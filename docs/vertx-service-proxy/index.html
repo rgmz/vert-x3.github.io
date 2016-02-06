@@ -87,11 +87,7 @@
 <li><a href="#_introduction_to_service_proxies">Introduction to service proxies</a></li>
 <li><a href="#_async_interface">Async Interface</a></li>
 <li><a href="#_exposing_your_service">Exposing your service</a></li>
-<li><a href="#_proxy_creation">Proxy creation</a>
-<ul class="sectlevel2">
-<li><a href="#_consuming_your_service_from_a_browser_or_from_node_js">Consuming your service from a browser or from Node.js</a></li>
-</ul>
-</li>
+<li><a href="#_proxy_creation">Proxy creation</a></li>
 <li><a href="#_restrictions_for_service_interface">Restrictions for service interface</a>
 <ul class="sectlevel2">
 <li><a href="#_return_types">Return types</a></li>
@@ -110,11 +106,7 @@
 <li><a href="#_introduction_to_service_proxies">Introduction to service proxies</a></li>
 <li><a href="#_async_interface">Async Interface</a></li>
 <li><a href="#_exposing_your_service">Exposing your service</a></li>
-<li><a href="#_proxy_creation">Proxy creation</a>
-<ul class="sectlevel2">
-<li><a href="#_consuming_your_service_from_a_browser_or_from_node_js">Consuming your service from a browser or from Node.js</a></li>
-</ul>
-</li>
+<li><a href="#_proxy_creation">Proxy creation</a></li>
 <li><a href="#_restrictions_for_service_interface">Restrictions for service interface</a>
 <ul class="sectlevel2">
 <li><a href="#_return_types">Return types</a></li>
@@ -161,7 +153,7 @@ your build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-service-proxy&lt;/artifactId&gt;
-  &lt;version&gt;3.2.0&lt;/version&gt;
+  &lt;version&gt;3.2.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -174,7 +166,7 @@ your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-proxy:3.2.0'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-proxy:3.2.1'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -370,6 +362,23 @@ ProxyHelper.registerService(SomeDatabaseService.class, vertx, service,
 <p>Once registered, the service becomes accessible. If you are running your application on a cluster, the service is
 available from any host.</p>
 </div>
+<div class="paragraph">
+<p>To withdraw your service, use the <code>ProxyHelper.unregisterService</code>
+method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">SomeDatabaseService service = new SomeDatabaseServiceImpl();
+// Register the handler
+MessageConsumer&lt;JsonObject&gt; consumer = ProxyHelper.registerService(SomeDatabaseService.class, vertx, service,
+    "database-service-address");
+
+// ....
+
+// Unregister your service.
+ProxyHelper.unregisterService(consumer);</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -414,64 +423,6 @@ public interface SomeDatabaseService {
 
  // ...
 }</code></pre>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_consuming_your_service_from_a_browser_or_from_node_js">Consuming your service from a browser or from Node.js</h3>
-<div class="paragraph">
-<p>The previous section has shown how you can create a service proxy in Java. However, you can consume your service
-directly from your browser or from a node.js application using a SockJS-based proxy.</p>
-</div>
-<div class="paragraph">
-<p>First, you need to configure the SockJS bridge, in order to let the proxy communicate with the service. You will
-find more details about the SockJS bridge in
-&lt;a href="http://vertx.io/docs/vertx-web/java/#_sockjs_event_bus_bridge"&gt;vertx-web&lt;/a&gt;:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">SomeDatabaseService service = new SomeDatabaseServiceImpl();
-ProxyHelper.registerService(SomeDatabaseService.class, vertx, service,
-    "database-service-address");
-
-
-Router router = Router.router(vertx);
-// Allow events for the designated addresses in/out of the event bus bridge
-BridgeOptions opts = new BridgeOptions()
-    .addInboundPermitted(new PermittedOptions()
-        .setAddress("database-service-address"))
-    .addOutboundPermitted(new PermittedOptions()
-        .setAddress("database-service-address"));
-
-// Create the event bus bridge and add it to the router.
-SockJSHandler ebHandler = SockJSHandler.create(vertx).bridge(opts);
-router.route("/eventbus/*").handler(ebHandler);
-
-vertx.createHttpServer().requestHandler(router::accept).listen(8080);</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Once you have the sockJS bridge configured, other applications developed in JavaScript can interact with your
-service directly. During the service compilation, a JS proxy module is generated, and is named as follows:
-<code>module_name-js/server-interface_simple_name</code> + <code>-proxy.js</code>. So for instance, if your interface is named <code>MyService</code>,
-the proxy module is named <code>my_service-proxy.js</code>. Again, this proxy is usable from your browser or from node.js.</p>
-</div>
-<div class="paragraph">
-<p>The generated proxy is a JavaScript module compatible with CommonJS, AMD and Webpack. The proxy then just needs to
-  instantiated with the EventBus bridge and the service EventBus address:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">&lt;script src="http://cdn.sockjs.org/sockjs-0.3.4.min.js"&gt;&lt;/script&gt;
-&lt;script src="vertx-eventbus.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-  var eb = new EventBus('http://localhost:8080/eventbus');
-  eb.onopen = function() {
-    var SomeDatabaseService =
-      require('vertx-database-js/some_database_service-proxy.js');
-    var svc = new SomeDatabaseService(eb, "database-service-address");
-  };
-&lt;/script&gt;</code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -665,7 +616,7 @@ any type supported by the event bus. To signal a failure the method <code>messag
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 +01:00
+                Last updated 2016-02-04 10:23:44 +01:00
               
               
             </div>

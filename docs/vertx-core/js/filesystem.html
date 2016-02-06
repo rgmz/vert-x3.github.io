@@ -404,6 +404,33 @@ vertx.fileSystem().open("target/classes/les_miserables.txt", {
 </div>
 </div>
 <div class="sect3">
+<h4 id="classpath">Accessing files from the classpath</h4>
+<div class="paragraph">
+<p>When vert.x cannot find the file on the filesystem it tries to resolve the
+file from the class path. Note that classpath resource paths never start with
+a <code>/</code>.</p>
+</div>
+<div class="paragraph">
+<p>Due to the fact that Java does not offer async access to classpath
+resources, the file is copied to the filesystem in a worker thread when the
+classpath resource is accessed the very first time and served from there
+asynchrously. When the same resource is accessed a second time, the file from
+the filesystem is served directly from the filesystem. The original content
+is served even if the classpath resource changes (e.g. in a development
+system).</p>
+</div>
+<div class="paragraph">
+<p>This caching behaviour can be disabled by setting the system
+property <code>vertx.disableFileCaching</code> to <code>true</code>. The path where the files are
+cached is <code>.vertx</code> by default and can be customized by setting the system
+property <code>vertx.cacheDirBase</code>.</p>
+</div>
+<div class="paragraph">
+<p>The whole classpath resolving feature can be disabled by setting the system
+property <code>vertx.disableFileCPResolving</code> to <code>true</code>.</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_closing_an_asyncfile">Closing an AsyncFile</h4>
 <div class="paragraph">
 <p>To close an <code>AsyncFile</code> call the <code><a href="../../jsdoc/async_file-AsyncFile.html#close">close</a></code> method. Closing is asynchronous and
@@ -420,7 +447,7 @@ if you want to be notified when the close has been completed you can specify a h
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 +01:00
+                Last updated 2016-02-05 14:36:08 +01:00
               
               
             </div>

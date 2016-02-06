@@ -117,6 +117,7 @@
 <li><a href="#jmx">JMX</a></li>
 <li><a href="#_enabling_remote_jmx">Enabling remote JMX</a></li>
 <li><a href="#dropwizard-registry">Accessing Dropwizard Registry</a></li>
+<li><a href="#_using_jolokia_and_hawtio">Using Jolokia and Hawtio</a></li>
 </ul>
         </div>
       </div>
@@ -158,6 +159,7 @@
 <li><a href="#jmx">JMX</a></li>
 <li><a href="#_enabling_remote_jmx">Enabling remote JMX</a></li>
 <li><a href="#dropwizard-registry">Accessing Dropwizard Registry</a></li>
+<li><a href="#_using_jolokia_and_hawtio">Using Jolokia and Hawtio</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -199,7 +201,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-dropwizard-metrics&lt;/artifactId&gt;
-  &lt;version&gt;3.2.0&lt;/version&gt;
+  &lt;version&gt;3.2.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -212,7 +214,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-dropwizard-metrics:3.2.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-dropwizard-metrics:3.2.1</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -956,6 +958,96 @@ def registry = com.codahale.metrics.SharedMetricRegistries.getOrCreate("my-regis
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_using_jolokia_and_hawtio">Using Jolokia and Hawtio</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://jolokia.org/">Jolokia</a> is a JMX-HTTP bridge giving an alternative to JSR-160 connectors. It is an agent based
+approach with support for many platforms. In addition to basic JMX operations it enhances JMX remoting with features
+like bulk requests.</p>
+</div>
+<div class="paragraph">
+<p><a href="http://hawt.io/">Hawtio</a> is a modular web console consuming the data exposed by Jolokia. It lets you create dashboards
+and retrieve data from JMX such as memory, cpu, or any vert.x metrics.</p>
+</div>
+<div class="paragraph">
+<p>This section explains how to configure your vert.x application to retrieve the metrics in Hawtio.</p>
+</div>
+<div class="paragraph">
+<p>First, you need to configure your vert.x instance with the following options:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Vertx
+def vertx = Vertx.vertx([
+  metricsOptions:[
+    enabled:true,
+    jmxEnabled:true,
+    jmxDomain:"vertx-metrics"
+  ]
+])</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can change the domain to whatever you want. The same configuration can be used for clustered Vert.x instances.
+This configuration instructs vertx-dropwizard-metrics to expose the metrics in the local MBean server, so
+Jolokia can retrieve them.</p>
+</div>
+<div class="paragraph">
+<p>Then you need, to <em>plug</em> jolokia to expose the data. There are several ways to <em>plug</em> jolokia. See
+<a href="https://jolokia.org/reference/html/architecture.html">for further details</a>. Here, we explain how to use the
+Jolokia agent with the default configuration. Refer to the <a href="https://jolokia.org/reference/html/">the jolokia
+documentation</a> to configure it.</p>
+</div>
+<div class="paragraph">
+<p>The agent can either be attached when you start the application or attached on a running JVM (you would need
+special permission to access the process). In the first case, launch you application using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>java -javaagent:/.../agents/jolokia-jvm.jar=port=7777,host=localhost -jar ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>-javaagent</code> specifies the path to the jolokia agent jar file. You can configure the port and host from the
+command line. Here it registers the REST endpoint on <code><a href="http://localhost:7777" class="bare">http://localhost:7777</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>You can also attach the agent on a running JVM with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>java -jar jolokia-jvm.jar start PID</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replace <code>PID</code> with the process id of the JVM.</p>
+</div>
+<div class="paragraph">
+<p>Once Jolokia is configured and launched, you can consume the data from Hawtio.</p>
+</div>
+<div class="paragraph">
+<p>On Hawtio, enter the connection details as follows:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/hawtio-connect.png" alt="hawtio connect">
+</div>
+</div>
+<div class="paragraph">
+<p>Then, you can go to the <em>JMX</em> tab and you should find a <em>directory</em> with the name you entered as JMX domain
+in the Vert.x configuration:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/hawtio-jmx.png" alt="hawtio jmx">
+</div>
+</div>
+<div class="paragraph">
+<p>From this, you can configure your dashboard and retrieve any metric exposed by vert.x.</p>
+</div>
+</div>
+</div>
 
         
 
@@ -963,7 +1055,7 @@ def registry = com.codahale.metrics.SharedMetricRegistries.getOrCreate("my-regis
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 +01:00
+                Last updated 2016-02-05 14:36:08 +01:00
               
               
             </div>

@@ -436,7 +436,7 @@ over time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">shared import io.vertx.ceylon.web "3.2.0";</code></pre>
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">shared import io.vertx.ceylon.web "3.2.1";</code></pre>
 </div>
 </div>
 </div>
@@ -3017,8 +3017,8 @@ var eb = new EventBus('http://localhost:8080/eventbus');
 eb.onopen = function() {
 
   // set a handler to receive a message
-  eb.registerHandler('some-address', function(message) {
-    console.log('received a message: ' + JSON.stringify(message);
+  eb.registerHandler('some-address', function(error, message) {
+    console.log('received a message: ' + JSON.stringify(message));
   });
 
   // send a message
@@ -3049,7 +3049,7 @@ the prefix <code>eventbus</code> we will connect there.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">shared import io.vertx.ceylon.web "3.2.0";</code></pre>
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">shared import io.vertx.ceylon.web "3.2.1";</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3318,7 +3318,7 @@ UNREGISTER. This event will occur when a client attempts to unregister a handler
 </div>
 <div class="paragraph">
 <p>The event enables you to retrieve the type using <code><a href="../../ceylondoc/vertx-web//handler/sockjs/BridgeEvent.type.html#type()">type</a></code> and
-inspect the raw message of the event using <code><a href="../../ceylondoc/vertx-web//handler/sockjs/BridgeEvent.type.html#rawMessage()">rawMessage</a></code>.</p>
+inspect the raw message of the event using <code><a href="../../ceylondoc/vertx-web//handler/sockjs/BridgeEvent.type.html#getRawMessage()">getRawMessage</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The raw message is a JSON object with the following structure:</p>
@@ -3366,7 +3366,7 @@ value options = BridgeOptions {
 
 sockJSHandler.bridge(options, (BridgeEvent be) {
   if (be.type() == publish || be.type() == receive) {
-    if (be.rawMessage()get("body" == "armadillos") {
+    if (be.getRawMessage()get("body" == "armadillos") {
       // Reject it
       be.complete(false);
       return;
@@ -3409,7 +3409,9 @@ sockJSHandler.bridge(options, (BridgeEvent be) {
       header1 = "val";
       header2 = "val2";
     };
-    be.rawMessage().put("headers", headers);
+    value rawMessage = be.getRawMessage();
+    rawMessage.put("headers", headers);
+    be.setRawMessage(rawMessage);
   };
   be.complete(true);
 });
@@ -3664,7 +3666,7 @@ for:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-02 09:43:54 +01:00
+                Last updated 2016-02-05 14:36:08 +01:00
               
               
             </div>

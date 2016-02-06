@@ -446,7 +446,7 @@ over time.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-web&lt;/artifactId&gt;
-  &lt;version&gt;3.2.0&lt;/version&gt;
+  &lt;version&gt;3.2.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -460,7 +460,7 @@ over time.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-web:3.2.0'
+  compile 'io.vertx:vertx-web:3.2.1'
 }</code></pre>
 </div>
 </div>
@@ -2521,7 +2521,7 @@ router.get_with_regex(".+\\.hbs").handler(&amp;handler.method(:handle))</code></
 <h3 id="_mvel_template_engine">MVEL template engine</h3>
 <div class="paragraph">
 <p>To use MVEL, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-mvel:3.2.0</code>. Create an instance of the MVEL template engine using:
+<code>io.vertx:vertx-web-templ-mvel:3.2.1</code>. Create an instance of the MVEL template engine using:
 <code>io.vertx.ext.web.templ.MVELTemplateEngine#create()</code></p>
 </div>
 <div class="paragraph">
@@ -2554,7 +2554,7 @@ MVEL templates.</p>
 <h3 id="_jade_template_engine">Jade template engine</h3>
 <div class="paragraph">
 <p>To use the Jade template engine, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-jade:3.2.0</code>. Create an instance of the Jade template engine using:
+<code>io.vertx:vertx-web-templ-jade:3.2.1</code>. Create an instance of the Jade template engine using:
 <code>io.vertx.ext.web.templ.JadeTemplateEngine#create()</code>.</p>
 </div>
 <div class="paragraph">
@@ -2587,7 +2587,7 @@ Jade templates.</p>
 <h3 id="_handlebars_template_engine">Handlebars template engine</h3>
 <div class="paragraph">
 <p>To use Handlebars, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-handlebars:3.2.0</code>. Create an instance of the Handlebars template engine
+<code>io.vertx:vertx-web-templ-handlebars:3.2.1</code>. Create an instance of the Handlebars template engine
 using: <code>io.vertx.ext.web.templ.HandlebarsTemplateEngine#create()</code>.</p>
 </div>
 <div class="paragraph">
@@ -2631,7 +2631,7 @@ handlebars templates.</p>
 <h3 id="_thymeleaf_template_engine">Thymeleaf template engine</h3>
 <div class="paragraph">
 <p>To use Thymeleaf, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-thymeleaf:3.2.0</code>. Create an instance of the Thymeleaf template engine
+<code>io.vertx:vertx-web-templ-thymeleaf:3.2.1</code>. Create an instance of the Thymeleaf template engine
 using: <code>io.vertx.ext.web.templ.ThymeleafTemplateEngine#create()</code>.</p>
 </div>
 <div class="paragraph">
@@ -2975,8 +2975,8 @@ var eb = new EventBus('http://localhost:8080/eventbus');
 eb.onopen = function() {
 
   // set a handler to receive a message
-  eb.registerHandler('some-address', function(message) {
-    console.log('received a message: ' + JSON.stringify(message);
+  eb.registerHandler('some-address', function(error, message) {
+    console.log('received a message: ' + JSON.stringify(message));
   });
 
   // send a message
@@ -3017,7 +3017,7 @@ the prefix <code>eventbus</code> we will connect there.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-web&lt;/artifactId&gt;
-  &lt;version&gt;3.2.0&lt;/version&gt;
+  &lt;version&gt;3.2.1&lt;/version&gt;
   &lt;classifier&gt;client&lt;/classifier&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
@@ -3031,7 +3031,7 @@ the prefix <code>eventbus</code> we will connect there.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-web:3.2.0:client</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-web:3.2.1:client</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3307,7 +3307,7 @@ UNREGISTER. This event will occur when a client attempts to unregister a handler
 </div>
 <div class="paragraph">
 <p>The event enables you to retrieve the type using <code><a href="../../yardoc/VertxWeb/BridgeEvent.html#type-instance_method">type</a></code> and
-inspect the raw message of the event using <code><a href="../../yardoc/VertxWeb/BridgeEvent.html#raw_message-instance_method">rawMessage</a></code>.</p>
+inspect the raw message of the event using <code><a href="../../yardoc/VertxWeb/BridgeEvent.html#get_raw_message-instance_method">getRawMessage</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The raw message is a JSON object with the following structure:</p>
@@ -3354,7 +3354,7 @@ options = {
 
 sockJSHandler.bridge(options) { |be|
   if (be.type() == :PUBLISH || be.type() == :RECEIVE)
-    if (be.raw_message()['body'].==("armadillos"))
+    if (be.get_raw_message()['body'].==("armadillos"))
       # Reject it
       be.complete(false)
       return
@@ -3396,7 +3396,9 @@ sockJSHandler.bridge(options) { |be|
       'header1' =&gt; "val",
       'header2' =&gt; "val2"
     }
-    be.raw_message()['headers'] = headers
+    rawMessage = be.get_raw_message()
+    rawMessage['headers'] = headers
+    be.set_raw_message(rawMessage)
   end
   be.complete(true)
 }
@@ -3637,7 +3639,7 @@ for:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 +01:00
+                Last updated 2016-02-05 14:36:08 +01:00
               
               
             </div>

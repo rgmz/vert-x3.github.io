@@ -97,6 +97,7 @@
 </ul>
 </li>
 <li><a href="#_asynchronous_testing">Asynchronous testing</a></li>
+<li><a href="#_asynchronous_assertions">Asynchronous assertions</a></li>
 <li><a href="#_repeating_test">Repeating test</a></li>
 <li><a href="#_sharing_objects">Sharing objects</a></li>
 <li><a href="#reporting">Running</a>
@@ -125,7 +126,6 @@
 <li><a href="#_java_language_integration">Java language integration</a>
 <ul class="sectlevel2">
 <li><a href="#_test_suite_integration">Test suite integration</a></li>
-<li><a href="#_java_specific_assertions">Java specific assertions</a></li>
 </ul>
 </li>
 </ul>
@@ -149,6 +149,7 @@
 </ul>
 </li>
 <li><a href="#_asynchronous_testing">Asynchronous testing</a></li>
+<li><a href="#_asynchronous_assertions">Asynchronous assertions</a></li>
 <li><a href="#_repeating_test">Repeating test</a></li>
 <li><a href="#_sharing_objects">Sharing objects</a></li>
 <li><a href="#reporting">Running</a>
@@ -177,7 +178,6 @@
 <li><a href="#_java_language_integration">Java language integration</a>
 <ul class="sectlevel2">
 <li><a href="#_test_suite_integration">Test suite integration</a></li>
-<li><a href="#_java_specific_assertions">Java specific assertions</a></li>
 </ul>
 </li>
 </ul>
@@ -215,7 +215,7 @@ and follows the Vert.x practices.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-unit&lt;/artifactId&gt;
-  &lt;version&gt;3.2.0&lt;/version&gt;
+  &lt;version&gt;3.2.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -228,7 +228,7 @@ and follows the Vert.x practices.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-unit:3.2.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-unit:3.2.1</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -663,6 +663,140 @@ async.awaitSuccess()
 </div>
 <div class="paragraph">
 <p>Calling <code>complete()</code> on an async completes the async as usual, it actually sets the value to <code>0</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_asynchronous_assertions">Asynchronous assertions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html">TestContext</a></code> provides useful methods that provides powerful constructs for async testing:</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#asyncAssertSuccess()">asyncAssertSuccess</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
+instance that acts like <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code>, resolving the <code>Async</code> on success and failing the test
+on failure with the failure cause.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Async async = context.async();
+vertx.deployVerticle("my.verticle", ar -&gt; {
+  if (ar.succeeded()) {
+    async.complete();
+  } else {
+    context.fail(ar.cause());
+  }
+});
+
+// Can be replaced by
+
+vertx.deployVerticle("my.verticle", context.asyncAssertSuccess());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#asyncAssertSuccess(io.vertx.core.Handler)">asyncAssertSuccess</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
+instance that acts like <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code>, invoking the delegating <code>Handler&lt;T&gt;</code> on success
+and failing the test on failure with the failure cause.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">AtomicBoolean started = new AtomicBoolean();
+Async async = context.async();
+vertx.deployVerticle(new AbstractVerticle() {
+  public void start() throws Exception {
+    started.set(true);
+  }
+}, ar -&gt; {
+  if (ar.succeeded()) {
+    context.assertTrue(started.get());
+    async.complete();
+  } else {
+    context.fail(ar.cause());
+  }
+});
+
+// Can be replaced by
+
+vertx.deployVerticle("my.verticle", context.asyncAssertSuccess(id -&gt; {
+  context.assertTrue(started.get());
+}));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The async is completed when the <code>Handler</code> exits, unless new asyncs were created during the invocation, which
+can be handy to <em>chain</em> asynchronous behaviors:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Async async = context.async();
+vertx.deployVerticle("my.verticle", ar1 -&gt; {
+  if (ar1.succeeded()) {
+    vertx.deployVerticle("my.otherverticle", ar2 -&gt; {
+      if (ar2.succeeded()) {
+        async.complete();
+      } else {
+        context.fail(ar2.cause());
+      }
+    });
+  } else {
+    context.fail(ar1.cause());
+  }
+});
+
+// Can be replaced by
+
+vertx.deployVerticle("my.verticle", context.asyncAssertSuccess(id -&gt;
+        vertx.deployVerticle("my_otherverticle", context.asyncAssertSuccess())
+));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#asyncAssertFailure()">asyncAssertFailure</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
+instance that acts like <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code>, resolving the <code>Async</code> on failure and failing the test
+on success.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Async async = context.async();
+vertx.deployVerticle("my.verticle", ar -&gt; {
+  if (ar.succeeded()) {
+    context.fail();
+  } else {
+    async.complete();
+  }
+});
+
+// Can be replaced by
+
+vertx.deployVerticle("my.verticle", context.asyncAssertFailure());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#asyncAssertFailure(io.vertx.core.Handler)">asyncAssertFailure</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
+instance that acts like <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code>, invoking the delegating <code>Handler&lt;Throwable&gt;</code> on
+failure and failing the test on success.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Async async = context.async();
+vertx.deployVerticle("my.verticle", ar -&gt; {
+  if (ar.succeeded()) {
+    context.fail();
+  } else {
+    context.assertTrue(ar.cause() instanceof IllegalArgumentException);
+    async.complete();
+  }
+});
+
+// Can be replaced by
+
+vertx.deployVerticle("my.verticle", context.asyncAssertFailure(cause -&gt; {
+  context.assertTrue(cause instanceof IllegalArgumentException);
+}));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The async is completed when the <code>Handler</code> exits, unless new asyncs were created during the invocation.</p>
 </div>
 </div>
 </div>
@@ -1198,7 +1332,7 @@ import org.junit.runner.RunWith;
 public class RunOnContextJUnitTestSuite {
 
   @Rule
-  RunTestOnContext rule = new RunTestOnContext();
+  public RunTestOnContext rule = new RunTestOnContext();
 
   @Test
   public void testSomething(TestContext context) {
@@ -1242,7 +1376,7 @@ import org.junit.Test;
 
 public class JunitTestWithTimeout {
 
-  @Test(timeout = 1000)
+  @Test(timeout = 1000l)
   public void testSomething(TestContext context) {
     //...
   }
@@ -1361,7 +1495,7 @@ import org.junit.runner.RunWith;
 public class RepeatingTest {
 
   @Rule
-  RepeatRule rule = new RepeatRule();
+  public RepeatRule rule = new RepeatRule();
 
   @Repeat(1000)
   @Test
@@ -1447,138 +1581,6 @@ public class MyTestSuite {
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_java_specific_assertions">Java specific assertions</h3>
-<div class="paragraph">
-<p>In Java, the <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html">TestContext</a></code> provides useful extra methods that provides powerful constructs:</p>
-</div>
-<div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#asyncAssertSuccess()">asyncAssertSuccess</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
-instance that acts like <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code>, resolving the <code>Async</code> on success and failing the test
-on failure with the failure cause.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Async async = context.async();
-vertx.deployVerticle("my.verticle", ar -&gt; {
-  if (ar.succeeded()) {
-    async.complete();
-  } else {
-    context.fail(ar.cause());
-  }
-});
-
-// Can be replaced by
-
-vertx.deployVerticle("my.verticle", context.asyncAssertSuccess());</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#asyncAssertSuccess(io.vertx.core.Handler)">asyncAssertSuccess</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
-instance that acts like <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code>, invoking the delegating <code>Handler&lt;T&gt;</code> on success
-and failing the test on failure with the failure cause.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">AtomicBoolean started = new AtomicBoolean();
-Async async = context.async();
-vertx.deployVerticle(new AbstractVerticle() {
-  public void start() throws Exception {
-    started.set(true);
-  }
-}, ar -&gt; {
-  if (ar.succeeded()) {
-    context.assertTrue(started.get());
-    async.complete();
-  } else {
-    context.fail(ar.cause());
-  }
-});
-
-// Can be replaced by
-
-vertx.deployVerticle("my.verticle", context.asyncAssertSuccess(id -&gt; {
-  context.assertTrue(started.get());
-}));</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The async is completed when the <code>Handler</code> exits, unless new asyncs were created during the invocation, which
-can be handy to <em>chain</em> asynchronous behaviors:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Async async = context.async();
-vertx.deployVerticle("my.verticle", ar1 -&gt; {
-  if (ar1.succeeded()) {
-    vertx.deployVerticle("my.otherverticle", ar2 -&gt; {
-      if (ar2.succeeded()) {
-        async.complete();
-      } else {
-        context.fail(ar2.cause());
-      }
-    });
-  } else {
-    context.fail(ar1.cause());
-  }
-});
-
-// Can be replaced by
-
-vertx.deployVerticle("my.verticle", context.asyncAssertSuccess(id -&gt;
-        vertx.deployVerticle("my_otherverticle", context.asyncAssertSuccess())
-));</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#asyncAssertFailure()">asyncAssertFailure</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
-instance that acts like <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code>, resolving the <code>Async</code> on failure and failing the test
-on success.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Async async = context.async();
-vertx.deployVerticle("my.verticle", ar -&gt; {
-  if (ar.succeeded()) {
-    context.fail();
-  } else {
-    async.complete();
-  }
-});
-
-// Can be replaced by
-
-vertx.deployVerticle("my.verticle", context.asyncAssertFailure());</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#asyncAssertFailure(io.vertx.core.Handler)">asyncAssertFailure</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
-instance that acts like <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code>, invoking the delegating <code>Handler&lt;Throwable&gt;</code> on
-failure and failing the test on success.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Async async = context.async();
-vertx.deployVerticle("my.verticle", ar -&gt; {
-  if (ar.succeeded()) {
-    context.fail();
-  } else {
-    context.assertTrue(ar.cause() instanceof IllegalArgumentException);
-    async.complete();
-  }
-});
-
-// Can be replaced by
-
-vertx.deployVerticle("my.verticle", context.asyncAssertFailure(cause -&gt; {
-  context.assertTrue(cause instanceof IllegalArgumentException);
-}));</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The async is completed when the <code>Handler</code> exits, unless new asyncs were created during the invocation.</p>
-</div>
-</div>
 </div>
 </div>
 
@@ -1588,7 +1590,7 @@ vertx.deployVerticle("my.verticle", context.asyncAssertFailure(cause -&gt; {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 +01:00
+                Last updated 2016-02-05 14:36:08 +01:00
               
               
             </div>

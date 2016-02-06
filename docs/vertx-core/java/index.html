@@ -95,6 +95,7 @@
 <li><a href="#_reactor_and_multi_reactor">Reactor and Multi-Reactor</a></li>
 <li><a href="#golden_rule">The Golden Rule - Don&#8217;t Block the Event Loop</a></li>
 <li><a href="#blocking_code">Running blocking code</a></li>
+<li><a href="#_async_coordination">Async coordination</a></li>
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
 <li><a href="#_writing_verticles">Writing Verticles</a></li>
@@ -156,7 +157,7 @@
 <li><a href="#_handling_exceptions">Handling exceptions</a></li>
 <li><a href="#_event_bus_write_handler">Event bus write handler</a></li>
 <li><a href="#_local_and_remote_addresses">Local and remote addresses</a></li>
-<li><a href="#_sending_files">Sending files</a></li>
+<li><a href="#_sending_files_or_resources_from_the_classpath">Sending files or resources from the classpath</a></li>
 <li><a href="#_streaming_sockets">Streaming sockets</a></li>
 <li><a href="#_upgrading_connections_to_ssl_tls">Upgrading connections to SSL/TLS</a></li>
 <li><a href="#_closing_a_tcp_server">Closing a TCP Server</a></li>
@@ -184,6 +185,7 @@
 <li><a href="#_enabling_compression_on_the_client">Enabling compression on the client</a></li>
 <li><a href="#_pooling_and_keep_alive">Pooling and keep alive</a></li>
 <li><a href="#_pipe_lining">Pipe-lining</a></li>
+<li><a href="#_httpclient_usage">HttpClient usage</a></li>
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
@@ -305,6 +307,7 @@
 <li><a href="#_reactor_and_multi_reactor">Reactor and Multi-Reactor</a></li>
 <li><a href="#golden_rule">The Golden Rule - Don&#8217;t Block the Event Loop</a></li>
 <li><a href="#blocking_code">Running blocking code</a></li>
+<li><a href="#_async_coordination">Async coordination</a></li>
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
 <li><a href="#_writing_verticles">Writing Verticles</a></li>
@@ -366,7 +369,7 @@
 <li><a href="#_handling_exceptions">Handling exceptions</a></li>
 <li><a href="#_event_bus_write_handler">Event bus write handler</a></li>
 <li><a href="#_local_and_remote_addresses">Local and remote addresses</a></li>
-<li><a href="#_sending_files">Sending files</a></li>
+<li><a href="#_sending_files_or_resources_from_the_classpath">Sending files or resources from the classpath</a></li>
 <li><a href="#_streaming_sockets">Streaming sockets</a></li>
 <li><a href="#_upgrading_connections_to_ssl_tls">Upgrading connections to SSL/TLS</a></li>
 <li><a href="#_closing_a_tcp_server">Closing a TCP Server</a></li>
@@ -394,6 +397,7 @@
 <li><a href="#_enabling_compression_on_the_client">Enabling compression on the client</a></li>
 <li><a href="#_pooling_and_keep_alive">Pooling and keep alive</a></li>
 <li><a href="#_pipe_lining">Pipe-lining</a></li>
+<li><a href="#_httpclient_usage">HttpClient usage</a></li>
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
@@ -580,7 +584,7 @@ project descriptor to access the Vert.x Core API:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-core&lt;/artifactId&gt;
-  &lt;version&gt;3.2.0&lt;/version&gt;
+  &lt;version&gt;3.2.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -593,7 +597,7 @@ project descriptor to access the Vert.x Core API:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-core:3.2.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-core:3.2.1</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1003,6 +1007,74 @@ on the worker pool.</p>
 </div>
 <div class="paragraph">
 <p>A worker verticle is always executed with a thread from the worker pool.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_async_coordination">Async coordination</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Coordination of multiple asynchronous results can be achieved with Vert.x <code><a href="../../apidocs/io/vertx/core/Future.html">futures</a></code>.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="../../apidocs/io/vertx/core/CompositeFuture.html#all-io.vertx.core.Future-io.vertx.core.Future-">CompositeFuture.all</a></code> takes several futures arguments (up to 6) and returns a future that is
+<em>succeeded</em> when all the futures are and <em>failed</em> otherwise:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Future&lt;HttpServer&gt; httpServerFuture = Future.future();
+httpServer.listen(httpServerFuture.completer());
+
+Future&lt;NetServer&gt; netServerFuture = Future.future();
+netServer.listen(netServerFuture.completer());
+
+CompositeFuture.all(httpServerFuture, netServerFuture).setHandler(ar -&gt; {
+  if (ar.succeeded()) {
+    // All server started
+  } else {
+    // At least one server failed
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The handler returned by <code><a href="../../apidocs/io/vertx/core/Future.html#completer--">completer</a></code> completes the future.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="../../apidocs/io/vertx/core/CompositeFuture.html#any-io.vertx.core.Future-io.vertx.core.Future-">CompositeFuture.any</a></code> takes several futures arguments (up to 6) and returns a future that is
+<em>succeeded</em> if one of the futures is, and <em>failed</em> otherwise:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Future&lt;String&gt; future1 = Future.future();
+Future&lt;String&gt; future2 = Future.future();
+CompositeFuture.any(future1, future2).setHandler(ar -&gt; {
+  if (ar.succeeded()) {
+    // At least one is succeeded
+  } else {
+    // All failed
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code><a href="../../apidocs/io/vertx/core/Future.html#compose-io.vertx.core.Handler-io.vertx.core.Future-">compose</a></code> can be used for chaining futures:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">FileSystem fs = vertx.fileSystem();
+
+Future&lt;Void&gt; fut1 = Future.future();
+Future&lt;Void&gt; fut2 = Future.future();
+
+fs.createFile("/foo", fut1.completer());
+fut1.compose(v -&gt; {
+  fs.writeFile("/foo", Buffer.buffer(), fut2.completer());
+}, fut2);
+fut2.compose(v -&gt; {
+  fs.move("/foo", "/bar", startFuture.completer());
+}, startFuture);</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -2725,10 +2797,14 @@ can be retrieved using <code><a href="../../apidocs/io/vertx/core/net/NetSocket.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_sending_files">Sending files</h3>
+<h3 id="_sending_files_or_resources_from_the_classpath">Sending files or resources from the classpath</h3>
 <div class="paragraph">
-<p>Files can be written to the socket directly using <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#sendFile-java.lang.String-">sendFile</a></code>. This can be a very
+<p>Files and classpath resources can be written to the socket directly using <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#sendFile-java.lang.String-">sendFile</a></code>. This can be a very
 efficient way to send files, as it can be handled by the OS kernel directly where supported by the operating system.</p>
+</div>
+<div class="paragraph">
+<p>Please see the chapter about <a href="#classpath">serving files from the classpath</a> for restrictions of the
+classpath resolution or disabling it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4086,7 +4162,7 @@ response.putTrailer("X-wibble", "woobble").putTrailer("X-quux", "flooble");</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="_serving_files_directly_from_disk">Serving files directly from disk</h4>
+<h4 id="_serving_files_directly_from_disk_or_the_classpath">Serving files directly from disk or the classpath</h4>
 <div class="paragraph">
 <p>If you were writing a web server, one way to serve a file from disk would be to open it as an <code><a href="../../apidocs/io/vertx/core/file/AsyncFile.html">AsyncFile</a></code>
 and pump it to the HTTP response.</p>
@@ -4095,7 +4171,8 @@ and pump it to the HTTP response.</p>
 <p>Or you could load it it one go using <code><a href="../../apidocs/io/vertx/core/file/FileSystem.html#readFile-java.lang.String-io.vertx.core.Handler-">readFile</a></code> and write it straight to the response.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively, Vert.x provides a method which allows you to serve a file from disk to an HTTP response in one operation.
+<p>Alternatively, Vert.x provides a method which allows you to serve a file from disk or the filesystem to an HTTP response
+in one operation.
 Where supported by the underlying operating system this may result in the OS directly transferring bytes from the
 file to the socket without being copied through user-space at all.</p>
 </div>
@@ -4123,6 +4200,9 @@ files, but may be slower for small files.</p>
 <p>Sending a file is asynchronous and may not complete until some time after the call has returned. If you want to
 be notified when the file has been writen you can use <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#sendFile-java.lang.String-io.vertx.core.Handler-">sendFile</a></code></p>
 </div>
+<div class="paragraph">
+<p>Please see the chapter about <a href="#classpath">serving files from the classpath</a> for restrictions about the classpath resolution or disabling it.</p>
+</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -4144,7 +4224,7 @@ directly from disk to socket it doesn&#8217;t give us an opportunity to apply an
 </td>
 <td class="content">
 If you&#8217;re going to write web servers directly using Vert.x be careful that users cannot exploit the
-path to access files outside the directory from which you want to serve them. It may be safer instead to use
+path to access files outside the directory from which you want to serve them or the classpath It may be safer instead to use
 Vert.x Web.
 </td>
 </tr>
@@ -4822,14 +4902,67 @@ request.continueHandler(v -&gt; {
 </div>
 <div class="paragraph">
 <p>On the server side a Vert.x http server can be configured to automatically send back 100 Continue interim responses
-when it receives an <code>Expect: 100-Continue</code> header.
-This is done by setting the option <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setHandle100ContinueAutomatically-boolean-">setHandle100ContinueAutomatically</a></code>.</p>
+when it receives an <code>Expect: 100-Continue</code> header.</p>
+</div>
+<div class="paragraph">
+<p>This is done by setting the option <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setHandle100ContinueAutomatically-boolean-">setHandle100ContinueAutomatically</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If you&#8217;d prefer to decide whether to send back continue responses manually, then this property should be set to
 <code>false</code> (the default), then you can inspect the headers and call <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#writeContinue--">writeContinue</a></code>
-if you wish the client to continue sending the body or you can reject the request by sending back a failure status code
-if you don&#8217;t want it to send the body. For example:</p>
+to have the client continue sending the body:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">httpServer.requestHandler(request -&gt; {
+  if (request.getHeader("Expect").equalsIgnoreCase("100-Continue")) {
+
+    // Send a 100 continue response
+    request.response().writeContinue();
+
+    // The client should send the body when it receives the 100 response
+    request.bodyHandler(body -&gt; {
+      // Do something with body
+    });
+
+    request.endHandler(v -&gt; {
+      request.response().end();
+    });
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also reject the request by sending back a failure status code directly: in this case the body
+should either be ignored or the connection should be closed (100-Continue is a performance hint and
+cannot be a logical protocol constraint):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">httpServer.requestHandler(request -&gt; {
+  if (request.getHeader("Expect").equalsIgnoreCase("100-Continue")) {
+
+    //
+    boolean rejectAndClose = true;
+    if (rejectAndClose) {
+
+      // Reject with a failure code and close the connection
+      // this is probably best with persistent connection
+      request.response()
+          .setStatusCode(405)
+          .putHeader("Connection", "close")
+          .end();
+    } else {
+
+      // Reject with a failure code and ignore the body
+      // this may be appropriate if the body is small
+      request.response()
+          .setStatusCode(405)
+          .end();
+    }
+  }
+});</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -4924,6 +5057,35 @@ By default pipe-lining is disabled.</p>
 </div>
 <div class="paragraph">
 <p>When pipe-lining is enabled requests will be written to connections without waiting for previous responses to return.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_httpclient_usage">HttpClient usage</h3>
+<div class="paragraph">
+<p>The HttpClient can be used in a Verticle or embedded.</p>
+</div>
+<div class="paragraph">
+<p>When used in a Verticle, the Verticle <strong>should use its own client instance</strong>.</p>
+</div>
+<div class="paragraph">
+<p>More generally a client should not be shared between different Vert.x contexts as it can lead to unexpected behavior.</p>
+</div>
+<div class="paragraph">
+<p>For example a keep-alive connection will call the client handlers on the context of the request that opened the connection, subsequent requests will use
+the same context.</p>
+</div>
+<div class="paragraph">
+<p>When this happen Vert.x detects it and log a warn:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Reusing a connection with a different context: an HttpClient is probably shared between different Verticles</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The HttpClient can be embedded in a non Vert.x thread like a unit test or a plain java <code>main</code>: the client handlers
+will be called by different Vert.x threads and contexts, such contexts are created as needed. For production this
+usage is not recommended.</p>
 </div>
 </div>
 <div class="sect2">
@@ -5715,6 +5877,33 @@ vertx.fileSystem().open("target/classes/les_miserables.txt", new OpenOptions(), 
 <div class="paragraph">
 <p>You can also use the <em>pump</em> to write file content into HTTP responses, or more generally in any
 <code>WriteStream</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="classpath">Accessing files from the classpath</h4>
+<div class="paragraph">
+<p>When vert.x cannot find the file on the filesystem it tries to resolve the
+file from the class path. Note that classpath resource paths never start with
+a <code>/</code>.</p>
+</div>
+<div class="paragraph">
+<p>Due to the fact that Java does not offer async access to classpath
+resources, the file is copied to the filesystem in a worker thread when the
+classpath resource is accessed the very first time and served from there
+asynchrously. When the same resource is accessed a second time, the file from
+the filesystem is served directly from the filesystem. The original content
+is served even if the classpath resource changes (e.g. in a development
+system).</p>
+</div>
+<div class="paragraph">
+<p>This caching behaviour can be disabled by setting the system
+property <code>vertx.disableFileCaching</code> to <code>true</code>. The path where the files are
+cached is <code>.vertx</code> by default and can be customized by setting the system
+property <code>vertx.cacheDirBase</code>.</p>
+</div>
+<div class="paragraph">
+<p>The whole classpath resolving feature can be disabled by setting the system
+property <code>vertx.disableFileCPResolving</code> to <code>true</code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -8216,7 +8405,32 @@ public class MyCommand extends DefaultCommand {
 </div>
 </div>
 <div class="paragraph">
-<p>Place the jar containing the command into the classpath of your fat-jar (or include it inside) or in the <code>lib</code>
+<p>You also need an implementation of <code><a href="../../apidocs/io/vertx/core/spi/launcher/CommandFactory.html">CommandFactory</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">public class HelloCommandFactory extends DefaultCommandFactory&lt;HelloCommand&gt; {
+  public HelloCommandFactory() {
+   super(HelloCommand.class);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, create the <code>src/main/resources/META-INF/services/io.vertx.core.spi.launcher.CommandFactory</code> and add a line
+indicating the fully qualified name of the factory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>io.vertx.core.launcher.example.HelloCommandFactory</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Builds the jar containing the command. Be sure to includes the SPI file
+(<code>META-INF/services/io.vertx.core.spi.launcher.CommandFactory</code>).</p>
+</div>
+<div class="paragraph">
+<p>Then, place the jar containing the command into the classpath of your fat-jar (or include it inside) or in the <code>lib</code>
 directory of your vert.x distribution, and you would be able to execute:</p>
 </div>
 <div class="listingblock">
@@ -8276,7 +8490,7 @@ and <code><a href="../../apidocs/io/vertx/core/impl/launcher/VertxCommandLaunche
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-02 09:43:54 +01:00
+                Last updated 2016-02-05 14:36:08 +01:00
               
               
             </div>

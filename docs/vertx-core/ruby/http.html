@@ -98,6 +98,7 @@
 <li><a href="#_enabling_compression_on_the_client">Enabling compression on the client</a></li>
 <li><a href="#_pooling_and_keep_alive">Pooling and keep alive</a></li>
 <li><a href="#_pipe_lining">Pipe-lining</a></li>
+<li><a href="#_httpclient_usage">HttpClient usage</a></li>
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
@@ -126,6 +127,7 @@
 <li><a href="#_enabling_compression_on_the_client">Enabling compression on the client</a></li>
 <li><a href="#_pooling_and_keep_alive">Pooling and keep alive</a></li>
 <li><a href="#_pipe_lining">Pipe-lining</a></li>
+<li><a href="#_httpclient_usage">HttpClient usage</a></li>
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
@@ -767,7 +769,7 @@ response.put_trailer("X-wibble", "woobble").put_trailer("X-quux", "flooble")</co
 </div>
 </div>
 <div class="sect3">
-<h4 id="_serving_files_directly_from_disk">Serving files directly from disk</h4>
+<h4 id="_serving_files_directly_from_disk_or_the_classpath">Serving files directly from disk or the classpath</h4>
 <div class="paragraph">
 <p>If you were writing a web server, one way to serve a file from disk would be to open it as an <code><a href="../../yardoc/Vertx/AsyncFile.html">AsyncFile</a></code>
 and pump it to the HTTP response.</p>
@@ -776,7 +778,8 @@ and pump it to the HTTP response.</p>
 <p>Or you could load it it one go using <code><a href="../../yardoc/Vertx/FileSystem.html#read_file-instance_method">readFile</a></code> and write it straight to the response.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively, Vert.x provides a method which allows you to serve a file from disk to an HTTP response in one operation.
+<p>Alternatively, Vert.x provides a method which allows you to serve a file from disk or the filesystem to an HTTP response
+in one operation.
 Where supported by the underlying operating system this may result in the OS directly transferring bytes from the
 file to the socket without being copied through user-space at all.</p>
 </div>
@@ -804,6 +807,9 @@ files, but may be slower for small files.</p>
 <p>Sending a file is asynchronous and may not complete until some time after the call has returned. If you want to
 be notified when the file has been writen you can use <code><a href="../../yardoc/Vertx/HttpServerResponse.html#send_file-instance_method">sendFile</a></code></p>
 </div>
+<div class="paragraph">
+<p>Please see the chapter about <a href="#classpath">serving files from the classpath</a> for restrictions about the classpath resolution or disabling it.</p>
+</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -825,7 +831,7 @@ directly from disk to socket it doesn&#8217;t give us an opportunity to apply an
 </td>
 <td class="content">
 If you&#8217;re going to write web servers directly using Vert.x be careful that users cannot exploit the
-path to access files outside the directory from which you want to serve them. It may be safer instead to use
+path to access files outside the directory from which you want to serve them or the classpath It may be safer instead to use
 Vert.x Web.
 </td>
 </tr>
@@ -929,7 +935,7 @@ vertx.create_http_server().request_handler() { |request|
 <p>By default compression is not enabled.</p>
 </div>
 <div class="paragraph">
-<p>When HTTP compression is enabled the server will check if the client incldes an <code>Accept-Encoding</code> header which
+<p>When HTTP compression is enabled the server will check if the client includes an <code>Accept-Encoding</code> header which
 includes the supported compressions. Commonly used are deflate and gzip. Both are supported by Vert.x.</p>
 </div>
 <div class="paragraph">
@@ -1534,14 +1540,62 @@ request.continue_handler() { |v|
 </div>
 <div class="paragraph">
 <p>On the server side a Vert.x http server can be configured to automatically send back 100 Continue interim responses
-when it receives an <code>Expect: 100-Continue</code> header.
-This is done by setting the option <code><a href="../dataobjects.html#HttpServerOptions#set_handle100_continue_automatically-instance_method">handle100ContinueAutomatically</a></code>.</p>
+when it receives an <code>Expect: 100-Continue</code> header.</p>
+</div>
+<div class="paragraph">
+<p>This is done by setting the option <code><a href="../dataobjects.html#HttpServerOptions#set_handle100_continue_automatically-instance_method">handle100ContinueAutomatically</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If you&#8217;d prefer to decide whether to send back continue responses manually, then this property should be set to
 <code>false</code> (the default), then you can inspect the headers and call <code><a href="../../yardoc/Vertx/HttpServerResponse.html#write_continue-instance_method">writeContinue</a></code>
-if you wish the client to continue sending the body or you can reject the request by sending back a failure status code
-if you don&#8217;t want it to send the body. For example:</p>
+to have the client continue sending the body:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">httpServer.request_handler() { |request|
+  if (request.get_header("Expect").equals_ignore_case?("100-Continue"))
+
+    # Send a 100 continue response
+    request.response().write_continue()
+
+    # The client should send the body when it receives the 100 response
+    request.body_handler() { |body|
+      # Do something with body
+    }
+
+    request.end_handler() { |v|
+      request.response().end()
+    }
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also reject the request by sending back a failure status code directly: in this case the body
+should either be ignored or the connection should be closed (100-Continue is a performance hint and
+cannot be a logical protocol constraint):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">httpServer.request_handler() { |request|
+  if (request.get_header("Expect").equals_ignore_case?("100-Continue"))
+
+    #
+    rejectAndClose = true
+    if (rejectAndClose)
+
+      # Reject with a failure code and close the connection
+      # this is probably best with persistent connection
+      request.response().set_status_code(405).put_header("Connection", "close").end()
+    else
+
+      # Reject with a failure code and ignore the body
+      # this may be appropriate if the body is small
+      request.response().set_status_code(405).end()
+    end
+  end
+}</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1636,6 +1690,35 @@ By default pipe-lining is disabled.</p>
 </div>
 <div class="paragraph">
 <p>When pipe-lining is enabled requests will be written to connections without waiting for previous responses to return.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_httpclient_usage">HttpClient usage</h3>
+<div class="paragraph">
+<p>The HttpClient can be used in a Verticle or embedded.</p>
+</div>
+<div class="paragraph">
+<p>When used in a Verticle, the Verticle <strong>should use its own client instance</strong>.</p>
+</div>
+<div class="paragraph">
+<p>More generally a client should not be shared between different Vert.x contexts as it can lead to unexpected behavior.</p>
+</div>
+<div class="paragraph">
+<p>For example a keep-alive connection will call the client handlers on the context of the request that opened the connection, subsequent requests will use
+the same context.</p>
+</div>
+<div class="paragraph">
+<p>When this happen Vert.x detects it and log a warn:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Reusing a connection with a different context: an HttpClient is probably shared between different Verticles</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The HttpClient can be embedded in a non Vert.x thread like a unit test or a plain java <code>main</code>: the client handlers
+will be called by different Vert.x threads and contexts, such contexts are created as needed. For production this
+usage is not recommended.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1776,8 +1859,8 @@ call <code><a href="../../yardoc/Vertx/HttpServerRequest.html#upgrade-instance_m
 <h5 id="_the_server_websocket">The server WebSocket</h5>
 <div class="paragraph">
 <p>The <code><a href="../../yardoc/Vertx/ServerWebSocket.html">ServerWebSocket</a></code> instance enables you to retrieve the <code><a href="../../yardoc/Vertx/ServerWebSocket.html#headers-instance_method">headers</a></code>,
-<code><a href="../../yardoc/Vertx/ServerWebSocket.html#path-instance_method">path</a></code> path}, <code><a href="../../yardoc/Vertx/ServerWebSocket.html#query-instance_method">query</a></code> and
-<code><a href="../../yardoc/Vertx/ServerWebSocket.html#uri-instance_method">uri</a></code> URI} of the HTTP request of the WebSocket handshake.</p>
+<code><a href="../../yardoc/Vertx/ServerWebSocket.html#path-instance_method">path</a></code>, <code><a href="../../yardoc/Vertx/ServerWebSocket.html#query-instance_method">query</a></code> and
+<code><a href="../../yardoc/Vertx/ServerWebSocket.html#uri-instance_method">URI</a></code> of the HTTP request of the WebSocket handshake.</p>
 </div>
 </div>
 </div>
@@ -1931,7 +2014,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2015-12-15 08:14:02 +01:00
+                Last updated 2016-02-05 14:36:08 +01:00
               
               
             </div>
