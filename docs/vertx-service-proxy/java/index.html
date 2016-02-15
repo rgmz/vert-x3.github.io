@@ -86,6 +86,7 @@
 <li><a href="#_using_vert_x_service_proxies">Using vert.x service proxies</a></li>
 <li><a href="#_introduction_to_service_proxies">Introduction to service proxies</a></li>
 <li><a href="#_async_interface">Async Interface</a></li>
+<li><a href="#_code_generation">Code generation</a></li>
 <li><a href="#_exposing_your_service">Exposing your service</a></li>
 <li><a href="#_proxy_creation">Proxy creation</a></li>
 <li><a href="#_restrictions_for_service_interface">Restrictions for service interface</a>
@@ -105,6 +106,7 @@
 <li><a href="#_using_vert_x_service_proxies">Using vert.x service proxies</a></li>
 <li><a href="#_introduction_to_service_proxies">Introduction to service proxies</a></li>
 <li><a href="#_async_interface">Async Interface</a></li>
+<li><a href="#_code_generation">Code generation</a></li>
 <li><a href="#_exposing_your_service">Exposing your service</a></li>
 <li><a href="#_proxy_creation">Proxy creation</a></li>
 <li><a href="#_restrictions_for_service_interface">Restrictions for service interface</a>
@@ -337,6 +339,54 @@ annotation. The proxy instance is disposed when this method is called.</p>
 </div>
 <div class="paragraph">
 <p>More constraints on the <em>service interfaces</em> are described below.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_code_generation">Code generation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Service annotated with <code>@ProxyGen</code> annotation trigger the generation of the service helper classes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The service proxy: a compile time generated proxy that uses the <code>EventBus</code> to interact with the service via messages</p>
+</li>
+<li>
+<p>The service handler: a compile time generated <code>EventBus</code> handler that reacts to events sent by the proxy</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Generated proxies and handlers are named after the service class, for example if the service is named <code>MyService</code>
+the handler is called <code>MyServiceProxyHandler</code> and the proxy is called <code>MyServiceEBProxy</code>.</p>
+</div>
+<div class="paragraph">
+<p>The <em>codegen</em> annotation processor generates these classes at compilation time. It is a feature of the Java
+compiler so <em>no extra step</em> is required, it is just a matter of configuring correctly the compiler.</p>
+</div>
+<div class="paragraph">
+<p>Here a configuration example for Maven:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;plugin&gt;
+  &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+  &lt;configuration&gt;
+    &lt;annotationProcessors&gt;
+      &lt;annotationProcessor&gt;io.vertx.codegen.CodeGenProcessor&lt;/annotationProcessor&gt;
+    &lt;/annotationProcessors&gt;
+    &lt;compilerArgs&gt;
+      &lt;arg&gt;-AoutputDirectory=${project.basedir}/src/main&lt;/arg&gt;
+    &lt;/compilerArgs&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This feature can also be used in Gradle, or even in IDE as they provide usually support for annotation
+processors.</p>
 </div>
 </div>
 </div>
@@ -616,7 +666,7 @@ any type supported by the event bus. To signal a failure the method <code>messag
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-02-15 14:01:32 +01:00
               
               
             </div>
