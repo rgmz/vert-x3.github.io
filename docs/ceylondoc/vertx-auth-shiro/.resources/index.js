@@ -24,13 +24,13 @@ var index = [
 {'name': 'shiroAuthRealmType.toCeylon', 'type': 'value', 'url': 'shiroAuthRealmType.object.html#toCeylon', 'doc': '', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'shiroAuthRealmType', 'type': 'object', 'url': 'shiroAuthRealmType.object.html', 'doc': '', 'tags': [],'icons': ['icon-object']},
 {'name': 'shiroAuthRealmType', 'type': 'value', 'url': 'index.html#shiroAuthRealmType', 'doc': '', 'tags': [],'icons': ['icon-shared-member']},
+{'name': 'ShiroAuth.setRolePrefix', 'type': 'function', 'url': 'ShiroAuth.type.html#setRolePrefix', 'doc': '<p>Set the role prefix to distinguish from permissions when checking for isPermitted requests.</p>', 'tags': [],'icons': ['icon-shared-member']},
+{'name': 'ShiroAuth', 'type': 'class', 'url': 'ShiroAuth.type.html', 'doc': '<p>Factory interface for creating Apache Shiro based <code>io.vertx.ext.auth.AuthProvider</code> instances.</p>', 'tags': [],'icons': ['icon-class']},
 {'name': 'shiroAuth.create', 'type': 'function', 'url': 'shiroAuth.object.html#create', 'doc': '<p>Create a Shiro auth provider</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'shiroAuth.create', 'type': 'function', 'url': 'shiroAuth.object.html#create', 'doc': '<p>Create a Shiro auth provider</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'shiroAuth.create', 'type': 'function', 'url': 'shiroAuth.object.html#create', 'doc': '<p>Create a Shiro auth provider</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'shiroAuth', 'type': 'object', 'url': 'shiroAuth.object.html', 'doc': '', 'tags': [],'icons': ['icon-object']},
 {'name': 'shiroAuth', 'type': 'value', 'url': 'index.html#shiroAuth', 'doc': '', 'tags': [],'icons': ['icon-shared-member']},
-{'name': 'ShiroAuth.setRolePrefix', 'type': 'function', 'url': 'ShiroAuth.type.html#setRolePrefix', 'doc': '<p>Set the role prefix to distinguish from permissions when checking for isPermitted requests.</p>', 'tags': [],'icons': ['icon-shared-member']},
-{'name': 'ShiroAuth', 'type': 'class', 'url': 'ShiroAuth.type.html', 'doc': '<p>Factory interface for creating Apache Shiro based <code>io.vertx.ext.auth.AuthProvider</code> instances.</p>', 'tags': [],'icons': ['icon-class']},
 {'name': 'io.vertx.ceylon.auth.shiro', 'type': 'module', 'url': 'index.html', 'doc': '', 'tags': [],'icons': ['icon-module']}];
 var tagIndex = [
 ];

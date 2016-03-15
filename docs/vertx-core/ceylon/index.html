@@ -98,6 +98,10 @@
 <li><a href="#_async_coordination">Async coordination</a></li>
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
+<li><a href="#_writing_verticles">Writing Verticles</a></li>
+<li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
+<li><a href="#_running_ceylon_verticles">Running Ceylon Verticles</a></li>
+<li><a href="#_ceylon_runtime_configuration">Ceylon runtime configuration</a></li>
 <li><a href="#_verticle_types">Verticle Types</a></li>
 <li><a href="#_standard_verticles">Standard verticles</a></li>
 <li><a href="#worker_verticles">Worker verticles</a></li>
@@ -107,6 +111,8 @@
 <li><a href="#_waiting_for_deployment_to_complete">Waiting for deployment to complete</a></li>
 <li><a href="#_undeploying_verticle_deployments">Undeploying verticle deployments</a></li>
 <li><a href="#_specifying_number_of_verticle_instances">Specifying number of verticle instances</a></li>
+<li><a href="#_passing_configuration_to_a_verticle">Passing configuration to a verticle</a></li>
+<li><a href="#_accessing_environment_variables_in_a_verticle">Accessing environment variables in a Verticle</a></li>
 <li><a href="#_verticle_isolation_groups">Verticle Isolation Groups</a></li>
 <li><a href="#_high_availability">High Availability</a></li>
 <li><a href="#_running_verticles_from_the_command_line">Running Verticles from the command line</a></li>
@@ -120,6 +126,12 @@
 <li><a href="#_the_theory">The Theory</a></li>
 <li><a href="#_the_event_bus_api">The Event Bus API</a></li>
 <li><a href="#_automatic_clean_up_in_verticles_2">Automatic clean-up in verticles</a></li>
+</ul>
+</li>
+<li><a href="#_json">JSON</a>
+<ul class="sectlevel2">
+<li><a href="#_json_objects">JSON objects</a></li>
+<li><a href="#_json_arrays">JSON arrays</a></li>
 </ul>
 </li>
 <li><a href="#_buffers">Buffers</a>
@@ -297,6 +309,10 @@
 <li><a href="#_async_coordination">Async coordination</a></li>
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
+<li><a href="#_writing_verticles">Writing Verticles</a></li>
+<li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
+<li><a href="#_running_ceylon_verticles">Running Ceylon Verticles</a></li>
+<li><a href="#_ceylon_runtime_configuration">Ceylon runtime configuration</a></li>
 <li><a href="#_verticle_types">Verticle Types</a></li>
 <li><a href="#_standard_verticles">Standard verticles</a></li>
 <li><a href="#worker_verticles">Worker verticles</a></li>
@@ -306,6 +322,8 @@
 <li><a href="#_waiting_for_deployment_to_complete">Waiting for deployment to complete</a></li>
 <li><a href="#_undeploying_verticle_deployments">Undeploying verticle deployments</a></li>
 <li><a href="#_specifying_number_of_verticle_instances">Specifying number of verticle instances</a></li>
+<li><a href="#_passing_configuration_to_a_verticle">Passing configuration to a verticle</a></li>
+<li><a href="#_accessing_environment_variables_in_a_verticle">Accessing environment variables in a Verticle</a></li>
 <li><a href="#_verticle_isolation_groups">Verticle Isolation Groups</a></li>
 <li><a href="#_high_availability">High Availability</a></li>
 <li><a href="#_running_verticles_from_the_command_line">Running Verticles from the command line</a></li>
@@ -319,6 +337,12 @@
 <li><a href="#_the_theory">The Theory</a></li>
 <li><a href="#_the_event_bus_api">The Event Bus API</a></li>
 <li><a href="#_automatic_clean_up_in_verticles_2">Automatic clean-up in verticles</a></li>
+</ul>
+</li>
+<li><a href="#_json">JSON</a>
+<ul class="sectlevel2">
+<li><a href="#_json_objects">JSON objects</a></li>
+<li><a href="#_json_arrays">JSON arrays</a></li>
 </ul>
 </li>
 <li><a href="#_buffers">Buffers</a>
@@ -543,7 +567,49 @@ Instead, we automatically generate an <strong>idiomatic</strong> equivalent of t
 <p>From now on we&#8217;ll just use the word <strong>core</strong> to refer to Vert.x core.</p>
 </div>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::override/dependencies.adoc[]</p>
+<p>If you are embedding Vert.x in Ceylon you should import Vert.x modules of your Ceylon module:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">native("jvm")
+module my.module "1.0.0" {
+  shared import io.vertx.ceylon.core "3.2.2";
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following stack of modules is supported in 3.2.0-SNAPSHOT:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>io.vertx.ceylon.core</code></p>
+</li>
+<li>
+<p><code>io.vertx.ceylon.jdbc</code></p>
+</li>
+<li>
+<p><code>io.vertx.ceylon.sql</code></p>
+</li>
+<li>
+<p><code>io.vertx.ceylon.web</code></p>
+</li>
+<li>
+<p><code>io.vertx.ceylon.auth.common</code></p>
+</li>
+<li>
+<p><code>io.vertx.ceylon.auth.jdbc</code></p>
+</li>
+<li>
+<p><code>io.vertx.ceylon.auth.jwt</code></p>
+</li>
+<li>
+<p><code>io.vertx.ceylon.auth.oauth2</code></p>
+</li>
+<li>
+<p><code>io.vertx.ceylon.auth.shiro</code></p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s discuss the different concepts and features in core.</p>
@@ -1078,8 +1144,198 @@ can include verticles written in multiple languages.</p>
 <p>An application would typically be composed of many verticle instances running in the same Vert.x instance at the same
 time. The different verticle instances communicate with each other by sending messages on the <a href="#event_bus">event bus</a>.</p>
 </div>
+<div class="sect2">
+<h3 id="_writing_verticles">Writing Verticles</h3>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::override/verticles.adoc[]</p>
+<p>Ceylon verticles are implemented as subclasses of <code>io.vertx.ceylon.core.Verticle</code>.</p>
+</div>
+<div class="paragraph">
+<p>The parent verticle class provides the <code>vertx</code> attribute to obtain the Vert.x instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>shared default void start() {
+  // Start a timer
+  vertx.setPeriodic(1000, (Integer id) =&gt; print("Timer has fired"));
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When the verticle is deployed the <code>start</code> method of the verticle will be executed.</p>
+</div>
+<div class="paragraph">
+<p>When the verticle is undeployed the <code>stop</code> method of the verticle will be executed.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>shared actual void stop() {}
+  // Cleanup here
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</h3>
+<div class="paragraph">
+<p>Sometimes you want to do something in your verticle start-up which takes some time and you don&#8217;t want the verticle to
+be considered deployed until that happens. For example you might want to deploy other verticles in the start method.</p>
+</div>
+<div class="paragraph">
+<p>You can&#8217;t block waiting for the other verticles to deploy in your start method as that would break the Golden Rule.</p>
+</div>
+<div class="paragraph">
+<p>So how can you do this?</p>
+</div>
+<div class="paragraph">
+<p>The way to do it is to implement the <strong>asynchronous</strong> start method. This version of the method takes a Future as a parameter.
+When the method returns the verticle will <strong>not</strong> be considered deployed yet. Some time later, after you&#8217;ve done everything
+you need to do (e.g. start other verticles), you can call complete on the Future (or fail) to signal that you&#8217;re done.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>shared actual void startAsync(Future&lt;Anything&gt; startFuture) {
+  // Now deploy some other verticle:
+
+  vertx.deployVerticle("otherVerticle.java", (String|Throwable res) {
+    if (is String res) {
+      startFuture.complete();
+    } else {}
+      startFuture.fail(res.message);
+    }
+  });
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Similarly, there is an asynchronous version of the stop method too. You use this if you want to do some verticle
+cleanup that takes some time.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>shared actual void stopAsync(Future&lt;Anything&gt; stopFuture) {
+  obj.doSomethingThatTakesTime((String|Throwable res) {
+    if (is String res) {
+      stopFuture.complete();
+    } else {}
+      stopFuture.fail(res.message);
+    }
+  });
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>INFO: You don&#8217;t need to manually undeploy child verticles started by a verticle, in the verticle&#8217;s stop method. Vert.x
+will automatically undeploy any child verticles when the parent is undeployed.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_running_ceylon_verticles">Running Ceylon Verticles</h3>
+<div class="paragraph">
+<p>The Vert.x Ceylon language allows to embed Vert.x in Ceylon or run Ceylon verticles from command line.</p>
+</div>
+<div class="paragraph">
+<p>Ceylon can embed Vert.x and start it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>import io.vertx.ceylon.core {
+  vertx
+}
+import io.vertx.ceylon.core.http { ... }
+
+shared void run() {
+
+  value vertx_ = vertx.vertx();
+  value server = vertx_.createHttpServer();
+
+  server.requestHandler((HttpServerRequest req) =&gt;
+    req.response().
+        putHeader("Content-Type", "text/html").
+        end("&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;")
+  );
+
+  server.listen(8080, (HttpServer|Throwable result) =&gt; switch(result)
+    case (is HttpServer) { print("Server started") }
+    else { result.printStackTrace() }
+  );
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Vert.x can also deploy Ceylon Verticles from command line or from other languages:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Run the ceylon module my.module/1.0.0</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>% vertx run ceylon:my.module/1.0.0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The module will be looked up according to the ceylon repository <a href="http://ceylon-lang.org/documentation/1.0/reference/tool/config/#_repositories_section">configuration</a>.</p>
+</div>
+<div class="paragraph">
+<p>The same can be done from Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.deployVerticle("ceylon:my.module/1.0.0");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The module is introspected to find the Verticle, if there are several verticles, one will be picked up.</p>
+</div>
+<div class="paragraph">
+<p>The Ceylon Vert.x language can also compile sources on the fly before running the module:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Compile and run the ceylon module</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>% vertx run ceylon:/path/to/my/module</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <em>/path/to/my/module</em> points to a Ceylon module, i.e the directory contains the <code>module.ceylon</code> file
+and all other ceylon sources.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ceylon_runtime_configuration">Ceylon runtime configuration</h3>
+<div class="paragraph">
+<p>JVM system properties can be set to control the behavior of Ceylon:</p>
+</div>
+<div class="listingblock">
+<div class="title">Verbose output</div>
+<div class="content">
+<pre class="prettyprint highlight"><code>% vertx run ceylon:my.module/1.0.0 -Dceylon.verbose=all</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>ceylon.verbose</code> system property is equivalent to the <code>--verbose</code> option of <em>ceylon</em> tool.</p>
+</div>
+<div class="listingblock">
+<div class="title">User repo configuration</div>
+<div class="content">
+<pre class="prettyprint highlight"><code>% vertx run ceylon:my.module/1.0.0 -Dceylon.rep=/path/to/modules</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>ceylon.rep</code> system property is equivalen to the <code>--rep</code> option of <em>ceylon</em> tool.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_verticle_types">Verticle Types</h3>
@@ -1331,8 +1587,60 @@ vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle", options);</code><
 <p>This is useful for scaling easily across multiple cores. For example you might have a web-server verticle to deploy
 and multiple cores on your machine, so you want to deploy multiple instances to take utilise all the cores.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_passing_configuration_to_a_verticle">Passing configuration to a verticle</h3>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::override/verticle-configuration.adoc[]</p>
+<p>Configuration in the form of JSON can be passed to a verticle at deployment time:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>value config = JsonObject {
+  "name"-&gt;"Tim",
+  "directory"-&gt;"blah"
+};
+value options = DeploymentOptions {
+  config = config;
+};
+
+vertx.deployVerticle("otherVerticle.java", options);</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+we suppose <code>ceylon.json::Object</code> is aliased to <code>JsonObject</code>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This configuration is then available via the <code>io.vertx.ceylon.core::Context</code> object.</p>
+</div>
+<div class="paragraph">
+<p>The configuration is returned as a
+<code>JsonObject</code> object so you can retrieve data as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>print("``vertx.getOrCreateContext().config()?.get("name") else "no config"``")</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_accessing_environment_variables_in_a_verticle">Accessing environment variables in a Verticle</h3>
+<div class="paragraph">
+<p>Environment variables and system properties are accessible from a verticle using the Java API:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">print("``System.getProperty("foo")``");
+print("``System.getenv("HOME")``");</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1548,7 +1856,7 @@ context.runOnContext(() {
 </div>
 <div class="paragraph">
 <p>The context object also let you access verticle configuration using the <code><a href="../../ceylondoc/vertx-core//Context.type.html#config()">config</a></code>
-method. Check the <a href="#Passing configuration to a verticle">[Passing configuration to a verticle]</a> section for more details about this configuration.</p>
+method. Check the <a href="#_passing_configuration_to_a_verticle">Passing configuration to a verticle</a> section for more details about this configuration.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1895,7 +2203,7 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 </div>
 <div class="paragraph">
-<p>Unresolved directive in eventbus.adoc - include::override/eventbus_headers.adoc[]</p>
+<p>Message delivery headers are available exclusively with the Java api.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2015,8 +2323,11 @@ so it can be deleted from the database</p>
 <div class="paragraph">
 <p>In all cases the reply handler will be called with the specific failure.</p>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_message_codecs">Message Codecs</h4>
 <div class="paragraph">
-<p>Unresolved directive in eventbus.adoc - include::override/eventbus.adoc[]</p>
+<p>Message codecs are available exclusively with the Java api.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2073,8 +2384,25 @@ for example the default <code>HazelcastClusterManager</code>.</p>
 <p>If you&#8217;re registering event bus handlers from inside verticles, those handlers will be automatically unregistered
 when the verticle is undeployed.</p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_json">JSON</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::override/json.adoc[]</p>
+<p>Ceylon uses the <a href="https://herd.ceylon-lang.org/modules/ceylon.json">ceylon.json</a> module for <a href="http://json.org/">JSON</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="_json_objects">JSON objects</h3>
+<div class="paragraph">
+<p>Ceylon uses <code>ceylon.json::Object</code> for representing a JSON object.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_json_arrays">JSON arrays</h3>
+<div class="paragraph">
+<p>Ceylon uses <code>ceylon.json::Array</code> for representing a JSON array</p>
 </div>
 </div>
 </div>
@@ -2135,9 +2463,6 @@ value buff = buffer.buffer("some string");</code></pre>
 
 value buff = buffer.buffer("some string", "UTF-16");</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>Unresolved directive in buffers.adoc - include::override/buffer_from_bytes.adoc[]</p>
 </div>
 <div class="paragraph">
 <p>Create a buffer with an initial size hint. If you know your buffer will have a certain amount of data written to it
@@ -6485,9 +6810,6 @@ client.reverseLookup("10.0.0.1", (String|Throwable ar) {
 });</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Unresolved directive in dns.adoc - include::override/dns.adoc[]</p>
-</div>
 </div>
 </div>
 </div>
@@ -8229,7 +8551,7 @@ and <code>unregister</code></p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-03-15 17:18:54 +01:00
               
               
             </div>
