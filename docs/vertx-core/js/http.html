@@ -106,21 +106,27 @@
 <ul class="sectlevel2">
 <li><a href="#_creating_an_http_server">Creating an HTTP Server</a></li>
 <li><a href="#_configuring_an_http_server">Configuring an HTTP server</a></li>
+<li><a href="#_configuring_an_http_2_server">Configuring an HTTP/2 server</a></li>
+<li><a href="#_logging_network_server_activity">Logging network server activity</a></li>
 <li><a href="#_start_the_server_listening">Start the Server Listening</a></li>
 <li><a href="#_getting_notified_of_incoming_requests">Getting notified of incoming requests</a></li>
 <li><a href="#_handling_requests">Handling requests</a></li>
 <li><a href="#_sending_back_responses">Sending back responses</a></li>
 <li><a href="#_http_compression">HTTP Compression</a></li>
 <li><a href="#_creating_an_http_client">Creating an HTTP client</a></li>
+<li><a href="#_logging_network_client_activity">Logging network client activity</a></li>
 <li><a href="#_making_requests">Making requests</a></li>
 <li><a href="#_handling_http_responses">Handling http responses</a></li>
 <li><a href="#_enabling_compression_on_the_client">Enabling compression on the client</a></li>
-<li><a href="#_pooling_and_keep_alive">Pooling and keep alive</a></li>
-<li><a href="#_pipe_lining">Pipe-lining</a></li>
+<li><a href="#_http_1_x_pooling_and_keep_alive">HTTP/1.x pooling and keep alive</a></li>
+<li><a href="#_http_1_1_pipe_lining">HTTP/1.1 pipe-lining</a></li>
+<li><a href="#_http_2_multiplexing">HTTP/2 multiplexing</a></li>
+<li><a href="#_http_connections">HTTP connections</a></li>
 <li><a href="#_httpclient_usage">HttpClient usage</a></li>
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
+<li><a href="#_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</a></li>
 <li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
@@ -135,21 +141,27 @@
 <ul class="sectlevel2">
 <li><a href="#_creating_an_http_server">Creating an HTTP Server</a></li>
 <li><a href="#_configuring_an_http_server">Configuring an HTTP server</a></li>
+<li><a href="#_configuring_an_http_2_server">Configuring an HTTP/2 server</a></li>
+<li><a href="#_logging_network_server_activity">Logging network server activity</a></li>
 <li><a href="#_start_the_server_listening">Start the Server Listening</a></li>
 <li><a href="#_getting_notified_of_incoming_requests">Getting notified of incoming requests</a></li>
 <li><a href="#_handling_requests">Handling requests</a></li>
 <li><a href="#_sending_back_responses">Sending back responses</a></li>
 <li><a href="#_http_compression">HTTP Compression</a></li>
 <li><a href="#_creating_an_http_client">Creating an HTTP client</a></li>
+<li><a href="#_logging_network_client_activity">Logging network client activity</a></li>
 <li><a href="#_making_requests">Making requests</a></li>
 <li><a href="#_handling_http_responses">Handling http responses</a></li>
 <li><a href="#_enabling_compression_on_the_client">Enabling compression on the client</a></li>
-<li><a href="#_pooling_and_keep_alive">Pooling and keep alive</a></li>
-<li><a href="#_pipe_lining">Pipe-lining</a></li>
+<li><a href="#_http_1_x_pooling_and_keep_alive">HTTP/1.x pooling and keep alive</a></li>
+<li><a href="#_http_1_1_pipe_lining">HTTP/1.1 pipe-lining</a></li>
+<li><a href="#_http_2_multiplexing">HTTP/2 multiplexing</a></li>
+<li><a href="#_http_connections">HTTP connections</a></li>
 <li><a href="#_httpclient_usage">HttpClient usage</a></li>
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
+<li><a href="#_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</a></li>
 <li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
@@ -160,6 +172,13 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>Vert.x allows you to easily write non blocking HTTP clients and servers.</p>
+</div>
+<div class="paragraph">
+<p>Vert.x supports the HTTP/1.0, HTTP/1.1 and HTTP/2 protocols.</p>
+</div>
+<div class="paragraph">
+<p>The base API for HTTP is the same for HTTP/1.x and HTTP/2, specific API features are available for dealing with the
+HTTP/2 protocol.</p>
 </div>
 <div class="sect2">
 <h3 id="_creating_an_http_server">Creating an HTTP Server</h3>
@@ -189,9 +208,100 @@ var server = vertx.createHttpServer(options);</code></pre>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_configuring_an_http_2_server">Configuring an HTTP/2 server</h3>
+<div class="paragraph">
+<p>Vert.x supports HTTP/2 over TLS <code>h2</code> and over TCP <code>h2c</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>h2</code> identifies the HTTP/2 protocol when used over TLS negotiated by <a href="https://en.wikipedia.org/wiki/Application-Layer_Protocol_Negotiation">Application-Layer Protocol Negotiation</a> (ALPN)</p>
+</li>
+<li>
+<p><code>h2c</code> identifies the HTTP/2 protocol when using in clear text over TCP, such connections are established either with
+an HTTP/1.1 upgraded request or directly</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To handle <code>h2</code> requests, TLS must be enabled along with <code><a href="../dataobjects.html#HttpServerOptions#setUseAlpn">useAlpn</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "useAlpn" : true,
+  "ssl" : true,
+  "keyStoreOptions" : {
+    "path" : "/path/to/my/keystore"
+  }
+};
+
+var server = vertx.createHttpServer(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ALPN is a TLS extension that negotiates the protocol before the client and the server start to exchange data.</p>
+</div>
+<div class="paragraph">
+<p>Clients that don&#8217;t support ALPN will still be able to do a <em>classic</em> SSL handshake.</p>
+</div>
+<div class="paragraph">
+<p>ALPN will usually agree on the <code>h2</code> protocol, although <code>http/1.1</code> can be used if the server or the client decides
+so.</p>
+</div>
+<div class="paragraph">
+<p>To handle <code>h2c</code> requests, TLS must be disabled, the server will upgrade to HTTP/2 any request HTTP/1.1 that wants to
+upgrade to HTTP/2. It will also accept a direct <code>h2c</code> connection beginning with the <code>PRI * HTTP/2.0\r\nSM\r\n</code> preface.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+most browsers won&#8217;t support <code>h2c</code>, so for serving web sites you should use <code>h2</code> and not <code>h2c</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When a server accepts an HTTP/2 connection, it sends to the client its <code><a href="../dataobjects.html#HttpServerOptions#getInitialSettings">initial settings</a></code>.
+The settings define how the client can use the connection, the default initial settings for a server are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="../dataobjects.html#Http2Settings#getMaxConcurrentStreams">getMaxConcurrentStreams</a></code>: <code>100</code> as recommended by the HTTP/2 RFC</p>
+</li>
+<li>
+<p>the default HTTP/2 settings values for the others</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_logging_network_server_activity">Logging network server activity</h3>
+<div class="paragraph">
+<p>For debugging purposes, network activity can be logged.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "logActivity" : true
+};
+
+var server = vertx.createHttpServer(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the chapter on <a href="#logging_network_activity">logging network activity</a> for a detailed explanation.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_start_the_server_listening">Start the Server Listening</h3>
 <div class="paragraph">
-<p>To tell the server to listen for incoming requests you use one of the <code><a href="../../jsdoc/http_server-HttpServer.html#listen">listen</a></code>
+<p>To tell the server to listen for incoming requests you use one of the <code><a href="../../jsdoc/module-vertx-js_http_server-HttpServer.html#listen">listen</a></code>
 alternatives.</p>
 </div>
 <div class="paragraph">
@@ -239,7 +349,7 @@ server.listen(8080, "myhost.com", function (res, res_err) {
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_requests">Getting notified of incoming requests</h3>
 <div class="paragraph">
-<p>To be notified when a request arrives you need to set a <code><a href="../../jsdoc/http_server-HttpServer.html#requestHandler">requestHandler</a></code>:</p>
+<p>To be notified when a request arrives you need to set a <code><a href="../../jsdoc/module-vertx-js_http_server-HttpServer.html#requestHandler">requestHandler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -253,7 +363,7 @@ server.requestHandler(function (request) {
 <div class="sect2">
 <h3 id="_handling_requests">Handling requests</h3>
 <div class="paragraph">
-<p>When a request arrives, the request handler is called passing in an instance of <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html">HttpServerRequest</a></code>.
+<p>When a request arrives, the request handler is called passing in an instance of <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html">HttpServerRequest</a></code>.
 This object represents the server side HTTP request.</p>
 </div>
 <div class="paragraph">
@@ -263,13 +373,13 @@ This object represents the server side HTTP request.</p>
 <p>If the request contains a body, that body will arrive at the server some time after the request handler has been called.</p>
 </div>
 <div class="paragraph">
-<p>The server request object allows you to retrieve the <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#uri">uri</a></code>,
-<code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#path">path</a></code>, <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#params">params</a></code> and
-<code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#headers">headers</a></code>, amongst other things.</p>
+<p>The server request object allows you to retrieve the <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#uri">uri</a></code>,
+<code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#path">path</a></code>, <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#params">params</a></code> and
+<code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#headers">headers</a></code>, amongst other things.</p>
 </div>
 <div class="paragraph">
 <p>Each server request object is associated with one server response object. You use
-<code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#response">response</a></code> to get a reference to the <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html">HttpServerResponse</a></code>
+<code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#response">response</a></code> to get a reference to the <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html">HttpServerResponse</a></code>
 object.</p>
 </div>
 <div class="paragraph">
@@ -285,20 +395,20 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_version">Request version</h4>
 <div class="paragraph">
-<p>The version of HTTP specified in the request can be retrieved with <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#version">version</a></code></p>
+<p>The version of HTTP specified in the request can be retrieved with <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#version">version</a></code></p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_request_method">Request method</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#method">method</a></code> to retrieve the HTTP method of the request.
+<p>Use <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#method">method</a></code> to retrieve the HTTP method of the request.
 (i.e. whether it&#8217;s GET, POST, PUT, DELETE, HEAD, OPTIONS, etc).</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_request_uri">Request URI</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#uri">uri</a></code> to retrieve the URI of the request.</p>
+<p>Use <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#uri">uri</a></code> to retrieve the URI of the request.</p>
 </div>
 <div class="paragraph">
 <p>Note that this is the actual URI as passed in the HTTP request, and it&#8217;s almost always a relative URI.</p>
@@ -310,7 +420,7 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_path">Request path</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#path">path</a></code> to return the path part of the URI</p>
+<p>Use <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#path">path</a></code> to return the path part of the URI</p>
 </div>
 <div class="paragraph">
 <p>For example, if the request URI was:</p>
@@ -332,7 +442,7 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_query">Request query</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#query">query</a></code> to return the query part of the URI</p>
+<p>Use <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#query">query</a></code> to return the query part of the URI</p>
 </div>
 <div class="paragraph">
 <p>For example, if the request URI was:</p>
@@ -354,10 +464,10 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_headers">Request headers</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#headers">headers</a></code> to return the headers of the HTTP request.</p>
+<p>Use <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#headers">headers</a></code> to return the headers of the HTTP request.</p>
 </div>
 <div class="paragraph">
-<p>This returns an instance of <code><a href="../../jsdoc/multi_map-MultiMap.html">MultiMap</a></code> - which is like a normal Map or Hash but allows multiple
+<p>This returns an instance of <code><a href="../../jsdoc/module-vertx-js_multi_map-MultiMap.html">MultiMap</a></code> - which is like a normal Map or Hash but allows multiple
 values for the same key - this is because HTTP allows multiple header values with the same key.</p>
 </div>
 <div class="paragraph">
@@ -376,12 +486,21 @@ console.log("User agent is " + headers.get("User-Agent"));</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_request_parameters">Request parameters</h4>
+<h4 id="_request_host">Request host</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#params">params</a></code> to return the parameters of the HTTP request.</p>
+<p>Use <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#host">host</a></code> to return the host of the HTTP request.</p>
 </div>
 <div class="paragraph">
-<p>Just like <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#headers">headers</a></code> this returns an instance of <code><a href="../../jsdoc/multi_map-MultiMap.html">MultiMap</a></code>
+<p>For HTTP/1.x requests the <code>host</code> header is returned, for HTTP/1 requests the <code>:authority</code> pseudo header is returned.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_request_parameters">Request parameters</h4>
+<div class="paragraph">
+<p>Use <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#params">params</a></code> to return the parameters of the HTTP request.</p>
+</div>
+<div class="paragraph">
+<p>Just like <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#headers">headers</a></code> this returns an instance of <code><a href="../../jsdoc/module-vertx-js_multi_map-MultiMap.html">MultiMap</a></code>
 as there can be more than one parameter with the same name.</p>
 </div>
 <div class="paragraph">
@@ -410,20 +529,20 @@ then they will not appear in the params here.</p>
 <div class="sect3">
 <h4 id="_remote_address">Remote address</h4>
 <div class="paragraph">
-<p>The address of the sender of the request can be retrieved with <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#remoteAddress">remoteAddress</a></code>.</p>
+<p>The address of the sender of the request can be retrieved with <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#remoteAddress">remoteAddress</a></code>.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_absolute_uri">Absolute URI</h4>
 <div class="paragraph">
 <p>The URI passed in an HTTP request is usually relative. If you wish to retrieve the absolute URI corresponding
-to the request, you can get it with <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#absoluteURI">absoluteURI</a></code></p>
+to the request, you can get it with <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#absoluteURI">absoluteURI</a></code></p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_end_handler">End handler</h4>
 <div class="paragraph">
-<p>The <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#endHandler">endHandler</a></code> of the request is invoked when the entire request,
+<p>The <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#endHandler">endHandler</a></code> of the request is invoked when the entire request,
 including any body has been fully read.</p>
 </div>
 </div>
@@ -438,7 +557,7 @@ when just the headers of the request have arrived so the request object does not
 body in memory before handing it to you, as that could cause the server to exhaust available memory.</p>
 </div>
 <div class="paragraph">
-<p>To receive the body, you can use the <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#handler">handler</a></code>  on the request,
+<p>To receive the body, you can use the <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#handler">handler</a></code>  on the request,
 this will get called every time a chunk of the request body arrives. Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
@@ -449,7 +568,7 @@ this will get called every time a chunk of the request body arrives. Here&#8217;
 </div>
 </div>
 <div class="paragraph">
-<p>The object passed into the handler is a <code><a href="../../jsdoc/buffer-Buffer.html">Buffer</a></code>, and the handler can be called
+<p>The object passed into the handler is a <code><a href="../../jsdoc/module-vertx-js_buffer-Buffer.html">Buffer</a></code>, and the handler can be called
 multiple times as data arrives from the network, depending on the size of the body.</p>
 </div>
 <div class="paragraph">
@@ -474,7 +593,7 @@ request.endHandler(function (v) {
 </div>
 </div>
 <div class="paragraph">
-<p>This is such a common case, that Vert.x provides a <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#bodyHandler">bodyHandler</a></code> to do this
+<p>This is such a common case, that Vert.x provides a <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#bodyHandler">bodyHandler</a></code> to do this
 for you. The body handler is called once when all the body has been received:</p>
 </div>
 <div class="listingblock">
@@ -488,8 +607,8 @@ for you. The body handler is called once when all the body has been received:</p
 <div class="sect3">
 <h4 id="_pumping_requests">Pumping requests</h4>
 <div class="paragraph">
-<p>The request object is a <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code> so you can pump the request body to any
-<code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instance.</p>
+<p>The request object is a <code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html">ReadStream</a></code> so you can pump the request body to any
+<code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html">WriteStream</a></code> instance.</p>
 </div>
 <div class="paragraph">
 <p>See the chapter on <a href="#streams">streams and pumps</a> for a detailed explanation.</p>
@@ -512,8 +631,8 @@ has been read from the wire.</p>
 </div>
 <div class="paragraph">
 <p>If you want to retrieve the attributes of a multi-part form you should tell Vert.x that you expect to receive
-such a form <strong>before</strong> any of the body is read by calling <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#setExpectMultipart">setExpectMultipart</a></code>
-with true, and then you should retrieve the actual attributes using <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#formAttributes">formAttributes</a></code>
+such a form <strong>before</strong> any of the body is read by calling <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#setExpectMultipart">setExpectMultipart</a></code>
+with true, and then you should retrieve the actual attributes using <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#formAttributes">formAttributes</a></code>
 once the entire body has been read:</p>
 </div>
 <div class="listingblock">
@@ -535,14 +654,14 @@ once the entire body has been read:</p>
 </div>
 <div class="paragraph">
 <p>To receive file uploads you tell Vert.x to expect a multi-part form and set an
-<code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#uploadHandler">uploadHandler</a></code> on the request.</p>
+<code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#uploadHandler">uploadHandler</a></code> on the request.</p>
 </div>
 <div class="paragraph">
 <p>This handler will be called once for every
 upload that arrives on the server.</p>
 </div>
 <div class="paragraph">
-<p>The object passed into the handler is a <code><a href="../../jsdoc/http_server_file_upload-HttpServerFileUpload.html">HttpServerFileUpload</a></code> instance.</p>
+<p>The object passed into the handler is a <code><a href="../../jsdoc/module-vertx-js_http_server_file_upload-HttpServerFileUpload.html">HttpServerFileUpload</a></code> instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -568,12 +687,12 @@ exhaustion, instead, the upload data is received in chunks:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The upload object is a <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code> so you can pump the request body to any
-<code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instance. See the chapter on <a href="#streams">streams and pumps</a> for a
+<p>The upload object is a <code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html">ReadStream</a></code> so you can pump the request body to any
+<code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html">WriteStream</a></code> instance. See the chapter on <a href="#streams">streams and pumps</a> for a
 detailed explanation.</p>
 </div>
 <div class="paragraph">
-<p>If you just want to upload the file to disk somewhere you can use <code><a href="../../jsdoc/http_server_file_upload-HttpServerFileUpload.html#streamToFileSystem">streamToFileSystem</a></code>:</p>
+<p>If you just want to upload the file to disk somewhere you can use <code><a href="../../jsdoc/module-vertx-js_http_server_file_upload-HttpServerFileUpload.html#streamToFileSystem">streamToFileSystem</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -596,12 +715,42 @@ to arbitrary places on your filesystem. See <a href="#Security notes">security n
 </table>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_receiving_custom_http_2_frames">Receiving custom HTTP/2 frames</h4>
+<div class="paragraph">
+<p>HTTP/2 is a framed protocol with various frames for the HTTP request/response model. The protocol allows other kind
+of frames to be sent and received.</p>
+</div>
+<div class="paragraph">
+<p>To receive custom frames, you can use the <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#customFrameHandler">customFrameHandler</a></code> on the request,
+this will get called every time a custom frame arrives. Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">request.customFrameHandler(function (frame) {
+
+  console.log("Received a frame type=" + frame.type() + " payload" + frame.payload().toString());
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>HTTP/2 frames are not subject to flow control - the frame handler will be called immediatly when a
+custom frame is received whether the request is paused or is not</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_non_standard_http_methods">Non standard HTTP methods</h4>
+<div class="paragraph">
+<p>The <code><a href="todo">OTHER</a></code> HTTP method is used for non standard methods, in this case
+<code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#rawMethod">rawMethod</a></code> returns the HTTP method as sent by the client.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_sending_back_responses">Sending back responses</h3>
 <div class="paragraph">
-<p>The server response object is an instance of <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html">HttpServerResponse</a></code> and is obtained from the
-request with <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#response">response</a></code>.</p>
+<p>The server response object is an instance of <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html">HttpServerResponse</a></code> and is obtained from the
+request with <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#response">response</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>You use the response object to write a response back to the HTTP client.</p>
@@ -612,19 +761,32 @@ request with <code><a href="../../jsdoc/http_server_request-HttpServerRequest.ht
 <p>The default HTTP status code for a response is <code>200</code>, representing <code>OK</code>.</p>
 </div>
 <div class="paragraph">
-<p>Use <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#setStatusCode">setStatusCode</a></code> to set a different code.</p>
+<p>Use <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#setStatusCode">setStatusCode</a></code> to set a different code.</p>
 </div>
 <div class="paragraph">
-<p>You can also specify a custom status message with <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#setStatusMessage">setStatusMessage</a></code>.</p>
+<p>You can also specify a custom status message with <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#setStatusMessage">setStatusMessage</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If you don&#8217;t specify a status message, the default one corresponding to the status code will be used.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+for HTTP/2 the status won&#8217;t be present in the response since the protocol won&#8217;t transmit the message
+to the client
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_writing_http_responses">Writing HTTP responses</h4>
 <div class="paragraph">
-<p>To write data to an HTTP response, you use one the <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#write">write</a></code> operations.</p>
+<p>To write data to an HTTP response, you use one the <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#write">write</a></code> operations.</p>
 </div>
 <div class="paragraph">
 <p>These can be invoked multiple times before the response is ended. They can be invoked in a few ways:</p>
@@ -662,7 +824,7 @@ response.write("hello world!", "UTF-16");</code></pre>
 </div>
 <div class="paragraph">
 <p>If you are just writing a single string or buffer to the HTTP response you can write it and end the response in a
-single call to the <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#end">end</a></code></p>
+single call to the <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#end">end</a></code></p>
 </div>
 <div class="paragraph">
 <p>The first call to write results in the response header being being written to the response. Consequently, if you are
@@ -673,7 +835,7 @@ be too late otherwise. If you are using HTTP chunking you do not have to worry.<
 <div class="sect3">
 <h4 id="_ending_http_responses">Ending HTTP responses</h4>
 <div class="paragraph">
-<p>Once you have finished with the HTTP response you should <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#end">end</a></code> it.</p>
+<p>Once you have finished with the HTTP response you should <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#end">end</a></code> it.</p>
 </div>
 <div class="paragraph">
 <p>This can be done in several ways:</p>
@@ -702,7 +864,7 @@ response.end("hello world!");</code></pre>
 <div class="sect3">
 <h4 id="_closing_the_underlying_connection">Closing the underlying connection</h4>
 <div class="paragraph">
-<p>You can close the underlying TCP connection with <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#close">close</a></code>.</p>
+<p>You can close the underlying TCP connection with <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#close">close</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Non keep-alive connections will be automatically closed by Vert.x when the response is ended.</p>
@@ -711,12 +873,15 @@ response.end("hello world!");</code></pre>
 <p>Keep-alive connections are not automatically closed by Vert.x by default. If you want keep-alive connections to be
 closed after an idle time, then you configure <code><a href="../dataobjects.html#HttpServerOptions#setIdleTimeout">idleTimeout</a></code>.</p>
 </div>
+<div class="paragraph">
+<p>HTTP/2 connections send a <code>GOAWAY</code> frame before closing the response.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_setting_response_headers">Setting response headers</h4>
 <div class="paragraph">
 <p>HTTP response headers can be added to the response by adding them directly to the
-<code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#headers">headers</a></code>:</p>
+<code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#headers">headers</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -727,7 +892,7 @@ headers.set("other-header", "wibble");</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Or you can use <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#putHeader">putHeader</a></code></p>
+<p>Or you can use <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#putHeader">putHeader</a></code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -758,15 +923,27 @@ response.setChunked(true);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Default is non-chunked. When in chunked mode, each call to one of the <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#write">write</a></code>
+<p>Default is non-chunked. When in chunked mode, each call to one of the <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#write">write</a></code>
 methods will result in a new HTTP chunk being written out.</p>
 </div>
 <div class="paragraph">
 <p>When in chunked mode you can also write HTTP response trailers to the response. These are actually written in
 the final chunk of the response.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+chunked response has no effect for an HTTP/2 stream
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>To add trailers to the response, add them directly to the <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#trailers">trailers</a></code>.</p>
+<p>To add trailers to the response, add them directly to the <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#trailers">trailers</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -777,7 +954,7 @@ trailers.set("X-wibble", "woobble").set("X-quux", "flooble");</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Or use <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#putTrailer">putTrailer</a></code>.</p>
+<p>Or use <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#putTrailer">putTrailer</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -790,11 +967,11 @@ response.putTrailer("X-wibble", "woobble").putTrailer("X-quux", "flooble");</cod
 <div class="sect3">
 <h4 id="_serving_files_directly_from_disk_or_the_classpath">Serving files directly from disk or the classpath</h4>
 <div class="paragraph">
-<p>If you were writing a web server, one way to serve a file from disk would be to open it as an <code><a href="../../jsdoc/async_file-AsyncFile.html">AsyncFile</a></code>
+<p>If you were writing a web server, one way to serve a file from disk would be to open it as an <code><a href="../../jsdoc/module-vertx-js_async_file-AsyncFile.html">AsyncFile</a></code>
 and pump it to the HTTP response.</p>
 </div>
 <div class="paragraph">
-<p>Or you could load it it one go using <code><a href="../../jsdoc/file_system-FileSystem.html#readFile">readFile</a></code> and write it straight to the response.</p>
+<p>Or you could load it it one go using <code><a href="../../jsdoc/module-vertx-js_file_system-FileSystem.html#readFile">readFile</a></code> and write it straight to the response.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively, Vert.x provides a method which allows you to serve a file from disk or the filesystem to an HTTP response
@@ -803,7 +980,7 @@ Where supported by the underlying operating system this may result in the OS dir
 file to the socket without being copied through user-space at all.</p>
 </div>
 <div class="paragraph">
-<p>This is done by using <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#sendFile">sendFile</a></code>, and is usually more efficient for large
+<p>This is done by using <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#sendFile">sendFile</a></code>, and is usually more efficient for large
 files, but may be slower for small files.</p>
 </div>
 <div class="paragraph">
@@ -824,7 +1001,7 @@ files, but may be slower for small files.</p>
 </div>
 <div class="paragraph">
 <p>Sending a file is asynchronous and may not complete until some time after the call has returned. If you want to
-be notified when the file has been writen you can use <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#sendFile">sendFile</a></code></p>
+be notified when the file has been writen you can use <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#sendFile">sendFile</a></code></p>
 </div>
 <div class="paragraph">
 <p>Please see the chapter about <a href="#classpath">serving files from the classpath</a> for restrictions about the classpath resolution or disabling it.</p>
@@ -905,9 +1082,9 @@ case you can just do:</p>
 <div class="sect3">
 <h4 id="_pumping_responses">Pumping responses</h4>
 <div class="paragraph">
-<p>The server response is a <code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instance so you can pump to it from any
-<code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code>, e.g. <code><a href="../../jsdoc/async_file-AsyncFile.html">AsyncFile</a></code>, <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code>,
-<code><a href="../../jsdoc/web_socket-WebSocket.html">WebSocket</a></code> or <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html">HttpServerRequest</a></code>.</p>
+<p>The server response is a <code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html">WriteStream</a></code> instance so you can pump to it from any
+<code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html">ReadStream</a></code>, e.g. <code><a href="../../jsdoc/module-vertx-js_async_file-AsyncFile.html">AsyncFile</a></code>, <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html">NetSocket</a></code>,
+<code><a href="../../jsdoc/module-vertx-js_web_socket-WebSocket.html">WebSocket</a></code> or <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html">HttpServerRequest</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example which echoes the request body back in the response for any PUT methods.
@@ -930,6 +1107,118 @@ vertx.createHttpServer().requestHandler(function (request) {
   }
 }).listen(8080);</code></pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_writing_http_2_frames">Writing HTTP/2 frames</h4>
+<div class="paragraph">
+<p>HTTP/2 is a framed protocol with various frames for the HTTP request/response model. The protocol allows other kind
+of frames to be sent and received.</p>
+</div>
+<div class="paragraph">
+<p>To send such frames, you can use the <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#writeCustomFrame">writeCustomFrame</a></code> on the response.
+Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Buffer = require("vertx-js/buffer");
+
+var frameType = 40;
+var frameStatus = 10;
+var payload = Buffer.buffer("some data");
+
+// Sending a frame to the client
+response.writeCustomFrame(frameType, frameStatus, payload);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These frames are sent immediately and are not subject to flow control - when such frame is sent there it may be done
+before other <code>DATA</code> frames.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_stream_reset">Stream reset</h4>
+<div class="paragraph">
+<p>HTTP/1.x does not allow a clean reset of a request or a response stream, for example when a client uploads
+a resource already present on the server, the server needs to accept the entire response.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/2 supports stream reset at any time during the request/response:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Reset the stream
+request.response().reset();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default the <code>NO_ERROR</code> (0) error code is sent, another code can sent instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Cancel the stream
+request.response().reset(8);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The HTTP/2 specification defines the list of <a href="http://httpwg.org/specs/rfc7540.html#ErrorCodes">error codes</a> one can use.</p>
+</div>
+<div class="paragraph">
+<p>The request handler are notified of stream reset events with the <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#exceptionHandler">request handler</a></code> and
+<code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#exceptionHandler">response handler</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">request.response().exceptionHandler(function (err) {
+  if (err.getClass().getSimpleName() == 'StreamResetException') {
+    var reset = err;
+    console.log("Stream reset " + reset.getCode());
+  }
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_server_push">Server push</h4>
+<div class="paragraph">
+<p>Server push is a new feature of HTTP/2 that enables sending multiple responses in parallel for a single client request.</p>
+</div>
+<div class="paragraph">
+<p>When a server process a request, it can push a request/response to the client:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var response = request.response();
+
+// Push main.js to the client
+response.push('GET', "/main.js", function (ar, ar_err) {
+
+  if (ar_err == null) {
+
+    // The server is ready to push the response
+    var pushedResponse = ar;
+
+    // Send main.js response
+    pushedResponse.putHeader("content-type", "application/json").end("alert(\"Push response hello\")");
+  } else {
+    console.log("Could not push client resource " + ar_err);
+  }
+});
+
+// Send the requested resource
+response.sendFile("&lt;html&gt;&lt;head&gt;&lt;script src=\"/main.js\"&gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When the server is ready to push the response, the push response handler is called and the handler can send the response.</p>
+</div>
+<div class="paragraph">
+<p>The push response handler may receive a failure, for instance the client may cancel the push because it already has <code>main.js</code> in its
+cache and does not want it anymore.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#push">push</a></code> method must be called before the initiating response ends, however
+the pushed response can be written after.</p>
 </div>
 </div>
 </div>
@@ -968,7 +1257,7 @@ compressions and send it back to the client.</p>
 <div class="sect2">
 <h3 id="_creating_an_http_client">Creating an HTTP client</h3>
 <div class="paragraph">
-<p>You create an <code><a href="../../jsdoc/http_client-HttpClient.html">HttpClient</a></code> instance with default options as follows:</p>
+<p>You create an <code><a href="../../jsdoc/module-vertx-js_http_client-HttpClient.html">HttpClient</a></code> instance with default options as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -985,6 +1274,72 @@ compressions and send it back to the client.</p>
 };
 var client = vertx.createHttpClient(options);</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Vert.x supports HTTP/2 over TLS <code>h2</code> and over TCP <code>h2c</code>.</p>
+</div>
+<div class="paragraph">
+<p>By default the http client performs HTTP/1.1 requests, to perform HTTP/2 requests the <code><a href="../dataobjects.html#HttpClientOptions#setProtocolVersion">protocolVersion</a></code>
+must be set to <code><a href="todo">HTTP_2</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>For <code>h2</code> requests, TLS must be enabled with <em>Application-Layer Protocol Negotiation</em>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "protocolVersion" : "HTTP_2",
+  "ssl" : true,
+  "useAlpn" : true,
+  "trustAll" : true
+};
+
+var client = vertx.createHttpClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For <code>h2c</code> requests, TLS must be disabled, the client will do an HTTP/1.1 requests and try an upgrade to HTTP/2:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "protocolVersion" : "HTTP_2"
+};
+
+var client = vertx.createHttpClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>h2c</code> connections can also be established directly, i.e connection started with a prior knowledge, when
+<code><a href="../dataobjects.html#HttpClientOptions#setHttp2ClearTextUpgrade">http2ClearTextUpgrade</a></code> options is set to false: after the
+connection is established, the client will send the HTTP/2 connection preface and expect to receive
+the same preface from the server.</p>
+</div>
+<div class="paragraph">
+<p>The http server may not support HTTP/2, the actual version can be checked
+with <code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html#version">version</a></code> when the response arrives.</p>
+</div>
+<div class="paragraph">
+<p>When a clients connects to an HTTP/2 server, it sends to the server its <code><a href="../dataobjects.html#HttpClientOptions#getInitialSettings">initial settings</a></code>.
+The settings define how the server can use the connection, the default initial settings for a client are the default
+values defined by the HTTP/2 RFC.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_logging_network_client_activity">Logging network client activity</h3>
+<div class="paragraph">
+<p>For debugging purposes, network activity can be logged.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "logActivity" : true
+};
+var client = vertx.createHttpClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the chapter on <a href="#logging_network_activity">logging network activity</a> for a detailed explanation.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1039,7 +1394,7 @@ HEAD requests.</p>
 </div>
 <div class="paragraph">
 <p>The simplest way to do this with the Vert.x http client is using the methods prefixed with <code>Now</code>. For example
-<code><a href="../../jsdoc/http_client-HttpClient.html#getNow">getNow</a></code>.</p>
+<code><a href="../../jsdoc/module-vertx-js_http_client-HttpClient.html#getNow">getNow</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>These methods create the http request and send it in a single method call and allow you to provide a handler that will be
@@ -1065,7 +1420,7 @@ client.headNow("/other-uri", function (response) {
 <h4 id="_writing_general_requests">Writing general requests</h4>
 <div class="paragraph">
 <p>At other times you don&#8217;t know the request method you want to send until run-time. For that use case we provide
-general purpose request methods such as <code><a href="../../jsdoc/http_client-HttpClient.html#request">request</a></code> which allow you to specify
+general purpose request methods such as <code><a href="../../jsdoc/module-vertx-js_http_client-HttpClient.html#request">request</a></code> which allow you to specify
 the HTTP method at run-time:</p>
 </div>
 <div class="listingblock">
@@ -1089,11 +1444,11 @@ client.request('POST', "foo-uri", function (response) {
 before sending it.</p>
 </div>
 <div class="paragraph">
-<p>To do this you can call one of the specific request methods such as <code><a href="../../jsdoc/http_client-HttpClient.html#post">post</a></code> or
-one of the general purpose request methods such as <code><a href="../../jsdoc/http_client-HttpClient.html#request">request</a></code>.</p>
+<p>To do this you can call one of the specific request methods such as <code><a href="../../jsdoc/module-vertx-js_http_client-HttpClient.html#post">post</a></code> or
+one of the general purpose request methods such as <code><a href="../../jsdoc/module-vertx-js_http_client-HttpClient.html#request">request</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>These methods don&#8217;t send the request immediately, but instead return an instance of <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code>
+<p>These methods don&#8217;t send the request immediately, but instead return an instance of <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html">HttpClientRequest</a></code>
 which can be used to write to the request body or write headers.</p>
 </div>
 <div class="paragraph">
@@ -1190,7 +1545,7 @@ up-front.</p>
 <div class="sect3">
 <h4 id="_writing_request_headers">Writing request headers</h4>
 <div class="paragraph">
-<p>You can write headers to a request using the <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#headers">headers</a></code> multi-map as follows:</p>
+<p>You can write headers to a request using the <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html#headers">headers</a></code> multi-map as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1201,11 +1556,11 @@ headers.set("content-type", "application/json").set("other-header", "foo");</cod
 </div>
 </div>
 <div class="paragraph">
-<p>The headers are an instance of <code><a href="../../jsdoc/multi_map-MultiMap.html">MultiMap</a></code> which provides operations for adding, setting and removing
+<p>The headers are an instance of <code><a href="../../jsdoc/module-vertx-js_multi_map-MultiMap.html">MultiMap</a></code> which provides operations for adding, setting and removing
 entries. Http headers allow more than one value for a specific key.</p>
 </div>
 <div class="paragraph">
-<p>You can also write headers using <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#putHeader">putHeader</a></code></p>
+<p>You can also write headers using <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html#putHeader">putHeader</a></code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1219,9 +1574,17 @@ request.putHeader("content-type", "application/json").putHeader("other-header", 
 </div>
 </div>
 <div class="sect3">
+<h4 id="_non_standard_http_methods_2">Non standard HTTP methods</h4>
+<div class="paragraph">
+<p>The <code><a href="todo">OTHER</a></code> HTTP method is used for non standard methods, when this method
+is used, <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html#setRawMethod">setRawMethod</a></code> must be used to
+set the raw method to send to the server.</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_ending_http_requests">Ending HTTP requests</h4>
 <div class="paragraph">
-<p>Once you have finished with the HTTP request you must end it with one of the <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#end">end</a></code>
+<p>Once you have finished with the HTTP request you must end it with one of the <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html#end">end</a></code>
 operations.</p>
 </div>
 <div class="paragraph">
@@ -1262,7 +1625,7 @@ request.end(buffer);</code></pre>
 to the server, whose size is not known in advance.</p>
 </div>
 <div class="paragraph">
-<p>You put the HTTP request into chunked mode using <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#setChunked">setChunked</a></code>.</p>
+<p>You put the HTTP request into chunked mode using <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html#setChunked">setChunked</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>In chunked mode each call to write will cause a new chunk to be written to the wire. In chunked mode there is
@@ -1284,7 +1647,7 @@ request.end();</code></pre>
 <div class="sect3">
 <h4 id="_request_timeouts">Request timeouts</h4>
 <div class="paragraph">
-<p>You can set a timeout for a specific http request using <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#setTimeout">setTimeout</a></code>.</p>
+<p>You can set a timeout for a specific http request using <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html#setTimeout">setTimeout</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If the request does not return any data within the timeout period an exception will be passed to the exception handler
@@ -1295,7 +1658,7 @@ request.end();</code></pre>
 <h4 id="_handling_exceptions">Handling exceptions</h4>
 <div class="paragraph">
 <p>You can handle exceptions corresponding to a request by setting an exception handler on the
-<code><a href="../../jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code> instance:</p>
+<code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html">HttpClientRequest</a></code> instance:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1310,7 +1673,7 @@ request.exceptionHandler(function (e) {
 </div>
 <div class="paragraph">
 <p>This does not handle non <em>2xx</em> response that need to be handled in the
-<code><a href="../../jsdoc/http_client_response-HttpClientResponse.html">HttpClientResponse</a></code> code:</p>
+<code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html">HttpClientResponse</a></code> code:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1345,7 +1708,7 @@ request.end();</code></pre>
 <div class="paragraph">
 <p>Instead of providing a response handler in the call to create the client request object, alternatively, you can
 not provide a handler when the request is created and set it later on the request object itself, using
-<code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#handler">handler</a></code>, for example:</p>
+<code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html#handler">handler</a></code>, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1359,8 +1722,8 @@ request.handler(function (response) {
 <div class="sect3">
 <h4 id="_using_the_request_as_a_stream">Using the request as a stream</h4>
 <div class="paragraph">
-<p>The <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code> instance is also a <code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> which means
-you can pump to it from any <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code> instance.</p>
+<p>The <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html">HttpClientRequest</a></code> instance is also a <code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html">WriteStream</a></code> which means
+you can pump to it from any <code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html">ReadStream</a></code> instance.</p>
 </div>
 <div class="paragraph">
 <p>For, example, you could pump a file on disk to a http request body as follows:</p>
@@ -1378,16 +1741,78 @@ pump.start();</code></pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_writing_http_2_frames_2">Writing HTTP/2 frames</h4>
+<div class="paragraph">
+<p>HTTP/2 is a framed protocol with various frames for the HTTP request/response model. The protocol allows other kind
+of frames to be sent and received.</p>
+</div>
+<div class="paragraph">
+<p>To send such frames, you can use the <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html#write">write</a></code> on the request. Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Buffer = require("vertx-js/buffer");
+
+var frameType = 40;
+var frameStatus = 10;
+var payload = Buffer.buffer("some data");
+
+// Sending a frame to the server
+request.writeCustomFrame(frameType, frameStatus, payload);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_stream_reset_2">Stream reset</h4>
+<div class="paragraph">
+<p>HTTP/1.x does not allow a clean reset of a request or a response stream, for example when a client uploads a resource already
+present on the server, the server needs to accept the entire response.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/2 supports stream reset at any time during the request/response:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">request.reset();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default the NO_ERROR (0) error code is sent, another code can sent instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">request.reset(8);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The HTTP/2 specification defines the list of <a href="http://httpwg.org/specs/rfc7540.html#ErrorCodes">error codes</a> one can use.</p>
+</div>
+<div class="paragraph">
+<p>The request handler are notified of stream reset events with the <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html#exceptionHandler">request handler</a></code> and
+<code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html#exceptionHandler">response handler</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">request.exceptionHandler(function (err) {
+  if (err.getClass().getSimpleName() == 'StreamResetException') {
+    var reset = err;
+    console.log("Stream reset " + reset.getCode());
+  }
+});</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_handling_http_responses">Handling http responses</h3>
 <div class="paragraph">
-<p>You receive an instance of <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html">HttpClientResponse</a></code> into the handler that you specify in of
-the request methods or by setting a handler directly on the <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code> object.</p>
+<p>You receive an instance of <code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html">HttpClientResponse</a></code> into the handler that you specify in of
+the request methods or by setting a handler directly on the <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html">HttpClientRequest</a></code> object.</p>
 </div>
 <div class="paragraph">
-<p>You can query the status code and the status message of the response with <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#statusCode">statusCode</a></code>
-and <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#statusMessage">statusMessage</a></code>.</p>
+<p>You can query the status code and the status message of the response with <code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html#statusCode">statusCode</a></code>
+and <code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html#statusMessage">statusMessage</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1403,17 +1828,17 @@ and <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#stat
 <div class="sect3">
 <h4 id="_using_the_response_as_a_stream">Using the response as a stream</h4>
 <div class="paragraph">
-<p>The <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html">HttpClientResponse</a></code> instance is also a <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code> which means
-you can pump it to any <code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instance.</p>
+<p>The <code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html">HttpClientResponse</a></code> instance is also a <code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html">ReadStream</a></code> which means
+you can pump it to any <code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html">WriteStream</a></code> instance.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_response_headers_and_trailers">Response headers and trailers</h4>
 <div class="paragraph">
-<p>Http responses can contain headers. Use <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#headers">headers</a></code> to get the headers.</p>
+<p>Http responses can contain headers. Use <code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html#headers">headers</a></code> to get the headers.</p>
 </div>
 <div class="paragraph">
-<p>The object returned is a <code><a href="../../jsdoc/multi_map-MultiMap.html">MultiMap</a></code> as HTTP headers can contain multiple values for single keys.</p>
+<p>The object returned is a <code><a href="../../jsdoc/module-vertx-js_multi_map-MultiMap.html">MultiMap</a></code> as HTTP headers can contain multiple values for single keys.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1425,7 +1850,7 @@ var contentLength = response.headers().get("content-lengh");</code></pre>
 <p>Chunked HTTP responses can also contain trailers - these are sent in the last chunk of the response body.</p>
 </div>
 <div class="paragraph">
-<p>You use <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#trailers">trailers</a></code> to get the trailers. Trailers are also a <code><a href="../../jsdoc/multi_map-MultiMap.html">MultiMap</a></code>.</p>
+<p>You use <code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html#trailers">trailers</a></code> to get the trailers. Trailers are also a <code><a href="../../jsdoc/module-vertx-js_multi_map-MultiMap.html">MultiMap</a></code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1439,8 +1864,8 @@ don&#8217;t wait for all the body to arrive before calling the response handler 
 might be waiting a long time, or run out of memory for large responses.</p>
 </div>
 <div class="paragraph">
-<p>As parts of the response body arrive, the <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#handler">handler</a></code> is called with
-a <code><a href="../../jsdoc/buffer-Buffer.html">Buffer</a></code> representing the piece of the body:</p>
+<p>As parts of the response body arrive, the <code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html#handler">handler</a></code> is called with
+a <code><a href="../../jsdoc/module-vertx-js_buffer-Buffer.html">Buffer</a></code> representing the piece of the body:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1479,7 +1904,7 @@ client.getNow("some-uri", function (response) {
 </div>
 </div>
 <div class="paragraph">
-<p>Or you can use the convenience <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#bodyHandler">bodyHandler</a></code> which
+<p>Or you can use the convenience <code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html#bodyHandler">bodyHandler</a></code> which
 is called with the entire body when the response has been fully read:</p>
 </div>
 <div class="listingblock">
@@ -1497,14 +1922,14 @@ is called with the entire body when the response has been fully read:</p>
 <div class="sect3">
 <h4 id="_response_end_handler">Response end handler</h4>
 <div class="paragraph">
-<p>The response <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#endHandler">endHandler</a></code> is called when the entire response body has been read
+<p>The response <code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html#endHandler">endHandler</a></code> is called when the entire response body has been read
 or immediately after the headers have been read and the response handler has been called if there is no body.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_reading_cookies_from_the_response">Reading cookies from the response</h4>
 <div class="paragraph">
-<p>You can retrieve the list of cookies from a response using <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html#cookies">cookies</a></code>.</p>
+<p>You can retrieve the list of cookies from a response using <code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html#cookies">cookies</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively you can just parse the <code>Set-Cookie</code> headers yourself in the response.</p>
@@ -1526,7 +1951,7 @@ Sending large amounts of data if the request might not be accepted is a waste of
 in reading data that it will just discard.</p>
 </div>
 <div class="paragraph">
-<p>Vert.x allows you to set a <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html#continueHandler">continueHandler</a></code> on the
+<p>Vert.x allows you to set a <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html#continueHandler">continueHandler</a></code> on the
 client request object</p>
 </div>
 <div class="paragraph">
@@ -1534,7 +1959,7 @@ client request object</p>
 the rest of the request.</p>
 </div>
 <div class="paragraph">
-<p>This is used in conjunction with `<a href="../../jsdoc/http_client_request-HttpClientRequest.html#sendHead">sendHead</a>`to send the head of the request.</p>
+<p>This is used in conjunction with `<a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html#sendHead">sendHead</a>`to send the head of the request.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example:</p>
@@ -1564,7 +1989,7 @@ when it receives an <code>Expect: 100-Continue</code> header.</p>
 </div>
 <div class="paragraph">
 <p>If you&#8217;d prefer to decide whether to send back continue responses manually, then this property should be set to
-<code>false</code> (the default), then you can inspect the headers and call <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html#writeContinue">writeContinue</a></code>
+<code>false</code> (the default), then you can inspect the headers and call <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html#writeContinue">writeContinue</a></code>
 to have the client continue sending the body:</p>
 </div>
 <div class="listingblock">
@@ -1615,6 +2040,74 @@ cannot be a logical protocol constraint):</p>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_client_push">Client push</h4>
+<div class="paragraph">
+<p>Server push is a new feature of HTTP/2 that enables sending multiple responses in parallel for a single client request.</p>
+</div>
+<div class="paragraph">
+<p>A push handler can be set on a request to receive the request/response pushed by the server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var request = client.get("/index.html", function (response) {
+  // Process index.html response
+});
+
+// Set a push handler to be aware of any resource pushed by the server
+request.pushHandler(function (pushedRequest) {
+
+  // A resource is pushed for this request
+  console.log("Server pushed " + pushedRequest.path());
+
+  // Set an handler for the response
+  pushedRequest.handler(function (pushedResponse) {
+    console.log("The response for the pushed request");
+  });
+});
+
+// End the request
+request.end();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the client does not want to receive a pushed request, it can reset the stream:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">request.pushHandler(function (pushedRequest) {
+  if (pushedRequest.path() == "/main.js") {
+    pushedRequest.reset();
+  } else {
+    // Handle it
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When no handler is set, any stream pushed will be automatically cancelled by the client with
+a stream reset (<code>8</code> error code).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_receiving_custom_http_2_frames_2">Receiving custom HTTP/2 frames</h4>
+<div class="paragraph">
+<p>HTTP/2 is a framed protocol with various frames for the HTTP request/response model. The protocol allows other kind of
+frames to be sent and received.</p>
+</div>
+<div class="paragraph">
+<p>To receive custom frames, you can use the customFrameHandler on the request, this will get called every time a custom
+frame arrives. Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">response.customFrameHandler(function (frame) {
+
+  console.log("Received a frame type=" + frame.type() + " payload" + frame.payload().toString());
+});</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_enabling_compression_on_the_client">Enabling compression on the client</h3>
@@ -1660,13 +2153,13 @@ used when creating the client.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_pooling_and_keep_alive">Pooling and keep alive</h3>
+<h3 id="_http_1_x_pooling_and_keep_alive">HTTP/1.x pooling and keep alive</h3>
 <div class="paragraph">
 <p>Http keep alive allows http connections to be used for more than one request. This can be a more efficient use of
 connections when you&#8217;re making multiple requests to the same server.</p>
 </div>
 <div class="paragraph">
-<p>The http client supports pooling of connections, allowing you to reuse connections between requests.</p>
+<p>For HTTP/1.x versions, the http client supports pooling of connections, allowing you to reuse connections between requests.</p>
 </div>
 <div class="paragraph">
 <p>For pooling to work, keep alive must be true using <code><a href="../dataobjects.html#HttpClientOptions#setKeepAlive">keepAlive</a></code>
@@ -1693,7 +2186,7 @@ connections not used within this timeout will be closed. Please note the idle ti
 </div>
 </div>
 <div class="sect2">
-<h3 id="_pipe_lining">Pipe-lining</h3>
+<h3 id="_http_1_1_pipe_lining">HTTP/1.1 pipe-lining</h3>
 <div class="paragraph">
 <p>The client also supports pipe-lining of requests on a connection.</p>
 </div>
@@ -1707,6 +2200,305 @@ By default pipe-lining is disabled.</p>
 </div>
 <div class="paragraph">
 <p>When pipe-lining is enabled requests will be written to connections without waiting for previous responses to return.</p>
+</div>
+<div class="paragraph">
+<p>The number of pipe-lined requests over a single connection is limited by <code><a href="../dataobjects.html#HttpClientOptions#setPipeliningLimit">pipeliningLimit</a></code>.
+This option defines the maximum number of http requests sent to the server awaiting for a response. This limit ensures the
+fairness of the distribution of the client requests over the connections to the same server.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_http_2_multiplexing">HTTP/2 multiplexing</h3>
+<div class="paragraph">
+<p>HTTP/2 advocates to use a single connection to a server, by default the http client uses a single
+connection for each server, all the streams to the same server are multiplexed over the same connection.</p>
+</div>
+<div class="paragraph">
+<p>When the clients needs to use more than a single connection and use pooling, the <code><a href="../dataobjects.html#HttpClientOptions#setHttp2MaxPoolSize">http2MaxPoolSize</a></code>
+shall be used.</p>
+</div>
+<div class="paragraph">
+<p>When it is desirable to limit the number of multiplexed streams per connection and use a connection
+pool instead of a single connection, <code><a href="../dataobjects.html#HttpClientOptions#setHttp2MultiplexingLimit">http2MultiplexingLimit</a></code>
+can be used.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var clientOptions = {
+  "http2MultiplexingLimit" : 10,
+  "http2MaxPoolSize" : 3
+};
+
+// Uses up to 3 connections and up to 10 streams per connection
+var client = vertx.createHttpClient(clientOptions);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The multiplexing limit for a connection is a setting set on the client that limits the number of streams
+of a single connection. The effective value can be even lower if the server sets a lower limit
+with the <code><a href="../dataobjects.html#Http2Settings#setMaxConcurrentStreams">SETTINGS_MAX_CONCURRENT_STREAMS</a></code> setting.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/2 connections will not be closed by the client automatically. To close them you can call <code><a href="../../jsdoc/module-vertx-js_http_connection-HttpConnection.html#close">close</a></code>
+or close the client instance.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively you can set idle timeout using <code><a href="../dataobjects.html#HttpClientOptions#setIdleTimeout">idleTimeout</a></code> - any
+connections not used within this timeout will be closed. Please note the idle timeout value is in seconds not milliseconds.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_http_connections">HTTP connections</h3>
+<div class="paragraph">
+<p>The <code><a href="../../jsdoc/module-vertx-js_http_connection-HttpConnection.html">HttpConnection</a></code> offers the API for dealing with HTTP connection events, lifecycle
+and settings.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/2 implements fully the <code><a href="../../jsdoc/module-vertx-js_http_connection-HttpConnection.html">HttpConnection</a></code> API.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/1.x implements partially the <code><a href="../../jsdoc/module-vertx-js_http_connection-HttpConnection.html">HttpConnection</a></code> API: only the close operation,
+the close handler and exception handler are implemented. This protocol does not provide semantics for
+the other operations.</p>
+</div>
+<div class="sect3">
+<h4 id="_server_connections">Server connections</h4>
+<div class="paragraph">
+<p>The <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#connection">connection</a></code> method returns the request connection on the server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var connection = request.connection();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A connection handler can be set on the server to be notified of any incoming connection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var server = vertx.createHttpServer(http2Options);
+
+server.connectionHandler(function (connection) {
+  console.log("A client connected");
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_client_connections">Client connections</h4>
+<div class="paragraph">
+<p>The <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html#connection">connection</a></code> method returns the request connection on the client:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var connection = request.connection();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A connection handler can be set on the request to be notified when the connection happens:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">request.connectionHandler(function (connection) {
+  console.log("Connected to the server");
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_settings">Connection settings</h4>
+<div class="paragraph">
+<p>The configuration of an HTTP/2 is configured by the <code><a href="../dataobjects.html#Http2Settings">Http2Settings</a></code> data object.</p>
+</div>
+<div class="paragraph">
+<p>Each endpoint must respect the settings sent by the other side of the connection.</p>
+</div>
+<div class="paragraph">
+<p>When a connection is established, the client and the server exchange initial settings. Initial settings
+are configured by <code><a href="../dataobjects.html#HttpClientOptions#setInitialSettings">initialSettings</a></code> on the client and
+<code><a href="../dataobjects.html#HttpServerOptions#setInitialSettings">initialSettings</a></code> on the server.</p>
+</div>
+<div class="paragraph">
+<p>The settings can be changed at any time after the connection is established:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">connection.updateSettings({
+  "maxConcurrentStreams" : 100
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As the remote side should acknowledge on reception of the settings update, it&#8217;s possible to give a callback
+to be notified of the acknowledgment:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">connection.updateSettings({
+  "maxConcurrentStreams" : 100
+}, function (ar, ar_err) {
+  if (ar_err == null) {
+    console.log("The settings update has been acknowledged ");
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Conversely the <code><a href="../../jsdoc/module-vertx-js_http_connection-HttpConnection.html#remoteSettingsHandler">remoteSettingsHandler</a></code> is notified
+when the new remote settings are received:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">connection.remoteSettingsHandler(function (settings) {
+  console.log("Received new settings");
+});</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+this only applies to the HTTP/2 protocol
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_ping">Connection ping</h4>
+<div class="paragraph">
+<p>HTTP/2 connection ping is useful for determining the connection round-trip time or check the connection
+validity: <code><a href="../../jsdoc/module-vertx-js_http_connection-HttpConnection.html#ping">ping</a></code> sends a <code>PING</code> frame to the remote
+endpoint:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Buffer = require("vertx-js/buffer");
+var data = Buffer.buffer();
+for (var i = 0; i &lt; 8; i++) {
+  data.appendByte(i);
+}
+connection.ping(data, function (pong, pong_err) {
+  console.log("Remote side replied");
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Vert.x will send automatically an acknowledgement when a <code>PING</code> frame is received,
+an handler can be set to be notified for each ping received:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">connection.pingHandler(function (ping) {
+  console.log("Got pinged by remote side");
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The handler is just notified, the acknowledgement is sent whatsoever. Such feature is aimed for
+implementing  protocols on top of HTTP/2.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+this only applies to the HTTP/2 protocol
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_shutdown_and_go_away">Connection shutdown and go away</h4>
+<div class="paragraph">
+<p>Calling <code><a href="../../jsdoc/module-vertx-js_http_connection-HttpConnection.html#shutdown">shutdown</a></code> will send a <code>GOAWAY</code> frame to the
+remote side of the connection, asking it to stop creating streams: a client will stop doing new requests
+and a server will stop pushing responses. After the <code>GOAWAY</code> frame is sent, the connection
+waits some time (30 seconds by default) until all current streams closed and close the connection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">connection.shutdown();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../jsdoc/module-vertx-js_http_connection-HttpConnection.html#shutdownHandler">shutdownHandler</a></code> notifies when all streams have been closed, the
+connection is not yet closed.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s possible to just send a <code>GOAWAY</code> frame, the main difference with a shutdown is that
+it will just tell the remote side of the connection to stop creating new streams without scheduling a connection
+close:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">connection.goAway(0);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Conversely, it is also possible to be notified when <code>GOAWAY</code> are received:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">connection.goAwayHandler(function (goAway) {
+  console.log("Received a go away frame");
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../jsdoc/module-vertx-js_http_connection-HttpConnection.html#shutdownHandler">shutdownHandler</a></code> will be called when all current streams
+have been closed and the connection can be closed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">connection.goAway(0);
+connection.shutdownHandler(function (v) {
+
+  // All streams are closed, close the connection
+  connection.close();
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This applies also when a <code>GOAWAY</code> is received.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+this only applies to the HTTP/2 protocol
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_close">Connection close</h4>
+<div class="paragraph">
+<p>Connection <code><a href="../../jsdoc/module-vertx-js_http_connection-HttpConnection.html#close">close</a></code> closes the connection:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>it closes the socket for HTTP/1.x</p>
+</li>
+<li>
+<p>a shutdown with no delay for HTTP/2, the <code>GOAWAY</code> frame will still be sent before the connection is closed. *</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../jsdoc/module-vertx-js_http_connection-HttpConnection.html#closeHandler">closeHandler</a></code> notifies when a connection is closed.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1821,12 +2613,12 @@ connection between HTTP servers and HTTP clients (typically browsers).</p>
 <div class="sect4">
 <h5 id="_websocket_handler">WebSocket handler</h5>
 <div class="paragraph">
-<p>The first way involves providing a <code><a href="../../jsdoc/http_server-HttpServer.html#websocketHandler">websocketHandler</a></code>
+<p>The first way involves providing a <code><a href="../../jsdoc/module-vertx-js_http_server-HttpServer.html#websocketHandler">websocketHandler</a></code>
 on the server instance.</p>
 </div>
 <div class="paragraph">
 <p>When a WebSocket connection is made to the server, the handler will be called, passing in an instance of
-<code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html">ServerWebSocket</a></code>.</p>
+<code><a href="../../jsdoc/module-vertx-js_server_web_socket-ServerWebSocket.html">ServerWebSocket</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1836,7 +2628,7 @@ on the server instance.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>You can choose to reject the WebSocket by calling <code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html#reject">reject</a></code>.</p>
+<p>You can choose to reject the WebSocket by calling <code><a href="../../jsdoc/module-vertx-js_server_web_socket-ServerWebSocket.html#reject">reject</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1854,7 +2646,7 @@ on the server instance.</p>
 <h5 id="_upgrading_to_websocket">Upgrading to WebSocket</h5>
 <div class="paragraph">
 <p>The second way of handling WebSockets is to handle the HTTP Upgrade request that was sent from the client, and
-call <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#upgrade">upgrade</a></code> on the server request.</p>
+call <code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html#upgrade">upgrade</a></code> on the server request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1875,23 +2667,23 @@ call <code><a href="../../jsdoc/http_server_request-HttpServerRequest.html#upgra
 <div class="sect4">
 <h5 id="_the_server_websocket">The server WebSocket</h5>
 <div class="paragraph">
-<p>The <code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html">ServerWebSocket</a></code> instance enables you to retrieve the <code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html#headers">headers</a></code>,
-<code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html#path">path</a></code>, <code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html#query">query</a></code> and
-<code><a href="../../jsdoc/server_web_socket-ServerWebSocket.html#uri">URI</a></code> of the HTTP request of the WebSocket handshake.</p>
+<p>The <code><a href="../../jsdoc/module-vertx-js_server_web_socket-ServerWebSocket.html">ServerWebSocket</a></code> instance enables you to retrieve the <code><a href="../../jsdoc/module-vertx-js_server_web_socket-ServerWebSocket.html#headers">headers</a></code>,
+<code><a href="../../jsdoc/module-vertx-js_server_web_socket-ServerWebSocket.html#path">path</a></code>, <code><a href="../../jsdoc/module-vertx-js_server_web_socket-ServerWebSocket.html#query">query</a></code> and
+<code><a href="../../jsdoc/module-vertx-js_server_web_socket-ServerWebSocket.html#uri">URI</a></code> of the HTTP request of the WebSocket handshake.</p>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_websockets_on_the_client">WebSockets on the client</h4>
 <div class="paragraph">
-<p>The Vert.x <code><a href="../../jsdoc/http_client-HttpClient.html">HttpClient</a></code> supports WebSockets.</p>
+<p>The Vert.x <code><a href="../../jsdoc/module-vertx-js_http_client-HttpClient.html">HttpClient</a></code> supports WebSockets.</p>
 </div>
 <div class="paragraph">
-<p>You can connect a WebSocket to a server using one of the <code><a href="../../jsdoc/http_client-HttpClient.html#websocket">websocket</a></code> operations and
+<p>You can connect a WebSocket to a server using one of the <code><a href="../../jsdoc/module-vertx-js_http_client-HttpClient.html#websocket">websocket</a></code> operations and
 providing a handler.</p>
 </div>
 <div class="paragraph">
-<p>The handler will be called with an instance of <code><a href="../../jsdoc/web_socket-WebSocket.html">WebSocket</a></code> when the connection has been made:</p>
+<p>The handler will be called with an instance of <code><a href="../../jsdoc/module-vertx-js_web_socket-WebSocket.html">WebSocket</a></code> when the connection has been made:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1905,7 +2697,7 @@ providing a handler.</p>
 <h4 id="_writing_messages_to_websockets">Writing messages to WebSockets</h4>
 <div class="paragraph">
 <p>If you wish to write a single binary WebSocket message to the WebSocket you can do this with
-<code><a href="../../jsdoc/web_socket-WebSocket.html#writeBinaryMessage">writeBinaryMessage</a></code>:</p>
+<code><a href="../../jsdoc/module-vertx-js_web_socket-WebSocket.html#writeBinaryMessage">writeBinaryMessage</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1933,10 +2725,10 @@ followed by zero or more <em>continuation</em> frames.</p>
 </div>
 <div class="paragraph">
 <p>To send a message consisting of multiple frames you create frames using
-<code><a href="../../jsdoc/web_socket_frame-WebSocketFrame.html#binaryFrame">WebSocketFrame.binaryFrame</a></code>
-, <code><a href="../../jsdoc/web_socket_frame-WebSocketFrame.html#textFrame">WebSocketFrame.textFrame</a></code> or
-<code><a href="../../jsdoc/web_socket_frame-WebSocketFrame.html#continuationFrame">WebSocketFrame.continuationFrame</a></code> and write them
-to the WebSocket using <code><a href="../../jsdoc/web_socket-WebSocket.html#writeFrame">writeFrame</a></code>.</p>
+<code><a href="../../jsdoc/module-vertx-js_web_socket_frame-WebSocketFrame.html#binaryFrame">WebSocketFrame.binaryFrame</a></code>
+, <code><a href="../../jsdoc/module-vertx-js_web_socket_frame-WebSocketFrame.html#textFrame">WebSocketFrame.textFrame</a></code> or
+<code><a href="../../jsdoc/module-vertx-js_web_socket_frame-WebSocketFrame.html#continuationFrame">WebSocketFrame.continuationFrame</a></code> and write them
+to the WebSocket using <code><a href="../../jsdoc/module-vertx-js_web_socket-WebSocket.html#writeFrame">writeFrame</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example for binary frames:</p>
@@ -1958,8 +2750,8 @@ websocket.writeFrame(frame3);</code></pre>
 </div>
 <div class="paragraph">
 <p>In many cases you just want to send a websocket message that consists of a single final frame, so we provide a couple
-of shortcut methods to do that with <code><a href="../../jsdoc/web_socket-WebSocket.html#writeFinalBinaryFrame">writeFinalBinaryFrame</a></code>
-and <code><a href="../../jsdoc/web_socket-WebSocket.html#writeFinalTextFrame">writeFinalTextFrame</a></code>.</p>
+of shortcut methods to do that with <code><a href="../../jsdoc/module-vertx-js_web_socket-WebSocket.html#writeFinalBinaryFrame">writeFinalBinaryFrame</a></code>
+and <code><a href="../../jsdoc/module-vertx-js_web_socket-WebSocket.html#writeFinalTextFrame">writeFinalTextFrame</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example:</p>
@@ -1983,10 +2775,10 @@ websocket.writeFinalBinaryFrame(buff);</code></pre>
 <div class="sect3">
 <h4 id="_reading_frames_from_websockets">Reading frames from WebSockets</h4>
 <div class="paragraph">
-<p>To read frames from a WebSocket you use the <code><a href="../../jsdoc/web_socket-WebSocket.html#frameHandler">frameHandler</a></code>.</p>
+<p>To read frames from a WebSocket you use the <code><a href="../../jsdoc/module-vertx-js_web_socket-WebSocket.html#frameHandler">frameHandler</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The frame handler will be called with instances of <code><a href="../../jsdoc/web_socket_frame-WebSocketFrame.html">WebSocketFrame</a></code> when a frame arrives,
+<p>The frame handler will be called with instances of <code><a href="../../jsdoc/module-vertx-js_web_socket_frame-WebSocketFrame.html">WebSocketFrame</a></code> when a frame arrives,
 for example:</p>
 </div>
 <div class="listingblock">
@@ -2000,19 +2792,68 @@ for example:</p>
 <div class="sect3">
 <h4 id="_closing_websockets">Closing WebSockets</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../jsdoc/web_socket_base-WebSocketBase.html#close">close</a></code> to close the WebSocket connection when you have finished with it.</p>
+<p>Use <code><a href="../../jsdoc/module-vertx-js_web_socket_base-WebSocketBase.html#close">close</a></code> to close the WebSocket connection when you have finished with it.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_streaming_websockets">Streaming WebSockets</h4>
 <div class="paragraph">
-<p>The <code><a href="../../jsdoc/web_socket-WebSocket.html">WebSocket</a></code> instance is also a <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code> and a
-<code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> so it can be used with pumps.</p>
+<p>The <code><a href="../../jsdoc/module-vertx-js_web_socket-WebSocket.html">WebSocket</a></code> instance is also a <code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html">ReadStream</a></code> and a
+<code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html">WriteStream</a></code> so it can be used with pumps.</p>
 </div>
 <div class="paragraph">
 <p>When using a WebSocket as a write stream or a read stream it can only be used with WebSockets connections that are
 used with binary frames that are no split over multiple frames.</p>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</h3>
+<div class="paragraph">
+<p>The http client supports accessing https servers via a HTTPS proxy (HTTP/1.x <em>CONNECT</em> method, e.g. Squid) or
+<em>SOCKS4a</em> or <em>SOCKS5</em> proxy. The http proxy protocol uses HTTP/1.x but can connect to HTTP/1.x and HTTP/2 servers.</p>
+</div>
+<div class="paragraph">
+<p>The proxy can be configured in the <code><a href="../dataobjects.html#HttpClientOptions">HttpClientOptions</a></code> by setting a
+<code><a href="../dataobjects.html#ProxyOptions">ProxyOptions</a></code> object containing proxy type, hostname, port and optionally username and password.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "proxyOptions" : {
+    "type" : "HTTP",
+    "host" : "localhost",
+    "port" : 3128,
+    "username" : "username",
+    "password" : "secret"
+  }
+};
+var client = vertx.createHttpClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or using SOCKS5 proxy</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "proxyOptions" : {
+    "type" : "SOCKS5",
+    "host" : "localhost",
+    "port" : 1080,
+    "username" : "username",
+    "password" : "secret"
+  }
+};
+var client = vertx.createHttpClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The DNS resolution is always done on the proxy server, to achieve the functionality of a SOCKS4 client, it is necessary
+to resolve the DNS address locally.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2031,7 +2872,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

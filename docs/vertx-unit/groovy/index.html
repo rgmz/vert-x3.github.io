@@ -134,6 +134,7 @@
 <li><a href="#_event_bus_reporting">Event bus reporting</a></li>
 </ul>
 </li>
+<li><a href="#_vertx_integration">Vertx integration</a></li>
 <li><a href="#_junit_integration">Junit integration</a>
 <ul class="sectlevel2">
 <li><a href="#_running_a_test_on_a_vert_x_context">Running a test on a Vert.x context</a></li>
@@ -186,6 +187,7 @@
 <li><a href="#_event_bus_reporting">Event bus reporting</a></li>
 </ul>
 </li>
+<li><a href="#_vertx_integration">Vertx integration</a></li>
 <li><a href="#_junit_integration">Junit integration</a>
 <ul class="sectlevel2">
 <li><a href="#_running_a_test_on_a_vert_x_context">Running a test on a Vert.x context</a></li>
@@ -234,7 +236,7 @@ and follows the Vert.x practices.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-unit&lt;/artifactId&gt;
-  &lt;version&gt;3.2.1&lt;/version&gt;
+  &lt;version&gt;3.3.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -247,7 +249,7 @@ and follows the Vert.x practices.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-unit:3.2.1</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-unit:3.3.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1281,6 +1283,65 @@ collector.register("the-address")</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_vertx_integration">Vertx integration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default, assertions and failures must be done on the <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html">TestContext</a></code> and throwing an
+assertion error works only when called by Vert.x Unit:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">suite.test("my_test_case", { ctx -&gt;
+
+  // The failure will be reported by Vert.x Unit
+  throw new java.lang.RuntimeException("it failed!")
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In a regular Vert.x callback, the failure will be ignored:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">suite.test("test-server", { testContext -&gt;
+  def server = vertx.createHttpServer().requestHandler({ req -&gt;
+    if (req.path() == "/somepath") {
+      throw new java.lang.AssertionError("Wrong path!")
+    }
+    req.response().end()
+  })
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Since Vert.x 3.3, a global exception handler can be set to report the event loop uncaught exceptions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">suite.before({ testContext -&gt;
+
+  // Report uncaught exceptions as Vert.x Unit failures
+  vertx.exceptionHandler(testContext.exceptionHandler())
+})
+
+suite.test("test-server", { testContext -&gt;
+  def server = vertx.createHttpServer().requestHandler({ req -&gt;
+    if (req.path() == "/somepath") {
+      throw new java.lang.AssertionError("Wrong path!")
+    }
+    req.response().end()
+  })
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The exception handler is set during the <em>before</em> phase, the <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html">TestContext</a></code> is shared
+between each <em>before</em>, <em>test</em> and <em>after</em> phase. So the exception handler obtained during the <em>before</em> phase
+is correct.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_junit_integration">Junit integration</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -1609,7 +1670,7 @@ public class MyTestSuite {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

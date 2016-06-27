@@ -109,6 +109,7 @@
 <li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
+<li><a href="#_configuring_the_event_bus">Configuring the event bus</a></li>
 </ul>
         </div>
       </div>
@@ -123,6 +124,7 @@
 <li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
+<li><a href="#_configuring_the_event_bus">Configuring the event bus</a></li>
 </ul>
         </div>
         <div class="sect1">
@@ -592,6 +594,89 @@ when the verticle is undeployed.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_configuring_the_event_bus">Configuring the event bus</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The event bus can be configured. It is particularly useful when the event bus is clustered. Under the hood
+the event bus uses TCP connections to send and receive message, so the
+<code><a href="../dataobjects.html#EventBusOptions">EventBusOptions</a></code> let you configure all aspects of these TCP connections. As
+the event bus acts as a server and client, the configuration is close to
+<code><a href="../dataobjects.html#NetClientOptions">NetClientOptions</a></code> and <code><a href="../dataobjects.html#NetServerOptions">NetServerOptions</a></code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.ClientAuth
+import io.vertx.groovy.core.Vertx
+def options = [
+  eventBusOptions:[
+    ssl:true,
+    keyStoreOptions:[
+      path:"keystore.jks",
+      password:"wibble"
+    ],
+    trustStoreOptions:[
+      path:"keystore.jks",
+      password:"wibble"
+    ],
+    clientAuth:"REQUIRED"
+  ]
+]
+
+Vertx.clusteredVertx(options, { res -&gt;
+  if (res.succeeded()) {
+    def vertx = res.result()
+    def eventBus = vertx.eventBus()
+    println("We now have a clustered event bus: ${eventBus}")
+  } else {
+    println("Failed: ${res.cause()}")
+  }
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The previous snippet depicts how you can use SSL connections for the event bus, instead of plain TCP
+connections.</p>
+</div>
+<div class="paragraph">
+<p><strong>WARNING</strong>: to enforce the security in clustered mode, you <strong>must</strong> configure the
+cluster manager to use encryption or enforce security. Refer to the documentation of the cluster
+manager for further details.</p>
+</div>
+<div class="paragraph">
+<p>The event bus configuration needs to be consistent in all the cluster nodes.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../dataobjects.html#EventBusOptions">EventBusOptions</a></code> also lets you specify whether or not the event bus is
+clustered, the port and host, as you would do with <code><a href="../dataobjects.html#VertxOptions#setClustered(boolean)">clustered</a></code>,
+ <code><a href="../dataobjects.html#VertxOptions#getClusterHost()">getClusterHost</a></code> and <code><a href="../dataobjects.html#VertxOptions#getClusterPort()">getClusterPort</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>When used in containers, you can also configure the public host and port:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Vertx
+def options = [
+  eventBusOptions:[
+    clusterPublicHost:"whatever",
+    clusterPublicPort:1234
+  ]
+]
+
+Vertx.clusteredVertx(options, { res -&gt;
+  if (res.succeeded()) {
+    def vertx = res.result()
+    def eventBus = vertx.eventBus()
+    println("We now have a clustered event bus: ${eventBus}")
+  } else {
+    println("Failed: ${res.cause()}")
+  }
+})</code></pre>
+</div>
+</div>
+</div>
+</div>
 
         
 
@@ -599,7 +684,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

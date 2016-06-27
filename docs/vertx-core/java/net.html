@@ -125,7 +125,9 @@
 <li><a href="#_configuring_a_tcp_client">Configuring a TCP client</a></li>
 <li><a href="#_making_connections">Making connections</a></li>
 <li><a href="#_configuring_connection_attempts">Configuring connection attempts</a></li>
+<li><a href="#logging_network_activity">Logging network activity</a></li>
 <li><a href="#ssl">Configuring servers and clients to work with SSL/TLS</a></li>
+<li><a href="#_using_a_proxy_for_client_connections">Using a proxy for client connections</a></li>
 </ul>
 </li>
 </ul>
@@ -158,7 +160,9 @@
 <li><a href="#_configuring_a_tcp_client">Configuring a TCP client</a></li>
 <li><a href="#_making_connections">Making connections</a></li>
 <li><a href="#_configuring_connection_attempts">Configuring connection attempts</a></li>
+<li><a href="#logging_network_activity">Logging network activity</a></li>
 <li><a href="#ssl">Configuring servers and clients to work with SSL/TLS</a></li>
+<li><a href="#_using_a_proxy_for_client_connections">Using a proxy for client connections</a></li>
 </ul>
 </li>
 </ul>
@@ -590,6 +594,71 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
 <div class="sect2">
+<h3 id="logging_network_activity">Logging network activity</h3>
+<div class="paragraph">
+<p>For debugging purposes, network activity can be logged:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().setLogActivity(true);
+
+NetServer server = vertx.createNetServer(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>for the client</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().setLogActivity(true);
+
+NetClient client = vertx.createNetClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Network activity is logged by Netty with the <code>DEBUG</code> level and with the <code>io.netty.handler.logging.LoggingHandler</code>
+name. When using network activity logging there are a few things to keep in mind:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>logging is not performed by Vert.x logging but by Netty</p>
+</li>
+<li>
+<p>this is <strong>not</strong> a production feature</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Netty will try to locate the following logger implementations, in the following order:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Slf4j</p>
+</li>
+<li>
+<p>Log4j</p>
+</li>
+<li>
+<p>JDK</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The presense of the slf4j or log4j classes on the classpath is enough to pick up the logging implementation.</p>
+</div>
+<div class="paragraph">
+<p>The logger implementation can be forced to a specific implementation by setting Netty&#8217;s internal logger implementation directly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Force logging to SLF4J
+InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="ssl">Configuring servers and clients to work with SSL/TLS</h3>
 <div class="paragraph">
 <p>TCP clients and servers can be configured to use <a href="http://en.wikipedia.org/wiki/Transport_Layer_Security">Transport Layer Security</a>
@@ -854,6 +923,18 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 configured and should contain the certificates of the servers that the client trusts.</p>
 </div>
 <div class="paragraph">
+<p>By default, host verification is disabled on the client.
+To enable host verification, set the algorithm to use on your client (only HTTPS and LDAPS is currently supported):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
+        setSsl(true).
+        setHostnameVerificationAlgorithm("HTTPS");
+NetClient client = vertx.createNetClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Likewise server configuration, the client trust can be configured in several ways:</p>
 </div>
 <div class="paragraph">
@@ -1087,7 +1168,7 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="sect3">
 <h4 id="_configuring_the_cipher_suite">Configuring the Cipher suite</h4>
 <div class="paragraph">
-<p>By default, the TLS configuration will uses the Cipher suite of the JVM running Vert.x. This Cipher suite can be
+<p>By default, the TLS configuration will use the Cipher suite of the JVM running Vert.x. This Cipher suite can be
 configured with a suite of enabled ciphers:</p>
 </div>
 <div class="listingblock">
@@ -1106,6 +1187,175 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <p>Cipher suite can be specified on the <code><a href="../../apidocs/io/vertx/core/net/NetServerOptions.html">NetServerOptions</a></code> or <code><a href="../../apidocs/io/vertx/core/net/NetClientOptions.html">NetClientOptions</a></code> configuration.</p>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_configuring_tls_protocol_versions">Configuring TLS protocol versions</h4>
+<div class="paragraph">
+<p>By default, the TLS configuration will use the following protocol versions: SSLv2Hello, TLSv1, TLSv1.1 and TLSv1.2. Protocol versions can be
+configured by explicitly adding enabled protocols:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
+    setSsl(true).
+    setKeyStoreOptions(keyStoreOptions).
+    addEnabledSecureTransportProtocol("TLSv1.1").
+    addEnabledSecureTransportProtocol("TLSv1.2");
+    NetServer server = vertx.createNetServer(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Protocol versions can be specified on the <code><a href="../../apidocs/io/vertx/core/net/NetServerOptions.html">NetServerOptions</a></code> or <code><a href="../../apidocs/io/vertx/core/net/NetClientOptions.html">NetClientOptions</a></code> configuration.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ssl_engine">SSL engine</h4>
+<div class="paragraph">
+<p>The engine implementation can be configured to use <a href="https://www.openssl.org">OpenSSL</a> instead of the JDK implementation.
+OpenSSL provides better performances and CPU usage than the JDK engine, as well as JDK version independence.</p>
+</div>
+<div class="paragraph">
+<p>The engine options to use is</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <code><a href="../../apidocs/io/vertx/core/net/TCPSSLOptions.html#getSslEngineOptions--">getSslEngineOptions</a></code> options when it is set</p>
+</li>
+<li>
+<p>otherwise <code><a href="../../apidocs/io/vertx/core/net/JdkSSLEngineOptions.html">JdkSSLEngineOptions</a></code></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
+    setSsl(true).
+    setKeyStoreOptions(keyStoreOptions);
+
+// Use JDK SSL engine explicitly
+options = new NetServerOptions().
+    setSsl(true).
+    setKeyStoreOptions(keyStoreOptions).
+    setJdkSslEngineOptions(new JdkSSLEngineOptions());
+
+// Use OpenSSL engine
+options = new NetServerOptions().
+    setSsl(true).
+    setKeyStoreOptions(keyStoreOptions).
+    setOpenSslEngineOptions(new OpenSSLEngineOptions());</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_application_layer_protocol_negotiation">Application-Layer Protocol Negotiation</h4>
+<div class="paragraph">
+<p>ALPN is a TLS extension for applicationl layer protocol negotitation. It is used by HTTP/2: during the TLS handshake
+the client gives the list of application protocols it accepts and the server responds with a protocol it supports.</p>
+</div>
+<div class="paragraph">
+<p>Java 8 does not supports ALPN out of the box, so ALPN should be enabled by other means:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>OpenSSL</em> support</p>
+</li>
+<li>
+<p><em>Jetty-ALPN</em> support</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The engine options to use is</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <code><a href="../../apidocs/io/vertx/core/net/TCPSSLOptions.html#getSslEngineOptions--">getSslEngineOptions</a></code> options when it is set</p>
+</li>
+<li>
+<p><code><a href="../../apidocs/io/vertx/core/net/JdkSSLEngineOptions.html">JdkSSLEngineOptions</a></code> when ALPN is available for JDK</p>
+</li>
+<li>
+<p><code><a href="../../apidocs/io/vertx/core/net/OpenSSLEngineOptions.html">OpenSSLEngineOptions</a></code> when ALPN is available for OpenSSL</p>
+</li>
+<li>
+<p>otherwise it fails</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_openssl_alpn_support">OpenSSL ALPN support</h5>
+<div class="paragraph">
+<p>OpenSSL provides native ALPN support.</p>
+</div>
+<div class="paragraph">
+<p>OpenSSL requires to configure <code><a href="../../apidocs/io/vertx/core/net/TCPSSLOptions.html#setOpenSslEngineOptions-io.vertx.core.net.OpenSSLEngineOptions-">setOpenSslEngineOptions</a></code>
+and use <a href="http://netty.io/wiki/forked-tomcat-native.html">netty-tcnative</a> jar on the classpath. Using tcnative may require
+OpenSSL to be installed on your OS depending on the tcnative implementation.</p>
+</div>
+<div class="paragraph">
+<p>OpenSSL restricts the key/certificate configuration to <code>.pem</code> files. However it is still possible to use any trust
+configuration.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_jetty_alpn_support">Jetty-ALPN support</h5>
+<div class="paragraph">
+<p>Jetty-ALPN is a small jar that overrides a few classes of Java 8 distribution to support ALPN.</p>
+</div>
+<div class="paragraph">
+<p>The JVM must be started with the <em>alpn-boot-${version}.jar</em> in its <code>bootclasspath</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>-Xbootclasspath/p:/path/to/alpn-boot${version}.jar</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where ${version} depends on the JVM version, e.g. <em>8.1.7.v20160121</em> for <em>OpenJDK 1.8.0u74</em> . The complete
+list is available on the <a href="http://www.eclipse.org/jetty/documentation/current/alpn-chapter.html">Jetty-ALPN page</a>.</p>
+</div>
+<div class="paragraph">
+<p>The main drawback is that the version depends on the JVM.</p>
+</div>
+<div class="paragraph">
+<p>To solve this problem the <em><a href="https://github.com/jetty-project/jetty-alpn-agent">Jetty ALPN agent</a></em> can be use instead. The agent is a JVM agent that will chose the correct
+ALPN version for the JVM running it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>-javaagent:/path/to/alpn/agent</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_a_proxy_for_client_connections">Using a proxy for client connections</h3>
+<div class="paragraph">
+<p>The <code><a href="../../apidocs/io/vertx/core/net/NetClient.html">NetClient</a></code> supports either a HTTP/1.x <em>CONNECT</em>, <em>SOCKS4a</em> or <em>SOCKS5</em> proxy.</p>
+</div>
+<div class="paragraph">
+<p>The proxy can be configured in the <code><a href="../../apidocs/io/vertx/core/net/NetClientOptions.html">NetClientOptions</a></code> by setting a
+<code><a href="../../apidocs/io/vertx/core/net/ProxyOptions.html">ProxyOptions</a></code> object containing proxy type, hostname, port and optionally username and password.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions()
+    .setProxyOptions(new ProxyOptions().setType(ProxyType.SOCKS5)
+        .setHost("localhost").setPort(1080)
+        .setUsername("username").setPassword("secret"));
+NetClient client = vertx.createNetClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The DNS resolution is always done on the proxy server, to achieve the functionality of a SOCKS4 client, it is necessary
+to resolve the DNS address locally.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1116,7 +1366,7 @@ NetServer server = vertx.createNetServer(options);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

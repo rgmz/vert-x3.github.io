@@ -106,21 +106,27 @@
 <ul class="sectlevel2">
 <li><a href="#_creating_an_http_server">Creating an HTTP Server</a></li>
 <li><a href="#_configuring_an_http_server">Configuring an HTTP server</a></li>
+<li><a href="#_configuring_an_http_2_server">Configuring an HTTP/2 server</a></li>
+<li><a href="#_logging_network_server_activity">Logging network server activity</a></li>
 <li><a href="#_start_the_server_listening">Start the Server Listening</a></li>
 <li><a href="#_getting_notified_of_incoming_requests">Getting notified of incoming requests</a></li>
 <li><a href="#_handling_requests">Handling requests</a></li>
 <li><a href="#_sending_back_responses">Sending back responses</a></li>
 <li><a href="#_http_compression">HTTP Compression</a></li>
 <li><a href="#_creating_an_http_client">Creating an HTTP client</a></li>
+<li><a href="#_logging_network_client_activity">Logging network client activity</a></li>
 <li><a href="#_making_requests">Making requests</a></li>
 <li><a href="#_handling_http_responses">Handling http responses</a></li>
 <li><a href="#_enabling_compression_on_the_client">Enabling compression on the client</a></li>
-<li><a href="#_pooling_and_keep_alive">Pooling and keep alive</a></li>
-<li><a href="#_pipe_lining">Pipe-lining</a></li>
+<li><a href="#_http_1_x_pooling_and_keep_alive">HTTP/1.x pooling and keep alive</a></li>
+<li><a href="#_http_1_1_pipe_lining">HTTP/1.1 pipe-lining</a></li>
+<li><a href="#_http_2_multiplexing">HTTP/2 multiplexing</a></li>
+<li><a href="#_http_connections">HTTP connections</a></li>
 <li><a href="#_httpclient_usage">HttpClient usage</a></li>
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
+<li><a href="#_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</a></li>
 <li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
@@ -135,21 +141,27 @@
 <ul class="sectlevel2">
 <li><a href="#_creating_an_http_server">Creating an HTTP Server</a></li>
 <li><a href="#_configuring_an_http_server">Configuring an HTTP server</a></li>
+<li><a href="#_configuring_an_http_2_server">Configuring an HTTP/2 server</a></li>
+<li><a href="#_logging_network_server_activity">Logging network server activity</a></li>
 <li><a href="#_start_the_server_listening">Start the Server Listening</a></li>
 <li><a href="#_getting_notified_of_incoming_requests">Getting notified of incoming requests</a></li>
 <li><a href="#_handling_requests">Handling requests</a></li>
 <li><a href="#_sending_back_responses">Sending back responses</a></li>
 <li><a href="#_http_compression">HTTP Compression</a></li>
 <li><a href="#_creating_an_http_client">Creating an HTTP client</a></li>
+<li><a href="#_logging_network_client_activity">Logging network client activity</a></li>
 <li><a href="#_making_requests">Making requests</a></li>
 <li><a href="#_handling_http_responses">Handling http responses</a></li>
 <li><a href="#_enabling_compression_on_the_client">Enabling compression on the client</a></li>
-<li><a href="#_pooling_and_keep_alive">Pooling and keep alive</a></li>
-<li><a href="#_pipe_lining">Pipe-lining</a></li>
+<li><a href="#_http_1_x_pooling_and_keep_alive">HTTP/1.x pooling and keep alive</a></li>
+<li><a href="#_http_1_1_pipe_lining">HTTP/1.1 pipe-lining</a></li>
+<li><a href="#_http_2_multiplexing">HTTP/2 multiplexing</a></li>
+<li><a href="#_http_connections">HTTP connections</a></li>
 <li><a href="#_httpclient_usage">HttpClient usage</a></li>
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
+<li><a href="#_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</a></li>
 <li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
@@ -160,6 +172,13 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>Vert.x allows you to easily write non blocking HTTP clients and servers.</p>
+</div>
+<div class="paragraph">
+<p>Vert.x supports the HTTP/1.0, HTTP/1.1 and HTTP/2 protocols.</p>
+</div>
+<div class="paragraph">
+<p>The base API for HTTP is the same for HTTP/1.x and HTTP/2, specific API features are available for dealing with the
+HTTP/2 protocol.</p>
 </div>
 <div class="sect2">
 <h3 id="_creating_an_http_server">Creating an HTTP Server</h3>
@@ -186,6 +205,97 @@ instance when creating it:</p>
 
 server = vertx.create_http_server(options)</code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuring_an_http_2_server">Configuring an HTTP/2 server</h3>
+<div class="paragraph">
+<p>Vert.x supports HTTP/2 over TLS <code>h2</code> and over TCP <code>h2c</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>h2</code> identifies the HTTP/2 protocol when used over TLS negotiated by <a href="https://en.wikipedia.org/wiki/Application-Layer_Protocol_Negotiation">Application-Layer Protocol Negotiation</a> (ALPN)</p>
+</li>
+<li>
+<p><code>h2c</code> identifies the HTTP/2 protocol when using in clear text over TCP, such connections are established either with
+an HTTP/1.1 upgraded request or directly</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To handle <code>h2</code> requests, TLS must be enabled along with <code><a href="../dataobjects.html#HttpServerOptions#set_use_alpn-instance_method">useAlpn</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
+  'useAlpn' =&gt; true,
+  'ssl' =&gt; true,
+  'keyStoreOptions' =&gt; {
+    'path' =&gt; "/path/to/my/keystore"
+  }
+}
+
+server = vertx.create_http_server(options)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ALPN is a TLS extension that negotiates the protocol before the client and the server start to exchange data.</p>
+</div>
+<div class="paragraph">
+<p>Clients that don&#8217;t support ALPN will still be able to do a <em>classic</em> SSL handshake.</p>
+</div>
+<div class="paragraph">
+<p>ALPN will usually agree on the <code>h2</code> protocol, although <code>http/1.1</code> can be used if the server or the client decides
+so.</p>
+</div>
+<div class="paragraph">
+<p>To handle <code>h2c</code> requests, TLS must be disabled, the server will upgrade to HTTP/2 any request HTTP/1.1 that wants to
+upgrade to HTTP/2. It will also accept a direct <code>h2c</code> connection beginning with the <code>PRI * HTTP/2.0\r\nSM\r\n</code> preface.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+most browsers won&#8217;t support <code>h2c</code>, so for serving web sites you should use <code>h2</code> and not <code>h2c</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When a server accepts an HTTP/2 connection, it sends to the client its <code><a href="../dataobjects.html#HttpServerOptions#get_initial_settings-instance_method">initial settings</a></code>.
+The settings define how the client can use the connection, the default initial settings for a server are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="../dataobjects.html#Http2Settings#get_max_concurrent_streams-instance_method">getMaxConcurrentStreams</a></code>: <code>100</code> as recommended by the HTTP/2 RFC</p>
+</li>
+<li>
+<p>the default HTTP/2 settings values for the others</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_logging_network_server_activity">Logging network server activity</h3>
+<div class="paragraph">
+<p>For debugging purposes, network activity can be logged.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
+  'logActivity' =&gt; true
+}
+
+server = vertx.create_http_server(options)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the chapter on <a href="#logging_network_activity">logging network activity</a> for a detailed explanation.</p>
 </div>
 </div>
 <div class="sect2">
@@ -373,6 +483,15 @@ puts "User agent is #{headers.get("user-agent")}"
 # You can also do this and get the same result:
 puts "User agent is #{headers.get("User-Agent")}"</code></pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_request_host">Request host</h4>
+<div class="paragraph">
+<p>Use <code><a href="../../yardoc/Vertx/HttpServerRequest.html#host-instance_method">host</a></code> to return the host of the HTTP request.</p>
+</div>
+<div class="paragraph">
+<p>For HTTP/1.x requests the <code>host</code> header is returned, for HTTP/1 requests the <code>:authority</code> pseudo header is returned.</p>
 </div>
 </div>
 <div class="sect3">
@@ -596,6 +715,36 @@ to arbitrary places on your filesystem. See <a href="#Security notes">security n
 </table>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_receiving_custom_http_2_frames">Receiving custom HTTP/2 frames</h4>
+<div class="paragraph">
+<p>HTTP/2 is a framed protocol with various frames for the HTTP request/response model. The protocol allows other kind
+of frames to be sent and received.</p>
+</div>
+<div class="paragraph">
+<p>To receive custom frames, you can use the <code><a href="../../yardoc/Vertx/HttpServerRequest.html#custom_frame_handler-instance_method">customFrameHandler</a></code> on the request,
+this will get called every time a custom frame arrives. Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.custom_frame_handler() { |frame|
+
+  puts "Received a frame type=#{frame.type()} payload#{frame.payload().to_string()}"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>HTTP/2 frames are not subject to flow control - the frame handler will be called immediatly when a
+custom frame is received whether the request is paused or is not</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_non_standard_http_methods">Non standard HTTP methods</h4>
+<div class="paragraph">
+<p>The <code><a href="todo">OTHER</a></code> HTTP method is used for non standard methods, in this case
+<code><a href="../../yardoc/Vertx/HttpServerRequest.html#raw_method-instance_method">rawMethod</a></code> returns the HTTP method as sent by the client.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_sending_back_responses">Sending back responses</h3>
@@ -619,6 +768,19 @@ request with <code><a href="../../yardoc/Vertx/HttpServerRequest.html#response-i
 </div>
 <div class="paragraph">
 <p>If you don&#8217;t specify a status message, the default one corresponding to the status code will be used.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+for HTTP/2 the status won&#8217;t be present in the response since the protocol won&#8217;t transmit the message
+to the client
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -711,6 +873,9 @@ response.end("hello world!")</code></pre>
 <p>Keep-alive connections are not automatically closed by Vert.x by default. If you want keep-alive connections to be
 closed after an idle time, then you configure <code><a href="../dataobjects.html#HttpServerOptions#set_idle_timeout-instance_method">idleTimeout</a></code>.</p>
 </div>
+<div class="paragraph">
+<p>HTTP/2 connections send a <code>GOAWAY</code> frame before closing the response.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_setting_response_headers">Setting response headers</h4>
@@ -764,6 +929,18 @@ methods will result in a new HTTP chunk being written out.</p>
 <div class="paragraph">
 <p>When in chunked mode you can also write HTTP response trailers to the response. These are actually written in
 the final chunk of the response.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+chunked response has no effect for an HTTP/2 stream
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>To add trailers to the response, add them directly to the <code><a href="../../yardoc/Vertx/HttpServerResponse.html#trailers-instance_method">trailers</a></code>.</p>
@@ -932,6 +1109,118 @@ vertx.create_http_server().request_handler() { |request|
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_writing_http_2_frames">Writing HTTP/2 frames</h4>
+<div class="paragraph">
+<p>HTTP/2 is a framed protocol with various frames for the HTTP request/response model. The protocol allows other kind
+of frames to be sent and received.</p>
+</div>
+<div class="paragraph">
+<p>To send such frames, you can use the <code><a href="../../yardoc/Vertx/HttpServerResponse.html#write_custom_frame-instance_method">writeCustomFrame</a></code> on the response.
+Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/buffer'
+
+frameType = 40
+frameStatus = 10
+payload = Vertx::Buffer.buffer("some data")
+
+# Sending a frame to the client
+response.write_custom_frame(frameType, frameStatus, payload)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These frames are sent immediately and are not subject to flow control - when such frame is sent there it may be done
+before other <code>DATA</code> frames.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_stream_reset">Stream reset</h4>
+<div class="paragraph">
+<p>HTTP/1.x does not allow a clean reset of a request or a response stream, for example when a client uploads
+a resource already present on the server, the server needs to accept the entire response.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/2 supports stream reset at any time during the request/response:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Reset the stream
+request.response().reset()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default the <code>NO_ERROR</code> (0) error code is sent, another code can sent instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Cancel the stream
+request.response().reset(8)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The HTTP/2 specification defines the list of <a href="http://httpwg.org/specs/rfc7540.html#ErrorCodes">error codes</a> one can use.</p>
+</div>
+<div class="paragraph">
+<p>The request handler are notified of stream reset events with the <code><a href="../../yardoc/Vertx/HttpServerRequest.html#exception_handler-instance_method">request handler</a></code> and
+<code><a href="../../yardoc/Vertx/HttpServerResponse.html#exception_handler-instance_method">response handler</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.response().exception_handler() { |err|
+  if (err.class.name == 'Java::IoVertxCoreHttp::StreamResetException')
+    reset = err
+    puts "Stream reset #{reset.get_code()}"
+  end
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_server_push">Server push</h4>
+<div class="paragraph">
+<p>Server push is a new feature of HTTP/2 that enables sending multiple responses in parallel for a single client request.</p>
+</div>
+<div class="paragraph">
+<p>When a server process a request, it can push a request/response to the client:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">response = request.response()
+
+# Push main.js to the client
+response.push(:GET, "/main.js") { |ar_err,ar|
+
+  if (ar_err == nil)
+
+    # The server is ready to push the response
+    pushedResponse = ar
+
+    # Send main.js response
+    pushedResponse.put_header("content-type", "application/json").end("alert(\"Push response hello\")")
+  else
+    puts "Could not push client resource #{ar_err}"
+  end
+}
+
+# Send the requested resource
+response.send_file("&lt;html&gt;&lt;head&gt;&lt;script src=\"/main.js\"&gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When the server is ready to push the response, the push response handler is called and the handler can send the response.</p>
+</div>
+<div class="paragraph">
+<p>The push response handler may receive a failure, for instance the client may cancel the push because it already has <code>main.js</code> in its
+cache and does not want it anymore.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../yardoc/Vertx/HttpServerResponse.html#push-instance_method">push</a></code> method must be called before the initiating response ends, however
+the pushed response can be written after.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_http_compression">HTTP Compression</h3>
@@ -985,6 +1274,72 @@ compressions and send it back to the client.</p>
 }
 client = vertx.create_http_client(options)</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Vert.x supports HTTP/2 over TLS <code>h2</code> and over TCP <code>h2c</code>.</p>
+</div>
+<div class="paragraph">
+<p>By default the http client performs HTTP/1.1 requests, to perform HTTP/2 requests the <code><a href="../dataobjects.html#HttpClientOptions#set_protocol_version-instance_method">protocolVersion</a></code>
+must be set to <code><a href="todo">HTTP_2</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>For <code>h2</code> requests, TLS must be enabled with <em>Application-Layer Protocol Negotiation</em>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
+  'protocolVersion' =&gt; "HTTP_2",
+  'ssl' =&gt; true,
+  'useAlpn' =&gt; true,
+  'trustAll' =&gt; true
+}
+
+client = vertx.create_http_client(options)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For <code>h2c</code> requests, TLS must be disabled, the client will do an HTTP/1.1 requests and try an upgrade to HTTP/2:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
+  'protocolVersion' =&gt; "HTTP_2"
+}
+
+client = vertx.create_http_client(options)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>h2c</code> connections can also be established directly, i.e connection started with a prior knowledge, when
+<code><a href="../dataobjects.html#HttpClientOptions#set_http2_clear_text_upgrade-instance_method">http2ClearTextUpgrade</a></code> options is set to false: after the
+connection is established, the client will send the HTTP/2 connection preface and expect to receive
+the same preface from the server.</p>
+</div>
+<div class="paragraph">
+<p>The http server may not support HTTP/2, the actual version can be checked
+with <code><a href="../../yardoc/Vertx/HttpClientResponse.html#version-instance_method">version</a></code> when the response arrives.</p>
+</div>
+<div class="paragraph">
+<p>When a clients connects to an HTTP/2 server, it sends to the server its <code><a href="../dataobjects.html#HttpClientOptions#get_initial_settings-instance_method">initial settings</a></code>.
+The settings define how the server can use the connection, the default initial settings for a client are the default
+values defined by the HTTP/2 RFC.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_logging_network_client_activity">Logging network client activity</h3>
+<div class="paragraph">
+<p>For debugging purposes, network activity can be logged.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
+  'logActivity' =&gt; true
+}
+client = vertx.create_http_client(options)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the chapter on <a href="#logging_network_activity">logging network activity</a> for a detailed explanation.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1219,6 +1574,14 @@ request.put_header("content-type", "application/json").put_header("other-header"
 </div>
 </div>
 <div class="sect3">
+<h4 id="_non_standard_http_methods_2">Non standard HTTP methods</h4>
+<div class="paragraph">
+<p>The <code><a href="todo">OTHER</a></code> HTTP method is used for non standard methods, when this method
+is used, <code><a href="../../yardoc/Vertx/HttpClientRequest.html#set_raw_method-instance_method">setRawMethod</a></code> must be used to
+set the raw method to send to the server.</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_ending_http_requests">Ending HTTP requests</h4>
 <div class="paragraph">
 <p>Once you have finished with the HTTP request you must end it with one of the <code><a href="../../yardoc/Vertx/HttpClientRequest.html#end-instance_method">end</a></code>
@@ -1377,6 +1740,68 @@ file.end_handler() { |v|
   request.end()
 }
 pump.start()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_writing_http_2_frames_2">Writing HTTP/2 frames</h4>
+<div class="paragraph">
+<p>HTTP/2 is a framed protocol with various frames for the HTTP request/response model. The protocol allows other kind
+of frames to be sent and received.</p>
+</div>
+<div class="paragraph">
+<p>To send such frames, you can use the <code><a href="../../yardoc/Vertx/HttpClientRequest.html#write-instance_method">write</a></code> on the request. Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/buffer'
+
+frameType = 40
+frameStatus = 10
+payload = Vertx::Buffer.buffer("some data")
+
+# Sending a frame to the server
+request.write_custom_frame(frameType, frameStatus, payload)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_stream_reset_2">Stream reset</h4>
+<div class="paragraph">
+<p>HTTP/1.x does not allow a clean reset of a request or a response stream, for example when a client uploads a resource already
+present on the server, the server needs to accept the entire response.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/2 supports stream reset at any time during the request/response:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.reset()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default the NO_ERROR (0) error code is sent, another code can sent instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.reset(8)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The HTTP/2 specification defines the list of <a href="http://httpwg.org/specs/rfc7540.html#ErrorCodes">error codes</a> one can use.</p>
+</div>
+<div class="paragraph">
+<p>The request handler are notified of stream reset events with the <code><a href="../../yardoc/Vertx/HttpClientRequest.html#exception_handler-instance_method">request handler</a></code> and
+<code><a href="../../yardoc/Vertx/HttpClientResponse.html#exception_handler-instance_method">response handler</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.exception_handler() { |err|
+  if (err.class.name == 'Java::IoVertxCoreHttp::StreamResetException')
+    reset = err
+    puts "Stream reset #{reset.get_code()}"
+  end
+}</code></pre>
 </div>
 </div>
 </div>
@@ -1617,6 +2042,74 @@ cannot be a logical protocol constraint):</p>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_client_push">Client push</h4>
+<div class="paragraph">
+<p>Server push is a new feature of HTTP/2 that enables sending multiple responses in parallel for a single client request.</p>
+</div>
+<div class="paragraph">
+<p>A push handler can be set on a request to receive the request/response pushed by the server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request = client.get("/index.html") { |response|
+  # Process index.html response
+}
+
+# Set a push handler to be aware of any resource pushed by the server
+request.push_handler() { |pushedRequest|
+
+  # A resource is pushed for this request
+  puts "Server pushed #{pushedRequest.path()}"
+
+  # Set an handler for the response
+  pushedRequest.handler() { |pushedResponse|
+    puts "The response for the pushed request"
+  }
+}
+
+# End the request
+request.end()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the client does not want to receive a pushed request, it can reset the stream:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.push_handler() { |pushedRequest|
+  if (pushedRequest.path().==("/main.js"))
+    pushedRequest.reset()
+  else
+    # Handle it
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When no handler is set, any stream pushed will be automatically cancelled by the client with
+a stream reset (<code>8</code> error code).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_receiving_custom_http_2_frames_2">Receiving custom HTTP/2 frames</h4>
+<div class="paragraph">
+<p>HTTP/2 is a framed protocol with various frames for the HTTP request/response model. The protocol allows other kind of
+frames to be sent and received.</p>
+</div>
+<div class="paragraph">
+<p>To receive custom frames, you can use the customFrameHandler on the request, this will get called every time a custom
+frame arrives. Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">response.custom_frame_handler() { |frame|
+
+  puts "Received a frame type=#{frame.type()} payload#{frame.payload().to_string()}"
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_enabling_compression_on_the_client">Enabling compression on the client</h3>
@@ -1662,13 +2155,13 @@ used when creating the client.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_pooling_and_keep_alive">Pooling and keep alive</h3>
+<h3 id="_http_1_x_pooling_and_keep_alive">HTTP/1.x pooling and keep alive</h3>
 <div class="paragraph">
 <p>Http keep alive allows http connections to be used for more than one request. This can be a more efficient use of
 connections when you&#8217;re making multiple requests to the same server.</p>
 </div>
 <div class="paragraph">
-<p>The http client supports pooling of connections, allowing you to reuse connections between requests.</p>
+<p>For HTTP/1.x versions, the http client supports pooling of connections, allowing you to reuse connections between requests.</p>
 </div>
 <div class="paragraph">
 <p>For pooling to work, keep alive must be true using <code><a href="../dataobjects.html#HttpClientOptions#set_keep_alive-instance_method">keepAlive</a></code>
@@ -1695,7 +2188,7 @@ connections not used within this timeout will be closed. Please note the idle ti
 </div>
 </div>
 <div class="sect2">
-<h3 id="_pipe_lining">Pipe-lining</h3>
+<h3 id="_http_1_1_pipe_lining">HTTP/1.1 pipe-lining</h3>
 <div class="paragraph">
 <p>The client also supports pipe-lining of requests on a connection.</p>
 </div>
@@ -1709,6 +2202,307 @@ By default pipe-lining is disabled.</p>
 </div>
 <div class="paragraph">
 <p>When pipe-lining is enabled requests will be written to connections without waiting for previous responses to return.</p>
+</div>
+<div class="paragraph">
+<p>The number of pipe-lined requests over a single connection is limited by <code><a href="../dataobjects.html#HttpClientOptions#set_pipelining_limit-instance_method">pipeliningLimit</a></code>.
+This option defines the maximum number of http requests sent to the server awaiting for a response. This limit ensures the
+fairness of the distribution of the client requests over the connections to the same server.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_http_2_multiplexing">HTTP/2 multiplexing</h3>
+<div class="paragraph">
+<p>HTTP/2 advocates to use a single connection to a server, by default the http client uses a single
+connection for each server, all the streams to the same server are multiplexed over the same connection.</p>
+</div>
+<div class="paragraph">
+<p>When the clients needs to use more than a single connection and use pooling, the <code><a href="../dataobjects.html#HttpClientOptions#set_http2_max_pool_size-instance_method">http2MaxPoolSize</a></code>
+shall be used.</p>
+</div>
+<div class="paragraph">
+<p>When it is desirable to limit the number of multiplexed streams per connection and use a connection
+pool instead of a single connection, <code><a href="../dataobjects.html#HttpClientOptions#set_http2_multiplexing_limit-instance_method">http2MultiplexingLimit</a></code>
+can be used.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">clientOptions = {
+  'http2MultiplexingLimit' =&gt; 10,
+  'http2MaxPoolSize' =&gt; 3
+}
+
+# Uses up to 3 connections and up to 10 streams per connection
+client = vertx.create_http_client(clientOptions)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The multiplexing limit for a connection is a setting set on the client that limits the number of streams
+of a single connection. The effective value can be even lower if the server sets a lower limit
+with the <code><a href="../dataobjects.html#Http2Settings#set_max_concurrent_streams-instance_method">SETTINGS_MAX_CONCURRENT_STREAMS</a></code> setting.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/2 connections will not be closed by the client automatically. To close them you can call <code><a href="../../yardoc/Vertx/HttpConnection.html#close-instance_method">close</a></code>
+or close the client instance.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively you can set idle timeout using <code><a href="../dataobjects.html#HttpClientOptions#set_idle_timeout-instance_method">idleTimeout</a></code> - any
+connections not used within this timeout will be closed. Please note the idle timeout value is in seconds not milliseconds.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_http_connections">HTTP connections</h3>
+<div class="paragraph">
+<p>The <code><a href="../../yardoc/Vertx/HttpConnection.html">HttpConnection</a></code> offers the API for dealing with HTTP connection events, lifecycle
+and settings.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/2 implements fully the <code><a href="../../yardoc/Vertx/HttpConnection.html">HttpConnection</a></code> API.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/1.x implements partially the <code><a href="../../yardoc/Vertx/HttpConnection.html">HttpConnection</a></code> API: only the close operation,
+the close handler and exception handler are implemented. This protocol does not provide semantics for
+the other operations.</p>
+</div>
+<div class="sect3">
+<h4 id="_server_connections">Server connections</h4>
+<div class="paragraph">
+<p>The <code><a href="../../yardoc/Vertx/HttpServerRequest.html#connection-instance_method">connection</a></code> method returns the request connection on the server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection = request.connection()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A connection handler can be set on the server to be notified of any incoming connection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_http_server(http2Options)
+
+server.connection_handler() { |connection|
+  puts "A client connected"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_client_connections">Client connections</h4>
+<div class="paragraph">
+<p>The <code><a href="../../yardoc/Vertx/HttpClientRequest.html#connection-instance_method">connection</a></code> method returns the request connection on the client:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection = request.connection()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A connection handler can be set on the request to be notified when the connection happens:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.connection_handler() { |connection|
+  puts "Connected to the server"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_settings">Connection settings</h4>
+<div class="paragraph">
+<p>The configuration of an HTTP/2 is configured by the <code><a href="../dataobjects.html#Http2Settings">Http2Settings</a></code> data object.</p>
+</div>
+<div class="paragraph">
+<p>Each endpoint must respect the settings sent by the other side of the connection.</p>
+</div>
+<div class="paragraph">
+<p>When a connection is established, the client and the server exchange initial settings. Initial settings
+are configured by <code><a href="../dataobjects.html#HttpClientOptions#set_initial_settings-instance_method">initialSettings</a></code> on the client and
+<code><a href="../dataobjects.html#HttpServerOptions#set_initial_settings-instance_method">initialSettings</a></code> on the server.</p>
+</div>
+<div class="paragraph">
+<p>The settings can be changed at any time after the connection is established:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection.update_settings({
+  'maxConcurrentStreams' =&gt; 100
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As the remote side should acknowledge on reception of the settings update, it&#8217;s possible to give a callback
+to be notified of the acknowledgment:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection.update_settings({
+  'maxConcurrentStreams' =&gt; 100
+}) { |ar_err,ar|
+  if (ar_err == nil)
+    puts "The settings update has been acknowledged "
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Conversely the <code><a href="../../yardoc/Vertx/HttpConnection.html#remote_settings_handler-instance_method">remoteSettingsHandler</a></code> is notified
+when the new remote settings are received:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection.remote_settings_handler() { |settings|
+  puts "Received new settings"
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+this only applies to the HTTP/2 protocol
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_ping">Connection ping</h4>
+<div class="paragraph">
+<p>HTTP/2 connection ping is useful for determining the connection round-trip time or check the connection
+validity: <code><a href="../../yardoc/Vertx/HttpConnection.html#ping-instance_method">ping</a></code> sends a <code>PING</code> frame to the remote
+endpoint:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/buffer'
+data = Vertx::Buffer.buffer()
+i = 0
+while (i &lt; 8)
+  data.append_byte(i)
+  i+=1
+end
+connection.ping(data) { |pong_err,pong|
+  puts "Remote side replied"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Vert.x will send automatically an acknowledgement when a <code>PING</code> frame is received,
+an handler can be set to be notified for each ping received:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection.ping_handler() { |ping|
+  puts "Got pinged by remote side"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The handler is just notified, the acknowledgement is sent whatsoever. Such feature is aimed for
+implementing  protocols on top of HTTP/2.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+this only applies to the HTTP/2 protocol
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_shutdown_and_go_away">Connection shutdown and go away</h4>
+<div class="paragraph">
+<p>Calling <code><a href="../../yardoc/Vertx/HttpConnection.html#shutdown-instance_method">shutdown</a></code> will send a <code>GOAWAY</code> frame to the
+remote side of the connection, asking it to stop creating streams: a client will stop doing new requests
+and a server will stop pushing responses. After the <code>GOAWAY</code> frame is sent, the connection
+waits some time (30 seconds by default) until all current streams closed and close the connection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection.shutdown()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../yardoc/Vertx/HttpConnection.html#shutdown_handler-instance_method">shutdownHandler</a></code> notifies when all streams have been closed, the
+connection is not yet closed.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s possible to just send a <code>GOAWAY</code> frame, the main difference with a shutdown is that
+it will just tell the remote side of the connection to stop creating new streams without scheduling a connection
+close:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection.go_away(0)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Conversely, it is also possible to be notified when <code>GOAWAY</code> are received:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection.go_away_handler() { |goAway|
+  puts "Received a go away frame"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../yardoc/Vertx/HttpConnection.html#shutdown_handler-instance_method">shutdownHandler</a></code> will be called when all current streams
+have been closed and the connection can be closed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection.go_away(0)
+connection.shutdown_handler() { |v|
+
+  # All streams are closed, close the connection
+  connection.close()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This applies also when a <code>GOAWAY</code> is received.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+this only applies to the HTTP/2 protocol
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_close">Connection close</h4>
+<div class="paragraph">
+<p>Connection <code><a href="../../yardoc/Vertx/HttpConnection.html#close-instance_method">close</a></code> closes the connection:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>it closes the socket for HTTP/1.x</p>
+</li>
+<li>
+<p>a shutdown with no delay for HTTP/2, the <code>GOAWAY</code> frame will still be sent before the connection is closed. *</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../yardoc/Vertx/HttpConnection.html#close_handler-instance_method">closeHandler</a></code> notifies when a connection is closed.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -2018,6 +2812,55 @@ used with binary frames that are no split over multiple frames.</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</h3>
+<div class="paragraph">
+<p>The http client supports accessing https servers via a HTTPS proxy (HTTP/1.x <em>CONNECT</em> method, e.g. Squid) or
+<em>SOCKS4a</em> or <em>SOCKS5</em> proxy. The http proxy protocol uses HTTP/1.x but can connect to HTTP/1.x and HTTP/2 servers.</p>
+</div>
+<div class="paragraph">
+<p>The proxy can be configured in the <code><a href="../dataobjects.html#HttpClientOptions">HttpClientOptions</a></code> by setting a
+<code><a href="../dataobjects.html#ProxyOptions">ProxyOptions</a></code> object containing proxy type, hostname, port and optionally username and password.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
+  'proxyOptions' =&gt; {
+    'type' =&gt; "HTTP",
+    'host' =&gt; "localhost",
+    'port' =&gt; 3128,
+    'username' =&gt; "username",
+    'password' =&gt; "secret"
+  }
+}
+client = vertx.create_http_client(options)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or using SOCKS5 proxy</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
+  'proxyOptions' =&gt; {
+    'type' =&gt; "SOCKS5",
+    'host' =&gt; "localhost",
+    'port' =&gt; 1080,
+    'username' =&gt; "username",
+    'password' =&gt; "secret"
+  }
+}
+client = vertx.create_http_client(options)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The DNS resolution is always done on the proxy server, to achieve the functionality of a SOCKS4 client, it is necessary
+to resolve the DNS address locally.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_automatic_clean_up_in_verticles">Automatic clean-up in verticles</h3>
 <div class="paragraph">
 <p>If you&#8217;re creating http servers and clients from inside verticles, those servers and clients will be automatically closed
@@ -2033,7 +2876,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

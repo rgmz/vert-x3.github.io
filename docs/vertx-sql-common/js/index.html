@@ -111,6 +111,7 @@
 <li><a href="#_executing_insert_update_or_delete">Executing INSERT, UPDATE or DELETE</a></li>
 <li><a href="#_prepared_statement_updates">Prepared statement updates</a></li>
 <li><a href="#_callable_statements">Callable statements</a></li>
+<li><a href="#_batch_operations">Batch operations</a></li>
 <li><a href="#_executing_other_operations">Executing other operations</a></li>
 <li><a href="#_using_transactions">Using transactions</a></li>
 <li><a href="#_closing_connections">Closing connections</a></li>
@@ -132,6 +133,7 @@
 <li><a href="#_executing_insert_update_or_delete">Executing INSERT, UPDATE or DELETE</a></li>
 <li><a href="#_prepared_statement_updates">Prepared statement updates</a></li>
 <li><a href="#_callable_statements">Callable statements</a></li>
+<li><a href="#_batch_operations">Batch operations</a></li>
 <li><a href="#_executing_other_operations">Executing other operations</a></li>
 <li><a href="#_using_transactions">Using transactions</a></li>
 <li><a href="#_closing_connections">Closing connections</a></li>
@@ -164,7 +166,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-sql-common&lt;/artifactId&gt;
-  &lt;version&gt;3.2.1&lt;/version&gt;
+  &lt;version&gt;3.3.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -177,7 +179,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-sql-common:3.2.1'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-sql-common:3.3.0'</code></pre>
 </div>
 </div>
 </div>
@@ -186,7 +188,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 <h2 id="_the_sql_connection">The SQL Connection</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A connection to the database is represented by <code><a href="../../jsdoc/sql_connection-SQLConnection.html">SQLConnection</a></code>.</p>
+<p>A connection to the database is represented by <code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html">SQLConnection</a></code>.</p>
 </div>
 <div class="sect2">
 <h3 id="_auto_commit">Auto-commit</h3>
@@ -196,7 +198,7 @@ execute in its own transaction.</p>
 </div>
 <div class="paragraph">
 <p>If you wish to perform multiple operations in a single transaction you should set auto commit to false with
-<code><a href="../../jsdoc/sql_connection-SQLConnection.html#setAutoCommit">setAutoCommit</a></code>.</p>
+<code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#setAutoCommit">setAutoCommit</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>When the operation is complete, the handler will be called:</p>
@@ -216,7 +218,7 @@ execute in its own transaction.</p>
 <div class="sect2">
 <h3 id="_executing_queries">Executing queries</h3>
 <div class="paragraph">
-<p>To execute a query use <code><a href="../../jsdoc/sql_connection-SQLConnection.html#query">query</a></code></p>
+<p>To execute a query use <code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#query">query</a></code></p>
 </div>
 <div class="paragraph">
 <p>The query string is raw SQL that is passed through without changes to the actual database.</p>
@@ -290,7 +292,7 @@ Array.prototype.forEach.call(rows, function(row) {
 <h3 id="_prepared_statement_queries">Prepared statement queries</h3>
 <div class="paragraph">
 <p>To execute a prepared statement query you can use
-<code><a href="../../jsdoc/sql_connection-SQLConnection.html#queryWithParams">queryWithParams</a></code>.</p>
+<code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#queryWithParams">queryWithParams</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>This takes the query, containing the parameter place holders, and a <code>JsonArray</code> or parameter
@@ -319,7 +321,7 @@ connection.queryWithParams(query, params, function (res, res_err) {
 <div class="sect2">
 <h3 id="_executing_insert_update_or_delete">Executing INSERT, UPDATE or DELETE</h3>
 <div class="paragraph">
-<p>To execute an operation which updates the database use <code><a href="../../jsdoc/sql_connection-SQLConnection.html#update">update</a></code>.</p>
+<p>To execute an operation which updates the database use <code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#update">update</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The update string is raw SQL that is passed through without changes to the actual database.</p>
@@ -334,17 +336,16 @@ if the update generated keys, they are available with <code><a href="../dataobje
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">var columnNames = resultSet.columnNames;
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.update("INSERT INTO PEOPLE VALUES (null, 'john', 'smith', 9)", function (res, res_err) {
+  if (res_err == null) {
 
-var results = resultSet.results;
+    var result = res;
+    console.log("Updated no. of rows: " + result.updated);
+    console.log("Generated keys: " + result.keys);
 
-Array.prototype.forEach.call(results, function(row) {
-
-  var id = row[0];
-  var fName = row[1];
-  var lName = row[2];
-  var shoeSize = row[3];
-
+  } else {
+    // Failed!
+  }
 });</code></pre>
 </div>
 </div>
@@ -353,7 +354,7 @@ Array.prototype.forEach.call(results, function(row) {
 <h3 id="_prepared_statement_updates">Prepared statement updates</h3>
 <div class="paragraph">
 <p>To execute a prepared statement update you can use
-<code><a href="../../jsdoc/sql_connection-SQLConnection.html#updateWithParams">updateWithParams</a></code>.</p>
+<code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#updateWithParams">updateWithParams</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>This takes the update, containing the parameter place holders, and a <code>JsonArray</code> or parameter
@@ -387,13 +388,17 @@ connection.updateWithParams(update, params, function (res, res_err) {
 <h3 id="_callable_statements">Callable statements</h3>
 <div class="paragraph">
 <p>To execute a callable statement (either SQL functions or SQL procedures) you can use
-<code><a href="../../jsdoc/sql_connection-SQLConnection.html#callWithParams">callWithParams</a></code>.</p>
+<code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#callWithParams">callWithParams</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>This takes the callable statement using the standard JDBC format <code>{ call func_proc_name() }</code>, optionally including
 parameter place holders e.g.: <code>{ call func_proc_name(?, ?) }</code>, a <code>JsonArray</code> containing the
 parameter values and finally a <code>JsonArray</code> containing the
 output types e.g.: <code>[null, 'VARCHAR']</code>.</p>
+</div>
+<div class="paragraph">
+<p>Note that the index of the output type is as important as the params array. If the return value is the second
+argument then the output array must contain a null value as the first element.</p>
 </div>
 <div class="paragraph">
 <p>A SQL function returns some output using the <code>return</code> keyword, and in this case one can call it like this:</p>
@@ -450,7 +455,27 @@ connection.callWithParams(func, [
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Assume that there is a SQL procedure like this:
+//
+// create procedure customer_lastname(IN firstname varchar(50), OUT lastname varchar(50))
+//   modifies sql data
+//   select lastname into lastname from customers where firstname = firstname;
+
+var func = "{ call customer_lastname(?, ?) }";
+
+connection.callWithParams(func, [
+  "John"
+], [
+  null,
+  "VARCHAR"
+], function (res, res_err) {
+
+  if (res_err == null) {
+    var result = res;
+  } else {
+    // Failed!
+  }
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -481,10 +506,71 @@ String describing the type you want to receive.</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_batch_operations">Batch operations</h3>
+<div class="paragraph">
+<p>The SQL common interface also defines how to execute batch operations. There are 3 types of batch operations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Batched statements <code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#batch">batch</a></code></p>
+</li>
+<li>
+<p>Batched prepared statements <code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#batchWithParams">batchWithParams</a></code></p>
+</li>
+<li>
+<p>Batched callable statements <code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#batchCallableWithParams">batchCallableWithParams</a></code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A batches statement will exeucte a list of sql statements as for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Batch values
+var batch = [];
+batch.push("INSERT INTO emp (NAME) VALUES ('JOE')");
+batch.push("INSERT INTO emp (NAME) VALUES ('JANE')");
+
+connection.batch(batch, function (res, res_err) {
+  if (res_err == null) {
+    var result = res;
+  } else {
+    // Failed!
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>While a prepared or callable statement batch will reuse the sql statement and take an list of arguments as for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Batch values
+var batch = [];
+batch.push([
+  "joe"
+]);
+batch.push([
+  "jane"
+]);
+
+connection.batchWithParams("INSERT INTO emp (name) VALUES (?)", batch, function (res, res_err) {
+  if (res_err == null) {
+    var result = res;
+  } else {
+    // Failed!
+  }
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_executing_other_operations">Executing other operations</h3>
 <div class="paragraph">
 <p>To execute any other database operation, e.g. a <code>CREATE TABLE</code> you can use
-<code><a href="../../jsdoc/sql_connection-SQLConnection.html#execute">execute</a></code>.</p>
+<code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#execute">execute</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The string is passed through without changes to the actual database. The handler is called when the operation
@@ -507,12 +593,12 @@ connection.execute(sql, function (execute, execute_err) {
 <div class="sect2">
 <h3 id="_using_transactions">Using transactions</h3>
 <div class="paragraph">
-<p>To use transactions first set auto-commit to false with <code><a href="../../jsdoc/sql_connection-SQLConnection.html#setAutoCommit">setAutoCommit</a></code>.</p>
+<p>To use transactions first set auto-commit to false with <code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#setAutoCommit">setAutoCommit</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>You then do your transactional operations and when you want to commit or rollback use
-<code><a href="../../jsdoc/sql_connection-SQLConnection.html#commit">commit</a></code> or
-<code><a href="../../jsdoc/sql_connection-SQLConnection.html#rollback">rollback</a></code>.</p>
+<code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#commit">commit</a></code> or
+<code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#rollback">rollback</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Once the commit/rollback is complete the handler will be called and the next transaction will be automatically started.</p>
@@ -536,7 +622,7 @@ connection.commit(function (res, res_err) {
 <div class="sect2">
 <h3 id="_closing_connections">Closing connections</h3>
 <div class="paragraph">
-<p>When you&#8217;ve done with the connection you should return it to the pool with <code><a href="../../jsdoc/sql_connection-SQLConnection.html#close">close</a></code>.</p>
+<p>When you&#8217;ve done with the connection you should return it to the pool with <code><a href="../../jsdoc/module-vertx-sql-js_sql_connection-SQLConnection.html#close">close</a></code>.</p>
 </div>
 </div>
 </div>
@@ -548,7 +634,7 @@ connection.commit(function (res, res_err) {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

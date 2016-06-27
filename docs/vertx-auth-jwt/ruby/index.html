@@ -106,6 +106,7 @@
 <ul class="sectlevel2">
 <li><a href="#_the_jwt_keystore_file">The JWT keystore file</a></li>
 <li><a href="#_generate_a_new_keystore_file">Generate a new Keystore file</a></li>
+<li><a href="#_read_only_tokens">Read only tokens</a></li>
 </ul>
 </li>
 </ul>
@@ -119,6 +120,7 @@
 <ul class="sectlevel2">
 <li><a href="#_the_jwt_keystore_file">The JWT keystore file</a></li>
 <li><a href="#_generate_a_new_keystore_file">Generate a new Keystore file</a></li>
+<li><a href="#_read_only_tokens">Read only tokens</a></li>
 </ul>
 </li>
 </ul>
@@ -145,7 +147,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-auth-jwt&lt;/artifactId&gt;
-  &lt;version&gt;3.2.1&lt;/version&gt;
+  &lt;version&gt;3.3.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -158,7 +160,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jwt:3.2.1'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jwt:3.3.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -254,15 +256,13 @@ if ("paulo".==(username) &amp;&amp; "super_secret".==(password))
 end</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>TODO show example of authentication and authorisation with JWT and explain how the permission string passed
-in authorisation maps to the claims in the JW token</p>
-</div>
 <div class="sect2">
 <h3 id="_the_jwt_keystore_file">The JWT keystore file</h3>
 <div class="paragraph">
-<p>This auth provider requires a keystore in the classpath or in the filesystem with either a <code><a href="unavailable">Mac</a></code>
-or a <code><a href="unavailable">Signature</a></code> in order to sign and verify the generated tokens.</p>
+<p>This auth provider requires a keystore in the classpath or in the filesystem with either a
+<code><a href="https://docs.oracle.com/javase/8/docs/api/javax/crypto/Mac.html">javax.crypto.Mac</a></code>
+or a <code><a href="https://docs.oracle.com/javase/8/docs/api/java/security/Signature.html">java.security.Signature</a></code> in order to
+sign and verify the generated tokens.</p>
 </div>
 <div class="paragraph">
 <p>The implementation will, by default, look for the following aliases, however not all are required to be present. As
@@ -305,6 +305,23 @@ keytool -genkeypair -keystore keystore.jceks -storetype jceks -storepass secret 
 keytool -genkeypair -keystore keystore.jceks -storetype jceks -storepass secret -keyalg EC -keysize 256 -alias ES512 -keypass secret -sigalg SHA512withECDSA -dname "CN=,OU=,O=,L=,ST=,C=" -validity 360</pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_read_only_tokens">Read only tokens</h3>
+<div class="paragraph">
+<p>If you need to consume JWT tokens issues by third parties you probably won&#8217;t have the private key with you, in that
+case all you need to have is a public key im PEM format.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-auth-jwt/jwt_auth'
+
+config = {
+  'public-key' =&gt; "BASE64-ENCODED-PUBLIC_KEY"
+}
+provider = VertxAuthJwt::JWTAuth.create(vertx, config)</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;&lt;a href="http://tfox.org"&gt;Tim Fox&lt;/a&gt;&lt;a href="mailto:pmlopes@gmail.com"&gt;Paulo Lopes&lt;/a&gt;</p>
 </div>
@@ -318,7 +335,7 @@ keytool -genkeypair -keystore keystore.jceks -storetype jceks -storepass secret 
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

@@ -160,7 +160,7 @@ connection pooling to keep connections open to be reused.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-mail-client&lt;/artifactId&gt;
-  &lt;version&gt;3.2.1&lt;/version&gt;
+  &lt;version&gt;3.3.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -173,7 +173,7 @@ connection pooling to keep connections open to be reused.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mail-client:3.2.1'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mail-client:3.3.0'</code></pre>
 </div>
 </div>
 </div>
@@ -234,7 +234,7 @@ var config = {
 };
 config.hostname = "mail.example.com";
 config.port = 587;
-config.starttls = 'REQUIRED';
+config.starttls = "REQUIRED";
 config.username = "user";
 config.password = "password";
 var mailClient = MailClient.createNonShared(vertx, config);</code></pre>
@@ -270,7 +270,7 @@ message.from = "user@example.com (Example User)";
 message.to = "recipient@example.org";
 message.cc = "Another User &lt;another@example.net&gt;";
 message.text = "this is the plain message text";
-message.html = "this is html text &lt;a href=\"\"&gt;vertx.io&lt;/a&gt;";</code></pre>
+message.html = "this is html text &lt;a href=\"http://vertx.io\"&gt;vertx.io&lt;/a&gt;";</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -286,6 +286,28 @@ attachment.contentType = "text/plain";
 attachment.data = Buffer.buffer("attachment file");
 
 message.attachment = attachment;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using inline attachments (usually images), it is possible to reference the images within a html message
+to display html with the images included in the mail.
+Images can be referenced as &lt;img src="cid:contentid@domain"&gt; in the html text, the corresponding image has Disposition:
+inline and the Content-ID header as "&lt;contentid@domain&gt;". Please note that RFC 2392 requires Content-ID values to be structured
+like a Message-ID with angle brackets and a local and domain part using URL compatible encoding. None of this is not enforced
+and most mail clients supports IDs without angle brackets or without domain part, the best practice is to use the strict format.
+A valid example for a Content-ID value is "&lt;<a href="mailto:filename%201.jpg@example.org">filename%201.jpg@example.org</a>&gt;"</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Buffer = require("vertx-js/buffer");
+var attachment = {
+};
+attachment.contentType = "image/jpeg";
+attachment.data = Buffer.buffer("image data");
+attachment.disposition = "inline";
+attachment.contentId = "&lt;image1@example.com&gt;";
+
+message.inlineAttachment = attachment;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -360,6 +382,9 @@ name</p>
 <p><code>attachment</code> MailAttachment or list of MailAttachment attachments of the message</p>
 </li>
 <li>
+<p><code>inlineAttachment</code> MailAttachment or list of MailAttachment of inline attachments of the message (usually images)</p>
+</li>
+<li>
 <p><code>headers</code> MultiMap representing headers to be added in addition to the headers necessary for the MIME Message</p>
 </li>
 <li>
@@ -395,6 +420,12 @@ what you are doing, this may generate invalid messages.</p>
 <li>
 <p><code>name</code> String filename of the attachment (this is put into the disposition and in the Content-Type headers of the attachment), optional</p>
 </li>
+<li>
+<p><code>contentId</code> String describing the Content-Id of the attachment (this is used to identify inline images), optional</p>
+</li>
+<li>
+<p><code>headers</code> MultiMap of headers for the attachment in addition to the default ones, optional</p>
+</li>
 </ul>
 </div>
 </div>
@@ -418,19 +449,19 @@ what you are doing, this may generate invalid messages.</p>
 <p><code>login</code> LoginOption either DISABLED, NONE or REQUIRED, default is NONE</p>
 </li>
 <li>
-<p><code>username</code> String of the username to be used for login</p>
+<p><code>username</code> String of the username to be used for login (required only when LoginOption is REQUIRED)</p>
 </li>
 <li>
-<p><code>password</code> String of the password to be used for login</p>
+<p><code>password</code> String of the password to be used for login (required only when LoginOption is REQUIRED)</p>
 </li>
 <li>
-<p><code>ssl</code> boolean whether to use ssl on connect to the mail server (default is false), set this to use a port 465 ssl connection</p>
+<p><code>ssl</code> boolean whether to use ssl on connect to the mail server (default is false), set this to use a port 465 ssl connection (default is false)</p>
 </li>
 <li>
-<p><code>ehloHostname</code> String to used in EHLO and for creating the message-id, if not set, the own hostname will be used, which may not be a good choice if it doesn&#8217;t contain a FQDN or is localhost</p>
+<p><code>ehloHostname</code> String to used in EHLO and for creating the message-id, if not set, the own hostname will be used, which may not be a good choice if it doesn&#8217;t contain a FQDN or is localhost (optional)</p>
 </li>
 <li>
-<p><code>authMethods</code> String space separated list of allowed auth methods, this can be used to disallow some auth methods or define one required auth method</p>
+<p><code>authMethods</code> String space separated list of allowed auth methods, this can be used to disallow some auth methods or define one required auth method (optional)</p>
 </li>
 <li>
 <p><code>keepAlive</code> boolean if connection pooling is enabled (default is true)</p>
@@ -442,13 +473,16 @@ what you are doing, this may generate invalid messages.</p>
 <p><code>trustAll</code> boolean whether to accept all certs from the server (default is false)</p>
 </li>
 <li>
-<p><code>keyStore</code> String the key store filename, this can be used to trust a server cert that is custom generated</p>
+<p><code>keyStore</code> String the key store filename, this can be used to trust a server cert that is custom generated (optional)</p>
 </li>
 <li>
-<p><code>keyStorePassword</code> String password used to decrypt the key store</p>
+<p><code>keyStorePassword</code> String password used to decrypt the key store (optional)</p>
 </li>
 <li>
-<p><code>allowRcptErrors</code> boolean if true, sending continues if a recipient address is not accepted and the mail will be sent if at least one address is accepted</p>
+<p><code>allowRcptErrors</code> boolean if true, sending continues if a recipient address is not accepted and the mail will be sent if at least one address is accepted (default false)</p>
+</li>
+<li>
+<p><code>disableEsmtp</code> boolean if true, ESMTP-related commands will not be used (set if your smtp server doesn&#8217;t even give a proper error response code for the EHLO command) (default false)</p>
 </li>
 </ul>
 </div>
@@ -478,7 +512,7 @@ what you are doing, this may generate invalid messages.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

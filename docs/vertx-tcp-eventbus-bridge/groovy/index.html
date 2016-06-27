@@ -118,76 +118,107 @@
 <p>To use this project, add the following
 dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
+<div class="paragraph">
 <p>Maven (in your <code>pom.xml</code>):</p>
-</li>
-</ul>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-tcp-eventbus-bridge&lt;/artifactId&gt;
-  &lt;version&gt;3.2.1&lt;/version&gt;
+  &lt;version&gt;3.3.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
-<div class="ulist">
-<ul>
-<li>
+<div class="paragraph">
 <p>Gradle (in your <code>build.gradle</code> file):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-tcp-eventbus-bridge:3.3.0'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The TCP EventBus bridge is built on top of TCP, meaning that any application that can
+create TCP sockets can interact with a remote Vert.x instance via its event bus.</p>
+</div>
+<div class="paragraph">
+<p>The main use case for the TCP bridge <em>versus</em> the SockJS bridge is for applications that are more
+resource-constrained and that need to be lightweight since the whole HTTP WebSockets is replaced with plain TCP sockets.</p>
+</div>
+<div class="paragraph">
+<p>It remains of course useful even for applications that don&#8217;t have tight resource constraints:
+the protocol is simple enough to efficiently provide an integration interface with non-JVM
+applications.</p>
+</div>
+<div class="paragraph">
+<p>The protocol has been kept as simple as possible and communications use Frames both ways.
+The structure of a Frame looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>&lt;Length: uInt32&gt;&lt;{
+   type: String,
+   address: String,
+   (replyAddress: String)?,
+   headers: JsonObject,
+   body: JsonObject
+}: JsonObject&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The message consists of a JSON document that may or may not have been minified.
+The message must be prefixed by a <em>big endian</em> 32 bits positive integer (4 bytes) that indicates
+the full length of the JSON document, in bytes.</p>
+</div>
+<div class="paragraph">
+<p>The message <code>type</code> can be the following for messages sent by the TCP client:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>send</code> to send a message to an <code>address</code>,</p>
 </li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-tcp-eventbus-bridge:3.2.1'</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The TCP EventBus bridge as its name states is a bridge built on top of TCP, meaning that any application able to
-create sockets can use the EventBus from a remote Vert.x instance.</p>
-</div>
-<div class="paragraph">
-<p>The protocol has been kept as simple as possible and communications use Frames both ways. A typical frame looks like
-this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>&lt;Length:Int32&gt;{type: String, headers: Object, body: Object}</pre>
-</div>
+<li>
+<p><code>publish</code> to publish a message to an <code>address</code>,</p>
+</li>
+<li>
+<p><code>register</code> to subscribe to the messages sent or published to an <code>address</code>,</p>
+</li>
+<li>
+<p><code>unregister</code> to unsubscribe to the messages sent or published to an <code>address</code>.</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p>The wire format is 4 bytes for the message length followed by a json document (there is no need to remove new lines
-or white space.</p>
+<p>Note that the <code>replyAddress</code> field is optional and may only be used for a <code>send</code> message.
+A message with that field is expected to <em>eventually</em> receive a message back from the server
+whose <code>address</code> field will be that of the original <code>replyAddress</code> value.</p>
 </div>
 <div class="paragraph">
-<p>Every received frame with a reply address will return a frame. In case of error even if there is no reply address the
-server might return a message, in this case the type will be "err".</p>
+<p>The server posts messages back to the client, and they can be of the following <code>type</code>:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>message</code> for messages sent or published to an <code>address</code>, or</p>
+</li>
+<li>
+<p><code>err</code> to indicate an error (the <code>body</code> shall contain details).</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p>An example NodeJS client is available in the source of the project, this client uses the same API as the SockJS
-counter part so it will make it easier to switch implementations.</p>
-</div>
-<div class="paragraph">
-<p>The use case for the TCP bridge vs the SockJS bridge if for applications that are more constrained in resources and
-need to be lightweight since the whole HTTP WebSockets is replaced with plain TCP sockets.</p>
+<p>An example NodeJS client is available in the source of the project.
+This client uses the same API as the SockJS
+counter part so it should make it easier to switch between the TCP and SockJS implementations.</p>
 </div>
 <div class="paragraph">
 <p>An example on how to get started with this bridge could be:</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>[source,groovy]</p>
-</li>
-</ul>
-</div>
 <div class="listingblock">
 <div class="content">
-<pre>import io.vertx.ext.groovy.eventbus.bridge.tcp.TcpEventBusBridge
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.ext.groovy.eventbus.bridge.tcp.TcpEventBusBridge
 
 def bridge = TcpEventBusBridge.create(vertx, [
   inboundPermitteds:[
@@ -208,7 +239,7 @@ bridge.listen(7000, { res -&gt;
   } else {
     // fail...
   }
-})</pre>
+})</code></pre>
 </div>
 </div>
 </div>
@@ -220,7 +251,7 @@ bridge.listen(7000, { res -&gt;
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

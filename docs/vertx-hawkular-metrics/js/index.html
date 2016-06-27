@@ -107,7 +107,9 @@
 <li><a href="#_configuration">Configuration</a>
 <ul class="sectlevel2">
 <li><a href="#_remote_hawkular_server">Remote Hawkular server</a></li>
-<li><a href="#_hawkular_tenant_selection">Hawkular tenant selection</a></li>
+<li><a href="#_tenant_selection">Tenant selection</a></li>
+<li><a href="#_connecting_to_a_hawkular_server">Connecting to a Hawkular server</a></li>
+<li><a href="#_openshift_metrics_token_authentication">Openshift Metrics token authentication</a></li>
 <li><a href="#_https_and_other_http_related_options">HTTPS and other HTTP related options</a></li>
 </ul>
 </li>
@@ -121,6 +123,7 @@
 <li><a href="#_event_bus">Event Bus</a></li>
 </ul>
 </li>
+<li><a href="#_vert_x_pool_metrics">Vert.x pool metrics</a></li>
 <li><a href="#_user_defined_metrics">User defined metrics</a></li>
 </ul>
         </div>
@@ -134,7 +137,9 @@
 <li><a href="#_configuration">Configuration</a>
 <ul class="sectlevel2">
 <li><a href="#_remote_hawkular_server">Remote Hawkular server</a></li>
-<li><a href="#_hawkular_tenant_selection">Hawkular tenant selection</a></li>
+<li><a href="#_tenant_selection">Tenant selection</a></li>
+<li><a href="#_connecting_to_a_hawkular_server">Connecting to a Hawkular server</a></li>
+<li><a href="#_openshift_metrics_token_authentication">Openshift Metrics token authentication</a></li>
 <li><a href="#_https_and_other_http_related_options">HTTPS and other HTTP related options</a></li>
 </ul>
 </li>
@@ -148,6 +153,7 @@
 <li><a href="#_event_bus">Event Bus</a></li>
 </ul>
 </li>
+<li><a href="#_vert_x_pool_metrics">Vert.x pool metrics</a></li>
 <li><a href="#_user_defined_metrics">User defined metrics</a></li>
 </ul>
         </div>
@@ -165,11 +171,11 @@ events will be sent to Hawkular, an <a href="http://www.hawkular.org">open sourc
 <div class="ulist">
 <ul>
 <li>
-<p>Vert.x core tools monitoring: TCP/HTTP client and servers, <code><a href="../../jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code>,
-<code><a href="../../jsdoc/event_bus-EventBus.html">EventBus</a></code> and handlers</p>
+<p>Vert.x core tools monitoring: TCP/HTTP client and servers, <code><a href="../../jsdoc/module-vertx-js_datagram_socket-DatagramSocket.html">DatagramSocket</a></code>,
+<code><a href="../../jsdoc/module-vertx-js_event_bus-EventBus.html">EventBus</a></code> and handlers</p>
 </li>
 <li>
-<p>User defined metrics via an <code><a href="../../jsdoc/event_bus-EventBus.html">EventBus</a></code> bridge.</p>
+<p>User defined metrics via an <code><a href="../../jsdoc/module-vertx-js_event_bus-EventBus.html">EventBus</a></code> bridge.</p>
 </li>
 </ul>
 </div>
@@ -189,7 +195,7 @@ events will be sent to Hawkular, an <a href="http://www.hawkular.org">open sourc
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-hawkular-metrics&lt;/artifactId&gt;
-  &lt;version&gt;3.2.1&lt;/version&gt;
+  &lt;version&gt;3.3.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -198,7 +204,7 @@ events will be sent to Hawkular, an <a href="http://www.hawkular.org">open sourc
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-hawkular-metrics:3.2.1'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-hawkular-metrics:3.3.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -239,9 +245,9 @@ var vertx = Vertx.vertx({
 </div>
 </div>
 <div class="sect2">
-<h3 id="_hawkular_tenant_selection">Hawkular tenant selection</h3>
+<h3 id="_tenant_selection">Tenant selection</h3>
 <div class="paragraph">
-<p>Hawkular is a multi-tenant solution, and <em>vertx-hawkular-metrics</em> can send metrics for a tenant other than <code>default</code>:</p>
+<p>Hawkular Metrics is a multi-tenant solution, and <em>vertx-hawkular-metrics</em> can send metrics for a tenant other than <code>default</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -250,6 +256,48 @@ var vertx = Vertx.vertx({
   "metricsOptions" : {
     "enabled" : true,
     "tenant" : "sales-department"
+  }
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_connecting_to_a_hawkular_server">Connecting to a Hawkular server</h3>
+<div class="paragraph">
+<p>Requests sent to a Hawkular server must be authenticated and tenant must be set to <code>hawkular</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
+var vertx = Vertx.vertx({
+  "metricsOptions" : {
+    "enabled" : true,
+    "tenant" : "hawkular",
+    "authenticationOptions" : {
+      "enabled" : true,
+      "id" : "username",
+      "secret" : "password"
+    }
+  }
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_openshift_metrics_token_authentication">Openshift Metrics token authentication</h3>
+<div class="paragraph">
+<p>When working with Openshift&#8217;s internal Metrics server, you can configure token authentication with a custom HTTP header:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
+var vertx = Vertx.vertx({
+  "metricsOptions" : {
+    "enabled" : true,
+    "tenant" : "my-namespace",
+    "httpHeaders" : {
+      "Authorization" : "Bearer xkjdksf9890-shjkjhkjlkjlk"
+    }
   }
 });</code></pre>
 </div>
@@ -650,6 +698,89 @@ are registered to the corresponding address.</p></td>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_vert_x_pool_metrics">Vert.x pool metrics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section lists all the metrics generated by monitoring Vert.x pools.</p>
+</div>
+<div class="paragraph">
+<p>There are two types currently supported:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>worker</em> (see <code><a href="../../jsdoc/module-vertx-js_worker_executor-WorkerExecutor.html">WorkerExecutor</a></code>)</p>
+</li>
+<li>
+<p><em>datasource</em> (created with Vert.x JDBC client)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Note that Vert.x creates two worker pools upfront, <em>vert.x-worker-thread</em> and <em>vert.x-internal-blocking</em>.</p>
+</div>
+<div class="paragraph">
+<p>All metrics are prefixed with <code>&lt;type&gt;.&lt;name&gt;.</code>. For example, <code>worker.vert.x-internal-blocking.</code>.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 50%;">
+<col style="width: 35%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Metric type</th>
+<th class="tableblock halign-left valign-top">Metric name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Counter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vertx.pool.&lt;type&gt;.&lt;name&gt;.delay</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cumulated time waiting for a resource (queue time).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gauge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vertx.pool.&lt;type&gt;.&lt;name&gt;.queued</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Current number of elements waiting for a resource.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Counter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vertx.pool.&lt;type&gt;.&lt;name&gt;.queueCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Total number of elements queued.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Counter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vertx.pool.&lt;type&gt;.&lt;name&gt;.usage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cumulated time using a resource (i.e. processing time for worker pools).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gauge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vertx.pool.&lt;type&gt;.&lt;name&gt;.inUse</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Current number of resources used.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Counter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vertx.pool.&lt;type&gt;.&lt;name&gt;.completed</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Total number of elements done with the resource (i.e. total number of tasks executed for worker pools).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gauge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vertx.pool.&lt;type&gt;.&lt;name&gt;.maxPoolSize</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum pool size, only present if it could be determined.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gauge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vertx.pool.&lt;type&gt;.&lt;name&gt;.inUse</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pool usage ratio, only present if maximum pool size could be determined.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_user_defined_metrics">User defined metrics</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -726,7 +857,7 @@ vertx.eventBus().publish("metrics", message);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

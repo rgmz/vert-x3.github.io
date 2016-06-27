@@ -153,7 +153,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-auth-oauth2&lt;/artifactId&gt;
-  &lt;version&gt;3.2.1&lt;/version&gt;
+  &lt;version&gt;3.3.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -166,7 +166,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-oauth2:3.2.1'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-oauth2:3.3.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -198,7 +198,7 @@ owner&#8217;s user-agent (typically a web browser) and capable of receiving inco
 authorization server.</p>
 </div>
 <div class="paragraph">
-<p>For more details see &lt;a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.1"&gt;Oauth2 spec#section-4.1&lt;/a&gt;.</p>
+<p>For more details see <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.1">Oauth2 specification, section 4.1</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -215,7 +215,7 @@ typically using an interactive form).  It is also used to migrate existing clien
 schemes such as HTTP Basic or Digest authentication to OAuth by converting the stored credentials to an access token.</p>
 </div>
 <div class="paragraph">
-<p>For more details see &lt;a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.3"&gt;Oauth2 spec#section-4.3&lt;/a&gt;.</p>
+<p>For more details see <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.3">Oauth2 specification, section 4.3</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -230,7 +230,7 @@ specification).</p>
 <p>The client credentials grant type MUST only be used by confidential clients.</p>
 </div>
 <div class="paragraph">
-<p>For more details see &lt;a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.4"&gt;Oauth2 spec#section-4.4&lt;/a&gt;.</p>
+<p>For more details see <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.4">Oauth2 specification, section 4.4</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -240,12 +240,12 @@ specification).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">OAuth2Auth oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, new JsonObject()
-        .put("clientID", "YOUR_CLIENT_ID")
-        .put("clientSecret", "YOUR_CLIENT_SECRET")
-        .put("site", "https://github.com/login")
-        .put("tokenPath", "/oauth/access_token")
-        .put("authorizationPath", "/oauth/authorize")
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">OAuth2Auth oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, new OAuth2ClientOptions()
+        .setClientID("YOUR_CLIENT_ID")
+        .setClientSecret("YOUR_CLIENT_SECRET")
+        .setSite("https://github.com/login")
+        .setTokenPath("/oauth/access_token")
+        .setAuthorizationPath("/oauth/authorize")
 );
 
 // when there is a need to access a protected resource or call a protected method,
@@ -282,10 +282,10 @@ access token.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject credentials = new JsonObject()
-    .put("clientID", "&lt;client-id&gt;")
-    .put("clientSecret", "&lt;client-secret&gt;")
-    .put("site", "https://api.oauth.com");
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">OAuth2ClientOptions credentials = new OAuth2ClientOptions()
+    .setClientID("&lt;client-id&gt;")
+    .setClientSecret("&lt;client-secret&gt;")
+    .setSite("https://api.oauth.com");
 
 
 // Initialize the OAuth2 Library
@@ -358,10 +358,10 @@ oauth2.getToken(tokenConfig, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject credentials = new JsonObject()
-    .put("clientID", "&lt;client-id&gt;")
-    .put("clientSecret", "&lt;client-secret&gt;")
-    .put("site", "https://api.oauth.com");
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">OAuth2ClientOptions credentials = new OAuth2ClientOptions()
+    .setClientID("&lt;client-id&gt;")
+    .setClientSecret("&lt;client-secret&gt;")
+    .setSite("https://api.oauth.com");
 
 
 // Initialize the OAuth2 Library
@@ -425,12 +425,12 @@ to refresh the access token when it is expired.</p>
 <h4 id="_google">Google</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject credentials = new JsonObject()
-    .put("clientID", "CLIENT_ID")
-    .put("clientSecret", "CLIENT_SECRET")
-    .put("site", "https://accounts.google.com")
-    .put("tokenPath", "https://www.googleapis.com/oauth2/v3/token")
-    .put("authorizationPath", "/o/oauth2/auth");
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">OAuth2ClientOptions credentials = new OAuth2ClientOptions()
+    .setClientID("CLIENT_ID")
+    .setClientSecret("CLIENT_SECRET")
+    .setSite("https://accounts.google.com")
+    .setTokenPath("https://www.googleapis.com/oauth2/v3/token")
+    .setAuthorizationPath("/o/oauth2/auth");
 
 
 // Initialize the OAuth2 Library
@@ -442,12 +442,12 @@ OAuth2Auth oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.CLIENT, credentials)
 <h4 id="_github">GitHub</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject credentials = new JsonObject()
-    .put("clientID", "CLIENT_ID")
-    .put("clientSecret", "CLIENT_SECRET")
-    .put("site", "https://github.com/login")
-    .put("tokenPath", "/oauth/access_token")
-    .put("authorizationPath", "/oauth/authorize");
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">OAuth2ClientOptions credentials = new OAuth2ClientOptions()
+    .setClientID("CLIENT_ID")
+    .setClientSecret("CLIENT_SECRET")
+    .setSite("https://github.com/login")
+    .setTokenPath("/oauth/access_token")
+    .setAuthorizationPath("/oauth/authorize");
 
 
 // Initialize the OAuth2 Library
@@ -459,12 +459,12 @@ OAuth2Auth oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.CLIENT, credentials)
 <h4 id="_linkedin">Linkedin</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject credentials = new JsonObject()
-    .put("clientID", "CLIENT_ID")
-    .put("clientSecret", "CLIENT_SECRET")
-    .put("site", "https://www.linkedin.com")
-    .put("authorizationPath", "/uas/oauth2/authorization")
-    .put("tokenPath", "/uas/oauth2/accessToken");
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">OAuth2ClientOptions credentials = new OAuth2ClientOptions()
+    .setClientID("CLIENT_ID")
+    .setClientSecret("CLIENT_SECRET")
+    .setSite("https://www.linkedin.com")
+    .setAuthorizationPath("/uas/oauth2/authorization")
+    .setTokenPath("/uas/oauth2/accessToken");
 
 
 // Initialize the OAuth2 Library
@@ -476,12 +476,12 @@ OAuth2Auth oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.CLIENT, credentials)
 <h4 id="_twitter">Twitter</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject credentials = new JsonObject()
-    .put("clientID", "CLIENT_ID")
-    .put("clientSecret", "CLIENT_SECRET")
-    .put("site", "https://api.twitter.com")
-    .put("authorizationPath", "/oauth/authorize")
-    .put("tokenPath", "/oauth/access_token");
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">OAuth2ClientOptions credentials = new OAuth2ClientOptions()
+    .setClientID("CLIENT_ID")
+    .setClientSecret("CLIENT_SECRET")
+    .setSite("https://api.twitter.com")
+    .setAuthorizationPath("/oauth/authorize")
+    .setTokenPath("/oauth/access_token");
 
 
 // Initialize the OAuth2 Library
@@ -493,12 +493,12 @@ OAuth2Auth oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.CLIENT, credentials)
 <h4 id="_facebook">Facebook</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject credentials = new JsonObject()
-    .put("clientID", "CLIENT_ID")
-    .put("clientSecret", "CLIENT_SECRET")
-    .put("site", "https://www.facebook.com")
-    .put("authorizationPath", "/dialog/oauth")
-    .put("tokenPath", "https://graph.facebook.com/oauth/access_token");
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">OAuth2ClientOptions credentials = new OAuth2ClientOptions()
+    .setClientID("CLIENT_ID")
+    .setClientSecret("CLIENT_SECRET")
+    .setSite("https://www.facebook.com")
+    .setAuthorizationPath("/dialog/oauth")
+    .setTokenPath("https://graph.facebook.com/oauth/access_token");
 
 
 // Initialize the OAuth2 Library
@@ -508,18 +508,58 @@ OAuth2Auth oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.CLIENT, credentials)
 </div>
 <div class="sect3">
 <h4 id="_jboss_keycloak">JBoss Keycloak</h4>
+<div class="paragraph">
+<p>When working with keycloak it will be quite simple to setup the OAuth2 provider, just export the JSON config from the
+web UI and use it as the OAuth2 config with the helper class <code><a href="../../apidocs/io/vertx/ext/auth/oauth2/OAuth2ClientOptions.html">OAuth2ClientOptions</a></code>.</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject credentials = new JsonObject()
-    .put("clientID", "CLIENT_ID")
-    .put("clientSecret", "CLIENT_SECRET")
-    .put("site", "https://www.your-keycloak-server.com")
-    .put("authorizationPath", "/realms/" + realm + "/protocol/openid-connect/auth")
-    .put("tokenPath", "/realms/" + realm + "/protocol/openid-connect/token");
-
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject keycloakJson = new JsonObject()
+    .put("realm", "master")
+    .put("realm-public-key", "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqGQkaBkiZWpUjFOuaabgfXgjzZzfJd0wozrS1czX5qHNKG3P79P/UtZeR3wGN8r15jVYiH42GMINMs7R7iP5Mbm1iImge5p/7/dPmXirKOKOBhjA3hNTiV5BlPDTQyiuuTAUEms5dY4+moswXo5zM4q9DFu6B7979o+v3kX6ZB+k3kNhP08wH82I4eJKoenN/0iCT7ALoG3ysEJf18+HEysSnniLMJr8R1pYF2QRFlqaDv3Mqyp7ipxYkt4ebMCgE7aDzT6OrfpyPowObpdjSMTUXpcwIcH8mIZCWFmyfF675zEeE0e+dHKkL1rPeCI7rr7Bqc5+1DS5YM54fk8xQwIDAQAB")
+    .put("auth-server-url", "http://localhost:9000/auth")
+    .put("ssl-required", "external")
+    .put("resource", "frontend")
+    .put("credentials", new JsonObject()
+        .put("secret", "2fbf5e18-b923-4a83-9657-b4ebd5317f60"));
 
 // Initialize the OAuth2 Library
-OAuth2Auth oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.CLIENT, credentials);</code></pre>
+OAuth2Auth oauth2 = OAuth2Auth.createKeycloak(vertx, OAuth2FlowType.CLIENT, keycloakJson);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using this approach the provider has knowledge on how to parse access tokens and extract grants from inside.
+This information is quite valuable since it allows to do authorization at the API level, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject keycloakJson = new JsonObject()
+    .put("realm", "master")
+    .put("realm-public-key", "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqGQkaBkiZWpUjFOuaabgfXgjzZzfJd0wozrS1czX5qHNKG3P79P/UtZeR3wGN8r15jVYiH42GMINMs7R7iP5Mbm1iImge5p/7/dPmXirKOKOBhjA3hNTiV5BlPDTQyiuuTAUEms5dY4+moswXo5zM4q9DFu6B7979o+v3kX6ZB+k3kNhP08wH82I4eJKoenN/0iCT7ALoG3ysEJf18+HEysSnniLMJr8R1pYF2QRFlqaDv3Mqyp7ipxYkt4ebMCgE7aDzT6OrfpyPowObpdjSMTUXpcwIcH8mIZCWFmyfF675zEeE0e+dHKkL1rPeCI7rr7Bqc5+1DS5YM54fk8xQwIDAQAB")
+    .put("auth-server-url", "http://localhost:9000/auth")
+    .put("ssl-required", "external")
+    .put("resource", "frontend")
+    .put("credentials", new JsonObject()
+        .put("secret", "2fbf5e18-b923-4a83-9657-b4ebd5317f60"));
+
+// Initialize the OAuth2 Library
+OAuth2Auth oauth2 = OAuth2Auth.createKeycloak(vertx, OAuth2FlowType.PASSWORD, keycloakJson);
+
+// first get a token (authenticate)
+oauth2.getToken(new JsonObject().put("username", "user").put("password", "secret"), res -&gt; {
+  if (res.failed()) {
+    // error handling...
+  } else {
+    AccessToken token = res.result();
+
+    // now check for permissions
+    token.isAuthorised("account:manage-account", r -&gt; {
+      if (r.result()) {
+        // this user is authorized to manage its account
+      }
+    });
+  }
+});</code></pre>
 </div>
 </div>
 </div>
@@ -533,7 +573,7 @@ OAuth2Auth oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.CLIENT, credentials)
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

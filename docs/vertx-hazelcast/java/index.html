@@ -105,6 +105,7 @@
 <li><a href="#_using_this_cluster_manager">Using this cluster manager</a></li>
 <li><a href="#_configuring_this_cluster_manager">Configuring this cluster manager</a></li>
 <li><a href="#_using_an_existing_hazelcast_cluster">Using an existing Hazelcast cluster</a></li>
+<li><a href="#_using_hazelcast_async_methods">Using Hazelcast async methods</a></li>
 <li><a href="#_trouble_shooting_clustering">Trouble shooting clustering</a>
 <ul class="sectlevel2">
 <li><a href="#_multicast_not_enabled_on_the_machine">Multicast not enabled on the machine.</a></li>
@@ -114,6 +115,8 @@
 <li><a href="#_enabling_logging">Enabling logging</a></li>
 </ul>
 </li>
+<li><a href="#_hazelcast_logging">Hazelcast logging</a></li>
+<li><a href="#_using_a_different_hazelcast_version">Using a different Hazelcast version</a></li>
 </ul>
         </div>
       </div>
@@ -124,6 +127,7 @@
 <li><a href="#_using_this_cluster_manager">Using this cluster manager</a></li>
 <li><a href="#_configuring_this_cluster_manager">Configuring this cluster manager</a></li>
 <li><a href="#_using_an_existing_hazelcast_cluster">Using an existing Hazelcast cluster</a></li>
+<li><a href="#_using_hazelcast_async_methods">Using Hazelcast async methods</a></li>
 <li><a href="#_trouble_shooting_clustering">Trouble shooting clustering</a>
 <ul class="sectlevel2">
 <li><a href="#_multicast_not_enabled_on_the_machine">Multicast not enabled on the machine.</a></li>
@@ -133,6 +137,8 @@
 <li><a href="#_enabling_logging">Enabling logging</a></li>
 </ul>
 </li>
+<li><a href="#_hazelcast_logging">Hazelcast logging</a></li>
+<li><a href="#_using_a_different_hazelcast_version">Using a different Hazelcast version</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -149,7 +155,7 @@ cluster managers are pluggable.  This implementation is packaged inside:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-hazelcast&lt;/artifactId&gt;
-  &lt;version&gt;3.2.1&lt;/version&gt;
+  &lt;version&gt;3.3.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -227,7 +233,50 @@ which is packaged inside the jar.</p>
 </div>
 <div class="paragraph">
 <p>If you want to override this configuration you can provide a file called <code>cluster.xml</code> on your classpath and this
-will be used instead.</p>
+will be used instead. If you want to embed the <code>cluster.xml</code> file in a fat jar, it must be located at the root of the
+fat jar. If it&#8217;s an external file, the <strong>directory</strong> containing the file must be added to the classpath. For
+example, if you are using the <em>launcher</em> class from Vert.x, the classpath enhancement can be done as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code># If the cluster.xml is in the current directory:
+java -jar ... -cp . -cluster
+vertx run MyVerticle -cp . -cluster
+
+# If the cluster.xml is in the conf directory
+java -jar ... -cp conf -cluster</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Another way to override the configuration is by providing the system property <code>vertx.hazelcast.config</code> with a
+location:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code># Use a cluster configuration located in an external file
+java -Dvertx.hazelcast.config=./config/my-cluster-config.xml -jar ... -cluster
+
+# Or use a custom configuration from the classpath
+java -Dvertx.hazelcast.config=classpath:my/package/config/my-cluster-config.xml -jar ... -cluster</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>vertx.hazelcast.config</code> system property, when present, overrides any <code>cluster.xml</code> on the classpath, but if
+loading
+from this system property fails, then loading falls back to either <code>cluster.xml</code> or the Hazelcast default configuration.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+Configuration of Hazelcast the <code>-Dhazelcast.config</code> system property is not supported by Vert.x and should
+not be used.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The xml file is a Hazelcast configuration file and is described in detail in the documentation on the Hazelcast
@@ -306,6 +355,28 @@ Vertx.clusteredVertx(options, res -&gt; {
 &lt;/semaphore&gt;</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><strong>IMPORTANT</strong> Do not use Hazelcast clients or smart clients when using high-availability (HA, or fail-over) in your
+cluster as they do not notify when they leave the cluster and you may loose data, or leave the cluster in an
+inconsistent state. See <a href="https://github.com/vert-x3/vertx-hazelcast/issues/24" class="bare">https://github.com/vert-x3/vertx-hazelcast/issues/24</a> for more details.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_hazelcast_async_methods">Using Hazelcast async methods</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Hazelcast&#8217;s <code>IMap</code> and <code>IAtomicLong</code> interfaces can be used with async methods returning <code>ICompletableFuture&lt;V&gt;</code>,
+a natural fit for Vert.x threading model. Even though these interfaces have been available for a long time, they are not
+provided by the public <code>HazelcastInstance</code> API.</p>
+</div>
+<div class="paragraph">
+<p>The default behavior of the <code>HazelcastClusterManager</code> is to use the public API. Supplying the option
+<code>-Dvertx.hazelcast.async-api=true</code> on JVM startup, will indicate that the async Hazelcast API methods will be used to
+communicate with the hazelcast cluster. Effectively, this means that when this option is enabled,
+execution of all <code>Counter</code> operations and <code>AsyncMap.get</code>,<code>AsyncMap.put</code> and <code>AsyncMap.remove</code> operations will
+occur in the calling thread (the event loop), instead of a worker thread with <code>vertx.executeBlocking</code>.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -351,7 +422,8 @@ When running at the command line this is done by specifying the <code>cluster-ho
 <p>Where <code>your-ip-address</code> is the same IP address you specified in the Hazelcast configuration.</p>
 </div>
 <div class="paragraph">
-<p>If using Vert.x programmatically you can specify this using <code><a href="../../apidocs/io/vertx/core/VertxOptions.html#setClusterHost-java.lang.String-">setClusterHost</a></code>.</p>
+<p>If using Vert.x programmatically you can specify this using
+<code><a href="../../apidocs/io/vertx/core/VertxOptions.html#setClusterHost-java.lang.String-">setClusterHost</a></code>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -382,7 +454,7 @@ documentation.</p>
 <div class="paragraph">
 <p>When trouble-shooting clustering issues with Hazelcast it&#8217;s often useful to get some logging output from Hazelcast
 to see if it&#8217;s forming a cluster properly. You can do this (when using the default JUL logging) by adding a file
-called <code>vertx-default-jul-logging.properties</code> on your classpath. This is a standard java.util.loging (JUL)
+called <code>vertx-default-jul-logging.properties</code> on your classpath. This is a standard java.util.logging (JUL)
 configuration file. Inside it set:</p>
 </div>
 <div class="listingblock">
@@ -402,6 +474,75 @@ java.util.logging.FileHandler.level=INFO</pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_hazelcast_logging">Hazelcast logging</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The logging backend used by Hazelcast is <code>jdk</code> by default (understand JUL). If you want to redirect the logging to
+another library, you need to set the <code>hazelcast.logging.type</code> system property such as in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>-Dhazelcast.logging.type=slf4j</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the <a href="http://docs.hazelcast.org/docs/3.6.1/manual/html-single/index.html#logging-configuration">hazelcast documentation</a> for more details.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_a_different_hazelcast_version">Using a different Hazelcast version</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You may want to use a different version of Hazelcast. The default version is <code>3.6.3</code>. To do so, you
+need to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>put the version you want in the application classpath</p>
+</li>
+<li>
+<p>if you are running a fat jar, configure your build manager to use the right version</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In this later case, you would need in Maven:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;com.hazelcast&lt;/groupId&gt;
+  &lt;artifactId&gt;hazelcast&lt;/artifactId&gt;
+  &lt;version&gt;ENTER_YOUR_VERSION_HERE&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-hazelcast&lt;/artifactId&gt;
+  &lt;version&gt;3.3.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Depending on the version, you may need to exclude some transitive dependencies.</p>
+</div>
+<div class="paragraph">
+<p>On Gradle, you can achieve the same overloading using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>dependencies {
+ compile ("io.vertx:vertx-hazelcast:3.3.0"){
+   exclude group: 'com.hazelcast', module: 'hazelcast'
+ }
+ compile "com.hazelcast:hazelcast:ENTER_YOUR_VERSION_HERE"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
 
         
 
@@ -409,7 +550,7 @@ java.util.logging.FileHandler.level=INFO</pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

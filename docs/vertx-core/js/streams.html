@@ -132,7 +132,7 @@
 <p>There are several objects in Vert.x that allow items to be read from and written.</p>
 </div>
 <div class="paragraph">
-<p>In previous versions the streams.adoc package was manipulating <code><a href="../../jsdoc/buffer-Buffer.html">Buffer</a></code>
+<p>In previous versions the streams.adoc package was manipulating <code><a href="../../jsdoc/module-vertx-js_buffer-Buffer.html">Buffer</a></code>
 objects exclusively. From now, streams are not coupled to buffers anymore and they work with any kind of objects.</p>
 </div>
 <div class="paragraph">
@@ -147,14 +147,14 @@ memory exhaustion.</p>
 <p>To solve this problem a simple flow control (<em>back-pressure</em>) capability is provided by some objects in the Vert.x API.</p>
 </div>
 <div class="paragraph">
-<p>Any flow control aware object that can be <em>written-to</em> implements <code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code>,
-while any flow control object that can be <em>read-from</em> is said to implement <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code>.</p>
+<p>Any flow control aware object that can be <em>written-to</em> implements <code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html">WriteStream</a></code>,
+while any flow control object that can be <em>read-from</em> is said to implement <code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html">ReadStream</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s take an example where we want to read from a <code>ReadStream</code> then write the data to a <code>WriteStream</code>.</p>
 </div>
 <div class="paragraph">
-<p>A very simple example would be reading from a <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code> then writing back to the
+<p>A very simple example would be reading from a <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html">NetSocket</a></code> then writing back to the
 same <code>NetSocket</code> - since <code>NetSocket</code> implements both <code>ReadStream</code> and <code>WriteStream</code>. Note that this works
 between any <code>ReadStream</code> and <code>WriteStream</code> compliant object, including HTTP requests, HTTP responses,
 async files I/O, WebSockets, etc.</p>
@@ -247,13 +247,13 @@ server.connectHandler(function (sock) {
 </div>
 </div>
 <div class="paragraph">
-<p>And there we have it. The <code><a href="../../jsdoc/write_stream-WriteStream.html#drainHandler">drainHandler</a></code> event handler will
+<p>And there we have it. The <code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html#drainHandler">drainHandler</a></code> event handler will
 get called when the write queue is ready to accept more data, this resumes the <code>NetSocket</code> that
 allows more data to be read.</p>
 </div>
 <div class="paragraph">
 <p>Wanting to do this is quite common while writing Vert.x applications, so we provide a helper class
-called <code><a href="../../jsdoc/pump-Pump.html">Pump</a></code> that does all of this hard work for you.
+called <code><a href="../../jsdoc/module-vertx-js_pump-Pump.html">Pump</a></code> that does all of this hard work for you.
 You just feed it the <code>ReadStream</code> plus the <code>WriteStream</code> then start it:</p>
 </div>
 <div class="listingblock">
@@ -277,12 +277,12 @@ server.connectHandler(function (sock) {
 <div class="sect2">
 <h3 id="_readstream">ReadStream</h3>
 <div class="paragraph">
-<p><code>ReadStream</code> is implemented by <code><a href="../../jsdoc/http_client_response-HttpClientResponse.html">HttpClientResponse</a></code>, <code><a href="../../jsdoc/datagram_socket-DatagramSocket.html">DatagramSocket</a></code>,
-<code><a href="../../jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="../../jsdoc/http_server_file_upload-HttpServerFileUpload.html">HttpServerFileUpload</a></code>,
-<code><a href="../../jsdoc/http_server_request-HttpServerRequest.html">HttpServerRequest</a></code>, <code><a href="../../jsdoc/http_server_request_stream-HttpServerRequestStream.html">HttpServerRequestStream</a></code>,
-<code><a href="../../jsdoc/message_consumer-MessageConsumer.html">MessageConsumer</a></code>, <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code>, <code><a href="../../jsdoc/net_socket_stream-NetSocketStream.html">NetSocketStream</a></code>,
-<code><a href="../../jsdoc/web_socket-WebSocket.html">WebSocket</a></code>, <code><a href="../../jsdoc/web_socket_stream-WebSocketStream.html">WebSocketStream</a></code>, <code><a href="../../jsdoc/timeout_stream-TimeoutStream.html">TimeoutStream</a></code>,
-<code><a href="../../jsdoc/async_file-AsyncFile.html">AsyncFile</a></code>.</p>
+<p><code>ReadStream</code> is implemented by <code><a href="../../jsdoc/module-vertx-js_http_client_response-HttpClientResponse.html">HttpClientResponse</a></code>, <code><a href="../../jsdoc/module-vertx-js_datagram_socket-DatagramSocket.html">DatagramSocket</a></code>,
+<code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="../../jsdoc/module-vertx-js_http_server_file_upload-HttpServerFileUpload.html">HttpServerFileUpload</a></code>,
+<code><a href="../../jsdoc/module-vertx-js_http_server_request-HttpServerRequest.html">HttpServerRequest</a></code>, <code><a href="../../jsdoc/module-vertx-js_http_server_request_stream-HttpServerRequestStream.html">HttpServerRequestStream</a></code>,
+<code><a href="../../jsdoc/module-vertx-js_message_consumer-MessageConsumer.html">MessageConsumer</a></code>, <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html">NetSocket</a></code>, <code><a href="../../jsdoc/module-vertx-js_net_socket_stream-NetSocketStream.html">NetSocketStream</a></code>,
+<code><a href="../../jsdoc/module-vertx-js_web_socket-WebSocket.html">WebSocket</a></code>, <code><a href="../../jsdoc/module-vertx-js_web_socket_stream-WebSocketStream.html">WebSocketStream</a></code>, <code><a href="../../jsdoc/module-vertx-js_timeout_stream-TimeoutStream.html">TimeoutStream</a></code>,
+<code><a href="../../jsdoc/module-vertx-js_async_file-AsyncFile.html">AsyncFile</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Functions:</p>
@@ -290,23 +290,23 @@ server.connectHandler(function (sock) {
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="../../jsdoc/read_stream-ReadStream.html#handler">handler</a></code>:
+<p><code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html#handler">handler</a></code>:
 set a handler which will receive items from the ReadStream.</p>
 </li>
 <li>
-<p><code><a href="../../jsdoc/read_stream-ReadStream.html#pause">pause</a></code>:
+<p><code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html#pause">pause</a></code>:
 pause the handler. When paused no items will be received in the handler.</p>
 </li>
 <li>
-<p><code><a href="../../jsdoc/read_stream-ReadStream.html#resume">resume</a></code>:
+<p><code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html#resume">resume</a></code>:
 resume the handler. The handler will be called if any item arrives.</p>
 </li>
 <li>
-<p><code><a href="../../jsdoc/read_stream-ReadStream.html#exceptionHandler">exceptionHandler</a></code>:
+<p><code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html#exceptionHandler">exceptionHandler</a></code>:
 Will be called if an exception occurs on the ReadStream.</p>
 </li>
 <li>
-<p><code><a href="../../jsdoc/read_stream-ReadStream.html#endHandler">endHandler</a></code>:
+<p><code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html#endHandler">endHandler</a></code>:
 Will be called when end of stream is reached. This might be when EOF is reached if the ReadStream represents a file,
 or when end of request is reached if it&#8217;s an HTTP request, or when the connection is closed if it&#8217;s a TCP socket.</p>
 </li>
@@ -316,9 +316,9 @@ or when end of request is reached if it&#8217;s an HTTP request, or when the con
 <div class="sect2">
 <h3 id="_writestream">WriteStream</h3>
 <div class="paragraph">
-<p><code>WriteStream</code> is implemented by <code><a href="../../jsdoc/http_client_request-HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="../../jsdoc/http_server_response-HttpServerResponse.html">HttpServerResponse</a></code>
-<code><a href="../../jsdoc/web_socket-WebSocket.html">WebSocket</a></code>, <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code>, <code><a href="../../jsdoc/async_file-AsyncFile.html">AsyncFile</a></code>,
-<code><a href="../../jsdoc/packet_writestream-PacketWritestream.html">PacketWritestream</a></code> and <code><a href="../../jsdoc/message_producer-MessageProducer.html">MessageProducer</a></code></p>
+<p><code>WriteStream</code> is implemented by <code><a href="../../jsdoc/module-vertx-js_http_client_request-HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="../../jsdoc/module-vertx-js_http_server_response-HttpServerResponse.html">HttpServerResponse</a></code>
+<code><a href="../../jsdoc/module-vertx-js_web_socket-WebSocket.html">WebSocket</a></code>, <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html">NetSocket</a></code>, <code><a href="../../jsdoc/module-vertx-js_async_file-AsyncFile.html">AsyncFile</a></code>,
+<code><a href="../../jsdoc/module-vertx-js_packet_writestream-PacketWritestream.html">PacketWritestream</a></code> and <code><a href="../../jsdoc/module-vertx-js_message_producer-MessageProducer.html">MessageProducer</a></code></p>
 </div>
 <div class="paragraph">
 <p>Functions:</p>
@@ -326,27 +326,27 @@ or when end of request is reached if it&#8217;s an HTTP request, or when the con
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="../../jsdoc/write_stream-WriteStream.html#write">write</a></code>:
+<p><code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html#write">write</a></code>:
 write an object to the WriteStream. This method will never block. Writes are queued internally and asynchronously
 written to the underlying resource.</p>
 </li>
 <li>
-<p><code><a href="../../jsdoc/write_stream-WriteStream.html#setWriteQueueMaxSize">setWriteQueueMaxSize</a></code>:
-set the number of object at which the write queue is considered <em>full</em>, and the method <code><a href="../../jsdoc/write_stream-WriteStream.html#writeQueueFull">writeQueueFull</a></code>
+<p><code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html#setWriteQueueMaxSize">setWriteQueueMaxSize</a></code>:
+set the number of object at which the write queue is considered <em>full</em>, and the method <code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html#writeQueueFull">writeQueueFull</a></code>
 returns <code>true</code>. Note that, when the write queue is considered full, if write is called the data will still be accepted
-and queued. The actual number depends on the stream implementation, for <code><a href="../../jsdoc/buffer-Buffer.html">Buffer</a></code> the size
+and queued. The actual number depends on the stream implementation, for <code><a href="../../jsdoc/module-vertx-js_buffer-Buffer.html">Buffer</a></code> the size
 represents the actual number of bytes written and not the number of buffers.</p>
 </li>
 <li>
-<p><code><a href="../../jsdoc/write_stream-WriteStream.html#writeQueueFull">writeQueueFull</a></code>:
+<p><code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html#writeQueueFull">writeQueueFull</a></code>:
 returns <code>true</code> if the write queue is considered full.</p>
 </li>
 <li>
-<p><code><a href="../../jsdoc/write_stream-WriteStream.html#exceptionHandler">exceptionHandler</a></code>:
+<p><code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html#exceptionHandler">exceptionHandler</a></code>:
 Will be called if an exception occurs on the <code>WriteStream</code>.</p>
 </li>
 <li>
-<p><code><a href="../../jsdoc/write_stream-WriteStream.html#drainHandler">drainHandler</a></code>:
+<p><code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html#drainHandler">drainHandler</a></code>:
 The handler will be called if the <code>WriteStream</code> is considered no longer full.</p>
 </li>
 </ul>
@@ -360,16 +360,16 @@ The handler will be called if the <code>WriteStream</code> is considered no long
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="../../jsdoc/pump-Pump.html#start">start</a></code>:
+<p><code><a href="../../jsdoc/module-vertx-js_pump-Pump.html#start">start</a></code>:
 Start the pump.</p>
 </li>
 <li>
-<p><code><a href="../../jsdoc/pump-Pump.html#stop">stop</a></code>:
+<p><code><a href="../../jsdoc/module-vertx-js_pump-Pump.html#stop">stop</a></code>:
 Stops the pump. When the pump starts it is in stopped mode.</p>
 </li>
 <li>
-<p><code><a href="../../jsdoc/pump-Pump.html#setWriteQueueMaxSize">setWriteQueueMaxSize</a></code>:
-This has the same meaning as <code><a href="../../jsdoc/write_stream-WriteStream.html#setWriteQueueMaxSize">setWriteQueueMaxSize</a></code> on the <code>WriteStream</code>.</p>
+<p><code><a href="../../jsdoc/module-vertx-js_pump-Pump.html#setWriteQueueMaxSize">setWriteQueueMaxSize</a></code>:
+This has the same meaning as <code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html#setWriteQueueMaxSize">setWriteQueueMaxSize</a></code> on the <code>WriteStream</code>.</p>
 </li>
 </ul>
 </div>
@@ -389,7 +389,7 @@ This has the same meaning as <code><a href="../../jsdoc/write_stream-WriteStream
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

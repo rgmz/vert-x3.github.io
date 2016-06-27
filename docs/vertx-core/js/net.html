@@ -125,7 +125,9 @@
 <li><a href="#_configuring_a_tcp_client">Configuring a TCP client</a></li>
 <li><a href="#_making_connections">Making connections</a></li>
 <li><a href="#_configuring_connection_attempts">Configuring connection attempts</a></li>
+<li><a href="#logging_network_activity">Logging network activity</a></li>
 <li><a href="#ssl">Configuring servers and clients to work with SSL/TLS</a></li>
+<li><a href="#_using_a_proxy_for_client_connections">Using a proxy for client connections</a></li>
 </ul>
 </li>
 </ul>
@@ -158,7 +160,9 @@
 <li><a href="#_configuring_a_tcp_client">Configuring a TCP client</a></li>
 <li><a href="#_making_connections">Making connections</a></li>
 <li><a href="#_configuring_connection_attempts">Configuring connection attempts</a></li>
+<li><a href="#logging_network_activity">Logging network activity</a></li>
 <li><a href="#ssl">Configuring servers and clients to work with SSL/TLS</a></li>
+<li><a href="#_using_a_proxy_for_client_connections">Using a proxy for client connections</a></li>
 </ul>
 </li>
 </ul>
@@ -198,7 +202,7 @@ var server = vertx.createNetServer(options);</code></pre>
 <div class="sect2">
 <h3 id="_start_the_server_listening">Start the Server Listening</h3>
 <div class="paragraph">
-<p>To tell the server to listen for incoming requests you use one of the <code><a href="../../jsdoc/net_server-NetServer.html#listen">listen</a></code>
+<p>To tell the server to listen for incoming requests you use one of the <code><a href="../../jsdoc/module-vertx-js_net_server-NetServer.html#listen">listen</a></code>
 alternatives.</p>
 </div>
 <div class="paragraph">
@@ -250,7 +254,7 @@ server.listen(1234, "localhost", function (res, res_err) {
 <p>If <code>0</code> is used as the listening port, the server will find an unused random port to listen on.</p>
 </div>
 <div class="paragraph">
-<p>To find out the real port the server is listening on you can call <code><a href="../../jsdoc/net_server-NetServer.html#actualPort">actualPort</a></code>.</p>
+<p>To find out the real port the server is listening on you can call <code><a href="../../jsdoc/module-vertx-js_net_server-NetServer.html#actualPort">actualPort</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -268,7 +272,7 @@ server.listen(0, "localhost", function (res, res_err) {
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_connections">Getting notified of incoming connections</h3>
 <div class="paragraph">
-<p>To be notified when a connection is made you need to set a <code><a href="../../jsdoc/net_server-NetServer.html#connectHandler">connectHandler</a></code>:</p>
+<p>To be notified when a connection is made you need to set a <code><a href="../../jsdoc/module-vertx-js_net_server-NetServer.html#connectHandler">connectHandler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -279,7 +283,7 @@ server.connectHandler(function (socket) {
 </div>
 </div>
 <div class="paragraph">
-<p>When a connection is made the handler will be called with an instance of <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code>.</p>
+<p>When a connection is made the handler will be called with an instance of <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html">NetSocket</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>This is a socket-like interface to the actual connection, and allows you to read and write data as well as do various
@@ -289,11 +293,11 @@ other things like close the socket.</p>
 <div class="sect2">
 <h3 id="_reading_data_from_the_socket">Reading data from the socket</h3>
 <div class="paragraph">
-<p>To read data from the socket you set the <code><a href="../../jsdoc/net_socket-NetSocket.html#handler">handler</a></code> on the
+<p>To read data from the socket you set the <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html#handler">handler</a></code> on the
 socket.</p>
 </div>
 <div class="paragraph">
-<p>This handler will be called with an instance of <code><a href="../../jsdoc/buffer-Buffer.html">Buffer</a></code> every time data is received on
+<p>This handler will be called with an instance of <code><a href="../../jsdoc/module-vertx-js_buffer-Buffer.html">Buffer</a></code> every time data is received on
 the socket.</p>
 </div>
 <div class="listingblock">
@@ -310,7 +314,7 @@ server.connectHandler(function (socket) {
 <div class="sect2">
 <h3 id="_writing_data_to_a_socket">Writing data to a socket</h3>
 <div class="paragraph">
-<p>You write to a socket using one of <code><a href="../../jsdoc/net_socket-NetSocket.html#write">write</a></code>.</p>
+<p>You write to a socket using one of <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html#write">write</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -334,7 +338,7 @@ socket.write("some data", "UTF-16");</code></pre>
 <div class="sect2">
 <h3 id="_closed_handler">Closed handler</h3>
 <div class="paragraph">
-<p>If you want to be notified when a socket is closed, you can set a <code><a href="../../jsdoc/net_socket-NetSocket.html#closeHandler">closeHandler</a></code>
+<p>If you want to be notified when a socket is closed, you can set a <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html#closeHandler">closeHandler</a></code>
 on it:</p>
 </div>
 <div class="listingblock">
@@ -348,7 +352,7 @@ on it:</p>
 <div class="sect2">
 <h3 id="_handling_exceptions">Handling exceptions</h3>
 <div class="paragraph">
-<p>You can set an <code><a href="../../jsdoc/net_socket-NetSocket.html#exceptionHandler">exceptionHandler</a></code> to receive any
+<p>You can set an <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html#exceptionHandler">exceptionHandler</a></code> to receive any
 exceptions that happen on the socket.</p>
 </div>
 </div>
@@ -363,23 +367,23 @@ it writes them to itself.</p>
 different Vert.x instance by sending the buffer to the address of that handler.</p>
 </div>
 <div class="paragraph">
-<p>The address of the handler is given by <code><a href="../../jsdoc/net_socket-NetSocket.html#writeHandlerID">writeHandlerID</a></code></p>
+<p>The address of the handler is given by <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html#writeHandlerID">writeHandlerID</a></code></p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_local_and_remote_addresses">Local and remote addresses</h3>
 <div class="paragraph">
-<p>The local address of a <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code> can be retrieved using <code><a href="../../jsdoc/net_socket-NetSocket.html#localAddress">localAddress</a></code>.</p>
+<p>The local address of a <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html">NetSocket</a></code> can be retrieved using <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html#localAddress">localAddress</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The remote address, (i.e. the address of the other end of the connection) of a <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code>
-can be retrieved using <code><a href="../../jsdoc/net_socket-NetSocket.html#remoteAddress">remoteAddress</a></code>.</p>
+<p>The remote address, (i.e. the address of the other end of the connection) of a <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html">NetSocket</a></code>
+can be retrieved using <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html#remoteAddress">remoteAddress</a></code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_sending_files_or_resources_from_the_classpath">Sending files or resources from the classpath</h3>
 <div class="paragraph">
-<p>Files and classpath resources can be written to the socket directly using <code><a href="../../jsdoc/net_socket-NetSocket.html#sendFile">sendFile</a></code>. This can be a very
+<p>Files and classpath resources can be written to the socket directly using <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html#sendFile">sendFile</a></code>. This can be a very
 efficient way to send files, as it can be handled by the OS kernel directly where supported by the operating system.</p>
 </div>
 <div class="paragraph">
@@ -395,8 +399,8 @@ classpath resolution or disabling it.</p>
 <div class="sect2">
 <h3 id="_streaming_sockets">Streaming sockets</h3>
 <div class="paragraph">
-<p>Instances of <code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code> are also <code><a href="../../jsdoc/read_stream-ReadStream.html">ReadStream</a></code> and
-<code><a href="../../jsdoc/write_stream-WriteStream.html">WriteStream</a></code> instances so they can be used to pump data to or from other
+<p>Instances of <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html">NetSocket</a></code> are also <code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html">ReadStream</a></code> and
+<code><a href="../../jsdoc/module-vertx-js_write_stream-WriteStream.html">WriteStream</a></code> instances so they can be used to pump data to or from other
 read and write streams.</p>
 </div>
 <div class="paragraph">
@@ -406,7 +410,7 @@ read and write streams.</p>
 <div class="sect2">
 <h3 id="_upgrading_connections_to_ssl_tls">Upgrading connections to SSL/TLS</h3>
 <div class="paragraph">
-<p>A non SSL/TLS connection can be upgraded to SSL/TLS using <code><a href="../../jsdoc/net_socket-NetSocket.html#upgradeToSsl">upgradeToSsl</a></code>.</p>
+<p>A non SSL/TLS connection can be upgraded to SSL/TLS using <code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html#upgradeToSsl">upgradeToSsl</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The server or client must be configured for SSL/TLS for this to work correctly. Please see the <a href="#ssl">chapter on SSL/TLS</a>
@@ -416,7 +420,7 @@ for more information.</p>
 <div class="sect2">
 <h3 id="_closing_a_tcp_server">Closing a TCP Server</h3>
 <div class="paragraph">
-<p>Call <code><a href="../../jsdoc/net_server-NetServer.html#close">close</a></code> to close the server. Closing the server closes any open connections
+<p>Call <code><a href="../../jsdoc/module-vertx-js_net_server-NetServer.html#close">close</a></code> to close the server. Closing the server closes any open connections
 and releases all server resources.</p>
 </div>
 <div class="paragraph">
@@ -548,9 +552,9 @@ var client = vertx.createNetClient(options);</code></pre>
 <div class="sect2">
 <h3 id="_making_connections">Making connections</h3>
 <div class="paragraph">
-<p>To make a connection to a server you use <code><a href="../../jsdoc/net_client-NetClient.html#connect">connect</a></code>,
+<p>To make a connection to a server you use <code><a href="../../jsdoc/module-vertx-js_net_client-NetClient.html#connect">connect</a></code>,
 specifying the port and host of the server and a handler that will be called with a result containing the
-<code><a href="../../jsdoc/net_socket-NetSocket.html">NetSocket</a></code> when connection is successful or with a failure if connection failed.</p>
+<code><a href="../../jsdoc/module-vertx-js_net_socket-NetSocket.html">NetSocket</a></code> when connection is successful or with a failure if connection failed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -601,6 +605,75 @@ var client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="paragraph">
 <p>By default, multiple connection attempts are disabled.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="logging_network_activity">Logging network activity</h3>
+<div class="paragraph">
+<p>For debugging purposes, network activity can be logged:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "logActivity" : true
+};
+
+var server = vertx.createNetServer(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>for the client</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "logActivity" : true
+};
+
+var client = vertx.createNetClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Network activity is logged by Netty with the <code>DEBUG</code> level and with the <code>io.netty.handler.logging.LoggingHandler</code>
+name. When using network activity logging there are a few things to keep in mind:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>logging is not performed by Vert.x logging but by Netty</p>
+</li>
+<li>
+<p>this is <strong>not</strong> a production feature</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Netty will try to locate the following logger implementations, in the following order:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Slf4j</p>
+</li>
+<li>
+<p>Log4j</p>
+</li>
+<li>
+<p>JDK</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The presense of the slf4j or log4j classes on the classpath is enough to pick up the logging implementation.</p>
+</div>
+<div class="paragraph">
+<p>The logger implementation can be forced to a specific implementation by setting Netty&#8217;s internal logger implementation directly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Force logging to SLF4J
+InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -759,7 +832,7 @@ utility which ships with the JDK.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
   "ssl" : true,
-  "clientAuth" : 'REQUIRED',
+  "clientAuth" : "REQUIRED",
   "trustStoreOptions" : {
     "path" : "/path/to/your/truststore.jks",
     "password" : "password-of-your-truststore"
@@ -776,7 +849,7 @@ var server = vertx.createNetServer(options);</code></pre>
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks");
 var options = {
   "ssl" : true,
-  "clientAuth" : 'REQUIRED',
+  "clientAuth" : "REQUIRED",
   "trustStoreOptions" : {
     "value" : myTrustStoreAsABuffer,
     "password" : "password-of-your-truststore"
@@ -793,7 +866,7 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
   "ssl" : true,
-  "clientAuth" : 'REQUIRED',
+  "clientAuth" : "REQUIRED",
   "pfxTrustOptions" : {
     "path" : "/path/to/your/truststore.pfx",
     "password" : "password-of-your-truststore"
@@ -810,7 +883,7 @@ var server = vertx.createNetServer(options);</code></pre>
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx");
 var options = {
   "ssl" : true,
-  "clientAuth" : 'REQUIRED',
+  "clientAuth" : "REQUIRED",
   "pfxTrustOptions" : {
     "value" : myTrustStoreAsABuffer,
     "password" : "password-of-your-truststore"
@@ -826,7 +899,7 @@ var server = vertx.createNetServer(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
   "ssl" : true,
-  "clientAuth" : 'REQUIRED',
+  "clientAuth" : "REQUIRED",
   "pemTrustOptions" : {
     "certPaths" : [
       "/path/to/your/server-ca.pem"
@@ -844,7 +917,7 @@ var server = vertx.createNetServer(options);</code></pre>
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">var myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx");
 var options = {
   "ssl" : true,
-  "clientAuth" : 'REQUIRED',
+  "clientAuth" : "REQUIRED",
   "pemTrustOptions" : {
     "certValues" : [
       myCaAsABuffer
@@ -883,6 +956,19 @@ var client = vertx.createNetClient(options);</code></pre>
 <div class="paragraph">
 <p>If <code><a href="../dataobjects.html#ClientOptionsBase#setTrustAll">trustAll</a></code> is not set then a client trust store must be
 configured and should contain the certificates of the servers that the client trusts.</p>
+</div>
+<div class="paragraph">
+<p>By default, host verification is disabled on the client.
+To enable host verification, set the algorithm to use on your client (only HTTPS and LDAPS is currently supported):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "ssl" : true,
+  "hostnameVerificationAlgorithm" : "HTTPS"
+};
+var client = vertx.createNetClient(options);</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Likewise server configuration, the client trust can be configured in several ways:</p>
@@ -1140,7 +1226,7 @@ var client = vertx.createNetClient(options);</code></pre>
 <div class="sect3">
 <h4 id="_configuring_the_cipher_suite">Configuring the Cipher suite</h4>
 <div class="paragraph">
-<p>By default, the TLS configuration will uses the Cipher suite of the JVM running Vert.x. This Cipher suite can be
+<p>By default, the TLS configuration will use the Cipher suite of the JVM running Vert.x. This Cipher suite can be
 configured with a suite of enabled ciphers:</p>
 </div>
 <div class="listingblock">
@@ -1162,6 +1248,189 @@ var server = vertx.createNetServer(options);</code></pre>
 <p>Cipher suite can be specified on the <code><a href="../dataobjects.html#NetServerOptions">NetServerOptions</a></code> or <code><a href="../dataobjects.html#NetClientOptions">NetClientOptions</a></code> configuration.</p>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_configuring_tls_protocol_versions">Configuring TLS protocol versions</h4>
+<div class="paragraph">
+<p>By default, the TLS configuration will use the following protocol versions: SSLv2Hello, TLSv1, TLSv1.1 and TLSv1.2. Protocol versions can be
+configured by explicitly adding enabled protocols:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "ssl" : true,
+  "keyStoreOptions" : keyStoreOptions,
+  "enabledSecureTransportProtocols" : [
+    "TLSv1.1",
+    "TLSv1.2"
+  ]
+};
+var server = vertx.createNetServer(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Protocol versions can be specified on the <code><a href="../dataobjects.html#NetServerOptions">NetServerOptions</a></code> or <code><a href="../dataobjects.html#NetClientOptions">NetClientOptions</a></code> configuration.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ssl_engine">SSL engine</h4>
+<div class="paragraph">
+<p>The engine implementation can be configured to use <a href="https://www.openssl.org">OpenSSL</a> instead of the JDK implementation.
+OpenSSL provides better performances and CPU usage than the JDK engine, as well as JDK version independence.</p>
+</div>
+<div class="paragraph">
+<p>The engine options to use is</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <code><a href="../dataobjects.html#TCPSSLOptions#getSslEngineOptions">getSslEngineOptions</a></code> options when it is set</p>
+</li>
+<li>
+<p>otherwise <code><a href="../dataobjects.html#JdkSSLEngineOptions">JdkSSLEngineOptions</a></code></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Use JDK SSL engine
+var options = {
+  "ssl" : true,
+  "keyStoreOptions" : keyStoreOptions
+};
+
+// Use JDK SSL engine explicitly
+options = {
+  "ssl" : true,
+  "keyStoreOptions" : keyStoreOptions,
+  "jdkSslEngineOptions" : {
+  }
+};
+
+// Use OpenSSL engine
+options = {
+  "ssl" : true,
+  "keyStoreOptions" : keyStoreOptions,
+  "openSslEngineOptions" : {
+  }
+};</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_application_layer_protocol_negotiation">Application-Layer Protocol Negotiation</h4>
+<div class="paragraph">
+<p>ALPN is a TLS extension for applicationl layer protocol negotitation. It is used by HTTP/2: during the TLS handshake
+the client gives the list of application protocols it accepts and the server responds with a protocol it supports.</p>
+</div>
+<div class="paragraph">
+<p>Java 8 does not supports ALPN out of the box, so ALPN should be enabled by other means:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>OpenSSL</em> support</p>
+</li>
+<li>
+<p><em>Jetty-ALPN</em> support</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The engine options to use is</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <code><a href="../dataobjects.html#TCPSSLOptions#getSslEngineOptions">getSslEngineOptions</a></code> options when it is set</p>
+</li>
+<li>
+<p><code><a href="../dataobjects.html#JdkSSLEngineOptions">JdkSSLEngineOptions</a></code> when ALPN is available for JDK</p>
+</li>
+<li>
+<p><code><a href="../dataobjects.html#OpenSSLEngineOptions">OpenSSLEngineOptions</a></code> when ALPN is available for OpenSSL</p>
+</li>
+<li>
+<p>otherwise it fails</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_openssl_alpn_support">OpenSSL ALPN support</h5>
+<div class="paragraph">
+<p>OpenSSL provides native ALPN support.</p>
+</div>
+<div class="paragraph">
+<p>OpenSSL requires to configure <code><a href="../dataobjects.html#TCPSSLOptions#setOpenSslEngineOptions">openSslEngineOptions</a></code>
+and use <a href="http://netty.io/wiki/forked-tomcat-native.html">netty-tcnative</a> jar on the classpath. Using tcnative may require
+OpenSSL to be installed on your OS depending on the tcnative implementation.</p>
+</div>
+<div class="paragraph">
+<p>OpenSSL restricts the key/certificate configuration to <code>.pem</code> files. However it is still possible to use any trust
+configuration.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_jetty_alpn_support">Jetty-ALPN support</h5>
+<div class="paragraph">
+<p>Jetty-ALPN is a small jar that overrides a few classes of Java 8 distribution to support ALPN.</p>
+</div>
+<div class="paragraph">
+<p>The JVM must be started with the <em>alpn-boot-${version}.jar</em> in its <code>bootclasspath</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>-Xbootclasspath/p:/path/to/alpn-boot${version}.jar</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where ${version} depends on the JVM version, e.g. <em>8.1.7.v20160121</em> for <em>OpenJDK 1.8.0u74</em> . The complete
+list is available on the <a href="http://www.eclipse.org/jetty/documentation/current/alpn-chapter.html">Jetty-ALPN page</a>.</p>
+</div>
+<div class="paragraph">
+<p>The main drawback is that the version depends on the JVM.</p>
+</div>
+<div class="paragraph">
+<p>To solve this problem the <em><a href="https://github.com/jetty-project/jetty-alpn-agent">Jetty ALPN agent</a></em> can be use instead. The agent is a JVM agent that will chose the correct
+ALPN version for the JVM running it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>-javaagent:/path/to/alpn/agent</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_a_proxy_for_client_connections">Using a proxy for client connections</h3>
+<div class="paragraph">
+<p>The <code><a href="../../jsdoc/module-vertx-js_net_client-NetClient.html">NetClient</a></code> supports either a HTTP/1.x <em>CONNECT</em>, <em>SOCKS4a</em> or <em>SOCKS5</em> proxy.</p>
+</div>
+<div class="paragraph">
+<p>The proxy can be configured in the <code><a href="../dataobjects.html#NetClientOptions">NetClientOptions</a></code> by setting a
+<code><a href="../dataobjects.html#ProxyOptions">ProxyOptions</a></code> object containing proxy type, hostname, port and optionally username and password.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+  "proxyOptions" : {
+    "type" : "SOCKS5",
+    "host" : "localhost",
+    "port" : 1080,
+    "username" : "username",
+    "password" : "secret"
+  }
+};
+var client = vertx.createNetClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The DNS resolution is always done on the proxy server, to achieve the functionality of a SOCKS4 client, it is necessary
+to resolve the DNS address locally.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1172,7 +1441,7 @@ var server = vertx.createNetServer(options);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

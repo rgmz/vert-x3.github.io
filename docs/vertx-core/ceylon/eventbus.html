@@ -109,6 +109,7 @@
 <li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
+<li><a href="#_configuring_the_event_bus">Configuring the event bus</a></li>
 </ul>
         </div>
       </div>
@@ -123,6 +124,7 @@
 <li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
+<li><a href="#_configuring_the_event_bus">Configuring the event bus</a></li>
 </ul>
         </div>
         <div class="sect1">
@@ -384,7 +386,7 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 </div>
 <div class="paragraph">
-<p>Message delivery headers are available exclusively with the Java api.</p>
+<p>Unresolved directive in eventbus.adoc - include::override/eventbus_headers.adoc[]</p>
 </div>
 </div>
 <div class="sect3">
@@ -504,11 +506,8 @@ so it can be deleted from the database</p>
 <div class="paragraph">
 <p>In all cases the reply handler will be called with the specific failure.</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_message_codecs">Message Codecs</h4>
 <div class="paragraph">
-<p>Message codecs are available exclusively with the Java api.</p>
+<p>Unresolved directive in eventbus.adoc - include::override/eventbus.adoc[]</p>
 </div>
 </div>
 <div class="sect3">
@@ -568,6 +567,95 @@ when the verticle is undeployed.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_configuring_the_event_bus">Configuring the event bus</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The event bus can be configured. It is particularly useful when the event bus is clustered. Under the hood
+the event bus uses TCP connections to send and receive message, so the
+<code><a href="../../ceylondoc/vertx-core//eventbus/EventBusOptions.type.html">EventBusOptions</a></code> let you configure all aspects of these TCP connections. As
+the event bus acts as a server and client, the configuration is close to
+<code><a href="../../ceylondoc/vertx-core//net/NetClientOptions.type.html">NetClientOptions</a></code> and <code><a href="../../ceylondoc/vertx-core//net/NetServerOptions.type.html">NetServerOptions</a></code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+import io.vertx.ceylon.core.http { required }
+
+...
+
+value options = VertxOptions {
+  eventBusOptions = EventBusOptions {
+    ssl = true;
+    keyStoreOptions = JksOptions {
+      path = "keystore.jks";
+      password = "wibble";
+    };
+    trustStoreOptions = JksOptions {
+      path = "keystore.jks";
+      password = "wibble";
+    };
+    clientAuth = "REQUIRED";
+  };
+};
+
+vertx_.clusteredVertx(options, (Vertx|Throwable res) {
+  if (is Vertx res) {
+    value vertx = res;
+    value eventBus = vertx.eventBus();
+    print("We now have a clustered event bus: ``eventBus``");
+  } else {
+    print("Failed: ``res``");
+  };
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The previous snippet depicts how you can use SSL connections for the event bus, instead of plain TCP
+connections.</p>
+</div>
+<div class="paragraph">
+<p><strong>WARNING</strong>: to enforce the security in clustered mode, you <strong>must</strong> configure the
+cluster manager to use encryption or enforce security. Refer to the documentation of the cluster
+manager for further details.</p>
+</div>
+<div class="paragraph">
+<p>The event bus configuration needs to be consistent in all the cluster nodes.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../ceylondoc/vertx-core//eventbus/EventBusOptions.type.html">EventBusOptions</a></code> also lets you specify whether or not the event bus is
+clustered, the port and host, as you would do with <code><a href="../../ceylondoc/vertx-core//VertxOptions.type.html#setClustered(boolean)">clustered</a></code>,
+ <code><a href="../../ceylondoc/vertx-core//VertxOptions.type.html#getClusterHost()">getClusterHost</a></code> and <code><a href="../../ceylondoc/vertx-core//VertxOptions.type.html#getClusterPort()">getClusterPort</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>When used in containers, you can also configure the public host and port:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value options = VertxOptions {
+  eventBusOptions = EventBusOptions {
+    clusterPublicHost = "whatever";
+    clusterPublicPort = 1234;
+  };
+};
+
+vertx_.clusteredVertx(options, (Vertx|Throwable res) {
+  if (is Vertx res) {
+    value vertx = res;
+    value eventBus = vertx.eventBus();
+    print("We now have a clustered event bus: ``eventBus``");
+  } else {
+    print("Failed: ``res``");
+  };
+});</code></pre>
+</div>
+</div>
+</div>
+</div>
 
         
 
@@ -575,7 +663,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-05-24 13:53:59 +02:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

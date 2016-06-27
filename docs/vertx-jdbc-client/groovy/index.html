@@ -110,7 +110,11 @@
 <li><a href="#_specifying_a_data_source">Specifying a data source</a></li>
 </ul>
 </li>
-<li><a href="#_closing_the_client">Closing the client</a></li>
+<li><a href="#_closing_the_client">Closing the client</a>
+<ul class="sectlevel2">
+<li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
+</ul>
+</li>
 <li><a href="#_getting_a_connection">Getting a connection</a></li>
 <li><a href="#_configuration">Configuration</a></li>
 <li><a href="#_jdbc_drivers">JDBC Drivers</a></li>
@@ -130,7 +134,11 @@
 <li><a href="#_specifying_a_data_source">Specifying a data source</a></li>
 </ul>
 </li>
-<li><a href="#_closing_the_client">Closing the client</a></li>
+<li><a href="#_closing_the_client">Closing the client</a>
+<ul class="sectlevel2">
+<li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
+</ul>
+</li>
 <li><a href="#_getting_a_connection">Getting a connection</a></li>
 <li><a href="#_configuration">Configuration</a></li>
 <li><a href="#_jdbc_drivers">JDBC Drivers</a></li>
@@ -161,7 +169,7 @@ application.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-jdbc-client&lt;/artifactId&gt;
-  &lt;version&gt;3.2.1&lt;/version&gt;
+  &lt;version&gt;3.3.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -174,7 +182,7 @@ application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-jdbc-client:3.2.1'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-jdbc-client:3.3.0'</code></pre>
 </div>
 </div>
 </div>
@@ -288,6 +296,12 @@ done with it you should close it.</p>
 <p>Clients that share a data source with other client instances are reference counted. Once the last one that references
 the same data source is closed, the data source will be closed.</p>
 </div>
+<div class="sect2">
+<h3 id="_automatic_clean_up_in_verticles">Automatic clean-up in verticles</h3>
+<div class="paragraph">
+<p>If you&#8217;re creating clients from inside verticles, the clients will be automatically closed when the verticle is undeployed.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -327,7 +341,7 @@ client.getConnection({ res -&gt;
 the Vert.x JDBC Client.</p>
 </div>
 <div class="paragraph">
-<p>You can learn how to use it in the <a href="http://foobar">common sql interface</a> documentation.</p>
+<p>You can learn how to use it in the <a href="http://vertx.io/docs/vertx-sql-common/groovy/">common sql interface</a> documentation.</p>
 </div>
 </div>
 </div>
@@ -435,6 +449,30 @@ def config = [
 def client = JDBCClient.createShared(vertx, config)</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Hikari uses a different set of properties:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>jdbcUrl</code> for the JDBC URL</p>
+</li>
+<li>
+<p><code>driverClassName</code> for the JDBC driven class name</p>
+</li>
+<li>
+<p><code>maximumPoolSize</code> for the pool size</p>
+</li>
+<li>
+<p><code>username</code> for the login (<code>password</code> for the password)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Refer to the <a href="https://github.com/brettwooldridge/HikariCP#configuration-knobs-baby">Hikari documentation</a>
+for further details. Also refer to the <a href="http://www.jolbox.com/configuration.html">BoneCP documentation</a>
+to configure BoneCP.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -470,7 +508,7 @@ deployed as bundle.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

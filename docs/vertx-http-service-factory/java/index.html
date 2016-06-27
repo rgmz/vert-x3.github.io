@@ -102,6 +102,7 @@
       <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
+<li><a href="#_deploying_a_java_service_packaged_as_a_fatjar">Deploying a Java service packaged as a fatjar</a></li>
 <li><a href="#_http_client_configuration">Http client configuration</a>
 <ul class="sectlevel2">
 <li><a href="#_client_authentication">Client authentication</a></li>
@@ -125,6 +126,7 @@
         <div class="toc hidden-md hidden-lg">
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
+<li><a href="#_deploying_a_java_service_packaged_as_a_fatjar">Deploying a Java service packaged as a fatjar</a></li>
 <li><a href="#_http_client_configuration">Http client configuration</a>
 <ul class="sectlevel2">
 <li><a href="#_client_authentication">Client authentication</a></li>
@@ -152,7 +154,7 @@
 <p>It it an alternative
 to the Maven Service Factory for using services hosted on a plain http server, e.g a JavaScript service zipped
 and hosted somewhere. Unlike the Maven Service Factory, the Http Service Factory does not provide any kind of
-classpath dependency resolution. To use this feature be sure that <code>io.vertx:vertx-http-service-factory:3.2.1</code> is in your classpath.</p>
+classpath dependency resolution. To use this feature be sure that <code>io.vertx:vertx-http-service-factory:3.3.0</code> is in your classpath.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -174,7 +176,7 @@ documentation.</p>
 </div>
 <div class="paragraph">
 <p>For example, to deploy a service that exists in an hosted at <code><a href="https://myserver.net/myverticle.zip" class="bare">https://myserver.net/myverticle.zip</a></code> called <code>my-service</code>
-you would use the strng <code><a href="https://myserver.net/myverticle.zip::my-service" class="bare">https://myserver.net/myverticle.zip::my-service</a></code>.</p>
+you would use the string <code><a href="https://myserver.net/myverticle.zip::my-service" class="bare">https://myserver.net/myverticle.zip::my-service</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Given this string, the verticle factory will use the Vert.x http client try and download the resource
@@ -228,6 +230,31 @@ declares the verticle to run:</p>
 <div class="content">
 <pre>vertx run https://myserver.net/myverticle.zip</pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploying_a_java_service_packaged_as_a_fatjar">Deploying a Java service packaged as a fatjar</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The deployer factory can also deploy a Java service packaged as a fatjar, i.e a jar that contains a Java service and all the classes needed
+to run, for example:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the jar manifest contains the <code>Main-Verticle:myservice.json</code></p>
+</li>
+<li>
+<p><code>myservice.json</code> declares the service via <code>main:my.Verticle</code></p>
+</li>
+<li>
+<p>the class <code>my.Verticle</code></p>
+</li>
+<li>
+<p>all the classes needed by the verticle to run, for example Google Guava jar, etc&#8230;&#8203;</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -427,7 +454,7 @@ Succeeded in deploying verticle</pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

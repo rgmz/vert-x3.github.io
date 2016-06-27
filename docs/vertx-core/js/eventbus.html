@@ -109,6 +109,7 @@
 <li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
+<li><a href="#_configuring_the_event_bus">Configuring the event bus</a></li>
 </ul>
         </div>
       </div>
@@ -123,16 +124,17 @@
 <li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
+<li><a href="#_configuring_the_event_bus">Configuring the event bus</a></li>
 </ul>
         </div>
         <div class="sect1">
 <h2 id="_the_event_bus">The Event Bus</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <code><a href="../../jsdoc/event_bus-EventBus.html">event bus</a></code> is the <strong>nervous system</strong> of Vert.x.</p>
+<p>The <code><a href="../../jsdoc/module-vertx-js_event_bus-EventBus.html">event bus</a></code> is the <strong>nervous system</strong> of Vert.x.</p>
 </div>
 <div class="paragraph">
-<p>There is a single event bus instance for every Vert.x instance and it is obtained using the method <code><a href="../../jsdoc/vertx-Vertx.html#eventBus">eventBus</a></code>.</p>
+<p>There is a single event bus instance for every Vert.x instance and it is obtained using the method <code><a href="../../jsdoc/module-vertx-js_vertx-Vertx.html#eventBus">eventBus</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The event bus allows different parts of your application to communicate with each other irrespective of what language they are written in,
@@ -237,7 +239,7 @@ to retry after recovery.</p>
 <div class="sect3">
 <h4 id="_types_of_messages">Types of messages</h4>
 <div class="paragraph">
-<p>Out of the box Vert.x allows any primitive/simple type, String, or <code><a href="../../jsdoc/buffer-Buffer.html">buffers</a></code> to
+<p>Out of the box Vert.x allows any primitive/simple type, String, or <code><a href="../../jsdoc/module-vertx-js_buffer-Buffer.html">buffers</a></code> to
 be sent as messages.</p>
 </div>
 <div class="paragraph">
@@ -278,7 +280,7 @@ You do this by defining a <code>codec</code> for the objects you want to send.</
 <div class="sect3">
 <h4 id="_registering_handlers">Registering Handlers</h4>
 <div class="paragraph">
-<p>This simplest way to register a handler is using <code><a href="../../jsdoc/event_bus-EventBus.html#consumer">consumer</a></code>.
+<p>This simplest way to register a handler is using <code><a href="../../jsdoc/module-vertx-js_event_bus-EventBus.html#consumer">consumer</a></code>.
 Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
@@ -291,16 +293,16 @@ eb.consumer("news.uk.sport", function (message) {
 </div>
 </div>
 <div class="paragraph">
-<p>When a message arrives for your handler, your handler will be called, passing in the <code><a href="../../jsdoc/message-Message.html">message</a></code>.</p>
+<p>When a message arrives for your handler, your handler will be called, passing in the <code><a href="../../jsdoc/module-vertx-js_message-Message.html">message</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The object returned from call to consumer() is an instance of <code><a href="../../jsdoc/message_consumer-MessageConsumer.html">MessageConsumer</a></code></p>
+<p>The object returned from call to consumer() is an instance of <code><a href="../../jsdoc/module-vertx-js_message_consumer-MessageConsumer.html">MessageConsumer</a></code></p>
 </div>
 <div class="paragraph">
 <p>This object can subsequently be used to unregister the handler, or use the handler as a stream.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively you can use <code><a href="../../jsdoc/event_bus-EventBus.html#consumer">consumer</a></code> to
+<p>Alternatively you can use <code><a href="../../jsdoc/module-vertx-js_event_bus-EventBus.html#consumer">consumer</a></code> to
 to return a MessageConsumer with no handler set, and then set the handler on that. For example:</p>
 </div>
 <div class="listingblock">
@@ -318,7 +320,7 @@ consumer.handler(function (message) {
 nodes of the cluster.</p>
 </div>
 <div class="paragraph">
-<p>If you want to be notified when this has completed, you can register a <code><a href="../../jsdoc/message_consumer-MessageConsumer.html#completionHandler">completion handler</a></code>
+<p>If you want to be notified when this has completed, you can register a <code><a href="../../jsdoc/module-vertx-js_message_consumer-MessageConsumer.html#completionHandler">completion handler</a></code>
 on the MessageConsumer object.</p>
 </div>
 <div class="listingblock">
@@ -336,11 +338,11 @@ on the MessageConsumer object.</p>
 <div class="sect3">
 <h4 id="_un_registering_handlers">Un-registering Handlers</h4>
 <div class="paragraph">
-<p>To unregister a handler, call <code><a href="../../jsdoc/message_consumer-MessageConsumer.html#unregister">unregister</a></code>.</p>
+<p>To unregister a handler, call <code><a href="../../jsdoc/module-vertx-js_message_consumer-MessageConsumer.html#unregister">unregister</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If you are on a clustered event bus, un-registering can take some time to propagate across the nodes, if you want to
-be notified when this is complete use <code><a href="../../jsdoc/message_consumer-MessageConsumer.html#unregister">unregister</a></code>.</p>
+be notified when this is complete use <code><a href="../../jsdoc/module-vertx-js_message_consumer-MessageConsumer.html#unregister">unregister</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -357,7 +359,7 @@ be notified when this is complete use <code><a href="../../jsdoc/message_consume
 <div class="sect3">
 <h4 id="_publishing_messages">Publishing messages</h4>
 <div class="paragraph">
-<p>Publishing a message is simple. Just use <code><a href="../../jsdoc/event_bus-EventBus.html#publish">publish</a></code> specifying the
+<p>Publishing a message is simple. Just use <code><a href="../../jsdoc/module-vertx-js_event_bus-EventBus.html#publish">publish</a></code> specifying the
 address to publish it to.</p>
 </div>
 <div class="listingblock">
@@ -376,7 +378,7 @@ address to publish it to.</p>
 This is the point to point messaging pattern. The handler is chosen in a non-strict round-robin fashion.</p>
 </div>
 <div class="paragraph">
-<p>You can send a message with <code><a href="../../jsdoc/event_bus-EventBus.html#send">send</a></code></p>
+<p>You can send a message with <code><a href="../../jsdoc/module-vertx-js_event_bus-EventBus.html#send">send</a></code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -423,26 +425,26 @@ vertx.eventBus().send("news.uk.sport", "Yay! Someone kicked a ball", options);</
 <div class="sect3">
 <h4 id="_the_message_object">The Message object</h4>
 <div class="paragraph">
-<p>The object you receive in a message handler is a <code><a href="../../jsdoc/message-Message.html">Message</a></code>.</p>
+<p>The object you receive in a message handler is a <code><a href="../../jsdoc/module-vertx-js_message-Message.html">Message</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../../jsdoc/message-Message.html#body">body</a></code> of the message corresponds to the object that was sent or published.</p>
+<p>The <code><a href="../../jsdoc/module-vertx-js_message-Message.html#body">body</a></code> of the message corresponds to the object that was sent or published.</p>
 </div>
 <div class="paragraph">
-<p>The headers of the message are available with <code><a href="../../jsdoc/message-Message.html#headers">headers</a></code>.</p>
+<p>The headers of the message are available with <code><a href="../../jsdoc/module-vertx-js_message-Message.html#headers">headers</a></code>.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_acknowledging_messages_sending_replies">Acknowledging messages / sending replies</h4>
 <div class="paragraph">
-<p>When using <code><a href="../../jsdoc/event_bus-EventBus.html#send">send</a></code> the event bus attempts to deliver the message to a
-<code><a href="../../jsdoc/message_consumer-MessageConsumer.html">MessageConsumer</a></code> registered with the event bus.</p>
+<p>When using <code><a href="../../jsdoc/module-vertx-js_event_bus-EventBus.html#send">send</a></code> the event bus attempts to deliver the message to a
+<code><a href="../../jsdoc/module-vertx-js_message_consumer-MessageConsumer.html">MessageConsumer</a></code> registered with the event bus.</p>
 </div>
 <div class="paragraph">
 <p>In some cases it&#8217;s useful for the sender to know when the consumer has received the message and "processed" it.</p>
 </div>
 <div class="paragraph">
-<p>To acknowledge that the message has been processed the consumer can reply to the message by calling <code><a href="../../jsdoc/message-Message.html#reply">reply</a></code>.</p>
+<p>To acknowledge that the message has been processed the consumer can reply to the message by calling <code><a href="../../jsdoc/module-vertx-js_message-Message.html#reply">reply</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>When this happens it causes a reply to be sent back to the sender and the reply handler is invoked with the reply.</p>
@@ -524,7 +526,7 @@ so it can be deleted from the database</p>
 <p>There are no handlers available to send the message to</p>
 </li>
 <li>
-<p>The recipient has explicitly failed the message using <code><a href="../../jsdoc/message-Message.html#fail">fail</a></code></p>
+<p>The recipient has explicitly failed the message using <code><a href="../../jsdoc/module-vertx-js_message-Message.html#fail">fail</a></code></p>
 </li>
 </ul>
 </div>
@@ -593,6 +595,88 @@ when the verticle is undeployed.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_configuring_the_event_bus">Configuring the event bus</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The event bus can be configured. It is particularly useful when the event bus is clustered. Under the hood
+the event bus uses TCP connections to send and receive message, so the
+<code><a href="../dataobjects.html#EventBusOptions">EventBusOptions</a></code> let you configure all aspects of these TCP connections. As
+the event bus acts as a server and client, the configuration is close to
+<code><a href="../dataobjects.html#NetClientOptions">NetClientOptions</a></code> and <code><a href="../dataobjects.html#NetServerOptions">NetServerOptions</a></code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
+var options = {
+  "eventBusOptions" : {
+    "ssl" : true,
+    "keyStoreOptions" : {
+      "path" : "keystore.jks",
+      "password" : "wibble"
+    },
+    "trustStoreOptions" : {
+      "path" : "keystore.jks",
+      "password" : "wibble"
+    },
+    "clientAuth" : "REQUIRED"
+  }
+};
+
+Vertx.clusteredVertx(options, function (res, res_err) {
+  if (res_err == null) {
+    var vertx = res;
+    var eventBus = vertx.eventBus();
+    console.log("We now have a clustered event bus: " + eventBus);
+  } else {
+    console.log("Failed: " + res_err);
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The previous snippet depicts how you can use SSL connections for the event bus, instead of plain TCP
+connections.</p>
+</div>
+<div class="paragraph">
+<p><strong>WARNING</strong>: to enforce the security in clustered mode, you <strong>must</strong> configure the
+cluster manager to use encryption or enforce security. Refer to the documentation of the cluster
+manager for further details.</p>
+</div>
+<div class="paragraph">
+<p>The event bus configuration needs to be consistent in all the cluster nodes.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../dataobjects.html#EventBusOptions">EventBusOptions</a></code> also lets you specify whether or not the event bus is
+clustered, the port and host, as you would do with <code><a href="../dataobjects.html#VertxOptions#setClustered">clustered</a></code>,
+ <code><a href="../dataobjects.html#VertxOptions#getClusterHost">getClusterHost</a></code> and <code><a href="../dataobjects.html#VertxOptions#getClusterPort">getClusterPort</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>When used in containers, you can also configure the public host and port:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
+var options = {
+  "eventBusOptions" : {
+    "clusterPublicHost" : "whatever",
+    "clusterPublicPort" : 1234
+  }
+};
+
+Vertx.clusteredVertx(options, function (res, res_err) {
+  if (res_err == null) {
+    var vertx = res;
+    var eventBus = vertx.eventBus();
+    console.log("We now have a clustered event bus: " + eventBus);
+  } else {
+    console.log("Failed: " + res_err);
+  }
+});</code></pre>
+</div>
+</div>
+</div>
+</div>
 
         
 
@@ -600,7 +684,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

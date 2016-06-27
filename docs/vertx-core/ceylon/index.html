@@ -117,10 +117,6 @@
 <li><a href="#_async_coordination">Async coordination</a></li>
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
-<li><a href="#_writing_verticles">Writing Verticles</a></li>
-<li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
-<li><a href="#_running_ceylon_verticles">Running Ceylon Verticles</a></li>
-<li><a href="#_ceylon_runtime_configuration">Ceylon runtime configuration</a></li>
 <li><a href="#_verticle_types">Verticle Types</a></li>
 <li><a href="#_standard_verticles">Standard verticles</a></li>
 <li><a href="#worker_verticles">Worker verticles</a></li>
@@ -130,14 +126,13 @@
 <li><a href="#_waiting_for_deployment_to_complete">Waiting for deployment to complete</a></li>
 <li><a href="#_undeploying_verticle_deployments">Undeploying verticle deployments</a></li>
 <li><a href="#_specifying_number_of_verticle_instances">Specifying number of verticle instances</a></li>
-<li><a href="#_passing_configuration_to_a_verticle">Passing configuration to a verticle</a></li>
-<li><a href="#_accessing_environment_variables_in_a_verticle">Accessing environment variables in a Verticle</a></li>
 <li><a href="#_verticle_isolation_groups">Verticle Isolation Groups</a></li>
 <li><a href="#_high_availability">High Availability</a></li>
 <li><a href="#_running_verticles_from_the_command_line">Running Verticles from the command line</a></li>
 <li><a href="#_causing_vert_x_to_exit">Causing Vert.x to exit</a></li>
 <li><a href="#_the_context_object">The Context object</a></li>
 <li><a href="#_executing_periodic_and_delayed_actions">Executing periodic and delayed actions</a></li>
+<li><a href="#_verticle_worker_pool">Verticle worker pool</a></li>
 </ul>
 </li>
 <li><a href="#event_bus">The Event Bus</a>
@@ -147,12 +142,7 @@
 <li><a href="#_automatic_clean_up_in_verticles_2">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
-<li><a href="#_json">JSON</a>
-<ul class="sectlevel2">
-<li><a href="#_json_objects">JSON objects</a></li>
-<li><a href="#_json_arrays">JSON arrays</a></li>
-</ul>
-</li>
+<li><a href="#_configuring_the_event_bus">Configuring the event bus</a></li>
 <li><a href="#_buffers">Buffers</a>
 <ul class="sectlevel2">
 <li><a href="#_creating_buffers">Creating buffers</a></li>
@@ -188,28 +178,36 @@
 <li><a href="#_configuring_a_tcp_client">Configuring a TCP client</a></li>
 <li><a href="#_making_connections">Making connections</a></li>
 <li><a href="#_configuring_connection_attempts">Configuring connection attempts</a></li>
+<li><a href="#logging_network_activity">Logging network activity</a></li>
 <li><a href="#ssl">Configuring servers and clients to work with SSL/TLS</a></li>
+<li><a href="#_using_a_proxy_for_client_connections">Using a proxy for client connections</a></li>
 </ul>
 </li>
 <li><a href="#_writing_http_servers_and_clients">Writing HTTP servers and clients</a>
 <ul class="sectlevel2">
 <li><a href="#_creating_an_http_server">Creating an HTTP Server</a></li>
 <li><a href="#_configuring_an_http_server">Configuring an HTTP server</a></li>
+<li><a href="#_configuring_an_http_2_server">Configuring an HTTP/2 server</a></li>
+<li><a href="#_logging_network_server_activity">Logging network server activity</a></li>
 <li><a href="#_start_the_server_listening_2">Start the Server Listening</a></li>
 <li><a href="#_getting_notified_of_incoming_requests">Getting notified of incoming requests</a></li>
 <li><a href="#_handling_requests">Handling requests</a></li>
 <li><a href="#_sending_back_responses">Sending back responses</a></li>
 <li><a href="#_http_compression">HTTP Compression</a></li>
 <li><a href="#_creating_an_http_client">Creating an HTTP client</a></li>
+<li><a href="#_logging_network_client_activity">Logging network client activity</a></li>
 <li><a href="#_making_requests">Making requests</a></li>
 <li><a href="#_handling_http_responses">Handling http responses</a></li>
 <li><a href="#_enabling_compression_on_the_client">Enabling compression on the client</a></li>
-<li><a href="#_pooling_and_keep_alive">Pooling and keep alive</a></li>
-<li><a href="#_pipe_lining">Pipe-lining</a></li>
+<li><a href="#_http_1_x_pooling_and_keep_alive">HTTP/1.x pooling and keep alive</a></li>
+<li><a href="#_http_1_1_pipe_lining">HTTP/1.1 pipe-lining</a></li>
+<li><a href="#_http_2_multiplexing">HTTP/2 multiplexing</a></li>
+<li><a href="#_http_connections">HTTP connections</a></li>
 <li><a href="#_httpclient_usage">HttpClient usage</a></li>
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
+<li><a href="#_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</a></li>
 <li><a href="#_automatic_clean_up_in_verticles_4">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
@@ -278,6 +276,7 @@
 <li><a href="#_logging_from_your_application">Logging from your application</a></li>
 </ul>
 </li>
+<li><a href="#_host_name_resolution">Host name resolution</a></li>
 <li><a href="#_high_availability_and_fail_over">High Availability and Fail-Over</a>
 <ul class="sectlevel2">
 <li><a href="#_automatic_failover">Automatic failover</a></li>
@@ -304,6 +303,7 @@
 <li><a href="#_extending_the_vert_x_launcher">Extending the vert.x Launcher</a></li>
 <li><a href="#_using_the_launcher_in_fat_jars">Using the Launcher in fat jars</a></li>
 <li><a href="#_sub_classing_the_launcher">Sub-classing the Launcher</a></li>
+<li><a href="#_launcher_and_exit_code">Launcher and exit code</a></li>
 </ul>
 </li>
 </ul>
@@ -328,10 +328,6 @@
 <li><a href="#_async_coordination">Async coordination</a></li>
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
-<li><a href="#_writing_verticles">Writing Verticles</a></li>
-<li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
-<li><a href="#_running_ceylon_verticles">Running Ceylon Verticles</a></li>
-<li><a href="#_ceylon_runtime_configuration">Ceylon runtime configuration</a></li>
 <li><a href="#_verticle_types">Verticle Types</a></li>
 <li><a href="#_standard_verticles">Standard verticles</a></li>
 <li><a href="#worker_verticles">Worker verticles</a></li>
@@ -341,14 +337,13 @@
 <li><a href="#_waiting_for_deployment_to_complete">Waiting for deployment to complete</a></li>
 <li><a href="#_undeploying_verticle_deployments">Undeploying verticle deployments</a></li>
 <li><a href="#_specifying_number_of_verticle_instances">Specifying number of verticle instances</a></li>
-<li><a href="#_passing_configuration_to_a_verticle">Passing configuration to a verticle</a></li>
-<li><a href="#_accessing_environment_variables_in_a_verticle">Accessing environment variables in a Verticle</a></li>
 <li><a href="#_verticle_isolation_groups">Verticle Isolation Groups</a></li>
 <li><a href="#_high_availability">High Availability</a></li>
 <li><a href="#_running_verticles_from_the_command_line">Running Verticles from the command line</a></li>
 <li><a href="#_causing_vert_x_to_exit">Causing Vert.x to exit</a></li>
 <li><a href="#_the_context_object">The Context object</a></li>
 <li><a href="#_executing_periodic_and_delayed_actions">Executing periodic and delayed actions</a></li>
+<li><a href="#_verticle_worker_pool">Verticle worker pool</a></li>
 </ul>
 </li>
 <li><a href="#event_bus">The Event Bus</a>
@@ -358,12 +353,7 @@
 <li><a href="#_automatic_clean_up_in_verticles_2">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
-<li><a href="#_json">JSON</a>
-<ul class="sectlevel2">
-<li><a href="#_json_objects">JSON objects</a></li>
-<li><a href="#_json_arrays">JSON arrays</a></li>
-</ul>
-</li>
+<li><a href="#_configuring_the_event_bus">Configuring the event bus</a></li>
 <li><a href="#_buffers">Buffers</a>
 <ul class="sectlevel2">
 <li><a href="#_creating_buffers">Creating buffers</a></li>
@@ -399,28 +389,36 @@
 <li><a href="#_configuring_a_tcp_client">Configuring a TCP client</a></li>
 <li><a href="#_making_connections">Making connections</a></li>
 <li><a href="#_configuring_connection_attempts">Configuring connection attempts</a></li>
+<li><a href="#logging_network_activity">Logging network activity</a></li>
 <li><a href="#ssl">Configuring servers and clients to work with SSL/TLS</a></li>
+<li><a href="#_using_a_proxy_for_client_connections">Using a proxy for client connections</a></li>
 </ul>
 </li>
 <li><a href="#_writing_http_servers_and_clients">Writing HTTP servers and clients</a>
 <ul class="sectlevel2">
 <li><a href="#_creating_an_http_server">Creating an HTTP Server</a></li>
 <li><a href="#_configuring_an_http_server">Configuring an HTTP server</a></li>
+<li><a href="#_configuring_an_http_2_server">Configuring an HTTP/2 server</a></li>
+<li><a href="#_logging_network_server_activity">Logging network server activity</a></li>
 <li><a href="#_start_the_server_listening_2">Start the Server Listening</a></li>
 <li><a href="#_getting_notified_of_incoming_requests">Getting notified of incoming requests</a></li>
 <li><a href="#_handling_requests">Handling requests</a></li>
 <li><a href="#_sending_back_responses">Sending back responses</a></li>
 <li><a href="#_http_compression">HTTP Compression</a></li>
 <li><a href="#_creating_an_http_client">Creating an HTTP client</a></li>
+<li><a href="#_logging_network_client_activity">Logging network client activity</a></li>
 <li><a href="#_making_requests">Making requests</a></li>
 <li><a href="#_handling_http_responses">Handling http responses</a></li>
 <li><a href="#_enabling_compression_on_the_client">Enabling compression on the client</a></li>
-<li><a href="#_pooling_and_keep_alive">Pooling and keep alive</a></li>
-<li><a href="#_pipe_lining">Pipe-lining</a></li>
+<li><a href="#_http_1_x_pooling_and_keep_alive">HTTP/1.x pooling and keep alive</a></li>
+<li><a href="#_http_1_1_pipe_lining">HTTP/1.1 pipe-lining</a></li>
+<li><a href="#_http_2_multiplexing">HTTP/2 multiplexing</a></li>
+<li><a href="#_http_connections">HTTP connections</a></li>
 <li><a href="#_httpclient_usage">HttpClient usage</a></li>
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
+<li><a href="#_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</a></li>
 <li><a href="#_automatic_clean_up_in_verticles_4">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
@@ -489,6 +487,7 @@
 <li><a href="#_logging_from_your_application">Logging from your application</a></li>
 </ul>
 </li>
+<li><a href="#_host_name_resolution">Host name resolution</a></li>
 <li><a href="#_high_availability_and_fail_over">High Availability and Fail-Over</a>
 <ul class="sectlevel2">
 <li><a href="#_automatic_failover">Automatic failover</a></li>
@@ -515,6 +514,7 @@
 <li><a href="#_extending_the_vert_x_launcher">Extending the vert.x Launcher</a></li>
 <li><a href="#_using_the_launcher_in_fat_jars">Using the Launcher in fat jars</a></li>
 <li><a href="#_sub_classing_the_launcher">Sub-classing the Launcher</a></li>
+<li><a href="#_launcher_and_exit_code">Launcher and exit code</a></li>
 </ul>
 </li>
 </ul>
@@ -586,49 +586,7 @@ Instead, we automatically generate an <strong>idiomatic</strong> equivalent of t
 <p>From now on we&#8217;ll just use the word <strong>core</strong> to refer to Vert.x core.</p>
 </div>
 <div class="paragraph">
-<p>If you are embedding Vert.x in Ceylon you should import Vert.x modules of your Ceylon module:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">native("jvm")
-module my.module "1.0.0" {
-  shared import io.vertx.ceylon.core "3.2.2";
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The following stack of modules is supported in 3.2.0-SNAPSHOT:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>io.vertx.ceylon.core</code></p>
-</li>
-<li>
-<p><code>io.vertx.ceylon.jdbc</code></p>
-</li>
-<li>
-<p><code>io.vertx.ceylon.sql</code></p>
-</li>
-<li>
-<p><code>io.vertx.ceylon.web</code></p>
-</li>
-<li>
-<p><code>io.vertx.ceylon.auth.common</code></p>
-</li>
-<li>
-<p><code>io.vertx.ceylon.auth.jdbc</code></p>
-</li>
-<li>
-<p><code>io.vertx.ceylon.auth.jwt</code></p>
-</li>
-<li>
-<p><code>io.vertx.ceylon.auth.oauth2</code></p>
-</li>
-<li>
-<p><code>io.vertx.ceylon.auth.shiro</code></p>
-</li>
-</ul>
+<p>Unresolved directive in index.adoc - include::override/dependencies.adoc[]</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s discuss the different concepts and features in core.</p>
@@ -982,7 +940,7 @@ can&#8217;t take more than 0.1 ms to process, so you can&#8217;t block for any m
 you diagnose such issues, Vert.x will automatically log warnings if it detects an event loop hasn&#8217;t returned for
 some time. If you see warnings like these in your logs, then you should investigate.</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
 <pre>Thread vertx-eventloop-thread-3 has been blocked for 20458 ms</pre>
 </div>
@@ -991,7 +949,7 @@ some time. If you see warnings like these in your logs, then you should investig
 <p>Vert.x will also provide stack traces to pinpoint exactly where the blocking is occurring.</p>
 </div>
 <div class="paragraph">
-<p>If you want to turn of these warnings or change the settings, you can do that in the
+<p>If you want to turn off these warnings or change the settings, you can do that in the
 <code><a href="../../ceylondoc/vertx-core//VertxOptions.type.html">VertxOptions</a></code> object before creating the Vertx object.</p>
 </div>
 </div>
@@ -1049,6 +1007,67 @@ on the worker pool.</p>
 <div class="paragraph">
 <p>A worker verticle is always executed with a thread from the worker pool.</p>
 </div>
+<div class="paragraph">
+<p>By default blocking code is executed on the Vert.x blocking code pool, configured with <code><a href="../../ceylondoc/vertx-core//VertxOptions.type.html#setWorkerPoolSize(int)">workerPoolSize</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>Additional pools can be created for different purposes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value executor = vertx.createSharedWorkerExecutor("my-worker-pool");
+executor.executeBlocking((Future&lt;Object&gt; future) {
+  // Call some blocking API that takes a significant amount of time to return
+  value result = someAPI.blockingMethod("hello");
+  future.complete(result);
+}, (Object|Throwable res) {
+  print("The result is: ``res``");
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The worker executor must be closed when it&#8217;s not necessary anymore:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">executor.close();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When several workers are created with the same name, they will share the same pool. The worker pool is destroyed
+when all the worker executors using it are closed.</p>
+</div>
+<div class="paragraph">
+<p>When an executor is created in a Verticle, Vert.x will close it automatically for you when the Verticle
+is undeployed.</p>
+</div>
+<div class="paragraph">
+<p>Worker executors can be configured when created:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">//
+// 10 threads max
+value poolSize = 10;
+
+// 2 minutes
+value maxExecuteTime = 120000;
+
+value executor = vertx.createSharedWorkerExecutor("my-worker-pool", poolSize, maxExecuteTime);</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+the configuration is set when the worker pool is created
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1083,6 +1102,18 @@ compositeFuture.all(httpServerFuture, netServerFuture).setHandler((CompositeFutu
 </div>
 </div>
 <div class="paragraph">
+<p>A list of futures can be used also:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { compositeFuture }
+
+...
+
+compositeFuture.all(ArrayList { f1,  f2,  f3 });</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>The handler returned by <code><a href="../../ceylondoc/vertx-core//Future.type.html#completer()">completer</a></code> completes the future.</p>
 </div>
 <div class="paragraph">
@@ -1107,6 +1138,18 @@ compositeFuture.any(future1, future2).setHandler((CompositeFuture|Throwable ar) 
 </div>
 </div>
 <div class="paragraph">
+<p>A list of futures can be used also:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { compositeFuture }
+
+...
+
+compositeFuture.any(ArrayList { f1,  f2,  f3 });</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p><code><a href="../../ceylondoc/vertx-core//Future.type.html#compose(io.vertx.core.Handler,%20io.vertx.core.Future)">compose</a></code> can be used for chaining futures:</p>
 </div>
 <div class="listingblock">
@@ -1120,13 +1163,18 @@ import io.vertx.ceylon.core { future }
 value fs = vertx.fileSystem();
 
 value fut1 = future.future();
-value fut2 = future.future();
 
 fs.createFile("/foo", fut1.completer());
 fut1.compose(() {
+
+  value fut2 = future.future();
   fs.writeFile("/foo", buffer.buffer(), fut2.completer());
-}, fut2);
-fut2.compose(() {
+
+  // Compose fut1 with fut2
+  return fut2;
+}).compose(() {
+
+  // Compose fut1 with fut2 and fut3
   fs.move("/foo", "/bar", startFuture.completer());
 }, startFuture);</code></pre>
 </div>
@@ -1152,9 +1200,9 @@ with respect to concurrency, scaling and deployment.</p>
 <p>To use this model, you write your code as set of <strong>verticles</strong>.</p>
 </div>
 <div class="paragraph">
-<p>Verticles are chunks of code that get deployed and
-run by Vert.x. Verticles can be written in any of the languages that Vert.x supports and a single application
-can include verticles written in multiple languages.</p>
+<p>Verticles are chunks of code that get deployed and run by Vert.x. A Vert.x instance maintains N event loop threads
+(where N by default is core*2) by default. Verticles can be written in any of the languages that Vert.x supports
+and a single application can include verticles written in multiple languages.</p>
 </div>
 <div class="paragraph">
 <p>You can think of a verticle as a bit like an actor in the <a href="http://en.wikipedia.org/wiki/Actor_model">Actor Model</a>.</p>
@@ -1163,198 +1211,8 @@ can include verticles written in multiple languages.</p>
 <p>An application would typically be composed of many verticle instances running in the same Vert.x instance at the same
 time. The different verticle instances communicate with each other by sending messages on the <a href="#event_bus">event bus</a>.</p>
 </div>
-<div class="sect2">
-<h3 id="_writing_verticles">Writing Verticles</h3>
 <div class="paragraph">
-<p>Ceylon verticles are implemented as subclasses of <code>io.vertx.ceylon.core.Verticle</code>.</p>
-</div>
-<div class="paragraph">
-<p>The parent verticle class provides the <code>vertx</code> attribute to obtain the Vert.x instance:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>shared default void start() {
-  // Start a timer
-  vertx.setPeriodic(1000, (Integer id) =&gt; print("Timer has fired"));
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>When the verticle is deployed the <code>start</code> method of the verticle will be executed.</p>
-</div>
-<div class="paragraph">
-<p>When the verticle is undeployed the <code>stop</code> method of the verticle will be executed.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>shared actual void stop() {}
-  // Cleanup here
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</h3>
-<div class="paragraph">
-<p>Sometimes you want to do something in your verticle start-up which takes some time and you don&#8217;t want the verticle to
-be considered deployed until that happens. For example you might want to deploy other verticles in the start method.</p>
-</div>
-<div class="paragraph">
-<p>You can&#8217;t block waiting for the other verticles to deploy in your start method as that would break the Golden Rule.</p>
-</div>
-<div class="paragraph">
-<p>So how can you do this?</p>
-</div>
-<div class="paragraph">
-<p>The way to do it is to implement the <strong>asynchronous</strong> start method. This version of the method takes a Future as a parameter.
-When the method returns the verticle will <strong>not</strong> be considered deployed yet. Some time later, after you&#8217;ve done everything
-you need to do (e.g. start other verticles), you can call complete on the Future (or fail) to signal that you&#8217;re done.</p>
-</div>
-<div class="paragraph">
-<p>Here&#8217;s an example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>shared actual void startAsync(Future&lt;Anything&gt; startFuture) {
-  // Now deploy some other verticle:
-
-  vertx.deployVerticle("otherVerticle.java", (String|Throwable res) {
-    if (is String res) {
-      startFuture.complete();
-    } else {}
-      startFuture.fail(res.message);
-    }
-  });
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Similarly, there is an asynchronous version of the stop method too. You use this if you want to do some verticle
-cleanup that takes some time.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>shared actual void stopAsync(Future&lt;Anything&gt; stopFuture) {
-  obj.doSomethingThatTakesTime((String|Throwable res) {
-    if (is String res) {
-      stopFuture.complete();
-    } else {}
-      stopFuture.fail(res.message);
-    }
-  });
-end</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>INFO: You don&#8217;t need to manually undeploy child verticles started by a verticle, in the verticle&#8217;s stop method. Vert.x
-will automatically undeploy any child verticles when the parent is undeployed.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_running_ceylon_verticles">Running Ceylon Verticles</h3>
-<div class="paragraph">
-<p>The Vert.x Ceylon language allows to embed Vert.x in Ceylon or run Ceylon verticles from command line.</p>
-</div>
-<div class="paragraph">
-<p>Ceylon can embed Vert.x and start it:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>import io.vertx.ceylon.core {
-  vertx
-}
-import io.vertx.ceylon.core.http { ... }
-
-shared void run() {
-
-  value vertx_ = vertx.vertx();
-  value server = vertx_.createHttpServer();
-
-  server.requestHandler((HttpServerRequest req) =&gt;
-    req.response().
-        putHeader("Content-Type", "text/html").
-        end("&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;")
-  );
-
-  server.listen(8080, (HttpServer|Throwable result) =&gt; switch(result)
-    case (is HttpServer) { print("Server started") }
-    else { result.printStackTrace() }
-  );
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Vert.x can also deploy Ceylon Verticles from command line or from other languages:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Run the ceylon module my.module/1.0.0</p>
-</li>
-</ol>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>% vertx run ceylon:my.module/1.0.0</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The module will be looked up according to the ceylon repository <a href="http://ceylon-lang.org/documentation/1.0/reference/tool/config/#_repositories_section">configuration</a>.</p>
-</div>
-<div class="paragraph">
-<p>The same can be done from Java:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.deployVerticle("ceylon:my.module/1.0.0");</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The module is introspected to find the Verticle, if there are several verticles, one will be picked up.</p>
-</div>
-<div class="paragraph">
-<p>The Ceylon Vert.x language can also compile sources on the fly before running the module:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Compile and run the ceylon module</p>
-</li>
-</ol>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>% vertx run ceylon:/path/to/my/module</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <em>/path/to/my/module</em> points to a Ceylon module, i.e the directory contains the <code>module.ceylon</code> file
-and all other ceylon sources.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_ceylon_runtime_configuration">Ceylon runtime configuration</h3>
-<div class="paragraph">
-<p>JVM system properties can be set to control the behavior of Ceylon:</p>
-</div>
-<div class="listingblock">
-<div class="title">Verbose output</div>
-<div class="content">
-<pre class="prettyprint highlight"><code>% vertx run ceylon:my.module/1.0.0 -Dceylon.verbose=all</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code>ceylon.verbose</code> system property is equivalent to the <code>--verbose</code> option of <em>ceylon</em> tool.</p>
-</div>
-<div class="listingblock">
-<div class="title">User repo configuration</div>
-<div class="content">
-<pre class="prettyprint highlight"><code>% vertx run ceylon:my.module/1.0.0 -Dceylon.rep=/path/to/modules</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code>ceylon.rep</code> system property is equivalen to the <code>--rep</code> option of <em>ceylon</em> tool.</p>
-</div>
+<p>Unresolved directive in index.adoc - include::override/verticles.adoc[]</p>
 </div>
 <div class="sect2">
 <h3 id="_verticle_types">Verticle Types</h3>
@@ -1606,60 +1464,8 @@ vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle", options);</code><
 <p>This is useful for scaling easily across multiple cores. For example you might have a web-server verticle to deploy
 and multiple cores on your machine, so you want to deploy multiple instances to take utilise all the cores.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_passing_configuration_to_a_verticle">Passing configuration to a verticle</h3>
 <div class="paragraph">
-<p>Configuration in the form of JSON can be passed to a verticle at deployment time:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>value config = JsonObject {
-  "name"-&gt;"Tim",
-  "directory"-&gt;"blah"
-};
-value options = DeploymentOptions {
-  config = config;
-};
-
-vertx.deployVerticle("otherVerticle.java", options);</code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-we suppose <code>ceylon.json::Object</code> is aliased to <code>JsonObject</code>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>This configuration is then available via the <code>io.vertx.ceylon.core::Context</code> object.</p>
-</div>
-<div class="paragraph">
-<p>The configuration is returned as a
-<code>JsonObject</code> object so you can retrieve data as follows:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>print("``vertx.getOrCreateContext().config()?.get("name") else "no config"``")</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_accessing_environment_variables_in_a_verticle">Accessing environment variables in a Verticle</h3>
-<div class="paragraph">
-<p>Environment variables and system properties are accessible from a verticle using the Java API:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">print("``System.getProperty("foo")``");
-print("``System.getenv("HOME")``");</code></pre>
-</div>
+<p>Unresolved directive in index.adoc - include::override/verticle-configuration.adoc[]</p>
 </div>
 </div>
 <div class="sect2">
@@ -1875,7 +1681,7 @@ context.runOnContext(() {
 </div>
 <div class="paragraph">
 <p>The context object also let you access verticle configuration using the <code><a href="../../ceylondoc/vertx-core//Context.type.html#config()">config</a></code>
-method. Check the <a href="#_passing_configuration_to_a_verticle">Passing configuration to a verticle</a> section for more details about this configuration.</p>
+method. Check the <a href="#Passing configuration to a verticle">[Passing configuration to a verticle]</a> section for more details about this configuration.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1958,6 +1764,23 @@ print("First this is printed");</code></pre>
 <div class="paragraph">
 <p>If you&#8217;re creating timers from inside verticles, those timers will be automatically closed
 when the verticle is undeployed.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_verticle_worker_pool">Verticle worker pool</h3>
+<div class="paragraph">
+<p>Verticle use the Vert.x worker pool for executing blocking actions, i.e <code><a href="../../ceylondoc/vertx-core//Context.type.html#executeBlocking(io.vertx.core.Handler,%20boolean,%20io.vertx.core.Handler)">executeBlocking</a></code> or
+worker verticle.</p>
+</div>
+<div class="paragraph">
+<p>A different worker pool can be specified in deployment options:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.deployVerticle("the-verticle", DeploymentOptions {
+  workerPoolName = "the-specific-pool";
+});</code></pre>
 </div>
 </div>
 </div>
@@ -2222,7 +2045,7 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 </div>
 <div class="paragraph">
-<p>Message delivery headers are available exclusively with the Java api.</p>
+<p>Unresolved directive in eventbus.adoc - include::override/eventbus_headers.adoc[]</p>
 </div>
 </div>
 <div class="sect3">
@@ -2342,11 +2165,8 @@ so it can be deleted from the database</p>
 <div class="paragraph">
 <p>In all cases the reply handler will be called with the specific failure.</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_message_codecs">Message Codecs</h4>
 <div class="paragraph">
-<p>Message codecs are available exclusively with the Java api.</p>
+<p>Unresolved directive in eventbus.adoc - include::override/eventbus.adoc[]</p>
 </div>
 </div>
 <div class="sect3">
@@ -2407,22 +2227,94 @@ when the verticle is undeployed.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_json">JSON</h2>
+<h2 id="_configuring_the_event_bus">Configuring the event bus</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ceylon uses the <a href="https://herd.ceylon-lang.org/modules/ceylon.json">ceylon.json</a> module for <a href="http://json.org/">JSON</a>.</p>
+<p>The event bus can be configured. It is particularly useful when the event bus is clustered. Under the hood
+the event bus uses TCP connections to send and receive message, so the
+<code><a href="../../ceylondoc/vertx-core//eventbus/EventBusOptions.type.html">EventBusOptions</a></code> let you configure all aspects of these TCP connections. As
+the event bus acts as a server and client, the configuration is close to
+<code><a href="../../ceylondoc/vertx-core//net/NetClientOptions.type.html">NetClientOptions</a></code> and <code><a href="../../ceylondoc/vertx-core//net/NetServerOptions.type.html">NetServerOptions</a></code>.</p>
 </div>
-<div class="sect2">
-<h3 id="_json_objects">JSON objects</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+import io.vertx.ceylon.core.http { required }
+
+...
+
+value options = VertxOptions {
+  eventBusOptions = EventBusOptions {
+    ssl = true;
+    keyStoreOptions = JksOptions {
+      path = "keystore.jks";
+      password = "wibble";
+    };
+    trustStoreOptions = JksOptions {
+      path = "keystore.jks";
+      password = "wibble";
+    };
+    clientAuth = "REQUIRED";
+  };
+};
+
+vertx_.clusteredVertx(options, (Vertx|Throwable res) {
+  if (is Vertx res) {
+    value vertx = res;
+    value eventBus = vertx.eventBus();
+    print("We now have a clustered event bus: ``eventBus``");
+  } else {
+    print("Failed: ``res``");
+  };
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
-<p>Ceylon uses <code>ceylon.json::Object</code> for representing a JSON object.</p>
+<p>The previous snippet depicts how you can use SSL connections for the event bus, instead of plain TCP
+connections.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_json_arrays">JSON arrays</h3>
 <div class="paragraph">
-<p>Ceylon uses <code>ceylon.json::Array</code> for representing a JSON array</p>
+<p><strong>WARNING</strong>: to enforce the security in clustered mode, you <strong>must</strong> configure the
+cluster manager to use encryption or enforce security. Refer to the documentation of the cluster
+manager for further details.</p>
 </div>
+<div class="paragraph">
+<p>The event bus configuration needs to be consistent in all the cluster nodes.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../ceylondoc/vertx-core//eventbus/EventBusOptions.type.html">EventBusOptions</a></code> also lets you specify whether or not the event bus is
+clustered, the port and host, as you would do with <code><a href="../../ceylondoc/vertx-core//VertxOptions.type.html#setClustered(boolean)">clustered</a></code>,
+ <code><a href="../../ceylondoc/vertx-core//VertxOptions.type.html#getClusterHost()">getClusterHost</a></code> and <code><a href="../../ceylondoc/vertx-core//VertxOptions.type.html#getClusterPort()">getClusterPort</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>When used in containers, you can also configure the public host and port:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value options = VertxOptions {
+  eventBusOptions = EventBusOptions {
+    clusterPublicHost = "whatever";
+    clusterPublicPort = 1234;
+  };
+};
+
+vertx_.clusteredVertx(options, (Vertx|Throwable res) {
+  if (is Vertx res) {
+    value vertx = res;
+    value eventBus = vertx.eventBus();
+    print("We now have a clustered event bus: ``eventBus``");
+  } else {
+    print("Failed: ``res``");
+  };
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Unresolved directive in index.adoc - include::override/json.adoc[]</p>
 </div>
 </div>
 </div>
@@ -2482,6 +2374,9 @@ value buff = buffer.buffer("some string");</code></pre>
 
 value buff = buffer.buffer("some string", "UTF-16");</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Unresolved directive in buffers.adoc - include::override/buffer_from_bytes.adoc[]</p>
 </div>
 <div class="paragraph">
 <p>Create a buffer with an initial size hint. If you know your buffer will have a certain amount of data written to it
@@ -3084,6 +2979,75 @@ value client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
 <div class="sect2">
+<h3 id="logging_network_activity">Logging network activity</h3>
+<div class="paragraph">
+<p>For debugging purposes, network activity can be logged:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetServerOptions {
+  logActivity = true;
+};
+
+value server = vertx.createNetServer(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>for the client</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+  logActivity = true;
+};
+
+value client = vertx.createNetClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Network activity is logged by Netty with the <code>DEBUG</code> level and with the <code>io.netty.handler.logging.LoggingHandler</code>
+name. When using network activity logging there are a few things to keep in mind:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>logging is not performed by Vert.x logging but by Netty</p>
+</li>
+<li>
+<p>this is <strong>not</strong> a production feature</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Netty will try to locate the following logger implementations, in the following order:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Slf4j</p>
+</li>
+<li>
+<p>Log4j</p>
+</li>
+<li>
+<p>JDK</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The presense of the slf4j or log4j classes on the classpath is enough to pick up the logging implementation.</p>
+</div>
+<div class="paragraph">
+<p>The logger implementation can be forced to a specific implementation by setting Netty&#8217;s internal logger implementation directly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Force logging to SLF4J
+InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="ssl">Configuring servers and clients to work with SSL/TLS</h3>
 <div class="paragraph">
 <p>TCP clients and servers can be configured to use <a href="http://en.wikipedia.org/wiki/Transport_Layer_Security">Transport Layer Security</a>
@@ -3243,7 +3207,7 @@ utility which ships with the JDK.</p>
 
 value options = NetServerOptions {
   ssl = true;
-  clientAuth = required;
+  clientAuth = "REQUIRED";
   trustStoreOptions = JksOptions {
     path = "/path/to/your/truststore.jks";
     password = "password-of-your-truststore";
@@ -3264,7 +3228,7 @@ value server = vertx.createNetServer(options);</code></pre>
 value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks");
 value options = NetServerOptions {
   ssl = true;
-  clientAuth = required;
+  clientAuth = "REQUIRED";
   trustStoreOptions = JksOptions {
     value = myTrustStoreAsABuffer;
     password = "password-of-your-truststore";
@@ -3285,7 +3249,7 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 
 value options = NetServerOptions {
   ssl = true;
-  clientAuth = required;
+  clientAuth = "REQUIRED";
   pfxTrustOptions = PfxOptions {
     path = "/path/to/your/truststore.pfx";
     password = "password-of-your-truststore";
@@ -3306,7 +3270,7 @@ value server = vertx.createNetServer(options);</code></pre>
 value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx");
 value options = NetServerOptions {
   ssl = true;
-  clientAuth = required;
+  clientAuth = "REQUIRED";
   pfxTrustOptions = PfxOptions {
     value = myTrustStoreAsABuffer;
     password = "password-of-your-truststore";
@@ -3326,7 +3290,7 @@ value server = vertx.createNetServer(options);</code></pre>
 
 value options = NetServerOptions {
   ssl = true;
-  clientAuth = required;
+  clientAuth = "REQUIRED";
   pemTrustOptions = PemTrustOptions {
     certPaths = {"/path/to/your/server-ca.pem" };
   };
@@ -3346,7 +3310,7 @@ value server = vertx.createNetServer(options);</code></pre>
 value myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx");
 value options = NetServerOptions {
   ssl = true;
-  clientAuth = required;
+  clientAuth = "REQUIRED";
   pemTrustOptions = PemTrustOptions {
     certValues = {myCaAsABuffer };
   };
@@ -3383,6 +3347,19 @@ value client = vertx.createNetClient(options);</code></pre>
 <div class="paragraph">
 <p>If <code><a href="../../ceylondoc/vertx-core//net/ClientOptionsBase.type.html#setTrustAll(boolean)">trustAll</a></code> is not set then a client trust store must be
 configured and should contain the certificates of the servers that the client trusts.</p>
+</div>
+<div class="paragraph">
+<p>By default, host verification is disabled on the client.
+To enable host verification, set the algorithm to use on your client (only HTTPS and LDAPS is currently supported):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+  ssl = true;
+  hostnameVerificationAlgorithm = "HTTPS";
+};
+value client = vertx.createNetClient(options);</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Likewise server configuration, the client trust can be configured in several ways:</p>
@@ -3632,7 +3609,7 @@ value client = vertx.createNetClient(options);</code></pre>
 <div class="sect3">
 <h4 id="_configuring_the_cipher_suite">Configuring the Cipher suite</h4>
 <div class="paragraph">
-<p>By default, the TLS configuration will uses the Cipher suite of the JVM running Vert.x. This Cipher suite can be
+<p>By default, the TLS configuration will use the Cipher suite of the JVM running Vert.x. This Cipher suite can be
 configured with a suite of enabled ciphers:</p>
 </div>
 <div class="listingblock">
@@ -3649,6 +3626,188 @@ value server = vertx.createNetServer(options);</code></pre>
 <p>Cipher suite can be specified on the <code><a href="../../ceylondoc/vertx-core//net/NetServerOptions.type.html">NetServerOptions</a></code> or <code><a href="../../ceylondoc/vertx-core//net/NetClientOptions.type.html">NetClientOptions</a></code> configuration.</p>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_configuring_tls_protocol_versions">Configuring TLS protocol versions</h4>
+<div class="paragraph">
+<p>By default, the TLS configuration will use the following protocol versions: SSLv2Hello, TLSv1, TLSv1.1 and TLSv1.2. Protocol versions can be
+configured by explicitly adding enabled protocols:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetServerOptions {
+  ssl = true;
+  keyStoreOptions = keyStoreOptions;
+  enabledSecureTransportProtocols = {"TLSv1.1" , "TLSv1.2" };
+};
+value server = vertx.createNetServer(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Protocol versions can be specified on the <code><a href="../../ceylondoc/vertx-core//net/NetServerOptions.type.html">NetServerOptions</a></code> or <code><a href="../../ceylondoc/vertx-core//net/NetClientOptions.type.html">NetClientOptions</a></code> configuration.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ssl_engine">SSL engine</h4>
+<div class="paragraph">
+<p>The engine implementation can be configured to use <a href="https://www.openssl.org">OpenSSL</a> instead of the JDK implementation.
+OpenSSL provides better performances and CPU usage than the JDK engine, as well as JDK version independence.</p>
+</div>
+<div class="paragraph">
+<p>The engine options to use is</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <code><a href="../../ceylondoc/vertx-core//net/TCPSSLOptions.type.html#getSslEngineOptions()">getSslEngineOptions</a></code> options when it is set</p>
+</li>
+<li>
+<p>otherwise <code><a href="../../ceylondoc/vertx-core//net/JdkSSLEngineOptions.type.html">JdkSSLEngineOptions</a></code></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Use JDK SSL engine
+value options = NetServerOptions {
+  ssl = true;
+  keyStoreOptions = keyStoreOptions;
+};
+
+// Use JDK SSL engine explicitly
+options = NetServerOptions {
+  ssl = true;
+  keyStoreOptions = keyStoreOptions;
+  jdkSslEngineOptions = JdkSSLEngineOptions();
+};
+
+// Use OpenSSL engine
+options = NetServerOptions {
+  ssl = true;
+  keyStoreOptions = keyStoreOptions;
+  openSslEngineOptions = OpenSSLEngineOptions();
+};</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_application_layer_protocol_negotiation">Application-Layer Protocol Negotiation</h4>
+<div class="paragraph">
+<p>ALPN is a TLS extension for applicationl layer protocol negotitation. It is used by HTTP/2: during the TLS handshake
+the client gives the list of application protocols it accepts and the server responds with a protocol it supports.</p>
+</div>
+<div class="paragraph">
+<p>Java 8 does not supports ALPN out of the box, so ALPN should be enabled by other means:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>OpenSSL</em> support</p>
+</li>
+<li>
+<p><em>Jetty-ALPN</em> support</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The engine options to use is</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <code><a href="../../ceylondoc/vertx-core//net/TCPSSLOptions.type.html#getSslEngineOptions()">getSslEngineOptions</a></code> options when it is set</p>
+</li>
+<li>
+<p><code><a href="../../ceylondoc/vertx-core//net/JdkSSLEngineOptions.type.html">JdkSSLEngineOptions</a></code> when ALPN is available for JDK</p>
+</li>
+<li>
+<p><code><a href="../../ceylondoc/vertx-core//net/OpenSSLEngineOptions.type.html">OpenSSLEngineOptions</a></code> when ALPN is available for OpenSSL</p>
+</li>
+<li>
+<p>otherwise it fails</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_openssl_alpn_support">OpenSSL ALPN support</h5>
+<div class="paragraph">
+<p>OpenSSL provides native ALPN support.</p>
+</div>
+<div class="paragraph">
+<p>OpenSSL requires to configure <code><a href="../../ceylondoc/vertx-core//net/TCPSSLOptions.type.html#setOpenSslEngineOptions(io.vertx.core.net.OpenSSLEngineOptions)">openSslEngineOptions</a></code>
+and use <a href="http://netty.io/wiki/forked-tomcat-native.html">netty-tcnative</a> jar on the classpath. Using tcnative may require
+OpenSSL to be installed on your OS depending on the tcnative implementation.</p>
+</div>
+<div class="paragraph">
+<p>OpenSSL restricts the key/certificate configuration to <code>.pem</code> files. However it is still possible to use any trust
+configuration.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_jetty_alpn_support">Jetty-ALPN support</h5>
+<div class="paragraph">
+<p>Jetty-ALPN is a small jar that overrides a few classes of Java 8 distribution to support ALPN.</p>
+</div>
+<div class="paragraph">
+<p>The JVM must be started with the <em>alpn-boot-${version}.jar</em> in its <code>bootclasspath</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>-Xbootclasspath/p:/path/to/alpn-boot${version}.jar</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where ${version} depends on the JVM version, e.g. <em>8.1.7.v20160121</em> for <em>OpenJDK 1.8.0u74</em> . The complete
+list is available on the <a href="http://www.eclipse.org/jetty/documentation/current/alpn-chapter.html">Jetty-ALPN page</a>.</p>
+</div>
+<div class="paragraph">
+<p>The main drawback is that the version depends on the JVM.</p>
+</div>
+<div class="paragraph">
+<p>To solve this problem the <em><a href="https://github.com/jetty-project/jetty-alpn-agent">Jetty ALPN agent</a></em> can be use instead. The agent is a JVM agent that will chose the correct
+ALPN version for the JVM running it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>-javaagent:/path/to/alpn/agent</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_a_proxy_for_client_connections">Using a proxy for client connections</h3>
+<div class="paragraph">
+<p>The <code><a href="../../ceylondoc/vertx-core//net/NetClient.type.html">NetClient</a></code> supports either a HTTP/1.x <em>CONNECT</em>, <em>SOCKS4a</em> or <em>SOCKS5</em> proxy.</p>
+</div>
+<div class="paragraph">
+<p>The proxy can be configured in the <code><a href="../../ceylondoc/vertx-core//net/NetClientOptions.type.html">NetClientOptions</a></code> by setting a
+<code><a href="../../ceylondoc/vertx-core//net/ProxyOptions.type.html">ProxyOptions</a></code> object containing proxy type, hostname, port and optionally username and password.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.net { socks5 }
+
+...
+
+value options = NetClientOptions {
+  proxyOptions = ProxyOptions {
+    type = "SOCKS5";
+    host = "localhost";
+    port = 1080;
+    username = "username";
+    password = "secret";
+  };
+};
+value client = vertx.createNetClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The DNS resolution is always done on the proxy server, to achieve the functionality of a SOCKS4 client, it is necessary
+to resolve the DNS address locally.</p>
+</div>
 </div>
 </div>
 </div>
@@ -3657,6 +3816,13 @@ value server = vertx.createNetServer(options);</code></pre>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Vert.x allows you to easily write non blocking HTTP clients and servers.</p>
+</div>
+<div class="paragraph">
+<p>Vert.x supports the HTTP/1.0, HTTP/1.1 and HTTP/2 protocols.</p>
+</div>
+<div class="paragraph">
+<p>The base API for HTTP is the same for HTTP/1.x and HTTP/2, specific API features are available for dealing with the
+HTTP/2 protocol.</p>
 </div>
 <div class="sect2">
 <h3 id="_creating_an_http_server">Creating an HTTP Server</h3>
@@ -3683,6 +3849,97 @@ instance when creating it:</p>
 
 value server = vertx.createHttpServer(options);</code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuring_an_http_2_server">Configuring an HTTP/2 server</h3>
+<div class="paragraph">
+<p>Vert.x supports HTTP/2 over TLS <code>h2</code> and over TCP <code>h2c</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>h2</code> identifies the HTTP/2 protocol when used over TLS negotiated by <a href="https://en.wikipedia.org/wiki/Application-Layer_Protocol_Negotiation">Application-Layer Protocol Negotiation</a> (ALPN)</p>
+</li>
+<li>
+<p><code>h2c</code> identifies the HTTP/2 protocol when using in clear text over TCP, such connections are established either with
+an HTTP/1.1 upgraded request or directly</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To handle <code>h2</code> requests, TLS must be enabled along with <code><a href="../../ceylondoc/vertx-core//http/HttpServerOptions.type.html#setUseAlpn(boolean)">useAlpn</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = HttpServerOptions {
+  useAlpn = true;
+  ssl = true;
+  keyStoreOptions = JksOptions {
+    path = "/path/to/my/keystore";
+  };
+};
+
+value server = vertx.createHttpServer(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ALPN is a TLS extension that negotiates the protocol before the client and the server start to exchange data.</p>
+</div>
+<div class="paragraph">
+<p>Clients that don&#8217;t support ALPN will still be able to do a <em>classic</em> SSL handshake.</p>
+</div>
+<div class="paragraph">
+<p>ALPN will usually agree on the <code>h2</code> protocol, although <code>http/1.1</code> can be used if the server or the client decides
+so.</p>
+</div>
+<div class="paragraph">
+<p>To handle <code>h2c</code> requests, TLS must be disabled, the server will upgrade to HTTP/2 any request HTTP/1.1 that wants to
+upgrade to HTTP/2. It will also accept a direct <code>h2c</code> connection beginning with the <code>PRI * HTTP/2.0\r\nSM\r\n</code> preface.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+most browsers won&#8217;t support <code>h2c</code>, so for serving web sites you should use <code>h2</code> and not <code>h2c</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When a server accepts an HTTP/2 connection, it sends to the client its <code><a href="../../ceylondoc/vertx-core//http/HttpServerOptions.type.html#getInitialSettings()">initial settings</a></code>.
+The settings define how the client can use the connection, the default initial settings for a server are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="../../ceylondoc/vertx-core//http/Http2Settings.type.html#getMaxConcurrentStreams()">getMaxConcurrentStreams</a></code>: <code>100</code> as recommended by the HTTP/2 RFC</p>
+</li>
+<li>
+<p>the default HTTP/2 settings values for the others</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_logging_network_server_activity">Logging network server activity</h3>
+<div class="paragraph">
+<p>For debugging purposes, network activity can be logged.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = HttpServerOptions {
+  logActivity = true;
+};
+
+value server = vertx.createHttpServer(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the chapter on <a href="#logging_network_activity">logging network activity</a> for a detailed explanation.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3870,6 +4127,15 @@ print("User agent is ``headers.get("user-agent")``");
 // You can also do this and get the same result:
 print("User agent is ``headers.get("User-Agent")``");</code></pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_request_host">Request host</h4>
+<div class="paragraph">
+<p>Use <code><a href="../../ceylondoc/vertx-core//http/HttpServerRequest.type.html#host()">host</a></code> to return the host of the HTTP request.</p>
+</div>
+<div class="paragraph">
+<p>For HTTP/1.x requests the <code>host</code> header is returned, for HTTP/1 requests the <code>:authority</code> pseudo header is returned.</p>
 </div>
 </div>
 <div class="sect3">
@@ -4101,6 +4367,36 @@ to arbitrary places on your filesystem. See <a href="#_security_notes">security 
 </table>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_receiving_custom_http_2_frames">Receiving custom HTTP/2 frames</h4>
+<div class="paragraph">
+<p>HTTP/2 is a framed protocol with various frames for the HTTP request/response model. The protocol allows other kind
+of frames to be sent and received.</p>
+</div>
+<div class="paragraph">
+<p>To receive custom frames, you can use the <code><a href="../../ceylondoc/vertx-core//http/HttpServerRequest.type.html#customFrameHandler(io.vertx.core.Handler)">customFrameHandler</a></code> on the request,
+this will get called every time a custom frame arrives. Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.customFrameHandler((HttpFrame frame) {
+
+  print("Received a frame type=``frame.type()`` payload``frame.payload().toString()``");
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>HTTP/2 frames are not subject to flow control - the frame handler will be called immediatly when a
+custom frame is received whether the request is paused or is not</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_non_standard_http_methods">Non standard HTTP methods</h4>
+<div class="paragraph">
+<p>The <code><a href="todo">OTHER</a></code> HTTP method is used for non standard methods, in this case
+<code><a href="../../ceylondoc/vertx-core//http/HttpServerRequest.type.html#rawMethod()">rawMethod</a></code> returns the HTTP method as sent by the client.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_sending_back_responses">Sending back responses</h3>
@@ -4124,6 +4420,19 @@ request with <code><a href="../../ceylondoc/vertx-core//http/HttpServerRequest.t
 </div>
 <div class="paragraph">
 <p>If you don&#8217;t specify a status message, the default one corresponding to the status code will be used.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+for HTTP/2 the status won&#8217;t be present in the response since the protocol won&#8217;t transmit the message
+to the client
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -4216,6 +4525,9 @@ response.end("hello world!");</code></pre>
 <p>Keep-alive connections are not automatically closed by Vert.x by default. If you want keep-alive connections to be
 closed after an idle time, then you configure <code><a href="../../ceylondoc/vertx-core//http/HttpServerOptions.type.html#setIdleTimeout(int)">idleTimeout</a></code>.</p>
 </div>
+<div class="paragraph">
+<p>HTTP/2 connections send a <code>GOAWAY</code> frame before closing the response.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_setting_response_headers">Setting response headers</h4>
@@ -4269,6 +4581,18 @@ methods will result in a new HTTP chunk being written out.</p>
 <div class="paragraph">
 <p>When in chunked mode you can also write HTTP response trailers to the response. These are actually written in
 the final chunk of the response.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+chunked response has no effect for an HTTP/2 stream
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>To add trailers to the response, add them directly to the <code><a href="../../ceylondoc/vertx-core//http/HttpServerResponse.type.html#trailers()">trailers</a></code>.</p>
@@ -4436,6 +4760,121 @@ vertx.createHttpServer().requestHandler((HttpServerRequest request) {
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_writing_http_2_frames">Writing HTTP/2 frames</h4>
+<div class="paragraph">
+<p>HTTP/2 is a framed protocol with various frames for the HTTP request/response model. The protocol allows other kind
+of frames to be sent and received.</p>
+</div>
+<div class="paragraph">
+<p>To send such frames, you can use the <code><a href="../../ceylondoc/vertx-core//http/HttpServerResponse.type.html#writeCustomFrame(int,%20int,%20io.vertx.core.buffer.Buffer)">writeCustomFrame</a></code> on the response.
+Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+
+value frameType = 40;
+value frameStatus = 10;
+value payload = buffer.buffer("some data");
+
+// Sending a frame to the client
+response.writeCustomFrame(frameType, frameStatus, payload);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These frames are sent immediately and are not subject to flow control - when such frame is sent there it may be done
+before other <code>DATA</code> frames.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_stream_reset">Stream reset</h4>
+<div class="paragraph">
+<p>HTTP/1.x does not allow a clean reset of a request or a response stream, for example when a client uploads
+a resource already present on the server, the server needs to accept the entire response.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/2 supports stream reset at any time during the request/response:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Reset the stream
+request.response().reset();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default the <code>NO_ERROR</code> (0) error code is sent, another code can sent instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Cancel the stream
+request.response().reset(8);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The HTTP/2 specification defines the list of <a href="http://httpwg.org/specs/rfc7540.html#ErrorCodes">error codes</a> one can use.</p>
+</div>
+<div class="paragraph">
+<p>The request handler are notified of stream reset events with the <code><a href="../../ceylondoc/vertx-core//http/HttpServerRequest.type.html#exceptionHandler(io.vertx.core.Handler)">request handler</a></code> and
+<code><a href="../../ceylondoc/vertx-core//http/HttpServerResponse.type.html#exceptionHandler(io.vertx.core.Handler)">response handler</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">Code not translatable : class io.vertx.codetrans.lang.ceylon.CeylonWriter has not implemented renderInstanceOf</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_server_push">Server push</h4>
+<div class="paragraph">
+<p>Server push is a new feature of HTTP/2 that enables sending multiple responses in parallel for a single client request.</p>
+</div>
+<div class="paragraph">
+<p>When a server process a request, it can push a request/response to the client:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { get }
+
+...
+
+
+value response = request.response();
+
+// Push main.js to the client
+response.push(get, "/main.js", (HttpServerResponse|Throwable ar) {
+
+  if (is HttpServerResponse ar) {
+
+    // The server is ready to push the response
+    value pushedResponse = ar;
+
+    // Send main.js response
+    pushedResponse.putHeader("content-type", "application/json").end("alert(\"Push response hello\")");
+  } else {
+    print("Could not push client resource ``ar``");
+  };
+});
+
+// Send the requested resource
+response.sendFile("&lt;html&gt;&lt;head&gt;&lt;script src=\"/main.js\"&gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When the server is ready to push the response, the push response handler is called and the handler can send the response.</p>
+</div>
+<div class="paragraph">
+<p>The push response handler may receive a failure, for instance the client may cancel the push because it already has <code>main.js</code> in its
+cache and does not want it anymore.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../ceylondoc/vertx-core//http/HttpServerResponse.type.html#push(io.vertx.core.http.HttpMethod,%20java.lang.String,%20java.lang.String,%20io.vertx.core.Handler)">push</a></code> method must be called before the initiating response ends, however
+the pushed response can be written after.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_http_compression">HTTP Compression</h3>
@@ -4489,6 +4928,82 @@ compressions and send it back to the client.</p>
 };
 value client = vertx.createHttpClient(options);</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Vert.x supports HTTP/2 over TLS <code>h2</code> and over TCP <code>h2c</code>.</p>
+</div>
+<div class="paragraph">
+<p>By default the http client performs HTTP/1.1 requests, to perform HTTP/2 requests the <code><a href="../../ceylondoc/vertx-core//http/HttpClientOptions.type.html#setProtocolVersion(io.vertx.core.http.HttpVersion)">protocolVersion</a></code>
+must be set to <code><a href="todo">HTTP_2</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>For <code>h2</code> requests, TLS must be enabled with <em>Application-Layer Protocol Negotiation</em>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { http_2 }
+
+...
+
+
+value options = HttpClientOptions {
+  protocolVersion = "HTTP_2";
+  ssl = true;
+  useAlpn = true;
+  trustAll = true;
+};
+
+value client = vertx.createHttpClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For <code>h2c</code> requests, TLS must be disabled, the client will do an HTTP/1.1 requests and try an upgrade to HTTP/2:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { http_2 }
+
+...
+
+
+value options = HttpClientOptions {
+  protocolVersion = "HTTP_2";
+};
+
+value client = vertx.createHttpClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>h2c</code> connections can also be established directly, i.e connection started with a prior knowledge, when
+<code><a href="../../ceylondoc/vertx-core//http/HttpClientOptions.type.html#setHttp2ClearTextUpgrade(boolean)">http2ClearTextUpgrade</a></code> options is set to false: after the
+connection is established, the client will send the HTTP/2 connection preface and expect to receive
+the same preface from the server.</p>
+</div>
+<div class="paragraph">
+<p>The http server may not support HTTP/2, the actual version can be checked
+with <code><a href="../../ceylondoc/vertx-core//http/HttpClientResponse.type.html#version()">version</a></code> when the response arrives.</p>
+</div>
+<div class="paragraph">
+<p>When a clients connects to an HTTP/2 server, it sends to the server its <code><a href="../../ceylondoc/vertx-core//http/HttpClientOptions.type.html#getInitialSettings()">initial settings</a></code>.
+The settings define how the server can use the connection, the default initial settings for a client are the default
+values defined by the HTTP/2 RFC.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_logging_network_client_activity">Logging network client activity</h3>
+<div class="paragraph">
+<p>For debugging purposes, network activity can be logged.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = HttpClientOptions {
+  logActivity = true;
+};
+value client = vertx.createHttpClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the chapter on <a href="#logging_network_activity">logging network activity</a> for a detailed explanation.</p>
 </div>
 </div>
 <div class="sect2">
@@ -4733,6 +5248,14 @@ request.putHeader("content-type", "application/json").putHeader("other-header", 
 </div>
 </div>
 <div class="sect3">
+<h4 id="_non_standard_http_methods_2">Non standard HTTP methods</h4>
+<div class="paragraph">
+<p>The <code><a href="todo">OTHER</a></code> HTTP method is used for non standard methods, when this method
+is used, <code><a href="../../ceylondoc/vertx-core//http/HttpClientRequest.type.html#setRawMethod(java.lang.String)">setRawMethod</a></code> must be used to
+set the raw method to send to the server.</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_ending_http_requests">Ending HTTP requests</h4>
 <div class="paragraph">
 <p>Once you have finished with the HTTP request you must end it with one of the <code><a href="../../ceylondoc/vertx-core//http/HttpClientRequest.type.html#end(java.lang.String)">end</a></code>
@@ -4894,6 +5417,66 @@ request.setChunked(true);
 value pump = pump_.pump(file, request);
 file.endHandler(() =&gt; request.end());
 pump.start();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_writing_http_2_frames_2">Writing HTTP/2 frames</h4>
+<div class="paragraph">
+<p>HTTP/2 is a framed protocol with various frames for the HTTP request/response model. The protocol allows other kind
+of frames to be sent and received.</p>
+</div>
+<div class="paragraph">
+<p>To send such frames, you can use the <code><a href="../../ceylondoc/vertx-core//http/HttpClientRequest.type.html#write(io.vertx.core.buffer.Buffer)">write</a></code> on the request. Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+
+value frameType = 40;
+value frameStatus = 10;
+value payload = buffer.buffer("some data");
+
+// Sending a frame to the server
+request.writeCustomFrame(frameType, frameStatus, payload);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_stream_reset_2">Stream reset</h4>
+<div class="paragraph">
+<p>HTTP/1.x does not allow a clean reset of a request or a response stream, for example when a client uploads a resource already
+present on the server, the server needs to accept the entire response.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/2 supports stream reset at any time during the request/response:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.reset();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default the NO_ERROR (0) error code is sent, another code can sent instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.reset(8);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The HTTP/2 specification defines the list of <a href="http://httpwg.org/specs/rfc7540.html#ErrorCodes">error codes</a> one can use.</p>
+</div>
+<div class="paragraph">
+<p>The request handler are notified of stream reset events with the <code><a href="../../ceylondoc/vertx-core//http/HttpClientRequest.type.html#exceptionHandler(io.vertx.core.Handler)">request handler</a></code> and
+<code><a href="../../ceylondoc/vertx-core//http/HttpClientResponse.type.html#exceptionHandler(io.vertx.core.Handler)">response handler</a></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">Code not translatable : class io.vertx.codetrans.lang.ceylon.CeylonWriter has not implemented renderInstanceOf</code></pre>
 </div>
 </div>
 </div>
@@ -5142,6 +5725,74 @@ cannot be a logical protocol constraint):</p>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_client_push">Client push</h4>
+<div class="paragraph">
+<p>Server push is a new feature of HTTP/2 that enables sending multiple responses in parallel for a single client request.</p>
+</div>
+<div class="paragraph">
+<p>A push handler can be set on a request to receive the request/response pushed by the server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value request = client.get("/index.html", (HttpClientResponse response) {
+  // Process index.html response
+});
+
+// Set a push handler to be aware of any resource pushed by the server
+request.pushHandler((HttpClientRequest pushedRequest) {
+
+  // A resource is pushed for this request
+  print("Server pushed ``pushedRequest.path()``");
+
+  // Set an handler for the response
+  pushedRequest.handler((HttpClientResponse pushedResponse) {
+    print("The response for the pushed request");
+  });
+});
+
+// End the request
+request.end();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the client does not want to receive a pushed request, it can reset the stream:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.pushHandler((HttpClientRequest pushedRequest) {
+  if (pushedRequest.path() == "/main.js") {
+    pushedRequest.reset();
+  } else {
+    // Handle it
+  };
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When no handler is set, any stream pushed will be automatically cancelled by the client with
+a stream reset (<code>8</code> error code).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_receiving_custom_http_2_frames_2">Receiving custom HTTP/2 frames</h4>
+<div class="paragraph">
+<p>HTTP/2 is a framed protocol with various frames for the HTTP request/response model. The protocol allows other kind of
+frames to be sent and received.</p>
+</div>
+<div class="paragraph">
+<p>To receive custom frames, you can use the customFrameHandler on the request, this will get called every time a custom
+frame arrives. Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">response.customFrameHandler((HttpFrame frame) {
+
+  print("Received a frame type=``frame.type()`` payload``frame.payload().toString()``");
+});</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_enabling_compression_on_the_client">Enabling compression on the client</h3>
@@ -5187,13 +5838,13 @@ used when creating the client.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_pooling_and_keep_alive">Pooling and keep alive</h3>
+<h3 id="_http_1_x_pooling_and_keep_alive">HTTP/1.x pooling and keep alive</h3>
 <div class="paragraph">
 <p>Http keep alive allows http connections to be used for more than one request. This can be a more efficient use of
 connections when you&#8217;re making multiple requests to the same server.</p>
 </div>
 <div class="paragraph">
-<p>The http client supports pooling of connections, allowing you to reuse connections between requests.</p>
+<p>For HTTP/1.x versions, the http client supports pooling of connections, allowing you to reuse connections between requests.</p>
 </div>
 <div class="paragraph">
 <p>For pooling to work, keep alive must be true using <code><a href="../../ceylondoc/vertx-core//http/HttpClientOptions.type.html#setKeepAlive(boolean)">keepAlive</a></code>
@@ -5220,7 +5871,7 @@ connections not used within this timeout will be closed. Please note the idle ti
 </div>
 </div>
 <div class="sect2">
-<h3 id="_pipe_lining">Pipe-lining</h3>
+<h3 id="_http_1_1_pipe_lining">HTTP/1.1 pipe-lining</h3>
 <div class="paragraph">
 <p>The client also supports pipe-lining of requests on a connection.</p>
 </div>
@@ -5234,6 +5885,319 @@ By default pipe-lining is disabled.</p>
 </div>
 <div class="paragraph">
 <p>When pipe-lining is enabled requests will be written to connections without waiting for previous responses to return.</p>
+</div>
+<div class="paragraph">
+<p>The number of pipe-lined requests over a single connection is limited by <code><a href="../../ceylondoc/vertx-core//http/HttpClientOptions.type.html#setPipeliningLimit(int)">pipeliningLimit</a></code>.
+This option defines the maximum number of http requests sent to the server awaiting for a response. This limit ensures the
+fairness of the distribution of the client requests over the connections to the same server.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_http_2_multiplexing">HTTP/2 multiplexing</h3>
+<div class="paragraph">
+<p>HTTP/2 advocates to use a single connection to a server, by default the http client uses a single
+connection for each server, all the streams to the same server are multiplexed over the same connection.</p>
+</div>
+<div class="paragraph">
+<p>When the clients needs to use more than a single connection and use pooling, the <code><a href="../../ceylondoc/vertx-core//http/HttpClientOptions.type.html#setHttp2MaxPoolSize(int)">http2MaxPoolSize</a></code>
+shall be used.</p>
+</div>
+<div class="paragraph">
+<p>When it is desirable to limit the number of multiplexed streams per connection and use a connection
+pool instead of a single connection, <code><a href="../../ceylondoc/vertx-core//http/HttpClientOptions.type.html#setHttp2MultiplexingLimit(int)">http2MultiplexingLimit</a></code>
+can be used.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value clientOptions = HttpClientOptions {
+  http2MultiplexingLimit = 10;
+  http2MaxPoolSize = 3;
+};
+
+// Uses up to 3 connections and up to 10 streams per connection
+value client = vertx.createHttpClient(clientOptions);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The multiplexing limit for a connection is a setting set on the client that limits the number of streams
+of a single connection. The effective value can be even lower if the server sets a lower limit
+with the <code><a href="../../ceylondoc/vertx-core//http/Http2Settings.type.html#setMaxConcurrentStreams(long)">SETTINGS_MAX_CONCURRENT_STREAMS</a></code> setting.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/2 connections will not be closed by the client automatically. To close them you can call <code><a href="../../ceylondoc/vertx-core//http/HttpConnection.type.html#close()">close</a></code>
+or close the client instance.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively you can set idle timeout using <code><a href="../../ceylondoc/vertx-core//http/HttpClientOptions.type.html#setIdleTimeout(int)">idleTimeout</a></code> - any
+connections not used within this timeout will be closed. Please note the idle timeout value is in seconds not milliseconds.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_http_connections">HTTP connections</h3>
+<div class="paragraph">
+<p>The <code><a href="../../ceylondoc/vertx-core//http/HttpConnection.type.html">HttpConnection</a></code> offers the API for dealing with HTTP connection events, lifecycle
+and settings.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/2 implements fully the <code><a href="../../ceylondoc/vertx-core//http/HttpConnection.type.html">HttpConnection</a></code> API.</p>
+</div>
+<div class="paragraph">
+<p>HTTP/1.x implements partially the <code><a href="../../ceylondoc/vertx-core//http/HttpConnection.type.html">HttpConnection</a></code> API: only the close operation,
+the close handler and exception handler are implemented. This protocol does not provide semantics for
+the other operations.</p>
+</div>
+<div class="sect3">
+<h4 id="_server_connections">Server connections</h4>
+<div class="paragraph">
+<p>The <code><a href="../../ceylondoc/vertx-core//http/HttpServerRequest.type.html#connection()">connection</a></code> method returns the request connection on the server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value connection = request.connection();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A connection handler can be set on the server to be notified of any incoming connection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createHttpServer(http2Options);
+
+server.connectionHandler((HttpConnection connection) {
+  print("A client connected");
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_client_connections">Client connections</h4>
+<div class="paragraph">
+<p>The <code><a href="../../ceylondoc/vertx-core//http/HttpClientRequest.type.html#connection()">connection</a></code> method returns the request connection on the client:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value connection = request.connection();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A connection handler can be set on the request to be notified when the connection happens:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.connectionHandler((HttpConnection connection) {
+  print("Connected to the server");
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_settings">Connection settings</h4>
+<div class="paragraph">
+<p>The configuration of an HTTP/2 is configured by the <code><a href="../../ceylondoc/vertx-core//http/Http2Settings.type.html">Http2Settings</a></code> data object.</p>
+</div>
+<div class="paragraph">
+<p>Each endpoint must respect the settings sent by the other side of the connection.</p>
+</div>
+<div class="paragraph">
+<p>When a connection is established, the client and the server exchange initial settings. Initial settings
+are configured by <code><a href="../../ceylondoc/vertx-core//http/HttpClientOptions.type.html#setInitialSettings(io.vertx.core.http.Http2Settings)">initialSettings</a></code> on the client and
+<code><a href="../../ceylondoc/vertx-core//http/HttpServerOptions.type.html#setInitialSettings(io.vertx.core.http.Http2Settings)">initialSettings</a></code> on the server.</p>
+</div>
+<div class="paragraph">
+<p>The settings can be changed at any time after the connection is established:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.updateSettings(Http2Settings {
+  maxConcurrentStreams = 100;
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As the remote side should acknowledge on reception of the settings update, it&#8217;s possible to give a callback
+to be notified of the acknowledgment:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.updateSettings(Http2Settings {
+  maxConcurrentStreams = 100;
+}, (Throwable? ar) {
+  if (!exists ar) {
+    print("The settings update has been acknowledged ");
+  };
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Conversely the <code><a href="../../ceylondoc/vertx-core//http/HttpConnection.type.html#remoteSettingsHandler(io.vertx.core.Handler)">remoteSettingsHandler</a></code> is notified
+when the new remote settings are received:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.remoteSettingsHandler((Http2Settings settings) {
+  print("Received new settings");
+});</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+this only applies to the HTTP/2 protocol
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_ping">Connection ping</h4>
+<div class="paragraph">
+<p>HTTP/2 connection ping is useful for determining the connection round-trip time or check the connection
+validity: <code><a href="../../ceylondoc/vertx-core//http/HttpConnection.type.html#ping(io.vertx.core.buffer.Buffer,%20io.vertx.core.Handler)">ping</a></code> sends a <code>PING</code> frame to the remote
+endpoint:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+
+...
+
+value data = buffer.buffer();
+variable value i = 0;
+while (i &lt; 8) {
+  data.appendByte(i);
+  i++};
+connection.ping(data, (Buffer|Throwable pong) {
+  print("Remote side replied");
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Vert.x will send automatically an acknowledgement when a <code>PING</code> frame is received,
+an handler can be set to be notified for each ping received:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.pingHandler((Buffer ping) {
+  print("Got pinged by remote side");
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The handler is just notified, the acknowledgement is sent whatsoever. Such feature is aimed for
+implementing  protocols on top of HTTP/2.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+this only applies to the HTTP/2 protocol
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_shutdown_and_go_away">Connection shutdown and go away</h4>
+<div class="paragraph">
+<p>Calling <code><a href="../../ceylondoc/vertx-core//http/HttpConnection.type.html#shutdown()">shutdown</a></code> will send a <code>GOAWAY</code> frame to the
+remote side of the connection, asking it to stop creating streams: a client will stop doing new requests
+and a server will stop pushing responses. After the <code>GOAWAY</code> frame is sent, the connection
+waits some time (30 seconds by default) until all current streams closed and close the connection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.shutdown();</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">The `link:../../ceylondoc/vertx-core//http/HttpConnection.type.html#shutdownHandler((@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler))[shutdownHandler]` notifies when all streams have been closed, the
+connection is not yet closed.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>It&#8217;s possible to just send a <code>GOAWAY</code> frame, the main difference with a shutdown is that
+it will just tell the remote side of the connection to stop creating new streams without scheduling a connection
+close:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.goAway(0);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Conversely, it is also possible to be notified when <code>GOAWAY</code> are received:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.goAwayHandler((GoAway goAway) {
+  print("Received a go away frame");
+});</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">The `link:../../ceylondoc/vertx-core//http/HttpConnection.type.html#shutdownHandler((@io.vertx.codegen.annotations.Nullable </dt>
+<dd>
+<p>io.vertx.core.Handler))[shutdownHandler]` will be called when all current streams
+have been closed and the connection can be closed:</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.goAway(0);
+connection.shutdownHandler(() {
+
+  // All streams are closed, close the connection
+  connection.close();
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This applies also when a <code>GOAWAY</code> is received.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+this only applies to the HTTP/2 protocol
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_close">Connection close</h4>
+<div class="paragraph">
+<p>Connection <code><a href="../../ceylondoc/vertx-core//http/HttpConnection.type.html#close()">close</a></code> closes the connection:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>it closes the socket for HTTP/1.x</p>
+</li>
+<li>
+<p>a shutdown with no delay for HTTP/2, the <code>GOAWAY</code> frame will still be sent before the connection is closed. *</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../ceylondoc/vertx-core//http/HttpConnection.type.html#closeHandler(io.vertx.core.Handler)">closeHandler</a></code> notifies when a connection is closed.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -5549,6 +6513,65 @@ for example:</p>
 <p>When using a WebSocket as a write stream or a read stream it can only be used with WebSockets connections that are
 used with binary frames that are no split over multiple frames.</p>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</h3>
+<div class="paragraph">
+<p>The http client supports accessing https servers via a HTTPS proxy (HTTP/1.x <em>CONNECT</em> method, e.g. Squid) or
+<em>SOCKS4a</em> or <em>SOCKS5</em> proxy. The http proxy protocol uses HTTP/1.x but can connect to HTTP/1.x and HTTP/2 servers.</p>
+</div>
+<div class="paragraph">
+<p>The proxy can be configured in the <code><a href="../../ceylondoc/vertx-core//http/HttpClientOptions.type.html">HttpClientOptions</a></code> by setting a
+<code><a href="../../ceylondoc/vertx-core//net/ProxyOptions.type.html">ProxyOptions</a></code> object containing proxy type, hostname, port and optionally username and password.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.net { http }
+
+...
+
+
+value options = HttpClientOptions {
+  proxyOptions = ProxyOptions {
+    type = "HTTP";
+    host = "localhost";
+    port = 3128;
+    username = "username";
+    password = "secret";
+  };
+};
+value client = vertx.createHttpClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or using SOCKS5 proxy</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.net { socks5 }
+
+...
+
+
+value options = HttpClientOptions {
+  proxyOptions = ProxyOptions {
+    type = "SOCKS5";
+    host = "localhost";
+    port = 1080;
+    username = "username";
+    password = "secret";
+  };
+};
+value client = vertx.createHttpClient(options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The DNS resolution is always done on the proxy server, to achieve the functionality of a SOCKS4 client, it is necessary
+to resolve the DNS address locally.</p>
 </div>
 </div>
 <div class="sect2">
@@ -6125,6 +7148,19 @@ property <code>vertx.cacheDirBase</code>.</p>
 <div class="paragraph">
 <p>The whole classpath resolving feature can be disabled by setting the system
 property <code>vertx.disableFileCPResolving</code> to <code>true</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+these system properties are evaluated once when the the <code>io.vertx.core.impl.FileResolver</code> class is loaded, so
+these properties should be set before loading this class or as a JVM system property when launching it.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -6829,6 +7865,9 @@ client.reverseLookup("10.0.0.1", (String|Throwable ar) {
 });</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Unresolved directive in dns.adoc - include::override/dns.adoc[]</p>
+</div>
 </div>
 </div>
 </div>
@@ -7194,6 +8233,10 @@ should be the case without you having to think about it.</p>
 to the classpath. The metrics SPI is an advanced feature which allows implementers to capture events from Vert.x in
 order to gather metrics. For more information on this, please consult the
 <code>API Documentation</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can also specify a metrics factory programmatically if embedding Vert.x using
+<code><a href="../../ceylondoc/vertx-core//metrics/MetricsOptions.type.html#setFactory(io.vertx.core.spi.VertxMetricsFactory)">factory</a></code>.</p>
 </div>
 </div>
 </div>
@@ -7613,6 +8656,13 @@ options to the <code>start</code> command:</p>
 <pre>If option values contain spaces, don't forget to wrap the value between `""` (double-quotes).</pre>
 </div>
 </div>
+<div class="literalblock">
+<div class="content">
+<pre>As the `start` command spawns a new process, the java options passed to the JVM are not propagated, so you **must**
+use `java-opts` to configure the JVM (`-X`, `-D`...). If you use the `CLASSPATH` environment variable, be sure it
+contains all the required jars (vertx-core, your jars and all the dependencies).</pre>
+</div>
+</div>
 </li>
 </ul>
 </div>
@@ -7631,7 +8681,7 @@ examples:</p>
 <div class="content">
 <pre class="prettyprint highlight"><code>vertx run MyVerticle.groovy --redeploy="**/*.groovy" --launcher-class=io.vertx.core.Launcher
 vertx run MyVerticle.groovy --redeploy="**/*.groovy,**/*.rb"  --launcher-class=io.vertx.core.Launcher
-java io.vertx.core.Launcher run org.acme.MyVerticle –redeploy="**/*.class"  --launcher-class=io.vertx.core
+java io.vertx.core.Launcher run org.acme.MyVerticle --redeploy="**/*.class"  --launcher-class=io.vertx.core
 .Launcher -cp ...</code></pre>
 </div>
 </div>
@@ -7674,7 +8724,7 @@ the module explicitly (<em>Build</em> menu &#8594; <em>Make project</em>).</p>
 </div>
 <div class="paragraph">
 <p>To debug your application, create your run configuration as a remote application and configure the debugger
-using <code>--java-opts</code>. However, don’t forget to re-plug the debugger after every redeployment as a new process is
+using <code>--java-opts</code>. However, don&#8217;t forget to re-plug the debugger after every redeployment as a new process is
 created every time.</p>
 </div>
 <div class="paragraph">
@@ -7682,7 +8732,7 @@ created every time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>java –jar target/my-fat-jar.jar –redeploy="**/*.java" --on-redeploy="mvn package"
+<pre class="prettyprint highlight"><code>java -jar target/my-fat-jar.jar --redeploy="**/*.java" --on-redeploy="mvn package"
 java -jar build/libs/my-fat-jar.jar --redeploy="src/**/*.java" --on-redeploy='./gradlew shadowJar'</code></pre>
 </div>
 </div>
@@ -7791,10 +8841,15 @@ Log4J or SLF4J.</p>
 </div>
 <div class="paragraph">
 <p>To do this you should set a system property called <code>vertx.logger-delegate-factory-class-name</code> with the name of a Java
-class which implements the interface <code>LogDelegateFactory</code>. We provide pre-built implementations for
-Log4J and SLF4J with the class names <code>io.vertx.core.logging.Log4jLogDelegateFactory</code> and <code>io.vertx.core.logging.SLF4JLogDelegateFactory</code>
-respectively. If you want to use these implementations you should also make sure the relevant Log4J or SLF4J jars
-are on your classpath.</p>
+class which implements the interface <code>LogDelegateFactory</code>. We provide pre-built
+implementations for Log4J (version 1), Log4J 2 and SLF4J with the class names
+<code>io.vertx.core.logging.Log4jLogDelegateFactory</code>, <code>io.vertx.core.logging.Log4j2LogDelegateFactory</code> and
+<code>io.vertx.core.logging.SLF4JLogDelegateFactory</code> respectively. If you want to use these implementations you should
+also make sure the relevant Log4J or SLF4J jars are on your classpath.</p>
+</div>
+<div class="paragraph">
+<p>Notice that, the provided delegate for Log4J 1 does not support parameterized message. The delegate for Log4J 2
+uses the <code>{}</code> syntax like the SLF4J delegate. JUL delegate uses the <code>{x}</code> syntax.</p>
 </div>
 </div>
 <div class="sect2">
@@ -7823,6 +8878,102 @@ logger.info("something happened");
 logger.error("oops!", exception);</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_host_name_resolution">Host name resolution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vert.x uses an an address resolver for resolving host name into IP addresses instead of
+the JVM built-in blocking resolver.</p>
+</div>
+<div class="paragraph">
+<p>An host name resolves to an IP address using:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <em>hosts</em> file of the operating system</p>
+</li>
+<li>
+<p>otherwise DNS queries against a list of servers</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>By default it will use the list of the system DNS server addresses from the environment, if that list cannot be
+retrieved it will use Google&#8217;s public DNS servers <code>"8.8.8.8"</code> and <code>"8.8.4.4"</code>.</p>
+</div>
+<div class="paragraph">
+<p>DNS servers can be also configured when creating a <code><a href="../../ceylondoc/vertx-core//Vertx.type.html">Vertx</a></code> instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value vertx = vertx_.vertx(VertxOptions {
+  addressResolverOptions = AddressResolverOptions {
+    servers = {"192.168.0.1" , "192.168.0.2:40000" };
+  };
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The default port of a DNS server is <code>53</code>, when a server uses a different port, this port can be set
+using a colon delimiter: <code>192.168.0.2:40000</code>.</p>
+</div>
+<div class="paragraph">
+<p>The resolver can be configured to use an alternative <em>hosts</em> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value vertx = vertx_.vertx(VertxOptions {
+  addressResolverOptions = AddressResolverOptions {
+    hostsPath = "/path/to/hosts";
+  };
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default the resolver will use the system DNS search domains from the environment. Alternatively an explicit search domain
+list can be provided:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+
+...
+
+value vertx = vertx_.vertx(VertxOptions {
+  addressResolverOptions = AddressResolverOptions {
+    searchDomains = {"foo.com" , "bar.com" };
+  };
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When a search domain list is used, the threshold for the number of dots is <code>1</code>, it can be configured with
+<code><a href="../../ceylondoc/vertx-core//dns/AddressResolverOptions.type.html#setNdots(int)">ndots</a></code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+sometimes it can be desirable to use the JVM built-in resolver, the JVM system property
+<em>-Dvertx.disableDnsResolver=true</em> activates this behavior
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -8561,6 +9712,35 @@ and <code>unregister</code></p>
 </ul>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_launcher_and_exit_code">Launcher and exit code</h3>
+<div class="paragraph">
+<p>When you use the <code>Launcher</code> class as main class, it uses the following exit code:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>0</code> if the process ends smoothly, or if an uncaught error is thrown</p>
+</li>
+<li>
+<p><code>1</code> for general purpose error</p>
+</li>
+<li>
+<p><code>11</code> if Vert.x cannot be initialized</p>
+</li>
+<li>
+<p><code>12</code> if a spawn process cannot be started, found or stopped. This error code is used by the <code>start</code> and
+<code>stop</code> command</p>
+</li>
+<li>
+<p><code>14</code> if the system configuration is not meeting the system requirement (shc as java not found)</p>
+</li>
+<li>
+<p><code>15</code> if the main verticle cannot be deployed</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 
@@ -8570,7 +9750,7 @@ and <code>unregister</code></p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-05-24 13:53:59 +02:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>

@@ -131,6 +131,7 @@
 <li><a href="#net-server-metrics">Net server metrics</a></li>
 <li><a href="#_net_client_metrics">Net client metrics</a></li>
 <li><a href="#_datagram_socket_metrics">Datagram socket metrics</a></li>
+<li><a href="#_pool_metrics">Pool metrics</a></li>
 </ul>
 </li>
 <li><a href="#jmx">JMX</a></li>
@@ -173,6 +174,7 @@
 <li><a href="#net-server-metrics">Net server metrics</a></li>
 <li><a href="#_net_client_metrics">Net client metrics</a></li>
 <li><a href="#_datagram_socket_metrics">Datagram socket metrics</a></li>
+<li><a href="#_pool_metrics">Pool metrics</a></li>
 </ul>
 </li>
 <li><a href="#jmx">JMX</a></li>
@@ -193,9 +195,9 @@
 <h2 id="_features">Features</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A fairly simple API to retrieve metrics via the <code><a href="../../jsdoc/measured-Measured.html">Measured</a></code>
-interface which is implemented by various Vert.x components like <code><a href="../../jsdoc/http_server-HttpServer.html">HttpServer</a></code>,
-<code><a href="../../jsdoc/net_server-NetServer.html">NetServer</a></code>, and even <code><a href="../../jsdoc/vertx-Vertx.html">Vertx</a></code> itself.</p>
+<p>A fairly simple API to retrieve metrics via the <code><a href="../../jsdoc/module-vertx-js_measured-Measured.html">Measured</a></code>
+interface which is implemented by various Vert.x components like <code><a href="../../jsdoc/module-vertx-js_http_server-HttpServer.html">HttpServer</a></code>,
+<code><a href="../../jsdoc/module-vertx-js_net_server-NetServer.html">NetServer</a></code>, and even <code><a href="../../jsdoc/module-vertx-js_vertx-Vertx.html">Vertx</a></code> itself.</p>
 </div>
 <div class="paragraph">
 <p>Confiugrable JMX reporting based on Dropwizard implementation, exposing Vert.x as JMX MBeans.</p>
@@ -220,7 +222,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-dropwizard-metrics&lt;/artifactId&gt;
-  &lt;version&gt;3.2.1&lt;/version&gt;
+  &lt;version&gt;3.3.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -233,7 +235,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-dropwizard-metrics:3.2.1</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-dropwizard-metrics:3.3.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -276,16 +278,31 @@ properties beginning with <em>vertx.metrics.options.</em> are transmitted to the
 </div>
 <div class="paragraph">
 <p>The <em>vertx.metrics.options.enabled</em> is a standard Vert.x Core option for enabling the metrics implementations, this
-options must be set to <code>true</code>.</p>
+options must be set to <code>true</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>java -jar your-fat-jar -Dvertx.metrics.options.enabled=true</pre>
+</div>
 </div>
 <div class="paragraph">
 <p>The <code><a href="../dataobjects.html#DropwizardMetricsOptions#setRegistryName">vertx.metrics.options.registryName</a></code>
-configures the <a href="#dropwizard-registry">Dropwizard Registry</a> to use.</p>
+configures the <a href="#dropwizard-registry">Dropwizard Registry</a> to use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>java -jar your-fat-jar -Dvertx.metrics.options.enabled=true -Dvertx.metrics.options.registryName=my-registry</pre>
+</div>
 </div>
 <div class="paragraph">
 <p>The <code><a href="../dataobjects.html#DropwizardMetricsOptions#setJmxEnabled">vertx.metrics.options.jmxEnabled</a></code> and
 <code><a href="../dataobjects.html#DropwizardMetricsOptions#setJmxDomain">vertx.metrics.options.jmxDomain</a></code>
-configures the <a href="#jmx">JMX</a> registration.</p>
+configures the <a href="#jmx">JMX</a> registration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>java -jar your-fat-jar -Dvertx.metrics.options.enabled=true -Dvertx.metrics.options.jmxEnabled=true ...</pre>
+</div>
 </div>
 <div class="paragraph">
 <p>The <code><a href="../dataobjects.html#DropwizardMetricsOptions#setConfigPath">vertx.metrics.options.configPath</a></code>
@@ -301,7 +318,7 @@ option allows to reconfigure the metrics from a property file.</p>
 an API for retrieving metrics (because some metrics collectors just do reporting and nothing more).</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../../jsdoc/metrics_service-MetricsService.html">MetricsService</a></code> provides an API in front of the Dropwizard Registry to get
+<p>The <code><a href="../../jsdoc/module-vertx-dropwizard-js_metrics_service-MetricsService.html">MetricsService</a></code> provides an API in front of the Dropwizard Registry to get
 metrics data snapshots.</p>
 </div>
 <div class="sect2">
@@ -344,8 +361,8 @@ Array.prototype.forEach.call(metricsNames, function(metricsName) {
 <div class="sect2">
 <h3 id="_retrieving_metrics">Retrieving metrics</h3>
 <div class="paragraph">
-<p>Once enabled, the <code><a href="../../jsdoc/metrics_service-MetricsService.html">MetricsService</a></code> allows to retrieve metrics snapshots from any
-<code><a href="../../jsdoc/measured-Measured.html">Measured</a></code> object which provides a map of the metric name to the data,
+<p>Once enabled, the <code><a href="../../jsdoc/module-vertx-dropwizard-js_metrics_service-MetricsService.html">MetricsService</a></code> allows to retrieve metrics snapshots from any
+<code><a href="../../jsdoc/module-vertx-js_measured-Measured.html">Measured</a></code> object which provides a map of the metric name to the data,
 represented by a <code>JsonObject</code>. So for example if we were to print out all metrics
 for a particular Vert.x instance:</p>
 </div>
@@ -375,7 +392,7 @@ consult the implementation documentation like <a href="https://github.com/vert-x
 without having to know the details of the naming scheme of every metric (something which is left to the implementers of the SPI).</p>
 </div>
 <div class="paragraph">
-<p>Since <code><a href="../../jsdoc/http_server-HttpServer.html">HttpServer</a></code> implements <code><a href="../../jsdoc/measured-Measured.html">Measured</a></code>, you can easily grab all metrics
+<p>Since <code><a href="../../jsdoc/module-vertx-js_http_server-HttpServer.html">HttpServer</a></code> implements <code><a href="../../jsdoc/module-vertx-js_measured-Measured.html">Measured</a></code>, you can easily grab all metrics
 that are specific for that particular http server.</p>
 </div>
 <div class="listingblock">
@@ -679,7 +696,7 @@ var vertx = Vertx.vertx({
       },
       {
         "value" : "business-.*",
-        "type" : 'REGEX'
+        "type" : "REGEX"
       }
     ]
   }
@@ -770,7 +787,7 @@ var vertx = Vertx.vertx({
       },
       {
         "value" : "/foo/.*",
-        "type" : 'REGEX'
+        "type" : "REGEX"
       }
     ]
   }
@@ -784,7 +801,8 @@ var vertx = Vertx.vertx({
 <div class="sect2">
 <h3 id="_http_client_metrics">Http client metrics</h3>
 <div class="paragraph">
-<p>Base name: <code>vertx.http.clients.@&lt;id&gt;</code></p>
+<p>Base name: <code>vertx.http.clients</code> (by default) or <code>vertx.http.clients.&lt;id&gt;</code> where <code>&lt;id&gt;</code> is a non empty string
+configured by <code><a href="../../vertx-core/dataobjects.html#HttpClientOptions#setMetricsName">metricsName</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Http client includes all the metrics of a <a href="#http-server-metrics">Http Server</a> plus the following:</p>
@@ -813,6 +831,37 @@ var vertx = Vertx.vertx({
 <p><code>responses-5xx</code> - A <a href="#meter">Meter</a> of the 5xx response code</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>The http client manages a pool of connection for each remote endpoint with a queue of pending requests</p>
+</div>
+<div class="paragraph">
+<p>Endpoint metrics are available too:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>endpoint.&lt;host:port&gt;.queue-delay</code> - A <a href="#timer">Timer</a> of the wait time of a pending request in the queue</p>
+</li>
+<li>
+<p><code>endpoint.&lt;host:port&gt;.queue-size</code> - A <a href="#counter">Counter</a> of the actual queue size</p>
+</li>
+<li>
+<p><code>endpoint.&lt;host:port&gt;.open-netsockets</code> - A <a href="#counter">Counter</a> of the actual number of open sockets to the endpoint</p>
+</li>
+<li>
+<p><code>endpoint.&lt;host:port&gt;.usage</code> - A <a href="#timer">Timer</a> of the delay between the request starts and the response ends</p>
+</li>
+<li>
+<p><code>endpoint.&lt;host:port&gt;.in-use</code> - A <a href="#counter">Counter</a> of the actual number of request/response</p>
+</li>
+<li>
+<p><code>endpoint.&lt;host:port&gt;.ttfb</code> - A <a href="#timer">Timer</a> of the wait time between the request ended and its response begins</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>where &lt;host&gt; is the endpoint host name possibly unresolved and &lt;port&gt; the TCP port.</p>
 </div>
 </div>
 <div class="sect2">
@@ -846,7 +895,8 @@ var vertx = Vertx.vertx({
 <div class="sect2">
 <h3 id="_net_client_metrics">Net client metrics</h3>
 <div class="paragraph">
-<p>Base name: <code>vertx.net.clients.@&lt;id&gt;</code></p>
+<p>Base name: <code>vertx.net.clients</code> (by default) or <code>vertx.net.clients.&lt;id&gt;</code> where <code>&lt;id&gt;</code> is a non empty string
+configured by <code><a href="../../vertx-core/dataobjects.html#NetClientOptions#setMetricsName">metricsName</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Net client includes all the metrics of a <a href="#net-server-metrics">Net Server</a></p>
@@ -879,6 +929,46 @@ var vertx = Vertx.vertx({
 </div>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pool_metrics">Pool metrics</h3>
+<div class="paragraph">
+<p>Base name: <code>vertx.pool.&lt;type&gt;.&lt;name&gt;</code> where <code>type</code> is the type of the pool (e.g <em>worker</em>, <em>datasource</em>) and
+<code>name</code> is the name of the pool (e.g <code>vert.x-worker-thread</code>).</p>
+</div>
+<div class="paragraph">
+<p>Pools of type <em>worker</em> are blocking worker pools. Vert.x exposes its worker as <em>vert.x-worker-thread</em> and
+<em>vert.x-internal-blocking</em>. Named worker executor created with <code><a href="../../jsdoc/module-vertx-js_worker_executor-WorkerExecutor.html">WorkerExecutor</a></code> are exposed.</p>
+</div>
+<div class="paragraph">
+<p>Datasource created with Vert.x JDBC clients are exposed as <em>datasource</em>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>queue-delay</code> - A <a href="#timer">Timer</a> measuring the duration of the delay to obtain the resource, i.e the wait time in the queue</p>
+</li>
+<li>
+<p><code>queue-size</code> - A <a href="#counter">Counter</a> of the actual number of waiters in the queue</p>
+</li>
+<li>
+<p><code>usage</code> - A <a href="#timer">Timer</a> measuring the duration of the usage of the resource</p>
+</li>
+<li>
+<p><code>in-use</code> - A <a href="#count">[count]</a> of the actual number of resources used</p>
+</li>
+<li>
+<p><code>pool-ratio</code> - A ratio <a href="#gauge">Gauge</a> of the in use resource / pool size</p>
+</li>
+<li>
+<p><code>max-pool-size</code> - A <a href="#gauge">Gauge</a> of the max pool size</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code>pool-ratio</code> and the <code>max_pool_size</code> won&#8217;t be present when the measured pool&#8217;s max pool size could not
+be determined.</p>
 </div>
 </div>
 </div>
@@ -1072,7 +1162,7 @@ in the Vert.x configuration:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-02-05 14:36:08 +01:00
+                Last updated 2016-06-24 07:51:00 PDT
               
               
             </div>
