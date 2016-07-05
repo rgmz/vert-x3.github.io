@@ -172,7 +172,6 @@
 <li><a href="#_jade_template_engine">Jade template engine</a></li>
 <li><a href="#_handlebars_template_engine">Handlebars template engine</a></li>
 <li><a href="#_thymeleaf_template_engine">Thymeleaf template engine</a></li>
-<li><a href="#_apache_freemarker_template_engine">Apache FreeMarker template engine</a></li>
 </ul>
 </li>
 <li><a href="#_error_handler">Error handler</a></li>
@@ -275,7 +274,6 @@
 <li><a href="#_jade_template_engine">Jade template engine</a></li>
 <li><a href="#_handlebars_template_engine">Handlebars template engine</a></li>
 <li><a href="#_thymeleaf_template_engine">Thymeleaf template engine</a></li>
-<li><a href="#_apache_freemarker_template_engine">Apache FreeMarker template engine</a></li>
 </ul>
 </li>
 <li><a href="#_error_handler">Error handler</a></li>
@@ -317,7 +315,7 @@ modern, scalable, web apps.</p>
 that will be sufficient.</p>
 </div>
 <div class="paragraph">
-<p>VVert.x-Web builds on Vert.x core to provide a richer set of functionality for building real web applications, more
+<p>Vert.x-Web builds on Vert.x core to provide a richer set of functionality for building real web applications, more
 easily.</p>
 </div>
 <div class="paragraph">
@@ -414,9 +412,6 @@ the type of app you prefer, not Vert.x-Web.</p>
 <li>
 <p>Thymeleaf</p>
 </li>
-<li>
-<p>Apache FreeMarker</p>
-</li>
 </ul>
 </div>
 </li>
@@ -470,7 +465,7 @@ over time.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-web&lt;/artifactId&gt;
-  &lt;version&gt;3.3.0&lt;/version&gt;
+  &lt;version&gt;3.2.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -484,7 +479,7 @@ over time.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-web:3.3.0'
+  compile 'io.vertx:vertx-web:3.2.1'
 }</code></pre>
 </div>
 </div>
@@ -1396,26 +1391,6 @@ moves to the next handler that re routes the request to <code>/some/path/B</code
 <div class="paragraph">
 <p>You can reroute based on a new path or based on a new path and method. Note however that rerouting based on method
 might introduce security issues since for example a usually safe GET request can become a DELETE.</p>
-</div>
-<div class="paragraph">
-<p>Reroute is also allowed on the failure handler, however due to the nature of re router when called the current status
-code and failure reason are reset. In order the rerouted handler should generate the correct status code if needed,
-for example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.get("/my-pretty-notfound-handler").handler({ ctx -&gt;
-  ctx.response().setStatusCode(404).end("NOT FOUND fancy html here!!!")
-})
-
-router.get().failureHandler({ ctx -&gt;
-  if (ctx.statusCode() == 404) {
-    ctx.reroute("/my-pretty-notfound-handler")
-  } else {
-    ctx.next()
-  }
-})</code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -2574,7 +2549,7 @@ router.getWithRegex(".+\\.hbs").handler(handler)</code></pre>
 <h3 id="_mvel_template_engine">MVEL template engine</h3>
 <div class="paragraph">
 <p>To use MVEL, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-mvel:3.3.0</code>. Create an instance of the MVEL template engine using:
+<code>io.vertx:vertx-web-templ-mvel:3.2.1</code>. Create an instance of the MVEL template engine using:
 <code>io.vertx.ext.web.templ.MVELTemplateEngine#create()</code></p>
 </div>
 <div class="paragraph">
@@ -2607,7 +2582,7 @@ MVEL templates.</p>
 <h3 id="_jade_template_engine">Jade template engine</h3>
 <div class="paragraph">
 <p>To use the Jade template engine, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-jade:3.3.0</code>. Create an instance of the Jade template engine using:
+<code>io.vertx:vertx-web-templ-jade:3.2.1</code>. Create an instance of the Jade template engine using:
 <code>io.vertx.ext.web.templ.JadeTemplateEngine#create()</code>.</p>
 </div>
 <div class="paragraph">
@@ -2640,7 +2615,7 @@ Jade templates.</p>
 <h3 id="_handlebars_template_engine">Handlebars template engine</h3>
 <div class="paragraph">
 <p>To use Handlebars, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-handlebars:3.3.0</code>. Create an instance of the Handlebars template engine
+<code>io.vertx:vertx-web-templ-handlebars:3.2.1</code>. Create an instance of the Handlebars template engine
 using: <code>io.vertx.ext.web.templ.HandlebarsTemplateEngine#create()</code>.</p>
 </div>
 <div class="paragraph">
@@ -2684,7 +2659,7 @@ handlebars templates.</p>
 <h3 id="_thymeleaf_template_engine">Thymeleaf template engine</h3>
 <div class="paragraph">
 <p>To use Thymeleaf, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-thymeleaf:3.3.0</code>. Create an instance of the Thymeleaf template engine
+<code>io.vertx:vertx-web-templ-thymeleaf:3.2.1</code>. Create an instance of the Thymeleaf template engine
 using: <code>io.vertx.ext.web.templ.ThymeleafTemplateEngine#create()</code>.</p>
 </div>
 <div class="paragraph">
@@ -2713,41 +2688,6 @@ including the request, response, session or context data.</p>
 <div class="paragraph">
 <p>Please consult the <a href="http://www.thymeleaf.org/">Thymeleaf documentation</a> for how to write
 Thymeleaf templates.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_apache_freemarker_template_engine">Apache FreeMarker template engine</h3>
-<div class="paragraph">
-<p>To use Apache FreeMarker, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-freemarker:3.3.0</code>. Create an instance of the Apache FreeMarker template engine
-using: <code>io.vertx.ext.web.templ.FreeMarkerTemplateEngine#create()</code>.</p>
-</div>
-<div class="paragraph">
-<p>When using the Apache FreeMarker template engine, it will by default look for
-templates with the <code>.ftl</code> extension if no extension is specified in the file name.</p>
-</div>
-<div class="paragraph">
-<p>The routing context <code><a href="../../groovydoc/io/vertx/groovy/ext/web/RoutingContext.html">RoutingContext</a></code> is available
-in the Apache FreeMarker template as the <code>context</code> variable, this means you can render the template based on anything in the context
-including the request, response, session or context data.</p>
-</div>
-<div class="paragraph">
-<p>Here are some examples:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>[snip]
-&lt;p th:text="${context.foo}"&gt;&lt;/p&gt;
-&lt;p th:text="${context.bar}"&gt;&lt;/p&gt;
-&lt;p th:text="${context.normalisedPath()}"&gt;&lt;/p&gt;
-&lt;p th:text="${context.request().params().param1}"&gt;&lt;/p&gt;
-&lt;p th:text="${context.request().params().param2}"&gt;&lt;/p&gt;
-[snip]</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Please consult the <a href="http://www.freemarker.org/">Apache FreeMarker documentation</a> for how to write
-Apache FreeMarker templates.</p>
 </div>
 </div>
 </div>
@@ -2801,7 +2741,7 @@ with the name <code>favicon.ico</code>. This means you bundle the favicon in the
 <p>This is configured using an instance of <code><a href="../../groovydoc/io/vertx/groovy/ext/web/handler/TimeoutHandler.html">TimeoutHandler</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>If a request times out before the response is written a <code>503</code> response will be returned to the client.</p>
+<p>If a request times out before the response is written a <code>408</code> response will be returned to the client.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example of using a timeout handler which will timeout all requests to paths starting with <code>/foo</code> after 5
@@ -2919,7 +2859,8 @@ router.route("/myapp/*").handler(sockJSHandler)</code></pre>
 <p>In client side JavaScript you use the SockJS client side library to make connections.</p>
 </div>
 <div class="paragraph">
-<p>You can find that <a href="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js">here</a>.</p>
+<p>You can find that <a href="http://cdn.sockjs.org/sockjs-0.3.4.js">here</a>.
+The minified version is <a href="http://cdn.sockjs.org/sockjs-0.3.4.min.js">here</a>.</p>
 </div>
 <div class="paragraph">
 <p>Full details for using the SockJS JavaScript client are on the <a href="https://github.com/sockjs/sockjs-client">SockJS website</a>,
@@ -2986,7 +2927,7 @@ use an iframe trick. A simple page is served from the SockJS server (using its f
 invisible iframe. Code run from this iframe doesn&#8217;t need to worry about cross-domain issues, as it&#8217;s being run from
 domain local to the SockJS server. This iframe also does need to load SockJS javascript client library, and this option
 lets you specify its url (if you&#8217;re unsure, point it to the latest minified SockJS client release, this is the default).
-The default value is <code><a href="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js" class="bare">http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js</a></code></p>
+The default value is <code><a href="http://cdn.sockjs.org/sockjs-0.3.4.min.js" class="bare">http://cdn.sockjs.org/sockjs-0.3.4.min.js</a></code></p>
 </dd>
 <dt class="hdlist1"><code>disabledTransports</code></dt>
 <dd>
@@ -3051,7 +2992,7 @@ and receive messages:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>&lt;script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"&gt;&lt;/script&gt;
+<pre>&lt;script src="http://cdn.sockjs.org/sockjs-0.3.4.min.js"&gt;&lt;/script&gt;
 &lt;script src='vertx-eventbus.js'&gt;&lt;/script&gt;
 
 &lt;script&gt;
@@ -3103,9 +3044,8 @@ the prefix <code>eventbus</code> we will connect there.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-web&lt;/artifactId&gt;
-  &lt;version&gt;3.3.0&lt;/version&gt;
+  &lt;version&gt;3.2.1&lt;/version&gt;
   &lt;classifier&gt;client&lt;/classifier&gt;
-  &lt;type&gt;js&lt;/type&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -3118,7 +3058,7 @@ the prefix <code>eventbus</code> we will connect there.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-web:3.3.0:client'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-web:3.2.1:client'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3386,15 +3326,9 @@ router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
 </dd>
 <dt class="hdlist1">RECEIVE</dt>
 <dd>
-<p>This event will occur when a message is attempted to be delivered from the server to the client.</p>
-</dd>
-<dt class="hdlist1">REGISTER</dt>
-<dd>
-<p>This event will occur when a client attempts to register a handler.</p>
-</dd>
-<dt class="hdlist1">UNREGISTER</dt>
-<dd>
-<p>This event will occur when a client attempts to unregister a handler.</p>
+<p>This event will occur when a message is attempted to be delivered from the server to the client.
+REGISTER. This event will occur when a client attempts to register a handler.
+UNREGISTER. This event will occur when a client attempts to unregister a handler.</p>
 </dd>
 </dl>
 </div>
@@ -3576,7 +3510,7 @@ router.route().handler(VirtualHostHandler.create("*.vertx.io", { routingContext 
 <div class="sectionbody">
 <div class="paragraph">
 <p>The <code>OAuth2AuthHandler</code> allows quick setup of secure routes using the OAuth2 protocol. This handler simplifies the
-authCode flow. An example of using it to protect some resource and authenticate with GitHub can be implemented as:</p>
+authCode flow. An example of using it to protect some resouce and authenticate with GitHub can be implemented as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3611,17 +3545,6 @@ router.get("/").handler({ ctx -&gt;
   ctx.response().putHeader("content-type", "text/html").end("Hello&lt;br&gt;&lt;a href=\"/protected/somepage\"&gt;Protected by Github&lt;/a&gt;")
 })</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>The OAuth2AuthHandler will setup a proper callback OAuth2 handler so the user does not need to deal with validation
-of the authority server response. It is quite important to know that authority server responses are only valid once,
-this means that if a client issues a reload of the callback URL it will be asserted as a invalid request since the
-validation will fail.</p>
-</div>
-<div class="paragraph">
-<p>A rule of thumb is once a valid callback is executed issue a client side redirect to a protected resource. This
-redirect should also create a session cookie (or other session mechanism) so the user is not required to authenticate
-for every request.</p>
 </div>
 <div class="paragraph">
 <p>Due to the nature of OAuth2 spec there are slight changes required in order to use other OAuth2 providers, for
@@ -3739,46 +3662,6 @@ for:</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>For keycloak we have a slighter easier setup, just export the json file from the keycloak admin console and load it
-into the handler. Keycloak has some differences from the other providers in the sense that it can also use the token
-to specify grants. You can validate against these grants like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.ext.auth.oauth2.OAuth2FlowType
-import io.vertx.groovy.ext.auth.oauth2.OAuth2Auth
-import io.vertx.groovy.ext.web.handler.OAuth2AuthHandler
-// create an OAuth2 provider for keycloak
-def authProvider = OAuth2Auth.createKeycloak(vertx, OAuth2FlowType.AUTH_CODE, [:])
-
-// create a oauth2 handler on our domain: "http://localhost:8000"
-def oauth2 = OAuth2AuthHandler.create(authProvider, "http://localhost:8000")
-
-// setup the callback handler for receiving the keycloak callback
-oauth2.setupCallback(router.get("/callback"))
-
-// protect everything under /protected
-router.route("/protected/*").handler(oauth2)
-
-// mount some handler under the protected zone
-router.route("/protected/somepage").handler({ rc -&gt;
-  // you can now do authZ based on keycloak grants
-  rc.user().isAuthorised("account:manage-account", { manageAccount -&gt;
-    if (manageAccount.result()) {
-      rc.response().end("Welcome to the protected resource and you can manage your account!")
-    } else {
-      rc.response().end("Welcome to the protected resource but you cannot manage your account!")
-    }
-  })
-})
-
-// welcome page
-router.get("/").handler({ ctx -&gt;
-  ctx.response().putHeader("content-type", "text/html").end("Hello&lt;br&gt;&lt;a href=\"/protected/somepage\"&gt;Protected by keycloak&lt;/a&gt;")
-})</code></pre>
-</div>
-</div>
 </div>
 </div>
 
@@ -3788,7 +3671,7 @@ router.get("/").handler({ ctx -&gt;
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-06-24 16:51:00 CEST
+                Last updated 2016-07-05 14:31:08 CEST
               
               
             </div>
