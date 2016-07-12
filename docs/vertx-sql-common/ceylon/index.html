@@ -111,6 +111,7 @@
 <li><a href="#_executing_insert_update_or_delete">Executing INSERT, UPDATE or DELETE</a></li>
 <li><a href="#_prepared_statement_updates">Prepared statement updates</a></li>
 <li><a href="#_callable_statements">Callable statements</a></li>
+<li><a href="#_batch_operations">Batch operations</a></li>
 <li><a href="#_executing_other_operations">Executing other operations</a></li>
 <li><a href="#_using_transactions">Using transactions</a></li>
 <li><a href="#_closing_connections">Closing connections</a></li>
@@ -132,6 +133,7 @@
 <li><a href="#_executing_insert_update_or_delete">Executing INSERT, UPDATE or DELETE</a></li>
 <li><a href="#_prepared_statement_updates">Prepared statement updates</a></li>
 <li><a href="#_callable_statements">Callable statements</a></li>
+<li><a href="#_batch_operations">Batch operations</a></li>
 <li><a href="#_executing_other_operations">Executing other operations</a></li>
 <li><a href="#_using_transactions">Using transactions</a></li>
 <li><a href="#_closing_connections">Closing connections</a></li>
@@ -154,7 +156,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">shared import io.vertx.ceylon.sql "3.3.0";</code></pre>
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">shared import io.vertx.ceylon.sql "3.3.2";</code></pre>
 </div>
 </div>
 </div>
@@ -180,7 +182,7 @@ execute in its own transaction.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.setAutoCommit(false, (Throwable? res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.setAutoCommit(false, (Throwable? res) {
   if (!exists res) {
     // OK!
   } else {
@@ -204,7 +206,7 @@ been run.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.query("SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE", (ResultSet|Throwable res) =&gt; {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.query("SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE", (ResultSet|Throwable res) {
   if (is ResultSet res) {
     // Get the result set
     value resultSet = res;
@@ -278,7 +280,7 @@ values.</p>
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">value query = "SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE WHERE LNAME=? AND SHOE_SIZE &gt; ?";
 value params = JsonArray {"Fox" , 9 };
 
-connection.queryWithParams(query, params, (ResultSet|Throwable res) =&gt; {
+connection.queryWithParams(query, params, (ResultSet|Throwable res) {
 
   if (is ResultSet res) {
     // Get the result set
@@ -308,18 +310,17 @@ if the update generated keys, they are available with <code><a href="../../ceylo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value columnNames = resultSet.columnNames;
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.update("INSERT INTO PEOPLE VALUES (null, 'john', 'smith', 9)", (UpdateResult|Throwable res) {
+  if (is UpdateResult res) {
 
-value results = resultSet.results;
+    value result = res;
+    print("Updated no. of rows: ``result.updated``");
+    print("Generated keys: ``result.keys``");
 
-for (row in results) {
-
-  value id = row[0];
-  value fName = row[1];
-  value lName = row[2];
-  value shoeSize = row[3];
-
-};</code></pre>
+  } else {
+    // Failed!
+  };
+});</code></pre>
 </div>
 </div>
 </div>
@@ -338,7 +339,7 @@ values.</p>
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">value update = "UPDATE PEOPLE SET SHOE_SIZE = 10 WHERE LNAME=?";
 value params = JsonArray {"Fox" };
 
-connection.updateWithParams(update, params, (UpdateResult|Throwable res) =&gt; {
+connection.updateWithParams(update, params, (UpdateResult|Throwable res) {
 
   if (is UpdateResult res) {
 
@@ -368,6 +369,10 @@ parameter values and finally a <code>JsonArray</code> containing the
 output types e.g.: <code>[null, 'VARCHAR']</code>.</p>
 </div>
 <div class="paragraph">
+<p>Note that the index of the output type is as important as the params array. If the return value is the second
+argument then the output array must contain a null value as the first element.</p>
+</div>
+<div class="paragraph">
 <p>A SQL function returns some output using the <code>return</code> keyword, and in this case one can call it like this:</p>
 </div>
 <div class="listingblock">
@@ -380,7 +385,7 @@ output types e.g.: <code>[null, 'VARCHAR']</code>.</p>
 // note that you do not need to declare the output for functions
 value func = "{ call one_hour_ago() }";
 
-connection.call(func, (ResultSet|Throwable res) =&gt; {
+connection.call(func, (ResultSet|Throwable res) {
 
   if (is ResultSet res) {
     value result = res;
@@ -404,7 +409,7 @@ not return anything the usage is as follows:</p>
 
 value func = "{ call new_customer(?, ?) }";
 
-connection.callWithParams(func, JsonArray {"John" , "Doe" }, null, (ResultSet|Throwable res) =&gt; {
+connection.callWithParams(func, JsonArray {"John" , "Doe" }, null, (ResultSet|Throwable res) {
 
   if (is ResultSet res) {
     // Success!
@@ -419,7 +424,22 @@ connection.callWithParams(func, JsonArray {"John" , "Doe" }, null, (ResultSet|Th
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Code not translatable</code></pre>
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Assume that there is a SQL procedure like this:
+//
+// create procedure customer_lastname(IN firstname varchar(50), OUT lastname varchar(50))
+//   modifies sql data
+//   select lastname into lastname from customers where firstname = firstname;
+
+value func = "{ call customer_lastname(?, ?) }";
+
+connection.callWithParams(func, JsonArray {"John" }, JsonArray {null , "VARCHAR" }, (ResultSet|Throwable res) {
+
+  if (is ResultSet res) {
+    value result = res;
+  } else {
+    // Failed!
+  };
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -450,6 +470,63 @@ String describing the type you want to receive.</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_batch_operations">Batch operations</h3>
+<div class="paragraph">
+<p>The SQL common interface also defines how to execute batch operations. There are 3 types of batch operations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Batched statements <code><a href="../../ceylondoc/vertx-sql//SQLConnection.type.html#batch(java.util.List,%20io.vertx.core.Handler)">batch</a></code></p>
+</li>
+<li>
+<p>Batched prepared statements <code><a href="../../ceylondoc/vertx-sql//SQLConnection.type.html#batchWithParams(java.lang.String,%20java.util.List,%20io.vertx.core.Handler)">batchWithParams</a></code></p>
+</li>
+<li>
+<p>Batched callable statements <code><a href="../../ceylondoc/vertx-sql//SQLConnection.type.html#batchCallableWithParams(java.lang.String,%20java.util.List,%20java.util.List,%20io.vertx.core.Handler)">batchCallableWithParams</a></code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A batches statement will exeucte a list of sql statements as for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Batch values
+value batch = renderNewList;
+renderListAdd;
+renderListAdd;
+
+connection.batch(batch, (List&lt;Integer&gt;|Throwable res) {
+  if (is List&lt;Integer&gt; res) {
+    value result = res;
+  } else {
+    // Failed!
+  };
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>While a prepared or callable statement batch will reuse the sql statement and take an list of arguments as for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Batch values
+value batch = renderNewList;
+renderListAdd;
+renderListAdd;
+
+connection.batchWithParams("INSERT INTO emp (name) VALUES (?)", batch, (List&lt;Integer&gt;|Throwable res) {
+  if (is List&lt;Integer&gt; res) {
+    value result = res;
+  } else {
+    // Failed!
+  };
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_executing_other_operations">Executing other operations</h3>
 <div class="paragraph">
 <p>To execute any other database operation, e.g. a <code>CREATE TABLE</code> you can use
@@ -463,7 +540,7 @@ is complete</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">value sql = "CREATE TABLE PEOPLE (ID int generated by default as identity (start with 1 increment by 1) not null,FNAME varchar(255), LNAME varchar(255), SHOE_SIZE int);";
 
-connection.execute(sql, (Throwable? execute) =&gt; {
+connection.execute(sql, (Throwable? execute) {
   if (!exists execute) {
     print("Table created !");
   } else {
@@ -492,7 +569,7 @@ connection.execute(sql, (Throwable? execute) =&gt; {
 
 // Now commit
 
-connection.commit((Throwable? res) =&gt; {
+connection.commit((Throwable? res) {
   if (!exists res) {
     // Committed OK!
   } else {
@@ -517,7 +594,7 @@ connection.commit((Throwable? res) =&gt; {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-06-24 07:51:00 CEST
+                Last updated 2016-07-10 18:37:52 BST
               
               
             </div>

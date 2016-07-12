@@ -222,7 +222,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-dropwizard-metrics&lt;/artifactId&gt;
-  &lt;version&gt;3.3.0&lt;/version&gt;
+  &lt;version&gt;3.3.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -235,7 +235,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-dropwizard-metrics:3.3.0'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-dropwizard-metrics:3.3.2'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -863,6 +863,33 @@ configured by <code><a href="../../vertx-core/dataobjects.html#HttpClientOptions
 <div class="paragraph">
 <p>where &lt;host&gt; is the endpoint host name possibly unresolved and &lt;port&gt; the TCP port.</p>
 </div>
+<div class="paragraph">
+<p>The monitored endpoints are configurable via a match performed on the server <code>$host:$port</code>.
+The default for this setting is to monitor no endpoints.</p>
+</div>
+<div class="paragraph">
+<p>The monitored endpoints can be configured in the <code><a href="../dataobjects.html#DropwizardMetricsOptions">DropwizardMetricsOptions</a></code> via
+a specific hostname match or a regex match:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/vertx'
+vertx = Vertx::Vertx.vertx({
+  'metricsOptions' =&gt; {
+    'enabled' =&gt; true,
+    'monitoredHttpClientEndpoints' =&gt; [
+      {
+        'value' =&gt; "some-host:80"
+      },
+      {
+        'value' =&gt; "another-host:.*",
+        'type' =&gt; "REGEX"
+      }
+    ]
+  }
+})</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="net-server-metrics">Net server metrics</h3>
@@ -1162,7 +1189,7 @@ in the Vert.x configuration:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-06-24 07:51:00 CEST
+                Last updated 2016-07-10 18:37:52 BST
               
               
             </div>

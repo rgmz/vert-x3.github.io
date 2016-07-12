@@ -118,6 +118,7 @@
 <li><a href="#_getting_a_connection">Getting a connection</a></li>
 <li><a href="#_configuration">Configuration</a></li>
 <li><a href="#_jdbc_drivers">JDBC Drivers</a></li>
+<li><a href="#_data_types">Data types</a></li>
 <li><a href="#_use_as_osgi_bundle">Use as OSGi bundle</a></li>
 </ul>
         </div>
@@ -142,6 +143,7 @@
 <li><a href="#_getting_a_connection">Getting a connection</a></li>
 <li><a href="#_configuration">Configuration</a></li>
 <li><a href="#_jdbc_drivers">JDBC Drivers</a></li>
+<li><a href="#_data_types">Data types</a></li>
 <li><a href="#_use_as_osgi_bundle">Use as OSGi bundle</a></li>
 </ul>
         </div>
@@ -169,7 +171,7 @@ application.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-jdbc-client&lt;/artifactId&gt;
-  &lt;version&gt;3.3.0&lt;/version&gt;
+  &lt;version&gt;3.3.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -182,7 +184,7 @@ application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-jdbc-client:3.3.0'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-jdbc-client:3.3.2'</code></pre>
 </div>
 </div>
 </div>
@@ -478,6 +480,44 @@ with the <code>vertx</code> command line, copy the JDBC driver to <code>${VERTX_
 </div>
 </div>
 <div class="sect1">
+<h2 id="_data_types">Data types</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Due to the fact that Vert.x uses JSON as its standard message format there will be many limitations to the data types
+accepted by the client. You will get out of the box the standard:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>null</p>
+</li>
+<li>
+<p>boolean</p>
+</li>
+<li>
+<p>number</p>
+</li>
+<li>
+<p>string</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>There is also an optimistic cast for temporal types (TIME, DATE, TIMESTAMP) and optionally disabled for UUID. UUIDs
+are supported by many databases but not all. For example MySQL does not support it so the recommended way is to use
+a VARCHAR(36) column. For other engines UUID optimistic casting can be enabled using the client config json as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>{ "UUIDCast": true }</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When this config is present UUIDs will be handled as a native type.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_use_as_osgi_bundle">Use as OSGi bundle</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -494,7 +534,7 @@ deployed as bundle.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-06-24 07:51:00 CEST
+                Last updated 2016-07-10 18:37:52 BST
               
               
             </div>

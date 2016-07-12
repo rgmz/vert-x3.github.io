@@ -623,12 +623,12 @@ project descriptor to access the Vert.x Core API and enable the Ruby support:</p
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
  &lt;artifactId&gt;vertx-core&lt;/artifactId&gt;
- &lt;version&gt;3.3.0&lt;/version&gt;
+ &lt;version&gt;3.3.2&lt;/version&gt;
 &lt;/dependency&gt;
 &lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-lang-ruby&lt;/artifactId&gt;
-  &lt;version&gt;3.3.0&lt;/version&gt;
+  &lt;version&gt;3.3.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -641,8 +641,8 @@ project descriptor to access the Vert.x Core API and enable the Ruby support:</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile "io.vertx:vertx-core:3.3.0"
-compile "io.vertx:vertx-lang-ruby:3.3.0"</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile "io.vertx:vertx-core:3.3.2"
+compile "io.vertx:vertx-lang-ruby:3.3.2"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1127,7 +1127,9 @@ the configuration is set when the worker pool is created
 <h2 id="_async_coordination">Async coordination</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Coordination of multiple asynchronous results can be achieved with Vert.x <code><a href="../../yardoc/Vertx/Future.html">futures</a></code>.</p>
+<p>Coordination of multiple asynchronous results can be achieved with Vert.x <code><a href="../../yardoc/Vertx/Future.html">futures</a></code>. It
+supports concurrent composition (run several async operations in parallel and join) and sequential composition
+(chain async operations).</p>
 </div>
 <div class="paragraph">
 <p><code><a href="../../yardoc/Vertx/CompositeFuture.html#all-class_method">CompositeFuture.all</a></code> takes several futures arguments (up to 6) and returns a future that is
@@ -1145,7 +1147,7 @@ netServer.listen(&amp;netServerFuture.completer())
 
 Vertx::CompositeFuture.all(httpServerFuture, netServerFuture).set_handler() { |ar_err,ar|
   if (ar_err == nil)
-    # All server started
+    # All servers started
   else
     # At least one server failed
   end
@@ -1153,7 +1155,13 @@ Vertx::CompositeFuture.all(httpServerFuture, netServerFuture).set_handler() { |a
 </div>
 </div>
 <div class="paragraph">
-<p>A list of futures can be used also:</p>
+<p>The operations run concurrently, and are joined. The <code><a href="unavailable">Handler</a></code> attached to the returned future is
+invoked upon completion of the composition. If one of the operation fails (one of the passed future is marked
+as a failure), the resulting future is marked as failed too. If all the operations succeed, the resulting future
+is completed with a success.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can pass a list (potentially empty) of futures:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1162,11 +1170,9 @@ Vertx::CompositeFuture.all([f1, f2, f3])</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The handler returned by <code><a href="../../yardoc/Vertx/Future.html#completer-instance_method">completer</a></code> completes the future.</p>
-</div>
-<div class="paragraph">
-<p><code><a href="../../yardoc/Vertx/CompositeFuture.html#any-class_method">CompositeFuture.any</a></code> takes several futures arguments (up to 6) and returns a future that is
-<em>succeeded</em> if one of the futures is, and <em>failed</em> otherwise:</p>
+<p>While the <code>all</code> composition <em>waits</em> until all futures are completed (or one fails), the <code>any</code> composition
+<em>waits</em> for the first completed future. <code><a href="../../yardoc/Vertx/CompositeFuture.html#any-class_method">CompositeFuture.any</a></code> takes several futures arguments
+(up to 6) and returns a future that is <em>succeeded</em> if one of the futures is, and <em>failed</em> otherwise:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1193,7 +1199,8 @@ Vertx::CompositeFuture.any([f1, f2, f3])</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><code><a href="../../yardoc/Vertx/Future.html#compose-instance_method">compose</a></code> can be used for chaining futures:</p>
+<p>While <code>all</code> and <code>any</code> are implementing concurrent composition, <code><a href="../../yardoc/Vertx/Future.html#compose-instance_method">compose</a></code> can be used
+for chaining futures (so sequential composition).</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1205,19 +1212,60 @@ fs = vertx.file_system()
 fut1 = Vertx::Future.future()
 
 fs.create_file("/foo", &amp;fut1.completer())
-fut1.compose(lambda { |v|
 
+fut1.compose(lambda { |v|
+  # When the file is created (fut1), execute this:
   fut2 = Vertx::Future.future()
   fs.write_file("/foo", Vertx::Buffer.buffer(), &amp;fut2.completer())
-
-  # Compose fut1 with fut2
   return fut2
 }).compose(lambda { |v|
-
-  # Compose fut1 with fut2 and fut3
+  # When the file is written (fut2), execute this:
   fs.move("/foo", "/bar", &amp;startFuture.completer())
 }, startFuture)</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>In this example, 3 operations are chained:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>a file is created (<code>fut1</code>)</p>
+</li>
+<li>
+<p>something is written in the file (<code>fut2</code>)</p>
+</li>
+<li>
+<p>the file is moved (<code>fut3</code>)</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>When these 3 steps are successful, the final future (<code>startFuture</code>) is completed with a success. However, if one
+of the steps fails, the final future is completed with a failure.</p>
+</div>
+<div class="paragraph">
+<p>This example uses:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="../../yardoc/Vertx/Future.html#compose-instance_method">compose</a></code>: when the current future completes,
+run the given function, that returns a future. When this returned future completes, it completes the composition.</p>
+</li>
+<li>
+<p><code><a href="../../yardoc/Vertx/Future.html#compose-instance_method">compose</a></code>: when the current future
+completes, run the given handler that completes the given <code>future</code> (next).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In this second case, the <code><a href="unavailable">Handler</a></code> should complete the <code>next</code> future to report its success or
+failure.</p>
+</div>
+<div class="paragraph">
+<p>You can use <code><a href="../../yardoc/Vertx/Future.html#completer-instance_method">completer</a></code> that completes a future with the operation result or
+failure. It avoids having to write the <em>traditional</em>: <code>if success then complete the future else fail the future</code>.</p>
 </div>
 </div>
 </div>
@@ -6770,6 +6818,21 @@ client = vertx.create_http_client(options)</code></pre>
 <p>The DNS resolution is always done on the proxy server, to achieve the functionality of a SOCKS4 client, it is necessary
 to resolve the DNS address locally.</p>
 </div>
+<div class="paragraph">
+<p>Please note: When using <code><a href="todo">HTTP</a></code> currently http requests are sent as CONNECT requests to the proxy, which will almost
+certainly not work since a properly configured proxy will deny connections to non-secure ports.</p>
+</div>
+<div class="paragraph">
+<p>This feature will be implemented differently in next version, allowing for a normal proxy request for non-http requests</p>
+</div>
+<div class="paragraph">
+<p>As a workaround, a http proxy request can be executed like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_automatic_clean_up_in_verticles_4">Automatic clean-up in verticles</h3>
@@ -6790,6 +6853,20 @@ or different applications in the same Vert.x instance or across a cluster of Ver
 <div class="paragraph">
 <p>Shared data includes local shared maps, distributed, cluster-wide maps, asynchronous cluster-wide locks and
 asynchronous cluster-wide counters.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+The behavior of the distributed data structure depends on the cluster manager you use. Backup
+(replication) and behavior when a network partition is faced are defined by the cluster manager and its
+configuration. Refer to the cluster manager documentation as well as to the underlying framework manual.
+</td>
+</tr>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_local_shared_maps">Local shared maps</h3>
@@ -9899,7 +9976,7 @@ and <code><a href="unavailable#unregister-instance_method">unregister</a></code>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-06-24 07:51:00 CEST
+                Last updated 2016-07-10 18:37:52 BST
               
               
             </div>

@@ -1074,7 +1074,9 @@ the configuration is set when the worker pool is created
 <h2 id="_async_coordination">Async coordination</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Coordination of multiple asynchronous results can be achieved with Vert.x <code><a href="../../ceylondoc/vertx-core//Future.type.html">futures</a></code>.</p>
+<p>Coordination of multiple asynchronous results can be achieved with Vert.x <code><a href="../../ceylondoc/vertx-core//Future.type.html">futures</a></code>. It
+supports concurrent composition (run several async operations in parallel and join) and sequential composition
+(chain async operations).</p>
 </div>
 <div class="paragraph">
 <p><code><a href="../../ceylondoc/vertx-core//CompositeFuture.object.html#all(io.vertx.core.Future,%20io.vertx.core.Future)">CompositeFuture.all</a></code> takes several futures arguments (up to 6) and returns a future that is
@@ -1094,7 +1096,7 @@ netServer.listen(netServerFuture.completer());
 
 compositeFuture.all(httpServerFuture, netServerFuture).setHandler((CompositeFuture|Throwable ar) {
   if (is CompositeFuture ar) {
-    // All server started
+    // All servers started
   } else {
     // At least one server failed
   };
@@ -1102,7 +1104,13 @@ compositeFuture.all(httpServerFuture, netServerFuture).setHandler((CompositeFutu
 </div>
 </div>
 <div class="paragraph">
-<p>A list of futures can be used also:</p>
+<p>The operations run concurrently, and are joined. The <code>Handler</code> attached to the returned future is
+invoked upon completion of the composition. If one of the operation fails (one of the passed future is marked
+as a failure), the resulting future is marked as failed too. If all the operations succeed, the resulting future
+is completed with a success.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can pass a list (potentially empty) of futures:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1114,11 +1122,9 @@ compositeFuture.all(ArrayList { f1,  f2,  f3 });</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The handler returned by <code><a href="../../ceylondoc/vertx-core//Future.type.html#completer()">completer</a></code> completes the future.</p>
-</div>
-<div class="paragraph">
-<p><code><a href="../../ceylondoc/vertx-core//CompositeFuture.object.html#any(io.vertx.core.Future,%20io.vertx.core.Future)">CompositeFuture.any</a></code> takes several futures arguments (up to 6) and returns a future that is
-<em>succeeded</em> if one of the futures is, and <em>failed</em> otherwise:</p>
+<p>While the <code>all</code> composition <em>waits</em> until all futures are completed (or one fails), the <code>any</code> composition
+<em>waits</em> for the first completed future. <code><a href="../../ceylondoc/vertx-core//CompositeFuture.object.html#any(io.vertx.core.Future,%20io.vertx.core.Future)">CompositeFuture.any</a></code> takes several futures arguments
+(up to 6) and returns a future that is <em>succeeded</em> if one of the futures is, and <em>failed</em> otherwise:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1150,7 +1156,8 @@ compositeFuture.any(ArrayList { f1,  f2,  f3 });</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><code><a href="../../ceylondoc/vertx-core//Future.type.html#compose(io.vertx.core.Handler,%20io.vertx.core.Future)">compose</a></code> can be used for chaining futures:</p>
+<p>While <code>all</code> and <code>any</code> are implementing concurrent composition, <code><a href="../../ceylondoc/vertx-core//Future.type.html#compose(io.vertx.core.Handler,%20io.vertx.core.Future)">compose</a></code> can be used
+for chaining futures (so sequential composition).</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1165,19 +1172,60 @@ value fs = vertx.fileSystem();
 value fut1 = future.future();
 
 fs.createFile("/foo", fut1.completer());
-fut1.compose(() {
 
+fut1.compose(() {
+  // When the file is created (fut1), execute this:
   value fut2 = future.future();
   fs.writeFile("/foo", buffer.buffer(), fut2.completer());
-
-  // Compose fut1 with fut2
   return fut2;
 }).compose(() {
-
-  // Compose fut1 with fut2 and fut3
+  // When the file is written (fut2), execute this:
   fs.move("/foo", "/bar", startFuture.completer());
 }, startFuture);</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>In this example, 3 operations are chained:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>a file is created (<code>fut1</code>)</p>
+</li>
+<li>
+<p>something is written in the file (<code>fut2</code>)</p>
+</li>
+<li>
+<p>the file is moved (<code>fut3</code>)</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>When these 3 steps are successful, the final future (<code>startFuture</code>) is completed with a success. However, if one
+of the steps fails, the final future is completed with a failure.</p>
+</div>
+<div class="paragraph">
+<p>This example uses:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="../../ceylondoc/vertx-core//Future.type.html#compose(java.util.function.Function)">compose</a></code>: when the current future completes,
+run the given function, that returns a future. When this returned future completes, it completes the composition.</p>
+</li>
+<li>
+<p><code><a href="../../ceylondoc/vertx-core//Future.type.html#compose(io.vertx.core.Handler,%20io.vertx.core.Future)">compose</a></code>: when the current future
+completes, run the given handler that completes the given <code>future</code> (next).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In this second case, the <code>Handler</code> should complete the <code>next</code> future to report its success or
+failure.</p>
+</div>
+<div class="paragraph">
+<p>You can use <code><a href="../../ceylondoc/vertx-core//Future.type.html#completer()">completer</a></code> that completes a future with the operation result or
+failure. It avoids having to write the <em>traditional</em>: <code>if success then complete the future else fail the future</code>.</p>
 </div>
 </div>
 </div>
@@ -6573,6 +6621,21 @@ value client = vertx.createHttpClient(options);</code></pre>
 <p>The DNS resolution is always done on the proxy server, to achieve the functionality of a SOCKS4 client, it is necessary
 to resolve the DNS address locally.</p>
 </div>
+<div class="paragraph">
+<p>Please note: When using <code><a href="todo">HTTP</a></code> currently http requests are sent as CONNECT requests to the proxy, which will almost
+certainly not work since a properly configured proxy will deny connections to non-secure ports.</p>
+</div>
+<div class="paragraph">
+<p>This feature will be implemented differently in next version, allowing for a normal proxy request for non-http requests</p>
+</div>
+<div class="paragraph">
+<p>As a workaround, a http proxy request can be executed like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">Code not translatable : String index out of range: -1</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_automatic_clean_up_in_verticles_4">Automatic clean-up in verticles</h3>
@@ -6593,6 +6656,20 @@ or different applications in the same Vert.x instance or across a cluster of Ver
 <div class="paragraph">
 <p>Shared data includes local shared maps, distributed, cluster-wide maps, asynchronous cluster-wide locks and
 asynchronous cluster-wide counters.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+The behavior of the distributed data structure depends on the cluster manager you use. Backup
+(replication) and behavior when a network partition is faced are defined by the cluster manager and its
+configuration. Refer to the cluster manager documentation as well as to the underlying framework manual.
+</td>
+</tr>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_local_shared_maps">Local shared maps</h3>
@@ -9750,7 +9827,7 @@ and <code>unregister</code></p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-06-24 07:51:00 CEST
+                Last updated 2016-07-10 18:37:52 BST
               
               
             </div>

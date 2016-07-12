@@ -142,7 +142,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">shared import io.vertx.ceylon.auth.oauth2 "3.3.0";</code></pre>
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">shared import io.vertx.ceylon.auth.oauth2 "3.3.2";</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -174,7 +174,7 @@ owner&#8217;s user-agent (typically a web browser) and capable of receiving inco
 authorization server.</p>
 </div>
 <div class="paragraph">
-<p>For more details see &lt;a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.1"&gt;Oauth2 spec#section-4.1&lt;/a&gt;.</p>
+<p>For more details see <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.1">Oauth2 specification, section 4.1</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -191,7 +191,7 @@ typically using an interactive form).  It is also used to migrate existing clien
 schemes such as HTTP Basic or Digest authentication to OAuth by converting the stored credentials to an access token.</p>
 </div>
 <div class="paragraph">
-<p>For more details see &lt;a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.3"&gt;Oauth2 spec#section-4.3&lt;/a&gt;.</p>
+<p>For more details see <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.3">Oauth2 specification, section 4.3</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -206,7 +206,7 @@ specification).</p>
 <p>The client credentials grant type MUST only be used by confidential clients.</p>
 </div>
 <div class="paragraph">
-<p>For more details see &lt;a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.4"&gt;Oauth2 spec#section-4.4&lt;/a&gt;.</p>
+<p>For more details see <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.4">Oauth2 specification, section 4.4</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -221,7 +221,7 @@ specification).</p>
 ...
 
 
-value oauth2 = oAuth2Auth.create(vertx, auth_code, JsonObject {
+value oauth2 = oAuth2Auth.create(vertx, auth_code, OAuth2ClientOptions {
   clientID = "YOUR_CLIENT_ID";
   clientSecret = "YOUR_CLIENT_SECRET";
   site = "https://github.com/login";
@@ -273,7 +273,7 @@ access token.</p>
 
 
 // Set the client credentials and the OAuth2 server
-value credentials = JsonObject {
+value credentials = OAuth2ClientOptions {
   clientID = "&lt;client-id&gt;";
   clientSecret = "&lt;client-secret&gt;";
   site = "https://api.oauth.com";
@@ -366,7 +366,7 @@ oauth2.getToken(tokenConfig, (AccessToken|Throwable res) {
 
 
 // Set the client credentials and the OAuth2 server
-value credentials = JsonObject {
+value credentials = OAuth2ClientOptions {
   clientID = "&lt;client-id&gt;";
   clientSecret = "&lt;client-secret&gt;";
   site = "https://api.oauth.com";
@@ -441,7 +441,7 @@ token.revoke("access_token", (Throwable? res) {
 ...
 
 // Set the client credentials and the OAuth2 server
-value credentials = JsonObject {
+value credentials = OAuth2ClientOptions {
   clientID = "CLIENT_ID";
   clientSecret = "CLIENT_SECRET";
   site = "https://accounts.google.com";
@@ -464,7 +464,7 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 ...
 
 // Set the client credentials and the OAuth2 server
-value credentials = JsonObject {
+value credentials = OAuth2ClientOptions {
   clientID = "CLIENT_ID";
   clientSecret = "CLIENT_SECRET";
   site = "https://github.com/login";
@@ -487,7 +487,7 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 ...
 
 // Set the client credentials and the OAuth2 server
-value credentials = JsonObject {
+value credentials = OAuth2ClientOptions {
   clientID = "CLIENT_ID";
   clientSecret = "CLIENT_SECRET";
   site = "https://www.linkedin.com";
@@ -510,7 +510,7 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 ...
 
 // Set the client credentials and the OAuth2 server
-value credentials = JsonObject {
+value credentials = OAuth2ClientOptions {
   clientID = "CLIENT_ID";
   clientSecret = "CLIENT_SECRET";
   site = "https://api.twitter.com";
@@ -533,7 +533,7 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 ...
 
 // Set the client credentials and the OAuth2 server
-value credentials = JsonObject {
+value credentials = OAuth2ClientOptions {
   clientID = "CLIENT_ID";
   clientSecret = "CLIENT_SECRET";
   site = "https://www.facebook.com";
@@ -549,24 +549,77 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_jboss_keycloak">JBoss Keycloak</h4>
+<div class="paragraph">
+<p>When working with keycloak it will be quite simple to setup the OAuth2 provider, just export the JSON config from the
+web UI and use it as the OAuth2 config with the helper class <code><a href="../../ceylondoc/vertx-auth-oauth2//OAuth2ClientOptions.type.html">OAuth2ClientOptions</a></code>.</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
 
 ...
 
-// Set the client credentials and the OAuth2 server
-value credentials = JsonObject {
-  clientID = "CLIENT_ID";
-  clientSecret = "CLIENT_SECRET";
-  site = "https://www.your-keycloak-server.com";
-  authorizationPath = "/realms/``realm``/protocol/openid-connect/auth";
-  tokenPath = "/realms/``realm``/protocol/openid-connect/token";
+// After setting up the application and users in keycloak export
+// the configuration json file from the web interface and load it in your application e.g.:
+
+value keycloakJson = JsonObject {
+  realm = "master";
+  realm-public-key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqGQkaBkiZWpUjFOuaabgfXgjzZzfJd0wozrS1czX5qHNKG3P79P/UtZeR3wGN8r15jVYiH42GMINMs7R7iP5Mbm1iImge5p/7/dPmXirKOKOBhjA3hNTiV5BlPDTQyiuuTAUEms5dY4+moswXo5zM4q9DFu6B7979o+v3kX6ZB+k3kNhP08wH82I4eJKoenN/0iCT7ALoG3ysEJf18+HEysSnniLMJr8R1pYF2QRFlqaDv3Mqyp7ipxYkt4ebMCgE7aDzT6OrfpyPowObpdjSMTUXpcwIcH8mIZCWFmyfF675zEeE0e+dHKkL1rPeCI7rr7Bqc5+1DS5YM54fk8xQwIDAQAB";
+  auth-server-url = "http://localhost:9000/auth";
+  ssl-required = "external";
+  resource = "frontend";
+  credentials = JsonObject {
+    secret = "2fbf5e18-b923-4a83-9657-b4ebd5317f60";
+  };
 };
 
+// Initialize the OAuth2 Library
+value oauth2 = oAuth2Auth.createKeycloak(vertx, client, keycloakJson);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using this approach the provider has knowledge on how to parse access tokens and extract grants from inside.
+This information is quite valuable since it allows to do authorization at the API level, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, password }
+
+...
+
+// you can now use this config with the OAuth2 provider like this:
+value keycloakJson = JsonObject {
+  realm = "master";
+  realm-public-key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqGQkaBkiZWpUjFOuaabgfXgjzZzfJd0wozrS1czX5qHNKG3P79P/UtZeR3wGN8r15jVYiH42GMINMs7R7iP5Mbm1iImge5p/7/dPmXirKOKOBhjA3hNTiV5BlPDTQyiuuTAUEms5dY4+moswXo5zM4q9DFu6B7979o+v3kX6ZB+k3kNhP08wH82I4eJKoenN/0iCT7ALoG3ysEJf18+HEysSnniLMJr8R1pYF2QRFlqaDv3Mqyp7ipxYkt4ebMCgE7aDzT6OrfpyPowObpdjSMTUXpcwIcH8mIZCWFmyfF675zEeE0e+dHKkL1rPeCI7rr7Bqc5+1DS5YM54fk8xQwIDAQAB";
+  auth-server-url = "http://localhost:9000/auth";
+  ssl-required = "external";
+  resource = "frontend";
+  credentials = JsonObject {
+    secret = "2fbf5e18-b923-4a83-9657-b4ebd5317f60";
+  };
+};
 
 // Initialize the OAuth2 Library
-value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
+value oauth2 = oAuth2Auth.createKeycloak(vertx, password, keycloakJson);
+
+// first get a token (authenticate)
+oauth2.getToken(JsonObject {
+  username = "user";
+  password = "secret";
+}, (AccessToken|Throwable res) {
+  if (is Throwable name) {
+    // error handling...
+  } else {
+    value token = res;
+
+    // now check for permissions
+    token.isAuthorised("account:manage-account", (Boolean|Throwable r) {
+      if (r) {
+        // this user is authorized to manage its account
+      };
+    });
+  };
+});</code></pre>
 </div>
 </div>
 </div>
@@ -580,7 +633,7 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-06-24 07:51:00 CEST
+                Last updated 2016-07-10 18:37:52 BST
               
               
             </div>

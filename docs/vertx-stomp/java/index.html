@@ -206,7 +206,7 @@ descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-stomp&lt;/artifactId&gt;
-  &lt;version&gt;3.3.0&lt;/version&gt;
+  &lt;version&gt;3.3.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -219,7 +219,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-stomp:3.3.0'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-stomp:3.3.2'</code></pre>
 </div>
 </div>
 </div>
@@ -665,7 +665,29 @@ frames sent by the server. Notice that the server closes the connection with the
 STOMP heartbeat mechanism. When the server has not sent a message in the heartbeat time window, the connection is
 closed and the <code>connectionDroppedHandler</code> is called (if set). To configure a <code>connectionDroppedHandler</code>, call
 <code><a href="../../apidocs/io/vertx/ext/stomp/StompClientConnection.html#connectionDroppedHandler-io.vertx.core.Handler-">connectionDroppedHandler</a></code>. The handler can
-for instance tries to reconnect to the server.</p>
+for instance tries to reconnect to the server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+    .connect(ar -&gt; {
+      if (ar.succeeded()) {
+        StompClientConnection connection = ar.result();
+        connection.connectionDroppedHandler(con -&gt; {
+          // The connection has been lost
+          // You can reconnect or switch to another server.
+        });
+
+        connection.send("/queue", Buffer.buffer("Hello"),
+            frame -&gt; {
+              System.out.println("Message processed by the server");
+            }
+        );
+      } else {
+        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      }
+    });</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1003,10 +1025,12 @@ frames, and <em>illegal / unknown</em> frames:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
-    .handler(StompServerHandler.create(vertx).receivedFrameHandler(System.out::println))
+    .handler(StompServerHandler.create(vertx).receivedFrameHandler(sf -&gt; {
+      System.out.println(sf.frame());
+    }))
     .listen();
 
-StompClient client = StompClient.create(vertx).receivedFrameHandler(System.out::println);</code></pre>
+StompClient client = StompClient.create(vertx).receivedFrameHandler(frame -&gt; System.out.println(frame));</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1023,10 +1047,14 @@ in the headers using the <code><a href="../../apidocs/io/vertx/ext/stomp/Frame.h
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
     .handler(StompServerHandler.create(vertx))
-    .writingFrameHandler(System.out::println)
+    .writingFrameHandler(sf -&gt; {
+      System.out.println(sf.frame());
+    })
     .listen();
 
-StompClient client = StompClient.create(vertx).writingFrameHandler(System.out::println);</code></pre>
+StompClient client = StompClient.create(vertx).writingFrameHandler(frame -&gt; {
+  System.out.println(frame);
+});</code></pre>
 </div>
 </div>
 </div>
@@ -1038,7 +1066,7 @@ StompClient client = StompClient.create(vertx).writingFrameHandler(System.out::p
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-06-24 07:51:00 CEST
+                Last updated 2016-07-10 18:37:52 BST
               
               
             </div>
