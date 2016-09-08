@@ -8,6 +8,242 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Centralized logging for Vert.x applications using the ELK stack</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;This post entry describes a solution to achieve centralized logging of Vert.x applications using the &lt;a href=&quot;https://www.elastic.co/webinars/introduction-elk-stack&quot;&gt;ELK stack&lt;/a&gt;, a set of tools including Logstash, Elasticsearch, and Kibana that are well known to work together seamlessly.&lt;/p&gt;
+&lt;h2 id=&quot;table-of-contents&quot;&gt;Table of contents&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#preamble&quot;&gt;Preamble&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#overview&quot;&gt;Overview&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#app-logging-configuration&quot;&gt;App logging configuration&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#log4j-logging&quot;&gt;Log4j logging&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#filebeat-configuration&quot;&gt;Filebeat configuration&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#elk-configuration&quot;&gt;ELK configuration&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#logstash&quot;&gt;Logstash&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#elasticsearch&quot;&gt;Elasticsearch&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#kibana&quot;&gt;Kibana&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#log-shipping-challenge&quot;&gt;Log shipping challenge&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#demo&quot;&gt;Demo&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#installation&quot;&gt;Installation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#building-the-example&quot;&gt;Building the example&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#building-the-vertx-microservices-workshop-docker-images&quot;&gt;Building the Vert.x Microservices workshop Docker images&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#running-the-example&quot;&gt;Running the example&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#the-demo&quot;&gt;The demo&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#conclusion&quot;&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;preamble&quot;&gt;Preamble&lt;/h2&gt;
+&lt;p&gt;This post was written in context of the project titled “&lt;a href=&quot;https://summerofcode.withgoogle.com/projects/#4858492141699072&quot;&gt;DevOps tooling for Vert.x applications&lt;/a&gt;“, one of the Vert.x projects taking place during the 2016 edition of &lt;a href=&quot;https://summerofcode.withgoogle.com/about/&quot;&gt;Google Summer of Code&lt;/a&gt;, a program that aims to bring together students with open source organizations, in order to help them to gain exposure to software development practices and real-world challenges.&lt;/p&gt;
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Centralized logging is an important topic while building a Microservices architecture and it is a step forward to adopting the DevOps culture. Having an overall solution partitioned into a set of services distributed across the Internet can represent a challenge when trying to monitor the log output of each of them, hence, a tool that helps to accomplish this results very helpful.&lt;/p&gt;
+&lt;h2 id=&quot;overview&quot;&gt;Overview&lt;/h2&gt;
+&lt;p&gt;As shown in the diagram below, the general centralized logging solution comprises two main elements: the application server, which runs our Vert.x application; and a separate server, hosting the ELK stack. Both elements are linked by Filebeat, a highly configurable tool capable of shipping our application logs to the Logstash instance, i.e., our gateway to the ELK stack.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/centralized-logging-using-elk/elk-overview.svg&quot; alt=&quot;Overview of centralized logging with ELK&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;app-logging-configuration&quot;&gt;App logging configuration&lt;/h2&gt;
+&lt;p&gt;The approach described here is based on a Filebeat + Logstash configuration, that means first we need to make sure our app logs to a file, whose records will be shipped to Logstash by Filebeat. Luckily, Vert.x provides the means to &lt;a href=&quot;http://vertx.io/docs/vertx-core/java/#_logging&quot;&gt;configure&lt;/a&gt; alternative logging frameworks (e.g., Log4j, Log4j2 and SLF4J) besides the default JUL logging. However, we can use Filebeat independently of the logging framework chosen.&lt;/p&gt;
+&lt;h3 id=&quot;log4j-logging&quot;&gt;Log4j Logging&lt;/h3&gt;
+&lt;p&gt;The demo that accompanies this post relies on Log4j2 as the logging framework. We instructed Vert.x to use this framework following the &lt;a href=&quot;http://vertx.io/docs/vertx-core/java/#_logging&quot;&gt;guidelines&lt;/a&gt; and we made sure our logging calls are made asynchronous, since we don’t want them to block our application. For this purpose, we opted for the &lt;code&gt;AsyncAppender&lt;/code&gt; and this was included in the Log4J configuration together with the log output format described in a XML configuration available in the application’s &lt;em&gt;Resource&lt;/em&gt; folder.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;Configuration&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;Appenders&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;RollingFile&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;name&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;vertx_logs&quot;&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;append&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;true&quot;&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;fileName&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;/var/log/vertx.log&quot;&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;filePattern&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;/var/log/vertx/$${date:yyyy-MM}/vertx-%d{MM-dd-yyyy}-%i.log.gz&quot;&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;PatternLayout&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;pattern&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;%d{ISO8601} %-5p %c:%L - %m%n&quot;&lt;/span&gt; /&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;RollingFile&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;Async&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;name&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;vertx_async&quot;&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;AppenderRef&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;ref&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;vertx_logs&quot;&lt;/span&gt;/&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;Async&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;Appenders&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;Loggers&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;Root&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;level&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;DEBUG&quot;&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;AppenderRef&lt;/span&gt; &lt;span class=&quot;hljs-attribute&quot;&gt;ref&lt;/span&gt;=&lt;span class=&quot;hljs-value&quot;&gt;&quot;vertx_async&quot;&lt;/span&gt; /&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;Root&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;Loggers&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;Configuration&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;filebeat-configuration&quot;&gt;Filebeat configuration&lt;/h3&gt;
+&lt;p&gt;Now that we have configured the log output of our Vert.x application to be stored in the file system, we delegate to Filebeat the task of forwarding the logs to the Logstash instance. Filebeat can be configured through a YAML file containing the logs output location and the pattern to interpret multiline logs (i.e., stack traces). Also, the Logstash output plugin is configured with the host location and a secure connection is enforced using the certificate from the machine hosting Logstash. We set the &lt;code&gt;document_type&lt;/code&gt; to the type of instance that this log belongs to, which could later help us while indexing our logs inside Elasticsearch.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-attribute&quot;&gt;filebeat&lt;/span&gt;:
+  &lt;span class=&quot;hljs-attribute&quot;&gt;prospectors&lt;/span&gt;:
+    -
+      &lt;span class=&quot;hljs-attribute&quot;&gt;document_type&lt;/span&gt;: trader_dashboard
+      &lt;span class=&quot;hljs-attribute&quot;&gt;paths&lt;/span&gt;:
+        - /var/log/vertx.log
+      &lt;span class=&quot;hljs-attribute&quot;&gt;multiline&lt;/span&gt;:
+        &lt;span class=&quot;hljs-attribute&quot;&gt;pattern&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;^[0-9]+&quot;&lt;/span&gt;
+        &lt;span class=&quot;hljs-attribute&quot;&gt;negate&lt;/span&gt;: true
+        &lt;span class=&quot;hljs-attribute&quot;&gt;match&lt;/span&gt;: after
+&lt;span class=&quot;hljs-attribute&quot;&gt;output&lt;/span&gt;:
+  &lt;span class=&quot;hljs-attribute&quot;&gt;logstash&lt;/span&gt;:
+    &lt;span class=&quot;hljs-attribute&quot;&gt;enabled&lt;/span&gt;: true
+    &lt;span class=&quot;hljs-attribute&quot;&gt;hosts&lt;/span&gt;:
+      - &lt;span class=&quot;hljs-attribute&quot;&gt;elk&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;5044&lt;/span&gt;
+    &lt;span class=&quot;hljs-attribute&quot;&gt;timeout&lt;/span&gt;: &lt;span class=&quot;hljs-number&quot;&gt;15&lt;/span&gt;
+    &lt;span class=&quot;hljs-attribute&quot;&gt;tls&lt;/span&gt;:
+      &lt;span class=&quot;hljs-attribute&quot;&gt;insecure&lt;/span&gt;: false
+      &lt;span class=&quot;hljs-attribute&quot;&gt;certificate_authoritites&lt;/span&gt;:
+        - /etc/pki/tls/certs/logstash-beats.crt&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;elk-configuration&quot;&gt;ELK configuration&lt;/h2&gt;
+&lt;p&gt;To take fully advantage of the ELK stack with respect to Vert.x and our app logs, we need to configure each of its individual components, namely Logstash, Elasticsearch and Kibana.&lt;/p&gt;
+&lt;h3 id=&quot;logstash&quot;&gt;Logstash&lt;/h3&gt;
+&lt;p&gt;Logstash is the component within the ELK stack that is in charge of aggregating the logs from each of the sources and forwarding them to the Elasticsearch instance.&lt;br&gt;Configuring Logstash is straightforward with the help of the specific input and output plugins for Beats and Elasticsearch, respectively.
+In the previous section we mentioned that Filebeat could be easily coupled with Logstash. Now, we see that this can be done by just specifying &lt;code&gt;Beat&lt;/code&gt; as the input plugin and set the parameters needed to be reached by our shippers (listening port, ssl key and certificate location).&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;input {
+  beats {
+    port =&gt; &lt;span class=&quot;hljs-number&quot;&gt;5044&lt;/span&gt;
+    ssl =&gt; &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;
+    ssl_certificate =&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;/etc/pki/tls/certs/logstash-beats.crt&quot;&lt;/span&gt;
+    ssl_key =&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;/etc/pki/tls/private/logstash-beats.key&quot;&lt;/span&gt;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now that we are ready to receive logs from the app, we can use Logstash filtering capabilities to specify the format of our logs and extract the fields so they can be indexed more efficiently by Elasticsearch.&lt;br&gt;The &lt;code&gt;grok&lt;/code&gt; filtering plugin comes handy in this situation. This plugin allows to declare the logs format using predefined and customized patterns based in regular expressions allowing to declare new fields from the information extracted from each log line. In the following block, we instruct Logstash to recognize our Log4j pattern inside a &lt;code&gt;message&lt;/code&gt; field, which contains the log message shipped by Filebeat. After that, the &lt;code&gt;date&lt;/code&gt; filtering plugin parses the &lt;code&gt;timestamp&lt;/code&gt; field extracted in the previous step and replaces it for the one set by Filebeat after reading the log output file.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;filter {
+  grok {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt;_on_match =&gt; &lt;span class=&quot;hljs-literal&quot;&gt;false&lt;/span&gt;
+    match =&gt;  [ &lt;span class=&quot;hljs-string&quot;&gt;&quot;message&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;%{LOG4J}&quot;&lt;/span&gt;]
+  }
+  date{
+    match =&gt; [ &lt;span class=&quot;hljs-string&quot;&gt;&quot;timestamp_string&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;ISO8601&quot;&lt;/span&gt;]
+    remove_field =&gt; [ &lt;span class=&quot;hljs-string&quot;&gt;&quot;timestamp_string&quot;&lt;/span&gt; ]
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The Log4j pattern is not included within the Logstash configuration, however, we can specify it using predefined data formats shipped with Logstash and adapt it to the specific log formats required in our application, as shown next.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-header&quot;&gt;# Pattern to match our Log4j format&lt;/span&gt;
+SPACING (?:[\s]+)
+LOGGER (?:[&lt;span class=&quot;hljs-link_label&quot;&gt;a-zA-Z$_&lt;/span&gt;][&lt;span class=&quot;hljs-link_reference&quot;&gt;a-zA-Z$_0-9&lt;/span&gt;]&lt;span class=&quot;hljs-emphasis&quot;&gt;*\.)*&lt;/span&gt;[&lt;span class=&quot;hljs-link_label&quot;&gt;a-zA-Z$_&lt;/span&gt;][&lt;span class=&quot;hljs-link_reference&quot;&gt;a-zA-Z$_0-9&lt;/span&gt;]*
+LINE %{INT}?
+LOG4J %{TIMESTAMP&lt;span class=&quot;hljs-emphasis&quot;&gt;_ISO8601:timestamp_&lt;/span&gt;string} %{LOGLEVEL:log&lt;span class=&quot;hljs-emphasis&quot;&gt;_level}%{SPACING}%{LOGGER:logger_&lt;/span&gt;name}:%{LINE:loc&lt;span class=&quot;hljs-emphasis&quot;&gt;_line} - %{JAVALOGMESSAGE:log_&lt;/span&gt;message}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Finally, we take a look at Logstash’s output configuration. This simply points to our elasticsearch instance, instructs it to provide a list of all cluster nodes (&lt;code&gt;sniffing&lt;/code&gt;), defines the name pattern for our indices, assigns the document type according to the metadata coming from Filebeat, and allows to define a custom index template for our data.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;output {
+  elasticsearch {
+    hosts =&gt; [&lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;]
+    sniffing =&gt; &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;
+    manage_template =&gt; &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;
+    index =&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;%{[@metadata][beat]}-%{+YYYY.MM.dd}&quot;&lt;/span&gt;
+    document_type =&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;%{[@metadata][type]}&quot;&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;template&lt;/span&gt; =&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;/etc/filebeat/vertx_app_filebeat.json&quot;&lt;/span&gt;
+    template_overwrite =&gt; &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;elasticsearch&quot;&gt;Elasticsearch&lt;/h3&gt;
+&lt;p&gt;Elasticsearch is the central component that enables the efficient indexing and real-time search capabilities of the stack. To take the most advantage of Elasticsearch, we can provide an indexing template of our incoming logs, which can help to optimize the data storage and match the queries issued by Kibana at a later point.&lt;br&gt;In the example below, we see an index template that would be applied to any index matching the pattern &lt;code&gt;filebeat-*&lt;/code&gt;. Additionally, we declare our new log fields &lt;code&gt;type&lt;/code&gt;, &lt;code&gt;host&lt;/code&gt;, &lt;code&gt;log_level&lt;/code&gt;, &lt;code&gt;logger_name&lt;/code&gt;, and &lt;code&gt;log_message&lt;/code&gt;, which are set as &lt;code&gt;not_analyzed&lt;/code&gt; except for the last two that are set as &lt;code&gt;analyzed&lt;/code&gt; allowing to perform queries based on regular expressions and not restricted to query the full text.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;mappings&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+    &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;_default_&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+      &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;_all&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+        &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;enabled&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;&lt;/span&gt;,
+        &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;norms&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+          &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;enabled&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-literal&quot;&gt;false&lt;/span&gt;
+        &lt;/span&gt;}
+      &lt;/span&gt;}&lt;/span&gt;,
+      &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;dynamic_templates&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;[
+        {
+          &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;template1&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+            &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;mapping&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+              &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;doc_values&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;&lt;/span&gt;,
+              &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;ignore_above&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-number&quot;&gt;1024&lt;/span&gt;&lt;/span&gt;,
+              &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;index&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;not_analyzed&quot;&lt;/span&gt;&lt;/span&gt;,
+              &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;type&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;{dynamic_type}&quot;&lt;/span&gt;
+            &lt;/span&gt;}&lt;/span&gt;,
+            &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;match&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;*&quot;&lt;/span&gt;
+          &lt;/span&gt;}
+        &lt;/span&gt;}
+      ]&lt;/span&gt;,
+      &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;properties&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+        &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;@timestamp&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+          &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;type&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;date&quot;&lt;/span&gt;
+        &lt;/span&gt;}&lt;/span&gt;,
+        &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;offset&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+          &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;type&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;long&quot;&lt;/span&gt;&lt;/span&gt;,
+          &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;doc_values&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;true&quot;&lt;/span&gt;
+        &lt;/span&gt;}&lt;/span&gt;,
+        &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;type&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{ &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;type&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;string&quot;&lt;/span&gt;&lt;/span&gt;, &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;index&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;not_analyzed&quot;&lt;/span&gt; &lt;/span&gt;}&lt;/span&gt;,
+        &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;host&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{ &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;type&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;string&quot;&lt;/span&gt;&lt;/span&gt;, &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;index&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;not_analyzed&quot;&lt;/span&gt; &lt;/span&gt;}&lt;/span&gt;,
+        &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;log_level&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{ &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;type&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;string&quot;&lt;/span&gt;&lt;/span&gt;, &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;index&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;not_analyzed&quot;&lt;/span&gt; &lt;/span&gt;}&lt;/span&gt;,
+        &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;logger_name&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{ &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;type&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;string&quot;&lt;/span&gt;&lt;/span&gt;, &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;index&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;analyzed&quot;&lt;/span&gt; &lt;/span&gt;}&lt;/span&gt;,
+        &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;log_message&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{ &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;type&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;string&quot;&lt;/span&gt;&lt;/span&gt;, &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;index&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;analyzed&quot;&lt;/span&gt; &lt;/span&gt;}
+      &lt;/span&gt;}
+    &lt;/span&gt;}
+  &lt;/span&gt;}&lt;/span&gt;,
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;settings&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+    &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;index.refresh_interval&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;5s&quot;&lt;/span&gt;
+  &lt;/span&gt;}&lt;/span&gt;,
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;template&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;filebeat-*&quot;&lt;/span&gt;
+&lt;/span&gt;}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;kibana&quot;&gt;Kibana&lt;/h3&gt;
+&lt;p&gt;Although we could fetch all our logs from Elasticsearch through its API, Kibana is a powerful tool that allows a more friendly query and visualization.
+Besides the option to query our data through the available indexed field names and search boxes allowing typing specific queries, Kibana allows creating our own &lt;em&gt;Visualizations&lt;/em&gt; and &lt;em&gt;Dashboards&lt;/em&gt;. Combined, they represent a powerful way to display data and gain insight in a customized manner.
+The accompanied demo ships with a couple of sample dashboards and visualizations that take advantage of the log fields that we specified in our index template and throw valuable insight. This includes: visualizing the number of log messages received by ELK, observe the proportion of messages that each log source produces, and directly find out the sources of error logs.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/centralized-logging-using-elk/kibana-dashboard.png&quot; alt=&quot;Kibana Dashboard&quot; style=&quot;width: 70%; display: block; margin: auto;&quot;/&gt;&lt;/p&gt;
+&lt;h2 id=&quot;log-shipping-challenge&quot;&gt;Log shipping challenge&lt;/h2&gt;
+&lt;p&gt;The solution presented here relied on Filebeat to ship log data to Logstash. However, if you are familiar with the Log4j framework you may be aware that there exists a &lt;em&gt;SocketAppender&lt;/em&gt; that allows to write log events directly to a remote server using a TCP connection. Although including the Filebeat + Logstash combination  may sound an unnecessary overhead to the logging pipeline, they provide a number of benefits in comparison to the Log4j socket alternative:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The SocketAppender relies on the specific serialization of Log4j’s &lt;em&gt;LogEvent&lt;/em&gt; objects, which is no an interchangeable format as JSON, which is used by the Beats solution. Although there are &lt;a href=&quot;https://github.com/majikthys/log4j2-logstash-jsonevent-layout&quot;&gt;attempts&lt;/a&gt; to output the logs in a JSON format for Logstash, it doesn’t support multiline logs, which results in messages being split into different events by Logstash. On the other hand, there is no official nor stable &lt;a href=&quot;https://www.elastic.co/guide/en/logstash/current/input-plugins.html&quot;&gt;input plugin&lt;/a&gt; for Log4j version 2.&lt;/li&gt;
+&lt;li&gt;While enabling Log4j’s async logging mode in an application delegates logging operations to separate threads, given their coexistence in the same JVM there is still the risk of data loss in case of a sudden JVM termination without proper log channel closing.&lt;/li&gt;
+&lt;li&gt;Filebeat is a data shipper designed to deal with many constraints that arise in distributed environments in a reliable manner, therefore it provides options to tailor and scale this operation to our needs: the possibility to load balance between multiple Logstash instances, specify the number of simultaneous Filebeat workers that ship log files, and specify a compression level in order to reduce the consumed bandwidth. Besides that, logs can be shipped in specific batch sizes, with maximum amount of retries, and specifying a connection timeout.&lt;/li&gt;
+&lt;li&gt;Lastly, although Filebeat can forward logs directly to Elasticsearch, using Logstash as an intermediary offers the possibility to collect logs from diverse sources (e.g., system metrics).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;demo&quot;&gt;Demo&lt;/h2&gt;
+&lt;p&gt;This post is accompanied by a demo based on the Vert.x Microservices &lt;a href=&quot;http://vertx-lab.dynamis-technologies.com/&quot;&gt;workshop&lt;/a&gt;, where each of them is shipped in a Docker container simulating a distributed system composed of independent addressable nodes.&lt;br&gt;Also, the ELK stack is provisioned using a preconfigured Docker image by &lt;a href=&quot;https://github.com/spujadas&quot;&gt;Sébastien Pujadas&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Following the guidelines in this post, this demo configures each of the Microservices of the workshop, sets up a Filebeat process on each of them to ship the logs to a central container hosting the ELK stack.&lt;/p&gt;
+&lt;h3 id=&quot;installation&quot;&gt;Installation&lt;/h3&gt;
+&lt;p&gt;In order to run this demo, it is necessary to have Docker installed, then proceed with:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cloning or downloading the demo &lt;a href=&quot;https://github.com/ricardohmon/vertx-elk&quot;&gt;repository&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Separately, obtaining the source code of the &lt;a href=&quot;https://github.com/ricardohmon/vertx-microservices-workshop/tree/elk-demo&quot;&gt;branch&lt;/a&gt; of the Microservices workshop adapted for this demo.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;building-the-example&quot;&gt;Building the example&lt;/h3&gt;
+&lt;p&gt;The Docker images belonging to the Vert.x Microservices workshop need to be built separately to this project before this project can be launched.&lt;/p&gt;
+&lt;h3 id=&quot;building-the-vert-x-microservices-workshop-docker-images-&quot;&gt;Building the Vert.x Microservices workshop Docker images.&lt;/h3&gt;
+&lt;p&gt;Build the &lt;em&gt;root&lt;/em&gt; project and the &lt;em&gt;Trader Dashboard&lt;/em&gt; followed by each of the modules contained in the solution folder. Issue the following commands for this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;mvn clean install
+cd trader-dashboard
+mvn &lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;docker:&lt;/span&gt;build
+cd ..&lt;span class=&quot;hljs-regexp&quot;&gt;/solution/&lt;/span&gt;audit-service
+mvn &lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;docker:&lt;/span&gt;build
+cd ../compulsive-traders
+mvn &lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;docker:&lt;/span&gt;build
+cd ../portfolio-service
+mvn &lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;docker:&lt;/span&gt;build
+cd ..&lt;span class=&quot;hljs-regexp&quot;&gt;/quote-generator/&lt;/span&gt;
+mvn &lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;docker:&lt;/span&gt;build&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;running-the-example&quot;&gt;Running the example&lt;/h3&gt;
+&lt;p&gt;After building the previous images, build and run the example in &lt;code&gt;vertx-elk&lt;/code&gt; using the following command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;docker-compose &lt;span class=&quot;hljs-keyword&quot;&gt;up&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;the-demo&quot;&gt;The demo&lt;/h3&gt;
+&lt;p&gt;You can watch the demo in action in the following screencast:&lt;/p&gt;
+&lt;div class=&quot;embed-responsive embed-responsive-16by9&quot;&gt;
+&lt;iframe class=&quot;embed-responsive-item&quot; src=&quot;https://www.youtube.com/embed/8P-MgXSujes&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;The ELK stack is a powerful set of tools that ease the aggregation of logs coming from distributed services into a central server. Its main pillar, Elasticsearch, provides the indexing and search capabilities of our log data. Also, it is accompanied by the convenient input/output components: Logstash, which can be flexibly configured to accept different data sources; and Kibana, which can be customized to present the information in the most convenient way.&lt;/p&gt;
+&lt;p&gt;Logstash has been designed to work seamlessly with Filebeat, the log shipper which represents a robust solution that can be adapted to our applications without having to make &lt;em&gt;significant&lt;/em&gt; changes to our architecture. In addition, Logstash can accept varied types of sources, filter the data, and process it before delivering to Elasticsearch. This flexibility comes with the price of having extra elements in our log aggregation pipeline, which can represent an increase of processing overhead or a point-of-failure. This additional overhead could be avoided if an application would be capable of delivering its log output directly to Elasticsearch.&lt;/p&gt;
+&lt;p&gt;Happy logging!&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Thu, 08 Sep 2016 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/centralized-logging-for-vert-x-applications-using-the-elk-stack</link>
+          <guid isPermaLink="true">http://vertx.io/blog/centralized-logging-for-vert-x-applications-using-the-elk-stack</guid>
+          <author>
+            <name>ricardohmon</name>
+            <uri>http://github.com/ricardohmon</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Vert.x Blueprint Tutorials</title>
           <description>
       &lt;article&gt;&lt;p&gt;The Vert.x Blueprint project aims to provide guidelines to Vert.x users to implement various applications such as message-based applications and microservices. This post introduces the content of each blueprints.&lt;/p&gt;
@@ -246,124 +482,6 @@ setup a realm on keycloak and once you’re done, export the configuration to yo
           <author>
             <name>pmlopes</name>
             <uri>http://github.com/pmlopes</uri>
-          </author>
-        </item>
-      
-        <item>
-          <title>Checklist for Migrating from Vert.x 2.1.x to Vert.x 3 - Part One</title>
-          <description>
-      &lt;article&gt;&lt;p&gt;This blog post presents feedbacks from a project migration using Vert.x 2 to Vert.x 3.&lt;/p&gt;
-&lt;h2 id=&quot;we-are-in-the-process-of-converting-our-vert-x-2-1-5-application-to-vert-x-3-0-&quot;&gt;We are in the process of converting our Vert.x 2.1.5 application to Vert.x 3.0.&lt;/h2&gt;
-&lt;p&gt;So while upgrading our application, I thought I should note down all the changes that we had to do in the process. Since Vert.x 3 is a major upgrade from the previous version, with so many changes.&lt;/p&gt;
-&lt;p&gt;It requires re-thinking your current 2.x Vert.x application. There are new classes, new apis, and a new package structure that has greatly simplified things that we used to have to work around. Therefore in our upgrade it required us to refactor and remove any unnecessary &lt;em&gt;“hacks”&lt;/em&gt; that weren’t available in 2 that are now a part of Vert.x 3 that you really want and need to take advantage of. (I don’t mean there are hacks in 3.x, just that we had in our application with Vert.x 2.x)&lt;/p&gt;
-&lt;p&gt;There are &lt;em&gt;Metrics&lt;/em&gt;, and &lt;em&gt;Clustered shared data&lt;/em&gt;, with locking and many more features that are amazing new additions. These are things we had to hack into our application with Vert.x 2.x. We added our own &lt;code&gt;MetricsRegistry&lt;/code&gt; from &lt;a href=&quot;https://dropwizard.github.io/metrics/3.1.0/getting-started/&quot;&gt;DropWizard&lt;/a&gt; which meant making our own &lt;code&gt;Main&lt;/code&gt; class that called Vert.x’s &lt;code&gt;Starter&lt;/code&gt; class after starting up the registry, but only in our &lt;em&gt;Devops&lt;/em&gt; server deploys, not our developer machines. And we had to build our own distributed locked of clustered data that also required writing a comprehensive distributed timers. (The timers got fixed with a better actor model). But now we can use what Vert.x gives us internally for those use cases.&lt;/p&gt;
-&lt;p&gt;This blog post is part one, as I am sure there will be some new changes that we need to do that we haven’t gotten to yet. Which as we go, will post in part two. Also that this post is a work in progress in that whenever you are upgrading and refactoring your code, it doesn’t leave much time for taking detailed notes, or writing beautiful prose. I am a terrible writer even when I can fully concentrate on it. So the first draft will just be a list of my notes. These notes are not in any particular order, but some things like tests you might want to save for last. (Just DON’T delete your tests, tests are very important)&lt;/p&gt;
-&lt;p&gt;One of the first things that Vert.x has changed is the whole &lt;em&gt;classloader&lt;/em&gt; setup. Read the Vert.x Docs for more information but basically, we have a flat &lt;em&gt;classloader&lt;/em&gt; system now. YAY! And one of the first things I noticed that is gone is the &lt;code&gt;Platform&lt;/code&gt; module.&lt;/p&gt;
-&lt;h2 id=&quot;changes-we-have-made-&quot;&gt;Changes we have made.&lt;/h2&gt;
-&lt;h3 id=&quot;dependency-changes&quot;&gt;Dependency changes&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;So the first thing we did was to remove the &lt;code&gt;vert.x-platform&lt;/code&gt; dependency from our &lt;code&gt;pom&lt;/code&gt; file (Build dependency file of whatever build system you use) This also means that you will be removing any import statements from your code that has &lt;code&gt;.platform&lt;/code&gt;. Which leads us to the next point.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Change all the imports for Vertx. from &lt;code&gt;org.vertx&lt;/code&gt; to &lt;code&gt;io.vertx&lt;/code&gt;. This could be a lot of work, as it is in every class you use Vert.x in. We had at least 250 locations to change here. Some classes have moved packages and “jars” that have them, so there will be some new jars to include as dependencies and different import statements for them.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;If using a language other than Java, change the dependency to &lt;code&gt;vertx-lang-&lt;&lt;language&gt;&gt;&lt;/code&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Remove any modules references that are using Vert.x 2.x stuff. You can get an odd error like
-&lt;em&gt;The type org.vertx.java.core.json.JsonObject cannot be resolved. It is indirectly referenced from required .class files&lt;/em&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;testtools&lt;/code&gt; dependency is gone. There is now Vertx-unit. So all your previous tests need to be completely re-written in the new style. This can be really difficult and time consuming as the tests you already have written really do need to be re-written from scratch. But these tests are also the backbone in knowing if your code is working. So this could take months if you have a really full set of test suites already. Also note the list below is to convert your JUnit Integration tests. as vertx-unit first and foremost provides its own testing framework/suite but it also works in JUnit, and if you are using JUnit you need to do the following&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Remove all the imports to &lt;code&gt;TestTools&lt;/code&gt;, including &lt;code&gt;VertxAssert&lt;/code&gt;. I would do a find/replace to replace all the &lt;code&gt;VertxAssert&lt;/code&gt; to &lt;code&gt;testContext&lt;/code&gt; for when you have to add &lt;code&gt;TestContext&lt;/code&gt; to all your &lt;code&gt;@Test&lt;/code&gt; methods. I recommend naming the parameter &lt;code&gt;testContext&lt;/code&gt;, just to put more context, into your context. Because if you just have &lt;code&gt;context&lt;/code&gt; as your parameter name, how do you know what context the context is? Sorry, that was too much fun. Basically, what I am saying is if you have say &lt;code&gt;Spring ApplicationContext&lt;/code&gt; in with your integration tests with Vert.x what does &lt;code&gt;context&lt;/code&gt; represent? Spring or Vert.x test context.&lt;/li&gt;
-&lt;li&gt;Add &lt;code&gt;@RunWith(VertxUnitRunner.class)&lt;/code&gt; above your test class&lt;/li&gt;
-&lt;li&gt;Remove any &lt;code&gt;VertxAssert.testComplete()&lt;/code&gt; those are gone. It needs &lt;code&gt;TestContext.async().complete()&lt;/code&gt;. It is also important to understand what &lt;code&gt;async()&lt;/code&gt; means. When to call it, when to complete it. It also allows you to do multiple &lt;code&gt;async()&lt;/code&gt; calls and nested ones. I think I needed that when I had a test that was a longer use case of many messages being sent, but only after responses to other ones occurred. For instance, to do chat in our app, you have to connect, subscribe, friend someone, then you can send a chat message. So that is 4 total Vert.x Messages sent from the Test client. And you can subscribe until connect completed, and you can send or receive messages unless you are subscribed and have a friend. So we need to have a few &lt;code&gt;async()&lt;/code&gt; calls in that scenario.&lt;/li&gt;
-&lt;li&gt;What is in your &lt;code&gt;start&lt;/code&gt; method override. Make that an &lt;code&gt;@Before&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;What is in your &lt;code&gt;stop&lt;/code&gt; method override. Make that an &lt;code&gt;@After&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;If you have your assertions have custom message &lt;em&gt;strings&lt;/em&gt; to log out when they fail, that parameter is now at the end of the &lt;code&gt;assert&lt;/code&gt; method call. Yes, this one can be painful.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&quot;build-changes&quot;&gt;Build Changes&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;Remove all &lt;em&gt;vertx maven plugin&lt;/em&gt; code to generate modules, instead create &lt;em&gt;fat&lt;/em&gt; jars, which requires adding the &lt;em&gt;Shade maven plugin&lt;/em&gt; to put all jar files into a big fat jar. The vertx-examples project has &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/maven-simplest&quot;&gt;simplest-maven&lt;/a&gt; which has the stuff to create the fat jar. &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/gradle-simplest&quot;&gt;simplest-gradle&lt;/a&gt; is the gradle equivalent.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;If you were running your application with &lt;code&gt;runMod&lt;/code&gt; or something like that then you need to create a &lt;em&gt;fat&lt;/em&gt; jar, changing the build file as in &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/blob/master/maven-simplest/pom.xml&quot;&gt;this one&lt;/a&gt; and create a Main class like here &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/blob/master/maven-simplest/src/main/java/io/vertx/example/HelloWorldEmbedded.java&quot;&gt;this one&lt;/a&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&quot;class-code-changes&quot;&gt;Class/Code Changes&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;Verticle&lt;/code&gt; is now an interface and not a class to extend, so using Groovy as an example you now extend &lt;code&gt;GroovyVerticle&lt;/code&gt;. In Java extend &lt;code&gt;AbstractVerticle&lt;/code&gt; instead.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;There is no &lt;code&gt;registerHandler&lt;/code&gt; on the eventBus anymore. So everywhere you do that has to change to create/call &lt;code&gt;consumer()&lt;/code&gt; and to unregister that handler, you have to have a reference to the &lt;code&gt;MessageConsumer&lt;/code&gt; that &lt;code&gt;consumer()&lt;/code&gt; call returns and call its &lt;code&gt;unregister&lt;/code&gt; method.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObject.toMap()&lt;/code&gt; changed to &lt;code&gt;JsonObject.getMap()&lt;/code&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObject&lt;/code&gt; also removed all the &lt;code&gt;putXXX&lt;/code&gt; methods with just one &lt;code&gt;put&lt;/code&gt; method with overloaded versions for different types.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObjectMessage&lt;/code&gt; no longer exists. What replaces depends on what you are doing. Meaning, if it is an &lt;code&gt;async&lt;/code&gt; callback to a deploy, you will get a &lt;code&gt;Message&lt;/code&gt; instance back that has &lt;code&gt;succeeded()&lt;/code&gt; or &lt;code&gt;failed()&lt;/code&gt; methods as well as &lt;code&gt;body()&lt;/code&gt; to check any results. If it is a &lt;code&gt;Consumer&lt;/code&gt;, it is typically a straight forward
-&lt;code&gt;JsonObject&lt;/code&gt;. If you are in Groovy it is also a &lt;code&gt;JsonObject&lt;/code&gt;, but the &lt;code&gt;body()&lt;/code&gt; is a &lt;code&gt;Map&lt;/code&gt; which you can use directly now, instead of having to convert from &lt;code&gt;JsonObject&lt;/code&gt; to &lt;code&gt;Map&lt;/code&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;There isn’t a &lt;code&gt;container&lt;/code&gt; variable in &lt;code&gt;Verticles&lt;/code&gt; anymore for deploying verticles and also a config file. You need to use &lt;code&gt;vertx.getOrCreateContext().config()&lt;/code&gt; to get to it. I used that in the SockJS Example code below.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;SharedData&lt;/code&gt; no longer has shared sets. It has a &lt;code&gt;Map&lt;/code&gt; of &lt;code&gt;SharedData&lt;/code&gt;, so an entry in that &lt;code&gt;Map&lt;/code&gt; of shared data could be the name of the set as the key, and a &lt;code&gt;Set&lt;/code&gt; as the value. It actually gives you more flexibility of what you put into Shared data, so this is actually a big win for us.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Getting the &lt;code&gt;writeHandlerID&lt;/code&gt; from a Socket type, is now a method call instead of &lt;code&gt;.writeHandlerID&lt;/code&gt;, so &lt;code&gt;.writeHandlerID()&lt;/code&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;SockJSSocket&lt;/code&gt; is in &lt;em&gt;vertx-web&lt;/em&gt; package now, so include it to get the class.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;There isn’t a &lt;code&gt;SockJSServer&lt;/code&gt; class anymore either. So you will create a &lt;code&gt;WebServer&lt;/code&gt;, a &lt;code&gt;Router&lt;/code&gt;
-and set SSL (if you are using SSL on the WebServer) then create a &lt;code&gt;SockJSHandler&lt;/code&gt; to assign to the router via the &lt;code&gt;route()&lt;/code&gt; method and &lt;code&gt;handler()&lt;/code&gt; methods in the Router api.
-Here is an example of our code. Although I haven’t tested it yet. ;)&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class=&quot;hljs groovy&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;MyVerticle&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;GroovyVerticle&lt;/span&gt; {&lt;/span&gt;
-  Router router
-
-  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
-  &lt;span class=&quot;hljs-typename&quot;&gt;void&lt;/span&gt; start() &lt;span class=&quot;hljs-keyword&quot;&gt;throws&lt;/span&gt; Exception {
-     router = Router.router(vertx)
-     (Map&lt;String, Object&gt;) sslConfig =
-        (Map&lt;String, Object&gt;)vertx.getOrCreateContext()
-          .config().get(&lt;span class=&quot;hljs-string&quot;&gt;&#39;ssl&#39;&lt;/span&gt;)
-
-     HttpServer sslHttpServer = vertx.createHttpServer(
-&lt;span class=&quot;hljs-label&quot;&gt;         SSL:&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;,
-&lt;span class=&quot;hljs-label&quot;&gt;         keyStorePath:&lt;/span&gt; sslConfig.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;keystore&quot;&lt;/span&gt;),
-&lt;span class=&quot;hljs-label&quot;&gt;         keyStorePassword:&lt;/span&gt; sslConfig.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;password&quot;&lt;/span&gt;))
-
-     startWebApiServer(sslHttpServer)
-  }
-
-  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-typename&quot;&gt;void&lt;/span&gt; startWebApiServer(&lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; HttpServer httpServer) {
-    &lt;span class=&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; sockHandler = SockJSHandler.create(vertx, [:])
-    sockHandler.socketHandler {
-      SockJSSocket ws -&gt; sockJSConnectHandler(ws)
-    }
-    router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/hdpoker&quot;&lt;/span&gt;).handler(sockHandler)
-    httpServer.requestHandler(router.&amp;accept)
-    httpServer.listen()
-  }
-
-}&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&quot;more-testing-change&quot;&gt;More testing change&lt;/h4&gt;
-&lt;p&gt;Testing messages in Integration Tests. To tell the test method that this has async calls put
-&lt;code&gt;Async async = testContext.async()&lt;/code&gt; as the first line in the test method. Yes, this is a little redundant from above, but I always forgot to put &lt;code&gt;async()&lt;/code&gt; calls in my integration tests and they would pass so quickly, without sending anything out, because it wasn’t waiting anymore&lt;/p&gt;
-&lt;h3 id=&quot;runtime-changes&quot;&gt;Runtime changes&lt;/h3&gt;
-&lt;p&gt;If you don’t use Vert.x built-in Logging and need to use slf4j, then remember that you should set a system property called &lt;code&gt;vertx.logger-delegate-factory-class-name&lt;/code&gt; with the name of a Java class which implements the interface &lt;code&gt;LoggerFactory&lt;/code&gt;. Vert.x provides pre-built implementations for Log4J and SLF4J with the class names &lt;code&gt;io.vertx.core.logging.Log4jLogDelegateFactory&lt;/code&gt; and &lt;code&gt;io.vertx.core.logging.SLF4JLogDelegateFactory&lt;/code&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;still-working&quot;&gt;Still working&lt;/h2&gt;
-&lt;p&gt;Well, that is all I have for you folks so far. We are still not done, as we haven’t gotten our application running with real clients just yet. But we do have all our integration tests from before completely passing
-so, if something does come up, it should be a small one (KNOCK ON WOOD)&lt;/p&gt;
-&lt;p&gt;Please feel free to post on the Vert.x Google Group with any comments or suggestions on what to add to this blog post or for Part Two.&lt;/p&gt;
-&lt;p&gt;Thanks&lt;/p&gt;
-&lt;p&gt;Mark S&lt;/p&gt;
-&lt;/article&gt;
-      </description>
-          <pubDate>Wed, 01 Jul 2015 00:00:00 +0200</pubDate>
-          <link>http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</link>
-          <guid isPermaLink="true">http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</guid>
-          <author>
-            <name>bytor99999</name>
-            <uri>http://github.com/bytor99999</uri>
           </author>
         </item>
       
@@ -3514,6 +3632,124 @@ for example &lt;code&gt;package.json&lt;/code&gt;:&lt;/p&gt;
           <author>
             <name>pmlopes</name>
             <uri>http://github.com/pmlopes</uri>
+          </author>
+        </item>
+      
+        <item>
+          <title>Checklist for Migrating from Vert.x 2.1.x to Vert.x 3 - Part One</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;This blog post presents feedbacks from a project migration using Vert.x 2 to Vert.x 3.&lt;/p&gt;
+&lt;h2 id=&quot;we-are-in-the-process-of-converting-our-vert-x-2-1-5-application-to-vert-x-3-0-&quot;&gt;We are in the process of converting our Vert.x 2.1.5 application to Vert.x 3.0.&lt;/h2&gt;
+&lt;p&gt;So while upgrading our application, I thought I should note down all the changes that we had to do in the process. Since Vert.x 3 is a major upgrade from the previous version, with so many changes.&lt;/p&gt;
+&lt;p&gt;It requires re-thinking your current 2.x Vert.x application. There are new classes, new apis, and a new package structure that has greatly simplified things that we used to have to work around. Therefore in our upgrade it required us to refactor and remove any unnecessary &lt;em&gt;“hacks”&lt;/em&gt; that weren’t available in 2 that are now a part of Vert.x 3 that you really want and need to take advantage of. (I don’t mean there are hacks in 3.x, just that we had in our application with Vert.x 2.x)&lt;/p&gt;
+&lt;p&gt;There are &lt;em&gt;Metrics&lt;/em&gt;, and &lt;em&gt;Clustered shared data&lt;/em&gt;, with locking and many more features that are amazing new additions. These are things we had to hack into our application with Vert.x 2.x. We added our own &lt;code&gt;MetricsRegistry&lt;/code&gt; from &lt;a href=&quot;https://dropwizard.github.io/metrics/3.1.0/getting-started/&quot;&gt;DropWizard&lt;/a&gt; which meant making our own &lt;code&gt;Main&lt;/code&gt; class that called Vert.x’s &lt;code&gt;Starter&lt;/code&gt; class after starting up the registry, but only in our &lt;em&gt;Devops&lt;/em&gt; server deploys, not our developer machines. And we had to build our own distributed locked of clustered data that also required writing a comprehensive distributed timers. (The timers got fixed with a better actor model). But now we can use what Vert.x gives us internally for those use cases.&lt;/p&gt;
+&lt;p&gt;This blog post is part one, as I am sure there will be some new changes that we need to do that we haven’t gotten to yet. Which as we go, will post in part two. Also that this post is a work in progress in that whenever you are upgrading and refactoring your code, it doesn’t leave much time for taking detailed notes, or writing beautiful prose. I am a terrible writer even when I can fully concentrate on it. So the first draft will just be a list of my notes. These notes are not in any particular order, but some things like tests you might want to save for last. (Just DON’T delete your tests, tests are very important)&lt;/p&gt;
+&lt;p&gt;One of the first things that Vert.x has changed is the whole &lt;em&gt;classloader&lt;/em&gt; setup. Read the Vert.x Docs for more information but basically, we have a flat &lt;em&gt;classloader&lt;/em&gt; system now. YAY! And one of the first things I noticed that is gone is the &lt;code&gt;Platform&lt;/code&gt; module.&lt;/p&gt;
+&lt;h2 id=&quot;changes-we-have-made-&quot;&gt;Changes we have made.&lt;/h2&gt;
+&lt;h3 id=&quot;dependency-changes&quot;&gt;Dependency changes&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;So the first thing we did was to remove the &lt;code&gt;vert.x-platform&lt;/code&gt; dependency from our &lt;code&gt;pom&lt;/code&gt; file (Build dependency file of whatever build system you use) This also means that you will be removing any import statements from your code that has &lt;code&gt;.platform&lt;/code&gt;. Which leads us to the next point.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Change all the imports for Vertx. from &lt;code&gt;org.vertx&lt;/code&gt; to &lt;code&gt;io.vertx&lt;/code&gt;. This could be a lot of work, as it is in every class you use Vert.x in. We had at least 250 locations to change here. Some classes have moved packages and “jars” that have them, so there will be some new jars to include as dependencies and different import statements for them.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If using a language other than Java, change the dependency to &lt;code&gt;vertx-lang-&lt;&lt;language&gt;&gt;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Remove any modules references that are using Vert.x 2.x stuff. You can get an odd error like
+&lt;em&gt;The type org.vertx.java.core.json.JsonObject cannot be resolved. It is indirectly referenced from required .class files&lt;/em&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;testtools&lt;/code&gt; dependency is gone. There is now Vertx-unit. So all your previous tests need to be completely re-written in the new style. This can be really difficult and time consuming as the tests you already have written really do need to be re-written from scratch. But these tests are also the backbone in knowing if your code is working. So this could take months if you have a really full set of test suites already. Also note the list below is to convert your JUnit Integration tests. as vertx-unit first and foremost provides its own testing framework/suite but it also works in JUnit, and if you are using JUnit you need to do the following&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Remove all the imports to &lt;code&gt;TestTools&lt;/code&gt;, including &lt;code&gt;VertxAssert&lt;/code&gt;. I would do a find/replace to replace all the &lt;code&gt;VertxAssert&lt;/code&gt; to &lt;code&gt;testContext&lt;/code&gt; for when you have to add &lt;code&gt;TestContext&lt;/code&gt; to all your &lt;code&gt;@Test&lt;/code&gt; methods. I recommend naming the parameter &lt;code&gt;testContext&lt;/code&gt;, just to put more context, into your context. Because if you just have &lt;code&gt;context&lt;/code&gt; as your parameter name, how do you know what context the context is? Sorry, that was too much fun. Basically, what I am saying is if you have say &lt;code&gt;Spring ApplicationContext&lt;/code&gt; in with your integration tests with Vert.x what does &lt;code&gt;context&lt;/code&gt; represent? Spring or Vert.x test context.&lt;/li&gt;
+&lt;li&gt;Add &lt;code&gt;@RunWith(VertxUnitRunner.class)&lt;/code&gt; above your test class&lt;/li&gt;
+&lt;li&gt;Remove any &lt;code&gt;VertxAssert.testComplete()&lt;/code&gt; those are gone. It needs &lt;code&gt;TestContext.async().complete()&lt;/code&gt;. It is also important to understand what &lt;code&gt;async()&lt;/code&gt; means. When to call it, when to complete it. It also allows you to do multiple &lt;code&gt;async()&lt;/code&gt; calls and nested ones. I think I needed that when I had a test that was a longer use case of many messages being sent, but only after responses to other ones occurred. For instance, to do chat in our app, you have to connect, subscribe, friend someone, then you can send a chat message. So that is 4 total Vert.x Messages sent from the Test client. And you can subscribe until connect completed, and you can send or receive messages unless you are subscribed and have a friend. So we need to have a few &lt;code&gt;async()&lt;/code&gt; calls in that scenario.&lt;/li&gt;
+&lt;li&gt;What is in your &lt;code&gt;start&lt;/code&gt; method override. Make that an &lt;code&gt;@Before&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;What is in your &lt;code&gt;stop&lt;/code&gt; method override. Make that an &lt;code&gt;@After&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;If you have your assertions have custom message &lt;em&gt;strings&lt;/em&gt; to log out when they fail, that parameter is now at the end of the &lt;code&gt;assert&lt;/code&gt; method call. Yes, this one can be painful.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;build-changes&quot;&gt;Build Changes&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Remove all &lt;em&gt;vertx maven plugin&lt;/em&gt; code to generate modules, instead create &lt;em&gt;fat&lt;/em&gt; jars, which requires adding the &lt;em&gt;Shade maven plugin&lt;/em&gt; to put all jar files into a big fat jar. The vertx-examples project has &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/maven-simplest&quot;&gt;simplest-maven&lt;/a&gt; which has the stuff to create the fat jar. &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/gradle-simplest&quot;&gt;simplest-gradle&lt;/a&gt; is the gradle equivalent.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If you were running your application with &lt;code&gt;runMod&lt;/code&gt; or something like that then you need to create a &lt;em&gt;fat&lt;/em&gt; jar, changing the build file as in &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/blob/master/maven-simplest/pom.xml&quot;&gt;this one&lt;/a&gt; and create a Main class like here &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/blob/master/maven-simplest/src/main/java/io/vertx/example/HelloWorldEmbedded.java&quot;&gt;this one&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;class-code-changes&quot;&gt;Class/Code Changes&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Verticle&lt;/code&gt; is now an interface and not a class to extend, so using Groovy as an example you now extend &lt;code&gt;GroovyVerticle&lt;/code&gt;. In Java extend &lt;code&gt;AbstractVerticle&lt;/code&gt; instead.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There is no &lt;code&gt;registerHandler&lt;/code&gt; on the eventBus anymore. So everywhere you do that has to change to create/call &lt;code&gt;consumer()&lt;/code&gt; and to unregister that handler, you have to have a reference to the &lt;code&gt;MessageConsumer&lt;/code&gt; that &lt;code&gt;consumer()&lt;/code&gt; call returns and call its &lt;code&gt;unregister&lt;/code&gt; method.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObject.toMap()&lt;/code&gt; changed to &lt;code&gt;JsonObject.getMap()&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObject&lt;/code&gt; also removed all the &lt;code&gt;putXXX&lt;/code&gt; methods with just one &lt;code&gt;put&lt;/code&gt; method with overloaded versions for different types.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObjectMessage&lt;/code&gt; no longer exists. What replaces depends on what you are doing. Meaning, if it is an &lt;code&gt;async&lt;/code&gt; callback to a deploy, you will get a &lt;code&gt;Message&lt;/code&gt; instance back that has &lt;code&gt;succeeded()&lt;/code&gt; or &lt;code&gt;failed()&lt;/code&gt; methods as well as &lt;code&gt;body()&lt;/code&gt; to check any results. If it is a &lt;code&gt;Consumer&lt;/code&gt;, it is typically a straight forward
+&lt;code&gt;JsonObject&lt;/code&gt;. If you are in Groovy it is also a &lt;code&gt;JsonObject&lt;/code&gt;, but the &lt;code&gt;body()&lt;/code&gt; is a &lt;code&gt;Map&lt;/code&gt; which you can use directly now, instead of having to convert from &lt;code&gt;JsonObject&lt;/code&gt; to &lt;code&gt;Map&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There isn’t a &lt;code&gt;container&lt;/code&gt; variable in &lt;code&gt;Verticles&lt;/code&gt; anymore for deploying verticles and also a config file. You need to use &lt;code&gt;vertx.getOrCreateContext().config()&lt;/code&gt; to get to it. I used that in the SockJS Example code below.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;SharedData&lt;/code&gt; no longer has shared sets. It has a &lt;code&gt;Map&lt;/code&gt; of &lt;code&gt;SharedData&lt;/code&gt;, so an entry in that &lt;code&gt;Map&lt;/code&gt; of shared data could be the name of the set as the key, and a &lt;code&gt;Set&lt;/code&gt; as the value. It actually gives you more flexibility of what you put into Shared data, so this is actually a big win for us.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Getting the &lt;code&gt;writeHandlerID&lt;/code&gt; from a Socket type, is now a method call instead of &lt;code&gt;.writeHandlerID&lt;/code&gt;, so &lt;code&gt;.writeHandlerID()&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;SockJSSocket&lt;/code&gt; is in &lt;em&gt;vertx-web&lt;/em&gt; package now, so include it to get the class.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There isn’t a &lt;code&gt;SockJSServer&lt;/code&gt; class anymore either. So you will create a &lt;code&gt;WebServer&lt;/code&gt;, a &lt;code&gt;Router&lt;/code&gt;
+and set SSL (if you are using SSL on the WebServer) then create a &lt;code&gt;SockJSHandler&lt;/code&gt; to assign to the router via the &lt;code&gt;route()&lt;/code&gt; method and &lt;code&gt;handler()&lt;/code&gt; methods in the Router api.
+Here is an example of our code. Although I haven’t tested it yet. ;)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs groovy&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;MyVerticle&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;GroovyVerticle&lt;/span&gt; {&lt;/span&gt;
+  Router router
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-typename&quot;&gt;void&lt;/span&gt; start() &lt;span class=&quot;hljs-keyword&quot;&gt;throws&lt;/span&gt; Exception {
+     router = Router.router(vertx)
+     (Map&lt;String, Object&gt;) sslConfig =
+        (Map&lt;String, Object&gt;)vertx.getOrCreateContext()
+          .config().get(&lt;span class=&quot;hljs-string&quot;&gt;&#39;ssl&#39;&lt;/span&gt;)
+
+     HttpServer sslHttpServer = vertx.createHttpServer(
+&lt;span class=&quot;hljs-label&quot;&gt;         SSL:&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;,
+&lt;span class=&quot;hljs-label&quot;&gt;         keyStorePath:&lt;/span&gt; sslConfig.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;keystore&quot;&lt;/span&gt;),
+&lt;span class=&quot;hljs-label&quot;&gt;         keyStorePassword:&lt;/span&gt; sslConfig.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;password&quot;&lt;/span&gt;))
+
+     startWebApiServer(sslHttpServer)
+  }
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-typename&quot;&gt;void&lt;/span&gt; startWebApiServer(&lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; HttpServer httpServer) {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; sockHandler = SockJSHandler.create(vertx, [:])
+    sockHandler.socketHandler {
+      SockJSSocket ws -&gt; sockJSConnectHandler(ws)
+    }
+    router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/hdpoker&quot;&lt;/span&gt;).handler(sockHandler)
+    httpServer.requestHandler(router.&amp;accept)
+    httpServer.listen()
+  }
+
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;more-testing-change&quot;&gt;More testing change&lt;/h4&gt;
+&lt;p&gt;Testing messages in Integration Tests. To tell the test method that this has async calls put
+&lt;code&gt;Async async = testContext.async()&lt;/code&gt; as the first line in the test method. Yes, this is a little redundant from above, but I always forgot to put &lt;code&gt;async()&lt;/code&gt; calls in my integration tests and they would pass so quickly, without sending anything out, because it wasn’t waiting anymore&lt;/p&gt;
+&lt;h3 id=&quot;runtime-changes&quot;&gt;Runtime changes&lt;/h3&gt;
+&lt;p&gt;If you don’t use Vert.x built-in Logging and need to use slf4j, then remember that you should set a system property called &lt;code&gt;vertx.logger-delegate-factory-class-name&lt;/code&gt; with the name of a Java class which implements the interface &lt;code&gt;LoggerFactory&lt;/code&gt;. Vert.x provides pre-built implementations for Log4J and SLF4J with the class names &lt;code&gt;io.vertx.core.logging.Log4jLogDelegateFactory&lt;/code&gt; and &lt;code&gt;io.vertx.core.logging.SLF4JLogDelegateFactory&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;still-working&quot;&gt;Still working&lt;/h2&gt;
+&lt;p&gt;Well, that is all I have for you folks so far. We are still not done, as we haven’t gotten our application running with real clients just yet. But we do have all our integration tests from before completely passing
+so, if something does come up, it should be a small one (KNOCK ON WOOD)&lt;/p&gt;
+&lt;p&gt;Please feel free to post on the Vert.x Google Group with any comments or suggestions on what to add to this blog post or for Part Two.&lt;/p&gt;
+&lt;p&gt;Thanks&lt;/p&gt;
+&lt;p&gt;Mark S&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 06 Jul 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</link>
+          <guid isPermaLink="true">http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</guid>
+          <author>
+            <name>bytor99999</name>
+            <uri>http://github.com/bytor99999</uri>
           </author>
         </item>
       
