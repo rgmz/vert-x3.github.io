@@ -201,7 +201,7 @@ this module has the tech preview status, this means the API can change between v
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-amqp-bridge&lt;/artifactId&gt;
-  &lt;version&gt;3.3.2&lt;/version&gt;
+  &lt;version&gt;3.3.3&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -214,7 +214,7 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-amqp-bridge:3.3.2</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-amqp-bridge:3.3.3</code></pre>
 </div>
 </div>
 </div>
@@ -445,7 +445,7 @@ in tandem with the producer and attempt to send only what it knows can actually 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>producer.writeQueueFull();</pre>
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">producer.writeQueueFull();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -454,9 +454,9 @@ receives more credit and is able to send messages immediately rather than buffer
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>producer.drainHandler(function (v) {
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">producer.drainHandler(function (v) {
   // ...do stuff and send...
-});</pre>
+});</code></pre>
 </div>
 </div>
 </div>
@@ -470,10 +470,10 @@ buffered message value before registering a handler, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>consumer.setMaxBufferedMessages(5);
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">consumer.setMaxBufferedMessages(5);
 consumer.handler(function (msg) {
   // ...handle received messages...
-});</pre>
+});</code></pre>
 </div>
 </div>
 </div>
@@ -493,7 +493,7 @@ certificate:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>var AmqpBridge = require("vertx-amqp-bridge-js/amqp_bridge");
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var AmqpBridge = require("vertx-amqp-bridge-js/amqp_bridge");
 var bridgeOptions = {
 };
 bridgeOptions.ssl = true;
@@ -507,7 +507,7 @@ bridgeOptions.pfxTrustOptions = trustOptions;
 var bridge = AmqpBridge.create(vertx, bridgeOptions);
 bridge.start("localhost", 5672, "username", "password", function (res, res_err) {
   // ..do things with the bridge..
-});</pre>
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -517,7 +517,7 @@ also a PKCS12 based key store containing an SSL key and certificate the server c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>var AmqpBridge = require("vertx-amqp-bridge-js/amqp_bridge");
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var AmqpBridge = require("vertx-amqp-bridge-js/amqp_bridge");
 var bridgeOptions = {
 };
 bridgeOptions.ssl = true;
@@ -537,7 +537,7 @@ bridgeOptions.pfxKeyCertOptions = keyCertOptions;
 var bridge = AmqpBridge.create(vertx, bridgeOptions);
 bridge.start("localhost", 5672, function (res, res_err) {
   // ..do things with the bridge..
-});</pre>
+});</code></pre>
 </div>
 </div>
 </div>
@@ -623,14 +623,14 @@ value to match it with the reply handler, and then invokes the handler with the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>var amqpMsgPayload = {
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var amqpMsgPayload = {
 };
 amqpMsgPayload.body = "myRequest";
 
 producer.send(amqpMsgPayload, function (res, res_err) {
   var amqpReplyMessagePayload = res.body();
   // ...do something with reply message...
-});</pre>
+});</code></pre>
 </div>
 </div>
 </div>
@@ -702,7 +702,7 @@ original sending application .</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>consumer.handler(function (msg) {
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">consumer.handler(function (msg) {
   // ...do something with received message...then reply...
   var replyAddress = msg.replyAddress();
   if (replyAddress !== null) {
@@ -712,7 +712,7 @@ original sending application .</p>
 
     msg.reply(amqpReplyMessagePayload);
   }
-});</pre>
+});</code></pre>
 </div>
 </div>
 </div>
@@ -725,7 +725,7 @@ original sending application .</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-07-10 18:37:52 CEST
+                Last updated 2016-09-12 08:38:04 CEST
               
               
             </div>

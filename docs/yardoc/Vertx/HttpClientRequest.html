@@ -98,45 +98,12 @@
   
   
     <dt class="r1 last">Defined in:</dt>
-    <dd class="r1 last">/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb</dd>
+    <dd class="r1 last">/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb</dd>
   
 </dl>
 <div class="clear"></div>
 
-<h2>Overview</h2><div class="docstring">
-  <div class="discussion">
-    Represents a client-side HTTP request.
- <p>
- Instances are created by an <span class='object_link'><a href="HttpClient.html" title="Vertx::HttpClient (class)">HttpClient</a></span> instance, via one of the methods corresponding to the
- specific HTTP methods, or the generic request methods. On creation the request will not have been written to the
- wire.
- <p>
- Once a request has been obtained, headers can be set on it, and data can be written to its body if required. Once
- you are ready to send the request, one of the <span class='object_link'><a href="#end-instance_method" title="Vertx::HttpClientRequest#end (method)">#end</a></span> methods should be called.
- <p>
- Nothing is actually sent until the request has been internally assigned an HTTP connection.
- <p>
- The <span class='object_link'><a href="HttpClient.html" title="Vertx::HttpClient (class)">HttpClient</a></span> instance will return an instance of this class immediately, even if there are no HTTP
- connections available in the pool. Any requests sent before a connection is assigned will be queued
- internally and actually sent when an HTTP connection becomes available from the pool.
- <p>
- The headers of the request are queued for writing either when the <span class='object_link'><a href="#end-instance_method" title="Vertx::HttpClientRequest#end (method)">#end</a></span> method is called, or, when the first
- part of the body is written, whichever occurs first.
- <p>
- This class supports both chunked and non-chunked HTTP.
- <p>
- It implements <span class='object_link'><a href="WriteStream.html" title="Vertx::WriteStream (module)">WriteStream</a></span> so it can be used with
- <span class='object_link'><a href="Pump.html" title="Vertx::Pump (class)">Pump</a></span> to pump data with flow control.
- <p>
- An example of using this class is as follows:
- <p>
 
-  </div>
-</div>
-<div class="tags">
-  
-
-</div>
 
 
 
@@ -154,95 +121,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#chunked%3F-instance_method" title="#chunked? (instance method)">- (true, false) <strong>chunked?</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>@return Is the request chunked?.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#connection-instance_method" title="#connection (instance method)">- (::Vertx::HttpConnection) <strong>connection</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>@return the <span class='object_link'><a href="HttpConnection.html" title="Vertx::HttpConnection (class)">HttpConnection</a></span> associated with this request.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#connection_handler-instance_method" title="#connection_handler (instance method)">- (self) <strong>connection_handler</strong> { ... }</a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>Set a connection handler called when an HTTP connection has been established.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#continue_handler-instance_method" title="#continue_handler (instance method)">- (self) <strong>continue_handler</strong> { ... }</a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>If you send an HTTP request with the header Expect set to the value 100-continue  and the server responds with an interim HTTP response with a status code of 100 and a continue handler  has been set using this method, then the handler will be called.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#drain_handler-instance_method" title="#drain_handler (instance method)">- (self) <strong>drain_handler</strong> { ... }</a>
+      <a href="#chunked%3F-instance_method" title="#chunked? (instance method)">- (Boolean) <strong>chunked?</strong> </a>
     
 
     
@@ -264,29 +143,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#end-instance_method" title="#end (instance method)">- (void) <strong>end</strong>(param_1 = nil, param_2 = nil) </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>Same as <span class='object_link'><a href="#end-instance_method" title="Vertx::HttpClientRequest#end (method)">#end</a></span> but writes a String with the specified encoding.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#end_handler-instance_method" title="#end_handler (instance method)">- (self) <strong>end_handler</strong> { ... }</a>
+      <a href="#connection-instance_method" title="#connection (instance method)">- (Object) <strong>connection</strong> </a>
     
 
     
@@ -308,7 +165,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#exception_handler-instance_method" title="#exception_handler (instance method)">- (self) <strong>exception_handler</strong> { ... }</a>
+      <a href="#connection_handler-instance_method" title="#connection_handler (instance method)">- (Object) <strong>connection_handler</strong> </a>
     
 
     
@@ -330,51 +187,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#get_host-instance_method" title="#get_host (instance method)">- (String) <strong>get_host</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>@return the request host.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#get_raw_method-instance_method" title="#get_raw_method (instance method)">- (String) <strong>get_raw_method</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>@return the raw value of the method this request sends.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#handler-instance_method" title="#handler (instance method)">- (self) <strong>handler</strong> { ... }</a>
+      <a href="#continue_handler-instance_method" title="#continue_handler (instance method)">- (Object) <strong>continue_handler</strong> </a>
     
 
     
@@ -396,73 +209,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#headers-instance_method" title="#headers (instance method)">- (::Vertx::MultiMap) <strong>headers</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>@return The HTTP headers.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#method-instance_method" title="#method (instance method)">- (:OPTIONS, ...) <strong>method</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>The HTTP method for the request.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#path-instance_method" title="#path (instance method)">- (String) <strong>path</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>@return The path part of the uri.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#pause-instance_method" title="#pause (instance method)">- (self) <strong>pause</strong> </a>
+      <a href="#drain_handler-instance_method" title="#drain_handler (instance method)">- (Object) <strong>drain_handler</strong> </a>
     
 
     
@@ -484,95 +231,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#push_handler-instance_method" title="#push_handler (instance method)">- (self) <strong>push_handler</strong> { ... }</a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>Set a push handler for this request.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#put_header-instance_method" title="#put_header (instance method)">- (self) <strong>put_header</strong>(name = nil, value = nil) </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>Put an HTTP header.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#query-instance_method" title="#query (instance method)">- (String) <strong>query</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>@return the query part of the uri.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#reset-instance_method" title="#reset (instance method)">- (void) <strong>reset</strong>(code = nil) </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>Reset this stream with the error code.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#resume-instance_method" title="#resume (instance method)">- (self) <strong>resume</strong> </a>
+      <a href="#end-instance_method" title="#end (instance method)">- (Object) <strong>end</strong>(param_1 = nil, param_2 = nil) </a>
     
 
     
@@ -594,117 +253,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#send_head-instance_method" title="#send_head (instance method)">- (self) <strong>send_head</strong> { ... }</a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>Like <span class='object_link'><a href="#send_head-instance_method" title="Vertx::HttpClientRequest#send_head (method)">#send_head</a></span> but with an handler after headers have been sent.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#set_chunked-instance_method" title="#set_chunked (instance method)">- (self) <strong>set_chunked</strong>(chunked = nil) </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>If chunked is true then the request will be set into HTTP chunked mode.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#set_host-instance_method" title="#set_host (instance method)">- (self) <strong>set_host</strong>(host = nil) </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>Set the request host.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#set_raw_method-instance_method" title="#set_raw_method (instance method)">- (self) <strong>set_raw_method</strong>(method = nil) </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>Set the value the method to send when the method  is used.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#set_timeout-instance_method" title="#set_timeout (instance method)">- (self) <strong>set_timeout</strong>(timeoutMs = nil) </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>Set's the amount of time after which if the request does not return any data within the timeout period an  TimeoutException will be passed to the exception handler (if provided) and  the request will be closed.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#set_write_queue_max_size-instance_method" title="#set_write_queue_max_size (instance method)">- (self) <strong>set_write_queue_max_size</strong>(maxSize = nil) </a>
+      <a href="#end_handler-instance_method" title="#end_handler (instance method)">- (Object) <strong>end_handler</strong> </a>
     
 
     
@@ -726,7 +275,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#stream_id-instance_method" title="#stream_id (instance method)">- (Fixnum) <strong>stream_id</strong> </a>
+      <a href="#exception_handler-instance_method" title="#exception_handler (instance method)">- (Object) <strong>exception_handler</strong> </a>
     
 
     
@@ -740,7 +289,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>@return the id of the stream of this response,  when it is not yet determined, i.e          the request has not been yet sent or it is not supported HTTP/1.x.</div></span>
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -748,7 +297,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#uri-instance_method" title="#uri (instance method)">- (String) <strong>uri</strong> </a>
+      <a href="#get_host-instance_method" title="#get_host (instance method)">- (Object) <strong>get_host</strong> </a>
     
 
     
@@ -762,7 +311,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>@return The URI of the request.</div></span>
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -770,7 +319,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#write-instance_method" title="#write (instance method)">- (self) <strong>write</strong>(param_1 = nil, param_2 = nil) </a>
+      <a href="#get_raw_method-instance_method" title="#get_raw_method (instance method)">- (Object) <strong>get_raw_method</strong> </a>
     
 
     
@@ -784,7 +333,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Write a String to the request body, encoded using the encoding enc.</div></span>
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -792,7 +341,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#write_custom_frame-instance_method" title="#write_custom_frame (instance method)">- (self) <strong>write_custom_frame</strong>(param_1 = nil, param_2 = nil, param_3 = nil) </a>
+      <a href="#handler-instance_method" title="#handler (instance method)">- (Object) <strong>handler</strong> </a>
     
 
     
@@ -806,7 +355,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Write an HTTP/2 frame to the request, allowing to extend the HTTP/2 protocol.</div></span>
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -814,7 +363,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#write_queue_full%3F-instance_method" title="#write_queue_full? (instance method)">- (true, false) <strong>write_queue_full?</strong> </a>
+      <a href="#headers-instance_method" title="#headers (instance method)">- (Object) <strong>headers</strong> </a>
     
 
     
@@ -828,7 +377,471 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>This will return true if there are more bytes in the write queue than the value set using <span class='object_link'><a href="#set_write_queue_max_size-instance_method" title="Vertx::HttpClientRequest#set_write_queue_max_size (method)">#set_write_queue_max_size</a></span>.</div></span>
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (HttpClientRequest) <strong>initialize</strong>(j_del) </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>A new instance of HttpClientRequest.</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#j_del-instance_method" title="#j_del (instance method)">- (Object) <strong>j_del</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#method-instance_method" title="#method (instance method)">- (Object) <strong>method</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#path-instance_method" title="#path (instance method)">- (Object) <strong>path</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pause-instance_method" title="#pause (instance method)">- (Object) <strong>pause</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#push_handler-instance_method" title="#push_handler (instance method)">- (Object) <strong>push_handler</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#put_header-instance_method" title="#put_header (instance method)">- (Object) <strong>put_header</strong>(name = nil, value = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#query-instance_method" title="#query (instance method)">- (Object) <strong>query</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#reset-instance_method" title="#reset (instance method)">- (Object) <strong>reset</strong>(code = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#resume-instance_method" title="#resume (instance method)">- (Object) <strong>resume</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#send_head-instance_method" title="#send_head (instance method)">- (Object) <strong>send_head</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_chunked-instance_method" title="#set_chunked (instance method)">- (Object) <strong>set_chunked</strong>(chunked = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_host-instance_method" title="#set_host (instance method)">- (Object) <strong>set_host</strong>(host = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_raw_method-instance_method" title="#set_raw_method (instance method)">- (Object) <strong>set_raw_method</strong>(method = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_timeout-instance_method" title="#set_timeout (instance method)">- (Object) <strong>set_timeout</strong>(timeoutMs = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_write_queue_max_size-instance_method" title="#set_write_queue_max_size (instance method)">- (Object) <strong>set_write_queue_max_size</strong>(maxSize = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#stream_id-instance_method" title="#stream_id (instance method)">- (Object) <strong>stream_id</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#uri-instance_method" title="#uri (instance method)">- (Object) <strong>uri</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#write-instance_method" title="#write (instance method)">- (Object) <strong>write</strong>(param_1 = nil, param_2 = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#write_custom_frame-instance_method" title="#write_custom_frame (instance method)">- (Object) <strong>write_custom_frame</strong>(param_1 = nil, param_2 = nil, param_3 = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#write_queue_full%3F-instance_method" title="#write_queue_full? (instance method)">- (Boolean) <strong>write_queue_full?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -854,7 +867,50 @@
   
   
   
+  <div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
   
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Vertx::HttpClientRequest (class)">HttpClientRequest</a></span></tt>) <strong>initialize</strong>(j_del) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    Returns a new instance of HttpClientRequest
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+41
+42
+43</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 41</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_j_del'>j_del</span><span class='rparen'>)</span>
+  <span class='ivar'>@j_del</span> <span class='op'>=</span> <span class='id identifier rubyid_j_del'>j_del</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
 
   <div id="instance_method_details" class="method_details_list">
     <h2>Instance Method Details</h2>
@@ -863,7 +919,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="chunked?-instance_method">
   
-    - (<tt>true</tt>, <tt>false</tt>) <strong>chunked?</strong> 
+    - (<tt>Boolean</tt>) <strong>chunked?</strong> 
   
 
   
@@ -871,7 +927,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    @return Is the request chunked?
+    
 
   </div>
 </div>
@@ -883,7 +939,7 @@
     <li>
       
       
-        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
+        <span class='type'>(<tt>Boolean</tt>)</span>
       
       
       
@@ -910,15 +966,15 @@
       <pre class="lines">
 
 
+151
 152
 153
 154
 155
-156
-157</pre>
+156</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 152</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 151</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_chunked?'>chunked?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -934,7 +990,7 @@
       <div class="method_details ">
   <h3 class="signature " id="connection-instance_method">
   
-    - (<tt><span class='object_link'><a href="HttpConnection.html" title="Vertx::HttpConnection (class)">::Vertx::HttpConnection</a></span></tt>) <strong>connection</strong> 
+    - (<tt>Object</tt>) <strong>connection</strong> 
   
 
   
@@ -942,25 +998,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    @return the <span class='object_link'><a href="HttpConnection.html" title="Vertx::HttpConnection (class)">Vertx::HttpConnection</a></span> associated with this request
+    
 
   </div>
 </div>
 <div class="tags">
   
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt><span class='object_link'><a href="HttpConnection.html" title="Vertx::HttpConnection (class)">::Vertx::HttpConnection</a></span></tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -981,18 +1024,18 @@
       <pre class="lines">
 
 
-354
-355
-356
-357
-358
-359
-360
-361
-362</pre>
+346
+347
+348
+349
+350
+351
+352
+353
+354</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 354</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 346</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_connection'>connection</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1011,7 +1054,7 @@
       <div class="method_details ">
   <h3 class="signature " id="connection_handler-instance_method">
   
-    - (<tt>self</tt>) <strong>connection_handler</strong> { ... }
+    - (<tt>Object</tt>) <strong>connection_handler</strong> 
   
 
   
@@ -1019,41 +1062,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Set a connection handler called when an HTTP connection has been established.
+    
 
   </div>
 </div>
 <div class="tags">
   
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-        
-        <div class='inline'>the handler</div>
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1074,16 +1088,16 @@
       <pre class="lines">
 
 
-366
-367
-368
-369
-370
-371
-372</pre>
+358
+359
+360
+361
+362
+363
+364</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 366</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 358</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_connection_handler'>connection_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1100,7 +1114,7 @@
       <div class="method_details ">
   <h3 class="signature " id="continue_handler-instance_method">
   
-    - (<tt>self</tt>) <strong>continue_handler</strong> { ... }
+    - (<tt>Object</tt>) <strong>continue_handler</strong> 
   
 
   
@@ -1108,43 +1122,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    If you send an HTTP request with the header <code>Expect</code> set to the value <code>100-continue</code>
- and the server responds with an interim HTTP response with a status code of <code>100</code> and a continue handler
- has been set using this method, then the <code>handler</code> will be called.
- <p>
- You can then continue to write data to the request body and later end it. This is normally used in conjunction with
- the <span class='object_link'><a href="#send_head-instance_method" title="Vertx::HttpClientRequest#send_head (method)">#send_head</a></span> method to force the request header to be written before the request has ended.
+    
 
   </div>
 </div>
 <div class="tags">
   
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1165,16 +1148,16 @@
       <pre class="lines">
 
 
-258
-259
-260
-261
-262
-263
-264</pre>
+251
+252
+253
+254
+255
+256
+257</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 258</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 251</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_continue_handler'>continue_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1191,7 +1174,7 @@
       <div class="method_details ">
   <h3 class="signature " id="drain_handler-instance_method">
   
-    - (<tt>self</tt>) <strong>drain_handler</strong> { ... }
+    - (<tt>Object</tt>) <strong>drain_handler</strong> 
   
 
   
@@ -1205,32 +1188,6 @@
 </div>
 <div class="tags">
   
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1260,7 +1217,7 @@
 105</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 99</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 99</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_drain_handler'>drain_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1277,15 +1234,7 @@
       <div class="method_details ">
   <h3 class="signature " id="end-instance_method">
   
-    
-      <span class="overload">- (<tt>void</tt>) <strong>end</strong> </span>
-    
-      <span class="overload">- (<tt>void</tt>) <strong>end</strong>(chunk) </span>
-    
-      <span class="overload">- (<tt>void</tt>) <strong>end</strong>(chunk) </span>
-    
-      <span class="overload">- (<tt>void</tt>) <strong>end</strong>(chunk, enc) </span>
-    
+    - (<tt>Object</tt>) <strong>end</strong>(param_1 = nil, param_2 = nil) 
   
 
   
@@ -1293,119 +1242,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>Same as <span class='object_link'><a href="#end-instance_method" title="Vertx::HttpClientRequest#end (method)">#end</a></span> but writes a String with the specified encoding
-
-  </div>
-</div>
-<div class="tags">
-  
-  <p class="tag_title">Overloads:</p>
-  <ul class="overload">
-    
-      
-      
-      <li class="overload_item">
-        <span class="signature">- (<tt>void</tt>) <strong>end</strong>(chunk) </span>
-        <div class="docstring">
-  <div class="discussion">
     
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>chunk</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-
-</div>
-      </li>
-    
-      
-      <li class="overload_item">
-        <span class="signature">- (<tt>void</tt>) <strong>end</strong>(chunk) </span>
-        <div class="docstring">
-  <div class="discussion">
-    
-
-  </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
-  
-    <li>
-      
-        <span class='name'>chunk</span>
-      
-      
-        <span class='type'>(<tt><span class='object_link'><a href="Buffer.html" title="Vertx::Buffer (class)">::Vertx::Buffer</a></span></tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-
-</div>
-      </li>
-    
-      
-      <li class="overload_item">
-        <span class="signature">- (<tt>void</tt>) <strong>end</strong>(chunk, enc) </span>
-        <div class="docstring">
-  <div class="discussion">
-    
-
-  </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
-  
-    <li>
-      
-        <span class='name'>chunk</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>enc</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-
-</div>
-      </li>
-    
-  </ul>
-
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1426,21 +1268,21 @@
       <pre class="lines">
 
 
+282
+283
+284
+285
+286
+287
+288
 289
 290
 291
 292
-293
-294
-295
-296
-297
-298
-299
-300</pre>
+293</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 289</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 282</span>
 
 <span class='kw'>def</span> <span class='kw'>end</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_param_2'>param_2</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_1'>param_1</span> <span class='op'>==</span> <span class='kw'>nil</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_2'>param_2</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -1462,7 +1304,7 @@
       <div class="method_details ">
   <h3 class="signature " id="end_handler-instance_method">
   
-    - (<tt>self</tt>) <strong>end_handler</strong> { ... }
+    - (<tt>Object</tt>) <strong>end_handler</strong> 
   
 
   
@@ -1476,32 +1318,6 @@
 </div>
 <div class="tags">
   
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1531,7 +1347,7 @@
 139</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 133</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 133</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_handler'>end_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1548,7 +1364,7 @@
       <div class="method_details ">
   <h3 class="signature " id="exception_handler-instance_method">
   
-    - (<tt>self</tt>) <strong>exception_handler</strong> { ... }
+    - (<tt>Object</tt>) <strong>exception_handler</strong> 
   
 
   
@@ -1562,32 +1378,6 @@
 </div>
 <div class="tags">
   
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1617,7 +1407,7 @@
 65</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 59</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 59</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_exception_handler'>exception_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1634,7 +1424,7 @@
       <div class="method_details ">
   <h3 class="signature " id="get_host-instance_method">
   
-    - (<tt>String</tt>) <strong>get_host</strong> 
+    - (<tt>Object</tt>) <strong>get_host</strong> 
   
 
   
@@ -1642,25 +1432,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    @return the request host. For HTTP2 it returns the  pseudo header otherwise it returns the  header
+    
 
   </div>
 </div>
 <div class="tags">
   
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1681,15 +1458,15 @@
       <pre class="lines">
 
 
-222
-223
-224
-225
-226
-227</pre>
+216
+217
+218
+219
+220
+221</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 222</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 216</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_host'>get_host</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1705,7 +1482,7 @@
       <div class="method_details ">
   <h3 class="signature " id="get_raw_method-instance_method">
   
-    - (<tt>String</tt>) <strong>get_raw_method</strong> 
+    - (<tt>Object</tt>) <strong>get_raw_method</strong> 
   
 
   
@@ -1713,25 +1490,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    @return the raw value of the method this request sends
+    
 
   </div>
 </div>
 <div class="tags">
   
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1752,15 +1516,15 @@
       <pre class="lines">
 
 
+166
+167
 168
 169
 170
-171
-172
-173</pre>
+171</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 168</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 166</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_raw_method'>get_raw_method</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1776,7 +1540,7 @@
       <div class="method_details ">
   <h3 class="signature " id="handler-instance_method">
   
-    - (<tt>self</tt>) <strong>handler</strong> { ... }
+    - (<tt>Object</tt>) <strong>handler</strong> 
   
 
   
@@ -1790,32 +1554,6 @@
 </div>
 <div class="tags">
   
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1845,7 +1583,7 @@
 114</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 108</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 108</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_handler'>handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1862,7 +1600,7 @@
       <div class="method_details ">
   <h3 class="signature " id="headers-instance_method">
   
-    - (<tt><span class='object_link'><a href="MultiMap.html" title="Vertx::MultiMap (class)">::Vertx::MultiMap</a></span></tt>) <strong>headers</strong> 
+    - (<tt>Object</tt>) <strong>headers</strong> 
   
 
   
@@ -1870,25 +1608,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    @return The HTTP headers
+    
 
   </div>
 </div>
 <div class="tags">
   
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt><span class='object_link'><a href="MultiMap.html" title="Vertx::MultiMap (class)">::Vertx::MultiMap</a></span></tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1909,18 +1634,18 @@
       <pre class="lines">
 
 
+223
+224
+225
+226
+227
+228
+229
 230
-231
-232
-233
-234
-235
-236
-237
-238</pre>
+231</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 230</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 223</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_headers'>headers</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1937,9 +1662,39 @@
 </div>
     
       <div class="method_details ">
+  <h3 class="signature " id="j_del-instance_method">
+  
+    - (<tt>Object</tt>) <strong>j_del</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+46
+47
+48</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 46</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_j_del'>j_del</span>
+  <span class='ivar'>@j_del</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
   <h3 class="signature " id="method-instance_method">
   
-    - (<tt>:OPTIONS</tt>, ...) <strong>method</strong> 
+    - (<tt>Object</tt>) <strong>method</strong> 
   
 
   
@@ -1947,25 +1702,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    The HTTP method for the request.
+    
 
   </div>
 </div>
 <div class="tags">
   
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>:OPTIONS</tt>, <tt>:GET</tt>, <tt>:HEAD</tt>, <tt>:POST</tt>, <tt>:PUT</tt>, <tt>:DELETE</tt>, <tt>:TRACE</tt>, <tt>:CONNECT</tt>, <tt>:PATCH</tt>, <tt>:OTHER</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1986,15 +1728,15 @@
       <pre class="lines">
 
 
+159
 160
 161
 162
 163
-164
-165</pre>
+164</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 160</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 159</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_method'>method</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2010,7 +1752,7 @@
       <div class="method_details ">
   <h3 class="signature " id="path-instance_method">
   
-    - (<tt>String</tt>) <strong>path</strong> 
+    - (<tt>Object</tt>) <strong>path</strong> 
   
 
   
@@ -2018,25 +1760,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    @return The path part of the uri. For example /somepath/somemorepath/someresource.foo
+    
 
   </div>
 </div>
 <div class="tags">
   
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2057,15 +1786,15 @@
       <pre class="lines">
 
 
+190
+191
+192
+193
 194
-195
-196
-197
-198
-199</pre>
+195</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 194</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 190</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_path'>path</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2081,7 +1810,7 @@
       <div class="method_details ">
   <h3 class="signature " id="pause-instance_method">
   
-    - (<tt>self</tt>) <strong>pause</strong> 
+    - (<tt>Object</tt>) <strong>pause</strong> 
   
 
   
@@ -2095,19 +1824,6 @@
 </div>
 <div class="tags">
   
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2137,7 +1853,7 @@
 122</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 116</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 116</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_pause'>pause</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2154,7 +1870,7 @@
       <div class="method_details ">
   <h3 class="signature " id="push_handler-instance_method">
   
-    - (<tt>self</tt>) <strong>push_handler</strong> { ... }
+    - (<tt>Object</tt>) <strong>push_handler</strong> 
   
 
   
@@ -2162,56 +1878,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Set a push handler for this request.<p/>
-
- The handler is called when the client receives a <i>push promise</i> from the server. The handler can be called
- multiple times, for each push promise.<p/>
-
- The handler is called with a <i>read-only</i> <span class='object_link'><a href="" title="Vertx::HttpClientRequest (class)">Vertx::HttpClientRequest</a></span>, the following methods can be called:<p/>
-
- <ul>
-   <li><span class='object_link'><a href="#method-instance_method" title="Vertx::HttpClientRequest#method (method)">#method</a></span></li>
-   <li><span class='object_link'><a href="#uri-instance_method" title="Vertx::HttpClientRequest#uri (method)">#uri</a></span></li>
-   <li><span class='object_link'><a href="#headers-instance_method" title="Vertx::HttpClientRequest#headers (method)">#headers</a></span></li>
-   <li><span class='object_link'><a href="#get_host-instance_method" title="Vertx::HttpClientRequest#get_host (method)">#get_host</a></span></li>
- </ul>
-
- In addition the handler should call the <span class='object_link'><a href="#handler-instance_method" title="Vertx::HttpClientRequest#handler (method)">#handler</a></span> method to set an handler to
- process the response.<p/>
+    
 
   </div>
 </div>
 <div class="tags">
   
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-        
-        <div class='inline'>the handler</div>
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2232,16 +1904,16 @@
       <pre class="lines">
 
 
-334
-335
-336
-337
-338
-339
-340</pre>
+327
+328
+329
+330
+331
+332
+333</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 334</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 327</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_push_handler'>push_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2258,7 +1930,7 @@
       <div class="method_details ">
   <h3 class="signature " id="put_header-instance_method">
   
-    - (<tt>self</tt>) <strong>put_header</strong>(name = nil, value = nil) 
+    - (<tt>Object</tt>) <strong>put_header</strong>(name = nil, value = nil) 
   
 
   
@@ -2266,61 +1938,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Put an HTTP header
+    
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>name</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>The header name</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>value</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>The header value</div>
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2341,16 +1964,16 @@
       <pre class="lines">
 
 
-243
-244
-245
-246
-247
-248
-249</pre>
+236
+237
+238
+239
+240
+241
+242</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 243</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 236</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_put_header'>put_header</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_value'>value</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2367,7 +1990,7 @@
       <div class="method_details ">
   <h3 class="signature " id="query-instance_method">
   
-    - (<tt>String</tt>) <strong>query</strong> 
+    - (<tt>Object</tt>) <strong>query</strong> 
   
 
   
@@ -2375,25 +1998,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    @return the query part of the uri. For example someparam=32&amp;someotherparam=x
+    
 
   </div>
 </div>
 <div class="tags">
   
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2414,15 +2024,15 @@
       <pre class="lines">
 
 
-202
-203
-204
-205
-206
-207</pre>
+197
+198
+199
+200
+201
+202</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 202</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 197</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_query'>query</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2438,7 +2048,7 @@
       <div class="method_details ">
   <h3 class="signature " id="reset-instance_method">
   
-    - (<tt>void</tt>) <strong>reset</strong>(code = nil) 
+    - (<tt>Object</tt>) <strong>reset</strong>(code = nil) 
   
 
   
@@ -2446,32 +2056,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>Reset this stream with the error <code>code</code>.
+    
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>code</span>
-      
-      
-        <span class='type'>(<tt>Fixnum</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>the error code</div>
-      
-    </li>
-  
-</ul>
-
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2492,17 +2082,17 @@
       <pre class="lines">
 
 
-344
-345
-346
-347
-348
-349
-350
-351</pre>
+337
+338
+339
+340
+341
+342
+343
+344</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 344</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 337</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_reset'>reset</span><span class='lparen'>(</span><span class='id identifier rubyid_code'>code</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_code'>code</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -2520,7 +2110,7 @@
       <div class="method_details ">
   <h3 class="signature " id="resume-instance_method">
   
-    - (<tt>self</tt>) <strong>resume</strong> 
+    - (<tt>Object</tt>) <strong>resume</strong> 
   
 
   
@@ -2534,19 +2124,6 @@
 </div>
 <div class="tags">
   
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2576,7 +2153,7 @@
 130</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 124</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 124</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_resume'>resume</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2593,7 +2170,7 @@
       <div class="method_details ">
   <h3 class="signature " id="send_head-instance_method">
   
-    - (<tt>self</tt>) <strong>send_head</strong> { ... }
+    - (<tt>Object</tt>) <strong>send_head</strong> 
   
 
   
@@ -2601,39 +2178,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Like <span class='object_link'><a href="#send_head-instance_method" title="Vertx::HttpClientRequest#send_head (method)">#send_head</a></span> but with an handler after headers have been sent. The handler will be called with
- the HttpVersion if it can be determined or null otherwise.<p>
+    
 
   </div>
 </div>
 <div class="tags">
   
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2654,19 +2204,19 @@
       <pre class="lines">
 
 
+262
+263
+264
+265
+266
+267
+268
 269
 270
-271
-272
-273
-274
-275
-276
-277
-278</pre>
+271</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 269</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 262</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_send_head'>send_head</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2686,7 +2236,7 @@
       <div class="method_details ">
   <h3 class="signature " id="set_chunked-instance_method">
   
-    - (<tt>self</tt>) <strong>set_chunked</strong>(chunked = nil) 
+    - (<tt>Object</tt>) <strong>set_chunked</strong>(chunked = nil) 
   
 
   
@@ -2694,45 +2244,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    If chunked is true then the request will be set into HTTP chunked mode
+    
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>chunked</span>
-      
-      
-        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>true if chunked encoding</div>
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2762,7 +2279,7 @@
 149</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 143</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 143</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_chunked'>set_chunked</span><span class='lparen'>(</span><span class='id identifier rubyid_chunked'>chunked</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_chunked'>chunked</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>TrueClass</span> <span class='op'>||</span> <span class='id identifier rubyid_chunked'>chunked</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>FalseClass</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2779,7 +2296,7 @@
       <div class="method_details ">
   <h3 class="signature " id="set_host-instance_method">
   
-    - (<tt>self</tt>) <strong>set_host</strong>(host = nil) 
+    - (<tt>Object</tt>) <strong>set_host</strong>(host = nil) 
   
 
   
@@ -2787,44 +2304,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Set the request host.<p/>
-
- For HTTP2 it sets the  pseudo header otherwise it sets the  header
+    
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>host</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2845,16 +2330,16 @@
       <pre class="lines">
 
 
+208
+209
+210
+211
+212
 213
-214
-215
-216
-217
-218
-219</pre>
+214</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 213</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 208</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_host'>set_host</span><span class='lparen'>(</span><span class='id identifier rubyid_host'>host</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_host'>host</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2871,7 +2356,7 @@
       <div class="method_details ">
   <h3 class="signature " id="set_raw_method-instance_method">
   
-    - (<tt>self</tt>) <strong>set_raw_method</strong>(method = nil) 
+    - (<tt>Object</tt>) <strong>set_raw_method</strong>(method = nil) 
   
 
   
@@ -2879,45 +2364,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Set the value the method to send when the method  is used.
+    
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>method</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>the raw method</div>
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2938,16 +2390,16 @@
       <pre class="lines">
 
 
+175
+176
 177
 178
 179
 180
-181
-182
-183</pre>
+181</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 177</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 175</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_raw_method'>set_raw_method</span><span class='lparen'>(</span><span class='id identifier rubyid_method'>method</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_method'>method</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2964,7 +2416,7 @@
       <div class="method_details ">
   <h3 class="signature " id="set_timeout-instance_method">
   
-    - (<tt>self</tt>) <strong>set_timeout</strong>(timeoutMs = nil) 
+    - (<tt>Object</tt>) <strong>set_timeout</strong>(timeoutMs = nil) 
   
 
   
@@ -2972,50 +2424,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Set's the amount of time after which if the request does not return any data within the timeout period an
- TimeoutException will be passed to the exception handler (if provided) and
- the request will be closed.
- <p>
- Calling this method more than once has the effect of canceling any existing timeout and starting
- the timeout from scratch.
+    
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>timeoutMs</span>
-      
-      
-        <span class='type'>(<tt>Fixnum</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>The quantity of time in milliseconds.</div>
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -3036,16 +2450,16 @@
       <pre class="lines">
 
 
-309
-310
-311
-312
-313
-314
-315</pre>
+302
+303
+304
+305
+306
+307
+308</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 309</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 302</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_timeout'>set_timeout</span><span class='lparen'>(</span><span class='id identifier rubyid_timeoutMs'>timeoutMs</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_timeoutMs'>timeoutMs</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3062,7 +2476,7 @@
       <div class="method_details ">
   <h3 class="signature " id="set_write_queue_max_size-instance_method">
   
-    - (<tt>self</tt>) <strong>set_write_queue_max_size</strong>(maxSize = nil) 
+    - (<tt>Object</tt>) <strong>set_write_queue_max_size</strong>(maxSize = nil) 
   
 
   
@@ -3075,37 +2489,7 @@
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>maxSize</span>
-      
-      
-        <span class='type'>(<tt>Fixnum</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
-      
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -3135,7 +2519,7 @@
 96</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 90</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 90</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_write_queue_max_size'>set_write_queue_max_size</span><span class='lparen'>(</span><span class='id identifier rubyid_maxSize'>maxSize</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_maxSize'>maxSize</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3152,7 +2536,7 @@
       <div class="method_details ">
   <h3 class="signature " id="stream_id-instance_method">
   
-    - (<tt>Fixnum</tt>) <strong>stream_id</strong> 
+    - (<tt>Object</tt>) <strong>stream_id</strong> 
   
 
   
@@ -3160,26 +2544,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    @return the id of the stream of this response,  when it is not yet determined, i.e
-         the request has not been yet sent or it is not supported HTTP/1.x
+    
 
   </div>
 </div>
 <div class="tags">
   
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Fixnum</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -3200,15 +2570,15 @@
       <pre class="lines">
 
 
-399
-400
-401
-402
-403
-404</pre>
+389
+390
+391
+392
+393
+394</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 399</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 389</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_stream_id'>stream_id</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3224,7 +2594,7 @@
       <div class="method_details ">
   <h3 class="signature " id="uri-instance_method">
   
-    - (<tt>String</tt>) <strong>uri</strong> 
+    - (<tt>Object</tt>) <strong>uri</strong> 
   
 
   
@@ -3232,25 +2602,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    @return The URI of the request.
+    
 
   </div>
 </div>
 <div class="tags">
   
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -3271,15 +2628,15 @@
       <pre class="lines">
 
 
+183
+184
+185
 186
 187
-188
-189
-190
-191</pre>
+188</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 186</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 183</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_uri'>uri</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3295,13 +2652,7 @@
       <div class="method_details ">
   <h3 class="signature " id="write-instance_method">
   
-    
-      <span class="overload">- (<tt>self</tt>) <strong>write</strong>(data) </span>
-    
-      <span class="overload">- (<tt>self</tt>) <strong>write</strong>(chunk) </span>
-    
-      <span class="overload">- (<tt>self</tt>) <strong>write</strong>(chunk, enc) </span>
-    
+    - (<tt>Object</tt>) <strong>write</strong>(param_1 = nil, param_2 = nil) 
   
 
   
@@ -3309,131 +2660,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Write a String to the request body, encoded using the encoding <code>enc</code>.
-
-  </div>
-</div>
-<div class="tags">
-  
-  <p class="tag_title">Overloads:</p>
-  <ul class="overload">
-    
-      
-      <li class="overload_item">
-        <span class="signature">- (<tt>self</tt>) <strong>write</strong>(data) </span>
-        <div class="docstring">
-  <div class="discussion">
     
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>data</span>
-      
-      
-        <span class='type'>(<tt><span class='object_link'><a href="Buffer.html" title="Vertx::Buffer (class)">::Vertx::Buffer</a></span></tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-
-</div>
-      </li>
-    
-      
-      <li class="overload_item">
-        <span class="signature">- (<tt>self</tt>) <strong>write</strong>(chunk) </span>
-        <div class="docstring">
-  <div class="discussion">
-    
-
-  </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
-  
-    <li>
-      
-        <span class='name'>chunk</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-
-</div>
-      </li>
-    
-      
-      <li class="overload_item">
-        <span class="signature">- (<tt>self</tt>) <strong>write</strong>(chunk, enc) </span>
-        <div class="docstring">
-  <div class="discussion">
-    
-
-  </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
-  
-    <li>
-      
-        <span class='name'>chunk</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>enc</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-
-</div>
-      </li>
-    
-  </ul>
-
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -3469,7 +2701,7 @@
 87</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 75</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 75</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write'>write</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_param_2'>param_2</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_param_1'>param_1</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_2'>param_2</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -3492,11 +2724,7 @@
       <div class="method_details ">
   <h3 class="signature " id="write_custom_frame-instance_method">
   
-    
-      <span class="overload">- (<tt>self</tt>) <strong>writeCustomFrame</strong>(frame) </span>
-    
-      <span class="overload">- (<tt>self</tt>) <strong>writeCustomFrame</strong>(type, flags, payload) </span>
-    
+    - (<tt>Object</tt>) <strong>write_custom_frame</strong>(param_1 = nil, param_2 = nil, param_3 = nil) 
   
 
   
@@ -3504,129 +2732,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Write an HTTP/2 frame to the request, allowing to extend the HTTP/2 protocol.<p>
-
- The frame is sent immediatly and is not subject to flow control.<p>
-
- This method must be called after the request headers have been sent and only for the protocol HTTP/2.
- The <span class='object_link'><a href="#send_head-instance_method" title="Vertx::HttpClientRequest#send_head (method)">#send_head</a></span> should be used for this purpose.
-
-  </div>
-</div>
-<div class="tags">
-  
-  <p class="tag_title">Overloads:</p>
-  <ul class="overload">
-    
-      
-      <li class="overload_item">
-        <span class="signature">- (<tt>self</tt>) <strong>writeCustomFrame</strong>(frame) </span>
-        <div class="docstring">
-  <div class="discussion">
     
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>frame</span>
-      
-      
-        <span class='type'>(<tt><span class='object_link'><a href="HttpFrame.html" title="Vertx::HttpFrame (class)">::Vertx::HttpFrame</a></span></tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>the frame to write</div>
-      
-    </li>
-  
-</ul>
-
-
-</div>
-      </li>
-    
-      
-      <li class="overload_item">
-        <span class="signature">- (<tt>self</tt>) <strong>writeCustomFrame</strong>(type, flags, payload) </span>
-        <div class="docstring">
-  <div class="discussion">
-    
-
-  </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
-  
-    <li>
-      
-        <span class='name'>type</span>
-      
-      
-        <span class='type'>(<tt>Fixnum</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>the 8-bit frame type</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>flags</span>
-      
-      
-        <span class='type'>(<tt>Fixnum</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>the 8-bit frame flags</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>payload</span>
-      
-      
-        <span class='type'>(<tt><span class='object_link'><a href="Buffer.html" title="Vertx::Buffer (class)">::Vertx::Buffer</a></span></tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>the frame payload</div>
-      
-    </li>
-  
-</ul>
-
-
-</div>
-      </li>
-    
-  </ul>
-
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -3647,19 +2758,19 @@
       <pre class="lines">
 
 
+378
+379
+380
+381
+382
+383
+384
+385
 386
-387
-388
-389
-390
-391
-392
-393
-394
-395</pre>
+387</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 386</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 378</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write_custom_frame'>write_custom_frame</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_param_2'>param_2</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_param_3'>param_3</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_param_1'>param_1</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_method_defined?'>method_defined?</span><span class='lparen'>(</span><span class='symbol'>:j_del</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_2'>param_2</span> <span class='op'>==</span> <span class='kw'>nil</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_3'>param_3</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -3679,7 +2790,7 @@
       <div class="method_details ">
   <h3 class="signature " id="write_queue_full?-instance_method">
   
-    - (<tt>true</tt>, <tt>false</tt>) <strong>write_queue_full?</strong> 
+    - (<tt>Boolean</tt>) <strong>write_queue_full?</strong> 
   
 
   
@@ -3687,7 +2798,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    This will return <code>true</code> if there are more bytes in the write queue than the value set using <span class='object_link'><a href="#set_write_queue_max_size-instance_method" title="Vertx::HttpClientRequest#set_write_queue_max_size (method)">#set_write_queue_max_size</a></span>
+    
 
   </div>
 </div>
@@ -3699,12 +2810,9 @@
     <li>
       
       
-        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
+        <span class='type'>(<tt>Boolean</tt>)</span>
       
       
-      
-        &mdash;
-        <div class='inline'>true if write queue is full</div>
       
     </li>
   
@@ -3737,7 +2845,7 @@
 56</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 51</span>
+      <pre class="code"><span class="info file"># File '/Users/clement/Projects/vertx-all/vertx-stack/stack-docs/target/rb/vertx/http_client_request.rb', line 51</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_write_queue_full?'>write_queue_full?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3755,9 +2863,9 @@
 </div>
 
     <div id="footer">
-  Generated on Sun Jul 10 18:37:46 2016 by
+  Generated on Mon Sep 12 08:37:55 2016 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.6 (ruby-2.2.3).
+  0.8.7.6 (ruby-2.3.1).
 </div>
 
   </body>

@@ -138,6 +138,7 @@
 <li><a href="#_enabling_remote_jmx">Enabling remote JMX</a></li>
 <li><a href="#dropwizard-registry">Accessing Dropwizard Registry</a></li>
 <li><a href="#_using_jolokia_and_hawtio">Using Jolokia and Hawtio</a></li>
+<li><a href="#_using_jolokia_and_jmx4perl_to_expose_metrics_to_nagios">Using Jolokia and JMX4Perl to expose metrics to Nagios</a></li>
 </ul>
         </div>
       </div>
@@ -181,6 +182,7 @@
 <li><a href="#_enabling_remote_jmx">Enabling remote JMX</a></li>
 <li><a href="#dropwizard-registry">Accessing Dropwizard Registry</a></li>
 <li><a href="#_using_jolokia_and_hawtio">Using Jolokia and Hawtio</a></li>
+<li><a href="#_using_jolokia_and_jmx4perl_to_expose_metrics_to_nagios">Using Jolokia and JMX4Perl to expose metrics to Nagios</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -222,7 +224,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-dropwizard-metrics&lt;/artifactId&gt;
-  &lt;version&gt;3.3.2&lt;/version&gt;
+  &lt;version&gt;3.3.3&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -235,7 +237,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-dropwizard-metrics:3.3.2'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-dropwizard-metrics:3.3.3'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1025,7 +1027,7 @@ var vertx = Vertx.vertx({
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>JMX_OPTS="-Dcom.sun.management.jmxremote -Dvertx.options.jmxEnabled=true"</pre>
+<pre>JMX_OPTS="-Dcom.sun.management.jmxremote -Dvertx.metrics.options.jmxEnabled=true"</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1040,6 +1042,15 @@ var vertx = Vertx.vertx({
     "jmxDomain" : "mydomain"
   }
 });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the command line, just append the following system properties to your application (works for the <code>vertx</code> cli and
+fat jars):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>-Dvertx.metrics.options.jmxEnabled=true -Dvertx.metrics.options.jmxDomain=vertx</code></pre>
 </div>
 </div>
 </div>
@@ -1182,6 +1193,58 @@ in the Vert.x configuration:</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_using_jolokia_and_jmx4perl_to_expose_metrics_to_nagios">Using Jolokia and JMX4Perl to expose metrics to Nagios</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="http://search.cpan.org/~roland/jmx4perl/scripts/check_jmx4perl">Check_jmx4perl</a> is a Nagios plugin using jmx4perl for
+accessing JMX data remotely. It lets you expose the Vert.x metrics to Nagios.</p>
+</div>
+<div class="paragraph">
+<p>First you need to start your application with the Jolokia JVM agent attached to it. There are several ways to
+attach jolokia. See <a href="https://jolokia.org/reference/html/architecture.html">for further details</a>. Here, we explain how
+to use the Jolokia agent with the default configuration. Refer to the <a href="https://jolokia.org/reference/html/">the jolokia
+documentation</a> to configure it.</p>
+</div>
+<div class="paragraph">
+<p>The agent can either be attached when you start the application or attached on a running JVM (you would need
+special permission to access the process). In the first case, launch you application using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>java -javaagent:/.../agents/jolokia-jvm.jar=port=7777,host=localhost -jar ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>-javaagent</code> specifies the path to the jolokia agent jar file. You can configure the port and host from the
+command line. Here it registers the REST endpoint on <code><a href="http://localhost:7777" class="bare">http://localhost:7777</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>You can also attach the agent on a running JVM with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>java -jar jolokia-jvm.jar start PID</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replace <code>PID</code> with the process id of the JVM.</p>
+</div>
+<div class="paragraph">
+<p>Once Jolokia is started, you can configure your Nagios check such as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>check_jmx4perl --url http://10.0.2.2:8778/jolokia --name eventloops --mbean vertx:name=vertx.event-loop-size
+--attribute Value --warning 4</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Check <a href="http://search.cpan.org/~roland/jmx4perl/scripts/check_jmx4perl">check_jmx4perl documentation</a> to get more
+details about check configuration.</p>
+</div>
+</div>
+</div>
 
         
 
@@ -1189,7 +1252,7 @@ in the Vert.x configuration:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-07-10 18:37:52 CEST
+                Last updated 2016-09-12 08:38:04 CEST
               
               
             </div>

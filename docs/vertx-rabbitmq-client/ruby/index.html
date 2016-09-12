@@ -166,7 +166,7 @@
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-rabbitmq-client&lt;/artifactId&gt;
-  &lt;version&gt;3.3.2&lt;/version&gt;
+  &lt;version&gt;3.3.3&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -179,7 +179,7 @@
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-rabbitmq-client:3.3.2'
+  compile 'io.vertx:vertx-rabbitmq-client:3.3.3'
 }</code></pre>
 </div>
 </div>
@@ -187,11 +187,40 @@
 <div class="sect2">
 <h3 id="_create_a_client">Create a client</h3>
 <div class="paragraph">
-<p>You can create a client instance as follows:</p>
+<p>You can create a client instance as follows using a full amqp uri:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-rabbitmq/rabbit_mq_client'
+config = {
+}
+# full amqp uri
+config['uri'] = "amqp://xvjvsrrc:VbuL1atClKt7zVNQha0bnnScbNvGiqgb@moose.rmq.cloudamqp.com/xvjvsrrc"
+client = VertxRabbitmq::RabbitMQClient.create(vertx, config)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or you can also specify individual parameters manually:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-rabbitmq/rabbit_mq_client'
+config = {
+}
+# Each parameter is optional
+# The default parameter with be used if the parameter is not set
+config['user'] = "user1"
+config['password'] = "password1"
+config['host'] = "localhost"
+config['port'] = 5672
+config['virtualHost'] = "vhost1"
+config['connectionTimeout'] = 60
+config['requestedHeartbeat'] = 60
+config['handshakeTimeout'] = 60
+config['requestedChannelMax'] = 5
+config['networkRecoveryInterval'] = 5
+config['automaticRecoveryEnabled'] = true
+
 client = VertxRabbitmq::RabbitMQClient.create(vertx, config)</code></pre>
 </div>
 </div>
@@ -312,7 +341,7 @@ client.basic_consume("my.queue", "my.address", false) { |consumeResult_err,consu
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-07-10 18:37:52 CEST
+                Last updated 2016-09-12 08:38:04 CEST
               
               
             </div>

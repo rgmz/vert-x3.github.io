@@ -126,8 +126,7 @@
 <li><a href="#_event_bus_services">Event bus services</a></li>
 <li><a href="#_message_source">Message source</a></li>
 <li><a href="#_jdbc_data_source">JDBC Data source</a></li>
-<li><a href="#_publishing_a_jdbc_service">Publishing a JDBC service</a></li>
-<li><a href="#_consuming_a_jdbc_service">Consuming a JDBC service</a></li>
+<li><a href="#_redis_data_source">Redis Data source</a></li>
 </ul>
 </li>
 <li><a href="#_listening_for_service_arrivals_and_departures">Listening for service arrivals and departures</a></li>
@@ -164,8 +163,7 @@
 <li><a href="#_event_bus_services">Event bus services</a></li>
 <li><a href="#_message_source">Message source</a></li>
 <li><a href="#_jdbc_data_source">JDBC Data source</a></li>
-<li><a href="#_publishing_a_jdbc_service">Publishing a JDBC service</a></li>
-<li><a href="#_consuming_a_jdbc_service">Consuming a JDBC service</a></li>
+<li><a href="#_redis_data_source">Redis Data source</a></li>
 </ul>
 </li>
 <li><a href="#_listening_for_service_arrivals_and_departures">Listening for service arrivals and departures</a></li>
@@ -187,7 +185,7 @@ with it. It does not have to be a vert.x entity, but can be anything. Each servi
 <code><a href="../dataobjects.html#Record">Record</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The service discovery implements the interactions defined in the service-oriented computing. And to some extend,
+<p>The service discovery implements the interactions defined in service-oriented computing. And to some extend,
 also provides the dynamic service-oriented computing interactions. So, applications can react to arrival and
 departure of services.</p>
 </div>
@@ -213,7 +211,7 @@ departure of services.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>lookup for services</p>
+<p>lookup services</p>
 </li>
 <li>
 <p>bind to a selected service (it gets a <code><a href="../../yardoc/VertxServiceDiscovery/ServiceReference.html">ServiceReference</a></code>) and use it</p>
@@ -227,17 +225,17 @@ departure of services.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>Consumer would 1) lookup for service record matching their need, 2) retrieve the
+<p>Consumer would 1) lookup a service record matching their need, 2) retrieve the
 <code><a href="../../yardoc/VertxServiceDiscovery/ServiceReference.html">ServiceReference</a></code> that give access to the service, 3) get a service object to access
 the service, 4) release the service object once done.</p>
 </div>
 <div class="paragraph">
-<p>A state above, the central piece of information shared by the providers and consumers are
+<p>As stated above, the central piece of information shared by the providers and consumers are
 <code><a href="../dataobjects.html#Record">records</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Providers and consumers must create their own <code><a href="../../yardoc/VertxServiceDiscovery/ServiceDiscovery.html">ServiceDiscovery</a></code> instance. These
-instances are collaborating in background (distributed structure) to keep the set of services in sync.</p>
+instances are collaborating in the background (distributed structure) to keep the set of services in sync.</p>
 </div>
 <div class="paragraph">
 <p>The service discovery supports bridges to import and export services from / to other discovery technologies.</p>
@@ -263,7 +261,7 @@ descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
 &lt;groupId&gt;io.vertx&lt;/groupId&gt;
 &lt;artifactId&gt;vertx-service-discovery&lt;/artifactId&gt;
-&lt;version&gt;3.3.2&lt;/version&gt;
+&lt;version&gt;3.3.3&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -276,7 +274,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery:3.3.2'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery:3.3.3'</code></pre>
 </div>
 </div>
 </div>
@@ -292,10 +290,10 @@ descriptor:</p>
 <div class="paragraph">
 <p>A service <code><a href="../dataobjects.html#Record">Record</a></code> is an object that describes a service published by a service
 provider. It contains a name, some metadata, a location object (describing where is the service). This record is
-the only objects shared by the provider (having published it) and the consumer (retrieve it when doing a lookup).</p>
+the only object shared by the provider (having published it) and the consumer (retrieve it when doing a lookup).</p>
 </div>
 <div class="paragraph">
-<p>The metadata and even the location format depends on the <code>service type</code> (see below).</p>
+<p>The metadata and even the location format depend on the <code>service type</code> (see below).</p>
 </div>
 <div class="paragraph">
 <p>A record is published when the provider is ready to be used, and withdrawn when the service provider is stopping.</p>
@@ -323,14 +321,14 @@ This reference allows the consumer to retrieve the <em>service object</em> (to u
 <div class="sect2">
 <h3 id="_service_object">Service object</h3>
 <div class="paragraph">
-<p>The service object is the object that give access to a service. It has various form, such as a proxy, a client, or
-may even be non existent for some service type. The nature of the service object depends of the service type.</p>
+<p>The service object is the object that gives access to a service. It can come in various forms, such as a proxy, a client,
+and may even be non-existent for some service types. The nature of the service object depends on the service type.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_service_types">Service types</h3>
 <div class="paragraph">
-<p>Services are resources, and it exists a wide variety of resources. They can be functional services, databases,
+<p>Services are just resources, and they exist in wide variety. They can be functional services, databases,
 REST APIs, and so on. The Vert.x service discovery has the concept of service types to handle this heterogeneity.
 Each type defines:</p>
 </div>
@@ -512,18 +510,18 @@ the matching ones. In the first case, the first matching record is returned.</p>
 <p>A function taking a <code><a href="../dataobjects.html#Record">Record</a></code> as parameter and returning a boolean</p>
 </li>
 <li>
-<p>This filter is a JSON object. Each entry of the given filter are checked against the record. All entry must
-match exactly the record. The entry can use the special <code>*</code> value to denotes a requirement on the key, but not on
+<p>This filter is a JSON object. Each entry of the given filter is checked against the record. All entries must
+exactly match the record. The entry can use the special <code>*</code> value to denote a requirement on the key, but not on
 the value.</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s take some example of JSON filter:</p>
+<p>Let&#8217;s see an example of a JSON filter:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>{ "name" = "a" } =&gt; matches records with name set fo "a"
+<pre>{ "name" = "a" } =&gt; matches records with name set to "a"
 { "color" = "*" } =&gt; matches records with "color" set
 { "color" = "red" } =&gt; only matches records with "color" set to "red"
 { "color" = "red", "name" = "a"} =&gt; only matches records with name set to "a", and color set to "red"</pre>
@@ -531,7 +529,7 @@ the value.</p>
 </div>
 <div class="paragraph">
 <p>If the JSON filter is not set (<code>null</code> or empty), it accepts all records. When using functions, to accept all
-records, you must return true regardless the record.</p>
+records, you must return <em>true</em> regardless the record.</p>
 </div>
 <div class="paragraph">
 <p>Here are some examples:</p>
@@ -623,9 +621,9 @@ discovery.get_records({
 </div>
 </div>
 <div class="paragraph">
-<p>You can retrieve a single record or all matching record with
+<p>You can retrieve a single record or all matching records with
 <code><a href="../../yardoc/VertxServiceDiscovery/ServiceDiscovery.html#get_records-instance_method">getRecords</a></code>.
-By default, record lookup does includes only records with a <code>status</code> set to <code>UP</code>. This can be overridden:</p>
+By default, record lookup does include only records with a <code>status</code> set to <code>UP</code>. This can be overridden:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -670,8 +668,8 @@ reference.release()</code></pre>
 </div>
 <div class="paragraph">
 <p>When retrieving a service reference you can pass a <code><a href="unavailable">JsonObject</a></code> used to configure the
-service object. It can contains various data about the service objects. Some service types do not needs additional
-configuration, some requires configuration (as data sources):</p>
+service object. It can contain various data about the service object. Some service types do not needs additional
+configuration, some require configuration (as data sources):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -697,12 +695,12 @@ reference.release()</code></pre>
 different services.</p>
 </div>
 <div class="paragraph">
-<p>Are provided by default:</p>
+<p>These types are provided by default:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="../../yardoc/VertxServiceDiscovery/HttpEndpoint.html">HttpEndpoint</a></code> - for REST API, the service object is a
+<p><code><a href="../../yardoc/VertxServiceDiscovery/HttpEndpoint.html">HttpEndpoint</a></code> - for REST API&#8217;s, the service object is a
 <code><a href="../../yardoc/Vertx/HttpClient.html">HttpClient</a></code> configured on the host and port (the location is the url).</p>
 </li>
 <li>
@@ -710,7 +708,7 @@ different services.</p>
 type is the proxies interface (the location is the address).</p>
 </li>
 <li>
-<p><code><a href="../../yardoc/VertxServiceDiscovery/MessageSource.html">MessageSource</a></code> - for message source (publisher), the service object is a
+<p><code><a href="../../yardoc/VertxServiceDiscovery/MessageSource.html">MessageSource</a></code> - for message sources (publisher), the service object is a
 <code><a href="../../yardoc/Vertx/MessageConsumer.html">MessageConsumer</a></code> (the location is the address).</p>
 </li>
 <li>
@@ -721,7 +719,7 @@ consumer configuration).</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>This section gives details about service types and describes how can be used the default service types.</p>
+<p>This section gives details about service types in general and describes how to use the default service types.</p>
 </div>
 <div class="sect2">
 <h3 id="_services_with_no_type">Services with no type</h3>
@@ -747,7 +745,7 @@ objects are <code><a href="../../yardoc/Vertx/HttpClient.html">HttpClient</a></c
 <code><a href="../../yardoc/VertxServiceDiscovery/HttpEndpoint.html#create_record-class_method">HttpEndpoint.createRecord</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The next snippet illustrates hot to create <code><a href="../dataobjects.html#Record">Record</a></code> from
+<p>The next snippet illustrates hot to create a <code><a href="../dataobjects.html#Record">Record</a></code> from
 <code><a href="../../yardoc/VertxServiceDiscovery/HttpEndpoint.html">HttpEndpoint</a></code>:</p>
 </div>
 <div class="listingblock">
@@ -765,7 +763,7 @@ record2 = VertxServiceDiscovery::HttpEndpoint.create_record("some-other-name", t
 </div>
 </div>
 <div class="paragraph">
-<p>When you run your service in a container or on the cloud, it may not knows its public IP and public port, so the
+<p>When you run your service in a container or on the cloud, it may not know its public IP and public port, so the
 publication must be done by another entity having this info. Generally it&#8217;s a bridge.</p>
 </div>
 </div>
@@ -831,15 +829,15 @@ VertxServiceDiscovery::HttpEndpoint.get_client(discovery, {
 <div class="paragraph">
 <p>In this second version, the service object is released using
 <code><a href="../../yardoc/VertxServiceDiscovery/ServiceDiscovery.html#release_service_object-class_method">ServiceDiscovery.releaseServiceObject</a></code>,
-as you don&#8217;t hold the service reference.</p>
+so you no longer hold on to the service reference.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_event_bus_services">Event bus services</h3>
 <div class="paragraph">
-<p>Event bus services are service proxies. They implement async-RPC services on top of the event bus. When retrieved
-a service object from an event bus service, you get a service proxy in the right type. You can access helper
+<p>Event bus services are service proxies. They implement async-RPC services on top of the event bus. When retrieving
+a service object from an event bus service, you get a service proxy of the right type. You can access helper
 methods from <code><a href="../../yardoc/VertxServiceDiscovery/EventBusService.html">EventBusService</a></code>.</p>
 </div>
 <div class="paragraph">
@@ -873,7 +871,7 @@ discovery.publish(record) { |ar_err,ar|
 <div class="sect2">
 <h3 id="_message_source">Message source</h3>
 <div class="paragraph">
-<p>A message source is a component sending message on the event bus on a specific address. Message source clients are
+<p>A message source is a component sending messages on the event bus on a specific address. Message source clients are
 <code><a href="../../yardoc/Vertx/MessageConsumer.html">MessageConsumer</a></code>.</p>
 </div>
 <div class="paragraph">
@@ -882,7 +880,7 @@ discovery.publish(record) { |ar_err,ar|
 <div class="sect3">
 <h4 id="_publishing_a_message_source">Publishing a message source</h4>
 <div class="paragraph">
-<p>As for the other service types, publishing a message source is a 2-steps process:</p>
+<p>As for the other service types, publishing a message source is a 2-step process:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -976,14 +974,13 @@ VertxServiceDiscovery::MessageSource.get_consumer(discovery, {
 <div class="sect2">
 <h3 id="_jdbc_data_source">JDBC Data source</h3>
 <div class="paragraph">
-<p>Data sources represents databases or data stores. JDBC data sources are a specialization for database accessible
+<p>Data sources represents databases or data stores. JDBC data sources are a specialization for databases accessible
 using a JDBC driver. The client of a JDBC data source service is a <code><a href="../../yardoc/VertxJdbc/JDBCClient.html">JDBCClient</a></code>.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_publishing_a_jdbc_service">Publishing a JDBC service</h3>
+<div class="sect3">
+<h4 id="_publishing_a_jdbc_service">Publishing a JDBC service</h4>
 <div class="paragraph">
-<p>As for the other service types, publishing a message source is a 2-steps process:</p>
+<p>As for the other service types, publishing a JDBC data source is a 2-step process:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1012,15 +1009,15 @@ discovery.publish(record) { |ar_err,ar|
 <div class="paragraph">
 <p>As JDBC data sources can represent a high variety of databases, and their access is often different, the record is
 rather unstructured. The <code>location</code> is a simple JSON object that should provide the fields to access the data
-source (JDBC url, username&#8230;&#8203;). The set of field may depends on the database but also on the connection pool use
+source (JDBC url, username&#8230;&#8203;). The set of fields may depend on the database but also on the connection pool used
 in front.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_consuming_a_jdbc_service">Consuming a JDBC service</h3>
+<div class="sect3">
+<h4 id="_consuming_a_jdbc_service">Consuming a JDBC service</h4>
 <div class="paragraph">
-<p>As state in the previous section, accessible data source depends on the data source itself. To build the
-<code><a href="../../yardoc/VertxJdbc/JDBCClient.html">JDBCClient</a></code>, are merged: the record location, the metadata and a json object provided by
+<p>As stated in the previous section, how to access a data source depends on the data source itself. To build the
+<code><a href="../../yardoc/VertxJdbc/JDBCClient.html">JDBCClient</a></code>, you can merge configuration: the record location, the metadata and a json object provided by
 the consumer:</p>
 </div>
 <div class="listingblock">
@@ -1048,7 +1045,7 @@ discovery.get_record({
 </div>
 </div>
 <div class="paragraph">
-<p>You can also use the <code><a href="../../yardoc/VertxJdbc/JDBCClient.html">JDBCClient</a></code> class to to the lookup and retrieval in one call:</p>
+<p>You can also use the <code><a href="../../yardoc/VertxJdbc/JDBCClient.html">JDBCClient</a></code> class to the lookup and retrieval in one call:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1070,6 +1067,99 @@ VertxServiceDiscovery::JDBCDataSource.get_jdbc_client(discovery, {
 
   end
 }</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_redis_data_source">Redis Data source</h3>
+<div class="paragraph">
+<p>Redis data sources are a specialization for Redis persistence accessible.
+The client of a Redis data source service is a <code><a href="../../yardoc/VertxRedis/RedisClient.html">RedisClient</a></code>.</p>
+</div>
+<div class="sect3">
+<h4 id="_publishing_a_redis_service">Publishing a Redis service</h4>
+<div class="paragraph">
+<p>Publishing a Redis data source is a 2-step process:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>create a record, using <code><a href="../../yardoc/VertxServiceDiscovery/RedisDataSource.html">RedisDataSource</a></code></p>
+</li>
+<li>
+<p>publish the record</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/redis_data_source'
+record = VertxServiceDiscovery::RedisDataSource.create_record("some-redis-data-source-service", {
+  'url' =&gt; "localhost"
+}, {
+  'some-metadata' =&gt; "some-value"
+})
+
+discovery.publish(record) { |ar_err,ar|
+  # ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>location</code> is a simple JSON object that should provide the fields to access the Redis data
+source (url, port&#8230;&#8203;).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_consuming_a_redis_service">Consuming a Redis service</h4>
+<div class="paragraph">
+<p>As stated in the previous section, how to access a data source depends on the data source itself. To build the
+<code><a href="../../yardoc/VertxRedis/RedisClient.html">RedisClient</a></code>, you can merge configuration: the record location, the metadata and a json object provided by
+the consumer:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Get the record
+discovery.get_record({
+  'name' =&gt; "some-redis-data-source-service"
+}) { |ar_err,ar|
+  if (ar_err == nil &amp;&amp; ar != nil)
+    # Retrieve the service reference
+    reference = discovery.get_reference(ar)
+
+    # Retrieve the service instance
+    client = reference.get()
+
+    # ...
+
+    # when done
+    reference.release()
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also use the <code><a href="../../yardoc/VertxServiceDiscovery/RedisDataSource.html">RedisDataSource</a></code> class to the lookup and retrieval in one call:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/service_discovery'
+require 'vertx-service-discovery/redis_data_source'
+VertxServiceDiscovery::RedisDataSource.get_redis_client(discovery, {
+  'name' =&gt; "some-redis-data-source-service"
+}) { |ar_err,ar|
+  if (ar_err == nil)
+    client = ar
+
+    # ...
+
+    # Dont' forget to release the service
+    VertxServiceDiscovery::ServiceDiscovery.release_service_object(discovery, client)
+
+  end
+}</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1104,8 +1194,8 @@ This address is configurable from the <code><a href="../dataobjects.html#Service
 <h2 id="_listening_for_service_usage">Listening for service usage</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Every time a service reference is retrieved (<code>bind</code>) or released (<code>release</code>), an event is published on the _vertx
-.discovery.usage` address. This address is configurable from the <code><a href="../dataobjects.html#ServiceDiscoveryOptions">ServiceDiscoveryOptions</a></code>.</p>
+<p>Every time a service reference is retrieved (<code>bind</code>) or released (<code>release</code>), an event is published on the <em>vertx
+.discovery.usage</em> address. This address is configurable from the <code><a href="../dataobjects.html#ServiceDiscoveryOptions">ServiceDiscoveryOptions</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>It lets you listen for service usage and map the service bindings.</p>
@@ -1140,7 +1230,7 @@ single node configuration and the id of the node in clustered mode.</p>
 <h2 id="_service_discovery_bridges">Service discovery bridges</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Bridges let import and export services from / to other discovery mechanism such as Docker, Kubernates, Consul&#8230;&#8203;
+<p>Bridges let you import and export services from / to other discovery mechanism such as Docker, Kubernates, Consul&#8230;&#8203;
 Each bridge decides how the services are imported and exported. It does not have to be bi-directional.</p>
 </div>
 <div class="paragraph">
@@ -1158,7 +1248,7 @@ register it using
 <p>{@link io.vertx.servicediscovery.spi.ServiceImporter#start)}
 method is called. It lets you configure the bridge. When the bridge is configured, ready and has imported /
 exported the initial services, it must complete the given <code><a href="../../yardoc/Vertx/Future.html">Future</a></code>. If the bridge starts
-method is blocking, it must uses an
+method is blocking, it must use an
 <code><a href="../../yardoc/Vertx/Vertx.html#execute_blocking-instance_method">executeBlocking</a></code> construct, and
 complete the given future object.</p>
 </div>
@@ -1180,7 +1270,7 @@ method must complete the given <code><a href="../../yardoc/Vertx/Future.html">Fu
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-07-10 18:37:52 CEST
+                Last updated 2016-09-12 08:38:06 CEST
               
               
             </div>

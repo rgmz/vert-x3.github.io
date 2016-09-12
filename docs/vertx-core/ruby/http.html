@@ -126,7 +126,7 @@
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
-<li><a href="#_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</a></li>
+<li><a href="#_using_a_proxy_for_http_https_connections">Using a proxy for HTTP/HTTPS connections</a></li>
 <li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
@@ -161,7 +161,7 @@
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
-<li><a href="#_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</a></li>
+<li><a href="#_using_a_proxy_for_http_https_connections">Using a proxy for HTTP/HTTPS connections</a></li>
 <li><a href="#_automatic_clean_up_in_verticles">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
@@ -2812,17 +2812,21 @@ used with binary frames that are no split over multiple frames.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</h3>
+<h3 id="_using_a_proxy_for_http_https_connections">Using a proxy for HTTP/HTTPS connections</h3>
 <div class="paragraph">
-<p>The http client supports accessing https servers via a HTTPS proxy (HTTP/1.x <em>CONNECT</em> method, e.g. Squid) or
-<em>SOCKS4a</em> or <em>SOCKS5</em> proxy. The http proxy protocol uses HTTP/1.x but can connect to HTTP/1.x and HTTP/2 servers.</p>
+<p>The http client supports accessing http/https URLs via a HTTP proxy (e.g. Squid) or <em>SOCKS4a</em> or <em>SOCKS5</em> proxy.
+The CONNECT protocol uses HTTP/1.x but can connect to HTTP/1.x and HTTP/2 servers.</p>
+</div>
+<div class="paragraph">
+<p>Connecting to h2c (unencrypted HTTP/2 servers) is likely not supported by http proxies since they will support
+HTTP/1.1 only.</p>
 </div>
 <div class="paragraph">
 <p>The proxy can be configured in the <code><a href="../dataobjects.html#HttpClientOptions">HttpClientOptions</a></code> by setting a
 <code><a href="../dataobjects.html#ProxyOptions">ProxyOptions</a></code> object containing proxy type, hostname, port and optionally username and password.</p>
 </div>
 <div class="paragraph">
-<p>Here&#8217;s an example:</p>
+<p>Here&#8217;s an example of using an HTTP proxy:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2839,7 +2843,15 @@ client = vertx.create_http_client(options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>or using SOCKS5 proxy</p>
+<p>When the client connects to an http URL, it connects to the proxy server and provides the full URL in the
+HTTP request ("GET <a href="http://www.somehost.com/path/file.html" class="bare">http://www.somehost.com/path/file.html</a> HTTP/1.1").</p>
+</div>
+<div class="paragraph">
+<p>When the client connects to an https URL, it asks the proxy to create a tunnel to the remote host with
+the CONNECT method.</p>
+</div>
+<div class="paragraph">
+<p>For a SOCKS5 proxy:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2859,21 +2871,6 @@ client = vertx.create_http_client(options)</code></pre>
 <p>The DNS resolution is always done on the proxy server, to achieve the functionality of a SOCKS4 client, it is necessary
 to resolve the DNS address locally.</p>
 </div>
-<div class="paragraph">
-<p>Please note: When using <code><a href="todo">HTTP</a></code> currently http requests are sent as CONNECT requests to the proxy, which will almost
-certainly not work since a properly configured proxy will deny connections to non-secure ports.</p>
-</div>
-<div class="paragraph">
-<p>This feature will be implemented differently in next version, allowing for a normal proxy request for non-http requests</p>
-</div>
-<div class="paragraph">
-<p>As a workaround, a http proxy request can be executed like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_automatic_clean_up_in_verticles">Automatic clean-up in verticles</h3>
@@ -2891,7 +2888,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-07-10 18:37:52 CEST
+                Last updated 2016-09-12 08:38:04 CEST
               
               
             </div>

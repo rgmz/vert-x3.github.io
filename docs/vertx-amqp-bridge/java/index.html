@@ -201,7 +201,7 @@ this module has the tech preview status, this means the API can change between v
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-amqp-bridge&lt;/artifactId&gt;
-  &lt;version&gt;3.3.2&lt;/version&gt;
+  &lt;version&gt;3.3.3&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -214,7 +214,7 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-amqp-bridge:3.3.2</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-amqp-bridge:3.3.3</code></pre>
 </div>
 </div>
 </div>
@@ -439,7 +439,7 @@ in tandem with the producer and attempt to send only what it knows can actually 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>producer.writeQueueFull();</pre>
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">producer.writeQueueFull();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -448,9 +448,9 @@ receives more credit and is able to send messages immediately rather than buffer
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>producer.drainHandler(v -&gt; {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">producer.drainHandler(v -&gt; {
   // ...do stuff and send...
-});</pre>
+});</code></pre>
 </div>
 </div>
 </div>
@@ -464,10 +464,10 @@ buffered message value before registering a handler, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>consumer.setMaxBufferedMessages(5);
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consumer.setMaxBufferedMessages(5);
 consumer.handler(msg -&gt; {
   // ...handle received messages...
-});</pre>
+});</code></pre>
 </div>
 </div>
 </div>
@@ -487,16 +487,17 @@ certificate:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>AmqpBridgeOptions bridgeOptions = new AmqpBridgeOptions();
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">AmqpBridgeOptions bridgeOptions = new AmqpBridgeOptions();
 bridgeOptions.setSsl(true);
 
-PfxOptions trustOptions = new PfxOptions().setPath("path/to/pkcs12.truststore").setPassword("password");
+PfxOptions trustOptions = new PfxOptions().setPath("path/to/pkcs12.truststore")
+                                          .setPassword("password");
 bridgeOptions.setPfxTrustOptions(trustOptions);
 
 AmqpBridge bridge = AmqpBridge.create(vertx, bridgeOptions);
 bridge.start("localhost", 5672, "username", "password", res -&gt; {
   // ..do things with the bridge..
-});</pre>
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -506,19 +507,21 @@ also a PKCS12 based key store containing an SSL key and certificate the server c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>AmqpBridgeOptions bridgeOptions = new AmqpBridgeOptions();
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">AmqpBridgeOptions bridgeOptions = new AmqpBridgeOptions();
 bridgeOptions.setSsl(true);
 
-PfxOptions trustOptions = new PfxOptions().setPath("path/to/pkcs12.truststore").setPassword("password");
+PfxOptions trustOptions = new PfxOptions().setPath("path/to/pkcs12.truststore")
+                                          .setPassword("password");
 bridgeOptions.setPfxTrustOptions(trustOptions);
 
-PfxOptions keyCertOptions = new PfxOptions().setPath("path/to/pkcs12.keystore").setPassword("password");
+PfxOptions keyCertOptions = new PfxOptions().setPath("path/to/pkcs12.keystore")
+                                            .setPassword("password");
 bridgeOptions.setPfxKeyCertOptions(keyCertOptions);
 
 AmqpBridge bridge = AmqpBridge.create(vertx, bridgeOptions);
 bridge.start("localhost", 5672, res -&gt; {
   // ..do things with the bridge..
-});</pre>
+});</code></pre>
 </div>
 </div>
 </div>
@@ -604,13 +607,13 @@ value to match it with the reply handler, and then invokes the handler with the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>JsonObject amqpMsgPayload = new JsonObject();
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject amqpMsgPayload = new JsonObject();
 amqpMsgPayload.put("body", "myRequest");
 
 producer.&lt;JsonObject&gt; send(amqpMsgPayload, res -&gt; {
   JsonObject amqpReplyMessagePayload = res.result().body();
   // ...do something with reply message...
-});</pre>
+});</code></pre>
 </div>
 </div>
 </div>
@@ -682,7 +685,7 @@ original sending application .</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>consumer.handler(msg -&gt; {
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consumer.handler(msg -&gt; {
   // ...do something with received message...then reply...
   String replyAddress = msg.replyAddress();
   if(replyAddress != null) {
@@ -691,7 +694,7 @@ original sending application .</p>
 
     msg.reply(amqpReplyMessagePayload);
   }
-});</pre>
+});</code></pre>
 </div>
 </div>
 </div>
@@ -704,7 +707,7 @@ original sending application .</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-07-10 18:37:52 CEST
+                Last updated 2016-09-12 08:38:04 CEST
               
               
             </div>

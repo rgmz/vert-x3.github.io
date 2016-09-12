@@ -114,7 +114,12 @@
 <li><a href="#_reactor_and_multi_reactor">Reactor and Multi-Reactor</a></li>
 <li><a href="#golden_rule">The Golden Rule - Don&#8217;t Block the Event Loop</a></li>
 <li><a href="#blocking_code">Running blocking code</a></li>
-<li><a href="#_async_coordination">Async coordination</a></li>
+<li><a href="#_async_coordination">Async coordination</a>
+<ul class="sectlevel2">
+<li><a href="#_concurrent_composition">Concurrent composition</a></li>
+<li><a href="#_sequential_composition">Sequential composition</a></li>
+</ul>
+</li>
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
 <li><a href="#_writing_verticles">Writing Verticles</a></li>
@@ -218,7 +223,7 @@
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
-<li><a href="#_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</a></li>
+<li><a href="#_using_a_proxy_for_http_https_connections">Using a proxy for HTTP/HTTPS connections</a></li>
 <li><a href="#_automatic_clean_up_in_verticles_4">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
@@ -318,6 +323,7 @@
 <li><a href="#_launcher_and_exit_code">Launcher and exit code</a></li>
 </ul>
 </li>
+<li><a href="#_configuring_vert_x_cache">Configuring Vert.x cache</a></li>
 </ul>
         </div>
       </div>
@@ -337,7 +343,12 @@
 <li><a href="#_reactor_and_multi_reactor">Reactor and Multi-Reactor</a></li>
 <li><a href="#golden_rule">The Golden Rule - Don&#8217;t Block the Event Loop</a></li>
 <li><a href="#blocking_code">Running blocking code</a></li>
-<li><a href="#_async_coordination">Async coordination</a></li>
+<li><a href="#_async_coordination">Async coordination</a>
+<ul class="sectlevel2">
+<li><a href="#_concurrent_composition">Concurrent composition</a></li>
+<li><a href="#_sequential_composition">Sequential composition</a></li>
+</ul>
+</li>
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
 <li><a href="#_writing_verticles">Writing Verticles</a></li>
@@ -441,7 +452,7 @@
 <li><a href="#_server_sharing">Server sharing</a></li>
 <li><a href="#_using_https_with_vert_x">Using HTTPS with Vert.x</a></li>
 <li><a href="#_websockets">WebSockets</a></li>
-<li><a href="#_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</a></li>
+<li><a href="#_using_a_proxy_for_http_https_connections">Using a proxy for HTTP/HTTPS connections</a></li>
 <li><a href="#_automatic_clean_up_in_verticles_4">Automatic clean-up in verticles</a></li>
 </ul>
 </li>
@@ -541,6 +552,7 @@
 <li><a href="#_launcher_and_exit_code">Launcher and exit code</a></li>
 </ul>
 </li>
+<li><a href="#_configuring_vert_x_cache">Configuring Vert.x cache</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -625,12 +637,12 @@ project descriptor to access the Vert.x Core API and enable the Groovy support:<
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
  &lt;artifactId&gt;vertx-core&lt;/artifactId&gt;
- &lt;version&gt;3.3.2&lt;/version&gt;
+ &lt;version&gt;3.3.3&lt;/version&gt;
 &lt;/dependency&gt;
 &lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-lang-groovy&lt;/artifactId&gt;
-  &lt;version&gt;3.3.2&lt;/version&gt;
+  &lt;version&gt;3.3.3&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -643,8 +655,8 @@ project descriptor to access the Vert.x Core API and enable the Groovy support:<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile "io.vertx:vertx-core:3.3.2"
-compile "io.vertx:vertx-lang-groovy:3.3.2"</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile "io.vertx:vertx-core:3.3.3"
+compile "io.vertx:vertx-lang-groovy:3.3.3"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1132,12 +1144,14 @@ the configuration is set when the worker pool is created
 <div class="sectionbody">
 <div class="paragraph">
 <p>Coordination of multiple asynchronous results can be achieved with Vert.x <code><a href="../../groovydoc/io/vertx/groovy/core/Future.html">futures</a></code>. It
-supports concurrent composition (run several async operations in parallel and join) and sequential composition
+supports concurrent composition (run several async operations in parallel) and sequential composition
 (chain async operations).</p>
 </div>
+<div class="sect2">
+<h3 id="_concurrent_composition">Concurrent composition</h3>
 <div class="paragraph">
 <p><code><a href="../../groovydoc/io/vertx/groovy/core/CompositeFuture.html#all(io.vertx.core.Future,%20io.vertx.core.Future)">CompositeFuture.all</a></code> takes several futures arguments (up to 6) and returns a future that is
-<em>succeeded</em> when all the futures are and <em>failed</em> otherwise:</p>
+<em>succeeded</em> when all the futures are and <em>failed</em> when at least one of the futures is failed:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1159,10 +1173,10 @@ CompositeFuture.all(httpServerFuture, netServerFuture).setHandler({ ar -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>The operations run concurrently, and are joined. The <code>Handler</code> attached to the returned future is
-invoked upon completion of the composition. If one of the operation fails (one of the passed future is marked
-as a failure), the resulting future is marked as failed too. If all the operations succeed, the resulting future
-is completed with a success.</p>
+<p>The operations run concurrently, the <code>Handler</code> attached to the returned future is invoked upon
+completion of the composition. When one of the operation fails (one of the passed future is marked as a failure),
+the resulting future is marked as failed too. When all the operations succeed, the resulting future is completed
+with a success.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively, you can pass a list (potentially empty) of futures:</p>
@@ -1170,20 +1184,18 @@ is completed with a success.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.CompositeFuture
-CompositeFuture.all([f1, f2, f3])</code></pre>
+CompositeFuture.all([future1, future2, future3])</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>While the <code>all</code> composition <em>waits</em> until all futures are completed (or one fails), the <code>any</code> composition
-<em>waits</em> for the first completed future. <code><a href="../../groovydoc/io/vertx/groovy/core/CompositeFuture.html#any(io.vertx.core.Future,%20io.vertx.core.Future)">CompositeFuture.any</a></code> takes several futures arguments
-(up to 6) and returns a future that is <em>succeeded</em> if one of the futures is, and <em>failed</em> otherwise:</p>
+<p>While the <code>all</code> composition <em>waits</em> until all futures are successful (or one fails), the <code>any</code> composition
+<em>waits</em> for the first succeeded future. <code><a href="../../groovydoc/io/vertx/groovy/core/CompositeFuture.html#any(io.vertx.core.Future,%20io.vertx.core.Future)">CompositeFuture.any</a></code> takes several futures
+arguments (up to 6) and returns a future that is succeeded when one of the futures is, and failed when
+all the futures are failed:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Future
-import io.vertx.groovy.core.CompositeFuture
-def future1 = Future.future()
-def future2 = Future.future()
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.CompositeFuture
 CompositeFuture.any(future1, future2).setHandler({ ar -&gt;
   if (ar.succeeded()) {
     // At least one is succeeded
@@ -1203,6 +1215,36 @@ CompositeFuture.any([f1, f2, f3])</code></pre>
 </div>
 </div>
 <div class="paragraph">
+<p>The <code>join</code> composition <em>waits</em> until all futures are completed, either with a success or a failure.
+<code><a href="../../groovydoc/io/vertx/groovy/core/CompositeFuture.html#join(io.vertx.core.Future,%20io.vertx.core.Future)">CompositeFuture.join</a></code> takes several futures arguments (up to 6) and returns a future that is
+succeeded when all the futures are succeeded, and failed when all the futures are completed and at least one of
+them is failed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.CompositeFuture
+CompositeFuture.join(future1, future2, future3).setHandler({ ar -&gt;
+  if (ar.succeeded()) {
+    // All succeeded
+  } else {
+    // All completed and at least one failed
+  }
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A list of futures can be used also:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.CompositeFuture
+CompositeFuture.join([future1, future2, future3])</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sequential_composition">Sequential composition</h3>
+<div class="paragraph">
 <p>While <code>all</code> and <code>any</code> are implementing concurrent composition, <code><a href="../../groovydoc/io/vertx/groovy/core/Future.html#compose(io.vertx.core.Handler,%20io.vertx.core.Future)">compose</a></code> can be used
 for chaining futures (so sequential composition).</p>
 </div>
@@ -1212,9 +1254,9 @@ for chaining futures (so sequential composition).</p>
 import io.vertx.groovy.core.buffer.Buffer
 
 def fs = vertx.fileSystem()
+def startFuture = Future.future()
 
 def fut1 = Future.future()
-
 fs.createFile("/foo", fut1.completer())
 
 fut1.compose({ v -&gt;
@@ -1224,7 +1266,8 @@ fut1.compose({ v -&gt;
   return fut2
 }).compose({ v -&gt;
   // When the file is written (fut2), execute this:
-  fs.move("/foo", "/bar", startFuture.completer())
+  def fut3 = Future.future()
+  fs.move("/foo", "/bar", fut3.completer())
 }, startFuture)</code></pre>
 </div>
 </div>
@@ -1270,6 +1313,7 @@ failure.</p>
 <div class="paragraph">
 <p>You can use <code><a href="../../groovydoc/io/vertx/groovy/core/Future.html#completer()">completer</a></code> that completes a future with the operation result or
 failure. It avoids having to write the <em>traditional</em>: <code>if success then complete the future else fail the future</code>.</p>
+</div>
 </div>
 </div>
 </div>
@@ -4230,10 +4274,6 @@ the client gives the list of application protocols it accepts and the server res
 and use <a href="http://netty.io/wiki/forked-tomcat-native.html">netty-tcnative</a> jar on the classpath. Using tcnative may require
 OpenSSL to be installed on your OS depending on the tcnative implementation.</p>
 </div>
-<div class="paragraph">
-<p>OpenSSL restricts the key/certificate configuration to <code>.pem</code> files. However it is still possible to use any trust
-configuration.</p>
-</div>
 </div>
 <div class="sect4">
 <h5 id="_jetty_alpn_support">Jetty-ALPN support</h5>
@@ -6970,17 +7010,21 @@ used with binary frames that are no split over multiple frames.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_using_a_proxy_for_https_connections">Using a proxy for HTTPS connections</h3>
+<h3 id="_using_a_proxy_for_http_https_connections">Using a proxy for HTTP/HTTPS connections</h3>
 <div class="paragraph">
-<p>The http client supports accessing https servers via a HTTPS proxy (HTTP/1.x <em>CONNECT</em> method, e.g. Squid) or
-<em>SOCKS4a</em> or <em>SOCKS5</em> proxy. The http proxy protocol uses HTTP/1.x but can connect to HTTP/1.x and HTTP/2 servers.</p>
+<p>The http client supports accessing http/https URLs via a HTTP proxy (e.g. Squid) or <em>SOCKS4a</em> or <em>SOCKS5</em> proxy.
+The CONNECT protocol uses HTTP/1.x but can connect to HTTP/1.x and HTTP/2 servers.</p>
+</div>
+<div class="paragraph">
+<p>Connecting to h2c (unencrypted HTTP/2 servers) is likely not supported by http proxies since they will support
+HTTP/1.1 only.</p>
 </div>
 <div class="paragraph">
 <p>The proxy can be configured in the <code><a href="../dataobjects.html#HttpClientOptions">HttpClientOptions</a></code> by setting a
 <code><a href="../dataobjects.html#ProxyOptions">ProxyOptions</a></code> object containing proxy type, hostname, port and optionally username and password.</p>
 </div>
 <div class="paragraph">
-<p>Here&#8217;s an example:</p>
+<p>Here&#8217;s an example of using an HTTP proxy:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6999,7 +7043,15 @@ def client = vertx.createHttpClient(options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>or using SOCKS5 proxy</p>
+<p>When the client connects to an http URL, it connects to the proxy server and provides the full URL in the
+HTTP request ("GET <a href="http://www.somehost.com/path/file.html" class="bare">http://www.somehost.com/path/file.html</a> HTTP/1.1").</p>
+</div>
+<div class="paragraph">
+<p>When the client connects to an https URL, it asks the proxy to create a tunnel to the remote host with
+the CONNECT method.</p>
+</div>
+<div class="paragraph">
+<p>For a SOCKS5 proxy:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7020,21 +7072,6 @@ def client = vertx.createHttpClient(options)</code></pre>
 <div class="paragraph">
 <p>The DNS resolution is always done on the proxy server, to achieve the functionality of a SOCKS4 client, it is necessary
 to resolve the DNS address locally.</p>
-</div>
-<div class="paragraph">
-<p>Please note: When using <code><a href="todo">HTTP</a></code> currently http requests are sent as CONNECT requests to the proxy, which will almost
-certainly not work since a properly configured proxy will deny connections to non-secure ports.</p>
-</div>
-<div class="paragraph">
-<p>This feature will be implemented differently in next version, allowing for a normal proxy request for non-http requests</p>
-</div>
-<div class="paragraph">
-<p>As a workaround, a http proxy request can be executed like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
-</div>
 </div>
 </div>
 <div class="sect2">
@@ -9044,7 +9081,7 @@ dies. To create a <em>bare</em> instance, launch:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx -ha</code></pre>
+<pre class="prettyprint highlight"><code>vertx bare</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9487,8 +9524,8 @@ def vertx = Vertx.vertx([
 </div>
 </div>
 <div class="paragraph">
-<p>When a search domain list is used, the threshold for the number of dots is <code>1</code>, it can be configured with
-<code><a href="../dataobjects.html#AddressResolverOptions#setNdots(int)">ndots</a></code>.</p>
+<p>When a search domain list is used, the threshold for the number of dots is <code>1</code> or loaded from <code>/etc/resolv.conf</code>
+on Linux, it can be configured to a specific value with <code><a href="../dataobjects.html#AddressResolverOptions#setNdots(int)">ndots</a></code>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -10248,6 +10285,55 @@ and <code>unregister</code></p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_configuring_vert_x_cache">Configuring Vert.x cache</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When Vert.x needs to read a file from the classpath (embedded in a fat jar, in a jar form the classpath or a file
+that is on the classpath), it copies it to a cache directory. The reason behind this is simple: reading a file
+from a jar or from an input stream is blocking. So to avoid to pay the price every time, Vert.x copies the file to
+its cache directory and reads it from there every subsequent read. This behavior can be configured.</p>
+</div>
+<div class="paragraph">
+<p>First, by default, Vert.x uses <code>$CWD/.vertx</code> as cache directory. It creates a unique directory inside this one to
+avoid conflicts. This location can be configured by using the <code>vertx.cacheDirBase</code> system property. For instance
+if the current working directory is not writable (such as in an immutable container context), launch your
+application with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>vertx run my.Verticle -Dvertx.cacheDirBase=/tmp/vertx-cache
+# or
+java -jar my-fat.jar vertx.cacheDirBase=/tmp/vertx-cache</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+the directory must be <strong>writable</strong>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When you are editing resources such as HTML, CSS or JavaScript, this cache mechanism can be annoying as it serves
+only the first version of the file (and so you won&#8217;t see your edits if you reload your page). To avoid this
+behavior, launch your application with <code>-Dvertx.disableFileCaching=true</code>. With this setting, Vert.x still uses
+the cache, but always refresh the version stored in the cache with the original source. So if you edit a file
+served from the classpath and refresh your browser, Vert.x reads it from the classpath, copies it to the cache
+directory and serves it from there. Do not use this setting in production, it can kill your performances.</p>
+</div>
+<div class="paragraph">
+<p>Finally, you can disable completely the cache by using <code>-Dvertx.disableFileCPResolving=true</code>. This setting is not
+without consequences. Vert.x would be unable to read any files from the classpath (only from the file system). Be
+very careful when using this settings.</p>
+</div>
+</div>
+</div>
 
         
 
@@ -10255,7 +10341,7 @@ and <code>unregister</code></p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-07-10 18:37:50 CEST
+                Last updated 2016-09-12 08:38:04 CEST
               
               
             </div>

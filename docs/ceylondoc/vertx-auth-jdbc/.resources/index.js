@@ -13,9 +13,9 @@ var index = [
 {'name': 'jdbcAuth', 'type': 'object', 'url': 'jdbcAuth.object.html', 'doc': '', 'tags': [],'icons': ['icon-object']},
 {'name': 'jdbcAuth', 'type': 'value', 'url': 'index.html#jdbcAuth', 'doc': '', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'JDBCAuth.setRolePrefix', 'type': 'function', 'url': 'JDBCAuth.type.html#setRolePrefix', 'doc': '<p>Set the role prefix to distinguish from permissions when checking for isPermitted requests.</p>', 'tags': [],'icons': ['icon-shared-member']},
-{'name': 'JDBCAuth.setAuthenticationQuery', 'type': 'function', 'url': 'JDBCAuth.type.html#setAuthenticationQuery', 'doc': '<p>Set the authentication query to use.</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'JDBCAuth.setRolesQuery', 'type': 'function', 'url': 'JDBCAuth.type.html#setRolesQuery', 'doc': '<p>Set the roles query to use.</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'JDBCAuth.setPermissionsQuery', 'type': 'function', 'url': 'JDBCAuth.type.html#setPermissionsQuery', 'doc': '<p>Set the permissions query to use.</p>', 'tags': [],'icons': ['icon-shared-member']},
+{'name': 'JDBCAuth.setAuthenticationQuery', 'type': 'function', 'url': 'JDBCAuth.type.html#setAuthenticationQuery', 'doc': '<p>Set the authentication query to use.</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'JDBCAuth', 'type': 'class', 'url': 'JDBCAuth.type.html', 'doc': '<p>Factory interface for creating <code>io.vertx.ext.auth.AuthProvider</code> instances that use the Vert.x JDBC client</p>', 'tags': [],'icons': ['icon-class']},
 {'name': 'io.vertx.ceylon.auth.jdbc', 'type': 'module', 'url': 'index.html', 'doc': '', 'tags': [],'icons': ['icon-module']}];
 var tagIndex = [

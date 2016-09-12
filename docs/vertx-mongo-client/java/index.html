@@ -211,7 +211,7 @@ as it natively handles JSON (BSON) documents.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-mongo-client&lt;/artifactId&gt;
-  &lt;version&gt;3.3.2&lt;/version&gt;
+  &lt;version&gt;3.3.3&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -224,7 +224,7 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mongo-client:3.3.2'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mongo-client:3.3.3'</code></pre>
 </div>
 </div>
 </div>
@@ -628,9 +628,18 @@ and pass in the an instance of <code><a href="../../apidocs/io/vertx/ext/mongo/F
 <pre>JsonObject query = new JsonObject().put("author", "J. R. R. Tolkien");
 
 mongoClient.findBatch("book", query, res -&gt; {
+
   if (res.succeeded()) {
 
-    System.out.println(res.result().encodePrettily());
+    if (res.result() == null) {
+
+      System.out.println("End of research");
+
+    } else {
+
+      System.out.println("Found doc: " + res.result().encodePrettily());
+
+    }
 
   } else {
 
@@ -656,7 +665,7 @@ mongoClient.findBatch("book", query, res -&gt; {
 <div class="sect2">
 <h3 id="_removing_documents">Removing documents</h3>
 <div class="paragraph">
-<p>To remove documents use <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#remove-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">remove</a></code>.</p>
+<p>To remove documents use <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#removeDocuments-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">removeDocuments</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The <code>query</code> parameter is used to match the documents in the collection to determine which ones to remove.</p>
@@ -686,10 +695,10 @@ mongoClient.remove("books", query, res -&gt; {
 <div class="sect2">
 <h3 id="_removing_a_single_document">Removing a single document</h3>
 <div class="paragraph">
-<p>To remove a single document you use <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#removeOne-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">removeOne</a></code>.</p>
+<p>To remove a single document you use <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#removeDocument-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">removeDocument</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>This works just like <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#remove-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">remove</a></code> but it removes just the first matching document.</p>
+<p>This works just like <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#removeDocuments-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">removeDocuments</a></code> but it removes just the first matching document.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1262,7 +1271,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-07-10 18:37:52 CEST
+                Last updated 2016-09-12 08:38:04 CEST
               
               
             </div>
