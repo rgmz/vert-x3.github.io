@@ -8,6 +8,188 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Vert.x featuring Continuous Delivery with Jenkins and Ansible</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;This blog entry describes an approach to adopt &lt;em&gt;Continuous Delivery&lt;/em&gt; for Vert.x applications using Jenkins and Ansible by taking advantage of the Jenkins Job DSL and Ansible plugins.&lt;/p&gt;
+&lt;h2 id=&quot;table-of-contents&quot;&gt;Table of contents&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#preamble&quot;&gt;Preamble&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#overview&quot;&gt;Overview&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#creating-a-Jenkins-build-job-using-job-dSL&quot;&gt;Creating a Jenkins build job using Job DSL&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#deploying-vertx-app-using-ansible&quot;&gt;Deploying Vert.x app using Ansible&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sample-sources-and-demo&quot;&gt;Sample sources and demo&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#launch-instructions&quot;&gt;Launch instructions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#demo&quot;&gt;Demo&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#conclusion&quot;&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;preamble&quot;&gt;Preamble&lt;/h2&gt;
+&lt;p&gt;This post was written in context of the project titled “&lt;a href=&quot;https://summerofcode.withgoogle.com/projects/#4858492141699072&quot;&gt;DevOps tooling for Vert.x applications&lt;/a&gt;“, one of the projects at Vert.x taking place during the 2016 edition of &lt;a href=&quot;https://summerofcode.withgoogle.com/about/&quot;&gt;Google Summer of Code&lt;/a&gt;, a program that aims to bring students together with open source organizations in order to help them to gain exposure to software development practices and real-world challenges.&lt;/p&gt;
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;System configuration management (e.g., Ansible) has been really hype in the recent years and there is a strong reason for that.
+Configuration management facilitates configuring a new environment following a fixed &lt;em&gt;recipe&lt;/em&gt; or slightly varying it with the help of parameters. This has not only the advantage of being able to do it more frequently but reduces the chance of errors than doing it manually.&lt;br&gt;Beyond that, combining it with &lt;em&gt;Continuous Integration&lt;/em&gt; tools (e.g., Jenkins) allows making a deployment as soon as a new codebase version is available, which represents the main building block of a &lt;em&gt;Continuous Delivery&lt;/em&gt; pipeline, one of the objectives of embracing a DevOps culture.&lt;/p&gt;
+&lt;p&gt;Given that Vert.x is a framework that consists in a few libraries which can be shipped within a single &lt;em&gt;fat jar&lt;/em&gt;, adopting a DevOps culture while developing a Vert.x-based application is straightforward.&lt;/p&gt;
+&lt;h2 id=&quot;overview&quot;&gt;Overview&lt;/h2&gt;
+&lt;p&gt;As seen in the diagram below, this post describes a method to define a Jenkins build job which will react to changes in a code repository. After succesfully building the project, the job will execute an Ansible &lt;em&gt;playbook&lt;/em&gt; to deploy the new application version to the hosts specified within the Ansible configuration.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/continuous-delivery-jenkins-ansible/ansible-jenkins-overview.svg&quot; alt=&quot;Overview of the continous delivery process&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;creating-a-jenkins-build-job-using-job-dsl&quot;&gt;Creating a Jenkins build job using Job DSL&lt;/h2&gt;
+&lt;p&gt;Jenkins has created a convenient way to define build jobs using a DSL. While this option avoids the hassle of configuring build jobs manually, it supports all features of the regular interface through its &lt;a href=&quot;https://jenkinsci.github.io/job-dsl-plugin/&quot;&gt;API&lt;/a&gt;. It is possible to use Ansible together with Jenkins with the help of the Ansible &lt;a href=&quot;https://wiki.jenkins-ci.org/display/JENKINS/Ansible+Plugin/&quot;&gt;plugin&lt;/a&gt;, whose instructions are also included in the Job DSL &lt;a href=&quot;https://github.com/jenkinsci/ansible-plugin/blob/master/README.md&quot;&gt;API&lt;/a&gt;. Alternatively to the Job DSL Plugin, Ansible can be used inside the definition of Jenkins Pipeline, one of tool’s most recent features.&lt;/p&gt;
+&lt;p&gt;Below is a sample job definition which can be used after creating a &lt;em&gt;freestyle&lt;/em&gt; job (seed job) and adding a new build step with the DSL script. In the script, there are a few things to notice:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A name for the job created by the seed job is given.&lt;/li&gt;
+&lt;li&gt;Specific versions of JDK, Maven, and Ansible (available in the environment) are used.&lt;/li&gt;
+&lt;li&gt;Git is selected as the SCM platform and the target repository is defined. Also, the build job is triggered according to a specific interval.&lt;/li&gt;
+&lt;li&gt;The Maven &lt;em&gt;package&lt;/em&gt; goal is invoked, which is instructed to package the application into a fat jar.&lt;/li&gt;
+&lt;li&gt;Lastly, Ansible is used to call a playbook available in the filesystem. The app will be deployed to the defined target hosts and the credentials (configured in Jenkins) will be used to log into the target hosts. Additionally, enabling the &lt;code&gt;colorizedOutput&lt;/code&gt; option will result in a friendlier formatting of the results in the console output. The contents of this playbook will be addressed in the next section.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs groovy&quot;&gt;job(&lt;span class=&quot;hljs-string&quot;&gt;&#39;vertx-microservices-workshop-job&#39;&lt;/span&gt;) {
+    jdk(&lt;span class=&quot;hljs-string&quot;&gt;&#39;JDK8&#39;&lt;/span&gt;)
+    scm {
+        git(&lt;span class=&quot;hljs-string&quot;&gt;&#39;git://github.com/ricardohmon/vertx-microservices-workshop.git&#39;&lt;/span&gt;)
+    }
+    triggers {
+        scm(&lt;span class=&quot;hljs-string&quot;&gt;&#39;*/15 * * * *&#39;&lt;/span&gt;)
+    }
+    steps {
+
+      &lt;span class=&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; mvnInst = &lt;span class=&quot;hljs-string&quot;&gt;&#39;M3.3.9&#39;&lt;/span&gt;  
+      maven {  
+        goals(&lt;span class=&quot;hljs-string&quot;&gt;&#39;package&#39;&lt;/span&gt;)  
+        mavenInstallation(mvnInst)  
+      }  
+      ansiblePlaybook(&lt;span class=&quot;hljs-string&quot;&gt;&#39;/ansible/playbook.yml&#39;&lt;/span&gt;) {  
+        inventoryPath(&lt;span class=&quot;hljs-string&quot;&gt;&#39;/ansible/hosts&#39;&lt;/span&gt;)  
+        ansibleName(&lt;span class=&quot;hljs-string&quot;&gt;&#39;Ansible2.0&#39;&lt;/span&gt;)  
+        credentialsId(&lt;span class=&quot;hljs-string&quot;&gt;&#39;vagrant-key&#39;&lt;/span&gt;)  
+        colorizedOutput(&lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;)  
+      }  
+
+    }  
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;deploying-vert-x-app-using-ansible&quot;&gt;Deploying Vert.x app using Ansible&lt;/h2&gt;
+&lt;p&gt;An Ansible Playbook results quite convenient to deploy a Vert.x application to a number of hosts while still taking considerations for each of them. Below is a sample playbook that deploys the respective application to each of the hosts described in an &lt;em&gt;inventory&lt;/em&gt; file. The playbook comprises the following tasks and takes the listed considerations:&lt;/p&gt;
+&lt;p&gt;1) A task that targets only hosts with a database.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The target hosts is specified with the name of the host (or hosts group) defined in the inventory file.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;2) Actual application deployment task. Here, several considerations are done:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The application may require that only one host is updated at the time.&lt;br&gt;This can be achieved with the &lt;code&gt;serial&lt;/code&gt; option, while the order of the deployment to hosts can be enforced in the &lt;code&gt;hosts&lt;/code&gt; option.&lt;br&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Host processing order &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; Even though we could have declared &lt;code&gt;all&lt;/code&gt; hosts, Ansible does not provide an explicit way to specify the order.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;Java is a system requirement for our Vert.x applications.&lt;br&gt;Besides installing it (keep reading), we need to declare the &lt;code&gt;JAVA_HOME&lt;/code&gt; environment variable.&lt;/li&gt;
+&lt;li&gt;A deployment may just represent an update to an already running application (&lt;em&gt;Continuous Deployment&lt;/em&gt;), hence it is convenient to stop the previous application inside the &lt;code&gt;pre_tasks&lt;/code&gt; and take post-deployment actions in the &lt;code&gt;post_tasks&lt;/code&gt;.
+Vert.x ships with the convenient &lt;code&gt;start&lt;/code&gt;/&lt;code&gt;stop&lt;/code&gt;/&lt;code&gt;list&lt;/code&gt; commands that result very helpful here. We can use the &lt;code&gt;list&lt;/code&gt; command and extract (using regex) the &lt;code&gt;id&lt;/code&gt; of the running application of its output to stop it before deploying a new version.
+&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Hint &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; If our solution includes a load balancer or proxy, we could deal with them at this step as described in Ansible’s &lt;a href=&quot;http://docs.ansible.com/ansible/playbooks_delegation.html&quot;&gt;best practices&lt;/a&gt; for rolling updates&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;Call to a &lt;code&gt;role&lt;/code&gt; that makes the actual application deployment. The Jenkins Ansible Plugin includes, between others, a &lt;code&gt;WORKSPACE&lt;/code&gt; environment variable, which may result very helpful in the following tasks, as shown later.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;# &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;) Special task &lt;span class=&quot;hljs-keyword&quot;&gt;for&lt;/span&gt; the service with a db
+- &lt;span class=&quot;hljs-string&quot;&gt;hosts:&lt;/span&gt; audit-service
+&lt;span class=&quot;hljs-label&quot;&gt;  remote_user:&lt;/span&gt; vagrant
+&lt;span class=&quot;hljs-label&quot;&gt;  become:&lt;/span&gt; yes
+&lt;span class=&quot;hljs-label&quot;&gt;  roles:&lt;/span&gt;
+    - db-setup
+
+  # &lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt;) Common tasks &lt;span class=&quot;hljs-keyword&quot;&gt;for&lt;/span&gt; all hosts
+- &lt;span class=&quot;hljs-string&quot;&gt;hosts:&lt;/span&gt; quote-&lt;span class=&quot;hljs-string&quot;&gt;generator:&lt;/span&gt;portfolio-&lt;span class=&quot;hljs-string&quot;&gt;service:&lt;/span&gt;compulsive-&lt;span class=&quot;hljs-string&quot;&gt;traders:&lt;/span&gt;audit-&lt;span class=&quot;hljs-string&quot;&gt;service:&lt;/span&gt;trader-dashboard
+&lt;span class=&quot;hljs-label&quot;&gt;  remote_user:&lt;/span&gt; vagrant
+&lt;span class=&quot;hljs-label&quot;&gt;  become:&lt;/span&gt; yes
+&lt;span class=&quot;hljs-label&quot;&gt;  serial:&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;hljs-label&quot;&gt;  environment:&lt;/span&gt;
+&lt;span class=&quot;hljs-label&quot;&gt;    JAVA_HOME:&lt;/span&gt; &lt;span class=&quot;hljs-regexp&quot;&gt;/usr/&lt;/span&gt;lib&lt;span class=&quot;hljs-regexp&quot;&gt;/jvm/&lt;/span&gt;jre-&lt;span class=&quot;hljs-number&quot;&gt;1.8&lt;/span&gt;&lt;span class=&quot;hljs-number&quot;&gt;.0&lt;/span&gt;-openjdk/
+&lt;span class=&quot;hljs-label&quot;&gt;
+  pre_tasks:&lt;/span&gt;
+  - &lt;span class=&quot;hljs-string&quot;&gt;name:&lt;/span&gt; Check &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; the app jar exists &lt;span class=&quot;hljs-keyword&quot;&gt;in&lt;/span&gt; the target already
+&lt;span class=&quot;hljs-label&quot;&gt;    stat:&lt;/span&gt; path=&lt;span class=&quot;hljs-regexp&quot;&gt;/usr/&lt;/span&gt;share&lt;span class=&quot;hljs-regexp&quot;&gt;/vertx_app/&lt;/span&gt;app-fatjar.jar
+&lt;span class=&quot;hljs-label&quot;&gt;    register:&lt;/span&gt; st
+  - &lt;span class=&quot;hljs-string&quot;&gt;name:&lt;/span&gt; List running Vert.x applications
+&lt;span class=&quot;hljs-label&quot;&gt;    command:&lt;/span&gt; java -jar &lt;span class=&quot;hljs-regexp&quot;&gt;/usr/&lt;/span&gt;share&lt;span class=&quot;hljs-regexp&quot;&gt;/vertx_app/&lt;/span&gt;app-fatjar.jar list
+&lt;span class=&quot;hljs-label&quot;&gt;    register:&lt;/span&gt; running_app_list
+&lt;span class=&quot;hljs-label&quot;&gt;    when:&lt;/span&gt; st.stat.exists == True
+  - &lt;span class=&quot;hljs-string&quot;&gt;name:&lt;/span&gt; Stop app &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; it is already running (avoid multiple running instances)
+&lt;span class=&quot;hljs-label&quot;&gt;    command:&lt;/span&gt; java -jar &lt;span class=&quot;hljs-regexp&quot;&gt;/usr/&lt;/span&gt;share&lt;span class=&quot;hljs-regexp&quot;&gt;/vertx_app/&lt;/span&gt;app-fatjar.jar stop {{ item | regex_replace(&lt;span class=&quot;hljs-string&quot;&gt;&#39;^(?P&lt;V_id&gt;.[8]-.[4]-.[4].[4].[12])\t.*&#39;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&#39;\\g&lt;V_id&gt;&#39;&lt;/span&gt;) }}
+&lt;span class=&quot;hljs-label&quot;&gt;    with_items:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;{{ running_app_list.stdout_lines|default([]) }}&quot;&lt;/span&gt;
+&lt;span class=&quot;hljs-label&quot;&gt;    when:&lt;/span&gt; st.stat.exists == True and (item | regex_replace(&lt;span class=&quot;hljs-string&quot;&gt;&#39;.*\t(.*)$&#39;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&#39;\\1&#39;&lt;/span&gt;) | match(&lt;span class=&quot;hljs-string&quot;&gt;&#39;.*/app-fatjar.jar$&#39;&lt;/span&gt;))
+
+  # Main role
+&lt;span class=&quot;hljs-label&quot;&gt;  roles:&lt;/span&gt;
+    - { &lt;span class=&quot;hljs-string&quot;&gt;role:&lt;/span&gt; vertx-app-deployment, &lt;span class=&quot;hljs-string&quot;&gt;jenkins_job_workspace:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;&quot;&lt;/span&gt; }
+&lt;span class=&quot;hljs-label&quot;&gt;
+  post_tasks:&lt;/span&gt;
+  - &lt;span class=&quot;hljs-string&quot;&gt;name:&lt;/span&gt; List again running Vert.x applications
+&lt;span class=&quot;hljs-label&quot;&gt;    command:&lt;/span&gt; java -jar &lt;span class=&quot;hljs-regexp&quot;&gt;/usr/&lt;/span&gt;share&lt;span class=&quot;hljs-regexp&quot;&gt;/vertx_app/&lt;/span&gt;app-fatjar.jar list&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Once we took care of the actions shown before, the remaining tasks (included in the main deployment role) reduce to the following:&lt;/p&gt;
+&lt;p&gt;1) Prepare the target machine with the proper environment to run our application. This includes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Set up Java (pretty convenient to do it through a package manager).&lt;/li&gt;
+&lt;li&gt;Copy the Vert.x application package to the appropriate folder (quite simple using a fat jar). The actual name and location of the jar package in the Jenkins environment can be defined using host-specific &lt;a href=&quot;http://docs.ansible.com/ansible/playbooks_delegation.html&quot;&gt;variables&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;In case necessary, copy the required config files.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;- &lt;span class=&quot;hljs-property&quot;&gt;name&lt;/span&gt;: Install Java &lt;span class=&quot;hljs-number&quot;&gt;1.8&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;some&lt;/span&gt; basic dependencies
+  yum: &lt;span class=&quot;hljs-property&quot;&gt;name&lt;/span&gt;={{ &lt;span class=&quot;hljs-property&quot;&gt;item&lt;/span&gt; }} state=present
+  with_items:
+   - java-&lt;span class=&quot;hljs-number&quot;&gt;1.8&lt;/span&gt;&lt;span class=&quot;hljs-number&quot;&gt;.0&lt;/span&gt;-openjdk
+- &lt;span class=&quot;hljs-property&quot;&gt;name&lt;/span&gt;: Ensure app dir exists
+  &lt;span class=&quot;hljs-type&quot;&gt;file&lt;/span&gt;: path=/usr/share/vertx_app/ recurse=yes state=directory mode=&lt;span class=&quot;hljs-number&quot;&gt;0744&lt;/span&gt;
+- &lt;span class=&quot;hljs-property&quot;&gt;name&lt;/span&gt;: Copy &lt;span class=&quot;hljs-keyword&quot;&gt;the&lt;/span&gt; Vert.x &lt;span class=&quot;hljs-type&quot;&gt;application&lt;/span&gt; jar package
+  &lt;span class=&quot;hljs-keyword&quot;&gt;copy&lt;/span&gt;: src={{ app_jar }} dest=/usr/share/vertx_app/app-fatjar.jar mode=&lt;span class=&quot;hljs-number&quot;&gt;0755&lt;/span&gt;
+- &lt;span class=&quot;hljs-property&quot;&gt;name&lt;/span&gt;: Ensure config dir exists
+  &lt;span class=&quot;hljs-type&quot;&gt;file&lt;/span&gt;: path=/etc/vertx_app/ recurse=yes state=directory mode=&lt;span class=&quot;hljs-number&quot;&gt;0744&lt;/span&gt;
+- &lt;span class=&quot;hljs-property&quot;&gt;name&lt;/span&gt;: Copy &lt;span class=&quot;hljs-keyword&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;application&lt;/span&gt; config &lt;span class=&quot;hljs-type&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; needed
+  &lt;span class=&quot;hljs-keyword&quot;&gt;copy&lt;/span&gt;: src={{ app_config }} dest=/etc/vertx_app/config.json mode=&lt;span class=&quot;hljs-number&quot;&gt;0755&lt;/span&gt;
+  when: app_config &lt;span class=&quot;hljs-keyword&quot;&gt;is&lt;/span&gt; defined&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2) Run the application as a service in the hosting machine.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Make sure to ignore the hang up signal with the help of &lt;code&gt;nohup&lt;/code&gt; command. Otherwise, Ansible will be stuck at this step.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;- name: &lt;span class=&quot;hljs-keyword&quot;&gt;Run&lt;/span&gt; Vert.x application as a service, ignore the SIGHUP signal
+  shell: nohup java &lt;span class=&quot;hljs-list&quot;&gt;&lt;/span&gt;&lt;span class=&quot;hljs-list&quot;&gt;{{ vertx_opts }&lt;/span&gt;}&lt;span class=&quot;hljs-list&quot;&gt;&lt;/span&gt; -jar /usr/share/vertx_app/app-fatjar.jar start &lt;span class=&quot;hljs-list&quot;&gt;&lt;/span&gt;&lt;span class=&quot;hljs-list&quot;&gt;{{ launch_params }&lt;/span&gt;}&lt;span class=&quot;hljs-list&quot;&gt;&lt;/span&gt;
+  register: svc_run_out
+- name: &lt;span class=&quot;hljs-keyword&quot;&gt;Print&lt;/span&gt; run output
+  debug: var=svc_run_out.stdout_lines&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Launching the Vert.x app &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; This example uses the &lt;code&gt;start&lt;/code&gt; command to launch the application as a service. This method may result more comfortable than creating an &lt;a href=&quot;http://vertx.io/blog/vert-x-3-init-d-script/&quot;&gt;init.d script&lt;/a&gt; or calling Vert.x from &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/#running-at-the-command-line&quot;&gt;command line&lt;/a&gt;, which would have required to install the Vert.x libraries in an independent Ansible task. &lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;This describes all the configuration needed to be able to build from a repository using Jenkins and deploy the results to our hosts with Ansible.&lt;/p&gt;
+&lt;h2 id=&quot;sample-sources-and-demo&quot;&gt;Sample sources and demo&lt;/h2&gt;
+&lt;p&gt;The sample configurations presented before are part of a complete demo focused on the Vert.x microservices &lt;a href=&quot;http://vertx-lab.dynamis-technologies.com/&quot;&gt;workshop&lt;/a&gt; to exemplify a basic Continuous Delivery scenario. This set up is available in a &lt;a href=&quot;https://github.com/ricardohmon/vertx-ansible&quot;&gt;repository&lt;/a&gt; and contains, in addition, a pre-configured Jenkins-based demo ready to host the build job described the previous sections. The demo scenario requires Vagrant and Virtualbox to be launched.&lt;/p&gt;
+&lt;h3 id=&quot;launch-instructions&quot;&gt;Launch instructions&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Clone or download this repository, and launch the demo using &lt;code&gt;vagrant up&lt;/code&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;git clone http&lt;span class=&quot;hljs-variable&quot;&gt;s:&lt;/span&gt;//github.&lt;span class=&quot;hljs-keyword&quot;&gt;com&lt;/span&gt;/ricardohmon/vertx-ansible.git
+&lt;span class=&quot;hljs-keyword&quot;&gt;cd&lt;/span&gt; demo
+vagrant &lt;span class=&quot;hljs-keyword&quot;&gt;up&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+This command will launch a virtual machine hosting Jenkins with the required plugins installed (tools names needed) and also launch five additional VMs that will host the microservices deployed by Jenkins.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Create a Jenkins freestyle build job using the DSL job script (seed job) found in &lt;code&gt;deployment-jobs/microservices_workshop_dsl.groovy&lt;/code&gt; and build it.
+&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Tool configuration assumption &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; The DSL Job assumes the following tools (with names) have been configured in Jenkins: Java 8(&lt;code&gt;JDK8&lt;/code&gt;), Maven (&lt;code&gt;M3.3.9&lt;/code&gt;), Ansible (&lt;code&gt;Ansible2.0&lt;/code&gt;)&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;After building the seed job, a new job(&lt;code&gt;vertx-microservices-workshop-job&lt;/code&gt;) will be created, which will be in charge of pulling recent changes of the project, building it, and deploying it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;demo&quot;&gt;Demo&lt;/h3&gt;
+&lt;p&gt;Watch the previous demo in action in the following screencast:&lt;/p&gt;
+&lt;div class=&quot;embed-responsive embed-responsive-16by9&quot;&gt;
+&lt;iframe class=&quot;embed-responsive-item&quot; src=&quot;https://www.youtube.com/embed/GQd_Rfeu6Yo&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Continuous Delivery approach is a &lt;em&gt;must&lt;/em&gt; in modern software development lifecycles (including Vert.x-based applications) and a step further towards adopting a DevOps culture. There are a number of tools that enable it and one example is the combination of Jenkins + Ansible described in this post.&lt;br&gt;While Jenkins offers the possibility to integrate recent changes perceived in a codebase and build runnable artifacts, Ansible can help to deploy them to hosting environments. The usage of both tools can be coupled easily with the help of the Job DSL plugin, a feature of Jenkins that allows describing a build job using a &lt;em&gt;domain-specific language&lt;/em&gt;, which can help to integrate additional steps and tools to a &lt;em&gt;CD&lt;/em&gt; pipeline.&lt;/p&gt;
+&lt;p&gt;Further enhancements can be done to this basic pipeline, such as, integrating the recent &lt;a href=&quot;https://wiki.jenkins-ci.org/display/JENKINS/Pipeline+Plugin&quot;&gt;Pipeline plugin&lt;/a&gt;, a feature that allows a better orchestration of CD stages; inclusion of notification and alerting services; and, ultimately a zero-downtime deployment approach, which could be achieved with the help of a proxy; plus, tons of options available trough Jenkins plugins.&lt;/p&gt;
+&lt;p&gt;Thanks for reading!&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Wed, 28 Sep 2016 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/vert-x-featuring-continuous-delivery-with-jenkins-and-ansible</link>
+          <guid isPermaLink="true">http://vertx.io/blog/vert-x-featuring-continuous-delivery-with-jenkins-and-ansible</guid>
+          <author>
+            <name>ricardohmon</name>
+            <uri>http://github.com/ricardohmon</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Vert.x 3.3.3 is released !</title>
           <description>
       &lt;article&gt;&lt;p&gt;We have just released Vert.x 3.3.3, a bug fix release of Vert.x 3.3.x.&lt;/p&gt;
