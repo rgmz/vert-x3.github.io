@@ -8,6 +8,91 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Getting started with new fabric8 Vert.x Maven Plugin</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;The all new &lt;a href=&quot;http://vmp.fabric8.io&quot;&gt;fabric8 Vert.x Maven Plugin&lt;/a&gt; allows you to setup, package, run, start, stop and redeploy easily with a very little configuration resulting in a less verbose &lt;code&gt;pom.xml&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block info&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-info-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;The plugin is developed under the &lt;a href=&quot;https://fabric8.io/&quot;&gt;fabric8&lt;/a&gt; umbrella&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;Traditionally Vert.x applications using &lt;a href=&quot;http://maven.apache.org&quot;&gt;Apache Maven&lt;/a&gt; need to have one or more of the following plugins,&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://maven.apache.org/plugins/maven-shade-plugin/&quot;&gt;Maven Shade Plugin&lt;/a&gt; - aids in packaging a uber jar of Vert.x application with additional configurations to perform SPI combining, MANIFEST.MF entries etc.,&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.mojohaus.org/exec-maven-plugin/&quot;&gt;Maven Exec Plugin&lt;/a&gt; - aids in starting the Vert.x application&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://maven.apache.org/plugins/maven-ant-plugin/&quot;&gt;Maven Ant Plugin&lt;/a&gt; - aids in stopping the running Vert.x application&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Though these are great plugins and does what is required, but end of the day the developer is left with a verbose &lt;code&gt;pom.xml&lt;/code&gt; which might become harder to maintain as the application or its configuration grows, even if we decide to go this way and use the plugins, there are somethings like the one listed below which can’t done or done easily,&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;run&lt;/code&gt; application on foreground - which is a typical way during development where the application starts in foreground of &lt;a href=&quot;http://maven.apache.org&quot;&gt;Apache Maven&lt;/a&gt; build and killed automatically once we it &lt;code&gt;Ctrl + c&lt;/code&gt;(or &lt;code&gt;CMD + c&lt;/code&gt; on Mac)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;redeploy&lt;/code&gt; - one of the coolest feature of Vert.x allowing us to perform hot deployments, still we can manage to do this with IDE support but not natively using &lt;a href=&quot;http://maven.apache.org&quot;&gt;Apache Maven&lt;/a&gt; - typically cases where we disable Automatic Builds via IDE&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;setup&lt;/code&gt; Vert.x applications with sensible defaults and required Vert.x dependencies e.g. vertx-core&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In this first blog of fabric8 Vert.x Maven Plugin series we will help you to get started with this new &lt;a href=&quot;http://vmp.fabric8.io&quot;&gt;fabric8 Vert.x Maven Plugin&lt;/a&gt;, highlighting how this plugin helps alleviating the aforementioned pain points with a less verbose &lt;code&gt;pom.xml&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&quot;http://maven.apache.org&quot;&gt;Apache Maven&lt;/a&gt; plugin source code is available at &lt;a href=&quot;https://github.com/fabric8io/vertx-maven-plugin&quot;&gt;github&lt;/a&gt; with &lt;a href=&quot;http://maven.apache.org&quot;&gt;Apache Maven&lt;/a&gt; plugin documentation available at &lt;a href=&quot;http://vmp.fabric8.io&quot;&gt;fabric8 Vert.x Maven Plugin&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The source code of the examples used in this blog are available at &lt;a href=&quot;https://github.com/kameshsampath/vmp-blog&quot;&gt;github&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;let-s-set-it-up&quot;&gt;Let’s set it up&lt;/h2&gt;
+&lt;p&gt;Its very easy to setup and get started, lets say you have project called &lt;em&gt;vmp-blog&lt;/em&gt; with the following content as part of &lt;code&gt;pom.xml&lt;/code&gt;&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/kameshsampath/0e0cfc90ea3cb9d69553ee9901dfd796.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;from the project directory just run the following command,&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;mvn io.fabric8:vertx-maven-plugin:&lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;.&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;:setup&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;On successfull execution of the above command the project’s &lt;code&gt;pom.xml&lt;/code&gt; will be updated as shown below,&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/kameshsampath/3c2e96d98f1e16d0f7a0501c05ce0d12.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;The command did the following for you on the project:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;added couple of properties&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;fabric8.vertx.plugin.version&lt;/code&gt;  - the latest fabric8 vert.x maven plugin version&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;vertx.version&lt;/code&gt; - the latest Vert.x framework version&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;add the Vert.x dependency BOM  and vertx-core dependency corresponding to &lt;code&gt;vertx.version&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;add &lt;code&gt;vertx-maven-plugin&lt;/code&gt; with a single execution for goals &lt;a href=&quot;https://vmp.fabric8.io/#vertx:initalize&quot;&gt;initialize&lt;/a&gt; and &lt;a href=&quot;https://vmp.fabric8.io/#vertx:package&quot;&gt;package&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The source code until this step is available in &lt;a href=&quot;https://github.com/kameshsampath/vmp-blog/tree/setup&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Voilà, you are now all set to go with your Vert.x application building with &lt;a href=&quot;http://maven.apache.org&quot;&gt;Apache Maven&lt;/a&gt;!!&lt;/p&gt;
+&lt;h2 id=&quot;let-s-package-it&quot;&gt;Let’s package it&lt;/h2&gt;
+&lt;p&gt;Now we have set our project to use &lt;code&gt;vertx-maven-plugin&lt;/code&gt;, lets now add a simple verticle and package the Vert.x application as typicall &lt;em&gt;uber&lt;/em&gt; jar in Vert.x world we call them as &lt;em&gt;fat&lt;/em&gt; jar.  The source code of this section is available &lt;a href=&quot;https://github.com/kameshsampath/vmp-blog/tree/package&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To make package work correctly we need to add property called &lt;code&gt;vertx.verticle&lt;/code&gt;, which will be used by the vertx-maven-plugin to set the &lt;code&gt;Main-Verticle&lt;/code&gt; attribute of the &lt;code&gt;MANIFEST.MF&lt;/code&gt;.  Please refer to the &lt;a href=&quot;https://vmp.fabric8.io/#vertx:package&quot;&gt;package&lt;/a&gt; of the vertx-maven-plugin for other possible configurations.  There is also a &lt;a href=&quot;https://vmp.fabric8.io/#vertx:examples&quot;&gt;examples&lt;/a&gt; section of the vertx-maven-plugin which provides various samples snippets.&lt;/p&gt;
+&lt;p&gt;The updated &lt;code&gt;pom.xml&lt;/code&gt; with added property &lt;code&gt;vertx-maven-plugin&lt;/code&gt; is shown below,&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;Only updated section is shown below, rest of the pom.xml is same as above&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/kameshsampath/24a1ed6a377b118f06af2c4b4ddf0ca0.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;To package the Vert.x application, run the following &lt;a href=&quot;http://maven.apache.org&quot;&gt;Apache Maven&lt;/a&gt; command from the project,&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;mvn clean package&lt;/code&gt;&lt;/pre&gt;
+On successful run of the above command you should see the file with name `${project.finalName}.jar` created in the `${project.build.directory}`, you could now do the following to start and run the Vert.x application.
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;java -jar &lt;span class=&quot;hljs-variable&quot;&gt;${project.build.directory}&lt;/span&gt;/&lt;span class=&quot;hljs-variable&quot;&gt;${project.finalName}&lt;/span&gt;.jar&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The generated &lt;code&gt;MANIFEST.MF&lt;/code&gt; file is as shown below,&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;Main-Class                               io&lt;span class=&quot;hljs-class&quot;&gt;.vertx&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.core&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.Launcher&lt;/span&gt;
+Main-Verticle                            io&lt;span class=&quot;hljs-class&quot;&gt;.fabric8&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.blog&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.MainVerticle&lt;/span&gt;
+Manifest-Version                         &lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The source code until this step is available in &lt;a href=&quot;https://github.com/kameshsampath/vmp-blog/tree/package&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;spi-combination&quot;&gt;SPI Combination&lt;/h3&gt;
+&lt;p&gt;The package goal by default does SPI combination, lets say you have a service file called &lt;code&gt;com.fasterxml.jackson.core.JsonFactory&lt;/code&gt; in &lt;code&gt;${project.basedir}/src/main/resources/META-INF/services&lt;/code&gt; with contents as shown below,&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;foo.bar.baz.MyImpl
+&lt;span class=&quot;hljs-variable&quot;&gt;${combine}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;During package if the &lt;a href=&quot;http://vmp.fabric8.io&quot;&gt;fabric8 Vert.x Maven Plugin&lt;/a&gt; finds another &lt;code&gt;com.fasterxml.jackson.core.JsonFactory&lt;/code&gt; service definition file within the project dependencies with content &lt;em&gt;foo.bar.baz2.MyImpl2&lt;/em&gt;, then it merges the content into &lt;code&gt;com.fasterxml.jackson.core.JsonFactory&lt;/code&gt; of &lt;code&gt;${project.basedir}/src/main/resources/META-INF/services&lt;/code&gt;, resulting in a content as shown below,&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;foo&lt;span class=&quot;hljs-class&quot;&gt;.bar&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.baz&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.MyImpl&lt;/span&gt;
+foo&lt;span class=&quot;hljs-class&quot;&gt;.bar&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.baz2&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.MyImpl2&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The position of &lt;code&gt;${combine}&lt;/code&gt; controls the ordering of the merge, since we added &lt;code&gt;${combine}&lt;/code&gt; below &lt;em&gt;foo.bar.baz.MyImpl&lt;/em&gt; all other SPI definitions will be appended below &lt;em&gt;foo.bar.baz.MyImpl&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&quot;what-s-next-&quot;&gt;What’s next ?&lt;/h2&gt;
+&lt;p&gt;It’s good have the jar packaged and run using &lt;code&gt;java -jar uber-jar&lt;/code&gt;, but when doing typical development you don’t  want to do frequent &lt;a href=&quot;http://maven.apache.org&quot;&gt;Apache Maven&lt;/a&gt; packaging and wish to see your changes automatically redeployed.&lt;/p&gt;
+&lt;p&gt;Don’t worry!!! As part of &lt;a href=&quot;http://vmp.fabric8.io&quot;&gt;fabric8 Vert.x Maven Plugin&lt;/a&gt; we have added the incremental builder to &lt;a href=&quot;http://maven.apache.org&quot;&gt;Apache Maven&lt;/a&gt; build, which will watch for your source and resource changes to perform automatic re-build and delegate the redeployment to Vert.x.&lt;/p&gt;
+&lt;p&gt;Run,redeploy and other features of the &lt;a href=&quot;http://vmp.fabric8.io&quot;&gt;fabric8 Vert.x Maven Plugin&lt;/a&gt; will be explored in detail in the next part of this series, until the have fun with &lt;a href=&quot;http://vmp.fabric8.io&quot;&gt;fabric8 Vert.x Maven Plugin&lt;/a&gt;!!&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Wed, 07 Dec 2016 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/getting-started-with-new-fabric8-vert-x-maven-plugin</link>
+          <guid isPermaLink="true">http://vertx.io/blog/getting-started-with-new-fabric8-vert-x-maven-plugin</guid>
+          <author>
+            <name>kameshsampath</name>
+            <uri>http://github.com/kameshsampath</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>OAuth2 got easy</title>
           <description>
       &lt;article&gt;&lt;p&gt;&lt;code&gt;Oauth2&lt;/code&gt; support exists in Eclipse Vert.x since version 3.2.0. The implementation follows the principles that rule the whole vert.x ecosystem: unopinionated, it does what you want it to do, simple but not too simple.&lt;/p&gt;
