@@ -2204,124 +2204,6 @@ you now compile your project:&lt;/p&gt;
         </item>
       
         <item>
-          <title>Checklist for Migrating from Vert.x 2.1.x to Vert.x 3 - Part One</title>
-          <description>
-      &lt;article&gt;&lt;p&gt;This blog post presents feedbacks from a project migration using Vert.x 2 to Vert.x 3.&lt;/p&gt;
-&lt;h2 id=&quot;we-are-in-the-process-of-converting-our-vert-x-2-1-5-application-to-vert-x-3-0-&quot;&gt;We are in the process of converting our Vert.x 2.1.5 application to Vert.x 3.0.&lt;/h2&gt;
-&lt;p&gt;So while upgrading our application, I thought I should note down all the changes that we had to do in the process. Since Vert.x 3 is a major upgrade from the previous version, with so many changes.&lt;/p&gt;
-&lt;p&gt;It requires re-thinking your current 2.x Vert.x application. There are new classes, new apis, and a new package structure that has greatly simplified things that we used to have to work around. Therefore in our upgrade it required us to refactor and remove any unnecessary &lt;em&gt;“hacks”&lt;/em&gt; that weren’t available in 2 that are now a part of Vert.x 3 that you really want and need to take advantage of. (I don’t mean there are hacks in 3.x, just that we had in our application with Vert.x 2.x)&lt;/p&gt;
-&lt;p&gt;There are &lt;em&gt;Metrics&lt;/em&gt;, and &lt;em&gt;Clustered shared data&lt;/em&gt;, with locking and many more features that are amazing new additions. These are things we had to hack into our application with Vert.x 2.x. We added our own &lt;code&gt;MetricsRegistry&lt;/code&gt; from &lt;a href=&quot;https://dropwizard.github.io/metrics/3.1.0/getting-started/&quot;&gt;DropWizard&lt;/a&gt; which meant making our own &lt;code&gt;Main&lt;/code&gt; class that called Vert.x’s &lt;code&gt;Starter&lt;/code&gt; class after starting up the registry, but only in our &lt;em&gt;Devops&lt;/em&gt; server deploys, not our developer machines. And we had to build our own distributed locked of clustered data that also required writing a comprehensive distributed timers. (The timers got fixed with a better actor model). But now we can use what Vert.x gives us internally for those use cases.&lt;/p&gt;
-&lt;p&gt;This blog post is part one, as I am sure there will be some new changes that we need to do that we haven’t gotten to yet. Which as we go, will post in part two. Also that this post is a work in progress in that whenever you are upgrading and refactoring your code, it doesn’t leave much time for taking detailed notes, or writing beautiful prose. I am a terrible writer even when I can fully concentrate on it. So the first draft will just be a list of my notes. These notes are not in any particular order, but some things like tests you might want to save for last. (Just DON’T delete your tests, tests are very important)&lt;/p&gt;
-&lt;p&gt;One of the first things that Vert.x has changed is the whole &lt;em&gt;classloader&lt;/em&gt; setup. Read the Vert.x Docs for more information but basically, we have a flat &lt;em&gt;classloader&lt;/em&gt; system now. YAY! And one of the first things I noticed that is gone is the &lt;code&gt;Platform&lt;/code&gt; module.&lt;/p&gt;
-&lt;h2 id=&quot;changes-we-have-made-&quot;&gt;Changes we have made.&lt;/h2&gt;
-&lt;h3 id=&quot;dependency-changes&quot;&gt;Dependency changes&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;So the first thing we did was to remove the &lt;code&gt;vert.x-platform&lt;/code&gt; dependency from our &lt;code&gt;pom&lt;/code&gt; file (Build dependency file of whatever build system you use) This also means that you will be removing any import statements from your code that has &lt;code&gt;.platform&lt;/code&gt;. Which leads us to the next point.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Change all the imports for Vertx. from &lt;code&gt;org.vertx&lt;/code&gt; to &lt;code&gt;io.vertx&lt;/code&gt;. This could be a lot of work, as it is in every class you use Vert.x in. We had at least 250 locations to change here. Some classes have moved packages and “jars” that have them, so there will be some new jars to include as dependencies and different import statements for them.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;If using a language other than Java, change the dependency to &lt;code&gt;vertx-lang-&lt;&lt;language&gt;&gt;&lt;/code&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Remove any modules references that are using Vert.x 2.x stuff. You can get an odd error like
-&lt;em&gt;The type org.vertx.java.core.json.JsonObject cannot be resolved. It is indirectly referenced from required .class files&lt;/em&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;testtools&lt;/code&gt; dependency is gone. There is now Vertx-unit. So all your previous tests need to be completely re-written in the new style. This can be really difficult and time consuming as the tests you already have written really do need to be re-written from scratch. But these tests are also the backbone in knowing if your code is working. So this could take months if you have a really full set of test suites already. Also note the list below is to convert your JUnit Integration tests. as vertx-unit first and foremost provides its own testing framework/suite but it also works in JUnit, and if you are using JUnit you need to do the following&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Remove all the imports to &lt;code&gt;TestTools&lt;/code&gt;, including &lt;code&gt;VertxAssert&lt;/code&gt;. I would do a find/replace to replace all the &lt;code&gt;VertxAssert&lt;/code&gt; to &lt;code&gt;testContext&lt;/code&gt; for when you have to add &lt;code&gt;TestContext&lt;/code&gt; to all your &lt;code&gt;@Test&lt;/code&gt; methods. I recommend naming the parameter &lt;code&gt;testContext&lt;/code&gt;, just to put more context, into your context. Because if you just have &lt;code&gt;context&lt;/code&gt; as your parameter name, how do you know what context the context is? Sorry, that was too much fun. Basically, what I am saying is if you have say &lt;code&gt;Spring ApplicationContext&lt;/code&gt; in with your integration tests with Vert.x what does &lt;code&gt;context&lt;/code&gt; represent? Spring or Vert.x test context.&lt;/li&gt;
-&lt;li&gt;Add &lt;code&gt;@RunWith(VertxUnitRunner.class)&lt;/code&gt; above your test class&lt;/li&gt;
-&lt;li&gt;Remove any &lt;code&gt;VertxAssert.testComplete()&lt;/code&gt; those are gone. It needs &lt;code&gt;TestContext.async().complete()&lt;/code&gt;. It is also important to understand what &lt;code&gt;async()&lt;/code&gt; means. When to call it, when to complete it. It also allows you to do multiple &lt;code&gt;async()&lt;/code&gt; calls and nested ones. I think I needed that when I had a test that was a longer use case of many messages being sent, but only after responses to other ones occurred. For instance, to do chat in our app, you have to connect, subscribe, friend someone, then you can send a chat message. So that is 4 total Vert.x Messages sent from the Test client. And you can subscribe until connect completed, and you can send or receive messages unless you are subscribed and have a friend. So we need to have a few &lt;code&gt;async()&lt;/code&gt; calls in that scenario.&lt;/li&gt;
-&lt;li&gt;What is in your &lt;code&gt;start&lt;/code&gt; method override. Make that an &lt;code&gt;@Before&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;What is in your &lt;code&gt;stop&lt;/code&gt; method override. Make that an &lt;code&gt;@After&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;If you have your assertions have custom message &lt;em&gt;strings&lt;/em&gt; to log out when they fail, that parameter is now at the end of the &lt;code&gt;assert&lt;/code&gt; method call. Yes, this one can be painful.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&quot;build-changes&quot;&gt;Build Changes&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;Remove all &lt;em&gt;vertx maven plugin&lt;/em&gt; code to generate modules, instead create &lt;em&gt;fat&lt;/em&gt; jars, which requires adding the &lt;em&gt;Shade maven plugin&lt;/em&gt; to put all jar files into a big fat jar. The vertx-examples project has &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/maven-simplest&quot;&gt;simplest-maven&lt;/a&gt; which has the stuff to create the fat jar. &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/gradle-simplest&quot;&gt;simplest-gradle&lt;/a&gt; is the gradle equivalent.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;If you were running your application with &lt;code&gt;runMod&lt;/code&gt; or something like that then you need to create a &lt;em&gt;fat&lt;/em&gt; jar, changing the build file as in &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/blob/master/maven-simplest/pom.xml&quot;&gt;this one&lt;/a&gt; and create a Main class like here &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/blob/master/maven-simplest/src/main/java/io/vertx/example/HelloWorldEmbedded.java&quot;&gt;this one&lt;/a&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&quot;class-code-changes&quot;&gt;Class/Code Changes&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;Verticle&lt;/code&gt; is now an interface and not a class to extend, so using Groovy as an example you now extend &lt;code&gt;GroovyVerticle&lt;/code&gt;. In Java extend &lt;code&gt;AbstractVerticle&lt;/code&gt; instead.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;There is no &lt;code&gt;registerHandler&lt;/code&gt; on the eventBus anymore. So everywhere you do that has to change to create/call &lt;code&gt;consumer()&lt;/code&gt; and to unregister that handler, you have to have a reference to the &lt;code&gt;MessageConsumer&lt;/code&gt; that &lt;code&gt;consumer()&lt;/code&gt; call returns and call its &lt;code&gt;unregister&lt;/code&gt; method.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObject.toMap()&lt;/code&gt; changed to &lt;code&gt;JsonObject.getMap()&lt;/code&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObject&lt;/code&gt; also removed all the &lt;code&gt;putXXX&lt;/code&gt; methods with just one &lt;code&gt;put&lt;/code&gt; method with overloaded versions for different types.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObjectMessage&lt;/code&gt; no longer exists. What replaces depends on what you are doing. Meaning, if it is an &lt;code&gt;async&lt;/code&gt; callback to a deploy, you will get a &lt;code&gt;Message&lt;/code&gt; instance back that has &lt;code&gt;succeeded()&lt;/code&gt; or &lt;code&gt;failed()&lt;/code&gt; methods as well as &lt;code&gt;body()&lt;/code&gt; to check any results. If it is a &lt;code&gt;Consumer&lt;/code&gt;, it is typically a straight forward
-&lt;code&gt;JsonObject&lt;/code&gt;. If you are in Groovy it is also a &lt;code&gt;JsonObject&lt;/code&gt;, but the &lt;code&gt;body()&lt;/code&gt; is a &lt;code&gt;Map&lt;/code&gt; which you can use directly now, instead of having to convert from &lt;code&gt;JsonObject&lt;/code&gt; to &lt;code&gt;Map&lt;/code&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;There isn’t a &lt;code&gt;container&lt;/code&gt; variable in &lt;code&gt;Verticles&lt;/code&gt; anymore for deploying verticles and also a config file. You need to use &lt;code&gt;vertx.getOrCreateContext().config()&lt;/code&gt; to get to it. I used that in the SockJS Example code below.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;SharedData&lt;/code&gt; no longer has shared sets. It has a &lt;code&gt;Map&lt;/code&gt; of &lt;code&gt;SharedData&lt;/code&gt;, so an entry in that &lt;code&gt;Map&lt;/code&gt; of shared data could be the name of the set as the key, and a &lt;code&gt;Set&lt;/code&gt; as the value. It actually gives you more flexibility of what you put into Shared data, so this is actually a big win for us.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Getting the &lt;code&gt;writeHandlerID&lt;/code&gt; from a Socket type, is now a method call instead of &lt;code&gt;.writeHandlerID&lt;/code&gt;, so &lt;code&gt;.writeHandlerID()&lt;/code&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;SockJSSocket&lt;/code&gt; is in &lt;em&gt;vertx-web&lt;/em&gt; package now, so include it to get the class.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;There isn’t a &lt;code&gt;SockJSServer&lt;/code&gt; class anymore either. So you will create a &lt;code&gt;WebServer&lt;/code&gt;, a &lt;code&gt;Router&lt;/code&gt;
-and set SSL (if you are using SSL on the WebServer) then create a &lt;code&gt;SockJSHandler&lt;/code&gt; to assign to the router via the &lt;code&gt;route()&lt;/code&gt; method and &lt;code&gt;handler()&lt;/code&gt; methods in the Router api.
-Here is an example of our code. Although I haven’t tested it yet. ;)&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class=&quot;hljs groovy&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;MyVerticle&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;GroovyVerticle&lt;/span&gt; {&lt;/span&gt;
-  Router router
-
-  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
-  &lt;span class=&quot;hljs-typename&quot;&gt;void&lt;/span&gt; start() &lt;span class=&quot;hljs-keyword&quot;&gt;throws&lt;/span&gt; Exception {
-     router = Router.router(vertx)
-     (Map&lt;String, Object&gt;) sslConfig =
-        (Map&lt;String, Object&gt;)vertx.getOrCreateContext()
-          .config().get(&lt;span class=&quot;hljs-string&quot;&gt;&#39;ssl&#39;&lt;/span&gt;)
-
-     HttpServer sslHttpServer = vertx.createHttpServer(
-&lt;span class=&quot;hljs-label&quot;&gt;         SSL:&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;,
-&lt;span class=&quot;hljs-label&quot;&gt;         keyStorePath:&lt;/span&gt; sslConfig.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;keystore&quot;&lt;/span&gt;),
-&lt;span class=&quot;hljs-label&quot;&gt;         keyStorePassword:&lt;/span&gt; sslConfig.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;password&quot;&lt;/span&gt;))
-
-     startWebApiServer(sslHttpServer)
-  }
-
-  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-typename&quot;&gt;void&lt;/span&gt; startWebApiServer(&lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; HttpServer httpServer) {
-    &lt;span class=&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; sockHandler = SockJSHandler.create(vertx, [:])
-    sockHandler.socketHandler {
-      SockJSSocket ws -&gt; sockJSConnectHandler(ws)
-    }
-    router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/hdpoker&quot;&lt;/span&gt;).handler(sockHandler)
-    httpServer.requestHandler(router.&amp;accept)
-    httpServer.listen()
-  }
-
-}&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&quot;more-testing-change&quot;&gt;More testing change&lt;/h4&gt;
-&lt;p&gt;Testing messages in Integration Tests. To tell the test method that this has async calls put
-&lt;code&gt;Async async = testContext.async()&lt;/code&gt; as the first line in the test method. Yes, this is a little redundant from above, but I always forgot to put &lt;code&gt;async()&lt;/code&gt; calls in my integration tests and they would pass so quickly, without sending anything out, because it wasn’t waiting anymore&lt;/p&gt;
-&lt;h3 id=&quot;runtime-changes&quot;&gt;Runtime changes&lt;/h3&gt;
-&lt;p&gt;If you don’t use Vert.x built-in Logging and need to use slf4j, then remember that you should set a system property called &lt;code&gt;vertx.logger-delegate-factory-class-name&lt;/code&gt; with the name of a Java class which implements the interface &lt;code&gt;LoggerFactory&lt;/code&gt;. Vert.x provides pre-built implementations for Log4J and SLF4J with the class names &lt;code&gt;io.vertx.core.logging.Log4jLogDelegateFactory&lt;/code&gt; and &lt;code&gt;io.vertx.core.logging.SLF4JLogDelegateFactory&lt;/code&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;still-working&quot;&gt;Still working&lt;/h2&gt;
-&lt;p&gt;Well, that is all I have for you folks so far. We are still not done, as we haven’t gotten our application running with real clients just yet. But we do have all our integration tests from before completely passing
-so, if something does come up, it should be a small one (KNOCK ON WOOD)&lt;/p&gt;
-&lt;p&gt;Please feel free to post on the Vert.x Google Group with any comments or suggestions on what to add to this blog post or for Part Two.&lt;/p&gt;
-&lt;p&gt;Thanks&lt;/p&gt;
-&lt;p&gt;Mark S&lt;/p&gt;
-&lt;/article&gt;
-      </description>
-          <pubDate>Wed, 01 Jul 2015 00:00:00 +0200</pubDate>
-          <link>http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</link>
-          <guid isPermaLink="true">http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</guid>
-          <author>
-            <name>bytor99999</name>
-            <uri>http://github.com/bytor99999</uri>
-          </author>
-        </item>
-      
-        <item>
           <title>Using the asynchronous SQL client</title>
           <description>
       &lt;article&gt;&lt;p&gt;Finally, back… This post is the fifth post of the introduction to vert.x blog series, after a not-that-small break. In this post we are going to see how we can use JDBC in a vert.x application, and this, using the asynchronous API provided by the &lt;a href=&quot;http://vertx.io/docs/vertx-jdbc-client/java/&quot;&gt;vertx-jdbc-client&lt;/a&gt;.&lt;/p&gt;
@@ -4337,6 +4219,124 @@ for example &lt;code&gt;package.json&lt;/code&gt;:&lt;/p&gt;
           <author>
             <name>pmlopes</name>
             <uri>http://github.com/pmlopes</uri>
+          </author>
+        </item>
+      
+        <item>
+          <title>Checklist for Migrating from Vert.x 2.1.x to Vert.x 3 - Part One</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;This blog post presents feedbacks from a project migration using Vert.x 2 to Vert.x 3.&lt;/p&gt;
+&lt;h2 id=&quot;we-are-in-the-process-of-converting-our-vert-x-2-1-5-application-to-vert-x-3-0-&quot;&gt;We are in the process of converting our Vert.x 2.1.5 application to Vert.x 3.0.&lt;/h2&gt;
+&lt;p&gt;So while upgrading our application, I thought I should note down all the changes that we had to do in the process. Since Vert.x 3 is a major upgrade from the previous version, with so many changes.&lt;/p&gt;
+&lt;p&gt;It requires re-thinking your current 2.x Vert.x application. There are new classes, new apis, and a new package structure that has greatly simplified things that we used to have to work around. Therefore in our upgrade it required us to refactor and remove any unnecessary &lt;em&gt;“hacks”&lt;/em&gt; that weren’t available in 2 that are now a part of Vert.x 3 that you really want and need to take advantage of. (I don’t mean there are hacks in 3.x, just that we had in our application with Vert.x 2.x)&lt;/p&gt;
+&lt;p&gt;There are &lt;em&gt;Metrics&lt;/em&gt;, and &lt;em&gt;Clustered shared data&lt;/em&gt;, with locking and many more features that are amazing new additions. These are things we had to hack into our application with Vert.x 2.x. We added our own &lt;code&gt;MetricsRegistry&lt;/code&gt; from &lt;a href=&quot;https://dropwizard.github.io/metrics/3.1.0/getting-started/&quot;&gt;DropWizard&lt;/a&gt; which meant making our own &lt;code&gt;Main&lt;/code&gt; class that called Vert.x’s &lt;code&gt;Starter&lt;/code&gt; class after starting up the registry, but only in our &lt;em&gt;Devops&lt;/em&gt; server deploys, not our developer machines. And we had to build our own distributed locked of clustered data that also required writing a comprehensive distributed timers. (The timers got fixed with a better actor model). But now we can use what Vert.x gives us internally for those use cases.&lt;/p&gt;
+&lt;p&gt;This blog post is part one, as I am sure there will be some new changes that we need to do that we haven’t gotten to yet. Which as we go, will post in part two. Also that this post is a work in progress in that whenever you are upgrading and refactoring your code, it doesn’t leave much time for taking detailed notes, or writing beautiful prose. I am a terrible writer even when I can fully concentrate on it. So the first draft will just be a list of my notes. These notes are not in any particular order, but some things like tests you might want to save for last. (Just DON’T delete your tests, tests are very important)&lt;/p&gt;
+&lt;p&gt;One of the first things that Vert.x has changed is the whole &lt;em&gt;classloader&lt;/em&gt; setup. Read the Vert.x Docs for more information but basically, we have a flat &lt;em&gt;classloader&lt;/em&gt; system now. YAY! And one of the first things I noticed that is gone is the &lt;code&gt;Platform&lt;/code&gt; module.&lt;/p&gt;
+&lt;h2 id=&quot;changes-we-have-made-&quot;&gt;Changes we have made.&lt;/h2&gt;
+&lt;h3 id=&quot;dependency-changes&quot;&gt;Dependency changes&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;So the first thing we did was to remove the &lt;code&gt;vert.x-platform&lt;/code&gt; dependency from our &lt;code&gt;pom&lt;/code&gt; file (Build dependency file of whatever build system you use) This also means that you will be removing any import statements from your code that has &lt;code&gt;.platform&lt;/code&gt;. Which leads us to the next point.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Change all the imports for Vertx. from &lt;code&gt;org.vertx&lt;/code&gt; to &lt;code&gt;io.vertx&lt;/code&gt;. This could be a lot of work, as it is in every class you use Vert.x in. We had at least 250 locations to change here. Some classes have moved packages and “jars” that have them, so there will be some new jars to include as dependencies and different import statements for them.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If using a language other than Java, change the dependency to &lt;code&gt;vertx-lang-&lt;&lt;language&gt;&gt;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Remove any modules references that are using Vert.x 2.x stuff. You can get an odd error like
+&lt;em&gt;The type org.vertx.java.core.json.JsonObject cannot be resolved. It is indirectly referenced from required .class files&lt;/em&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;testtools&lt;/code&gt; dependency is gone. There is now Vertx-unit. So all your previous tests need to be completely re-written in the new style. This can be really difficult and time consuming as the tests you already have written really do need to be re-written from scratch. But these tests are also the backbone in knowing if your code is working. So this could take months if you have a really full set of test suites already. Also note the list below is to convert your JUnit Integration tests. as vertx-unit first and foremost provides its own testing framework/suite but it also works in JUnit, and if you are using JUnit you need to do the following&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Remove all the imports to &lt;code&gt;TestTools&lt;/code&gt;, including &lt;code&gt;VertxAssert&lt;/code&gt;. I would do a find/replace to replace all the &lt;code&gt;VertxAssert&lt;/code&gt; to &lt;code&gt;testContext&lt;/code&gt; for when you have to add &lt;code&gt;TestContext&lt;/code&gt; to all your &lt;code&gt;@Test&lt;/code&gt; methods. I recommend naming the parameter &lt;code&gt;testContext&lt;/code&gt;, just to put more context, into your context. Because if you just have &lt;code&gt;context&lt;/code&gt; as your parameter name, how do you know what context the context is? Sorry, that was too much fun. Basically, what I am saying is if you have say &lt;code&gt;Spring ApplicationContext&lt;/code&gt; in with your integration tests with Vert.x what does &lt;code&gt;context&lt;/code&gt; represent? Spring or Vert.x test context.&lt;/li&gt;
+&lt;li&gt;Add &lt;code&gt;@RunWith(VertxUnitRunner.class)&lt;/code&gt; above your test class&lt;/li&gt;
+&lt;li&gt;Remove any &lt;code&gt;VertxAssert.testComplete()&lt;/code&gt; those are gone. It needs &lt;code&gt;TestContext.async().complete()&lt;/code&gt;. It is also important to understand what &lt;code&gt;async()&lt;/code&gt; means. When to call it, when to complete it. It also allows you to do multiple &lt;code&gt;async()&lt;/code&gt; calls and nested ones. I think I needed that when I had a test that was a longer use case of many messages being sent, but only after responses to other ones occurred. For instance, to do chat in our app, you have to connect, subscribe, friend someone, then you can send a chat message. So that is 4 total Vert.x Messages sent from the Test client. And you can subscribe until connect completed, and you can send or receive messages unless you are subscribed and have a friend. So we need to have a few &lt;code&gt;async()&lt;/code&gt; calls in that scenario.&lt;/li&gt;
+&lt;li&gt;What is in your &lt;code&gt;start&lt;/code&gt; method override. Make that an &lt;code&gt;@Before&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;What is in your &lt;code&gt;stop&lt;/code&gt; method override. Make that an &lt;code&gt;@After&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;If you have your assertions have custom message &lt;em&gt;strings&lt;/em&gt; to log out when they fail, that parameter is now at the end of the &lt;code&gt;assert&lt;/code&gt; method call. Yes, this one can be painful.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;build-changes&quot;&gt;Build Changes&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Remove all &lt;em&gt;vertx maven plugin&lt;/em&gt; code to generate modules, instead create &lt;em&gt;fat&lt;/em&gt; jars, which requires adding the &lt;em&gt;Shade maven plugin&lt;/em&gt; to put all jar files into a big fat jar. The vertx-examples project has &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/maven-simplest&quot;&gt;simplest-maven&lt;/a&gt; which has the stuff to create the fat jar. &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/gradle-simplest&quot;&gt;simplest-gradle&lt;/a&gt; is the gradle equivalent.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If you were running your application with &lt;code&gt;runMod&lt;/code&gt; or something like that then you need to create a &lt;em&gt;fat&lt;/em&gt; jar, changing the build file as in &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/blob/master/maven-simplest/pom.xml&quot;&gt;this one&lt;/a&gt; and create a Main class like here &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/blob/master/maven-simplest/src/main/java/io/vertx/example/HelloWorldEmbedded.java&quot;&gt;this one&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;class-code-changes&quot;&gt;Class/Code Changes&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Verticle&lt;/code&gt; is now an interface and not a class to extend, so using Groovy as an example you now extend &lt;code&gt;GroovyVerticle&lt;/code&gt;. In Java extend &lt;code&gt;AbstractVerticle&lt;/code&gt; instead.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There is no &lt;code&gt;registerHandler&lt;/code&gt; on the eventBus anymore. So everywhere you do that has to change to create/call &lt;code&gt;consumer()&lt;/code&gt; and to unregister that handler, you have to have a reference to the &lt;code&gt;MessageConsumer&lt;/code&gt; that &lt;code&gt;consumer()&lt;/code&gt; call returns and call its &lt;code&gt;unregister&lt;/code&gt; method.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObject.toMap()&lt;/code&gt; changed to &lt;code&gt;JsonObject.getMap()&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObject&lt;/code&gt; also removed all the &lt;code&gt;putXXX&lt;/code&gt; methods with just one &lt;code&gt;put&lt;/code&gt; method with overloaded versions for different types.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;JsonObjectMessage&lt;/code&gt; no longer exists. What replaces depends on what you are doing. Meaning, if it is an &lt;code&gt;async&lt;/code&gt; callback to a deploy, you will get a &lt;code&gt;Message&lt;/code&gt; instance back that has &lt;code&gt;succeeded()&lt;/code&gt; or &lt;code&gt;failed()&lt;/code&gt; methods as well as &lt;code&gt;body()&lt;/code&gt; to check any results. If it is a &lt;code&gt;Consumer&lt;/code&gt;, it is typically a straight forward
+&lt;code&gt;JsonObject&lt;/code&gt;. If you are in Groovy it is also a &lt;code&gt;JsonObject&lt;/code&gt;, but the &lt;code&gt;body()&lt;/code&gt; is a &lt;code&gt;Map&lt;/code&gt; which you can use directly now, instead of having to convert from &lt;code&gt;JsonObject&lt;/code&gt; to &lt;code&gt;Map&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There isn’t a &lt;code&gt;container&lt;/code&gt; variable in &lt;code&gt;Verticles&lt;/code&gt; anymore for deploying verticles and also a config file. You need to use &lt;code&gt;vertx.getOrCreateContext().config()&lt;/code&gt; to get to it. I used that in the SockJS Example code below.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;SharedData&lt;/code&gt; no longer has shared sets. It has a &lt;code&gt;Map&lt;/code&gt; of &lt;code&gt;SharedData&lt;/code&gt;, so an entry in that &lt;code&gt;Map&lt;/code&gt; of shared data could be the name of the set as the key, and a &lt;code&gt;Set&lt;/code&gt; as the value. It actually gives you more flexibility of what you put into Shared data, so this is actually a big win for us.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Getting the &lt;code&gt;writeHandlerID&lt;/code&gt; from a Socket type, is now a method call instead of &lt;code&gt;.writeHandlerID&lt;/code&gt;, so &lt;code&gt;.writeHandlerID()&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;SockJSSocket&lt;/code&gt; is in &lt;em&gt;vertx-web&lt;/em&gt; package now, so include it to get the class.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There isn’t a &lt;code&gt;SockJSServer&lt;/code&gt; class anymore either. So you will create a &lt;code&gt;WebServer&lt;/code&gt;, a &lt;code&gt;Router&lt;/code&gt;
+and set SSL (if you are using SSL on the WebServer) then create a &lt;code&gt;SockJSHandler&lt;/code&gt; to assign to the router via the &lt;code&gt;route()&lt;/code&gt; method and &lt;code&gt;handler()&lt;/code&gt; methods in the Router api.
+Here is an example of our code. Although I haven’t tested it yet. ;)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs groovy&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;MyVerticle&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;GroovyVerticle&lt;/span&gt; {&lt;/span&gt;
+  Router router
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-typename&quot;&gt;void&lt;/span&gt; start() &lt;span class=&quot;hljs-keyword&quot;&gt;throws&lt;/span&gt; Exception {
+     router = Router.router(vertx)
+     (Map&lt;String, Object&gt;) sslConfig =
+        (Map&lt;String, Object&gt;)vertx.getOrCreateContext()
+          .config().get(&lt;span class=&quot;hljs-string&quot;&gt;&#39;ssl&#39;&lt;/span&gt;)
+
+     HttpServer sslHttpServer = vertx.createHttpServer(
+&lt;span class=&quot;hljs-label&quot;&gt;         SSL:&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;,
+&lt;span class=&quot;hljs-label&quot;&gt;         keyStorePath:&lt;/span&gt; sslConfig.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;keystore&quot;&lt;/span&gt;),
+&lt;span class=&quot;hljs-label&quot;&gt;         keyStorePassword:&lt;/span&gt; sslConfig.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;password&quot;&lt;/span&gt;))
+
+     startWebApiServer(sslHttpServer)
+  }
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-typename&quot;&gt;void&lt;/span&gt; startWebApiServer(&lt;span class=&quot;hljs-keyword&quot;&gt;final&lt;/span&gt; HttpServer httpServer) {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; sockHandler = SockJSHandler.create(vertx, [:])
+    sockHandler.socketHandler {
+      SockJSSocket ws -&gt; sockJSConnectHandler(ws)
+    }
+    router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/hdpoker&quot;&lt;/span&gt;).handler(sockHandler)
+    httpServer.requestHandler(router.&amp;accept)
+    httpServer.listen()
+  }
+
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;more-testing-change&quot;&gt;More testing change&lt;/h4&gt;
+&lt;p&gt;Testing messages in Integration Tests. To tell the test method that this has async calls put
+&lt;code&gt;Async async = testContext.async()&lt;/code&gt; as the first line in the test method. Yes, this is a little redundant from above, but I always forgot to put &lt;code&gt;async()&lt;/code&gt; calls in my integration tests and they would pass so quickly, without sending anything out, because it wasn’t waiting anymore&lt;/p&gt;
+&lt;h3 id=&quot;runtime-changes&quot;&gt;Runtime changes&lt;/h3&gt;
+&lt;p&gt;If you don’t use Vert.x built-in Logging and need to use slf4j, then remember that you should set a system property called &lt;code&gt;vertx.logger-delegate-factory-class-name&lt;/code&gt; with the name of a Java class which implements the interface &lt;code&gt;LoggerFactory&lt;/code&gt;. Vert.x provides pre-built implementations for Log4J and SLF4J with the class names &lt;code&gt;io.vertx.core.logging.Log4jLogDelegateFactory&lt;/code&gt; and &lt;code&gt;io.vertx.core.logging.SLF4JLogDelegateFactory&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;still-working&quot;&gt;Still working&lt;/h2&gt;
+&lt;p&gt;Well, that is all I have for you folks so far. We are still not done, as we haven’t gotten our application running with real clients just yet. But we do have all our integration tests from before completely passing
+so, if something does come up, it should be a small one (KNOCK ON WOOD)&lt;/p&gt;
+&lt;p&gt;Please feel free to post on the Vert.x Google Group with any comments or suggestions on what to add to this blog post or for Part Two.&lt;/p&gt;
+&lt;p&gt;Thanks&lt;/p&gt;
+&lt;p&gt;Mark S&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 06 Jul 2015 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</link>
+          <guid isPermaLink="true">http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</guid>
+          <author>
+            <name>bytor99999</name>
+            <uri>http://github.com/bytor99999</uri>
           </author>
         </item>
       
