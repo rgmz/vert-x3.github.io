@@ -8,6 +8,235 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Vert.x 3.4.0.Beta1 release</title>
+          <description>
+      &lt;article&gt;&lt;h2 id=&quot;tl-dr&quot;&gt;TL;DR&lt;/h2&gt;
+&lt;p&gt;we have released 3.4.0.Beta1, this release is the biggest since Vert.x 3.0.0 with plenty of great futures.&lt;/p&gt;
+&lt;p&gt;You can use consume it in your projects from Maven or Gradle as usual with the version &lt;code&gt;3.4.0.Beta1&lt;/code&gt; or read&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;the &lt;a href=&quot;http://vertx.io/docs/3.4.0.Beta1/&quot;&gt;documentation preview&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;the &lt;a href=&quot;https://gist.github.com/vietj/1ce63b368af127775512afbfc0ab14cc&quot;&gt;release notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;see the &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/3.4.0-SNAPSHOT&quot;&gt;actual examples&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Let me outline the important changes you can already find in this Beta1.&lt;/p&gt;
+&lt;h2 id=&quot;vert-x-web-client&quot;&gt;Vert.x Web Client&lt;/h2&gt;
+&lt;p&gt;in a simple sentence “Vert.x Web Client is to Vert.x HttpClient what Vert.x Web is to HttpServer”&lt;/p&gt;
+&lt;p&gt;The Web Client makes easy to do HTTP request/response interactions with a web server, and provides advanced features like:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Json body encoding / decoding&lt;/li&gt;
+&lt;li&gt;request/response pumping&lt;/li&gt;
+&lt;li&gt;request parameters&lt;/li&gt;
+&lt;li&gt;unified error handling&lt;/li&gt;
+&lt;li&gt;form submissions&lt;/li&gt;
+&lt;li&gt;and more!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Built on top of HttpClient, it naturally inherits its features and provides a better API, let me give an overview in one example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-type&quot;&gt;WebClient&lt;/span&gt; client = &lt;span class=&quot;hljs-type&quot;&gt;WebClient&lt;/span&gt;.
+client
+  .get(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;myserver.mycompany.com&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/some-uri&quot;&lt;/span&gt;)
+  .&lt;span class=&quot;hljs-keyword&quot;&gt;as&lt;/span&gt;(&lt;span class=&quot;hljs-type&quot;&gt;BodyCodec&lt;/span&gt;.json(&lt;span class=&quot;hljs-type&quot;&gt;User&lt;/span&gt;.class))
+  .send(ar -&gt; {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar.succeeded()) {
+
+      &lt;span class=&quot;hljs-type&quot;&gt;HttpResponse&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;User&lt;/span&gt;&gt; response = ar.&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;();
+      &lt;span class=&quot;hljs-type&quot;&gt;User&lt;/span&gt; user = response.body();
+
+      &lt;span class=&quot;hljs-type&quot;&gt;System&lt;/span&gt;.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Received response with status code&quot;&lt;/span&gt; + response.statusCode() + &lt;span class=&quot;hljs-string&quot;&gt;&quot; with body &quot;&lt;/span&gt; +
+        user.getFirstName() + &lt;span class=&quot;hljs-string&quot;&gt;&quot; &quot;&lt;/span&gt; + user.getLastName());
+    } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+      &lt;span class=&quot;hljs-type&quot;&gt;System&lt;/span&gt;.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Something went wrong &quot;&lt;/span&gt; + ar.cause().getMessage());
+    }
+  });&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;rxjava-singles&quot;&gt;RxJava singles&lt;/h2&gt;
+&lt;p&gt;RxJava is a very popular Java extension and in this release we focused on the API usability with the support
+of the &lt;code&gt;Single&lt;/code&gt; RxJava type.&lt;/p&gt;
+&lt;p&gt;The new methods are prefixed by &lt;code&gt;rx&lt;/code&gt; and deprecates the &lt;code&gt;Observable&lt;/code&gt; suffixed methods.&lt;/p&gt;
+&lt;p&gt;So instead of starting a server with &lt;code&gt;sendObservable&lt;/code&gt; now you use &lt;code&gt;rxListen&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;HttpServer &lt;span class=&quot;hljs-built_in&quot;&gt;server&lt;/span&gt; = vertx.createHttpServer();
+Single&lt;HttpServer&gt; single = &lt;span class=&quot;hljs-built_in&quot;&gt;server&lt;/span&gt;.rxListen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;);
+single.subscribe(
+  ok -&gt; System.out.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Server started&quot;&lt;/span&gt;),
+  &lt;span class=&quot;hljs-built_in&quot;&gt;err&lt;/span&gt; -&gt; System.out.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Something went wrong &quot;&lt;/span&gt; + &lt;span class=&quot;hljs-built_in&quot;&gt;err&lt;/span&gt;.getMessage()));&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;One noticeable difference with the previous API, is that the &lt;code&gt;listen&lt;/code&gt; method is called when the &lt;code&gt;Single&lt;/code&gt; is subscribed.&lt;/p&gt;
+&lt;p&gt;This is very handy when combined with the new web client:&lt;/p&gt;
+ &lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-prompt&quot;&gt;Single&lt;HttpResponse&lt;Buffer&gt;&gt;&lt;/span&gt; single = client
+   .get(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;myserver.mycompany.com&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/some-uri&quot;&lt;/span&gt;)
+   .rxSend();
+
+&lt;span class=&quot;hljs-regexp&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;hljs-constant&quot;&gt;Send&lt;/span&gt; the request
+&lt;span class=&quot;hljs-prompt&quot;&gt;single.subscribe(response -&gt;&lt;/span&gt; &lt;span class=&quot;hljs-constant&quot;&gt;System&lt;/span&gt;.out.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;got response &quot;&lt;/span&gt; + response.statusCode());
+
+&lt;span class=&quot;hljs-regexp&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;hljs-constant&quot;&gt;Send&lt;/span&gt; the request again
+&lt;span class=&quot;hljs-prompt&quot;&gt;single.subscribe(response -&gt;&lt;/span&gt; &lt;span class=&quot;hljs-constant&quot;&gt;System&lt;/span&gt;.out.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;got response &quot;&lt;/span&gt; + response.statusCode());&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;polyglot&quot;&gt;Polyglot&lt;/h2&gt;
+&lt;p&gt;In this beta you can try &lt;em&gt;Vert.x for Kotlin&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Vert.x for Kotlin&lt;/em&gt; is based on the Java API and provides also the execution of Kotlin Verticles.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-preprocessor&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.core.*&lt;/span&gt;
+&lt;span class=&quot;hljs-preprocessor&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.kotlin.core.http.HttpServerOptions&lt;/span&gt;
+
+&lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;Server&lt;/span&gt; : &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt;() {&lt;/span&gt;
+
+  override fun start() {
+    vertx.createHttpServer(
+
+        // We provide Kotlin extension methods, allowing &lt;span class=&quot;hljs-keyword&quot;&gt;to&lt;/span&gt; use an idiomatic Kotlin API &lt;span class=&quot;hljs-keyword&quot;&gt;for&lt;/span&gt; building these options
+        HttpServerOptions(
+            port = &lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;,
+            host = &lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;
+        ))
+        .requestHandler() { req -&gt;
+          req.response().&lt;span class=&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello from Kotlin&quot;&lt;/span&gt;)
+        }
+        .listen()
+    println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Server started on 8080&quot;&lt;/span&gt;)
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It can be directly ran from the command line:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;julien:vertx-kotlin-example julien$ vertx &lt;span class=&quot;hljs-command&quot;&gt;run&lt;/span&gt; Server.kt
+Server started &lt;span class=&quot;hljs-function_start&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;on&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;
+Succeeded &lt;span class=&quot;hljs-keyword&quot;&gt;in&lt;/span&gt; deploying verticle&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, Kotlin is using directly the Java API and we thought that it might be a cool thing to do the
+same with Groovy support. So we have reconsidered our Groovy support and now it uses the plain Java API,
+without loosing the existing features.&lt;/p&gt;
+&lt;p&gt;Thanks to Groovy extension methods, idiomatic Groovy it still supporting while benefiting of the full Java API!&lt;/p&gt;
+&lt;p&gt;Scala support is also planned for 3.4.0 and will be released soon, watch &lt;a href=&quot;https://twitter.com/vertx_project&quot;&gt;@vertx_project&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;the-microservices-story-goes-on-&quot;&gt;The microservices story goes on…&lt;/h2&gt;
+&lt;p&gt;Our API have matured and now they have been moved out of tech preview, of course this wasn’t enough and we now
+have &lt;em&gt;Vert.x Config&lt;/em&gt;, an extensible way to configure Vert.x applications supporting File, json, ENV, system properties,
+HTTP, &lt;em&gt;Kubernetes Configmap&lt;/em&gt;, &lt;em&gt;Consul&lt;/em&gt;, &lt;em&gt;Spring Config Server&lt;/em&gt;, &lt;em&gt;Redis&lt;/em&gt;, &lt;em&gt;Git&lt;/em&gt;, &lt;em&gt;Zookeeper&lt;/em&gt;, … stores as well as
+several formats: properties file, YAML and Hocon.&lt;/p&gt;
+&lt;p&gt;Here is a small example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;ConfigStoreOptions httpStore = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; ConfigStoreOptions()
+  .setType(&lt;span class=&quot;hljs-string&quot;&gt;&quot;http&quot;&lt;/span&gt;)
+  .setConfig(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()
+    .&lt;span class=&quot;hljs-keyword&quot;&gt;put&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;host&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;).&lt;span class=&quot;hljs-keyword&quot;&gt;put&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;port&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;).&lt;span class=&quot;hljs-keyword&quot;&gt;put&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;path&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/conf&quot;&lt;/span&gt;));
+
+ConfigStoreOptions fileStore = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; ConfigStoreOptions()
+  .setType(&lt;span class=&quot;hljs-string&quot;&gt;&quot;file&quot;&lt;/span&gt;)
+  .setConfig(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject().&lt;span class=&quot;hljs-keyword&quot;&gt;put&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;path&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;my-config.json&quot;&lt;/span&gt;));
+
+ConfigStoreOptions sysPropsStore = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; ConfigStoreOptions().setType(&lt;span class=&quot;hljs-string&quot;&gt;&quot;sys&quot;&lt;/span&gt;);
+
+ConfigRetrieverOptions &lt;span class=&quot;hljs-keyword&quot;&gt;options&lt;/span&gt; = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; ConfigRetrieverOptions()
+  .addStore(httpStore).addStore(fileStore).addStore(sysPropsStore);
+
+ConfigRetriever retriever = ConfigRetriever.create(vertx, &lt;span class=&quot;hljs-keyword&quot;&gt;options&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Vert.x Config also supports push based notification style:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;ConfigRetriever retriever &lt;span class=&quot;hljs-subst&quot;&gt;=&lt;/span&gt; ConfigRetriever&lt;span class=&quot;hljs-built_in&quot;&gt;.&lt;/span&gt;create(Vertx&lt;span class=&quot;hljs-built_in&quot;&gt;.&lt;/span&gt;vertx(), options);
+retriever&lt;span class=&quot;hljs-built_in&quot;&gt;.&lt;/span&gt;configStream()
+  &lt;span class=&quot;hljs-built_in&quot;&gt;.&lt;/span&gt;endHandler(v &lt;span class=&quot;hljs-subst&quot;&gt;-&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-comment&quot;&gt;// retriever closed&lt;/span&gt;
+  })
+  &lt;span class=&quot;hljs-built_in&quot;&gt;.&lt;/span&gt;exceptionHandler(t &lt;span class=&quot;hljs-subst&quot;&gt;-&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-comment&quot;&gt;// an error has been caught while retrieving the configuration&lt;/span&gt;
+  })
+  &lt;span class=&quot;hljs-built_in&quot;&gt;.&lt;/span&gt;handler(conf &lt;span class=&quot;hljs-subst&quot;&gt;-&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-comment&quot;&gt;// the configuration&lt;/span&gt;
+  });&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;vertx-mqtt-server&quot;&gt;Vertx MQTT Server&lt;/h2&gt;
+&lt;p&gt;Vert.x MQTT Server is able to handle connections, communication and messages exchange with remote MQTT clients.
+Its API provides a bunch of events related to protocol messages received by clients and exposes allow to send
+messages to them.&lt;/p&gt;
+&lt;p&gt;Here is a small effective example of creating, the Vert.x way!&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;MqttServerOptions &lt;span class=&quot;hljs-keyword&quot;&gt;options&lt;/span&gt; = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; MqttServerOptions()
+  .setPort(&lt;span class=&quot;hljs-number&quot;&gt;1883&lt;/span&gt;)
+  .setHost(&lt;span class=&quot;hljs-string&quot;&gt;&quot;0.0.0.0&quot;&lt;/span&gt;);
+
+MqttServer server = MqttServer.create(vertx, &lt;span class=&quot;hljs-keyword&quot;&gt;options&lt;/span&gt;);
+
+server.endpointHandler(endpoint -&gt; {
+
+  System.out.&lt;span class=&quot;hljs-keyword&quot;&gt;println&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;connected client &quot;&lt;/span&gt; + endpoint.clientIdentifier());
+
+  endpoint.publishHandler(message -&gt; {
+
+    System.out.&lt;span class=&quot;hljs-keyword&quot;&gt;println&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Just received message on [&quot;&lt;/span&gt; + message.topicName() + &lt;span class=&quot;hljs-string&quot;&gt;&quot;] payload [&quot;&lt;/span&gt; +
+      message.payload() + &lt;span class=&quot;hljs-string&quot;&gt;&quot;] with QoS [&quot;&lt;/span&gt; +
+      message.qosLevel() + &lt;span class=&quot;hljs-string&quot;&gt;&quot;]&quot;&lt;/span&gt;);
+  });
+
+  endpoint.accept(&lt;span class=&quot;hljs-keyword&quot;&gt;false&lt;/span&gt;);
+});
+
+server.listen(ar -&gt; {
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar.succeeded()) {
+    System.out.&lt;span class=&quot;hljs-keyword&quot;&gt;println&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;MQTT server started and listening on port &quot;&lt;/span&gt; + server.actualPort());
+  } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+    System.err.&lt;span class=&quot;hljs-keyword&quot;&gt;println&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;MQTT server error on start&quot;&lt;/span&gt; + ar.cause().getMessage());
+  }
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;vert-x-sql-streaming&quot;&gt;Vert.x SQL streaming&lt;/h2&gt;
+&lt;p&gt;We now supports streaming style for SQL queries:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;connection.queryStream(&lt;span class=&quot;hljs-string&quot;&gt;&quot;select * from test&quot;&lt;/span&gt;, stream -&gt; {
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (stream.succeeded()) {
+    &lt;span class=&quot;hljs-type&quot;&gt;SQLRowStream&lt;/span&gt; sqlRowStream = stream.&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;();
+
+    sqlRowStream
+      .handler(row -&gt; {
+        // &lt;span class=&quot;hljs-keyword&quot;&gt;do&lt;/span&gt; something &lt;span class=&quot;hljs-keyword&quot;&gt;with&lt;/span&gt; the row...
+        &lt;span class=&quot;hljs-type&quot;&gt;System&lt;/span&gt;.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(row.encode());
+      })
+      .endHandler(v -&gt; {
+        // no more data available, close the connection
+        connection.close(done -&gt; {
+          &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (done.failed()) {
+            throw new &lt;span class=&quot;hljs-type&quot;&gt;RuntimeException&lt;/span&gt;(done.cause());
+          }
+        });
+      });
+  }
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And with the RxJava API:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;client
+  .rxGetConnection() // &lt;span class=&quot;hljs-type&quot;&gt;Connect&lt;/span&gt; to the database
+  .flatMapObservable(conn -&gt; { // &lt;span class=&quot;hljs-type&quot;&gt;With&lt;/span&gt; the connection...
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; conn.rxUpdate(&lt;span class=&quot;hljs-string&quot;&gt;&quot;CREATE TABLE test(col VARCHAR(20))&quot;&lt;/span&gt;) // ...create test table
+      .flatMap(&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt; -&gt; conn.rxUpdate(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO test (col) VALUES (&#39;val1&#39;)&quot;&lt;/span&gt;)) // ...insert a row
+      .flatMap(&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt; -&gt; conn.rxUpdate(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO test (col) VALUES (&#39;val2&#39;)&quot;&lt;/span&gt;)) // ...another one
+      .flatMap(&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt; -&gt; conn.rxQueryStream(&lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT * FROM test&quot;&lt;/span&gt;)) // ...get values stream
+      .flatMapObservable(sqlRowStream -&gt; {
+        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; sqlRowStream.toObservable() // &lt;span class=&quot;hljs-type&quot;&gt;Transform&lt;/span&gt; the stream into an &lt;span class=&quot;hljs-type&quot;&gt;Observable&lt;/span&gt;...
+          .doOnTerminate(conn::close); // ...&lt;span class=&quot;hljs-keyword&quot;&gt;and&lt;/span&gt; close the connection &lt;span class=&quot;hljs-keyword&quot;&gt;when&lt;/span&gt; the stream &lt;span class=&quot;hljs-keyword&quot;&gt;is&lt;/span&gt; fully read &lt;span class=&quot;hljs-keyword&quot;&gt;or&lt;/span&gt; an error occurs
+      });
+  }).subscribe(row -&gt; &lt;span class=&quot;hljs-type&quot;&gt;System&lt;/span&gt;.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Row : &quot;&lt;/span&gt; + row.encode()));&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;finally&quot;&gt;Finally&lt;/h2&gt;
+&lt;p&gt;In addition of all these brillants features here is a list of more-than-noticeable things you have in this Beta1:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Vert.x Infinispan replaces Vert.x Jgroups cluster manager&lt;/li&gt;
+&lt;li&gt;Vert.x Consul Client provides a full fledged client for Consul&lt;/li&gt;
+&lt;li&gt;Oauth2 predefined configuration with 16 settings from &lt;em&gt;Azure Active Directory&lt;/em&gt;, to &lt;em&gt;Twitter&lt;/em&gt; with the usual suspects (&lt;em&gt;Facebook&lt;/em&gt;, &lt;em&gt;LinkedIn&lt;/em&gt;, …)&lt;/li&gt;
+&lt;li&gt;Http client now follow redirects&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You can use consume it in your projects from Maven or Gradle as usual with the version &lt;code&gt;3.4.0.Beta1&lt;/code&gt; or read&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;the &lt;a href=&quot;http://vertx.io/docs/3.4.0.Beta1/&quot;&gt;documentation preview&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;the &lt;a href=&quot;https://gist.github.com/vietj/1ce63b368af127775512afbfc0ab14cc&quot;&gt;release notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;see the &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/3.4.0-SNAPSHOT&quot;&gt;actual examples&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Last but not least, I want to personally thank all the persons that contributed to this release, beyond the Vert.x core team, the actual
+ Vert.x committers and many other persons have brought a lot of efforts in this upcoming 3.4.0!!!!&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Thu, 09 Feb 2017 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/vert-x-3-4-0-beta1-release</link>
+          <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-4-0-beta1-release</guid>
+          <author>
+            <name>vietj</name>
+            <uri>http://github.com/vietj</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>An Introduction to the Vert.x Context Object</title>
           <description>
       &lt;article&gt;&lt;p&gt;Under the hood, the vert.x Context class plays a critical part in maintaining the thread-safety guarantees of verticles. Most of the time, vert.x coders don’t need to make use of Context objects directly. However, sometimes you may need to. This article provides a brief introduction to the vert.x Context class, which covers why it’s important, and why and when you might wish to make use of the Context directly, based on the author’s experience of building a generic async library which can be used with vert.x.&lt;/p&gt;
