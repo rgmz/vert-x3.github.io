@@ -113,6 +113,8 @@
 <li><a href="#_callable_statements">Callable statements</a></li>
 <li><a href="#_batch_operations">Batch operations</a></li>
 <li><a href="#_executing_other_operations">Executing other operations</a></li>
+<li><a href="#_multiple_resultset_responses">Multiple ResultSet responses</a></li>
+<li><a href="#_streaming">Streaming</a></li>
 <li><a href="#_using_transactions">Using transactions</a></li>
 <li><a href="#_closing_connections">Closing connections</a></li>
 </ul>
@@ -135,6 +137,8 @@
 <li><a href="#_callable_statements">Callable statements</a></li>
 <li><a href="#_batch_operations">Batch operations</a></li>
 <li><a href="#_executing_other_operations">Executing other operations</a></li>
+<li><a href="#_multiple_resultset_responses">Multiple ResultSet responses</a></li>
+<li><a href="#_streaming">Streaming</a></li>
 <li><a href="#_using_transactions">Using transactions</a></li>
 <li><a href="#_closing_connections">Closing connections</a></li>
 </ul>
@@ -166,7 +170,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-sql-common&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -179,7 +183,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-sql-common:3.3.3'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-sql-common:3.4.0'</code></pre>
 </div>
 </div>
 </div>
@@ -591,6 +595,63 @@ connection.execute(sql) { |execute_err,execute|
 </div>
 </div>
 <div class="sect2">
+<h3 id="_multiple_resultset_responses">Multiple ResultSet responses</h3>
+<div class="paragraph">
+<p>In some cases your query might return more than one result set, in this case and to preserve the compatibility when
+the returned result set object is converted to pure json, the next result sets are chained to the current result set
+under the property <code>next</code>. A simple walk of all result sets can be achieved like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># do something with the result set...
+
+# next step
+rs = rs['next']</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_streaming">Streaming</h3>
+<div class="paragraph">
+<p>When dealing with large data sets, it is not advised to use API just described but to stream data since it avoids
+inflating the whole response into memory and JSON and data is just processed on a row by row basis, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection.query_stream("SELECT * FROM large_table") { |stream_err,stream|
+  if (stream_err == nil)
+    stream.handler() { |row|
+      # do something with the row...
+    }
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You still have full control on when the stream is pauses, resumed and ended. For cases where your query returns
+multiple result sets you should use the result set ended event to fetch the next one if available. If there is more
+data the stream handler will receive the new data, otherwise the end handler is invoked.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection.query_stream("SELECT * FROM large_table; SELECT * FROM other_table") { |stream_err,stream|
+  if (stream_err == nil)
+    sqlRowStream = stream
+
+    sqlRowStream.result_set_closed_handler() { |v|
+      # will ask to restart the stream with the new result set if any
+      sqlRowStream.more_results()
+    }.handler() { |row|
+      # do something with the row...
+    }.end_handler() { |v|
+      # no more data available...
+    }
+  end
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_using_transactions">Using transactions</h3>
 <div class="paragraph">
 <p>To use transactions first set auto-commit to false with <code><a href="../../yardoc/VertxSql/SQLConnection.html#set_auto_commit-instance_method">setAutoCommit</a></code>.</p>
@@ -634,7 +695,7 @@ connection.commit() { |res_err,res|
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

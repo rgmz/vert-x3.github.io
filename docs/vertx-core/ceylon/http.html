@@ -279,6 +279,18 @@ The settings define how the client can use the connection, the default initial s
 </li>
 </ul>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Worker Verticles are not compatible with HTTP/2
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_logging_network_server_activity">Logging network server activity</h3>
@@ -721,6 +733,20 @@ to arbitrary places on your filesystem. See <a href="#Security notes">security n
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_handling_compressed_body">Handling compressed body</h4>
+<div class="paragraph">
+<p>Vert.x can handle compressed body payloads which are encoded by the client with the <em>deflate</em> or <em>gzip</em>
+algorithms.</p>
+</div>
+<div class="paragraph">
+<p>To enable decompression set <code><a href="../../ceylondoc/vertx-core//http/HttpServerOptions.type.html#setDecompressionSupported(boolean)">decompressionSupported</a></code> on the
+options when creating the server.</p>
+</div>
+<div class="paragraph">
+<p>By default decompression is disabled.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1263,6 +1289,26 @@ compressions and send it back to the client.</p>
 <div class="paragraph">
 <p>Be aware that compression may be able to reduce network traffic but is more CPU-intensive.</p>
 </div>
+<div class="paragraph">
+<p>To address this latter issue Vert.x allows you to tune the 'compression level' parameter that is native of the gzip/deflate compression algorithms.</p>
+</div>
+<div class="paragraph">
+<p>Compression level allows to configure gizp/deflate algorithms in terms of the compression ratio of the resulting data and the computational cost of the compress/decompress operation.</p>
+</div>
+<div class="paragraph">
+<p>The compression level is an integer value ranged from '1' to '9', where '1' means lower compression ratio but fastest algorithm and '9' means maximum compression ratio available but a slower algorithm.</p>
+</div>
+<div class="paragraph">
+<p>Using compression levels higher that 1-2 usually allows to save just some bytes in size - the gain is not linear, and depends on the specific data to be compressed
+- but it comports a non-trascurable cost in term of CPU cycles required to the server while generating the compressed response data
+( Note that at moment Vert.x doesn&#8217;t support any form caching of compressed response data, even for static files, so the compression is done on-the-fly
+at every request body generation ) and in the same way it affects client(s) while decoding (inflating) received responses, operation that becomes more CPU-intensive
+the more the level increases.</p>
+</div>
+<div class="paragraph">
+<p>By default - if compression is enabled via <code><a href="../../ceylondoc/vertx-core//http/HttpServerOptions.type.html#setCompressionSupported(boolean)">compressionSupported</a></code> - Vert.x will use '6' as compression level,
+but the parameter can be configured to address any case with <code><a href="../../ceylondoc/vertx-core//http/HttpServerOptions.type.html#setCompressionLevel(int)">compressionLevel</a></code>.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_creating_an_http_client">Creating an HTTP client</h3>
@@ -1414,7 +1460,7 @@ HEAD requests.</p>
 </div>
 <div class="paragraph">
 <p>The simplest way to do this with the Vert.x http client is using the methods prefixed with <code>Now</code>. For example
-<code><a href="../../ceylondoc/vertx-core//http/HttpClient.type.html#getNow(int,%20java.lang.String,%20java.lang.String,%20io.vertx.core.Handler)">getNow</a></code>.</p>
+<code><a href="../../ceylondoc/vertx-core//http/HttpClient.type.html#getNow(io.vertx.core.http.RequestOptions,%20io.vertx.core.Handler)">getNow</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>These methods create the http request and send it in a single method call and allow you to provide a handler that will be
@@ -1440,7 +1486,7 @@ client.headNow("/other-uri", (HttpClientResponse response) {
 <h4 id="_writing_general_requests">Writing general requests</h4>
 <div class="paragraph">
 <p>At other times you don&#8217;t know the request method you want to send until run-time. For that use case we provide
-general purpose request methods such as <code><a href="../../ceylondoc/vertx-core//http/HttpClient.type.html#request(io.vertx.core.http.HttpMethod,%20int,%20java.lang.String,%20java.lang.String)">request</a></code> which allow you to specify
+general purpose request methods such as <code><a href="../../ceylondoc/vertx-core//http/HttpClient.type.html#request(io.vertx.core.http.HttpMethod,%20io.vertx.core.http.RequestOptions)">request</a></code> which allow you to specify
 the HTTP method at run-time:</p>
 </div>
 <div class="listingblock">
@@ -1468,8 +1514,8 @@ client.request(post, "foo-uri", (HttpClientResponse response) {
 before sending it.</p>
 </div>
 <div class="paragraph">
-<p>To do this you can call one of the specific request methods such as <code><a href="../../ceylondoc/vertx-core//http/HttpClient.type.html#post(int,%20java.lang.String,%20java.lang.String)">post</a></code> or
-one of the general purpose request methods such as <code><a href="../../ceylondoc/vertx-core//http/HttpClient.type.html#request(io.vertx.core.http.HttpMethod,%20int,%20java.lang.String,%20java.lang.String)">request</a></code>.</p>
+<p>To do this you can call one of the specific request methods such as <code><a href="../../ceylondoc/vertx-core//http/HttpClient.type.html#post(io.vertx.core.http.RequestOptions)">post</a></code> or
+one of the general purpose request methods such as <code><a href="../../ceylondoc/vertx-core//http/HttpClient.type.html#request(io.vertx.core.http.HttpMethod,%20io.vertx.core.http.RequestOptions)">request</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>These methods don&#8217;t send the request immediately, but instead return an instance of <code><a href="../../ceylondoc/vertx-core//http/HttpClientRequest.type.html">HttpClientRequest</a></code>
@@ -1669,10 +1715,9 @@ no need to set the <code>Content-Length</code> of the request up-front.</p>
 <pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.setChunked(true);
 
 // Write some chunks
-variable value i = 0;
-while (i &lt; 10) {
+for (i in 0:10) {
   request.write("this-is-chunk-``i``");
-  i++};
+};
 
 request.end();</code></pre>
 </div>
@@ -1969,6 +2014,135 @@ or immediately after the headers have been read and the response handler has bee
 </div>
 <div class="paragraph">
 <p>Alternatively you can just parse the <code>Set-Cookie</code> headers yourself in the response.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_30x_redirection_handling">30x redirection handling</h4>
+<div class="paragraph">
+<p>The client can be configured to follow HTTP redirections: when the client receives an
+<code>301</code>, <code>302</code>, <code>303</code> or <code>307</code> status code, it follows the redirection provided by the <code>Location</code> response header
+and the response handler is passed the redirected response instead of the original response.</p>
+</div>
+<div class="paragraph">
+<p>Here’s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.get("some-uri", (HttpClientResponse response) {
+  print("Received response with status code ``response.statusCode()``");
+}).setFollowRedirects(true).end();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The redirection policy is as follow</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>on a <code>301</code>, <code>302</code> or <code>303</code> status code, follow the redirection with a <code>GET</code> method</p>
+</li>
+<li>
+<p>on a <code>307</code> status code, follow the redirection with the same HTTP method and the cached body</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+following redirections caches the request body
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The maximum redirects is <code>16</code> by default and can be changed with <code><a href="../../ceylondoc/vertx-core//http/HttpClientOptions.type.html#setMaxRedirects(int)">maxRedirects</a></code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createHttpClient(HttpClientOptions {
+  maxRedirects = 32;
+});
+
+client.get("some-uri", (HttpClientResponse response) {
+  print("Received response with status code ``response.statusCode()``");
+}).setFollowRedirects(true).end();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One size does not fit all and the default redirection policy may not be adapted to your needs.</p>
+</div>
+<div class="paragraph">
+<p>The default redirection policy can changed with a custom implementation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { future }
+
+...
+
+
+client.redirectHandler((HttpClientResponse response) {
+
+  // Only follow 301 code
+  if (response.statusCode() == 301 &amp;&amp; response.getHeader("Location") != null) {
+
+    // Compute the redirect URI
+    value absoluteURI = this.resolveURI(response.request().absoluteURI(), response.getHeader("Location"));
+
+    // Create a new ready to use request that the client will use
+    return future.succeededFuture(client.getAbs(absoluteURI));
+  };
+
+  // We don't redirect
+  return null;
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The policy handles the original <code><a href="../../ceylondoc/vertx-core//http/HttpClientResponse.type.html">HttpClientResponse</a></code> received and returns either <code>null</code>
+or a <code>Future&lt;HttpClientRequest&gt;</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>when <code>null</code> is returned, the original response is processed</p>
+</li>
+<li>
+<p>when a future is returned, the request will be sent on its successful completion</p>
+</li>
+<li>
+<p>when a future is returned, the exception handler set on the request is called on its failure</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The returned request must be unsent so the original request handlers can be sent and the client can send it after.</p>
+</div>
+<div class="paragraph">
+<p>Most of the original request settings will be propagated to the new request:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>request headers, unless if you have set some headers (including <code><a href="../../ceylondoc/vertx-core//http/HttpClientRequest.type.html#setHost(java.lang.String)">setHost</a></code>)</p>
+</li>
+<li>
+<p>request body unless the returned request uses a <code>GET</code> method</p>
+</li>
+<li>
+<p>response handler</p>
+</li>
+<li>
+<p>request exception handler</p>
+</li>
+<li>
+<p>request timeout</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
@@ -2422,10 +2596,9 @@ endpoint:</p>
 ...
 
 value data = buffer.buffer();
-variable value i = 0;
-while (i &lt; 8) {
+for (i in 0:8) {
   data.appendByte(i);
-  i++};
+};
 connection.ping(data, (Buffer|Throwable pong) {
   print("Remote side replied");
 });</code></pre>
@@ -2650,6 +2823,44 @@ server on your multi-core machine.</p>
 <div class="paragraph">
 <p>Please see <a href="#ssl">configuring net servers to use SSL</a> for more information.</p>
 </div>
+<div class="paragraph">
+<p>SSL can also be enabled/disabled per request with <code><a href="../../ceylondoc/vertx-core//http/RequestOptions.type.html">RequestOptions</a></code> or when
+specifying a scheme with <code><a href="../../ceylondoc/vertx-core//http/HttpClient.type.html#requestAbs(io.vertx.core.http.HttpMethod,%20java.lang.String)">requestAbs</a></code>
+method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.getNow(RequestOptions {
+  host = "localhost";
+  port = 8080;
+  uRI = "/";
+  ssl = true;
+}, (HttpClientResponse response) {
+  print("Received response with status code ``response.statusCode()``");
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../ceylondoc/vertx-core//http/HttpClientOptions.type.html#setSsl(boolean)">ssl</a></code> setting acts as the default client setting.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../ceylondoc/vertx-core//http/RequestOptions.type.html#setSsl(boolean)">ssl</a></code> overrides the default client setting</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>setting the value to <code>false</code> will disable SSL/TLS even if the client is configured to use SSL/TLS</p>
+</li>
+<li>
+<p>setting the value to <code>true</code> will enable SSL/TLS  even if the client is configured to not use SSL/TLS, the actual
+client SSL/TLS (such as trust, key/certificate, ciphers, ALPN, &#8230;&#8203;) will be reused</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Likewise <code><a href="../../ceylondoc/vertx-core//http/HttpClient.type.html#requestAbs(io.vertx.core.http.HttpMethod,%20java.lang.String)">requestAbs</a></code> scheme
+also overrides the default client setting.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_websockets">WebSockets</h3>
@@ -2734,7 +2945,7 @@ call <code><a href="../../ceylondoc/vertx-core//http/HttpServerRequest.type.html
 <p>The Vert.x <code><a href="../../ceylondoc/vertx-core//http/HttpClient.type.html">HttpClient</a></code> supports WebSockets.</p>
 </div>
 <div class="paragraph">
-<p>You can connect a WebSocket to a server using one of the <code><a href="../../ceylondoc/vertx-core//http/HttpClient.type.html#websocket(int,%20java.lang.String,%20java.lang.String,%20io.vertx.core.Handler)">websocket</a></code> operations and
+<p>You can connect a WebSocket to a server using one of the <code><a href="../../ceylondoc/vertx-core//http/HttpClient.type.html#websocket(io.vertx.core.http.RequestOptions,%20io.vertx.core.Handler)">websocket</a></code> operations and
 providing a handler.</p>
 </div>
 <div class="paragraph">
@@ -2751,8 +2962,9 @@ providing a handler.</p>
 <div class="sect3">
 <h4 id="_writing_messages_to_websockets">Writing messages to WebSockets</h4>
 <div class="paragraph">
-<p>If you wish to write a single binary WebSocket message to the WebSocket you can do this with
-<code><a href="../../ceylondoc/vertx-core//http/WebSocket.type.html#writeBinaryMessage(io.vertx.core.buffer.Buffer)">writeBinaryMessage</a></code>:</p>
+<p>If you wish to write a single WebSocket message to the WebSocket you can do this with
+<code><a href="../../ceylondoc/vertx-core//http/WebSocket.type.html#writeBinaryMessage(io.vertx.core.buffer.Buffer)">writeBinaryMessage</a></code> or
+<code><a href="../../ceylondoc/vertx-core//http/WebSocket.type.html#writeTextMessage(java.lang.String)">writeTextMessage</a></code> :</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2760,10 +2972,13 @@ providing a handler.</p>
 
 ...
 
-// Write a simple message
+// Write a simple binary message
 value buffer = buffer_.buffer().appendInt(123).appendFloat(1.23);
+websocket.writeBinaryMessage(buffer);
 
-websocket.writeBinaryMessage(buffer);</code></pre>
+// Write a simple text message
+value message = "hello";
+websocket.writeTextMessage(message);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2958,7 +3173,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

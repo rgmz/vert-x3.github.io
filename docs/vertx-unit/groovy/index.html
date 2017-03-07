@@ -119,14 +119,14 @@
 <li><a href="#_asynchronous_assertions">Asynchronous assertions</a></li>
 <li><a href="#_repeating_test">Repeating test</a></li>
 <li><a href="#_sharing_objects">Sharing objects</a></li>
-<li><a href="#reporting">Running</a>
+<li><a href="#_running">Running</a>
 <ul class="sectlevel2">
 <li><a href="#_test_suite_completion">Test suite completion</a></li>
 <li><a href="#_time_out">Time out</a></li>
 <li><a href="#event_loop">Event loop</a></li>
 </ul>
 </li>
-<li><a href="#_reporting">Reporting</a>
+<li><a href="#reporting">Reporting</a>
 <ul class="sectlevel2">
 <li><a href="#_console_reporting">Console reporting</a></li>
 <li><a href="#_file_reporting">File reporting</a></li>
@@ -173,14 +173,14 @@
 <li><a href="#_asynchronous_assertions">Asynchronous assertions</a></li>
 <li><a href="#_repeating_test">Repeating test</a></li>
 <li><a href="#_sharing_objects">Sharing objects</a></li>
-<li><a href="#reporting">Running</a>
+<li><a href="#_running">Running</a>
 <ul class="sectlevel2">
 <li><a href="#_test_suite_completion">Test suite completion</a></li>
 <li><a href="#_time_out">Time out</a></li>
 <li><a href="#event_loop">Event loop</a></li>
 </ul>
 </li>
-<li><a href="#_reporting">Reporting</a>
+<li><a href="#reporting">Reporting</a>
 <ul class="sectlevel2">
 <li><a href="#_console_reporting">Console reporting</a></li>
 <li><a href="#_file_reporting">File reporting</a></li>
@@ -238,7 +238,8 @@ and follows the Vert.x practices.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-unit&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
+  &lt;scope&gt;test&lt;/scope&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -251,7 +252,7 @@ and follows the Vert.x practices.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-unit:3.3.3</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">testCompile io.vertx:vertx-unit:3.4.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -260,8 +261,7 @@ the results the right way, this example shows the bare minimum test suite:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.unit.TestSuite
-def suite = TestSuite.create("the_test_suite")
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def suite = TestSuite.create("the_test_suite")
 suite.test("my_test_case", { context -&gt;
   def s = "value"
   context.assertEquals("value", s)
@@ -276,8 +276,7 @@ of the test result.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.unit.TestSuite
-def suite = TestSuite.create("the_test_suite")
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def suite = TestSuite.create("the_test_suite")
 suite.test("my_test_case", { context -&gt;
   def s = "value"
   context.assertEquals("value", s)
@@ -304,7 +303,7 @@ End test suite the_test_suite , run: 1, Failures: 0, Errors: 0</pre>
 </div>
 <div class="paragraph">
 <p>The <code>reporters</code> option configures the reporters used by the suite runner for reporting the execution
-of the tests, see the <a href="#reporting">Running</a> section for more info.</p>
+of the tests, see the <a href="#reporting">Reporting</a> section for more info.</p>
 </div>
 </div>
 </div>
@@ -318,8 +317,7 @@ initializing or disposing services used by the test suite.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.unit.TestSuite
-def suite = TestSuite.create("the_test_suite")
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def suite = TestSuite.create("the_test_suite")
 suite.test("my_test_case_1", { context -&gt;
   // Test 1
 })
@@ -336,8 +334,7 @@ suite.test("my_test_case_3", { context -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.unit.TestSuite
-def suite = TestSuite.create("the_test_suite")
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def suite = TestSuite.create("the_test_suite")
 suite.test("my_test_case_1", { context -&gt;
   // Test 1
 }).test("my_test_case_2", { context -&gt;
@@ -356,8 +353,7 @@ another test case to run. Such practice is considered as a bad one.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.unit.TestSuite
-def suite = TestSuite.create("the_test_suite")
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def suite = TestSuite.create("the_test_suite")
 suite.before({ context -&gt;
   // Test suite setup
 }).test("my_test_case_1", { context -&gt;
@@ -387,8 +383,7 @@ for each test case:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.unit.TestSuite
-def suite = TestSuite.create("the_test_suite")
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def suite = TestSuite.create("the_test_suite")
 suite.beforeEach({ context -&gt;
   // Test case setup
 }).test("my_test_case_1", { context -&gt;
@@ -413,7 +408,7 @@ the <em>beforeEach</em> callback reported a failure.</p>
 <h2 id="_asserting">Asserting</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Vertx Unit provides the <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html">TestContext</a></code> object for doing assertions in test cases. The <em>context</em>
+<p>Vertx Unit provides the <code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html">TestContext</a></code> object for doing assertions in test cases. The <em>context</em>
 object provides the usual methods when dealing with assertions.</p>
 </div>
 <div class="sect2">
@@ -484,7 +479,7 @@ object provides the usual methods when dealing with assertions.</p>
 <div class="sect2">
 <h3 id="_assertinrange">assertInRange</h3>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#assertInRange(double,%20double,%20double)">assertInRange</a></code> targets real numbers.</p>
+<p>The <code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html#assertInRange-double-double-double-">assertInRange</a></code> targets real numbers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -564,8 +559,8 @@ callback, for instance:</p>
 </ol>
 </div>
 <div class="paragraph">
-<p>Creating an <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code> object with the <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#async()">async</a></code> method marks the
-executed test case as non terminated. The test case terminates when the <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html#complete()">complete</a></code>
+<p>Creating an <code><a href="../../apidocs/io/vertx/ext/unit/Async.html">Async</a></code> object with the <code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html#async--">async</a></code> method marks the
+executed test case as non terminated. The test case terminates when the <code><a href="../../apidocs/io/vertx/ext/unit/Async.html#complete--">complete</a></code>
 method is invoked.</p>
 </div>
 <div class="admonitionblock note">
@@ -627,7 +622,7 @@ to implement a setup that depends on one or several asynchronous results:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>It is possible to wait until the completion of a specific <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code>, similar
+<p>It is possible to wait until the completion of a specific <code><a href="../../apidocs/io/vertx/ext/unit/Async.html">Async</a></code>, similar
 to Java&#8217;s count-down latch:</p>
 </div>
 <div class="listingblock">
@@ -661,7 +656,7 @@ this should not be executed from the event loop!
 </div>
 <div class="paragraph">
 <p>Async can also be created with an initial count value, it completes when the count-down reaches
-zero using <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html#countDown()">countDown</a></code>:</p>
+zero using <code><a href="../../apidocs/io/vertx/ext/unit/Async.html#countDown--">countDown</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="title">Wait until the complete count-down reaches zero</div>
@@ -693,11 +688,11 @@ async.awaitSuccess()
 <h2 id="_asynchronous_assertions">Asynchronous assertions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html">TestContext</a></code> provides useful methods that provides powerful constructs for async testing:</p>
+<p><code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html">TestContext</a></code> provides useful methods that provides powerful constructs for async testing:</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#asyncAssertSuccess()">asyncAssertSuccess</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
-instance that acts like <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code>, resolving the <code>Async</code> on success and failing the test
+<p>The <code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html#asyncAssertSuccess--">asyncAssertSuccess</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
+instance that acts like <code><a href="../../apidocs/io/vertx/ext/unit/Async.html">Async</a></code>, resolving the <code>Async</code> on success and failing the test
 on failure with the failure cause.</p>
 </div>
 <div class="listingblock">
@@ -717,8 +712,8 @@ vertx.deployVerticle("my.verticle", context.asyncAssertSuccess());</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#asyncAssertSuccess(io.vertx.core.Handler)">asyncAssertSuccess</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
-instance that acts like <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code>, invoking the delegating <code>Handler&lt;T&gt;</code> on success
+<p>The <code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html#asyncAssertSuccess-io.vertx.core.Handler-">asyncAssertSuccess</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
+instance that acts like <code><a href="../../apidocs/io/vertx/ext/unit/Async.html">Async</a></code>, invoking the delegating <code>Handler&lt;T&gt;</code> on success
 and failing the test on failure with the failure cause.</p>
 </div>
 <div class="listingblock">
@@ -774,8 +769,8 @@ vertx.deployVerticle("my.verticle", context.asyncAssertSuccess(id -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#asyncAssertFailure()">asyncAssertFailure</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
-instance that acts like <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code>, resolving the <code>Async</code> on failure and failing the test
+<p>The <code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html#asyncAssertFailure--">asyncAssertFailure</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
+instance that acts like <code><a href="../../apidocs/io/vertx/ext/unit/Async.html">Async</a></code>, resolving the <code>Async</code> on failure and failing the test
 on success.</p>
 </div>
 <div class="listingblock">
@@ -795,8 +790,8 @@ vertx.deployVerticle("my.verticle", context.asyncAssertFailure());</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html#asyncAssertFailure(io.vertx.core.Handler)">asyncAssertFailure</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
-instance that acts like <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Async.html">Async</a></code>, invoking the delegating <code>Handler&lt;Throwable&gt;</code> on
+<p>The <code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html#asyncAssertFailure-io.vertx.core.Handler-">asyncAssertFailure</a></code> method returns an <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code>
+instance that acts like <code><a href="../../apidocs/io/vertx/ext/unit/Async.html">Async</a></code>, invoking the delegating <code>Handler&lt;Throwable&gt;</code> on
 failure and failing the test on success.</p>
 </div>
 <div class="listingblock">
@@ -833,8 +828,7 @@ test multiple times to increase the failure likelihood of the test.</p>
 <div class="listingblock">
 <div class="title">Repeating a test</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.unit.TestSuite
-TestSuite.create("my_suite").test("my_test", 1000, { context -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">TestSuite.create("my_suite").test("my_test", 1000, { context -&gt;
   // This will be executed 1000 times
 })</code></pre>
 </div>
@@ -860,7 +854,7 @@ test repetition are executed sequentially
 <h2 id="_sharing_objects">Sharing objects</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html">TestContext</a></code> has <code>get</code>/<code>put</code>/<code>remove</code> operations for sharing state between callbacks.</p>
+<p>The <code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html">TestContext</a></code> has <code>get</code>/<code>put</code>/<code>remove</code> operations for sharing state between callbacks.</p>
 </div>
 <div class="paragraph">
 <p>Any object added during the <em>before</em> callback is available in any other callbacks. Each test case will operate on
@@ -869,8 +863,7 @@ a copy of the shared state, so updates will only be visible for a test case.</p>
 <div class="listingblock">
 <div class="title">Sharing state between callbacks</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.unit.TestSuite
-TestSuite.create("my_suite").before({ context -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">TestSuite.create("my_suite").before({ context -&gt;
 
   // host is available for all test cases
   context.put("host", "localhost")
@@ -929,10 +922,10 @@ Other objects should be shared using the features of that language.
 </div>
 </div>
 <div class="sect1">
-<h2 id="reporting">Running</h2>
+<h2 id="_running">Running</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>When a test suite is created, it won&#8217;t be executed until the <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestSuite.html#run()">run</a></code> method
+<p>When a test suite is created, it won&#8217;t be executed until the <code><a href="../../apidocs/io/vertx/ext/unit/TestSuite.html#run--">run</a></code> method
 is called.</p>
 </div>
 <div class="listingblock">
@@ -942,7 +935,7 @@ is called.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The test suite can also be run with a specified <code><a href="../../groovydoc/io/vertx/groovy/core/Vertx.html">Vertx</a></code> instance:</p>
+<p>The test suite can also be run with a specified <code><a href="../../apidocs/io/vertx/core/Vertx.html">Vertx</a></code> instance:</p>
 </div>
 <div class="listingblock">
 <div class="title">Provides a Vertx instance to run the test suite</div>
@@ -969,14 +962,13 @@ End test suite my_suite , run: 1, Failures: 0, Errors: 0</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Such test suite just need to be executed via the <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestSuite.html#run()">run</a></code> command, the
+<p>Such test suite just need to be executed via the <code><a href="../../apidocs/io/vertx/ext/unit/TestSuite.html#run--">run</a></code> command, the
 <code>vertx test</code> command takes care of configuring reporting, timeout, etc&#8230;&#8203;, pretty much like in this
 example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.unit.TestSuite
-def suite = TestSuite.create("the_test_suite")
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def suite = TestSuite.create("the_test_suite")
 suite.test("my_test_case", { context -&gt;
   def s = "value"
   context.assertEquals("value", s)
@@ -1007,7 +999,7 @@ all suite executed.
 <div class="paragraph">
 <p>No assumptions can be made about when the test suite will be completed, and if some code needs to be executed
 after the test suite, it should either be in the test suite <em>after</em> callback or as callback of the
-<code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Completion.html">Completion</a></code>:</p>
+<code><a href="../../apidocs/io/vertx/ext/unit/Completion.html">Completion</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="title">Test suite execution callback</div>
@@ -1026,7 +1018,7 @@ completion.handler({ ar -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Completion.html">Completion</a></code> object provides also a <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Completion.html#resolve(io.vertx.core.Future)">resolve</a></code> method that
+<p>The <code><a href="../../apidocs/io/vertx/ext/unit/Completion.html">Completion</a></code> object provides also a <code><a href="../../apidocs/io/vertx/ext/unit/Completion.html#resolve-io.vertx.core.Future-">resolve</a></code> method that
 takes a <code>Future</code> object, this <code>Future</code> will be notified of the test suite execution:</p>
 </div>
 <div class="listingblock">
@@ -1059,7 +1051,7 @@ completion.await()</code></pre>
 <p>The <code>await</code> throws an exception when the thread is interrupted or a timeout is fired.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/Completion.html#awaitSuccess()">awaitSuccess</a></code> is a variation that throws an exception when
+<p>The <code><a href="../../apidocs/io/vertx/ext/unit/Completion.html#awaitSuccess--">awaitSuccess</a></code> is a variation that throws an exception when
 the test suite fails.</p>
 </div>
 <div class="listingblock">
@@ -1099,7 +1091,7 @@ current execution context (i.e the test suite is executed in a <code>main</code>
 wether or not a <code>Vertx</code> instance is configured.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../dataobjects.html#TestOptions#setUseEventLoop(java.lang.Boolean)">useEventLoop</a></code> configures the usage of the event
+<p>The <code><a href="../../apidocs/io/vertx/ext/unit/TestOptions.html#setUseEventLoop-java.lang.Boolean-">setUseEventLoop</a></code> configures the usage of the event
 loop:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
@@ -1147,7 +1139,7 @@ to no event loop when no one is available.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_reporting">Reporting</h2>
+<h2 id="reporting">Reporting</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Reporting is an important piece of a test suite, Vertx Unit can be configured to run with different kind
@@ -1263,13 +1255,12 @@ files).</p>
 <p>It allow to decouple the execution of the test suite from the reporting.</p>
 </div>
 <div class="paragraph">
-<p>The messages sent over the event bus can be collected by the <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/collect/EventBusCollector.html">EventBusCollector</a></code>
+<p>The messages sent over the event bus can be collected by the <code><a href="../../apidocs/io/vertx/ext/unit/collect/EventBusCollector.html">EventBusCollector</a></code>
 and achieve custom reporting:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.unit.collect.EventBusCollector
-def collector = EventBusCollector.create(vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def collector = EventBusCollector.create(vertx, [
   reporters:[
     [
       to:"file:report.xml",
@@ -1288,7 +1279,7 @@ collector.register("the-address")</code></pre>
 <h2 id="vertx_integration">Vertx integration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>By default, assertions and failures must be done on the <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html">TestContext</a></code> and throwing an
+<p>By default, assertions and failures must be done on the <code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html">TestContext</a></code> and throwing an
 assertion error works only when called by Vert.x Unit:</p>
 </div>
 <div class="listingblock">
@@ -1337,7 +1328,7 @@ suite.test("test-server", { testContext -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>The exception handler is set during the <em>before</em> phase, the <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html">TestContext</a></code> is shared
+<p>The exception handler is set during the <em>before</em> phase, the <code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html">TestContext</a></code> is shared
 between each <em>before</em>, <em>test</em> and <em>after</em> phase. So the exception handler obtained during the <em>before</em> phase
 is correct.</p>
 </div>
@@ -1363,8 +1354,8 @@ public class JUnitTestSuite {
 </div>
 </div>
 <div class="paragraph">
-<p>The <code>VertxUnitRunner</code> uses the junit annotations for introspecting the class
-and create a test suite after the class. The methods should declare a <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html">TestContext</a></code>
+<p>The <code><a href="../../apidocs/io/vertx/ext/unit/junit/VertxUnitRunner.html">VertxUnitRunner</a></code> uses the junit annotations for introspecting the class
+and create a test suite after the class. The methods should declare a <code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html">TestContext</a></code>
 argument, if they don&#8217;t it is fine too. However the <code>TestContext</code> is the only way to retrieve the associated
 Vertx instance of perform asynchronous tests.</p>
 </div>
@@ -1375,7 +1366,7 @@ runner.</p>
 <div class="sect2">
 <h3 id="_running_a_test_on_a_vert_x_context">Running a test on a Vert.x context</h3>
 <div class="paragraph">
-<p>By default the thread invoking the test methods is the JUnit thread. The <code>RunTestOnContext</code>
+<p>By default the thread invoking the test methods is the JUnit thread. The <code><a href="../../apidocs/io/vertx/ext/unit/junit/RunTestOnContext.html">RunTestOnContext</a></code>
 JUnit rule can be used to alter this behavior for running these test methods with a Vert.x event loop thread.</p>
 </div>
 <div class="paragraph">
@@ -1385,9 +1376,9 @@ One way to solve this is to use proper synchronization, another is to execute te
 that will be propagated to the created handlers.</p>
 </div>
 <div class="paragraph">
-<p>For this purpose the <code>RunTestOnContext</code> rule needs a <code><a href="../../groovydoc/io/vertx/groovy/core/Vertx.html">Vertx</a></code>
+<p>For this purpose the <code><a href="../../apidocs/io/vertx/ext/unit/junit/RunTestOnContext.html">RunTestOnContext</a></code> rule needs a <code><a href="../../apidocs/io/vertx/core/Vertx.html">Vertx</a></code>
 instance. Such instance can be provided, otherwise the rule will manage an instance under the hood. Such
-instance can be retrieved when the test is running, making this rule a way to manage a <code><a href="../../groovydoc/io/vertx/groovy/core/Vertx.html">Vertx</a></code>
+instance can be retrieved when the test is running, making this rule a way to manage a <code><a href="../../apidocs/io/vertx/core/Vertx.html">Vertx</a></code>
 instance as well.</p>
 </div>
 <div class="listingblock">
@@ -1444,7 +1435,7 @@ keep in mind that you cannot block the event loop when using this rule. Usage of
 </div>
 </div>
 <div class="paragraph">
-<p>For a more global configuration, the <code>Timeout</code> rule can be used:</p>
+<p>For a more global configuration, the <code><a href="../../apidocs/io/vertx/ext/unit/junit/Timeout.html">Timeout</a></code> rule can be used:</p>
 </div>
 <div class="listingblock">
 <div class="title">Configure the timeout at the class level</div>
@@ -1469,7 +1460,7 @@ public class TimeoutTestSuite {
 <div class="title">Note</div>
 </td>
 <td class="content">
-the <code>@Test</code> timeout overrides the the <code>Timeout</code> rule.
+the <code>@Test</code> timeout overrides the the <code><a href="../../apidocs/io/vertx/ext/unit/junit/Timeout.html">Timeout</a></code> rule.
 </td>
 </tr>
 </table>
@@ -1479,7 +1470,7 @@ the <code>@Test</code> timeout overrides the the <code>Timeout</code> rule.
 <h3 id="_parameterized_tests">Parameterized tests</h3>
 <div class="paragraph">
 <p>JUnit provides useful <code>Parameterized</code> tests, Vert.x Unit tests can be ran with this particular runner thanks to
-the <code>VertxUnitRunnerWithParametersFactory</code>:</p>
+the <code><a href="../../apidocs/io/vertx/ext/unit/junit/VertxUnitRunnerWithParametersFactory.html">VertxUnitRunnerWithParametersFactory</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="title">Running a Vert.x Unit parameterized test</div>
@@ -1515,8 +1506,8 @@ public class SimpleParameterizedTest {
 test multiple times to increase the likelihood failure of the test.</p>
 </div>
 <div class="paragraph">
-<p>With JUnit a test has to be annotated with <code>@Repeat</code> to be repeated. The test must
-also define the <code>RepeatRule</code> among its rules.</p>
+<p>With JUnit a test has to be annotated with <code><a href="../../apidocs/io/vertx/ext/unit/junit/Repeat.html">@Repeat</a></code> to be repeated. The test must
+also define the <code><a href="../../apidocs/io/vertx/ext/unit/junit/RepeatRule.html">RepeatRule</a></code> among its rules.</p>
 </div>
 <div class="listingblock">
 <div class="title">Repeating a test with JUnit</div>
@@ -1577,7 +1568,7 @@ following mapping rules:</p>
 </div>
 <div class="paragraph">
 <p>The <code>testSuiteObject</code> argument methods are inspected and the public, non static methods
-with <code><a href="../../groovydoc/io/vertx/groovy/ext/unit/TestContext.html">TestContext</a></code> parameter are retained and mapped to a Vertx Unit test suite
+with <code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html">TestContext</a></code> parameter are retained and mapped to a Vertx Unit test suite
 via the method name:</p>
 </div>
 <div class="ulist">
@@ -1629,7 +1620,7 @@ via the method name:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

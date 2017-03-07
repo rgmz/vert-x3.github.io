@@ -211,7 +211,7 @@ as it natively handles JSON (BSON) documents.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-mongo-client&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -224,7 +224,7 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mongo-client:3.3.3'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mongo-client:3.4.0'</code></pre>
 </div>
 </div>
 </div>
@@ -1037,11 +1037,11 @@ mongoClient.save("books", document, res -&gt; {
 </dd>
 <dt class="hdlist1"><code>useObjectId</code></dt>
 <dd>
-<p>Toggle this option to support persisting and retrieving ObjectId&#8217;s as strings. If <code>true', hex-strings will
+<p>Toggle this option to support persisting and retrieving ObjectId&#8217;s as strings. If <code>true</code>, hex-strings will
 be saved as native Mongodb ObjectId types in the document collection. This will allow the sorting of documents based on creation
-time. You can also derive the creation time from the hex-string using ObjectId::getDate(). Set to `false' for other types of your choosing.
+time. You can also derive the creation time from the hex-string using ObjectId::getDate(). Set to <code>false</code> for other types of your choosing.
 If set to false, or left to default, hex strings will be generated as the document _id if the _id is omitted from the document.
-Defaults to `false</code>.</p>
+Defaults to <code>false</code>.</p>
 </dd>
 </dl>
 </div>
@@ -1077,7 +1077,7 @@ For more information on the format of the connection string please consult the d
 <div class="content">
 <pre>{
   // Single Cluster Settings
-  "host" : "17.0.0.1", // string
+  "host" : "127.0.0.1", // string
   "port" : 27017,      // int
 
   // Multiple Cluster Settings
@@ -1092,7 +1092,8 @@ For more information on the format of the connection string please consult the d
     },
     ...
   ],
-  "replicaSet" :  "foo"    // string
+  "replicaSet" :  "foo",    // string
+  "serverSelectionTimeoutMS" : 30000, // long
 
   // Connection Pool Settings
   "maxPoolSize" : 50,                // int
@@ -1162,6 +1163,10 @@ For more information on the format of the connection string please consult the d
 <dt class="hdlist1"><code>replicaSet</code></dt>
 <dd>
 <p>The name of the replica set, if the mongoDB instance is a member of a replica set</p>
+</dd>
+<dt class="hdlist1"><code>serverSelectionTimeoutMS</code></dt>
+<dd>
+<p>The time in milliseconds that the mongo driver will wait to select a server for an operation before raising an error.</p>
 </dd>
 <dt class="hdlist1"><code>maxPoolSize</code></dt>
 <dd>
@@ -1271,7 +1276,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

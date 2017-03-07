@@ -102,7 +102,7 @@
       <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
-<li><a href="#_using_vert_x_service_proxies">Using vert.x service proxies</a></li>
+<li><a href="#_using_vert_x_service_proxies">Using Vert.x service proxies</a></li>
 <li><a href="#_introduction_to_service_proxies">Introduction to service proxies</a></li>
 <li><a href="#_async_interface">Async Interface</a></li>
 <li><a href="#_code_generation">Code generation</a></li>
@@ -112,6 +112,7 @@
 <li><a href="#_restrictions_for_service_interface">Restrictions for service interface</a>
 <ul class="sectlevel2">
 <li><a href="#_return_types">Return types</a></li>
+<li><a href="#_parameter_types">Parameter types</a></li>
 <li><a href="#_overloaded_methods">Overloaded methods</a></li>
 </ul>
 </li>
@@ -123,7 +124,7 @@
         <div class="toc hidden-md hidden-lg">
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
-<li><a href="#_using_vert_x_service_proxies">Using vert.x service proxies</a></li>
+<li><a href="#_using_vert_x_service_proxies">Using Vert.x service proxies</a></li>
 <li><a href="#_introduction_to_service_proxies">Introduction to service proxies</a></li>
 <li><a href="#_async_interface">Async Interface</a></li>
 <li><a href="#_code_generation">Code generation</a></li>
@@ -133,6 +134,7 @@
 <li><a href="#_restrictions_for_service_interface">Restrictions for service interface</a>
 <ul class="sectlevel2">
 <li><a href="#_return_types">Return types</a></li>
+<li><a href="#_parameter_types">Parameter types</a></li>
 <li><a href="#_overloaded_methods">Overloaded methods</a></li>
 </ul>
 </li>
@@ -142,26 +144,26 @@
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>When you compose a vert.x application, you may want to isolate a functionality somewhere and make it available to
+<p>When you compose a Vert.x application, you may want to isolate a functionality somewhere and make it available to
 the rest of your application.</p>
 </div>
 <div class="paragraph">
 <p>That&#8217;s the main purpose of service proxies. It lets you expose a <em>service</em> on the
-event bus, so, any other vert.x component can consume it, as soon as they know the <em>address</em> on which the service
+event bus, so, any other Vert.x component can consume it, as soon as they know the <em>address</em> on which the service
 is published.</p>
 </div>
 <div class="paragraph">
-<p>A <em>service</em> is described with a Java interface containing methods following the <em>async pattern</em>. Behind the hood,
-messages are sent on the event bus to invoke the service and get the response back. But to make it more easy to use
-for you, it generates a <em>proxy</em> that you can invoke directly (using the API  from the service interface).</p>
+<p>A <em>service</em> is described with a Java interface containing methods following the <em>async pattern</em>. Under the hood,
+messages are sent on the event bus to invoke the service and get the response back. But for ease of use,
+it generates a <em>proxy</em> that you can invoke directly (using the API from the service interface).</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_using_vert_x_service_proxies">Using vert.x service proxies</h2>
+<h2 id="_using_vert_x_service_proxies">Using Vert.x service proxies</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To use the Vert.x Service Proxies, add the following dependency to the <em>dependencies</em> section of
+<p>To <strong>use</strong> Vert.x Service Proxies, add the following dependency to the <em>dependencies</em> section of
 your build descriptor:</p>
 </div>
 <div class="ulist">
@@ -176,7 +178,7 @@ your build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-service-proxy&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -189,7 +191,39 @@ your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-proxy:3.3.3'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-proxy:3.4.0'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To <strong>implement</strong> service proxies, also add:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-codegen&lt;/artifactId&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
+  &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compileOnly 'io.vertx:vertx-codegen:3.4.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -198,7 +232,7 @@ require to re-compile the sources to regenerate the code.</p>
 </div>
 <div class="paragraph">
 <p>To generate the proxies in different languages, you will need to add the <em>language</em> dependency such as
-<code>vertx-lang-groovy</code> for Groovy&#8230;&#8203;.</p>
+<code>vertx-lang-groovy</code> for Groovy.</p>
 </div>
 </div>
 </div>
@@ -206,7 +240,7 @@ require to re-compile the sources to regenerate the code.</p>
 <h2 id="_introduction_to_service_proxies">Introduction to service proxies</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Let&#8217;s have a look to service proxies and why they can be useful. Let&#8217;s imagine you have a <em>database service</em>
+<p>Let&#8217;s have a look at service proxies and why they can be useful. Let&#8217;s imagine you have a <em>database service</em>
 exposed on the event bus, you should do something like this:</p>
 </div>
 <div class="listingblock">
@@ -299,12 +333,11 @@ public interface SomeDatabaseService {
 <div class="sectionbody">
 <div class="paragraph">
 <p>To be used by the service-proxy generation, the <em>service interface</em> must comply to a couple of rules. First it
-should follow the async pattern. To return result, the method should declare a
-<code>Handler&lt;AsyncResult&lt;ResultType&gt;&gt;</code>. <code>ResultType</code> can be another proxy (and so a proxies can be factories for other
-proxies.</p>
+should follow the async pattern. To return a result, the method should declare a <code>Handler&lt;AsyncResult&lt;ResultType&gt;&gt;</code> parameter.
+<code>ResultType</code> can be another proxy (and so a proxies can be factories for other proxies).</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s see an example</p>
+<p>Let&#8217;s see an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -384,11 +417,48 @@ annotation. The proxy instance is disposed when this method is called.</p>
 the handler is called <code>MyServiceProxyHandler</code> and the proxy is called <code>MyServiceEBProxy</code>.</p>
 </div>
 <div class="paragraph">
+<p>In addition Vert.x Core provides a generator creating data object converters to ease data object usage in
+service proxies. Such converter provides a basis for the <code>JsonObject</code> constructor and the <code>toJson()</code> method
+that are necessary for using data objects in service proxies.</p>
+</div>
+<div class="paragraph">
 <p>The <em>codegen</em> annotation processor generates these classes at compilation time. It is a feature of the Java
-compiler so <em>no extra step</em> is required, it is just a matter of configuring correctly the compiler.</p>
+compiler so <em>no extra step</em> is required, it is just a matter of configuring correctly your build:</p>
+</div>
+<div class="paragraph">
+<p>Just add the <code>io.vertx:vertx-service-proxy:processor</code> dependency to your build.</p>
 </div>
 <div class="paragraph">
 <p>Here a configuration example for Maven:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-service-proxy&lt;/artifactId&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
+  &lt;classifier&gt;processor&lt;/classifier&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This feature can also be used in Gradle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>compile "io.vertx:vertx-service-proxy:3.4.0:processor"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>IDE provides usually support for annotation processors.</p>
+</div>
+<div class="paragraph">
+<p>The <code>processor</code> classifier adds to the jar the automatic configuration of the service proxy annotation processor
+via the <code>META-INF/services</code> plugin mechanism.</p>
+</div>
+<div class="paragraph">
+<p>If you want you can use it too with the regular jar but you need then to declare the annotation processor
+explicitly, for instance in Maven:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -396,18 +466,11 @@ compiler so <em>no extra step</em> is required, it is just a matter of configuri
   &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
   &lt;configuration&gt;
     &lt;annotationProcessors&gt;
-      &lt;annotationProcessor&gt;io.vertx.codegen.CodeGenProcessor&lt;/annotationProcessor&gt;
+      &lt;annotationProcessor&gt;io.vertx.serviceproxy.ServiceProxyProcessor&lt;/annotationProcessor&gt;
     &lt;/annotationProcessors&gt;
-    &lt;compilerArgs&gt;
-      &lt;arg&gt;-AoutputDirectory=${project.basedir}/src/main&lt;/arg&gt;
-    &lt;/compilerArgs&gt;
   &lt;/configuration&gt;
 &lt;/plugin&gt;</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>This feature can also be used in Gradle, or even in IDE as they provide usually support for annotation
-processors.</p>
 </div>
 </div>
 </div>
@@ -471,7 +534,7 @@ SomeDatabaseService service2 = ProxyHelper.createProxy(SomeDatabaseService.class
 </div>
 </div>
 <div class="paragraph">
-<p>The second method takes an instance of <code><a href="../../apidocs/io/vertx/core/eventbus/DeliveryOptions.html">DeliveryOptions</a></code> where you con configure the
+<p>The second method takes an instance of <code><a href="../../apidocs/io/vertx/core/eventbus/DeliveryOptions.html">DeliveryOptions</a></code> where you can configure the
 message delivery (such as the timeout).</p>
 </div>
 <div class="paragraph">
@@ -666,7 +729,7 @@ marshall over event bus messages and so they can be used asynchronously. They ar
 <div class="sect2">
 <h3 id="_return_types">Return types</h3>
 <div class="paragraph">
-<p>Must be one of</p>
+<p>Must be one of:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -688,8 +751,9 @@ SomeDatabaseService doSomething();</code></pre>
 <p>This is because methods must not block and it&#8217;s not possible to return a result immediately without blocking if
 the service is remote.</p>
 </div>
-<div class="sect3">
-<h4 id="_parameter_types">Parameter types</h4>
+</div>
+<div class="sect2">
+<h3 id="_parameter_types">Parameter types</h3>
 <div class="paragraph">
 <p>Let <code>JSON</code> = <code>JsonObject | JsonArray</code>
 Let <code>PRIMITIVE</code> = Any primitive type or boxed primitive type</p>
@@ -769,7 +833,6 @@ Let <code>PRIMITIVE</code> = Any primitive type or boxed primitive type</p>
 </ul>
 </div>
 </div>
-</div>
 <div class="sect2">
 <h3 id="_overloaded_methods">Overloaded methods</h3>
 <div class="paragraph">
@@ -845,7 +908,7 @@ any type supported by the event bus. To signal a failure the method <code>messag
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

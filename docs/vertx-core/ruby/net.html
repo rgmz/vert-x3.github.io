@@ -468,8 +468,7 @@ deployed then you will have at most one core utilised on your server.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Create a few instances so we can utilise cores
 
-i = 0
-while (i &lt; 10)
+(0...10).each do |i|
   server = vertx.create_net_server()
   server.connect_handler() { |socket|
     socket.handler() { |buffer|
@@ -478,7 +477,6 @@ while (i &lt; 10)
     }
   }
   server.listen(1234, "localhost")
-  i+=1
 end</code></pre>
 </div>
 </div>
@@ -650,32 +648,7 @@ name. When using network activity logging there are a few things to keep in mind
 </ul>
 </div>
 <div class="paragraph">
-<p>Netty will try to locate the following logger implementations, in the following order:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Slf4j</p>
-</li>
-<li>
-<p>Log4j</p>
-</li>
-<li>
-<p>JDK</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The presense of the slf4j or log4j classes on the classpath is enough to pick up the logging implementation.</p>
-</div>
-<div class="paragraph">
-<p>The logger implementation can be forced to a specific implementation by setting Netty&#8217;s internal logger implementation directly:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Force logging to SLF4J
-InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);</code></pre>
-</div>
+<p>You should read the <a href="#netty-logging">[netty-logging]</a> section.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1190,6 +1163,90 @@ client = vertx.create_net_client(options)</code></pre>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_self_signed_certificates_for_testing_and_development_purposes">Self-signed certificates for testing and development purposes</h4>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+Do not use this in production settings, and note that the generated keys are very insecure.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is very often the case that self-signed certificates are required, be it for unit / integration tests or for
+running a development version of an application.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="../../yardoc/Vertx/SelfSignedCertificate.html">SelfSignedCertificate</a></code> can be used to provide self-signed PEM certificate helpers and
+give <code><a href="unavailable">KeyCertOptions</a></code> and <code><a href="unavailable">TrustOptions</a></code> configurations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/self_signed_certificate'
+certificate = Vertx::SelfSignedCertificate.create()
+
+serverOptions = {
+  'ssl' =&gt; true,
+  'keyCertOptions' =&gt; certificate.key_cert_options(),
+  'trustOptions' =&gt; certificate.trust_options()
+}
+
+server = vertx.create_net_server(serverOptions).connect_handler() { |socket|
+  socket.write("Hello!").end()
+}.listen(1234, "localhost")
+
+clientOptions = {
+  'ssl' =&gt; true,
+  'keyCertOptions' =&gt; certificate.key_cert_options(),
+  'trustOptions' =&gt; certificate.trust_options()
+}
+
+client = vertx.create_net_client(clientOptions)
+client.connect(1234, "localhost") { |ar_err,ar|
+  if (ar_err == nil)
+    ar.handler() { |buffer|
+      puts buffer
+    }
+  else
+    STDERR.puts "Woops: #{ar_err.get_message()}"
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The client can also be configured to trust all certificates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">clientOptions = {
+  'ssl' =&gt; true,
+  'trustAll' =&gt; true
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that self-signed certificates also work for other TCP protocols like HTTPS:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/self_signed_certificate'
+certificate = Vertx::SelfSignedCertificate.create()
+
+vertx.create_http_server({
+  'ssl' =&gt; true,
+  'keyCertOptions' =&gt; certificate.key_cert_options(),
+  'trustOptions' =&gt; certificate.trust_options()
+}).request_handler() { |req|
+  req.response().end("Hello!")
+}.listen(8080)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_revoking_certificate_authorities">Revoking certificate authorities</h4>
 <div class="paragraph">
 <p>Trust can be configured to use a certificate revocation list (CRL) for revoked certificates that should no
@@ -1439,7 +1496,7 @@ to resolve the DNS address locally.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:00:58 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

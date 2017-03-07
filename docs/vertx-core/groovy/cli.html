@@ -125,7 +125,7 @@
 <div class="paragraph">
 <p>It&#8217;s also able to print help
 messages detailing the options available for a command line tool. Even if such features are far from
-the Vert.x core topics, this API is used in the <code>Launcher</code> class that you can use in <em>fat-jar</em>
+the Vert.x core topics, this API is used in the <code><a href="../../apidocs/io/vertx/core/Launcher.html">Launcher</a></code> class that you can use in <em>fat-jar</em>
 and in the <code>vertx</code> command line tools. In addition, it&#8217;s polyglot (can be used from any supported language) and is
 used in Vert.x Shell.</p>
 </div>
@@ -174,13 +174,12 @@ different types of syntax:</p>
 <h3 id="_definition_stage">Definition Stage</h3>
 <div class="paragraph">
 <p>Each command line interface must define the set of options and arguments that will be used. It also requires a
-name. The CLI API uses the <code><a href="../dataobjects.html#Option">Option</a></code> and <code><a href="../dataobjects.html#Argument">Argument</a></code> classes to
+name. The CLI API uses the <code><a href="../../apidocs/io/vertx/core/cli/Option.html">Option</a></code> and <code><a href="../../apidocs/io/vertx/core/cli/Argument.html">Argument</a></code> classes to
 describe options and arguments:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.cli.CLI
-def cli = CLI.create("copy").setSummary("A command line interface to copy files.").addOption([
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = CLI.create("copy").setSummary("A command line interface to copy files.").addOption([
   longName:"directory",
   shortName:"R",
   description:"enables directory support",
@@ -190,34 +189,33 @@ def cli = CLI.create("copy").setSummary("A command line interface to copy files.
   description:"The source",
   argName:"source"
 ]).addArgument([
-  index:0,
+  index:1,
   description:"The destination",
   argName:"target"
 ])</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>As you can see, you can create a new <code><a href="../../groovydoc/io/vertx/groovy/core/cli/CLI.html">CLI</a></code> using
-<code><a href="../../groovydoc/io/vertx/groovy/core/cli/CLI.html#create(java.lang.String)">CLI.create</a></code>. The passed string is the name of the CLI. Once created you
+<p>As you can see, you can create a new <code><a href="../../apidocs/io/vertx/core/cli/CLI.html">CLI</a></code> using
+<code><a href="../../apidocs/io/vertx/core/cli/CLI.html#create-java.lang.String-">CLI.create</a></code>. The passed string is the name of the CLI. Once created you
 can set the summary and description. The summary is intended to be short (one line), while the description can
 contain more details. Each option and argument are also added on the <code>CLI</code> object using the
-<code><a href="../../groovydoc/io/vertx/groovy/core/cli/CLI.html#addArgument(io.vertx.core.cli.Argument)">addArgument</a></code> and
-<code><a href="../../groovydoc/io/vertx/groovy/core/cli/CLI.html#addOption(io.vertx.core.cli.Option)">addOption</a></code> methods.</p>
+<code><a href="../../apidocs/io/vertx/core/cli/CLI.html#addArgument-io.vertx.core.cli.Argument-">addArgument</a></code> and
+<code><a href="../../apidocs/io/vertx/core/cli/CLI.html#addOption-io.vertx.core.cli.Option-">addOption</a></code> methods.</p>
 </div>
 <div class="sect3">
 <h4 id="_options">Options</h4>
 <div class="paragraph">
-<p>An <code><a href="../dataobjects.html#Option">Option</a></code> is a command line parameter identified by a <em>key</em> present in the user command
+<p>An <code><a href="../../apidocs/io/vertx/core/cli/Option.html">Option</a></code> is a command line parameter identified by a <em>key</em> present in the user command
 line. Options must have at least a long name or a short name. Long name are generally used using a <code>--</code> prefix,
 while short names are used with a single <code>-</code>. Options can get a description displayed in the usage (see below).
 Options can receive 0, 1 or several values. An option receiving 0 values is a <code>flag</code>, and must be declared using
-<code><a href="../dataobjects.html#Option#setFlag(boolean)">flag</a></code>. By default, options receive a single value, however, you can
-configure the option to receive several values using <code><a href="../dataobjects.html#Option#setMultiValued(boolean)">multiValued</a></code>:</p>
+<code><a href="../../apidocs/io/vertx/core/cli/Option.html#setFlag-boolean-">setFlag</a></code>. By default, options receive a single value, however, you can
+configure the option to receive several values using <code><a href="../../apidocs/io/vertx/core/cli/Option.html#setMultiValued-boolean-">setMultiValued</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.cli.CLI
-def cli = CLI.create("some-name").setSummary("A command line interface illustrating the options valuation.").addOption([
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = CLI.create("some-name").setSummary("A command line interface illustrating the options valuation.").addOption([
   longName:"flag",
   shortName:"f",
   flag:true,
@@ -240,8 +238,7 @@ the parsing:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.cli.CLI
-def cli = CLI.create("some-name").addOption([
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = CLI.create("some-name").addOption([
   longName:"mandatory",
   required:true,
   description:"a mandatory option"
@@ -254,8 +251,7 @@ the command line:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.cli.CLI
-def cli = CLI.create("some-name").addOption([
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = CLI.create("some-name").addOption([
   longName:"optional",
   defaultValue:"hello",
   description:"an optional option with a default value"
@@ -263,7 +259,7 @@ def cli = CLI.create("some-name").addOption([
 </div>
 </div>
 <div class="paragraph">
-<p>An option can be <em>hidden</em> using the <code><a href="../dataobjects.html#Option#setHidden(boolean)">hidden</a></code> method. Hidden option are
+<p>An option can be <em>hidden</em> using the <code><a href="../../apidocs/io/vertx/core/cli/Option.html#setHidden-boolean-">setHidden</a></code> method. Hidden option are
 not listed in the usage, but can still be used in the user command line (for power-users).</p>
 </div>
 <div class="paragraph">
@@ -271,8 +267,7 @@ not listed in the usage, but can still be used in the user command line (for pow
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.cli.CLI
-def cli = CLI.create("some-name").addOption([
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = CLI.create("some-name").addOption([
   longName:"color",
   defaultValue:"green",
   choices:[
@@ -300,8 +295,7 @@ index <code>0</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.cli.CLI
-def cli = CLI.create("some-name").addArgument([
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = CLI.create("some-name").addArgument([
   index:0,
   description:"the first argument",
   argName:"arg1"
@@ -317,8 +311,7 @@ def cli = CLI.create("some-name").addArgument([
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.cli.CLI
-def cli = CLI.create("some-name").addArgument([
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = CLI.create("some-name").addArgument([
   description:"the first argument",
   argName:"arg1"
 ]).addArgument([
@@ -331,21 +324,21 @@ def cli = CLI.create("some-name").addArgument([
 <p>The <code>argName</code> is optional and used in the usage message.</p>
 </div>
 <div class="paragraph">
-<p>As options, <code><a href="../dataobjects.html#Argument">Argument</a></code> can:</p>
+<p>As options, <code><a href="../../apidocs/io/vertx/core/cli/Argument.html">Argument</a></code> can:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>be hidden using <code><a href="../dataobjects.html#Argument#setHidden(boolean)">hidden</a></code></p>
+<p>be hidden using <code><a href="../../apidocs/io/vertx/core/cli/Argument.html#setHidden-boolean-">setHidden</a></code></p>
 </li>
 <li>
-<p>be mandatory using <code><a href="../dataobjects.html#Argument#setRequired(boolean)">required</a></code></p>
+<p>be mandatory using <code><a href="../../apidocs/io/vertx/core/cli/Argument.html#setRequired-boolean-">setRequired</a></code></p>
 </li>
 <li>
-<p>have a default value using <code><a href="../dataobjects.html#Argument#setDefaultValue(java.lang.String)">defaultValue</a></code></p>
+<p>have a default value using <code><a href="../../apidocs/io/vertx/core/cli/Argument.html#setDefaultValue-java.lang.String-">setDefaultValue</a></code></p>
 </li>
 <li>
-<p>receive several values using <code><a href="../dataobjects.html#Argument#setMultiValued(boolean)">multiValued</a></code> - only the last argument
+<p>receive several values using <code><a href="../../apidocs/io/vertx/core/cli/Argument.html#setMultiValued-boolean-">setMultiValued</a></code> - only the last argument
 can be multi-valued.</p>
 </li>
 </ul>
@@ -357,12 +350,11 @@ can be multi-valued.</p>
 <div class="sect3">
 <h4 id="_usage_generation">Usage generation</h4>
 <div class="paragraph">
-<p>Once your <code><a href="../../groovydoc/io/vertx/groovy/core/cli/CLI.html">CLI</a></code> instance is configured, you can generate the <em>usage</em> message:</p>
+<p>Once your <code><a href="../../apidocs/io/vertx/core/cli/CLI.html">CLI</a></code> instance is configured, you can generate the <em>usage</em> message:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.cli.CLI
-def cli = CLI.create("copy").setSummary("A command line interface to copy files.").addOption([
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = CLI.create("copy").setSummary("A command line interface to copy files.").addOption([
   longName:"directory",
   shortName:"R",
   description:"enables directory support",
@@ -394,14 +386,14 @@ A command line interface to copy files.
 </div>
 </div>
 <div class="paragraph">
-<p>If you need to tune the usage message, check the <code>UsageMessageFormatter</code> class.</p>
+<p>If you need to tune the usage message, check the <code><a href="../../apidocs/io/vertx/core/cli/UsageMessageFormatter.html">UsageMessageFormatter</a></code> class.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_parsing_stage">Parsing Stage</h3>
 <div class="paragraph">
-<p>Once your <code><a href="../../groovydoc/io/vertx/groovy/core/cli/CLI.html">CLI</a></code> instance is configured, you can parse the user command line to evaluate
+<p>Once your <code><a href="../../apidocs/io/vertx/core/cli/CLI.html">CLI</a></code> instance is configured, you can parse the user command line to evaluate
 each option and argument:</p>
 </div>
 <div class="listingblock">
@@ -410,22 +402,22 @@ each option and argument:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/cli/CLI.html#parse(java.util.List)">parse</a></code> method returns a <code><a href="../../groovydoc/io/vertx/groovy/core/cli/CommandLine.html">CommandLine</a></code>
+<p>The <code><a href="../../apidocs/io/vertx/core/cli/CLI.html#parse-java.util.List-">parse</a></code> method returns a <code><a href="../../apidocs/io/vertx/core/cli/CommandLine.html">CommandLine</a></code>
 object containing the values. By default, it validates the user command line and checks that each mandatory options
 and arguments have been set as well as the number of values received by each option. You can disable the
-validation by passing <code>false</code> as second parameter of <code><a href="../../groovydoc/io/vertx/groovy/core/cli/CLI.html#parse(java.util.List,%20boolean)">parse</a></code>.
+validation by passing <code>false</code> as second parameter of <code><a href="../../apidocs/io/vertx/core/cli/CLI.html#parse-java.util.List-boolean-">parse</a></code>.
 This is useful if you want to check an argument or option is present even if the parsed command line is invalid.</p>
 </div>
 <div class="paragraph">
 <p>You can check whether or not the
-<code><a href="../../groovydoc/io/vertx/groovy/core/cli/CommandLine.html">CommandLine</a></code> is valid using <code><a href="../../groovydoc/io/vertx/groovy/core/cli/CommandLine.html#isValid()">isValid</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/core/cli/CommandLine.html">CommandLine</a></code> is valid using <code><a href="../../apidocs/io/vertx/core/cli/CommandLine.html#isValid--">isValid</a></code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_query_interrogation_stage">Query / Interrogation Stage</h3>
 <div class="paragraph">
 <p>Once parsed, you can retrieve the values of the options and arguments from the
-<code><a href="../../groovydoc/io/vertx/groovy/core/cli/CommandLine.html">CommandLine</a></code> object returned by the <code><a href="../../groovydoc/io/vertx/groovy/core/cli/CLI.html#parse(java.util.List)">parse</a></code>
+<code><a href="../../apidocs/io/vertx/core/cli/CommandLine.html">CommandLine</a></code> object returned by the <code><a href="../../apidocs/io/vertx/core/cli/CLI.html#parse-java.util.List-">parse</a></code>
 method:</p>
 </div>
 <div class="listingblock">
@@ -442,8 +434,7 @@ won&#8217;t failed, but give you the opportunity to check if the user asks for h
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.cli.CLI
-def cli = CLI.create("test").addOption([
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = CLI.create("test").addOption([
   longName:"help",
   shortName:"h",
   flag:true,
@@ -471,7 +462,7 @@ if (!line.isValid() &amp;&amp; line.isAskingForHelp()) {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:00:58 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

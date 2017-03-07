@@ -187,7 +187,7 @@
 <div class="sect2">
 <h3 id="_configuring_a_tcp_server">Configuring a TCP server</h3>
 <div class="paragraph">
-<p>If you don&#8217;t want the default, a server can be configured by passing in a <code><a href="../dataobjects.html#NetServerOptions">NetServerOptions</a></code>
+<p>If you don&#8217;t want the default, a server can be configured by passing in a <code><a href="../../apidocs/io/vertx/core/net/NetServerOptions.html">NetServerOptions</a></code>
 instance when creating it:</p>
 </div>
 <div class="listingblock">
@@ -202,7 +202,7 @@ def server = vertx.createNetServer(options)</code></pre>
 <div class="sect2">
 <h3 id="_start_the_server_listening">Start the Server Listening</h3>
 <div class="paragraph">
-<p>To tell the server to listen for incoming requests you use one of the <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetServer.html#listen()">listen</a></code>
+<p>To tell the server to listen for incoming requests you use one of the <code><a href="../../apidocs/io/vertx/core/net/NetServer.html#listen--">listen</a></code>
 alternatives.</p>
 </div>
 <div class="paragraph">
@@ -254,7 +254,7 @@ server.listen(1234, "localhost", { res -&gt;
 <p>If <code>0</code> is used as the listening port, the server will find an unused random port to listen on.</p>
 </div>
 <div class="paragraph">
-<p>To find out the real port the server is listening on you can call <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetServer.html#actualPort()">actualPort</a></code>.</p>
+<p>To find out the real port the server is listening on you can call <code><a href="../../apidocs/io/vertx/core/net/NetServer.html#actualPort--">actualPort</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -271,13 +271,8 @@ server.listen(0, "localhost", { res -&gt;
 </div>
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_connections">Getting notified of incoming connections</h3>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">To be notified when a connection is made you need to set a `link:../../groovydoc/io/vertx/groovy/core/net/NetServer.html#connectHandler((@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler))[connectHandler]`:</p>
-</dd>
-</dl>
+<div class="paragraph">
+<p>To be notified when a connection is made you need to set a <code><a href="../../apidocs/io/vertx/core/net/NetServer.html#connectHandler-io.vertx.core.Handler-">connectHandler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -288,7 +283,7 @@ server.connectHandler({ socket -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>When a connection is made the handler will be called with an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code>.</p>
+<p>When a connection is made the handler will be called with an instance of <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html">NetSocket</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>This is a socket-like interface to the actual connection, and allows you to read and write data as well as do various
@@ -298,11 +293,11 @@ other things like close the socket.</p>
 <div class="sect2">
 <h3 id="_reading_data_from_the_socket">Reading data from the socket</h3>
 <div class="paragraph">
-<p>To read data from the socket you set the <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html#handler(io.vertx.core.Handler)">handler</a></code> on the
+<p>To read data from the socket you set the <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#handler-io.vertx.core.Handler-">handler</a></code> on the
 socket.</p>
 </div>
 <div class="paragraph">
-<p>This handler will be called with an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/buffer/Buffer.html">Buffer</a></code> every time data is received on
+<p>This handler will be called with an instance of <code><a href="../../apidocs/io/vertx/core/buffer/Buffer.html">Buffer</a></code> every time data is received on
 the socket.</p>
 </div>
 <div class="listingblock">
@@ -319,13 +314,11 @@ server.connectHandler({ socket -&gt;
 <div class="sect2">
 <h3 id="_writing_data_to_a_socket">Writing data to a socket</h3>
 <div class="paragraph">
-<p>You write to a socket using one of <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html#write(io.vertx.core.buffer.Buffer)">write</a></code>.</p>
+<p>You write to a socket using one of <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#write-io.vertx.core.buffer.Buffer-">write</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-
-// Write a buffer
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Write a buffer
 def buffer = Buffer.buffer().appendFloat(12.34f).appendInt(123)
 socket.write(buffer)
 
@@ -342,14 +335,9 @@ socket.write("some data", "UTF-16")</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_closed_handler">Closed handler</h3>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">If you want to be notified when a socket is closed, you can set a `link:../../groovydoc/io/vertx/groovy/core/net/NetSocket.html#closeHandler((@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler))[closeHandler]`
+<div class="paragraph">
+<p>If you want to be notified when a socket is closed, you can set a <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#closeHandler-io.vertx.core.Handler-">closeHandler</a></code>
 on it:</p>
-</dd>
-</dl>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -362,7 +350,7 @@ on it:</p>
 <div class="sect2">
 <h3 id="_handling_exceptions">Handling exceptions</h3>
 <div class="paragraph">
-<p>You can set an <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html#exceptionHandler(io.vertx.core.Handler)">exceptionHandler</a></code> to receive any
+<p>You can set an <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#exceptionHandler-io.vertx.core.Handler-">exceptionHandler</a></code> to receive any
 exceptions that happen on the socket.</p>
 </div>
 </div>
@@ -377,23 +365,23 @@ it writes them to itself.</p>
 different Vert.x instance by sending the buffer to the address of that handler.</p>
 </div>
 <div class="paragraph">
-<p>The address of the handler is given by <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html#writeHandlerID()">writeHandlerID</a></code></p>
+<p>The address of the handler is given by <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#writeHandlerID--">writeHandlerID</a></code></p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_local_and_remote_addresses">Local and remote addresses</h3>
 <div class="paragraph">
-<p>The local address of a <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code> can be retrieved using <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html#localAddress()">localAddress</a></code>.</p>
+<p>The local address of a <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html">NetSocket</a></code> can be retrieved using <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#localAddress--">localAddress</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The remote address, (i.e. the address of the other end of the connection) of a <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code>
-can be retrieved using <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html#remoteAddress()">remoteAddress</a></code>.</p>
+<p>The remote address, (i.e. the address of the other end of the connection) of a <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html">NetSocket</a></code>
+can be retrieved using <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#remoteAddress--">remoteAddress</a></code>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_sending_files_or_resources_from_the_classpath">Sending files or resources from the classpath</h3>
 <div class="paragraph">
-<p>Files and classpath resources can be written to the socket directly using <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html#sendFile(java.lang.String)">sendFile</a></code>. This can be a very
+<p>Files and classpath resources can be written to the socket directly using <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#sendFile-java.lang.String-">sendFile</a></code>. This can be a very
 efficient way to send files, as it can be handled by the OS kernel directly where supported by the operating system.</p>
 </div>
 <div class="paragraph">
@@ -409,8 +397,8 @@ classpath resolution or disabling it.</p>
 <div class="sect2">
 <h3 id="_streaming_sockets">Streaming sockets</h3>
 <div class="paragraph">
-<p>Instances of <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code> are also <code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> and
-<code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> instances so they can be used to pump data to or from other
+<p>Instances of <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html">NetSocket</a></code> are also <code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html">ReadStream</a></code> and
+<code><a href="../../apidocs/io/vertx/core/streams/WriteStream.html">WriteStream</a></code> instances so they can be used to pump data to or from other
 read and write streams.</p>
 </div>
 <div class="paragraph">
@@ -420,7 +408,7 @@ read and write streams.</p>
 <div class="sect2">
 <h3 id="_upgrading_connections_to_ssl_tls">Upgrading connections to SSL/TLS</h3>
 <div class="paragraph">
-<p>A non SSL/TLS connection can be upgraded to SSL/TLS using <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html#upgradeToSsl(io.vertx.core.Handler)">upgradeToSsl</a></code>.</p>
+<p>A non SSL/TLS connection can be upgraded to SSL/TLS using <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html#upgradeToSsl-io.vertx.core.Handler-">upgradeToSsl</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The server or client must be configured for SSL/TLS for this to work correctly. Please see the <a href="#ssl">chapter on SSL/TLS</a>
@@ -430,7 +418,7 @@ for more information.</p>
 <div class="sect2">
 <h3 id="_closing_a_tcp_server">Closing a TCP Server</h3>
 <div class="paragraph">
-<p>Call <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetServer.html#close()">close</a></code> to close the server. Closing the server closes any open connections
+<p>Call <code><a href="../../apidocs/io/vertx/core/net/NetServer.html#close--">close</a></code> to close the server. Closing the server closes any open connections
 and releases all server resources.</p>
 </div>
 <div class="paragraph">
@@ -478,7 +466,7 @@ deployed then you will have at most one core utilised on your server.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Create a few instances so we can utilise cores
 
-for (def i = 0;i &lt; 10;i++) {
+(0..&lt;10).each { i -&gt;
   def server = vertx.createNetServer()
   server.connectHandler({ socket -&gt;
     socket.handler({ buffer -&gt;
@@ -547,7 +535,7 @@ them in a round-robin fashion to any of the connect handlers.</p>
 <div class="sect2">
 <h3 id="_configuring_a_tcp_client">Configuring a TCP client</h3>
 <div class="paragraph">
-<p>If you don&#8217;t want the default, a client can be configured by passing in a <code><a href="../dataobjects.html#NetClientOptions">NetClientOptions</a></code>
+<p>If you don&#8217;t want the default, a client can be configured by passing in a <code><a href="../../apidocs/io/vertx/core/net/NetClientOptions.html">NetClientOptions</a></code>
 instance when creating it:</p>
 </div>
 <div class="listingblock">
@@ -562,9 +550,9 @@ def client = vertx.createNetClient(options)</code></pre>
 <div class="sect2">
 <h3 id="_making_connections">Making connections</h3>
 <div class="paragraph">
-<p>To make a connection to a server you use <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetClient.html#connect(int,%20java.lang.String,%20io.vertx.core.Handler)">connect</a></code>,
+<p>To make a connection to a server you use <code><a href="../../apidocs/io/vertx/core/net/NetClient.html#connect-int-java.lang.String-io.vertx.core.Handler-">connect</a></code>,
 specifying the port and host of the server and a handler that will be called with a result containing the
-<code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code> when connection is successful or with a failure if connection failed.</p>
+<code><a href="../../apidocs/io/vertx/core/net/NetSocket.html">NetSocket</a></code> when connection is successful or with a failure if connection failed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -587,8 +575,8 @@ client.connect(4321, "localhost", { res -&gt;
 <h3 id="_configuring_connection_attempts">Configuring connection attempts</h3>
 <div class="paragraph">
 <p>A client can be configured to automatically retry connecting to the server in the event that it cannot connect.
-This is configured with <code><a href="../dataobjects.html#NetClientOptions#setReconnectInterval(long)">reconnectInterval</a></code> and
-<code><a href="../dataobjects.html#NetClientOptions#setReconnectAttempts(int)">reconnectAttempts</a></code>.</p>
+This is configured with <code><a href="../../apidocs/io/vertx/core/net/NetClientOptions.html#setReconnectInterval-long-">setReconnectInterval</a></code> and
+<code><a href="../../apidocs/io/vertx/core/net/NetClientOptions.html#setReconnectAttempts-int-">setReconnectAttempts</a></code>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -658,32 +646,7 @@ name. When using network activity logging there are a few things to keep in mind
 </ul>
 </div>
 <div class="paragraph">
-<p>Netty will try to locate the following logger implementations, in the following order:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Slf4j</p>
-</li>
-<li>
-<p>Log4j</p>
-</li>
-<li>
-<p>JDK</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The presense of the slf4j or log4j classes on the classpath is enough to pick up the logging implementation.</p>
-</div>
-<div class="paragraph">
-<p>The logger implementation can be forced to a specific implementation by setting Netty&#8217;s internal logger implementation directly:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Force logging to SLF4J
-InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);</code></pre>
-</div>
+<p>You should read the <a href="#netty-logging">[netty-logging]</a> section.</p>
 </div>
 </div>
 <div class="sect2">
@@ -694,13 +657,13 @@ InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);</code></pr
 </div>
 <div class="paragraph">
 <p>The APIs of the servers and clients are identical whether or not SSL/TLS is used, and it&#8217;s enabled by configuring
-the <code><a href="../dataobjects.html#NetClientOptions">NetClientOptions</a></code> or <code><a href="../dataobjects.html#NetServerOptions">NetServerOptions</a></code> instances used
+the <code><a href="../../apidocs/io/vertx/core/net/NetClientOptions.html">NetClientOptions</a></code> or <code><a href="../../apidocs/io/vertx/core/net/NetServerOptions.html">NetServerOptions</a></code> instances used
 to create the servers or clients.</p>
 </div>
 <div class="sect3">
 <h4 id="_enabling_ssl_tls_on_the_server">Enabling SSL/TLS on the server</h4>
 <div class="paragraph">
-<p>SSL/TLS is enabled with  <code><a href="../dataobjects.html#NetServerOptions#setSsl(boolean)">ssl</a></code>.</p>
+<p>SSL/TLS is enabled with  <code><a href="../../apidocs/io/vertx/core/net/NetServerOptions.html#setSsl-boolean-">ssl</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>By default it is disabled.</p>
@@ -840,8 +803,7 @@ utility which ships with the JDK.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.ClientAuth
-def options = [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
   ssl:true,
   clientAuth:"REQUIRED",
   trustStoreOptions:[
@@ -857,8 +819,7 @@ def server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.ClientAuth
-def myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks")
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks")
 def options = [
   ssl:true,
   clientAuth:"REQUIRED",
@@ -876,8 +837,7 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.ClientAuth
-def options = [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
   ssl:true,
   clientAuth:"REQUIRED",
   pfxTrustOptions:[
@@ -893,8 +853,7 @@ def server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.ClientAuth
-def myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx")
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx")
 def options = [
   ssl:true,
   clientAuth:"REQUIRED",
@@ -911,8 +870,7 @@ def server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.ClientAuth
-def options = [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
   ssl:true,
   clientAuth:"REQUIRED",
   pemTrustOptions:[
@@ -929,8 +887,7 @@ def server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.ClientAuth
-def myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx")
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx")
 def options = [
   ssl:true,
   clientAuth:"REQUIRED",
@@ -956,7 +913,7 @@ def server = vertx.createNetServer(options)</code></pre>
 <div class="sect3">
 <h4 id="_client_trust_configuration">Client trust configuration</h4>
 <div class="paragraph">
-<p>If the <code><a href="../dataobjects.html#ClientOptionsBase#setTrustAll(boolean)">trustALl</a></code> is set to true on the client, then the client will
+<p>If the <code><a href="../../apidocs/io/vertx/core/net/ClientOptionsBase.html#setTrustAll-boolean-">trustALl</a></code> is set to true on the client, then the client will
 trust all server certificates. The connection will still be encrypted but this mode is vulnerable to 'man in the middle' attacks. I.e. you can&#8217;t
 be sure who you are connecting to. Use this with caution. Default value is false.</p>
 </div>
@@ -970,7 +927,7 @@ def client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If <code><a href="../dataobjects.html#ClientOptionsBase#setTrustAll(boolean)">trustAll</a></code> is not set then a client trust store must be
+<p>If <code><a href="../../apidocs/io/vertx/core/net/ClientOptionsBase.html#setTrustAll-boolean-">trustAll</a></code> is not set then a client trust store must be
 configured and should contain the certificates of the servers that the client trusts.</p>
 </div>
 <div class="paragraph">
@@ -994,8 +951,8 @@ def client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="paragraph">
 <p>It is just a standard Java key store, the same as the key stores on the server side. The client
-trust store location is set by using the function <code><a href="../dataobjects.html#JksOptions#setPath(java.lang.String)">path</a></code> on the
-<code><a href="../dataobjects.html#JksOptions">jks options</a></code>. If a server presents a certificate during connection which is not
+trust store location is set by using the function <code><a href="../../apidocs/io/vertx/core/net/JksOptions.html#setPath-java.lang.String-">path</a></code> on the
+<code><a href="../../apidocs/io/vertx/core/net/JksOptions.html">jks options</a></code>. If a server presents a certificate during connection which is not
 in the client trust store, the connection attempt will not succeed.</p>
 </div>
 <div class="listingblock">
@@ -1101,8 +1058,8 @@ connecting. The client can be configured in several ways:</p>
 <div class="paragraph">
 <p>The first method is by specifying the location of a Java key-store which contains the key and certificate.
 Again it&#8217;s just a regular Java key store. The client keystore location is set by using the function
-<code><a href="../dataobjects.html#JksOptions#setPath(java.lang.String)">path</a></code> on the
-<code><a href="../dataobjects.html#JksOptions">jks options</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/core/net/JksOptions.html#setPath-java.lang.String-">path</a></code> on the
+<code><a href="../../apidocs/io/vertx/core/net/JksOptions.html">jks options</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1204,10 +1161,92 @@ def client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_self_signed_certificates_for_testing_and_development_purposes">Self-signed certificates for testing and development purposes</h4>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+Do not use this in production settings, and note that the generated keys are very insecure.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is very often the case that self-signed certificates are required, be it for unit / integration tests or for
+running a development version of an application.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="../../apidocs/io/vertx/core/net/SelfSignedCertificate.html">SelfSignedCertificate</a></code> can be used to provide self-signed PEM certificate helpers and
+give <code><a href="../../apidocs/io/vertx/core/net/KeyCertOptions.html">KeyCertOptions</a></code> and <code><a href="../../apidocs/io/vertx/core/net/TrustOptions.html">TrustOptions</a></code> configurations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def certificate = SelfSignedCertificate.create()
+
+def serverOptions = [
+  ssl:true,
+  keyCertOptions:certificate.keyCertOptions(),
+  trustOptions:certificate.trustOptions()
+]
+
+def server = vertx.createNetServer(serverOptions).connectHandler({ socket -&gt;
+  socket.write("Hello!").end()
+}).listen(1234, "localhost")
+
+def clientOptions = [
+  ssl:true,
+  keyCertOptions:certificate.keyCertOptions(),
+  trustOptions:certificate.trustOptions()
+]
+
+def client = vertx.createNetClient(clientOptions)
+client.connect(1234, "localhost", { ar -&gt;
+  if (ar.succeeded()) {
+    ar.result().handler({ buffer -&gt;
+      println(buffer)
+    })
+  } else {
+    System.err.println("Woops: ${ar.cause().getMessage()}")
+  }
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The client can also be configured to trust all certificates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def clientOptions = [
+  ssl:true,
+  trustAll:true
+]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that self-signed certificates also work for other TCP protocols like HTTPS:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def certificate = SelfSignedCertificate.create()
+
+vertx.createHttpServer([
+  ssl:true,
+  keyCertOptions:certificate.keyCertOptions(),
+  trustOptions:certificate.trustOptions()
+]).requestHandler({ req -&gt;
+  req.response().end("Hello!")
+}).listen(8080)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_revoking_certificate_authorities">Revoking certificate authorities</h4>
 <div class="paragraph">
 <p>Trust can be configured to use a certificate revocation list (CRL) for revoked certificates that should no
-longer be trusted. The <code><a href="../dataobjects.html#NetClientOptions#addCrlPath(java.lang.String)">crlPath</a></code> configures
+longer be trusted. The <code><a href="../../apidocs/io/vertx/core/net/NetClientOptions.html#addCrlPath-java.lang.String-">crlPath</a></code> configures
 the crl list to use:</p>
 </div>
 <div class="listingblock">
@@ -1261,7 +1300,7 @@ def server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Cipher suite can be specified on the <code><a href="../dataobjects.html#NetServerOptions">NetServerOptions</a></code> or <code><a href="../dataobjects.html#NetClientOptions">NetClientOptions</a></code> configuration.</p>
+<p>Cipher suite can be specified on the <code><a href="../../apidocs/io/vertx/core/net/NetServerOptions.html">NetServerOptions</a></code> or <code><a href="../../apidocs/io/vertx/core/net/NetClientOptions.html">NetClientOptions</a></code> configuration.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1284,7 +1323,7 @@ def server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Protocol versions can be specified on the <code><a href="../dataobjects.html#NetServerOptions">NetServerOptions</a></code> or <code><a href="../dataobjects.html#NetClientOptions">NetClientOptions</a></code> configuration.</p>
+<p>Protocol versions can be specified on the <code><a href="../../apidocs/io/vertx/core/net/NetServerOptions.html">NetServerOptions</a></code> or <code><a href="../../apidocs/io/vertx/core/net/NetClientOptions.html">NetClientOptions</a></code> configuration.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1299,10 +1338,10 @@ OpenSSL provides better performances and CPU usage than the JDK engine, as well 
 <div class="ulist">
 <ul>
 <li>
-<p>the <code><a href="../dataobjects.html#TCPSSLOptions#getSslEngineOptions()">getSslEngineOptions</a></code> options when it is set</p>
+<p>the <code><a href="../../apidocs/io/vertx/core/net/TCPSSLOptions.html#getSslEngineOptions--">getSslEngineOptions</a></code> options when it is set</p>
 </li>
 <li>
-<p>otherwise <code><a href="../dataobjects.html#JdkSSLEngineOptions">JdkSSLEngineOptions</a></code></p>
+<p>otherwise <code><a href="../../apidocs/io/vertx/core/net/JdkSSLEngineOptions.html">JdkSSLEngineOptions</a></code></p>
 </li>
 </ul>
 </div>
@@ -1355,13 +1394,13 @@ the client gives the list of application protocols it accepts and the server res
 <div class="ulist">
 <ul>
 <li>
-<p>the <code><a href="../dataobjects.html#TCPSSLOptions#getSslEngineOptions()">getSslEngineOptions</a></code> options when it is set</p>
+<p>the <code><a href="../../apidocs/io/vertx/core/net/TCPSSLOptions.html#getSslEngineOptions--">getSslEngineOptions</a></code> options when it is set</p>
 </li>
 <li>
-<p><code><a href="../dataobjects.html#JdkSSLEngineOptions">JdkSSLEngineOptions</a></code> when ALPN is available for JDK</p>
+<p><code><a href="../../apidocs/io/vertx/core/net/JdkSSLEngineOptions.html">JdkSSLEngineOptions</a></code> when ALPN is available for JDK</p>
 </li>
 <li>
-<p><code><a href="../dataobjects.html#OpenSSLEngineOptions">OpenSSLEngineOptions</a></code> when ALPN is available for OpenSSL</p>
+<p><code><a href="../../apidocs/io/vertx/core/net/OpenSSLEngineOptions.html">OpenSSLEngineOptions</a></code> when ALPN is available for OpenSSL</p>
 </li>
 <li>
 <p>otherwise it fails</p>
@@ -1374,7 +1413,7 @@ the client gives the list of application protocols it accepts and the server res
 <p>OpenSSL provides native ALPN support.</p>
 </div>
 <div class="paragraph">
-<p>OpenSSL requires to configure <code><a href="../dataobjects.html#TCPSSLOptions#setOpenSslEngineOptions(io.vertx.core.net.OpenSSLEngineOptions)">openSslEngineOptions</a></code>
+<p>OpenSSL requires to configure <code><a href="../../apidocs/io/vertx/core/net/TCPSSLOptions.html#setOpenSslEngineOptions-io.vertx.core.net.OpenSSLEngineOptions-">setOpenSslEngineOptions</a></code>
 and use <a href="http://netty.io/wiki/forked-tomcat-native.html">netty-tcnative</a> jar on the classpath. Using tcnative may require
 OpenSSL to be installed on your OS depending on the tcnative implementation.</p>
 </div>
@@ -1414,19 +1453,18 @@ ALPN version for the JVM running it:</p>
 <div class="sect2">
 <h3 id="_using_a_proxy_for_client_connections">Using a proxy for client connections</h3>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetClient.html">NetClient</a></code> supports either a HTTP/1.x <em>CONNECT</em>, <em>SOCKS4a</em> or <em>SOCKS5</em> proxy.</p>
+<p>The <code><a href="../../apidocs/io/vertx/core/net/NetClient.html">NetClient</a></code> supports either a HTTP/1.x <em>CONNECT</em>, <em>SOCKS4a</em> or <em>SOCKS5</em> proxy.</p>
 </div>
 <div class="paragraph">
-<p>The proxy can be configured in the <code><a href="../dataobjects.html#NetClientOptions">NetClientOptions</a></code> by setting a
-<code><a href="../dataobjects.html#ProxyOptions">ProxyOptions</a></code> object containing proxy type, hostname, port and optionally username and password.</p>
+<p>The proxy can be configured in the <code><a href="../../apidocs/io/vertx/core/net/NetClientOptions.html">NetClientOptions</a></code> by setting a
+<code><a href="../../apidocs/io/vertx/core/net/ProxyOptions.html">ProxyOptions</a></code> object containing proxy type, hostname, port and optionally username and password.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.net.ProxyType
-def options = [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
   proxyOptions:[
     type:"SOCKS5",
     host:"localhost",
@@ -1452,7 +1490,7 @@ to resolve the DNS address locally.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:00:58 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

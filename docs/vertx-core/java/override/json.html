@@ -156,6 +156,17 @@ two classes to make handling JSON in your Vert.x applications a bit easier.</p>
 JsonObject object = new JsonObject(jsonString);</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>You can create a JSON object from a map as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();
+map.put("foo", "bar");
+map.put("xyz", 3);
+JsonObject object = new JsonObject(map);</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_putting_entries_into_a_json_object">Putting entries into a JSON object</h4>
@@ -185,7 +196,37 @@ int intVal = jsonObject.getInteger("some-other-key");</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_encoding_the_json_object_to_a_string">Encoding the JSON object to a String</h4>
+<h4 id="_mapping_between_json_objects_and_java_objects">Mapping between JSON objects and Java objects</h4>
+<div class="paragraph">
+<p>You can create a JSON object from the fields of a Java object as follows:</p>
+</div>
+<div class="paragraph">
+<p>You can instantiate a Java object and populate its fields from a JSON object as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.bodyHandler(buff -&gt; {
+  JsonObject jsonObject = buff.toJsonObject();
+  User javaObject = jsonObject.mapTo(User.class);
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that both of the above mapping directions use Jackson&#8217;s <code>ObjectMapper#convertValue()</code> to perform the
+mapping. See the Jackson documentation for information on the impact of field and constructor visibility, caveats
+on serialization and deserialization across object references, etc.</p>
+</div>
+<div class="paragraph">
+<p>However, in the simplest case, both <code>mapFrom</code> and <code>mapTo</code> should succeed if all fields of the Java class are
+public (or have public getters/setters), and if there is a public default constructor (or no defined constructors).</p>
+</div>
+<div class="paragraph">
+<p>Referenced objects will be transitively serialized/deserialized to/from nested JSON objects as
+long as the object graph is acyclic.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_encoding_a_json_object_to_a_string">Encoding a JSON object to a String</h4>
 <div class="paragraph">
 <p>You use <code><a href="../../apidocs/io/vertx/core/json/JsonObject.html#encode--">encode</a></code> to encode the object to a String form.</p>
 </div>
@@ -243,7 +284,7 @@ Boolean boolVal = array.getBoolean(2);</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_encoding_the_json_array_to_a_string">Encoding the JSON array to a String</h4>
+<h4 id="_encoding_a_json_array_to_a_string">Encoding a JSON array to a String</h4>
 <div class="paragraph">
 <p>You use <code><a href="../../apidocs/io/vertx/core/json/JsonArray.html#encode--">encode</a></code> to encode the array to a String form.</p>
 </div>
@@ -258,7 +299,7 @@ Boolean boolVal = array.getBoolean(2);</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:00:58 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

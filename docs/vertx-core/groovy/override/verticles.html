@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Writing Verticles - Vert.x</title>
+  <title>API changes from previous versions - Vert.x</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -86,7 +86,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h1>Writing Verticles</h1>
+          <h1>API changes from previous versions</h1>
           
         </div>
       </div>
@@ -102,6 +102,7 @@
       <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel2">
+<li><a href="#_api_changes_from_previous_versions">API changes from previous versions</a></li>
 <li><a href="#_writing_verticles">Writing Verticles</a></li>
 <li><a href="#_accessing_the_vertx_instance_from_a_verticle">Accessing the vertx instance from a verticle</a></li>
 <li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
@@ -112,15 +113,145 @@
         <div class="toc hidden-md hidden-lg">
           <h2>Table of Contents</h2>
           <ul class="sectlevel2">
+<li><a href="#_api_changes_from_previous_versions">API changes from previous versions</a></li>
 <li><a href="#_writing_verticles">Writing Verticles</a></li>
 <li><a href="#_accessing_the_vertx_instance_from_a_verticle">Accessing the vertx instance from a verticle</a></li>
 <li><a href="#_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</a></li>
 </ul>
         </div>
         <div class="sect2">
+<h3 id="_api_changes_from_previous_versions">API changes from previous versions</h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+this is an important change from previous versions and <em>Vert.x for Groovy</em> users should carefully
+read this section
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Vert.x for Groovy has been revamped in Vert.x 3.4.</p>
+</div>
+<div class="paragraph">
+<p>The previous versions were using a code generated Groovy API wrapping the Vert.x Java API, e.g
+<code>io.vertx.groovy.core.Vertx</code> was a Groovy class wrapping <code>io.vertx.core.Vertx</code> and changing a few methods
+to provide a Groovy idiomatic API:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>data objects are replaced by maps</p>
+</li>
+<li>
+<p><code>io.vertx.core.json.JsonObject</code> is replaced by map</p>
+</li>
+<li>
+<p><code>io.vertx.core.json.JsonArray</code> is replaced by list</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Creating an <code>HttpServer</code> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// call createHttpServer on io.vertx.groovy.core.Vertx
+def server = vertx.createHttpServer([host:"localhost",port:8080]);
+// it returned an io.vertx.groovy.core.http.HttpServer instance</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Since 3.4, the Groovy API has become an extension of the Java API based on
+<a href="http://mrhaki.blogspot.fr/2013/01/groovy-goodness-adding-extra-methods.html">Groovy extension methods</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// call createHttpServer on io.vertx.core.Vertx
+def server = vertx.createHttpServer([host:"localhost",port:8080]);
+// it returned an io.vertx.core.http.HttpServer instance</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The actual method called is <code>io.vertx.groovy.core.Vertx_GroovyExtension#createHttpServer(io.vertx.core.Vertx, Map&lt;String, Object&gt;)</code>
+that transforms the map options into <code>io.vertx.core.http.HttpServerOptions</code>.</p>
+</div>
+<div class="paragraph">
+<p>Of course if you like you can call the <code>createHttpServer(HttpServerOptions)</code> method directly and pass an <code>HttpServerOptions</code>
+instance.</p>
+</div>
+<div class="paragraph">
+<p>The benefits are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>performance gains since no wrapping occur</p>
+</li>
+<li>
+<p>an idiomatic Groovy-ish API</p>
+</li>
+<li>
+<p>full access to the Vert.x Java API, not hidden anymore behind a wrapper</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_migrating_from_previous_api">Migrating from previous API</h4>
+<div class="paragraph">
+<p>Existing Groovy Verticles are using <code>io.vertx.groovy.XYZ</code> API and should use now <code>io.vertx.XYZ</code> Java API.</p>
+</div>
+<div class="paragraph">
+<p>Vert.x for Groovy provides a Groovy compiler transformation that rewrites the compiled classes to unwraps the occurences
+of legacy classes, i.e it rewrites <code>io.vertx.groovy.core.Vertx</code> to <code>io.vertx.core.Vertx</code>.</p>
+</div>
+<div class="paragraph">
+<p>To help you, the transformed classes are printed by the compiler on the standard output, for instance if you compile
+the script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer;
+
+def content = Buffer.buffer("Hello World");
+
+def server = vertx.createHttpServer();
+server.requestHandler { req
+  req.response().end("content");
+}
+server.listen();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Something like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// -------- BEGIN HelloWorldServer --------
+import io.vertx.core.buffer.Buffer as Buffer
+
+def content  = Buffer.buffer('Hello World')
+def server  = vertx.createHttpServer()
+server.requestHandler({ req -&gt;
+ req.response().end(content)
+})
+server.listen()
+// -------- END HelloWorldServer --------</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Printed on the console</p>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_writing_verticles">Writing Verticles</h3>
 <div class="paragraph">
-<p>There are three alternatives to create verticles in Groovy:</p>
+<p>There are two alternatives to create verticles in Groovy:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -128,16 +259,7 @@
 <p>a plain Groovy script</p>
 </li>
 <li>
-<p>a Groovy class extending the <code>GroovyVerticle</code> class</p>
-</li>
-<li>
-<p>a Groovy class implementing the <code>Verticle</code> interface or extending the <code>AbstractVerticle</code> class</p>
-<div class="literalblock">
-<div class="content">
-<pre>We will not cover the third case in this manual, as it is a plain Java class and instead you should read the
-Vert.x manual for Java.</pre>
-</div>
-</div>
+<p>a Groovy class implementing the <code><a href="../../apidocs/io/vertx/core/Verticle.html">Verticle</a></code> interface or extending the <code><a href="../../apidocs/io/vertx/core/AbstractVerticle.html">AbstractVerticle</a></code> class</p>
 </li>
 </ul>
 </div>
@@ -165,14 +287,14 @@ void vertxStop() {
 </div>
 </div>
 <div class="paragraph">
-<p>Alternatively, you can extend the <code>GroovyVerticle</code> class and implement the <code>start</code> and
+<p>Alternatively, you can extend the <code><a href="../../apidocs/io/vertx/core/AbstractVerticle.html">AbstractVerticle</a></code> class and implement the <code>start</code> and
 <code>stop</code> methods:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.lang.groovy.GroovyVerticle;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.AbstractVerticle;
 
-public class HelloWorldHttpVerticle extends GroovyVerticle {
+public class HelloWorldHttpVerticle extends AbstractVerticle {
 
  public void start() {
   println("Starting")
@@ -185,8 +307,8 @@ public class HelloWorldHttpVerticle extends GroovyVerticle {
 </div>
 </div>
 <div class="paragraph">
-<p>As in Java, vert.x creates a new instance of the class automatically.  When Vert.x deploys the verticle it will call
-the <code>start</code> method, and when the method has completed the verticle will be considered started.</p>
+<p>When Vert.x deploys the verticle it will call the <code>start</code> method, and when the method has completed the
+verticle will be considered started.</p>
 </div>
 <div class="paragraph">
 <p>You can also optionally override the <code>stop</code> method. This will be called by Vert.x when the verticle is undeployed
@@ -244,7 +366,7 @@ You use this if you want to do some verticle cleanup that takes some time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.Future
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.Future
 
 void vertxStart(Future&lt;Void&gt; future) {
  println "starting"
@@ -264,16 +386,16 @@ void vertxStop(Future&lt;Void&gt; future) {
 </div>
 </div>
 <div class="paragraph">
-<p>If your verticle extends <code>GroovyVerticle</code>, you override the
-<code>start</code> and
-<code>stop</code> methods:</p>
+<p>If your verticle extends <code><a href="../../apidocs/io/vertx/core/AbstractVerticle.html">AbstractVerticle</a></code>, you override the
+<code><a href="../../apidocs/io/vertx/core/AbstractVerticle.html#start-io.vertx.core.Future-">start</a></code> and
+<code><a href="../../apidocs/io/vertx/core/AbstractVerticle.html#stop-io.vertx.core.Future-">stop</a></code> methods:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.Future
-import io.vertx.lang.groovy.GroovyVerticle
+import io.vertx.core.AbstractVerticle
 
-public class HelloWorldHttpVerticle extends GroovyVerticle {
+public class HelloWorldHttpVerticle extends AbstractVerticle {
  public void start(Future&lt;Void&gt; future) {
    println "starting"
    vertx.deployVerticle("v.rb",
@@ -293,20 +415,6 @@ public class HelloWorldHttpVerticle extends GroovyVerticle {
 }</code></pre>
 </div>
 </div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Important</div>
-</td>
-<td class="content">
-Notice that depending your implementation choice, the <code>Future</code> class is different. Groovy verticle
-implemented as script are using <code>io.vertx.groovy.core.Future</code>, while classes are using
-<code>io.vertx.core.Future</code>
-</td>
-</tr>
-</table>
-</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -320,6 +428,9 @@ Vert.x will automatically undeploy any child verticles when the parent is undepl
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p><code><a href="../../apidocs/io/vertx/lang/groovy/GroovyVerticle.html">GroovyVerticle</a></code></p>
+</div>
 </div>
 
         
@@ -328,7 +439,7 @@ Vert.x will automatically undeploy any child verticles when the parent is undepl
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:00:58 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

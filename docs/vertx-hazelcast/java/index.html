@@ -104,7 +104,11 @@
           <ul class="sectlevel1">
 <li><a href="#_using_this_cluster_manager">Using this cluster manager</a></li>
 <li><a href="#_configuring_this_cluster_manager">Configuring this cluster manager</a></li>
-<li><a href="#_using_an_existing_hazelcast_cluster">Using an existing Hazelcast cluster</a></li>
+<li><a href="#_using_an_existing_hazelcast_cluster">Using an existing Hazelcast cluster</a>
+<ul class="sectlevel2">
+<li><a href="#_changing_timeout_for_failed_nodes">Changing timeout for failed nodes</a></li>
+</ul>
+</li>
 <li><a href="#_using_hazelcast_async_methods">Using Hazelcast async methods</a></li>
 <li><a href="#_trouble_shooting_clustering">Trouble shooting clustering</a>
 <ul class="sectlevel2">
@@ -126,7 +130,11 @@
           <ul class="sectlevel1">
 <li><a href="#_using_this_cluster_manager">Using this cluster manager</a></li>
 <li><a href="#_configuring_this_cluster_manager">Configuring this cluster manager</a></li>
-<li><a href="#_using_an_existing_hazelcast_cluster">Using an existing Hazelcast cluster</a></li>
+<li><a href="#_using_an_existing_hazelcast_cluster">Using an existing Hazelcast cluster</a>
+<ul class="sectlevel2">
+<li><a href="#_changing_timeout_for_failed_nodes">Changing timeout for failed nodes</a></li>
+</ul>
+</li>
 <li><a href="#_using_hazelcast_async_methods">Using Hazelcast async methods</a></li>
 <li><a href="#_trouble_shooting_clustering">Trouble shooting clustering</a>
 <ul class="sectlevel2">
@@ -155,7 +163,7 @@ cluster managers are pluggable.  This implementation is packaged inside:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-hazelcast&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -190,12 +198,12 @@ cluster managers are pluggable.  This implementation is packaged inside:</p>
 <h2 id="_using_this_cluster_manager">Using this cluster manager</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you are using Vert.x from the command line, the jar corresponding to this cluster manager (it will be named <code>vertx-hazelcast-${version}</code>.jar`
+<p>If you are using Vert.x from the command line, the jar corresponding to this cluster manager (it will be named <code>vertx-hazelcast-3.4.0.jar</code>
 should be in the <code>lib</code> directory of the Vert.x installation.</p>
 </div>
 <div class="paragraph">
 <p>If you want clustering with this cluster manager in your Vert.x Maven or Gradle project then just add a dependency to
-the artifact: <code>io.vertx:vertx-hazelcast:${version}</code> in your project.</p>
+the artifact: <code>io.vertx:vertx-hazelcast:3.4.0</code> in your project.</p>
 </div>
 <div class="paragraph">
 <p>If the jar is on your classpath as above then Vert.x will automatically detect this and use it as the cluster manager.
@@ -341,8 +349,13 @@ Vertx.clusteredVertx(options, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;map name="__vertx.subs"&gt;
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;properties&gt;
+  &lt;property name="hazelcast.shutdownhook.enabled"&gt;false&lt;/property&gt;
+&lt;/properties&gt;
+&lt;multimap name="__vertx.subs"&gt;
   &lt;backup-count&gt;1&lt;/backup-count&gt;
+&lt;/multimap&gt;
+&lt;map name="__vertx.haInfo"&gt;
   &lt;time-to-live-seconds&gt;0&lt;/time-to-live-seconds&gt;
   &lt;max-idle-seconds&gt;0&lt;/max-idle-seconds&gt;
   &lt;eviction-policy&gt;NONE&lt;/eviction-policy&gt;
@@ -359,6 +372,31 @@ Vertx.clusteredVertx(options, res -&gt; {
 <p><strong>IMPORTANT</strong> Do not use Hazelcast clients or smart clients when using high-availability (HA, or fail-over) in your
 cluster as they do not notify when they leave the cluster and you may loose data, or leave the cluster in an
 inconsistent state. See <a href="https://github.com/vert-x3/vertx-hazelcast/issues/24" class="bare">https://github.com/vert-x3/vertx-hazelcast/issues/24</a> for more details.</p>
+</div>
+<div class="paragraph">
+<p><strong>IMPORTANT</strong> Make sure Hazelcast is started before and shut down after Vert.x.
+Also, the Hazelcast shutdown hook should be disabled (see xml example, or via system property).</p>
+</div>
+<div class="sect2">
+<h3 id="_changing_timeout_for_failed_nodes">Changing timeout for failed nodes</h3>
+<div class="paragraph">
+<p>By default a node will be removed from the cluster if Hazelcast didn&#8217;t receive a heartbeat for 300 seconds. To change
+this value <code>hazelcast.max.no.heartbeat.seconds</code> system property such as in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>-Dhazelcast.max.no.heartbeat.seconds=5</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Afterwards a node will be removed from the cluster after 5 seconds without a heartbeat.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="http://docs.hazelcast.org/docs/3.6/manual/html-single/index.html#system-properties">Hazelcast
+system-properties</a> and
+<a href="http://docs.hazelcast.org/docs/3.6/manual/html-single/index.html#configuring-with-system-properties">configuring Hazelcast
+with system properties</a> for the other properties you can configure.</p>
+</div>
 </div>
 </div>
 </div>
@@ -521,7 +559,7 @@ need to:</p>
 &lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-hazelcast&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -534,7 +572,7 @@ need to:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code>dependencies {
- compile ("io.vertx:vertx-hazelcast:3.3.3"){
+ compile ("io.vertx:vertx-hazelcast:3.4.0"){
    exclude group: 'com.hazelcast', module: 'hazelcast'
  }
  compile "com.hazelcast:hazelcast:ENTER_YOUR_VERSION_HERE"
@@ -550,7 +588,7 @@ need to:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

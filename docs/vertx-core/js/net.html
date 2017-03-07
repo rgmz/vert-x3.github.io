@@ -468,7 +468,7 @@ deployed then you will have at most one core utilised on your server.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Create a few instances so we can utilise cores
 
-for (var i = 0; i &lt; 10; i++) {
+for (var i = 0;i &lt; 10;i++) {
   var server = vertx.createNetServer();
   server.connectHandler(function (socket) {
     socket.handler(function (buffer) {
@@ -648,32 +648,7 @@ name. When using network activity logging there are a few things to keep in mind
 </ul>
 </div>
 <div class="paragraph">
-<p>Netty will try to locate the following logger implementations, in the following order:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Slf4j</p>
-</li>
-<li>
-<p>Log4j</p>
-</li>
-<li>
-<p>JDK</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The presense of the slf4j or log4j classes on the classpath is enough to pick up the logging implementation.</p>
-</div>
-<div class="paragraph">
-<p>The logger implementation can be forced to a specific implementation by setting Netty&#8217;s internal logger implementation directly:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Force logging to SLF4J
-InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);</code></pre>
-</div>
+<p>You should read the <a href="#netty-logging">[netty-logging]</a> section.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1188,6 +1163,90 @@ var client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_self_signed_certificates_for_testing_and_development_purposes">Self-signed certificates for testing and development purposes</h4>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+Do not use this in production settings, and note that the generated keys are very insecure.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is very often the case that self-signed certificates are required, be it for unit / integration tests or for
+running a development version of an application.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="../../jsdoc/module-vertx-js_self_signed_certificate-SelfSignedCertificate.html">SelfSignedCertificate</a></code> can be used to provide self-signed PEM certificate helpers and
+give <code>KeyCertOptions</code> and <code>TrustOptions</code> configurations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var SelfSignedCertificate = require("vertx-js/self_signed_certificate");
+var certificate = SelfSignedCertificate.create();
+
+var serverOptions = {
+  "ssl" : true,
+  "keyCertOptions" : certificate.keyCertOptions(),
+  "trustOptions" : certificate.trustOptions()
+};
+
+var server = vertx.createNetServer(serverOptions).connectHandler(function (socket) {
+  socket.write("Hello!").end();
+}).listen(1234, "localhost");
+
+var clientOptions = {
+  "ssl" : true,
+  "keyCertOptions" : certificate.keyCertOptions(),
+  "trustOptions" : certificate.trustOptions()
+};
+
+var client = vertx.createNetClient(clientOptions);
+client.connect(1234, "localhost", function (ar, ar_err) {
+  if (ar_err == null) {
+    ar.handler(function (buffer) {
+      console.log(buffer);
+    });
+  } else {
+    console.error("Woops: " + ar_err.getMessage());
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The client can also be configured to trust all certificates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var clientOptions = {
+  "ssl" : true,
+  "trustAll" : true
+};</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that self-signed certificates also work for other TCP protocols like HTTPS:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var SelfSignedCertificate = require("vertx-js/self_signed_certificate");
+var certificate = SelfSignedCertificate.create();
+
+vertx.createHttpServer({
+  "ssl" : true,
+  "keyCertOptions" : certificate.keyCertOptions(),
+  "trustOptions" : certificate.trustOptions()
+}).requestHandler(function (req) {
+  req.response().end("Hello!");
+}).listen(8080);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_revoking_certificate_authorities">Revoking certificate authorities</h4>
 <div class="paragraph">
 <p>Trust can be configured to use a certificate revocation list (CRL) for revoked certificates that should no
@@ -1437,7 +1496,7 @@ to resolve the DNS address locally.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:00:58 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

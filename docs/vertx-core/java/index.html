@@ -290,9 +290,18 @@
 <li><a href="#_configuring_jul_logging">Configuring JUL logging</a></li>
 <li><a href="#_using_another_logging_framework">Using another logging framework</a></li>
 <li><a href="#_logging_from_your_application">Logging from your application</a></li>
+<li><a href="#netty-logging">Netty logging</a></li>
+<li><a href="#_troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
-<li><a href="#_host_name_resolution">Host name resolution</a></li>
+<li><a href="#_host_name_resolution">Host name resolution</a>
+<ul class="sectlevel2">
+<li><a href="#_failover">Failover</a></li>
+<li><a href="#_server_list_rotation">Server list rotation</a></li>
+<li><a href="#_hosts_mapping">Hosts mapping</a></li>
+<li><a href="#_search_domains">Search domains</a></li>
+</ul>
+</li>
 <li><a href="#_high_availability_and_fail_over">High Availability and Fail-Over</a>
 <ul class="sectlevel2">
 <li><a href="#_automatic_failover">Automatic failover</a></li>
@@ -520,9 +529,18 @@
 <li><a href="#_configuring_jul_logging">Configuring JUL logging</a></li>
 <li><a href="#_using_another_logging_framework">Using another logging framework</a></li>
 <li><a href="#_logging_from_your_application">Logging from your application</a></li>
+<li><a href="#netty-logging">Netty logging</a></li>
+<li><a href="#_troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
-<li><a href="#_host_name_resolution">Host name resolution</a></li>
+<li><a href="#_host_name_resolution">Host name resolution</a>
+<ul class="sectlevel2">
+<li><a href="#_failover">Failover</a></li>
+<li><a href="#_server_list_rotation">Server list rotation</a></li>
+<li><a href="#_hosts_mapping">Hosts mapping</a></li>
+<li><a href="#_search_domains">Search domains</a></li>
+</ul>
+</li>
 <li><a href="#_high_availability_and_fail_over">High Availability and Fail-Over</a>
 <ul class="sectlevel2">
 <li><a href="#_automatic_failover">Automatic failover</a></li>
@@ -639,7 +657,7 @@ project descriptor to access the Vert.x Core API:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-core&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -652,7 +670,7 @@ project descriptor to access the Vert.x Core API:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-core:3.3.3</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-core:3.4.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1241,11 +1259,9 @@ fut1.compose(v -&gt; {
   return fut2;
 }).compose(v -&gt; {
           // When the file is written (fut2), execute this:
-          Future&lt;Void&gt; fut3 = Future.future();
-          fs.move("/foo", "/bar", fut3.completer());
+          fs.move("/foo", "/bar", startFuture.completer());
         },
-        // mark the start future as completed when all the chain has been completed,
-        // or mark it as failed if any step fails.
+        // mark startFuture it as failed if any step fails.
         startFuture);</code></pre>
 </div>
 </div>
@@ -1261,13 +1277,13 @@ fut1.compose(v -&gt; {
 <p>something is written in the file (<code>fut2</code>)</p>
 </li>
 <li>
-<p>the file is moved (<code>fut3</code>)</p>
+<p>the file is moved (<code>startFuture</code>)</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>When these 3 steps are successful, the final future (<code>startFuture</code>) is completed with a success. However, if one
-of the steps fails, the final future is completed with a failure.</p>
+<p>When these 3 steps are successful, the final future (<code>startFuture</code>) is succeeded. However, if one
+of the steps fails, the final future is failed.</p>
 </div>
 <div class="paragraph">
 <p>This example uses:</p>
@@ -2618,6 +2634,17 @@ two classes to make handling JSON in your Vert.x applications a bit easier.</p>
 JsonObject object = new JsonObject(jsonString);</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>You can create a JSON object from a map as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();
+map.put("foo", "bar");
+map.put("xyz", 3);
+JsonObject object = new JsonObject(map);</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_putting_entries_into_a_json_object">Putting entries into a JSON object</h4>
@@ -2647,7 +2674,37 @@ int intVal = jsonObject.getInteger("some-other-key");</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_encoding_the_json_object_to_a_string">Encoding the JSON object to a String</h4>
+<h4 id="_mapping_between_json_objects_and_java_objects">Mapping between JSON objects and Java objects</h4>
+<div class="paragraph">
+<p>You can create a JSON object from the fields of a Java object as follows:</p>
+</div>
+<div class="paragraph">
+<p>You can instantiate a Java object and populate its fields from a JSON object as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.bodyHandler(buff -&gt; {
+  JsonObject jsonObject = buff.toJsonObject();
+  User javaObject = jsonObject.mapTo(User.class);
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that both of the above mapping directions use Jackson&#8217;s <code>ObjectMapper#convertValue()</code> to perform the
+mapping. See the Jackson documentation for information on the impact of field and constructor visibility, caveats
+on serialization and deserialization across object references, etc.</p>
+</div>
+<div class="paragraph">
+<p>However, in the simplest case, both <code>mapFrom</code> and <code>mapTo</code> should succeed if all fields of the Java class are
+public (or have public getters/setters), and if there is a public default constructor (or no defined constructors).</p>
+</div>
+<div class="paragraph">
+<p>Referenced objects will be transitively serialized/deserialized to/from nested JSON objects as
+long as the object graph is acyclic.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_encoding_a_json_object_to_a_string">Encoding a JSON object to a String</h4>
 <div class="paragraph">
 <p>You use <code><a href="../../apidocs/io/vertx/core/json/JsonObject.html#encode--">encode</a></code> to encode the object to a String form.</p>
 </div>
@@ -2705,7 +2762,7 @@ Boolean boolVal = array.getBoolean(2);</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_encoding_the_json_array_to_a_string">Encoding the JSON array to a String</h4>
+<h4 id="_encoding_a_json_array_to_a_string">Encoding a JSON array to a String</h4>
 <div class="paragraph">
 <p>You use <code><a href="../../apidocs/io/vertx/core/json/JsonArray.html#encode--">encode</a></code> to encode the array to a String form.</p>
 </div>
@@ -3308,8 +3365,8 @@ only apply to creating initial connections.
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-    setReconnectAttempts(10).
-    setReconnectInterval(500);
+  setReconnectAttempts(10).
+  setReconnectInterval(500);
 
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -3355,32 +3412,7 @@ name. When using network activity logging there are a few things to keep in mind
 </ul>
 </div>
 <div class="paragraph">
-<p>Netty will try to locate the following logger implementations, in the following order:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Slf4j</p>
-</li>
-<li>
-<p>Log4j</p>
-</li>
-<li>
-<p>JDK</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The presense of the slf4j or log4j classes on the classpath is enough to pick up the logging implementation.</p>
-</div>
-<div class="paragraph">
-<p>The logger implementation can be forced to a specific implementation by setting Netty&#8217;s internal logger implementation directly:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Force logging to SLF4J
-InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);</code></pre>
-</div>
+<p>You should read the <a href="#netty-logging">Netty logging</a> section.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3424,9 +3456,9 @@ utility which ships with the JDK.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().setSsl(true).setKeyStoreOptions(
-    new JksOptions().
-        setPath("/path/to/your/server-keystore.jks").
-        setPassword("password-of-your-keystore")
+  new JksOptions().
+    setPath("/path/to/your/server-keystore.jks").
+    setPassword("password-of-your-keystore")
 );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -3438,11 +3470,11 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.jks");
 JksOptions jksOptions = new JksOptions().
-    setValue(myKeyStoreAsABuffer).
-    setPassword("password-of-your-keystore");
+  setValue(myKeyStoreAsABuffer).
+  setPassword("password-of-your-keystore");
 NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setKeyStoreOptions(jksOptions);
+  setSsl(true).
+  setKeyStoreOptions(jksOptions);
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -3453,9 +3485,9 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().setSsl(true).setPfxKeyCertOptions(
-    new PfxOptions().
-        setPath("/path/to/your/server-keystore.pfx").
-        setPassword("password-of-your-keystore")
+  new PfxOptions().
+    setPath("/path/to/your/server-keystore.pfx").
+    setPassword("password-of-your-keystore")
 );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -3467,11 +3499,11 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.pfx");
 PfxOptions pfxOptions = new PfxOptions().
-    setValue(myKeyStoreAsABuffer).
-    setPassword("password-of-your-keystore");
+  setValue(myKeyStoreAsABuffer).
+  setPassword("password-of-your-keystore");
 NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setPfxKeyCertOptions(pfxOptions);
+  setSsl(true).
+  setPfxKeyCertOptions(pfxOptions);
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -3481,9 +3513,9 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().setSsl(true).setPemKeyCertOptions(
-    new PemKeyCertOptions().
-        setKeyPath("/path/to/your/server-key.pem").
-        setCertPath("/path/to/your/server-cert.pem")
+  new PemKeyCertOptions().
+    setKeyPath("/path/to/your/server-key.pem").
+    setCertPath("/path/to/your/server-cert.pem")
 );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -3496,11 +3528,11 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-key.pem");
 Buffer myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-cert.pem");
 PemKeyCertOptions pemOptions = new PemKeyCertOptions().
-    setKeyValue(myKeyAsABuffer).
-    setCertValue(myCertAsABuffer);
+  setKeyValue(myKeyAsABuffer).
+  setCertValue(myCertAsABuffer);
 NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setPemKeyCertOptions(pemOptions);
+  setSsl(true).
+  setPemKeyCertOptions(pemOptions);
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -3526,13 +3558,13 @@ utility which ships with the JDK.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setClientAuth(ClientAuth.REQUIRED).
-    setTrustStoreOptions(
-        new JksOptions().
-            setPath("/path/to/your/truststore.jks").
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setClientAuth(ClientAuth.REQUIRED).
+  setTrustStoreOptions(
+    new JksOptions().
+      setPath("/path/to/your/truststore.jks").
+      setPassword("password-of-your-truststore")
+  );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -3543,13 +3575,13 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks");
 NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setClientAuth(ClientAuth.REQUIRED).
-    setTrustStoreOptions(
-        new JksOptions().
-            setValue(myTrustStoreAsABuffer).
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setClientAuth(ClientAuth.REQUIRED).
+  setTrustStoreOptions(
+    new JksOptions().
+      setValue(myTrustStoreAsABuffer).
+      setPassword("password-of-your-truststore")
+  );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -3560,13 +3592,13 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setClientAuth(ClientAuth.REQUIRED).
-    setPfxTrustOptions(
-        new PfxOptions().
-            setPath("/path/to/your/truststore.pfx").
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setClientAuth(ClientAuth.REQUIRED).
+  setPfxTrustOptions(
+    new PfxOptions().
+      setPath("/path/to/your/truststore.pfx").
+      setPassword("password-of-your-truststore")
+  );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -3577,13 +3609,13 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx");
 NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setClientAuth(ClientAuth.REQUIRED).
-    setPfxTrustOptions(
-        new PfxOptions().
-            setValue(myTrustStoreAsABuffer).
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setClientAuth(ClientAuth.REQUIRED).
+  setPfxTrustOptions(
+    new PfxOptions().
+      setValue(myTrustStoreAsABuffer).
+      setPassword("password-of-your-truststore")
+  );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -3593,12 +3625,12 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setClientAuth(ClientAuth.REQUIRED).
-    setPemTrustOptions(
-        new PemTrustOptions().
-            addCertPath("/path/to/your/server-ca.pem")
-    );
+  setSsl(true).
+  setClientAuth(ClientAuth.REQUIRED).
+  setPemTrustOptions(
+    new PemTrustOptions().
+      addCertPath("/path/to/your/server-ca.pem")
+  );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -3609,12 +3641,12 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx");
 NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setClientAuth(ClientAuth.REQUIRED).
-    setPemTrustOptions(
-        new PemTrustOptions().
-            addCertValue(myCaAsABuffer)
-    );
+  setSsl(true).
+  setClientAuth(ClientAuth.REQUIRED).
+  setPemTrustOptions(
+    new PemTrustOptions().
+      addCertValue(myCaAsABuffer)
+  );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -3638,8 +3670,8 @@ be sure who you are connecting to. Use this with caution. Default value is false
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setTrustAll(true);
+  setSsl(true).
+  setTrustAll(true);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -3654,8 +3686,8 @@ To enable host verification, set the algorithm to use on your client (only HTTPS
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-        setSsl(true).
-        setHostnameVerificationAlgorithm("HTTPS");
+  setSsl(true).
+  setHostnameVerificationAlgorithm("HTTPS");
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -3674,12 +3706,12 @@ in the client trust store, the connection attempt will not succeed.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setTrustStoreOptions(
-        new JksOptions().
-            setPath("/path/to/your/truststore.jks").
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setTrustStoreOptions(
+    new JksOptions().
+      setPath("/path/to/your/truststore.jks").
+      setPassword("password-of-your-truststore")
+  );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -3690,12 +3722,12 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks");
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setTrustStoreOptions(
-        new JksOptions().
-            setValue(myTrustStoreAsABuffer).
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setTrustStoreOptions(
+    new JksOptions().
+      setValue(myTrustStoreAsABuffer).
+      setPassword("password-of-your-truststore")
+  );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -3706,12 +3738,12 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setPfxTrustOptions(
-        new PfxOptions().
-            setPath("/path/to/your/truststore.pfx").
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setPfxTrustOptions(
+    new PfxOptions().
+      setPath("/path/to/your/truststore.pfx").
+      setPassword("password-of-your-truststore")
+  );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -3722,12 +3754,12 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx");
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setPfxTrustOptions(
-        new PfxOptions().
-            setValue(myTrustStoreAsABuffer).
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setPfxTrustOptions(
+    new PfxOptions().
+      setValue(myTrustStoreAsABuffer).
+      setPassword("password-of-your-truststore")
+  );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -3737,11 +3769,11 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setPemTrustOptions(
-        new PemTrustOptions().
-            addCertPath("/path/to/your/ca-cert.pem")
-    );
+  setSsl(true).
+  setPemTrustOptions(
+    new PemTrustOptions().
+      addCertPath("/path/to/your/ca-cert.pem")
+  );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -3752,11 +3784,11 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/ca-cert.pem");
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setPemTrustOptions(
-        new PemTrustOptions().
-            addCertValue(myTrustStoreAsABuffer)
-    );
+  setSsl(true).
+  setPemTrustOptions(
+    new PemTrustOptions().
+      addCertValue(myTrustStoreAsABuffer)
+  );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -3776,9 +3808,9 @@ Again it&#8217;s just a regular Java key store. The client keystore location is 
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().setSsl(true).setKeyStoreOptions(
-    new JksOptions().
-        setPath("/path/to/your/client-keystore.jks").
-        setPassword("password-of-your-keystore")
+  new JksOptions().
+    setPath("/path/to/your/client-keystore.jks").
+    setPassword("password-of-your-keystore")
 );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -3790,11 +3822,11 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.jks");
 JksOptions jksOptions = new JksOptions().
-    setValue(myKeyStoreAsABuffer).
-    setPassword("password-of-your-keystore");
+  setValue(myKeyStoreAsABuffer).
+  setPassword("password-of-your-keystore");
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setKeyStoreOptions(jksOptions);
+  setSsl(true).
+  setKeyStoreOptions(jksOptions);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -3805,9 +3837,9 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().setSsl(true).setPfxKeyCertOptions(
-    new PfxOptions().
-        setPath("/path/to/your/client-keystore.pfx").
-        setPassword("password-of-your-keystore")
+  new PfxOptions().
+    setPath("/path/to/your/client-keystore.pfx").
+    setPassword("password-of-your-keystore")
 );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -3819,11 +3851,11 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.pfx");
 PfxOptions pfxOptions = new PfxOptions().
-    setValue(myKeyStoreAsABuffer).
-    setPassword("password-of-your-keystore");
+  setValue(myKeyStoreAsABuffer).
+  setPassword("password-of-your-keystore");
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setPfxKeyCertOptions(pfxOptions);
+  setSsl(true).
+  setPfxKeyCertOptions(pfxOptions);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -3833,9 +3865,9 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().setSsl(true).setPemKeyCertOptions(
-    new PemKeyCertOptions().
-        setKeyPath("/path/to/your/client-key.pem").
-        setCertPath("/path/to/your/client-cert.pem")
+  new PemKeyCertOptions().
+    setKeyPath("/path/to/your/client-key.pem").
+    setCertPath("/path/to/your/client-cert.pem")
 );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -3848,16 +3880,92 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-key.pem");
 Buffer myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-cert.pem");
 PemKeyCertOptions pemOptions = new PemKeyCertOptions().
-    setKeyValue(myKeyAsABuffer).
-    setCertValue(myCertAsABuffer);
+  setKeyValue(myKeyAsABuffer).
+  setCertValue(myCertAsABuffer);
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setPemKeyCertOptions(pemOptions);
+  setSsl(true).
+  setPemKeyCertOptions(pemOptions);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Keep in mind that pem configuration, the private key is not crypted.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_self_signed_certificates_for_testing_and_development_purposes">Self-signed certificates for testing and development purposes</h4>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+Do not use this in production settings, and note that the generated keys are very insecure.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is very often the case that self-signed certificates are required, be it for unit / integration tests or for
+running a development version of an application.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="../../apidocs/io/vertx/core/net/SelfSignedCertificate.html">SelfSignedCertificate</a></code> can be used to provide self-signed PEM certificate helpers and
+give <code><a href="../../apidocs/io/vertx/core/net/KeyCertOptions.html">KeyCertOptions</a></code> and <code><a href="../../apidocs/io/vertx/core/net/TrustOptions.html">TrustOptions</a></code> configurations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">SelfSignedCertificate certificate = SelfSignedCertificate.create();
+
+NetServerOptions serverOptions = new NetServerOptions()
+  .setSsl(true)
+  .setKeyCertOptions(certificate.keyCertOptions())
+  .setTrustOptions(certificate.trustOptions());
+
+NetServer server = vertx.createNetServer(serverOptions)
+  .connectHandler(socket -&gt; socket.write("Hello!").end())
+  .listen(1234, "localhost");
+
+NetClientOptions clientOptions = new NetClientOptions()
+  .setSsl(true)
+  .setKeyCertOptions(certificate.keyCertOptions())
+  .setTrustOptions(certificate.trustOptions());
+
+NetClient client = vertx.createNetClient(clientOptions);
+client.connect(1234, "localhost", ar -&gt; {
+  if (ar.succeeded()) {
+    ar.result().handler(buffer -&gt; System.out.println(buffer));
+  } else {
+    System.err.println("Woops: " + ar.cause().getMessage());
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The client can also be configured to trust all certificates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions clientOptions = new NetClientOptions()
+  .setSsl(true)
+  .setTrustAll(true);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that self-signed certificates also work for other TCP protocols like HTTPS:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">SelfSignedCertificate certificate = SelfSignedCertificate.create();
+
+vertx.createHttpServer(new HttpServerOptions()
+  .setSsl(true)
+  .setKeyCertOptions(certificate.keyCertOptions())
+  .setTrustOptions(certificate.trustOptions()))
+  .requestHandler(req -&gt; req.response().end("Hello!"))
+  .listen(8080);</code></pre>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -3870,9 +3978,9 @@ the crl list to use:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setTrustStoreOptions(trustOptions).
-    addCrlPath("/path/to/your/crl.pem");
+  setSsl(true).
+  setTrustStoreOptions(trustOptions).
+  addCrlPath("/path/to/your/crl.pem");
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -3883,9 +3991,9 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myCrlAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/crl.pem");
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setTrustStoreOptions(trustOptions).
-    addCrlValue(myCrlAsABuffer);
+  setSsl(true).
+  setTrustStoreOptions(trustOptions).
+  addCrlValue(myCrlAsABuffer);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -3899,12 +4007,12 @@ configured with a suite of enabled ciphers:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setKeyStoreOptions(keyStoreOptions).
-    addEnabledCipherSuite("ECDHE-RSA-AES128-GCM-SHA256").
-    addEnabledCipherSuite("ECDHE-ECDSA-AES128-GCM-SHA256").
-    addEnabledCipherSuite("ECDHE-RSA-AES256-GCM-SHA384").
-    addEnabledCipherSuite("CDHE-ECDSA-AES256-GCM-SHA384");
+  setSsl(true).
+  setKeyStoreOptions(keyStoreOptions).
+  addEnabledCipherSuite("ECDHE-RSA-AES128-GCM-SHA256").
+  addEnabledCipherSuite("ECDHE-ECDSA-AES128-GCM-SHA256").
+  addEnabledCipherSuite("ECDHE-RSA-AES256-GCM-SHA384").
+  addEnabledCipherSuite("CDHE-ECDSA-AES256-GCM-SHA384");
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -3921,11 +4029,11 @@ configured by explicitly adding enabled protocols:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setKeyStoreOptions(keyStoreOptions).
-    addEnabledSecureTransportProtocol("TLSv1.1").
-    addEnabledSecureTransportProtocol("TLSv1.2");
-    NetServer server = vertx.createNetServer(options);</code></pre>
+  setSsl(true).
+  setKeyStoreOptions(keyStoreOptions).
+  addEnabledSecureTransportProtocol("TLSv1.1").
+  addEnabledSecureTransportProtocol("TLSv1.2");
+NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3954,20 +4062,20 @@ OpenSSL provides better performances and CPU usage than the JDK engine, as well 
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setKeyStoreOptions(keyStoreOptions);
+  setSsl(true).
+  setKeyStoreOptions(keyStoreOptions);
 
 // Use JDK SSL engine explicitly
 options = new NetServerOptions().
-    setSsl(true).
-    setKeyStoreOptions(keyStoreOptions).
-    setJdkSslEngineOptions(new JdkSSLEngineOptions());
+  setSsl(true).
+  setKeyStoreOptions(keyStoreOptions).
+  setJdkSslEngineOptions(new JdkSSLEngineOptions());
 
 // Use OpenSSL engine
 options = new NetServerOptions().
-    setSsl(true).
-    setKeyStoreOptions(keyStoreOptions).
-    setOpenSslEngineOptions(new OpenSSLEngineOptions());</code></pre>
+  setSsl(true).
+  setKeyStoreOptions(keyStoreOptions).
+  setOpenSslEngineOptions(new OpenSSLEngineOptions());</code></pre>
 </div>
 </div>
 </div>
@@ -4067,9 +4175,9 @@ ALPN version for the JVM running it:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions()
-    .setProxyOptions(new ProxyOptions().setType(ProxyType.SOCKS5)
-        .setHost("localhost").setPort(1080)
-        .setUsername("username").setPassword("secret"));
+  .setProxyOptions(new ProxyOptions().setType(ProxyType.SOCKS5)
+    .setHost("localhost").setPort(1080)
+    .setUsername("username").setPassword("secret"));
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -4186,6 +4294,18 @@ The settings define how the client can use the connection, the default initial s
 <p>the default HTTP/2 settings values for the others</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Worker Verticles are not compatible with HTTP/2
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -4616,6 +4736,20 @@ to arbitrary places on your filesystem. See <a href="#_security_notes">security 
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_handling_compressed_body">Handling compressed body</h4>
+<div class="paragraph">
+<p>Vert.x can handle compressed body payloads which are encoded by the client with the <em>deflate</em> or <em>gzip</em>
+algorithms.</p>
+</div>
+<div class="paragraph">
+<p>To enable decompression set <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setDecompressionSupported-boolean-">setDecompressionSupported</a></code> on the
+options when creating the server.</p>
+</div>
+<div class="paragraph">
+<p>By default decompression is disabled.</p>
 </div>
 </div>
 <div class="sect3">
@@ -5149,6 +5283,26 @@ compressions and send it back to the client.</p>
 <div class="paragraph">
 <p>Be aware that compression may be able to reduce network traffic but is more CPU-intensive.</p>
 </div>
+<div class="paragraph">
+<p>To address this latter issue Vert.x allows you to tune the 'compression level' parameter that is native of the gzip/deflate compression algorithms.</p>
+</div>
+<div class="paragraph">
+<p>Compression level allows to configure gizp/deflate algorithms in terms of the compression ratio of the resulting data and the computational cost of the compress/decompress operation.</p>
+</div>
+<div class="paragraph">
+<p>The compression level is an integer value ranged from '1' to '9', where '1' means lower compression ratio but fastest algorithm and '9' means maximum compression ratio available but a slower algorithm.</p>
+</div>
+<div class="paragraph">
+<p>Using compression levels higher that 1-2 usually allows to save just some bytes in size - the gain is not linear, and depends on the specific data to be compressed
+- but it comports a non-trascurable cost in term of CPU cycles required to the server while generating the compressed response data
+( Note that at moment Vert.x doesn&#8217;t support any form caching of compressed response data, even for static files, so the compression is done on-the-fly
+at every request body generation ) and in the same way it affects client(s) while decoding (inflating) received responses, operation that becomes more CPU-intensive
+the more the level increases.</p>
+</div>
+<div class="paragraph">
+<p>By default - if compression is enabled via <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setCompressionSupported-boolean-">setCompressionSupported</a></code> - Vert.x will use '6' as compression level,
+but the parameter can be configured to address any case with <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setCompressionLevel-int-">setCompressionLevel</a></code>.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_creating_an_http_client">Creating an HTTP client</h3>
@@ -5280,7 +5434,7 @@ HEAD requests.</p>
 </div>
 <div class="paragraph">
 <p>The simplest way to do this with the Vert.x http client is using the methods prefixed with <code>Now</code>. For example
-<code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#getNow-int-java.lang.String-java.lang.String-io.vertx.core.Handler-">getNow</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#getNow-io.vertx.core.http.RequestOptions-io.vertx.core.Handler-">getNow</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>These methods create the http request and send it in a single method call and allow you to provide a handler that will be
@@ -5306,7 +5460,7 @@ client.headNow("/other-uri", response -&gt; {
 <h4 id="_writing_general_requests">Writing general requests</h4>
 <div class="paragraph">
 <p>At other times you don&#8217;t know the request method you want to send until run-time. For that use case we provide
-general purpose request methods such as <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#request-io.vertx.core.http.HttpMethod-int-java.lang.String-java.lang.String-">request</a></code> which allow you to specify
+general purpose request methods such as <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#request-io.vertx.core.http.HttpMethod-io.vertx.core.http.RequestOptions-">request</a></code> which allow you to specify
 the HTTP method at run-time:</p>
 </div>
 <div class="listingblock">
@@ -5330,8 +5484,8 @@ client.request(HttpMethod.POST, "foo-uri", response -&gt; {
 before sending it.</p>
 </div>
 <div class="paragraph">
-<p>To do this you can call one of the specific request methods such as <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#post-int-java.lang.String-java.lang.String-">post</a></code> or
-one of the general purpose request methods such as <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#request-io.vertx.core.http.HttpMethod-int-java.lang.String-java.lang.String-">request</a></code>.</p>
+<p>To do this you can call one of the specific request methods such as <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#post-io.vertx.core.http.RequestOptions-">post</a></code> or
+one of the general purpose request methods such as <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#request-io.vertx.core.http.HttpMethod-io.vertx.core.http.RequestOptions-">request</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>These methods don&#8217;t send the request immediately, but instead return an instance of <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html">HttpClientRequest</a></code>
@@ -5799,6 +5953,130 @@ or immediately after the headers have been read and the response handler has bee
 </div>
 <div class="paragraph">
 <p>Alternatively you can just parse the <code>Set-Cookie</code> headers yourself in the response.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_30x_redirection_handling">30x redirection handling</h4>
+<div class="paragraph">
+<p>The client can be configured to follow HTTP redirections: when the client receives an
+<code>301</code>, <code>302</code>, <code>303</code> or <code>307</code> status code, it follows the redirection provided by the <code>Location</code> response header
+and the response handler is passed the redirected response instead of the original response.</p>
+</div>
+<div class="paragraph">
+<p>Here’s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client.get("some-uri", response -&gt; {
+  System.out.println("Received response with status code " + response.statusCode());
+}).setFollowRedirects(true).end();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The redirection policy is as follow</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>on a <code>301</code>, <code>302</code> or <code>303</code> status code, follow the redirection with a <code>GET</code> method</p>
+</li>
+<li>
+<p>on a <code>307</code> status code, follow the redirection with the same HTTP method and the cached body</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+following redirections caches the request body
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The maximum redirects is <code>16</code> by default and can be changed with <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setMaxRedirects-int-">setMaxRedirects</a></code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClient client = vertx.createHttpClient(
+    new HttpClientOptions()
+        .setMaxRedirects(32));
+
+client.get("some-uri", response -&gt; {
+  System.out.println("Received response with status code " + response.statusCode());
+}).setFollowRedirects(true).end();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One size does not fit all and the default redirection policy may not be adapted to your needs.</p>
+</div>
+<div class="paragraph">
+<p>The default redirection policy can changed with a custom implementation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client.redirectHandler(response -&gt; {
+
+  // Only follow 301 code
+  if (response.statusCode() == 301 &amp;&amp; response.getHeader("Location") != null) {
+
+    // Compute the redirect URI
+    String absoluteURI = resolveURI(response.request().absoluteURI(), response.getHeader("Location"));
+
+    // Create a new ready to use request that the client will use
+    return Future.succeededFuture(client.getAbs(absoluteURI));
+  }
+
+  // We don't redirect
+  return null;
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The policy handles the original <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html">HttpClientResponse</a></code> received and returns either <code>null</code>
+or a <code>Future&lt;HttpClientRequest&gt;</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>when <code>null</code> is returned, the original response is processed</p>
+</li>
+<li>
+<p>when a future is returned, the request will be sent on its successful completion</p>
+</li>
+<li>
+<p>when a future is returned, the exception handler set on the request is called on its failure</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The returned request must be unsent so the original request handlers can be sent and the client can send it after.</p>
+</div>
+<div class="paragraph">
+<p>Most of the original request settings will be propagated to the new request:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>request headers, unless if you have set some headers (including <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#setHost-java.lang.String-">setHost</a></code>)</p>
+</li>
+<li>
+<p>request body unless the returned request uses a <code>GET</code> method</p>
+</li>
+<li>
+<p>response handler</p>
+</li>
+<li>
+<p>request exception handler</p>
+</li>
+<li>
+<p>request timeout</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
@@ -6461,6 +6739,43 @@ server on your multi-core machine.</p>
 <div class="paragraph">
 <p>Please see <a href="#ssl">configuring net servers to use SSL</a> for more information.</p>
 </div>
+<div class="paragraph">
+<p>SSL can also be enabled/disabled per request with <code><a href="../../apidocs/io/vertx/core/http/RequestOptions.html">RequestOptions</a></code> or when
+specifying a scheme with <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#requestAbs-io.vertx.core.http.HttpMethod-java.lang.String-">requestAbs</a></code>
+method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client.getNow(new RequestOptions()
+    .setHost("localhost")
+    .setPort(8080)
+    .setURI("/")
+    .setSsl(true), response -&gt; {
+  System.out.println("Received response with status code " + response.statusCode());
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setSsl-boolean-">setSsl</a></code> setting acts as the default client setting.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../apidocs/io/vertx/core/http/RequestOptions.html#setSsl-boolean-">setSsl</a></code> overrides the default client setting</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>setting the value to <code>false</code> will disable SSL/TLS even if the client is configured to use SSL/TLS</p>
+</li>
+<li>
+<p>setting the value to <code>true</code> will enable SSL/TLS  even if the client is configured to not use SSL/TLS, the actual
+client SSL/TLS (such as trust, key/certificate, ciphers, ALPN, &#8230;&#8203;) will be reused</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Likewise <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#requestAbs-io.vertx.core.http.HttpMethod-java.lang.String-">requestAbs</a></code> scheme
+also overrides the default client setting.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_websockets">WebSockets</h3>
@@ -6545,7 +6860,7 @@ call <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#upgr
 <p>The Vert.x <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html">HttpClient</a></code> supports WebSockets.</p>
 </div>
 <div class="paragraph">
-<p>You can connect a WebSocket to a server using one of the <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#websocket-int-java.lang.String-java.lang.String-io.vertx.core.Handler-">websocket</a></code> operations and
+<p>You can connect a WebSocket to a server using one of the <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#websocket-io.vertx.core.http.RequestOptions-io.vertx.core.Handler-">websocket</a></code> operations and
 providing a handler.</p>
 </div>
 <div class="paragraph">
@@ -6562,14 +6877,18 @@ providing a handler.</p>
 <div class="sect3">
 <h4 id="_writing_messages_to_websockets">Writing messages to WebSockets</h4>
 <div class="paragraph">
-<p>If you wish to write a single binary WebSocket message to the WebSocket you can do this with
-<code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeBinaryMessage-io.vertx.core.buffer.Buffer-">writeBinaryMessage</a></code>:</p>
+<p>If you wish to write a single WebSocket message to the WebSocket you can do this with
+<code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeBinaryMessage-io.vertx.core.buffer.Buffer-">writeBinaryMessage</a></code> or
+<code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeTextMessage-java.lang.String-">writeTextMessage</a></code> :</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer buffer = Buffer.buffer().appendInt(123).appendFloat(1.23f);
+websocket.writeBinaryMessage(buffer);
 
-websocket.writeBinaryMessage(buffer);</code></pre>
+// Write a simple text message
+String message = "hello";
+websocket.writeTextMessage(message);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8224,9 +8543,8 @@ server.connectHandler(sock -&gt; {
 <div class="paragraph">
 <p><code>ReadStream</code> is implemented by <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html">HttpClientResponse</a></code>, <code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html">DatagramSocket</a></code>,
 <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="../../apidocs/io/vertx/core/http/HttpServerFileUpload.html">HttpServerFileUpload</a></code>,
-<code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html">HttpServerRequest</a></code>, <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequestStream.html">HttpServerRequestStream</a></code>,
-<code><a href="../../apidocs/io/vertx/core/eventbus/MessageConsumer.html">MessageConsumer</a></code>, <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html">NetSocket</a></code>, <code><a href="../../apidocs/io/vertx/core/net/NetSocketStream.html">NetSocketStream</a></code>,
-<code><a href="../../apidocs/io/vertx/core/http/WebSocket.html">WebSocket</a></code>, <code><a href="../../apidocs/io/vertx/core/http/WebSocketStream.html">WebSocketStream</a></code>, <code><a href="../../apidocs/io/vertx/core/TimeoutStream.html">TimeoutStream</a></code>,
+<code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html">HttpServerRequest</a></code>, <code><a href="../../apidocs/io/vertx/core/eventbus/MessageConsumer.html">MessageConsumer</a></code>,
+<code><a href="../../apidocs/io/vertx/core/net/NetSocket.html">NetSocket</a></code>, <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html">WebSocket</a></code>, <code><a href="../../apidocs/io/vertx/core/TimeoutStream.html">TimeoutStream</a></code>,
 <code><a href="../../apidocs/io/vertx/core/file/AsyncFile.html">AsyncFile</a></code>.</p>
 </div>
 <div class="paragraph">
@@ -8263,7 +8581,7 @@ or when end of request is reached if it&#8217;s an HTTP request, or when the con
 <div class="paragraph">
 <p><code>WriteStream</code> is implemented by <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html">HttpServerResponse</a></code>
 <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html">WebSocket</a></code>, <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html">NetSocket</a></code>, <code><a href="../../apidocs/io/vertx/core/file/AsyncFile.html">AsyncFile</a></code>,
-<code><a href="../../apidocs/io/vertx/core/datagram/PacketWritestream.html">PacketWritestream</a></code> and <code><a href="../../apidocs/io/vertx/core/eventbus/MessageProducer.html">MessageProducer</a></code></p>
+and <code><a href="../../apidocs/io/vertx/core/eventbus/MessageProducer.html">MessageProducer</a></code></p>
 </div>
 <div class="paragraph">
 <p>Functions:</p>
@@ -9057,6 +9375,78 @@ logger.error("oops!", exception);</code></pre>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="netty-logging">Netty logging</h3>
+<div class="paragraph">
+<p>When configuring logging, you should care about configuring Netty logging as well.</p>
+</div>
+<div class="paragraph">
+<p>Netty does not rely on external logging configuration (e.g system properties) and instead implements a logging
+configuration based on the logging libraries visible from the Netty classes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>use <code>SLF4J</code> library if it is visible</p>
+</li>
+<li>
+<p>otherwise use <code>Log4j</code> if it is visible</p>
+</li>
+<li>
+<p>otherwise fallback <code>java.util.logging</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The logger implementation can be forced to a specific implementation by setting Netty&#8217;s internal logger implementation directly
+on <code>io.netty.util.internal.logging.InternalLoggerFactory</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Force logging to Log4j
+InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_troubleshooting">Troubleshooting</h3>
+<div class="sect3">
+<h4 id="_slf4j_warning_at_startup">SLF4J warning at startup</h4>
+<div class="paragraph">
+<p>If, when you start your application, you see the following message:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It means that you have SLF4J-API in your classpath but no actual binding. Messages logged with SLF4J will be dropped.
+You should add a binding to your classpath. Check <a href="https://www.slf4j.org/manual.html#swapping" class="bare">https://www.slf4j.org/manual.html#swapping</a> to pick a binding and configure it.</p>
+</div>
+<div class="paragraph">
+<p>Be aware that Netty looks for the SLF4-API jar and uses it by default.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_reset_by_peer">Connection reset by peer</h4>
+<div class="paragraph">
+<p>If your logs show a bunch of:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>io.vertx.core.net.impl.ConnectionBase
+SEVERE: java.io.IOException: Connection reset by peer</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It means that the client is resetting the HTTP connection instead of closing it. This message also indicates that you
+may have not consumed the complete payload (the connection was cut before you were able to).</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -9100,8 +9490,51 @@ retrieved it will use Google&#8217;s public DNS servers <code>"8.8.8.8"</code> a
 <p>The default port of a DNS server is <code>53</code>, when a server uses a different port, this port can be set
 using a colon delimiter: <code>192.168.0.2:40000</code>.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+sometimes it can be desirable to use the JVM built-in resolver, the JVM system property
+<em>-Dvertx.disableDnsResolver=true</em> activates this behavior
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_failover">Failover</h3>
 <div class="paragraph">
-<p>The resolver can be configured to use an alternative <em>hosts</em> file:</p>
+<p>When a server does not reply in a timely manner, the resolver will try the next one from the list, the search
+is limited by <code><a href="../../apidocs/io/vertx/core/dns/AddressResolverOptions.html#setMaxQueries-int-">setMaxQueries</a></code> (the default value is <code>4</code> queries).</p>
+</div>
+<div class="paragraph">
+<p>A DNS query is considered as failed when the resolver has not received a correct answer within
+<code><a href="../../apidocs/io/vertx/core/dns/AddressResolverOptions.html#getQueryTimeout--">getQueryTimeout</a></code> milliseconds (the default value is <code>5</code> seconds).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_server_list_rotation">Server list rotation</h3>
+<div class="paragraph">
+<p>By default the dns server selection uses the first one, the remaining servers are used for failover.</p>
+</div>
+<div class="paragraph">
+<p>You can configure <code><a href="../../apidocs/io/vertx/core/dns/AddressResolverOptions.html#setRotateServers-boolean-">setRotateServers</a></code> to <code>true</code> to let
+the resolver perform a round-robin selection instead. It spreads the query load among the servers and avoids
+all lookup to hit the first server of the list.</p>
+</div>
+<div class="paragraph">
+<p>Failover still applies and will use the next server in the list.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hosts_mapping">Hosts mapping</h3>
+<div class="paragraph">
+<p>The <em>hosts</em> file of the operating system is used to perform an hostname lookup for an ipaddress.</p>
+</div>
+<div class="paragraph">
+<p>An alternative <em>hosts</em> file can be used instead:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9112,6 +9545,9 @@ using a colon delimiter: <code>192.168.0.2:40000</code>.</p>
 );</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_search_domains">Search domains</h3>
 <div class="paragraph">
 <p>By default the resolver will use the system DNS search domains from the environment. Alternatively an explicit search domain
 list can be provided:</p>
@@ -9128,18 +9564,6 @@ list can be provided:</p>
 <p>When a search domain list is used, the threshold for the number of dots is <code>1</code> or loaded from <code>/etc/resolv.conf</code>
 on Linux, it can be configured to a specific value with <code><a href="../../apidocs/io/vertx/core/dns/AddressResolverOptions.html#setNdots-int-">setNdots</a></code>.</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-sometimes it can be desirable to use the JVM built-in resolver, the JVM system property
-<em>-Dvertx.disableDnsResolver=true</em> activates this behavior
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -9244,7 +9668,7 @@ you don&#8217;t specify a HA group the default group <code>__DEFAULT__</code> is
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run my-verticle.js -ha -ha-group my-group</code></pre>
+<pre class="prettyprint highlight"><code>vertx run my-verticle.js -ha -hagroup my-group</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9471,7 +9895,7 @@ describe options and arguments:</p>
         .setDescription("The source")
         .setArgName("source"))
     .addArgument(new Argument()
-        .setIndex(0)
+        .setIndex(1)
         .setDescription("The destination")
         .setArgName("target"));</code></pre>
 </div>
@@ -9807,7 +10231,7 @@ this converter:</p>
 <p>For booleans, the boolean values are evaluated to <code>true</code>: <code>on</code>, <code>yes</code>, <code>1</code>, <code>true</code>.</p>
 </div>
 <div class="paragraph">
-<p>If one of your option as an <code>enum</code> as type, it computes the set of choices automatically.</p>
+<p>If one of your option has an <code>enum</code> as type, it computes the set of choices automatically.</p>
 </div>
 </div>
 <div class="sect2">
@@ -10054,7 +10478,7 @@ very careful when using this settings.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:00:58 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

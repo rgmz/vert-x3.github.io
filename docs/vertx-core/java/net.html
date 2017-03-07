@@ -583,8 +583,8 @@ only apply to creating initial connections.
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-    setReconnectAttempts(10).
-    setReconnectInterval(500);
+  setReconnectAttempts(10).
+  setReconnectInterval(500);
 
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -630,32 +630,7 @@ name. When using network activity logging there are a few things to keep in mind
 </ul>
 </div>
 <div class="paragraph">
-<p>Netty will try to locate the following logger implementations, in the following order:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Slf4j</p>
-</li>
-<li>
-<p>Log4j</p>
-</li>
-<li>
-<p>JDK</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The presense of the slf4j or log4j classes on the classpath is enough to pick up the logging implementation.</p>
-</div>
-<div class="paragraph">
-<p>The logger implementation can be forced to a specific implementation by setting Netty&#8217;s internal logger implementation directly:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Force logging to SLF4J
-InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);</code></pre>
-</div>
+<p>You should read the <a href="#netty-logging">[netty-logging]</a> section.</p>
 </div>
 </div>
 <div class="sect2">
@@ -699,9 +674,9 @@ utility which ships with the JDK.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().setSsl(true).setKeyStoreOptions(
-    new JksOptions().
-        setPath("/path/to/your/server-keystore.jks").
-        setPassword("password-of-your-keystore")
+  new JksOptions().
+    setPath("/path/to/your/server-keystore.jks").
+    setPassword("password-of-your-keystore")
 );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -713,11 +688,11 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.jks");
 JksOptions jksOptions = new JksOptions().
-    setValue(myKeyStoreAsABuffer).
-    setPassword("password-of-your-keystore");
+  setValue(myKeyStoreAsABuffer).
+  setPassword("password-of-your-keystore");
 NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setKeyStoreOptions(jksOptions);
+  setSsl(true).
+  setKeyStoreOptions(jksOptions);
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -728,9 +703,9 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().setSsl(true).setPfxKeyCertOptions(
-    new PfxOptions().
-        setPath("/path/to/your/server-keystore.pfx").
-        setPassword("password-of-your-keystore")
+  new PfxOptions().
+    setPath("/path/to/your/server-keystore.pfx").
+    setPassword("password-of-your-keystore")
 );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -742,11 +717,11 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.pfx");
 PfxOptions pfxOptions = new PfxOptions().
-    setValue(myKeyStoreAsABuffer).
-    setPassword("password-of-your-keystore");
+  setValue(myKeyStoreAsABuffer).
+  setPassword("password-of-your-keystore");
 NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setPfxKeyCertOptions(pfxOptions);
+  setSsl(true).
+  setPfxKeyCertOptions(pfxOptions);
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -756,9 +731,9 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().setSsl(true).setPemKeyCertOptions(
-    new PemKeyCertOptions().
-        setKeyPath("/path/to/your/server-key.pem").
-        setCertPath("/path/to/your/server-cert.pem")
+  new PemKeyCertOptions().
+    setKeyPath("/path/to/your/server-key.pem").
+    setCertPath("/path/to/your/server-cert.pem")
 );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -771,11 +746,11 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-key.pem");
 Buffer myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-cert.pem");
 PemKeyCertOptions pemOptions = new PemKeyCertOptions().
-    setKeyValue(myKeyAsABuffer).
-    setCertValue(myCertAsABuffer);
+  setKeyValue(myKeyAsABuffer).
+  setCertValue(myCertAsABuffer);
 NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setPemKeyCertOptions(pemOptions);
+  setSsl(true).
+  setPemKeyCertOptions(pemOptions);
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -801,13 +776,13 @@ utility which ships with the JDK.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setClientAuth(ClientAuth.REQUIRED).
-    setTrustStoreOptions(
-        new JksOptions().
-            setPath("/path/to/your/truststore.jks").
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setClientAuth(ClientAuth.REQUIRED).
+  setTrustStoreOptions(
+    new JksOptions().
+      setPath("/path/to/your/truststore.jks").
+      setPassword("password-of-your-truststore")
+  );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -818,13 +793,13 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks");
 NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setClientAuth(ClientAuth.REQUIRED).
-    setTrustStoreOptions(
-        new JksOptions().
-            setValue(myTrustStoreAsABuffer).
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setClientAuth(ClientAuth.REQUIRED).
+  setTrustStoreOptions(
+    new JksOptions().
+      setValue(myTrustStoreAsABuffer).
+      setPassword("password-of-your-truststore")
+  );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -835,13 +810,13 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setClientAuth(ClientAuth.REQUIRED).
-    setPfxTrustOptions(
-        new PfxOptions().
-            setPath("/path/to/your/truststore.pfx").
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setClientAuth(ClientAuth.REQUIRED).
+  setPfxTrustOptions(
+    new PfxOptions().
+      setPath("/path/to/your/truststore.pfx").
+      setPassword("password-of-your-truststore")
+  );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -852,13 +827,13 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx");
 NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setClientAuth(ClientAuth.REQUIRED).
-    setPfxTrustOptions(
-        new PfxOptions().
-            setValue(myTrustStoreAsABuffer).
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setClientAuth(ClientAuth.REQUIRED).
+  setPfxTrustOptions(
+    new PfxOptions().
+      setValue(myTrustStoreAsABuffer).
+      setPassword("password-of-your-truststore")
+  );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -868,12 +843,12 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setClientAuth(ClientAuth.REQUIRED).
-    setPemTrustOptions(
-        new PemTrustOptions().
-            addCertPath("/path/to/your/server-ca.pem")
-    );
+  setSsl(true).
+  setClientAuth(ClientAuth.REQUIRED).
+  setPemTrustOptions(
+    new PemTrustOptions().
+      addCertPath("/path/to/your/server-ca.pem")
+  );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -884,12 +859,12 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx");
 NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setClientAuth(ClientAuth.REQUIRED).
-    setPemTrustOptions(
-        new PemTrustOptions().
-            addCertValue(myCaAsABuffer)
-    );
+  setSsl(true).
+  setClientAuth(ClientAuth.REQUIRED).
+  setPemTrustOptions(
+    new PemTrustOptions().
+      addCertValue(myCaAsABuffer)
+  );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -913,8 +888,8 @@ be sure who you are connecting to. Use this with caution. Default value is false
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setTrustAll(true);
+  setSsl(true).
+  setTrustAll(true);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -929,8 +904,8 @@ To enable host verification, set the algorithm to use on your client (only HTTPS
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-        setSsl(true).
-        setHostnameVerificationAlgorithm("HTTPS");
+  setSsl(true).
+  setHostnameVerificationAlgorithm("HTTPS");
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -949,12 +924,12 @@ in the client trust store, the connection attempt will not succeed.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setTrustStoreOptions(
-        new JksOptions().
-            setPath("/path/to/your/truststore.jks").
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setTrustStoreOptions(
+    new JksOptions().
+      setPath("/path/to/your/truststore.jks").
+      setPassword("password-of-your-truststore")
+  );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -965,12 +940,12 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks");
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setTrustStoreOptions(
-        new JksOptions().
-            setValue(myTrustStoreAsABuffer).
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setTrustStoreOptions(
+    new JksOptions().
+      setValue(myTrustStoreAsABuffer).
+      setPassword("password-of-your-truststore")
+  );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -981,12 +956,12 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setPfxTrustOptions(
-        new PfxOptions().
-            setPath("/path/to/your/truststore.pfx").
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setPfxTrustOptions(
+    new PfxOptions().
+      setPath("/path/to/your/truststore.pfx").
+      setPassword("password-of-your-truststore")
+  );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -997,12 +972,12 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx");
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setPfxTrustOptions(
-        new PfxOptions().
-            setValue(myTrustStoreAsABuffer).
-            setPassword("password-of-your-truststore")
-    );
+  setSsl(true).
+  setPfxTrustOptions(
+    new PfxOptions().
+      setValue(myTrustStoreAsABuffer).
+      setPassword("password-of-your-truststore")
+  );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -1012,11 +987,11 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setPemTrustOptions(
-        new PemTrustOptions().
-            addCertPath("/path/to/your/ca-cert.pem")
-    );
+  setSsl(true).
+  setPemTrustOptions(
+    new PemTrustOptions().
+      addCertPath("/path/to/your/ca-cert.pem")
+  );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -1027,11 +1002,11 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/ca-cert.pem");
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setPemTrustOptions(
-        new PemTrustOptions().
-            addCertValue(myTrustStoreAsABuffer)
-    );
+  setSsl(true).
+  setPemTrustOptions(
+    new PemTrustOptions().
+      addCertValue(myTrustStoreAsABuffer)
+  );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -1051,9 +1026,9 @@ Again it&#8217;s just a regular Java key store. The client keystore location is 
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().setSsl(true).setKeyStoreOptions(
-    new JksOptions().
-        setPath("/path/to/your/client-keystore.jks").
-        setPassword("password-of-your-keystore")
+  new JksOptions().
+    setPath("/path/to/your/client-keystore.jks").
+    setPassword("password-of-your-keystore")
 );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -1065,11 +1040,11 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.jks");
 JksOptions jksOptions = new JksOptions().
-    setValue(myKeyStoreAsABuffer).
-    setPassword("password-of-your-keystore");
+  setValue(myKeyStoreAsABuffer).
+  setPassword("password-of-your-keystore");
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setKeyStoreOptions(jksOptions);
+  setSsl(true).
+  setKeyStoreOptions(jksOptions);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -1080,9 +1055,9 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().setSsl(true).setPfxKeyCertOptions(
-    new PfxOptions().
-        setPath("/path/to/your/client-keystore.pfx").
-        setPassword("password-of-your-keystore")
+  new PfxOptions().
+    setPath("/path/to/your/client-keystore.pfx").
+    setPassword("password-of-your-keystore")
 );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -1094,11 +1069,11 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.pfx");
 PfxOptions pfxOptions = new PfxOptions().
-    setValue(myKeyStoreAsABuffer).
-    setPassword("password-of-your-keystore");
+  setValue(myKeyStoreAsABuffer).
+  setPassword("password-of-your-keystore");
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setPfxKeyCertOptions(pfxOptions);
+  setSsl(true).
+  setPfxKeyCertOptions(pfxOptions);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -1108,9 +1083,9 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().setSsl(true).setPemKeyCertOptions(
-    new PemKeyCertOptions().
-        setKeyPath("/path/to/your/client-key.pem").
-        setCertPath("/path/to/your/client-cert.pem")
+  new PemKeyCertOptions().
+    setKeyPath("/path/to/your/client-key.pem").
+    setCertPath("/path/to/your/client-cert.pem")
 );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -1123,16 +1098,92 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-key.pem");
 Buffer myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-cert.pem");
 PemKeyCertOptions pemOptions = new PemKeyCertOptions().
-    setKeyValue(myKeyAsABuffer).
-    setCertValue(myCertAsABuffer);
+  setKeyValue(myKeyAsABuffer).
+  setCertValue(myCertAsABuffer);
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setPemKeyCertOptions(pemOptions);
+  setSsl(true).
+  setPemKeyCertOptions(pemOptions);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Keep in mind that pem configuration, the private key is not crypted.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_self_signed_certificates_for_testing_and_development_purposes">Self-signed certificates for testing and development purposes</h4>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+Do not use this in production settings, and note that the generated keys are very insecure.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is very often the case that self-signed certificates are required, be it for unit / integration tests or for
+running a development version of an application.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="../../apidocs/io/vertx/core/net/SelfSignedCertificate.html">SelfSignedCertificate</a></code> can be used to provide self-signed PEM certificate helpers and
+give <code><a href="../../apidocs/io/vertx/core/net/KeyCertOptions.html">KeyCertOptions</a></code> and <code><a href="../../apidocs/io/vertx/core/net/TrustOptions.html">TrustOptions</a></code> configurations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">SelfSignedCertificate certificate = SelfSignedCertificate.create();
+
+NetServerOptions serverOptions = new NetServerOptions()
+  .setSsl(true)
+  .setKeyCertOptions(certificate.keyCertOptions())
+  .setTrustOptions(certificate.trustOptions());
+
+NetServer server = vertx.createNetServer(serverOptions)
+  .connectHandler(socket -&gt; socket.write("Hello!").end())
+  .listen(1234, "localhost");
+
+NetClientOptions clientOptions = new NetClientOptions()
+  .setSsl(true)
+  .setKeyCertOptions(certificate.keyCertOptions())
+  .setTrustOptions(certificate.trustOptions());
+
+NetClient client = vertx.createNetClient(clientOptions);
+client.connect(1234, "localhost", ar -&gt; {
+  if (ar.succeeded()) {
+    ar.result().handler(buffer -&gt; System.out.println(buffer));
+  } else {
+    System.err.println("Woops: " + ar.cause().getMessage());
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The client can also be configured to trust all certificates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions clientOptions = new NetClientOptions()
+  .setSsl(true)
+  .setTrustAll(true);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that self-signed certificates also work for other TCP protocols like HTTPS:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">SelfSignedCertificate certificate = SelfSignedCertificate.create();
+
+vertx.createHttpServer(new HttpServerOptions()
+  .setSsl(true)
+  .setKeyCertOptions(certificate.keyCertOptions())
+  .setTrustOptions(certificate.trustOptions()))
+  .requestHandler(req -&gt; req.response().end("Hello!"))
+  .listen(8080);</code></pre>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -1145,9 +1196,9 @@ the crl list to use:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setTrustStoreOptions(trustOptions).
-    addCrlPath("/path/to/your/crl.pem");
+  setSsl(true).
+  setTrustStoreOptions(trustOptions).
+  addCrlPath("/path/to/your/crl.pem");
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -1158,9 +1209,9 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myCrlAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/crl.pem");
 NetClientOptions options = new NetClientOptions().
-    setSsl(true).
-    setTrustStoreOptions(trustOptions).
-    addCrlValue(myCrlAsABuffer);
+  setSsl(true).
+  setTrustStoreOptions(trustOptions).
+  addCrlValue(myCrlAsABuffer);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -1174,12 +1225,12 @@ configured with a suite of enabled ciphers:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setKeyStoreOptions(keyStoreOptions).
-    addEnabledCipherSuite("ECDHE-RSA-AES128-GCM-SHA256").
-    addEnabledCipherSuite("ECDHE-ECDSA-AES128-GCM-SHA256").
-    addEnabledCipherSuite("ECDHE-RSA-AES256-GCM-SHA384").
-    addEnabledCipherSuite("CDHE-ECDSA-AES256-GCM-SHA384");
+  setSsl(true).
+  setKeyStoreOptions(keyStoreOptions).
+  addEnabledCipherSuite("ECDHE-RSA-AES128-GCM-SHA256").
+  addEnabledCipherSuite("ECDHE-ECDSA-AES128-GCM-SHA256").
+  addEnabledCipherSuite("ECDHE-RSA-AES256-GCM-SHA384").
+  addEnabledCipherSuite("CDHE-ECDSA-AES256-GCM-SHA384");
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -1196,11 +1247,11 @@ configured by explicitly adding enabled protocols:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setKeyStoreOptions(keyStoreOptions).
-    addEnabledSecureTransportProtocol("TLSv1.1").
-    addEnabledSecureTransportProtocol("TLSv1.2");
-    NetServer server = vertx.createNetServer(options);</code></pre>
+  setSsl(true).
+  setKeyStoreOptions(keyStoreOptions).
+  addEnabledSecureTransportProtocol("TLSv1.1").
+  addEnabledSecureTransportProtocol("TLSv1.2");
+NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1229,20 +1280,20 @@ OpenSSL provides better performances and CPU usage than the JDK engine, as well 
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-    setSsl(true).
-    setKeyStoreOptions(keyStoreOptions);
+  setSsl(true).
+  setKeyStoreOptions(keyStoreOptions);
 
 // Use JDK SSL engine explicitly
 options = new NetServerOptions().
-    setSsl(true).
-    setKeyStoreOptions(keyStoreOptions).
-    setJdkSslEngineOptions(new JdkSSLEngineOptions());
+  setSsl(true).
+  setKeyStoreOptions(keyStoreOptions).
+  setJdkSslEngineOptions(new JdkSSLEngineOptions());
 
 // Use OpenSSL engine
 options = new NetServerOptions().
-    setSsl(true).
-    setKeyStoreOptions(keyStoreOptions).
-    setOpenSslEngineOptions(new OpenSSLEngineOptions());</code></pre>
+  setSsl(true).
+  setKeyStoreOptions(keyStoreOptions).
+  setOpenSslEngineOptions(new OpenSSLEngineOptions());</code></pre>
 </div>
 </div>
 </div>
@@ -1342,9 +1393,9 @@ ALPN version for the JVM running it:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions()
-    .setProxyOptions(new ProxyOptions().setType(ProxyType.SOCKS5)
-        .setHost("localhost").setPort(1080)
-        .setUsername("username").setPassword("secret"));
+  .setProxyOptions(new ProxyOptions().setType(ProxyType.SOCKS5)
+    .setHost("localhost").setPort(1080)
+    .setUsername("username").setPassword("secret"));
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -1362,7 +1413,7 @@ to resolve the DNS address locally.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:00:58 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

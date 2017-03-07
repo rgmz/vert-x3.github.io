@@ -107,9 +107,12 @@
 <li><a href="#_authorization_code_flow">Authorization Code Flow</a></li>
 <li><a href="#_password_credentials_flow">Password Credentials Flow</a></li>
 <li><a href="#_client_credentials_flow">Client Credentials Flow</a></li>
+<li><a href="#_extensions">Extensions</a></li>
 <li><a href="#_getting_started">Getting Started</a></li>
 <li><a href="#_accesstoken_object">AccessToken object</a></li>
 <li><a href="#_example_configuration_for_common_oauth2_providers">Example configuration for common OAuth2 providers</a></li>
+<li><a href="#_token_introspection">Token Introspection</a></li>
+<li><a href="#_verifying_jwt_tokens">Verifying JWT tokens</a></li>
 </ul>
 </li>
 </ul>
@@ -124,9 +127,12 @@
 <li><a href="#_authorization_code_flow">Authorization Code Flow</a></li>
 <li><a href="#_password_credentials_flow">Password Credentials Flow</a></li>
 <li><a href="#_client_credentials_flow">Client Credentials Flow</a></li>
+<li><a href="#_extensions">Extensions</a></li>
 <li><a href="#_getting_started">Getting Started</a></li>
 <li><a href="#_accesstoken_object">AccessToken object</a></li>
 <li><a href="#_example_configuration_for_common_oauth2_providers">Example configuration for common OAuth2 providers</a></li>
+<li><a href="#_token_introspection">Token Introspection</a></li>
+<li><a href="#_verifying_jwt_tokens">Verifying JWT tokens</a></li>
 </ul>
 </li>
 </ul>
@@ -153,7 +159,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-auth-oauth2&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -166,7 +172,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-oauth2:3.3.3'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-oauth2:3.4.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -231,6 +237,12 @@ specification).</p>
 </div>
 <div class="paragraph">
 <p>For more details see <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.4">Oauth2 specification, section 4.4</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_extensions">Extensions</h3>
+<div class="paragraph">
+<p>The provider supports RFC7523 an extension to allow server to server authorization based on JWT.</p>
 </div>
 </div>
 <div class="sect2">
@@ -444,144 +456,74 @@ token.revoke("access_token") { |res_err,res|
 </div>
 <div class="sect2">
 <h3 id="_example_configuration_for_common_oauth2_providers">Example configuration for common OAuth2 providers</h3>
-<div class="sect3">
-<h4 id="_google">Google</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-auth-oauth2/o_auth2_auth'
-# Set the client credentials and the OAuth2 server
-credentials = {
-  'clientID' =&gt; "CLIENT_ID",
-  'clientSecret' =&gt; "CLIENT_SECRET",
-  'site' =&gt; "https://accounts.google.com",
-  'tokenPath' =&gt; "https://www.googleapis.com/oauth2/v3/token",
-  'authorizationPath' =&gt; "/o/oauth2/auth"
-}
-
-
-# Initialize the OAuth2 Library
-oauth2 = VertxAuthOauth2::OAuth2Auth.create(vertx, :CLIENT, credentials)</code></pre>
+<div class="paragraph">
+<p>For convenience there are several helpers to assist your with your configuration. Currently we provide:</p>
 </div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_github">GitHub</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-auth-oauth2/o_auth2_auth'
-# Set the client credentials and the OAuth2 server
-credentials = {
-  'clientID' =&gt; "CLIENT_ID",
-  'clientSecret' =&gt; "CLIENT_SECRET",
-  'site' =&gt; "https://github.com/login",
-  'tokenPath' =&gt; "/oauth/access_token",
-  'authorizationPath' =&gt; "/oauth/authorize"
-}
-
-
-# Initialize the OAuth2 Library
-oauth2 = VertxAuthOauth2::OAuth2Auth.create(vertx, :CLIENT, credentials)</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_linkedin">Linkedin</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-auth-oauth2/o_auth2_auth'
-# Set the client credentials and the OAuth2 server
-credentials = {
-  'clientID' =&gt; "CLIENT_ID",
-  'clientSecret' =&gt; "CLIENT_SECRET",
-  'site' =&gt; "https://www.linkedin.com",
-  'authorizationPath' =&gt; "/uas/oauth2/authorization",
-  'tokenPath' =&gt; "/uas/oauth2/accessToken"
-}
-
-
-# Initialize the OAuth2 Library
-oauth2 = VertxAuthOauth2::OAuth2Auth.create(vertx, :CLIENT, credentials)</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_twitter">Twitter</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-auth-oauth2/o_auth2_auth'
-# Set the client credentials and the OAuth2 server
-credentials = {
-  'clientID' =&gt; "CLIENT_ID",
-  'clientSecret' =&gt; "CLIENT_SECRET",
-  'site' =&gt; "https://api.twitter.com",
-  'authorizationPath' =&gt; "/oauth/authorize",
-  'tokenPath' =&gt; "/oauth/access_token"
-}
-
-
-# Initialize the OAuth2 Library
-oauth2 = VertxAuthOauth2::OAuth2Auth.create(vertx, :CLIENT, credentials)</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_facebook">Facebook</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-auth-oauth2/o_auth2_auth'
-# Set the client credentials and the OAuth2 server
-credentials = {
-  'clientID' =&gt; "CLIENT_ID",
-  'clientSecret' =&gt; "CLIENT_SECRET",
-  'site' =&gt; "https://www.facebook.com",
-  'authorizationPath' =&gt; "/dialog/oauth",
-  'tokenPath' =&gt; "https://graph.facebook.com/oauth/access_token"
-}
-
-
-# Initialize the OAuth2 Library
-oauth2 = VertxAuthOauth2::OAuth2Auth.create(vertx, :CLIENT, credentials)</code></pre>
-</div>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Azure Active Directory <code><a href="../../yardoc/VertxAuthOauth2/AzureADAuth.html">AzureADAuth</a></code></p>
+</li>
+<li>
+<p>Box.com <code><a href="../../yardoc/VertxAuthOauth2/BoxAuth.html">BoxAuth</a></code></p>
+</li>
+<li>
+<p>Dropbox <code><a href="../../yardoc/VertxAuthOauth2/DropboxAuth.html">DropboxAuth</a></code></p>
+</li>
+<li>
+<p>Facebook <code><a href="../../yardoc/VertxAuthOauth2/FacebookAuth.html">FacebookAuth</a></code></p>
+</li>
+<li>
+<p>Foursquare <code><a href="../../yardoc/VertxAuthOauth2/FoursquareAuth.html">FoursquareAuth</a></code></p>
+</li>
+<li>
+<p>Github <code><a href="../../yardoc/VertxAuthOauth2/GithubAuth.html">GithubAuth</a></code></p>
+</li>
+<li>
+<p>Google <code><a href="../../yardoc/VertxAuthOauth2/GoogleAuth.html">GoogleAuth</a></code></p>
+</li>
+<li>
+<p>Instagram <code><a href="../../yardoc/VertxAuthOauth2/InstagramAuth.html">InstagramAuth</a></code></p>
+</li>
+<li>
+<p>Keycloak <code><a href="../../yardoc/VertxAuthOauth2/KeycloakAuth.html">KeycloakAuth</a></code></p>
+</li>
+<li>
+<p>LinkedIn <code><a href="../../yardoc/VertxAuthOauth2/LinkedInAuth.html">LinkedInAuth</a></code></p>
+</li>
+<li>
+<p>Mailchimp <code><a href="../../yardoc/VertxAuthOauth2/MailchimpAuth.html">MailchimpAuth</a></code></p>
+</li>
+<li>
+<p>Salesforce <code><a href="../../yardoc/VertxAuthOauth2/SalesforceAuth.html">SalesforceAuth</a></code></p>
+</li>
+<li>
+<p>Shopify <code><a href="../../yardoc/VertxAuthOauth2/ShopifyAuth.html">ShopifyAuth</a></code></p>
+</li>
+<li>
+<p>Soundcloud <code><a href="../../yardoc/VertxAuthOauth2/SoundcloudAuth.html">SoundcloudAuth</a></code></p>
+</li>
+<li>
+<p>Stripe <code><a href="../../yardoc/VertxAuthOauth2/StripeAuth.html">StripeAuth</a></code></p>
+</li>
+<li>
+<p>Twitter <code><a href="../../yardoc/VertxAuthOauth2/TwitterAuth.html">TwitterAuth</a></code></p>
+</li>
+</ul>
 </div>
 <div class="sect3">
 <h4 id="_jboss_keycloak">JBoss Keycloak</h4>
 <div class="paragraph">
-<p>When working with keycloak it will be quite simple to setup the OAuth2 provider, just export the JSON config from the
-web UI and use it as the OAuth2 config with the helper class <code><a href="../dataobjects.html#OAuth2ClientOptions">OAuth2ClientOptions</a></code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-auth-oauth2/o_auth2_auth'
-# After setting up the application and users in keycloak export
-# the configuration json file from the web interface and load it in your application e.g.:
-
-keycloakJson = {
-  'realm' =&gt; "master",
-  'realm-public-key' =&gt; "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqGQkaBkiZWpUjFOuaabgfXgjzZzfJd0wozrS1czX5qHNKG3P79P/UtZeR3wGN8r15jVYiH42GMINMs7R7iP5Mbm1iImge5p/7/dPmXirKOKOBhjA3hNTiV5BlPDTQyiuuTAUEms5dY4+moswXo5zM4q9DFu6B7979o+v3kX6ZB+k3kNhP08wH82I4eJKoenN/0iCT7ALoG3ysEJf18+HEysSnniLMJr8R1pYF2QRFlqaDv3Mqyp7ipxYkt4ebMCgE7aDzT6OrfpyPowObpdjSMTUXpcwIcH8mIZCWFmyfF675zEeE0e+dHKkL1rPeCI7rr7Bqc5+1DS5YM54fk8xQwIDAQAB",
-  'auth-server-url' =&gt; "http://localhost:9000/auth",
-  'ssl-required' =&gt; "external",
-  'resource' =&gt; "frontend",
-  'credentials' =&gt; {
-    'secret' =&gt; "2fbf5e18-b923-4a83-9657-b4ebd5317f60"
-  }
-}
-
-# Initialize the OAuth2 Library
-oauth2 = VertxAuthOauth2::OAuth2Auth.create_keycloak(vertx, :CLIENT, keycloakJson)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>When using this approach the provider has knowledge on how to parse access tokens and extract grants from inside.
+<p>When using this Keycloak the provider has knowledge on how to parse access tokens and extract grants from inside.
 This information is quite valuable since it allows to do authorization at the API level, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-auth-oauth2/o_auth2_auth'
-# you can now use this config with the OAuth2 provider like this:
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-auth-oauth2/keycloak_auth'
+# you would get this config from the keycloak admin console
 keycloakJson = {
   'realm' =&gt; "master",
-  'realm-public-key' =&gt; "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqGQkaBkiZWpUjFOuaabgfXgjzZzfJd0wozrS1czX5qHNKG3P79P/UtZeR3wGN8r15jVYiH42GMINMs7R7iP5Mbm1iImge5p/7/dPmXirKOKOBhjA3hNTiV5BlPDTQyiuuTAUEms5dY4+moswXo5zM4q9DFu6B7979o+v3kX6ZB+k3kNhP08wH82I4eJKoenN/0iCT7ALoG3ysEJf18+HEysSnniLMJr8R1pYF2QRFlqaDv3Mqyp7ipxYkt4ebMCgE7aDzT6OrfpyPowObpdjSMTUXpcwIcH8mIZCWFmyfF675zEeE0e+dHKkL1rPeCI7rr7Bqc5+1DS5YM54fk8xQwIDAQAB",
+  'realm-public-key' =&gt; "MIIBIjANBgkqhk...wIDAQAB",
   'auth-server-url' =&gt; "http://localhost:9000/auth",
   'ssl-required' =&gt; "external",
   'resource' =&gt; "frontend",
@@ -591,7 +533,7 @@ keycloakJson = {
 }
 
 # Initialize the OAuth2 Library
-oauth2 = VertxAuthOauth2::OAuth2Auth.create_keycloak(vertx, :PASSWORD, keycloakJson)
+oauth2 = VertxAuthOauth2::KeycloakAuth.create(vertx, :PASSWORD, keycloakJson)
 
 # first get a token (authenticate)
 oauth2.get_token({
@@ -613,6 +555,80 @@ oauth2.get_token({
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>We also provide a helper class for Keycloak so that we can we can easily retrieve decoded token and some necessary
+data (e.g. <code>preferred_username</code>) from the Keycloak principal. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-auth-oauth2/keycloak_helper'
+# you can get the decoded `id_token` from the Keycloak principal
+idToken = VertxAuthOauth2::KeycloakHelper.id_token(principal)
+
+# you can also retrieve some properties directly from the Keycloak principal
+# e.g. `preferred_username`
+username = VertxAuthOauth2::KeycloakHelper.preferred_username(principal)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_google_server_to_server">Google Server to Server</h4>
+<div class="paragraph">
+<p>The provider also supports Server to Server or the RFC7523 extension. This is a feature present on Google with their
+service account.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_token_introspection">Token Introspection</h3>
+<div class="paragraph">
+<p>Tokens can be introspected in order to assert that they are still valid. Although there is RFC7660 for this purpose
+not many providers implement it. Instead there are variations also known as <code>TokenInfo</code> end points. The OAuth2
+provider will accept both end points as a configuration. Currently we are known to work with <code>Google</code> and <code>Keycloak</code>.</p>
+</div>
+<div class="paragraph">
+<p>Token introspection assumes that tokens are opaque, so they need to be validated on the provider server. Every time a
+token is validated it requires a round trip to the provider. Introspection can be performed at the OAuth2 level or at
+the User level:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># OAuth2Auth level
+oauth2.introspect_token("opaque string") { |res_err,res|
+  if (res_err == nil)
+    # token is valid!
+    accessToken = res
+  end
+}
+
+# User level
+token.introspect() { |res_err,res|
+  if (res_err == nil)
+    # Token is valid!
+  end
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_verifying_jwt_tokens">Verifying JWT tokens</h3>
+<div class="paragraph">
+<p>We&#8217;ve just covered how to introspect a token however when dealing with JWT tokens one can reduce the amount of trips
+to the provider server thus enhancing your overall response times. In this case tokens will be verified using the
+JWT protocol at your application side only. Verifying JWT tokens is cheaper and offers better performance, however
+due to the stateless nature of JWTs it is not possible to know if a user is logged out and a token is invalid. For
+this specific case one needs to use the token introspection if the provider supports it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># OAuth2Auth level
+oauth2.decode_token("jwt-token") { |res_err,res|
+  if (res_err == nil)
+    # token is valid!
+    accessToken = res
+  end
+}</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -624,7 +640,7 @@ oauth2.get_token({
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

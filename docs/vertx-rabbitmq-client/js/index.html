@@ -107,6 +107,7 @@
 <li><a href="#_maven">Maven</a></li>
 <li><a href="#_gradle">Gradle</a></li>
 <li><a href="#_create_a_client">Create a client</a></li>
+<li><a href="#_declare_exchange_with_additional_config">Declare exchange with additional config</a></li>
 </ul>
 </li>
 <li><a href="#_operations">Operations</a>
@@ -130,6 +131,7 @@
 <li><a href="#_maven">Maven</a></li>
 <li><a href="#_gradle">Gradle</a></li>
 <li><a href="#_create_a_client">Create a client</a></li>
+<li><a href="#_declare_exchange_with_additional_config">Declare exchange with additional config</a></li>
 </ul>
 </li>
 <li><a href="#_operations">Operations</a>
@@ -166,7 +168,7 @@
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-rabbitmq-client&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -179,7 +181,7 @@
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-rabbitmq-client:3.3.3'
+  compile 'io.vertx:vertx-rabbitmq-client:3.4.0'
 }</code></pre>
 </div>
 </div>
@@ -222,6 +224,28 @@ config.networkRecoveryInterval = 5;
 config.automaticRecoveryEnabled = true;
 
 var client = RabbitMQClient.create(vertx, config);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_declare_exchange_with_additional_config">Declare exchange with additional config</h3>
+<div class="paragraph">
+<p>You can pass additional config parameters to RabbitMQ&#8217;s exchangeDeclare method</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var config = {};
+
+config["x-dead-letter-exchange"] = "my.deadletter.exchange";
+config["alternate-exchange"] = "my.alternate.exchange";
+// ...
+client.exchangeDeclare("my.exchange", "fanout", true, false, config, function (onResult, onResult_err) {
+  if (onResult_err == null) {
+    console.log("Exchange successfully declared with config");
+  } else {
+    onResult_err.printStackTrace();
+  }
+});</code></pre>
 </div>
 </div>
 </div>
@@ -341,7 +365,7 @@ client.basicConsume("my.queue", "my.address", false, function (consumeResult, co
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

@@ -99,6 +99,56 @@
 </dl>
 <div class="clear"></div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    The execution context of a Proc execution.
+ <p>
+ When Vert.x provides an event to a handler or calls the start or stop methods of a Nil,
+ the execution is associated with a <code>Context</code>.
+ <p>
+ Usually a context is an *event-loop context* and is tied to a specific event loop thread. So executions for that
+ context always occur on that exact same event loop thread.
+ <p>
+ In the case of worker verticles and running inline blocking code a worker context will be associated with the execution
+ which will use a thread from the worker thread pool.
+ <p>
+ When a handler is set by a thread associated with a specific context, the Vert.x will guarantee that when that handler
+ is executed, that execution will be associated with the same context.
+ <p>
+ If a handler is set by a thread not associated with a context (i.e. a non Vert.x thread). Then a new context will
+ be created for that handler.
+ <p>
+ In other words, a context is propagated.
+ <p>
+ This means that when a verticle is deployed, any handlers it sets will be associated with the same context - the context
+ of the verticle.
+ <p>
+ This means (in the case of a standard verticle) that the verticle code will always be executed with the exact same
+ thread, so you don't have to worry about multi-threaded acccess to the verticle state and you can code your application
+ as single threaded.
+ <p>
+ This class also allows arbitrary data to be <span class='object_link'><a href="#put-instance_method" title="Vertx::Context#put (method)">#put</a></span> and <span class='object_link'><a href="#get-instance_method" title="Vertx::Context#get (method)">#get</a></span> on the context so it can be shared easily
+ amongst different handlers of, for example, a verticle instance.
+ <p>
+ This class also provides <span class='object_link'><a href="#run_on_context-instance_method" title="Vertx::Context#run_on_context (method)">#run_on_context</a></span> which allows an action to be executed asynchronously using the same context.
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="j_api_type-classvariable" class="">@@j_api_type =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>Object</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span></pre></dd>
+      
+    </dl>
+  
 
 
 
@@ -117,7 +167,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#on_event_loop_thread%3F-class_method" title="on_event_loop_thread? (class method)">+ (Boolean) <strong>on_event_loop_thread?</strong> </a>
+      <a href="#accept%3F-class_method" title="accept? (class method)">+ (Boolean) <strong>accept?</strong>(obj) </a>
     
 
     
@@ -139,7 +189,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#on_vertx_thread%3F-class_method" title="on_vertx_thread? (class method)">+ (Boolean) <strong>on_vertx_thread?</strong> </a>
+      <a href="#j_api_type-class_method" title="j_api_type (class method)">+ (Object) <strong>j_api_type</strong> </a>
     
 
     
@@ -161,7 +211,117 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#on_worker_thread%3F-class_method" title="on_worker_thread? (class method)">+ (Boolean) <strong>on_worker_thread?</strong> </a>
+      <a href="#j_class-class_method" title="j_class (class method)">+ (Object) <strong>j_class</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#on_event_loop_thread%3F-class_method" title="on_event_loop_thread? (class method)">+ (true, false) <strong>on_event_loop_thread?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>Is the current thread an event thread?    NOTE! This is not always the same as calling #is_event_loop_context.</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#on_vertx_thread%3F-class_method" title="on_vertx_thread? (class method)">+ (true, false) <strong>on_vertx_thread?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>Is the current thread a Vert.x thread? That's either a worker thread or an event loop thread.</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#on_worker_thread%3F-class_method" title="on_worker_thread? (class method)">+ (true, false) <strong>on_worker_thread?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>Is the current thread a worker thread?    NOTE! This is not always the same as calling #is_worker_context.</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#unwrap-class_method" title="unwrap (class method)">+ (Object) <strong>unwrap</strong>(obj) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#wrap-class_method" title="wrap (class method)">+ (Object) <strong>wrap</strong>(obj) </a>
     
 
     
@@ -192,7 +352,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#config-instance_method" title="#config (instance method)">- (Object) <strong>config</strong> </a>
+      <a href="#config-instance_method" title="#config (instance method)">- (Hash{String =&gt; Object}) <strong>config</strong> </a>
     
 
     
@@ -206,7 +366,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>If the context is associated with a Verticle deployment, this returns the configuration that was specified when  the verticle was deployed.</div></span>
   
 </li>
 
@@ -214,7 +374,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#deployment_id-instance_method" title="#deployment_id (instance method)">- (Object) <strong>deployment_id</strong> </a>
+      <a href="#deployment_id-instance_method" title="#deployment_id (instance method)">- (String) <strong>deployment_id</strong> </a>
     
 
     
@@ -228,7 +388,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>If the context is associated with a Verticle deployment, this returns the deployment ID of that deployment.</div></span>
   
 </li>
 
@@ -236,7 +396,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#event_loop_context%3F-instance_method" title="#event_loop_context? (instance method)">- (Boolean) <strong>event_loop_context?</strong> </a>
+      <a href="#event_loop_context%3F-instance_method" title="#event_loop_context? (instance method)">- (true, false) <strong>event_loop_context?</strong> </a>
     
 
     
@@ -250,7 +410,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>Is the current context an event loop context?    NOTE! when running blocking code using <span class='object_link'><a href="Vertx.html#execute_blocking-instance_method" title="Vertx::Vertx#execute_blocking (method)">Vertx#execute_blocking</a></span> from a  standard (not worker) verticle, the context will still an event loop context and this   will return true.</div></span>
   
 </li>
 
@@ -258,7 +418,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#exception_handler-instance_method" title="#exception_handler (instance method)">- (Object) <strong>exception_handler</strong> </a>
+      <a href="#exception_handler-instance_method" title="#exception_handler (instance method)">- (self) <strong>exception_handler</strong> { ... }</a>
     
 
     
@@ -272,7 +432,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>Set an exception handler called when the context runs an action throwing an uncaught throwable.</div></span>
   
 </li>
 
@@ -280,7 +440,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#execute_blocking-instance_method" title="#execute_blocking (instance method)">- (Object) <strong>execute_blocking</strong>(blockingCodeHandler = nil, ordered = nil) </a>
+      <a href="#execute_blocking-instance_method" title="#execute_blocking (instance method)">- (void) <strong>execute_blocking</strong>(blockingCodeHandler = nil, ordered = nil) { ... }</a>
     
 
     
@@ -294,7 +454,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>Safely execute some blocking code.</div></span>
   
 </li>
 
@@ -316,7 +476,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>Get some data from the context.</div></span>
   
 </li>
 
@@ -324,7 +484,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#get_instance_count-instance_method" title="#get_instance_count (instance method)">- (Object) <strong>get_instance_count</strong> </a>
+      <a href="#get_instance_count-instance_method" title="#get_instance_count (instance method)">- (Fixnum) <strong>get_instance_count</strong> </a>
     
 
     
@@ -338,7 +498,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>The number of instances of the verticle that were deployed in the deployment (if any) related to this context.</div></span>
   
 </li>
 
@@ -346,31 +506,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Context) <strong>initialize</strong>(j_del) </a>
-    
-
-    
-  </span>
-  
-  
-    <span class="note title constructor">constructor</span>
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>A new instance of Context.</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#j_del-instance_method" title="#j_del (instance method)">- (Object) <strong>j_del</strong> </a>
+      <a href="#multi_threaded_worker_context%3F-instance_method" title="#multi_threaded_worker_context? (instance method)">- (true, false) <strong>multi_threaded_worker_context?</strong> </a>
     
 
     
@@ -384,7 +520,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>Is the current context a multi-threaded worker context?.</div></span>
   
 </li>
 
@@ -392,7 +528,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#multi_threaded_worker_context%3F-instance_method" title="#multi_threaded_worker_context? (instance method)">- (Boolean) <strong>multi_threaded_worker_context?</strong> </a>
+      <a href="#owner-instance_method" title="#owner (instance method)">- (::Vertx::Vertx) <strong>owner</strong> </a>
     
 
     
@@ -406,7 +542,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>The Vertx instance that created the context.</div></span>
   
 </li>
 
@@ -414,7 +550,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#owner-instance_method" title="#owner (instance method)">- (Object) <strong>owner</strong> </a>
+      <a href="#process_args-instance_method" title="#process_args (instance method)">- (Array&lt;String&gt;) <strong>process_args</strong> </a>
     
 
     
@@ -428,7 +564,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>The process args.</div></span>
   
 </li>
 
@@ -436,7 +572,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#process_args-instance_method" title="#process_args (instance method)">- (Object) <strong>process_args</strong> </a>
+      <a href="#put-instance_method" title="#put (instance method)">- (void) <strong>put</strong>(key = nil, value = nil) </a>
     
 
     
@@ -450,7 +586,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>Put some data in the context.</div></span>
   
 </li>
 
@@ -458,7 +594,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#put-instance_method" title="#put (instance method)">- (Object) <strong>put</strong>(key = nil, value = nil) </a>
+      <a href="#remove-instance_method" title="#remove (instance method)">- (true, false) <strong>remove</strong>(key = nil) </a>
     
 
     
@@ -472,7 +608,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>Remove some data from the context.</div></span>
   
 </li>
 
@@ -480,7 +616,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#remove%3F-instance_method" title="#remove? (instance method)">- (Boolean) <strong>remove?</strong>(key = nil) </a>
+      <a href="#run_on_context-instance_method" title="#run_on_context (instance method)">- (void) <strong>run_on_context</strong> { ... }</a>
     
 
     
@@ -494,7 +630,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>Run the specified action asynchronously on the same context, some time after the current execution has completed.</div></span>
   
 </li>
 
@@ -502,7 +638,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#run_on_context-instance_method" title="#run_on_context (instance method)">- (Object) <strong>run_on_context</strong> </a>
+      <a href="#worker_context%3F-instance_method" title="#worker_context? (instance method)">- (true, false) <strong>worker_context?</strong> </a>
     
 
     
@@ -516,29 +652,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#worker_context%3F-instance_method" title="#worker_context? (instance method)">- (Boolean) <strong>worker_context?</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>Is the current context a worker context?    NOTE! when running blocking code using <span class='object_link'><a href="Vertx.html#execute_blocking-instance_method" title="Vertx::Vertx#execute_blocking (method)">Vertx#execute_blocking</a></span> from a  standard (not worker) verticle, the context will still an event loop context and this   will return false.</div></span>
   
 </li>
 
@@ -546,49 +660,6 @@
     </ul>
   
 
-<div id="constructor_details" class="method_details_list">
-  <h2>Constructor Details</h2>
-  
-    <div class="method_details first">
-  <h3 class="signature first" id="initialize-instance_method">
-  
-    - (<tt><span class='object_link'><a href="" title="Vertx::Context (class)">Context</a></span></tt>) <strong>initialize</strong>(j_del) 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    Returns a new instance of Context
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-39
-40
-41</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 39</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_j_del'>j_del</span><span class='rparen'>)</span>
-  <span class='ivar'>@j_del</span> <span class='op'>=</span> <span class='id identifier rubyid_j_del'>j_del</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-  
-</div>
 
 
   <div id="class_method_details" class="method_details_list">
@@ -596,9 +667,9 @@
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="on_event_loop_thread?-class_method">
+  <h3 class="signature first" id="accept?-class_method">
   
-    + (<tt>Boolean</tt>) <strong>on_event_loop_thread?</strong> 
+    + (<tt>Boolean</tt>) <strong>accept?</strong>(obj) 
   
 
   
@@ -625,6 +696,124 @@
     </li>
   
 </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+48
+49
+50</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 48</span>
+
+<span class='kw'>def</span> <span class='cvar'>@@j_api_type</span><span class='period'>.</span><span class='id identifier rubyid_accept?'>accept?</span><span class='lparen'>(</span><span class='id identifier rubyid_obj'>obj</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Context</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="j_api_type-class_method">
+  
+    + (<tt>Object</tt>) <strong>j_api_type</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+57
+58
+59</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 57</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_j_api_type'>j_api_type</span>
+  <span class='cvar'>@@j_api_type</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="j_class-class_method">
+  
+    + (<tt>Object</tt>) <strong>j_class</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+60
+61
+62</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 60</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_j_class'>j_class</span>
+  <span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Context</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="on_event_loop_thread?-class_method">
+  
+    + (<tt>true</tt>, <tt>false</tt>) <strong>on_event_loop_thread?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    Is the current thread an event thread?
+ <p>
+ NOTE! This is not always the same as calling #is_event_loop_context. If you are running blocking code
+ from an event loop context, then this will return false but #is_event_loop_context will return true.
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>true if current thread is a worker thread, false otherwise</div>
+      
+    </li>
+  
+</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -645,15 +834,15 @@
       <pre class="lines">
 
 
-63
-64
-65
-66
-67
-68</pre>
+79
+80
+81
+82
+83
+84</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 63</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 79</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_on_event_loop_thread?'>on_event_loop_thread?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -669,7 +858,7 @@
       <div class="method_details ">
   <h3 class="signature " id="on_vertx_thread?-class_method">
   
-    + (<tt>Boolean</tt>) <strong>on_vertx_thread?</strong> 
+    + (<tt>true</tt>, <tt>false</tt>) <strong>on_vertx_thread?</strong> 
   
 
   
@@ -677,7 +866,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    Is the current thread a Vert.x thread? That's either a worker thread or an event loop thread
 
   </div>
 </div>
@@ -689,9 +878,12 @@
     <li>
       
       
-        <span class='type'>(<tt>Boolean</tt>)</span>
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
       
       
+      
+        &mdash;
+        <div class='inline'>true if current thread is a Vert.x thread, false otherwise</div>
       
     </li>
   
@@ -716,15 +908,15 @@
       <pre class="lines">
 
 
-71
-72
-73
-74
-75
-76</pre>
+87
+88
+89
+90
+91
+92</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 71</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 87</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_on_vertx_thread?'>on_vertx_thread?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -740,7 +932,7 @@
       <div class="method_details ">
   <h3 class="signature " id="on_worker_thread?-class_method">
   
-    + (<tt>Boolean</tt>) <strong>on_worker_thread?</strong> 
+    + (<tt>true</tt>, <tt>false</tt>) <strong>on_worker_thread?</strong> 
   
 
   
@@ -748,7 +940,10 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    Is the current thread a worker thread?
+ <p>
+ NOTE! This is not always the same as calling #is_worker_context. If you are running blocking code
+ from an event loop context, then this will return true but #is_worker_context will return false.
 
   </div>
 </div>
@@ -760,9 +955,12 @@
     <li>
       
       
-        <span class='type'>(<tt>Boolean</tt>)</span>
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
       
       
+      
+        &mdash;
+        <div class='inline'>true if current thread is a worker thread, false otherwise</div>
       
     </li>
   
@@ -787,21 +985,81 @@
       <pre class="lines">
 
 
-52
-53
-54
-55
-56
-57</pre>
+68
+69
+70
+71
+72
+73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 52</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 68</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_on_worker_thread?'>on_worker_thread?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
     <span class='kw'>return</span> <span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Context</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:isOnWorkerThread</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling on_worker_thread?()</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="unwrap-class_method">
+  
+    + (<tt>Object</tt>) <strong>unwrap</strong>(obj) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+54
+55
+56</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 54</span>
+
+<span class='kw'>def</span> <span class='cvar'>@@j_api_type</span><span class='period'>.</span><span class='id identifier rubyid_unwrap'>unwrap</span><span class='lparen'>(</span><span class='id identifier rubyid_obj'>obj</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_j_del'>j_del</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="wrap-class_method">
+  
+    + (<tt>Object</tt>) <strong>wrap</strong>(obj) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+51
+52
+53</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 51</span>
+
+<span class='kw'>def</span> <span class='cvar'>@@j_api_type</span><span class='period'>.</span><span class='id identifier rubyid_wrap'>wrap</span><span class='lparen'>(</span><span class='id identifier rubyid_obj'>obj</span><span class='rparen'>)</span>
+  <span class='const'>Context</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_obj'>obj</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -817,7 +1075,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="config-instance_method">
   
-    - (<tt>Object</tt>) <strong>config</strong> 
+    - (<tt>Hash{String =&gt; Object}</tt>) <strong>config</strong> 
   
 
   
@@ -825,12 +1083,29 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    If the context is associated with a Verticle deployment, this returns the configuration that was specified when
+ the verticle was deployed.
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{String =&gt; Object}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>the configuration of the deployment or null if not a Verticle deployment</div>
+      
+    </li>
+  
+</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -851,15 +1126,15 @@
       <pre class="lines">
 
 
-119
-120
-121
-122
-123
-124</pre>
+135
+136
+137
+138
+139
+140</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 119</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 135</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_config'>config</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -875,7 +1150,7 @@
       <div class="method_details ">
   <h3 class="signature " id="deployment_id-instance_method">
   
-    - (<tt>Object</tt>) <strong>deployment_id</strong> 
+    - (<tt>String</tt>) <strong>deployment_id</strong> 
   
 
   
@@ -883,12 +1158,28 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    If the context is associated with a Verticle deployment, this returns the deployment ID of that deployment.
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>the deployment ID of the deployment or null if not a Verticle deployment</div>
+      
+    </li>
+  
+</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -909,15 +1200,15 @@
       <pre class="lines">
 
 
-110
-111
-112
-113
-114
-115</pre>
+126
+127
+128
+129
+130
+131</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 110</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 126</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_deployment_id'>deployment_id</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -933,7 +1224,7 @@
       <div class="method_details ">
   <h3 class="signature " id="event_loop_context?-instance_method">
   
-    - (<tt>Boolean</tt>) <strong>event_loop_context?</strong> 
+    - (<tt>true</tt>, <tt>false</tt>) <strong>event_loop_context?</strong> 
   
 
   
@@ -941,7 +1232,11 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    Is the current context an event loop context?
+ <p>
+ NOTE! when running blocking code using <span class='object_link'><a href="Vertx.html#execute_blocking-instance_method" title="Vertx::Vertx#execute_blocking (method)">Vertx#execute_blocking</a></span> from a
+ standard (not worker) verticle, the context will still an event loop context and this 
+ will return true.
 
   </div>
 </div>
@@ -953,9 +1248,12 @@
     <li>
       
       
-        <span class='type'>(<tt>Boolean</tt>)</span>
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
       
       
+      
+        &mdash;
+        <div class='inline'>true if false otherwise</div>
       
     </li>
   
@@ -980,15 +1278,15 @@
       <pre class="lines">
 
 
-139
-140
-141
-142
-143
-144</pre>
+155
+156
+157
+158
+159
+160</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 139</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 155</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_event_loop_context?'>event_loop_context?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1004,7 +1302,7 @@
       <div class="method_details ">
   <h3 class="signature " id="exception_handler-instance_method">
   
-    - (<tt>Object</tt>) <strong>exception_handler</strong> 
+    - (<tt>self</tt>) <strong>exception_handler</strong> { ... }
   
 
   
@@ -1012,12 +1310,43 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    Set an exception handler called when the context runs an action throwing an uncaught throwable.<p/>
+
+ When this handler is called, Vertx#current_context will return this context.
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'>the exception handler</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1038,16 +1367,16 @@
       <pre class="lines">
 
 
-214
-215
-216
-217
-218
-219
-220</pre>
+230
+231
+232
+233
+234
+235
+236</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 214</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 230</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_exception_handler'>exception_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1064,7 +1393,7 @@
       <div class="method_details ">
   <h3 class="signature " id="execute_blocking-instance_method">
   
-    - (<tt>Object</tt>) <strong>execute_blocking</strong>(blockingCodeHandler = nil, ordered = nil) 
+    - (<tt>void</tt>) <strong>execute_blocking</strong>(blockingCodeHandler = nil, ordered = nil) { ... }
   
 
   
@@ -1072,12 +1401,73 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note returns_void">This method returns an undefined value.</p>Safely execute some blocking code.
+ <p>
+ Executes the blocking code in the handler <code>blockingCodeHandler</code> using a thread from the worker pool.
+ <p>
+ When the code is complete the handler <code>resultHandler</code> will be called with the result on the original context
+ (e.g. on the original event loop of the caller).
+ <p>
+ A <code>Future</code> instance is passed into <code>blockingCodeHandler</code>. When the blocking code successfully completes,
+ the handler should call the <span class='object_link'><a href="Future.html#complete-instance_method" title="Vertx::Future#complete (method)">Future#complete</a></span> or <span class='object_link'><a href="Future.html#complete-instance_method" title="Vertx::Future#complete (method)">Future#complete</a></span> method, or the <span class='object_link'><a href="Future.html#fail-instance_method" title="Vertx::Future#fail (method)">Future#fail</a></span>
+ method if it failed.
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>blockingCodeHandler</span>
+      
+      
+        <span class='type'>(<tt>Proc</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>handler representing the blocking code to run</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ordered</span>
+      
+      
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>if true then if executeBlocking is called several times on the same context, the executions for that context will be executed serially, not in parallel. if false then they will be no ordering guarantees</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'>handler that will be called when the blocking code is complete</div>
+      
+    </li>
+  
+</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1098,25 +1488,25 @@
       <pre class="lines">
 
 
-100
-101
-102
-103
-104
-105
-106
-107</pre>
+116
+117
+118
+119
+120
+121
+122
+123</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 100</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 116</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_execute_blocking'>execute_blocking</span><span class='lparen'>(</span><span class='id identifier rubyid_blockingCodeHandler'>blockingCodeHandler</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_ordered'>ordered</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_blockingCodeHandler'>blockingCodeHandler</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Proc</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_ordered'>ordered</span> <span class='op'>==</span> <span class='kw'>nil</span>
-    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:executeBlocking</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_event'>event</span><span class='op'>|</span> <span class='id identifier rubyid_blockingCodeHandler'>blockingCodeHandler</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_safe_create'>safe_create</span><span class='lparen'>(</span><span class='id identifier rubyid_event'>event</span><span class='comma'>,</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Future</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='comma'>,</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ar'>ar</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_failed'>failed</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_cause'>cause</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_succeeded'>succeeded</span> <span class='op'>?</span> <span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_from_object'>from_object</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_result'>result</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:executeBlocking</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_event'>event</span><span class='op'>|</span> <span class='id identifier rubyid_blockingCodeHandler'>blockingCodeHandler</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_safe_create'>safe_create</span><span class='lparen'>(</span><span class='id identifier rubyid_event'>event</span><span class='comma'>,</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Future</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='comma'>,</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ar'>ar</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_failed'>failed</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_cause'>cause</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_succeeded'>succeeded</span> <span class='op'>?</span> <span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_from_object'>from_object</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_result'>result</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
   <span class='kw'>elsif</span> <span class='id identifier rubyid_blockingCodeHandler'>blockingCodeHandler</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Proc</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='id identifier rubyid_ordered'>ordered</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>TrueClass</span> <span class='op'>||</span> <span class='id identifier rubyid_ordered'>ordered</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>FalseClass</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
-    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:executeBlocking</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_boolean'>boolean</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_event'>event</span><span class='op'>|</span> <span class='id identifier rubyid_blockingCodeHandler'>blockingCodeHandler</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_safe_create'>safe_create</span><span class='lparen'>(</span><span class='id identifier rubyid_event'>event</span><span class='comma'>,</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Future</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='comma'>,</span><span class='id identifier rubyid_ordered'>ordered</span><span class='comma'>,</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ar'>ar</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_failed'>failed</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_cause'>cause</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_succeeded'>succeeded</span> <span class='op'>?</span> <span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_from_object'>from_object</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_result'>result</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:executeBlocking</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_boolean'>boolean</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_event'>event</span><span class='op'>|</span> <span class='id identifier rubyid_blockingCodeHandler'>blockingCodeHandler</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_safe_create'>safe_create</span><span class='lparen'>(</span><span class='id identifier rubyid_event'>event</span><span class='comma'>,</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Future</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='comma'>,</span><span class='id identifier rubyid_ordered'>ordered</span><span class='comma'>,</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ar'>ar</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_failed'>failed</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_cause'>cause</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_succeeded'>succeeded</span> <span class='op'>?</span> <span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_from_object'>from_object</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_result'>result</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling execute_blocking(blockingCodeHandler,ordered)</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling execute_blocking(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_blockingCodeHandler'>blockingCodeHandler</span><span class='embexpr_end'>}</span><span class='tstring_content'>,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ordered'>ordered</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1134,12 +1524,48 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    Get some data from the context.
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>key</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>the key of the data</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Object</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>the data</div>
+      
+    </li>
+  
+</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1160,21 +1586,21 @@
       <pre class="lines">
 
 
-168
-169
-170
-171
-172
-173</pre>
+184
+185
+186
+187
+188
+189</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 168</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 184</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
     <span class='kw'>return</span> <span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_from_object'>from_object</span><span class='lparen'>(</span><span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:get</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling get(key)</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling get(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1184,7 +1610,7 @@
       <div class="method_details ">
   <h3 class="signature " id="get_instance_count-instance_method">
   
-    - (<tt>Object</tt>) <strong>get_instance_count</strong> 
+    - (<tt>Fixnum</tt>) <strong>get_instance_count</strong> 
   
 
   
@@ -1192,12 +1618,28 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    Returns the number of instances of the verticle that were deployed in the deployment (if any) related to this context
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>the number of instances of the verticle that were deployed in the deployment (if any) related to this context</div>
+      
+    </li>
+  
+</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1218,15 +1660,15 @@
       <pre class="lines">
 
 
-203
-204
-205
-206
-207
-208</pre>
+219
+220
+221
+222
+223
+224</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 203</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 219</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_instance_count'>get_instance_count</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1240,39 +1682,9 @@
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="j_del-instance_method">
-  
-    - (<tt>Object</tt>) <strong>j_del</strong> 
-  
-
-  
-
-  
-</h3><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-44
-45
-46</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 44</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_j_del'>j_del</span>
-  <span class='ivar'>@j_del</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
   <h3 class="signature " id="multi_threaded_worker_context?-instance_method">
   
-    - (<tt>Boolean</tt>) <strong>multi_threaded_worker_context?</strong> 
+    - (<tt>true</tt>, <tt>false</tt>) <strong>multi_threaded_worker_context?</strong> 
   
 
   
@@ -1280,7 +1692,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    Is the current context a multi-threaded worker context?
 
   </div>
 </div>
@@ -1292,9 +1704,12 @@
     <li>
       
       
-        <span class='type'>(<tt>Boolean</tt>)</span>
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
       
       
+      
+        &mdash;
+        <div class='inline'>true if the current context is a multi-threaded worker context, false otherwise</div>
       
     </li>
   
@@ -1319,15 +1734,15 @@
       <pre class="lines">
 
 
-159
-160
-161
-162
-163
-164</pre>
+175
+176
+177
+178
+179
+180</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 159</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 175</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_multi_threaded_worker_context?'>multi_threaded_worker_context?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1343,7 +1758,7 @@
       <div class="method_details ">
   <h3 class="signature " id="owner-instance_method">
   
-    - (<tt>Object</tt>) <strong>owner</strong> 
+    - (<tt><span class='object_link'><a href="Vertx.html" title="Vertx::Vertx (class)">::Vertx::Vertx</a></span></tt>) <strong>owner</strong> 
   
 
   
@@ -1351,12 +1766,195 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    Returns The Vertx instance that created the context
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vertx.html" title="Vertx::Vertx (class)">::Vertx::Vertx</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>The Vertx instance that created the context</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+212
+213
+214
+215
+216
+217</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 212</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_owner'>owner</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='kw'>return</span> <span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_safe_create'>safe_create</span><span class='lparen'>(</span><span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:owner</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='rparen'>)</span><span class='comma'>,</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Vertx</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling owner()</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="process_args-instance_method">
+  
+    - (<tt>Array&lt;String&gt;</tt>) <strong>process_args</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    The process args
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;String&gt;</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+143
+144
+145
+146
+147
+148</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 143</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_process_args'>process_args</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:processArgs</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_elt'>elt</span><span class='op'>|</span> <span class='id identifier rubyid_elt'>elt</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling process_args()</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="put-instance_method">
+  
+    - (<tt>void</tt>) <strong>put</strong>(key = nil, value = nil) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>Put some data in the context.
+ <p>
+ This can be used to share data between different handlers that share a context
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>key</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>the key of the data</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt>Object</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>the data</div>
+      
+    </li>
+  
+</ul>
+
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1387,127 +1985,11 @@
     <td>
       <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 196</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_owner'>owner</span>
-  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
-    <span class='kw'>return</span> <span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_safe_create'>safe_create</span><span class='lparen'>(</span><span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:owner</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='rparen'>)</span><span class='comma'>,</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Vertx</span><span class='rparen'>)</span>
-  <span class='kw'>end</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling owner()</span><span class='tstring_end'>&quot;</span></span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="process_args-instance_method">
-  
-    - (<tt>Object</tt>) <strong>process_args</strong> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Raises:</p>
-<ul class="raise">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>ArgumentError</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-127
-128
-129
-130
-131
-132</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 127</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_process_args'>process_args</span>
-  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
-    <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:processArgs</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_elt'>elt</span><span class='op'>|</span> <span class='id identifier rubyid_elt'>elt</span> <span class='rbrace'>}</span>
-  <span class='kw'>end</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling process_args()</span><span class='tstring_end'>&quot;</span></span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="put-instance_method">
-  
-    - (<tt>Object</tt>) <strong>put</strong>(key = nil, value = nil) 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Raises:</p>
-<ul class="raise">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>ArgumentError</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-180
-181
-182
-183
-184
-185</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 180</span>
-
 <span class='kw'>def</span> <span class='id identifier rubyid_put'>put</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_value'>value</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span>  <span class='op'>||</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>||</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Array</span> <span class='op'>||</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>NilClass</span> <span class='op'>||</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>TrueClass</span> <span class='op'>||</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>FalseClass</span> <span class='op'>||</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>||</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Float</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='id identifier rubyid_unknown_type'>unknown_type</span><span class='period'>.</span><span class='id identifier rubyid_accept?'>accept?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
     <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:put</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='comma'>,</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>Object</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span><span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_to_object'>to_object</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling put(key,value)</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling put(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_value'>value</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1515,9 +1997,9 @@
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="remove?-instance_method">
+  <h3 class="signature " id="remove-instance_method">
   
-    - (<tt>Boolean</tt>) <strong>remove?</strong>(key = nil) 
+    - (<tt>true</tt>, <tt>false</tt>) <strong>remove</strong>(key = nil) 
   
 
   
@@ -1525,21 +2007,44 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    Remove some data from the context.
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>key</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>the key to remove</div>
+      
+    </li>
+  
+</ul>
+
 <p class="tag_title">Returns:</p>
 <ul class="return">
   
     <li>
       
       
-        <span class='type'>(<tt>Boolean</tt>)</span>
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
       
       
+      
+        &mdash;
+        <div class='inline'>true if removed successfully, false otherwise</div>
       
     </li>
   
@@ -1564,21 +2069,21 @@
       <pre class="lines">
 
 
-189
-190
-191
-192
-193
-194</pre>
+205
+206
+207
+208
+209
+210</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 189</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 205</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_remove?'>remove?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_remove'>remove</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
     <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:remove</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_java'>java</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='period'>.</span><span class='const'>String</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling remove?(key)</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling remove(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1588,7 +2093,7 @@
       <div class="method_details ">
   <h3 class="signature " id="run_on_context-instance_method">
   
-    - (<tt>Object</tt>) <strong>run_on_context</strong> 
+    - (<tt>void</tt>) <strong>run_on_context</strong> { ... }
   
 
   
@@ -1596,12 +2101,28 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note returns_void">This method returns an undefined value.</p>Run the specified action asynchronously on the same context, some time after the current execution has completed.
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'>the action to run</div>
+      
+    </li>
+  
+</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1622,15 +2143,15 @@
       <pre class="lines">
 
 
-80
-81
-82
-83
-84
-85</pre>
+96
+97
+98
+99
+100
+101</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 80</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 96</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_run_on_context'>run_on_context</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1646,7 +2167,7 @@
       <div class="method_details ">
   <h3 class="signature " id="worker_context?-instance_method">
   
-    - (<tt>Boolean</tt>) <strong>worker_context?</strong> 
+    - (<tt>true</tt>, <tt>false</tt>) <strong>worker_context?</strong> 
   
 
   
@@ -1654,7 +2175,11 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    Is the current context a worker context?
+ <p>
+ NOTE! when running blocking code using <span class='object_link'><a href="Vertx.html#execute_blocking-instance_method" title="Vertx::Vertx#execute_blocking (method)">Vertx#execute_blocking</a></span> from a
+ standard (not worker) verticle, the context will still an event loop context and this 
+ will return false.
 
   </div>
 </div>
@@ -1666,9 +2191,12 @@
     <li>
       
       
-        <span class='type'>(<tt>Boolean</tt>)</span>
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
       
       
+      
+        &mdash;
+        <div class='inline'>true if the current context is a worker context, false otherwise</div>
       
     </li>
   
@@ -1693,15 +2221,15 @@
       <pre class="lines">
 
 
-151
-152
-153
-154
-155
-156</pre>
+167
+168
+169
+170
+171
+172</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 151</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx/context.rb', line 167</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_worker_context?'>worker_context?</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1719,7 +2247,7 @@
 </div>
 
     <div id="footer">
-  Generated on Thu Sep  8 18:00:46 2016 by
+  Generated on Mon Mar  6 23:34:11 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.3.1).
 </div>

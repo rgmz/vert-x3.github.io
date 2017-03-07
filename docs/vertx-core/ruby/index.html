@@ -290,9 +290,18 @@
 <li><a href="#_configuring_jul_logging">Configuring JUL logging</a></li>
 <li><a href="#_using_another_logging_framework">Using another logging framework</a></li>
 <li><a href="#_logging_from_your_application">Logging from your application</a></li>
+<li><a href="#netty-logging">Netty logging</a></li>
+<li><a href="#_troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
-<li><a href="#_host_name_resolution">Host name resolution</a></li>
+<li><a href="#_host_name_resolution">Host name resolution</a>
+<ul class="sectlevel2">
+<li><a href="#_failover">Failover</a></li>
+<li><a href="#_server_list_rotation">Server list rotation</a></li>
+<li><a href="#_hosts_mapping">Hosts mapping</a></li>
+<li><a href="#_search_domains">Search domains</a></li>
+</ul>
+</li>
 <li><a href="#_high_availability_and_fail_over">High Availability and Fail-Over</a>
 <ul class="sectlevel2">
 <li><a href="#_automatic_failover">Automatic failover</a></li>
@@ -518,9 +527,18 @@
 <li><a href="#_configuring_jul_logging">Configuring JUL logging</a></li>
 <li><a href="#_using_another_logging_framework">Using another logging framework</a></li>
 <li><a href="#_logging_from_your_application">Logging from your application</a></li>
+<li><a href="#netty-logging">Netty logging</a></li>
+<li><a href="#_troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
-<li><a href="#_host_name_resolution">Host name resolution</a></li>
+<li><a href="#_host_name_resolution">Host name resolution</a>
+<ul class="sectlevel2">
+<li><a href="#_failover">Failover</a></li>
+<li><a href="#_server_list_rotation">Server list rotation</a></li>
+<li><a href="#_hosts_mapping">Hosts mapping</a></li>
+<li><a href="#_search_domains">Search domains</a></li>
+</ul>
+</li>
 <li><a href="#_high_availability_and_fail_over">High Availability and Fail-Over</a>
 <ul class="sectlevel2">
 <li><a href="#_automatic_failover">Automatic failover</a></li>
@@ -635,12 +653,12 @@ project descriptor to access the Vert.x Core API and enable the Ruby support:</p
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
  &lt;artifactId&gt;vertx-core&lt;/artifactId&gt;
- &lt;version&gt;3.3.3&lt;/version&gt;
+ &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;
 &lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-lang-ruby&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -653,8 +671,8 @@ project descriptor to access the Vert.x Core API and enable the Ruby support:</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile "io.vertx:vertx-core:3.3.3"
-compile "io.vertx:vertx-lang-ruby:3.3.3"</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile "io.vertx:vertx-core:3.4.0"
+compile "io.vertx:vertx-lang-ruby:3.4.0"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1046,8 +1064,7 @@ result handler to be called back asynchronous when the blocking code has been ex
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">@someAPI = Java::ExamplesCoreExamples::BlockingAPI.new()
-vertx.execute_blocking(lambda { |future|
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">vertx.execute_blocking(lambda { |future|
   # Call some blocking API that takes a significant amount of time to return
   result = @someAPI.blocking_method("hello")
   future.complete(result)
@@ -1079,8 +1096,7 @@ on the worker pool.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">@someAPI = Java::ExamplesCoreExamples::BlockingAPI.new()
-executor = vertx.create_shared_worker_executor("my-worker-pool")
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">executor = vertx.create_shared_worker_executor("my-worker-pool")
 executor.execute_blocking(lambda { |future|
   # Call some blocking API that takes a significant amount of time to return
   result = @someAPI.blocking_method("hello")
@@ -1262,8 +1278,7 @@ fut1.compose(lambda { |v|
   return fut2
 }).compose(lambda { |v|
   # When the file is written (fut2), execute this:
-  fut3 = Vertx::Future.future()
-  fs.move("/foo", "/bar", &amp;fut3.completer())
+  fs.move("/foo", "/bar", &amp;startFuture.completer())
 }, startFuture)</code></pre>
 </div>
 </div>
@@ -1279,13 +1294,13 @@ fut1.compose(lambda { |v|
 <p>something is written in the file (<code>fut2</code>)</p>
 </li>
 <li>
-<p>the file is moved (<code>fut3</code>)</p>
+<p>the file is moved (<code>startFuture</code>)</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>When these 3 steps are successful, the final future (<code>startFuture</code>) is completed with a success. However, if one
-of the steps fails, the final future is completed with a failure.</p>
+<p>When these 3 steps are successful, the final future (<code>startFuture</code>) is succeeded. However, if one
+of the steps fails, the final future is failed.</p>
 </div>
 <div class="paragraph">
 <p>This example uses:</p>
@@ -3202,8 +3217,7 @@ deployed then you will have at most one core utilised on your server.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Create a few instances so we can utilise cores
 
-i = 0
-while (i &lt; 10)
+(0...10).each do |i|
   server = vertx.create_net_server()
   server.connect_handler() { |socket|
     socket.handler() { |buffer|
@@ -3212,7 +3226,6 @@ while (i &lt; 10)
     }
   }
   server.listen(1234, "localhost")
-  i+=1
 end</code></pre>
 </div>
 </div>
@@ -3384,32 +3397,7 @@ name. When using network activity logging there are a few things to keep in mind
 </ul>
 </div>
 <div class="paragraph">
-<p>Netty will try to locate the following logger implementations, in the following order:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Slf4j</p>
-</li>
-<li>
-<p>Log4j</p>
-</li>
-<li>
-<p>JDK</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The presense of the slf4j or log4j classes on the classpath is enough to pick up the logging implementation.</p>
-</div>
-<div class="paragraph">
-<p>The logger implementation can be forced to a specific implementation by setting Netty&#8217;s internal logger implementation directly:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Force logging to SLF4J
-InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);</code></pre>
-</div>
+<p>You should read the <a href="#netty-logging">Netty logging</a> section.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3924,6 +3912,90 @@ client = vertx.create_net_client(options)</code></pre>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_self_signed_certificates_for_testing_and_development_purposes">Self-signed certificates for testing and development purposes</h4>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+Do not use this in production settings, and note that the generated keys are very insecure.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is very often the case that self-signed certificates are required, be it for unit / integration tests or for
+running a development version of an application.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="../../yardoc/Vertx/SelfSignedCertificate.html">SelfSignedCertificate</a></code> can be used to provide self-signed PEM certificate helpers and
+give <code><a href="unavailable">KeyCertOptions</a></code> and <code><a href="unavailable">TrustOptions</a></code> configurations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/self_signed_certificate'
+certificate = Vertx::SelfSignedCertificate.create()
+
+serverOptions = {
+  'ssl' =&gt; true,
+  'keyCertOptions' =&gt; certificate.key_cert_options(),
+  'trustOptions' =&gt; certificate.trust_options()
+}
+
+server = vertx.create_net_server(serverOptions).connect_handler() { |socket|
+  socket.write("Hello!").end()
+}.listen(1234, "localhost")
+
+clientOptions = {
+  'ssl' =&gt; true,
+  'keyCertOptions' =&gt; certificate.key_cert_options(),
+  'trustOptions' =&gt; certificate.trust_options()
+}
+
+client = vertx.create_net_client(clientOptions)
+client.connect(1234, "localhost") { |ar_err,ar|
+  if (ar_err == nil)
+    ar.handler() { |buffer|
+      puts buffer
+    }
+  else
+    STDERR.puts "Woops: #{ar_err.get_message()}"
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The client can also be configured to trust all certificates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">clientOptions = {
+  'ssl' =&gt; true,
+  'trustAll' =&gt; true
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that self-signed certificates also work for other TCP protocols like HTTPS:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/self_signed_certificate'
+certificate = Vertx::SelfSignedCertificate.create()
+
+vertx.create_http_server({
+  'ssl' =&gt; true,
+  'keyCertOptions' =&gt; certificate.key_cert_options(),
+  'trustOptions' =&gt; certificate.trust_options()
+}).request_handler() { |req|
+  req.response().end("Hello!")
+}.listen(8080)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_revoking_certificate_authorities">Revoking certificate authorities</h4>
 <div class="paragraph">
 <p>Trust can be configured to use a certificate revocation list (CRL) for revoked certificates that should no
@@ -4277,6 +4349,18 @@ The settings define how the client can use the connection, the default initial s
 <p>the default HTTP/2 settings values for the others</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Worker Verticles are not compatible with HTTP/2
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -4712,6 +4796,20 @@ to arbitrary places on your filesystem. See <a href="#_security_notes">security 
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_handling_compressed_body">Handling compressed body</h4>
+<div class="paragraph">
+<p>Vert.x can handle compressed body payloads which are encoded by the client with the <em>deflate</em> or <em>gzip</em>
+algorithms.</p>
+</div>
+<div class="paragraph">
+<p>To enable decompression set <code><a href="../dataobjects.html#HttpServerOptions#set_decompression_supported-instance_method">decompressionSupported</a></code> on the
+options when creating the server.</p>
+</div>
+<div class="paragraph">
+<p>By default decompression is disabled.</p>
 </div>
 </div>
 <div class="sect3">
@@ -5252,6 +5350,26 @@ compressions and send it back to the client.</p>
 <div class="paragraph">
 <p>Be aware that compression may be able to reduce network traffic but is more CPU-intensive.</p>
 </div>
+<div class="paragraph">
+<p>To address this latter issue Vert.x allows you to tune the 'compression level' parameter that is native of the gzip/deflate compression algorithms.</p>
+</div>
+<div class="paragraph">
+<p>Compression level allows to configure gizp/deflate algorithms in terms of the compression ratio of the resulting data and the computational cost of the compress/decompress operation.</p>
+</div>
+<div class="paragraph">
+<p>The compression level is an integer value ranged from '1' to '9', where '1' means lower compression ratio but fastest algorithm and '9' means maximum compression ratio available but a slower algorithm.</p>
+</div>
+<div class="paragraph">
+<p>Using compression levels higher that 1-2 usually allows to save just some bytes in size - the gain is not linear, and depends on the specific data to be compressed
+- but it comports a non-trascurable cost in term of CPU cycles required to the server while generating the compressed response data
+( Note that at moment Vert.x doesn&#8217;t support any form caching of compressed response data, even for static files, so the compression is done on-the-fly
+at every request body generation ) and in the same way it affects client(s) while decoding (inflating) received responses, operation that becomes more CPU-intensive
+the more the level increases.</p>
+</div>
+<div class="paragraph">
+<p>By default - if compression is enabled via <code><a href="../dataobjects.html#HttpServerOptions#set_compression_supported-instance_method">compressionSupported</a></code> - Vert.x will use '6' as compression level,
+but the parameter can be configured to address any case with <code><a href="../dataobjects.html#HttpServerOptions#set_compression_level-instance_method">compressionLevel</a></code>.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_creating_an_http_client">Creating an HTTP client</h3>
@@ -5635,10 +5753,8 @@ no need to set the <code>Content-Length</code> of the request up-front.</p>
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.set_chunked(true)
 
 # Write some chunks
-i = 0
-while (i &lt; 10)
+(0...10).each do |i|
   request.write("this-is-chunk-#{i}")
-  i+=1
 end
 
 request.end()</code></pre>
@@ -5775,7 +5891,7 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.reset()</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.reset?()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5783,7 +5899,7 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.reset(8)</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.reset?(8)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5937,6 +6053,132 @@ or immediately after the headers have been read and the response handler has bee
 </div>
 </div>
 <div class="sect3">
+<h4 id="_30x_redirection_handling">30x redirection handling</h4>
+<div class="paragraph">
+<p>The client can be configured to follow HTTP redirections: when the client receives an
+<code>301</code>, <code>302</code>, <code>303</code> or <code>307</code> status code, it follows the redirection provided by the <code>Location</code> response header
+and the response handler is passed the redirected response instead of the original response.</p>
+</div>
+<div class="paragraph">
+<p>Here’s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client.get("some-uri") { |response|
+  puts "Received response with status code #{response.status_code()}"
+}.set_follow_redirects(true).end()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The redirection policy is as follow</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>on a <code>301</code>, <code>302</code> or <code>303</code> status code, follow the redirection with a <code>GET</code> method</p>
+</li>
+<li>
+<p>on a <code>307</code> status code, follow the redirection with the same HTTP method and the cached body</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+following redirections caches the request body
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The maximum redirects is <code>16</code> by default and can be changed with <code><a href="../dataobjects.html#HttpClientOptions#set_max_redirects-instance_method">maxRedirects</a></code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_http_client({
+  'maxRedirects' =&gt; 32
+})
+
+client.get("some-uri") { |response|
+  puts "Received response with status code #{response.status_code()}"
+}.set_follow_redirects(true).end()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One size does not fit all and the default redirection policy may not be adapted to your needs.</p>
+</div>
+<div class="paragraph">
+<p>The default redirection policy can changed with a custom implementation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/future'
+
+client.redirect_handler(lambda { |response|
+
+  # Only follow 301 code
+  if (response.status_code() == 301 &amp;&amp; response.get_header("Location") != nil)
+
+    # Compute the redirect URI
+    absoluteURI = resolve_uri(response.request().absolute_uri(), response.get_header("Location"))
+
+    # Create a new ready to use request that the client will use
+    return Vertx::Future.succeeded_future(client.get_abs(absoluteURI))
+  end
+
+  # We don't redirect
+  return nil
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The policy handles the original <code><a href="../../yardoc/Vertx/HttpClientResponse.html">HttpClientResponse</a></code> received and returns either <code>null</code>
+or a <code>Future&lt;HttpClientRequest&gt;</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>when <code>null</code> is returned, the original response is processed</p>
+</li>
+<li>
+<p>when a future is returned, the request will be sent on its successful completion</p>
+</li>
+<li>
+<p>when a future is returned, the exception handler set on the request is called on its failure</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The returned request must be unsent so the original request handlers can be sent and the client can send it after.</p>
+</div>
+<div class="paragraph">
+<p>Most of the original request settings will be propagated to the new request:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>request headers, unless if you have set some headers (including <code><a href="../../yardoc/Vertx/HttpClientRequest.html#set_host-instance_method">setHost</a></code>)</p>
+</li>
+<li>
+<p>request body unless the returned request uses a <code>GET</code> method</p>
+</li>
+<li>
+<p>response handler</p>
+</li>
+<li>
+<p>request exception handler</p>
+</li>
+<li>
+<p>request timeout</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_100_continue_handling">100-Continue handling</h4>
 <div class="paragraph">
 <p>According to the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html">HTTP 1.1 specification</a> a client can set a
@@ -6078,7 +6320,7 @@ request.end()</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.push_handler() { |pushedRequest|
   if (pushedRequest.path().==("/main.js"))
-    pushedRequest.reset()
+    pushedRequest.reset?()
   else
     # Handle it
   end
@@ -6379,10 +6621,8 @@ endpoint:</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/buffer'
 data = Vertx::Buffer.buffer()
-i = 0
-while (i &lt; 8)
+(0...8).each do |i|
   data.append_byte(i)
-  i+=1
 end
 connection.ping(data) { |pong_err,pong|
   puts "Remote side replied"
@@ -6598,6 +6838,44 @@ server on your multi-core machine.</p>
 <div class="paragraph">
 <p>Please see <a href="#ssl">configuring net servers to use SSL</a> for more information.</p>
 </div>
+<div class="paragraph">
+<p>SSL can also be enabled/disabled per request with <code><a href="../dataobjects.html#RequestOptions">RequestOptions</a></code> or when
+specifying a scheme with <code><a href="../../yardoc/Vertx/HttpClient.html#request_abs-instance_method">requestAbs</a></code>
+method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client.get_now({
+  'host' =&gt; "localhost",
+  'port' =&gt; 8080,
+  'uRI' =&gt; "/",
+  'ssl' =&gt; true
+}) { |response|
+  puts "Received response with status code #{response.status_code()}"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../dataobjects.html#HttpClientOptions#set_ssl-instance_method">ssl</a></code> setting acts as the default client setting.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../dataobjects.html#RequestOptions#set_ssl-instance_method">ssl</a></code> overrides the default client setting</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>setting the value to <code>false</code> will disable SSL/TLS even if the client is configured to use SSL/TLS</p>
+</li>
+<li>
+<p>setting the value to <code>true</code> will enable SSL/TLS  even if the client is configured to not use SSL/TLS, the actual
+client SSL/TLS (such as trust, key/certificate, ciphers, ALPN, &#8230;&#8203;) will be reused</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Likewise <code><a href="../../yardoc/Vertx/HttpClient.html#request_abs-instance_method">requestAbs</a></code> scheme
+also overrides the default client setting.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_websockets">WebSockets</h3>
@@ -6699,16 +6977,20 @@ providing a handler.</p>
 <div class="sect3">
 <h4 id="_writing_messages_to_websockets">Writing messages to WebSockets</h4>
 <div class="paragraph">
-<p>If you wish to write a single binary WebSocket message to the WebSocket you can do this with
-<code><a href="../../yardoc/Vertx/WebSocket.html#write_binary_message-instance_method">writeBinaryMessage</a></code>:</p>
+<p>If you wish to write a single WebSocket message to the WebSocket you can do this with
+<code><a href="../../yardoc/Vertx/WebSocket.html#write_binary_message-instance_method">writeBinaryMessage</a></code> or
+<code><a href="../../yardoc/Vertx/WebSocket.html#write_text_message-instance_method">writeTextMessage</a></code> :</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/buffer'
-# Write a simple message
+# Write a simple binary message
 buffer = Vertx::Buffer.buffer().append_int(123).append_float(1.23)
+websocket.write_binary_message(buffer)
 
-websocket.write_binary_message(buffer)</code></pre>
+# Write a simple text message
+message = "hello"
+websocket.write_text_message(message)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -7286,8 +7568,7 @@ vertx.file_system().open("target/classes/hello.txt", {
   if (result_err == nil)
     file = result
     buff = Vertx::Buffer.buffer("foo")
-    i = 0
-    while (i &lt; 5)
+    (0...5).each do |i|
       file.write(buff, buff.length() * i) { |ar_err,ar|
         if (ar_err == nil)
           puts "Written ok!"
@@ -7296,7 +7577,6 @@ vertx.file_system().open("target/classes/hello.txt", {
           STDERR.puts "Failed to write: #{ar_err}"
         end
       }
-      i+=1
     end
   else
     STDERR.puts "Cannot open file #{result_err}"
@@ -7347,8 +7627,7 @@ vertx.file_system().open("target/classes/les_miserables.txt", {
   if (result_err == nil)
     file = result
     buff = Vertx::Buffer.buffer(1000)
-    i = 0
-    while (i &lt; 10)
+    (0...10).each do |i|
       file.read(buff, i * 100, i * 100, 100) { |ar_err,ar|
         if (ar_err == nil)
           puts "Read ok!"
@@ -7356,7 +7635,6 @@ vertx.file_system().open("target/classes/les_miserables.txt", {
           STDERR.puts "Failed to write: #{ar_err}"
         end
       }
-      i+=1
     end
   else
     STDERR.puts "Cannot open file #{result_err}"
@@ -8328,9 +8606,8 @@ server.connect_handler() { |sock|
 <div class="paragraph">
 <p><code>ReadStream</code> is implemented by <code><a href="../../yardoc/Vertx/HttpClientResponse.html">HttpClientResponse</a></code>, <code><a href="../../yardoc/Vertx/DatagramSocket.html">DatagramSocket</a></code>,
 <code><a href="../../yardoc/Vertx/HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="../../yardoc/Vertx/HttpServerFileUpload.html">HttpServerFileUpload</a></code>,
-<code><a href="../../yardoc/Vertx/HttpServerRequest.html">HttpServerRequest</a></code>, <code><a href="../../yardoc/Vertx/HttpServerRequestStream.html">HttpServerRequestStream</a></code>,
-<code><a href="../../yardoc/Vertx/MessageConsumer.html">MessageConsumer</a></code>, <code><a href="../../yardoc/Vertx/NetSocket.html">NetSocket</a></code>, <code><a href="../../yardoc/Vertx/NetSocketStream.html">NetSocketStream</a></code>,
-<code><a href="../../yardoc/Vertx/WebSocket.html">WebSocket</a></code>, <code><a href="../../yardoc/Vertx/WebSocketStream.html">WebSocketStream</a></code>, <code><a href="../../yardoc/Vertx/TimeoutStream.html">TimeoutStream</a></code>,
+<code><a href="../../yardoc/Vertx/HttpServerRequest.html">HttpServerRequest</a></code>, <code><a href="../../yardoc/Vertx/MessageConsumer.html">MessageConsumer</a></code>,
+<code><a href="../../yardoc/Vertx/NetSocket.html">NetSocket</a></code>, <code><a href="../../yardoc/Vertx/WebSocket.html">WebSocket</a></code>, <code><a href="../../yardoc/Vertx/TimeoutStream.html">TimeoutStream</a></code>,
 <code><a href="../../yardoc/Vertx/AsyncFile.html">AsyncFile</a></code>.</p>
 </div>
 <div class="paragraph">
@@ -8367,7 +8644,7 @@ or when end of request is reached if it&#8217;s an HTTP request, or when the con
 <div class="paragraph">
 <p><code>WriteStream</code> is implemented by <code><a href="../../yardoc/Vertx/HttpClientRequest.html">HttpClientRequest</a></code>, <code><a href="../../yardoc/Vertx/HttpServerResponse.html">HttpServerResponse</a></code>
 <code><a href="../../yardoc/Vertx/WebSocket.html">WebSocket</a></code>, <code><a href="../../yardoc/Vertx/NetSocket.html">NetSocket</a></code>, <code><a href="../../yardoc/Vertx/AsyncFile.html">AsyncFile</a></code>,
-<code><a href="../../yardoc/Vertx/PacketWritestream.html">PacketWritestream</a></code> and <code><a href="../../yardoc/Vertx/MessageProducer.html">MessageProducer</a></code></p>
+and <code><a href="../../yardoc/Vertx/MessageProducer.html">MessageProducer</a></code></p>
 </div>
 <div class="paragraph">
 <p>Functions:</p>
@@ -9168,6 +9445,78 @@ logger.error("oops!", exception)</code></pre>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="netty-logging">Netty logging</h3>
+<div class="paragraph">
+<p>When configuring logging, you should care about configuring Netty logging as well.</p>
+</div>
+<div class="paragraph">
+<p>Netty does not rely on external logging configuration (e.g system properties) and instead implements a logging
+configuration based on the logging libraries visible from the Netty classes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>use <code>SLF4J</code> library if it is visible</p>
+</li>
+<li>
+<p>otherwise use <code>Log4j</code> if it is visible</p>
+</li>
+<li>
+<p>otherwise fallback <code>java.util.logging</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The logger implementation can be forced to a specific implementation by setting Netty&#8217;s internal logger implementation directly
+on <code>io.netty.util.internal.logging.InternalLoggerFactory</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Force logging to Log4j
+InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_troubleshooting">Troubleshooting</h3>
+<div class="sect3">
+<h4 id="_slf4j_warning_at_startup">SLF4J warning at startup</h4>
+<div class="paragraph">
+<p>If, when you start your application, you see the following message:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It means that you have SLF4J-API in your classpath but no actual binding. Messages logged with SLF4J will be dropped.
+You should add a binding to your classpath. Check <a href="https://www.slf4j.org/manual.html#swapping" class="bare">https://www.slf4j.org/manual.html#swapping</a> to pick a binding and configure it.</p>
+</div>
+<div class="paragraph">
+<p>Be aware that Netty looks for the SLF4-API jar and uses it by default.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_connection_reset_by_peer">Connection reset by peer</h4>
+<div class="paragraph">
+<p>If your logs show a bunch of:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>io.vertx.core.net.impl.ConnectionBase
+SEVERE: java.io.IOException: Connection reset by peer</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It means that the client is resetting the HTTP connection instead of closing it. This message also indicates that you
+may have not consumed the complete payload (the connection was cut before you were able to).</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -9214,8 +9563,51 @@ vertx = Vertx::Vertx.vertx({
 <p>The default port of a DNS server is <code>53</code>, when a server uses a different port, this port can be set
 using a colon delimiter: <code>192.168.0.2:40000</code>.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+sometimes it can be desirable to use the JVM built-in resolver, the JVM system property
+<em>-Dvertx.disableDnsResolver=true</em> activates this behavior
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_failover">Failover</h3>
 <div class="paragraph">
-<p>The resolver can be configured to use an alternative <em>hosts</em> file:</p>
+<p>When a server does not reply in a timely manner, the resolver will try the next one from the list, the search
+is limited by <code><a href="../dataobjects.html#AddressResolverOptions#set_max_queries-instance_method">maxQueries</a></code> (the default value is <code>4</code> queries).</p>
+</div>
+<div class="paragraph">
+<p>A DNS query is considered as failed when the resolver has not received a correct answer within
+<code><a href="../dataobjects.html#AddressResolverOptions#get_query_timeout-instance_method">getQueryTimeout</a></code> milliseconds (the default value is <code>5</code> seconds).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_server_list_rotation">Server list rotation</h3>
+<div class="paragraph">
+<p>By default the dns server selection uses the first one, the remaining servers are used for failover.</p>
+</div>
+<div class="paragraph">
+<p>You can configure <code><a href="../dataobjects.html#AddressResolverOptions#set_rotate_servers-instance_method">rotateServers</a></code> to <code>true</code> to let
+the resolver perform a round-robin selection instead. It spreads the query load among the servers and avoids
+all lookup to hit the first server of the list.</p>
+</div>
+<div class="paragraph">
+<p>Failover still applies and will use the next server in the list.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hosts_mapping">Hosts mapping</h3>
+<div class="paragraph">
+<p>The <em>hosts</em> file of the operating system is used to perform an hostname lookup for an ipaddress.</p>
+</div>
+<div class="paragraph">
+<p>An alternative <em>hosts</em> file can be used instead:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9227,6 +9619,9 @@ vertx = Vertx::Vertx.vertx({
 })</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_search_domains">Search domains</h3>
 <div class="paragraph">
 <p>By default the resolver will use the system DNS search domains from the environment. Alternatively an explicit search domain
 list can be provided:</p>
@@ -9248,18 +9643,6 @@ vertx = Vertx::Vertx.vertx({
 <p>When a search domain list is used, the threshold for the number of dots is <code>1</code> or loaded from <code>/etc/resolv.conf</code>
 on Linux, it can be configured to a specific value with <code><a href="../dataobjects.html#AddressResolverOptions#set_ndots-instance_method">ndots</a></code>.</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-sometimes it can be desirable to use the JVM built-in resolver, the JVM system property
-<em>-Dvertx.disableDnsResolver=true</em> activates this behavior
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -9364,7 +9747,7 @@ you don&#8217;t specify a HA group the default group <code>__DEFAULT__</code> is
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run my-verticle.js -ha -ha-group my-group</code></pre>
+<pre class="prettyprint highlight"><code>vertx run my-verticle.js -ha -hagroup my-group</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9590,7 +9973,7 @@ cli = Vertx::CLI.create("copy").set_summary("A command line interface to copy fi
   'description' =&gt; "The source",
   'argName' =&gt; "source"
 }).add_argument({
-  'index' =&gt; 0,
+  'index' =&gt; 1,
   'description' =&gt; "The destination",
   'argName' =&gt; "target"
 })</code></pre>
@@ -10062,7 +10445,7 @@ very careful when using this settings.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:00:58 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

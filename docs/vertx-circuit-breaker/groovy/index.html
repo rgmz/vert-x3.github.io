@@ -108,6 +108,7 @@
 <li><a href="#_callbacks">Callbacks</a></li>
 <li><a href="#_event_bus_notification">Event bus notification</a></li>
 <li><a href="#_the_half_open_state">The half-open state</a></li>
+<li><a href="#_pushing_circuit_breaker_metrics_to_the_hystrix_dashboard">Pushing circuit breaker metrics to the Hystrix Dashboard</a></li>
 </ul>
         </div>
       </div>
@@ -121,6 +122,7 @@
 <li><a href="#_callbacks">Callbacks</a></li>
 <li><a href="#_event_bus_notification">Event bus notification</a></li>
 <li><a href="#_the_half_open_state">The half-open state</a></li>
+<li><a href="#_pushing_circuit_breaker_metrics_to_the_hystrix_dashboard">Pushing circuit breaker metrics to the Hystrix Dashboard</a></li>
 </ul>
         </div>
         <div class="sect1">
@@ -131,7 +133,7 @@
 </div>
 <div class="paragraph">
 <p>It keeps track of the
-number of failures and <em>open the circuit</em> when a threshold is reached. Optionally, a fallback is executed.</p>
+number of failures and <em>opens the circuit</em> when a threshold is reached. Optionally, a fallback is executed.</p>
 </div>
 <div class="paragraph">
 <p>Supported failures are:</p>
@@ -139,7 +141,7 @@ number of failures and <em>open the circuit</em> when a threshold is reached. Op
 <div class="ulist">
 <ul>
 <li>
-<p>failures reported by your code in a <code><a href="../../groovydoc/io/vertx/groovy/core/Future.html">Future</a></code></p>
+<p>failures reported by your code in a <code><a href="../../apidocs/io/vertx/core/Future.html">Future</a></code></p>
 </li>
 <li>
 <p>exception thrown by your code</p>
@@ -150,7 +152,7 @@ number of failures and <em>open the circuit</em> when a threshold is reached. Op
 </ul>
 </div>
 <div class="paragraph">
-<p>Operations guarded by a circuit breaker are intended to by non-blocking and asynchronous in order to benefits from
+<p>Operations guarded by a circuit breaker are intended to be non-blocking and asynchronous in order to benefit from
 the Vert.x execution model.</p>
 </div>
 </div>
@@ -174,7 +176,7 @@ descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-circuit-breaker&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -187,7 +189,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-circuit-breaker:3.3.3'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-circuit-breaker:3.4.0'</code></pre>
 </div>
 </div>
 </div>
@@ -213,8 +215,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.circuitbreaker.CircuitBreaker
-def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
   maxFailures:5,
   timeout:2000,
   fallbackOnFailure:true,
@@ -232,14 +233,13 @@ breaker.execute({ future -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>The executed block receives a <code><a href="../../groovydoc/io/vertx/groovy/core/Future.html">Future</a></code> object as parameter, to denote the
+<p>The executed block receives a <code><a href="../../apidocs/io/vertx/core/Future.html">Future</a></code> object as parameter, to denote the
 success or failure of the operation as well as the result. For example in the following example, the result is the
 output of a REST endpoint invocation:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.circuitbreaker.CircuitBreaker
-def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
   maxFailures:5,
   timeout:2000
 ])
@@ -265,20 +265,19 @@ breaker.execute({ future -&gt;
 <div class="ulist">
 <ul>
 <li>
-<p>returned <code><a href="../../groovydoc/io/vertx/groovy/core/Future.html">Future</a></code> when calling <code>execute</code> methods</p>
+<p>returned <code><a href="../../apidocs/io/vertx/core/Future.html">Future</a></code> when calling <code>execute</code> methods</p>
 </li>
 <li>
-<p>provided <code><a href="../../groovydoc/io/vertx/groovy/core/Future.html">Future</a></code> when calling the <code>executeAndReport</code> methods</p>
+<p>provided <code><a href="../../apidocs/io/vertx/core/Future.html">Future</a></code> when calling the <code>executeAndReport</code> methods</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Optionally, you can provide a fallback executed when the circuit is open:</p>
+<p>Optionally, you can provide a fallback which is executed when the circuit is open:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.circuitbreaker.CircuitBreaker
-def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
   maxFailures:5,
   timeout:2000
 ])
@@ -303,17 +302,16 @@ breaker.executeWithFallback({ future -&gt;
 </div>
 <div class="paragraph">
 <p>The fallback is called whenever the circuit is open, or if the
-<code><a href="../dataobjects.html#CircuitBreakerOptions#isFallbackOnFailure()">isFallbackOnFailure</a></code> is enabled. When a fallback is
+<code><a href="../../apidocs/io/vertx/circuitbreaker/CircuitBreakerOptions.html#isFallbackOnFailure--">isFallbackOnFailure</a></code> is enabled. When a fallback is
 set, the result is using the output of the fallback function. The fallback function takes as parameter a
-<code>Throwable</code> object and returned an object of the expected type.</p>
+<code><a href="../../apidocs/java/lang/Throwable.html">Throwable</a></code> object and returns an object of the expected type.</p>
 </div>
 <div class="paragraph">
-<p>The fallback can also be set on the <code><a href="../../groovydoc/io/vertx/groovy/circuitbreaker/CircuitBreaker.html">CircuitBreaker</a></code> object directly:</p>
+<p>The fallback can also be set on the <code><a href="../../apidocs/io/vertx/circuitbreaker/CircuitBreaker.html">CircuitBreaker</a></code> object directly:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.circuitbreaker.CircuitBreaker
-def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
   maxFailures:5,
   timeout:2000
 ]).fallback({ v -&gt;
@@ -334,6 +332,13 @@ breaker.execute({ future -&gt;
 })</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>You can also specify how often the circuit breaker should try your code before failing with
+<code><a href="../../apidocs/io/vertx/circuitbreaker/CircuitBreakerOptions.html#setMaxRetries-int-">setMaxRetries</a></code>.
+If you set this to something higher than 0 your code gets executed several times before finally failing
+in the last execution. If the code succeeded in one of the retries your handler gets notified and any
+retries left are skipped. Retries are only supported when the circuit is closed.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -344,8 +349,7 @@ breaker.execute({ future -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.circuitbreaker.CircuitBreaker
-def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
   maxFailures:5,
   timeout:2000
 ]).openHandler({ v -&gt;
@@ -367,8 +371,8 @@ breaker.execute({ future -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>You can also be notified when the circuit breaker decide to attempt to reset (half-open state). You can register
-such as callback with <code><a href="../../groovydoc/io/vertx/groovy/circuitbreaker/CircuitBreaker.html#halfOpenHandler(io.vertx.core.Handler)">halfOpenHandler</a></code>.</p>
+<p>You can also be notified when the circuit breaker decides to attempt to reset (half-open state). You can register
+such a callback with <code><a href="../../apidocs/io/vertx/circuitbreaker/CircuitBreaker.html#halfOpenHandler-io.vertx.core.Handler-">halfOpenHandler</a></code>.</p>
 </div>
 </div>
 </div>
@@ -376,9 +380,9 @@ such as callback with <code><a href="../../groovydoc/io/vertx/groovy/circuitbrea
 <h2 id="_event_bus_notification">Event bus notification</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Every time the circuit state changes, an event is published on the event bus. The address on which the event are
+<p>Every time the circuit state changes, an event is published on the event bus. The address on which the events are
 sent is configurable with
-<code><a href="../dataobjects.html#CircuitBreakerOptions#setNotificationAddress(java.lang.String)">notificationAddress</a></code>. If <code>null</code> is
+<code><a href="../../apidocs/io/vertx/circuitbreaker/CircuitBreakerOptions.html#setNotificationAddress-java.lang.String-">setNotificationAddress</a></code>. If <code>null</code> is
 passed to this method, the notifications are disabled. By default, the used address is <code>vertx.circuit-breaker</code>.</p>
 </div>
 <div class="paragraph">
@@ -396,7 +400,7 @@ passed to this method, the notifications are disabled. By default, the used addr
 <p><code>failures</code> : the number of failures</p>
 </li>
 <li>
-<p><code>node</code> : the identifier of the node (<code>local</code> is Vert.x is not running in cluster mode)</p>
+<p><code>node</code> : the identifier of the node (<code>local</code> if Vert.x is not running in cluster mode)</p>
 </li>
 </ul>
 </div>
@@ -408,11 +412,45 @@ passed to this method, the notifications are disabled. By default, the used addr
 <div class="paragraph">
 <p>When the circuit is “open,” calls to the circuit breaker fail immediately, without any attempt to execute the real
 operation. After a suitable amount of time (configured from
-<code><a href="../dataobjects.html#CircuitBreakerOptions#setResetTimeout(long)">resetTimeout</a></code>, the circuit breaker decides that the
+<code><a href="../../apidocs/io/vertx/circuitbreaker/CircuitBreakerOptions.html#setResetTimeout-long-">setResetTimeout</a></code>, the circuit breaker decides that the
 operation has a chance of succeeding, so it goes into the <code>half-open</code> state. In this state, the next call to the
 circuit breaker is allowed to execute the dangerous operation. Should the call succeed, the circuit breaker resets
 and returns to the <code>closed</code> state, ready for more routine operation. If this trial call fails, however, the circuit
 breaker returns to the <code>open</code> state until another timeout elapses.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pushing_circuit_breaker_metrics_to_the_hystrix_dashboard">Pushing circuit breaker metrics to the Hystrix Dashboard</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Netflix Hystrix comes with a dashboard to present the current state of the circuit breakers. The Vert.x circuit
+breakers can publish their metrics in order to be consumed by this Hystrix Dashboard. The Hystrix dashboard requires
+a SSE stream sending the metrics. This stream is provided by the
+<code><a href="../../apidocs/io/vertx/circuitbreaker/HystrixMetricHandler.html">HystrixMetricHandler</a></code> Vert.x Web Handler:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Create the circuit breaker as usual.
+def breaker = CircuitBreaker.create("my-circuit-breaker", vertx)
+def breaker2 = CircuitBreaker.create("my-second-circuit-breaker", vertx)
+
+// Create a Vert.x Web router
+def router = Router.router(vertx)
+// Register the metric handler
+router.get("/hystrix-metrics").handler(HystrixMetricHandler.create(vertx))
+
+// Create the HTTP server using the router to dispatch the requests
+vertx.createHttpServer().requestHandler(router.&amp;accept).listen(8080)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the Hystrix Dashboard, configure the stream url like: <code><a href="http://localhost:8080/metrics" class="bare">http://localhost:8080/metrics</a></code>. The dashboard now consumes
+the metrics from the Vert.x circuit breakers.</p>
+</div>
+<div class="paragraph">
+<p>Notice that the metrics are collected by the Vert.x Web handler using the event bus notifications. If you don&#8217;t use
+the default notification address, you need to pass it when creating the metrics handler.</p>
 </div>
 </div>
 </div>
@@ -423,7 +461,7 @@ breaker returns to the <code>open</code> state until another timeout elapses.</p
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

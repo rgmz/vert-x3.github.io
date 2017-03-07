@@ -218,7 +218,7 @@ your network.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-redis-client&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -231,7 +231,7 @@ your network.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-redis-client:3.3.3'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-redis-client:3.4.0'</code></pre>
 </div>
 </div>
 </div>
@@ -240,7 +240,7 @@ your network.</p>
 <h2 id="_connecting_to_redis">Connecting to Redis</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In order to connect to Redis there is a config required. This config is provided in the form of <code><a href="../dataobjects.html#RedisOptions">RedisOptions</a></code>
+<p>In order to connect to Redis there is a config required. This config is provided in the form of <code><a href="../../apidocs/io/vertx/redis/RedisOptions.html">RedisOptions</a></code>
 containing the following values:</p>
 </div>
 <div class="ulist">
@@ -267,8 +267,7 @@ containing the following values:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.redis.RedisClient
-def config = [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = [
   host:"127.0.0.1"
 ]
 
@@ -291,8 +290,8 @@ password and/or database id to the config object, the properties names are:</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>If you do not do this and manually call the <code><a href="../../groovydoc/io/vertx/groovy/redis/RedisClient.html#auth(java.lang.String,%20io.vertx.core.Handler)">auth</a></code>
-or <code><a href="../../groovydoc/io/vertx/groovy/redis/RedisClient.html#select(int,%20io.vertx.core.Handler)">select</a></code> then the client will not know how to recover
+<p>If you do not do this and manually call the <code><a href="../../apidocs/io/vertx/redis/RedisClient.html#auth-java.lang.String-io.vertx.core.Handler-">auth</a></code>
+or <code><a href="../../apidocs/io/vertx/redis/RedisClient.html#select-int-io.vertx.core.Handler-">select</a></code> then the client will not know how to recover
 the connection in case of socket error.</p>
 </div>
 </div>
@@ -307,8 +306,7 @@ if one wants to get a value of a key it can be done as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.redis.RedisClient
-def redis = RedisClient.create(vertx, [:])
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def redis = RedisClient.create(vertx, [:])
 
 redis.get("mykey", { res -&gt;
   if (res.succeeded()) {
@@ -334,9 +332,7 @@ it cannot be used for running other commands than the command to leave that mode
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.redis.RedisClient
-
-// register a handler for the incoming message the naming the Redis module will use is base address + '.' + redis channel
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// register a handler for the incoming message the naming the Redis module will use is base address + '.' + redis channel
 vertx.eventBus().consumer("io.vertx.redis.channel1", { received -&gt;
   // do whatever you need to do with your message
   def value = received.body().value
@@ -360,9 +356,7 @@ redis.subscribe("channel1", { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.redis.RedisClient
-
-def redis = RedisClient.create(vertx, [:])
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def redis = RedisClient.create(vertx, [:])
 
 redis.publish("channel1", "Hello World!", { res -&gt;
   if (res.succeeded()) {
@@ -507,7 +501,7 @@ will always return a JsonArray, even for example for scripts such as:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

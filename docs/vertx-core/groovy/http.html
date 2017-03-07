@@ -194,7 +194,7 @@ HTTP/2 protocol.</p>
 <div class="sect2">
 <h3 id="_configuring_an_http_server">Configuring an HTTP server</h3>
 <div class="paragraph">
-<p>If you don&#8217;t want the default, a server can be configured by passing in a <code><a href="../dataobjects.html#HttpServerOptions">HttpServerOptions</a></code>
+<p>If you don&#8217;t want the default, a server can be configured by passing in a <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html">HttpServerOptions</a></code>
 instance when creating it:</p>
 </div>
 <div class="listingblock">
@@ -224,7 +224,7 @@ an HTTP/1.1 upgraded request or directly</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>To handle <code>h2</code> requests, TLS must be enabled along with <code><a href="../dataobjects.html#HttpServerOptions#setUseAlpn(boolean)">useAlpn</a></code>:</p>
+<p>To handle <code>h2</code> requests, TLS must be enabled along with <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setUseAlpn-boolean-">setUseAlpn</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -266,18 +266,30 @@ most browsers won&#8217;t support <code>h2c</code>, so for serving web sites you
 </table>
 </div>
 <div class="paragraph">
-<p>When a server accepts an HTTP/2 connection, it sends to the client its <code><a href="../dataobjects.html#HttpServerOptions#getInitialSettings()">initial settings</a></code>.
+<p>When a server accepts an HTTP/2 connection, it sends to the client its <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#getInitialSettings--">initial settings</a></code>.
 The settings define how the client can use the connection, the default initial settings for a server are:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="../dataobjects.html#Http2Settings#getMaxConcurrentStreams()">getMaxConcurrentStreams</a></code>: <code>100</code> as recommended by the HTTP/2 RFC</p>
+<p><code><a href="../../apidocs/io/vertx/core/http/Http2Settings.html#getMaxConcurrentStreams--">getMaxConcurrentStreams</a></code>: <code>100</code> as recommended by the HTTP/2 RFC</p>
 </li>
 <li>
 <p>the default HTTP/2 settings values for the others</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Worker Verticles are not compatible with HTTP/2
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -301,7 +313,7 @@ def server = vertx.createHttpServer(options)</code></pre>
 <div class="sect2">
 <h3 id="_start_the_server_listening">Start the Server Listening</h3>
 <div class="paragraph">
-<p>To tell the server to listen for incoming requests you use one of the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServer.html#listen()">listen</a></code>
+<p>To tell the server to listen for incoming requests you use one of the <code><a href="../../apidocs/io/vertx/core/http/HttpServer.html#listen--">listen</a></code>
 alternatives.</p>
 </div>
 <div class="paragraph">
@@ -349,7 +361,7 @@ server.listen(8080, "myhost.com", { res -&gt;
 <div class="sect2">
 <h3 id="_getting_notified_of_incoming_requests">Getting notified of incoming requests</h3>
 <div class="paragraph">
-<p>To be notified when a request arrives you need to set a <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServer.html#requestHandler(io.vertx.core.Handler)">requestHandler</a></code>:</p>
+<p>To be notified when a request arrives you need to set a <code><a href="../../apidocs/io/vertx/core/http/HttpServer.html#requestHandler-io.vertx.core.Handler-">requestHandler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -363,7 +375,7 @@ server.requestHandler({ request -&gt;
 <div class="sect2">
 <h3 id="_handling_requests">Handling requests</h3>
 <div class="paragraph">
-<p>When a request arrives, the request handler is called passing in an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html">HttpServerRequest</a></code>.
+<p>When a request arrives, the request handler is called passing in an instance of <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html">HttpServerRequest</a></code>.
 This object represents the server side HTTP request.</p>
 </div>
 <div class="paragraph">
@@ -373,13 +385,13 @@ This object represents the server side HTTP request.</p>
 <p>If the request contains a body, that body will arrive at the server some time after the request handler has been called.</p>
 </div>
 <div class="paragraph">
-<p>The server request object allows you to retrieve the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#uri()">uri</a></code>,
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#path()">path</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#params()">params</a></code> and
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#headers()">headers</a></code>, amongst other things.</p>
+<p>The server request object allows you to retrieve the <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#uri--">uri</a></code>,
+<code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#path--">path</a></code>, <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#params--">params</a></code> and
+<code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#headers--">headers</a></code>, amongst other things.</p>
 </div>
 <div class="paragraph">
 <p>Each server request object is associated with one server response object. You use
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#response()">response</a></code> to get a reference to the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html">HttpServerResponse</a></code>
+<code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#response--">response</a></code> to get a reference to the <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html">HttpServerResponse</a></code>
 object.</p>
 </div>
 <div class="paragraph">
@@ -395,20 +407,20 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_version">Request version</h4>
 <div class="paragraph">
-<p>The version of HTTP specified in the request can be retrieved with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#version()">version</a></code></p>
+<p>The version of HTTP specified in the request can be retrieved with <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#version--">version</a></code></p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_request_method">Request method</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#method()">method</a></code> to retrieve the HTTP method of the request.
+<p>Use <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#method--">method</a></code> to retrieve the HTTP method of the request.
 (i.e. whether it&#8217;s GET, POST, PUT, DELETE, HEAD, OPTIONS, etc).</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_request_uri">Request URI</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#uri()">uri</a></code> to retrieve the URI of the request.</p>
+<p>Use <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#uri--">uri</a></code> to retrieve the URI of the request.</p>
 </div>
 <div class="paragraph">
 <p>Note that this is the actual URI as passed in the HTTP request, and it&#8217;s almost always a relative URI.</p>
@@ -420,7 +432,7 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_path">Request path</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#path()">path</a></code> to return the path part of the URI</p>
+<p>Use <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#path--">path</a></code> to return the path part of the URI</p>
 </div>
 <div class="paragraph">
 <p>For example, if the request URI was:</p>
@@ -442,7 +454,7 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_query">Request query</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#query()">query</a></code> to return the query part of the URI</p>
+<p>Use <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#query--">query</a></code> to return the query part of the URI</p>
 </div>
 <div class="paragraph">
 <p>For example, if the request URI was:</p>
@@ -464,10 +476,10 @@ object.</p>
 <div class="sect3">
 <h4 id="_request_headers">Request headers</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#headers()">headers</a></code> to return the headers of the HTTP request.</p>
+<p>Use <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#headers--">headers</a></code> to return the headers of the HTTP request.</p>
 </div>
 <div class="paragraph">
-<p>This returns an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code> - which is like a normal Map or Hash but allows multiple
+<p>This returns an instance of <code><a href="../../apidocs/io/vertx/core/MultiMap.html">MultiMap</a></code> - which is like a normal Map or Hash but allows multiple
 values for the same key - this is because HTTP allows multiple header values with the same key.</p>
 </div>
 <div class="paragraph">
@@ -488,7 +500,7 @@ println("User agent is ${headers.get("User-Agent")}")</code></pre>
 <div class="sect3">
 <h4 id="_request_host">Request host</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#host()">host</a></code> to return the host of the HTTP request.</p>
+<p>Use <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#host--">host</a></code> to return the host of the HTTP request.</p>
 </div>
 <div class="paragraph">
 <p>For HTTP/1.x requests the <code>host</code> header is returned, for HTTP/1 requests the <code>:authority</code> pseudo header is returned.</p>
@@ -497,10 +509,10 @@ println("User agent is ${headers.get("User-Agent")}")</code></pre>
 <div class="sect3">
 <h4 id="_request_parameters">Request parameters</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#params()">params</a></code> to return the parameters of the HTTP request.</p>
+<p>Use <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#params--">params</a></code> to return the parameters of the HTTP request.</p>
 </div>
 <div class="paragraph">
-<p>Just like <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#headers()">headers</a></code> this returns an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code>
+<p>Just like <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#headers--">headers</a></code> this returns an instance of <code><a href="../../apidocs/io/vertx/core/MultiMap.html">MultiMap</a></code>
 as there can be more than one parameter with the same name.</p>
 </div>
 <div class="paragraph">
@@ -529,20 +541,20 @@ then they will not appear in the params here.</p>
 <div class="sect3">
 <h4 id="_remote_address">Remote address</h4>
 <div class="paragraph">
-<p>The address of the sender of the request can be retrieved with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#remoteAddress()">remoteAddress</a></code>.</p>
+<p>The address of the sender of the request can be retrieved with <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#remoteAddress--">remoteAddress</a></code>.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_absolute_uri">Absolute URI</h4>
 <div class="paragraph">
 <p>The URI passed in an HTTP request is usually relative. If you wish to retrieve the absolute URI corresponding
-to the request, you can get it with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#absoluteURI()">absoluteURI</a></code></p>
+to the request, you can get it with <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#absoluteURI--">absoluteURI</a></code></p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_end_handler">End handler</h4>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#endHandler(io.vertx.core.Handler)">endHandler</a></code> of the request is invoked when the entire request,
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#endHandler-io.vertx.core.Handler-">endHandler</a></code> of the request is invoked when the entire request,
 including any body has been fully read.</p>
 </div>
 </div>
@@ -557,7 +569,7 @@ when just the headers of the request have arrived so the request object does not
 body in memory before handing it to you, as that could cause the server to exhaust available memory.</p>
 </div>
 <div class="paragraph">
-<p>To receive the body, you can use the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#handler(io.vertx.core.Handler)">handler</a></code>  on the request,
+<p>To receive the body, you can use the <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#handler-io.vertx.core.Handler-">handler</a></code>  on the request,
 this will get called every time a chunk of the request body arrives. Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
@@ -568,7 +580,7 @@ this will get called every time a chunk of the request body arrives. Here&#8217;
 </div>
 </div>
 <div class="paragraph">
-<p>The object passed into the handler is a <code><a href="../../groovydoc/io/vertx/groovy/core/buffer/Buffer.html">Buffer</a></code>, and the handler can be called
+<p>The object passed into the handler is a <code><a href="../../apidocs/io/vertx/core/buffer/Buffer.html">Buffer</a></code>, and the handler can be called
 multiple times as data arrives from the network, depending on the size of the body.</p>
 </div>
 <div class="paragraph">
@@ -577,9 +589,7 @@ the aggregation yourself as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-
-// Create an empty buffer
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Create an empty buffer
 def totalBuffer = Buffer.buffer()
 
 request.handler({ buffer -&gt;
@@ -592,14 +602,9 @@ request.endHandler({ v -&gt;
 })</code></pre>
 </div>
 </div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">This is such a common case, that Vert.x provides a `link:../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#bodyHandler((@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler))[bodyHandler]` to do this
+<div class="paragraph">
+<p>This is such a common case, that Vert.x provides a <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#bodyHandler-io.vertx.core.Handler-">bodyHandler</a></code> to do this
 for you. The body handler is called once when all the body has been received:</p>
-</dd>
-</dl>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -612,8 +617,8 @@ for you. The body handler is called once when all the body has been received:</p
 <div class="sect3">
 <h4 id="_pumping_requests">Pumping requests</h4>
 <div class="paragraph">
-<p>The request object is a <code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> so you can pump the request body to any
-<code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> instance.</p>
+<p>The request object is a <code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html">ReadStream</a></code> so you can pump the request body to any
+<code><a href="../../apidocs/io/vertx/core/streams/WriteStream.html">WriteStream</a></code> instance.</p>
 </div>
 <div class="paragraph">
 <p>See the chapter on <a href="#streams">streams and pumps</a> for a detailed explanation.</p>
@@ -636,8 +641,8 @@ has been read from the wire.</p>
 </div>
 <div class="paragraph">
 <p>If you want to retrieve the attributes of a multi-part form you should tell Vert.x that you expect to receive
-such a form <strong>before</strong> any of the body is read by calling <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#setExpectMultipart(boolean)">setExpectMultipart</a></code>
-with true, and then you should retrieve the actual attributes using <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#formAttributes()">formAttributes</a></code>
+such a form <strong>before</strong> any of the body is read by calling <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#setExpectMultipart-boolean-">setExpectMultipart</a></code>
+with true, and then you should retrieve the actual attributes using <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#formAttributes--">formAttributes</a></code>
 once the entire body has been read:</p>
 </div>
 <div class="listingblock">
@@ -659,14 +664,14 @@ once the entire body has been read:</p>
 </div>
 <div class="paragraph">
 <p>To receive file uploads you tell Vert.x to expect a multi-part form and set an
-<code>link:../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#uploadHandler@io.vertx.codegen.annotations.Nullable :: io.vertx.core.Handler[uploadHandler]</code> on the request.</p>
+<code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#uploadHandler-io.vertx.core.Handler-">uploadHandler</a></code> on the request.</p>
 </div>
 <div class="paragraph">
 <p>This handler will be called once for every
 upload that arrives on the server.</p>
 </div>
 <div class="paragraph">
-<p>The object passed into the handler is a <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerFileUpload.html">HttpServerFileUpload</a></code> instance.</p>
+<p>The object passed into the handler is a <code><a href="../../apidocs/io/vertx/core/http/HttpServerFileUpload.html">HttpServerFileUpload</a></code> instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -692,12 +697,12 @@ exhaustion, instead, the upload data is received in chunks:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The upload object is a <code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> so you can pump the request body to any
-<code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> instance. See the chapter on <a href="#streams">streams and pumps</a> for a
+<p>The upload object is a <code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html">ReadStream</a></code> so you can pump the request body to any
+<code><a href="../../apidocs/io/vertx/core/streams/WriteStream.html">WriteStream</a></code> instance. See the chapter on <a href="#streams">streams and pumps</a> for a
 detailed explanation.</p>
 </div>
 <div class="paragraph">
-<p>If you just want to upload the file to disk somewhere you can use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerFileUpload.html#streamToFileSystem(java.lang.String)">streamToFileSystem</a></code>:</p>
+<p>If you just want to upload the file to disk somewhere you can use <code><a href="../../apidocs/io/vertx/core/http/HttpServerFileUpload.html#streamToFileSystem-java.lang.String-">streamToFileSystem</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -721,13 +726,27 @@ to arbitrary places on your filesystem. See <a href="#Security notes">security n
 </div>
 </div>
 <div class="sect3">
+<h4 id="_handling_compressed_body">Handling compressed body</h4>
+<div class="paragraph">
+<p>Vert.x can handle compressed body payloads which are encoded by the client with the <em>deflate</em> or <em>gzip</em>
+algorithms.</p>
+</div>
+<div class="paragraph">
+<p>To enable decompression set <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setDecompressionSupported-boolean-">setDecompressionSupported</a></code> on the
+options when creating the server.</p>
+</div>
+<div class="paragraph">
+<p>By default decompression is disabled.</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_receiving_custom_http_2_frames">Receiving custom HTTP/2 frames</h4>
 <div class="paragraph">
 <p>HTTP/2 is a framed protocol with various frames for the HTTP request/response model. The protocol allows other kind
 of frames to be sent and received.</p>
 </div>
 <div class="paragraph">
-<p>To receive custom frames, you can use the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#customFrameHandler(io.vertx.core.Handler)">customFrameHandler</a></code> on the request,
+<p>To receive custom frames, you can use the <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#customFrameHandler-io.vertx.core.Handler-">customFrameHandler</a></code> on the request,
 this will get called every time a custom frame arrives. Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
@@ -746,16 +765,16 @@ custom frame is received whether the request is paused or is not</p>
 <div class="sect3">
 <h4 id="_non_standard_http_methods">Non standard HTTP methods</h4>
 <div class="paragraph">
-<p>The <code><a href="todo">OTHER</a></code> HTTP method is used for non standard methods, in this case
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#rawMethod()">rawMethod</a></code> returns the HTTP method as sent by the client.</p>
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpMethod.html#OTHER">OTHER</a></code> HTTP method is used for non standard methods, in this case
+<code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#rawMethod--">rawMethod</a></code> returns the HTTP method as sent by the client.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_sending_back_responses">Sending back responses</h3>
 <div class="paragraph">
-<p>The server response object is an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html">HttpServerResponse</a></code> and is obtained from the
-request with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#response()">response</a></code>.</p>
+<p>The server response object is an instance of <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html">HttpServerResponse</a></code> and is obtained from the
+request with <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#response--">response</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>You use the response object to write a response back to the HTTP client.</p>
@@ -766,10 +785,10 @@ request with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServer
 <p>The default HTTP status code for a response is <code>200</code>, representing <code>OK</code>.</p>
 </div>
 <div class="paragraph">
-<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#setStatusCode(int)">setStatusCode</a></code> to set a different code.</p>
+<p>Use <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#setStatusCode-int-">setStatusCode</a></code> to set a different code.</p>
 </div>
 <div class="paragraph">
-<p>You can also specify a custom status message with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#setStatusMessage(java.lang.String)">setStatusMessage</a></code>.</p>
+<p>You can also specify a custom status message with <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#setStatusMessage-java.lang.String-">setStatusMessage</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If you don&#8217;t specify a status message, the default one corresponding to the status code will be used.</p>
@@ -791,7 +810,7 @@ to the client
 <div class="sect3">
 <h4 id="_writing_http_responses">Writing HTTP responses</h4>
 <div class="paragraph">
-<p>To write data to an HTTP response, you use one the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#write(io.vertx.core.buffer.Buffer)">write</a></code> operations.</p>
+<p>To write data to an HTTP response, you use one the <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#write-io.vertx.core.buffer.Buffer-">write</a></code> operations.</p>
 </div>
 <div class="paragraph">
 <p>These can be invoked multiple times before the response is ended. They can be invoked in a few ways:</p>
@@ -829,7 +848,7 @@ response.write("hello world!", "UTF-16")</code></pre>
 </div>
 <div class="paragraph">
 <p>If you are just writing a single string or buffer to the HTTP response you can write it and end the response in a
-single call to the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#end(java.lang.String)">end</a></code></p>
+single call to the <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#end-java.lang.String-">end</a></code></p>
 </div>
 <div class="paragraph">
 <p>The first call to write results in the response header being being written to the response. Consequently, if you are
@@ -840,7 +859,7 @@ be too late otherwise. If you are using HTTP chunking you do not have to worry.<
 <div class="sect3">
 <h4 id="_ending_http_responses">Ending HTTP responses</h4>
 <div class="paragraph">
-<p>Once you have finished with the HTTP response you should <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#end(java.lang.String)">end</a></code> it.</p>
+<p>Once you have finished with the HTTP response you should <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#end-java.lang.String-">end</a></code> it.</p>
 </div>
 <div class="paragraph">
 <p>This can be done in several ways:</p>
@@ -869,14 +888,14 @@ response.end("hello world!")</code></pre>
 <div class="sect3">
 <h4 id="_closing_the_underlying_connection">Closing the underlying connection</h4>
 <div class="paragraph">
-<p>You can close the underlying TCP connection with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#close()">close</a></code>.</p>
+<p>You can close the underlying TCP connection with <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#close--">close</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Non keep-alive connections will be automatically closed by Vert.x when the response is ended.</p>
 </div>
 <div class="paragraph">
 <p>Keep-alive connections are not automatically closed by Vert.x by default. If you want keep-alive connections to be
-closed after an idle time, then you configure <code><a href="../dataobjects.html#HttpServerOptions#setIdleTimeout(int)">idleTimeout</a></code>.</p>
+closed after an idle time, then you configure <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setIdleTimeout-int-">setIdleTimeout</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>HTTP/2 connections send a <code>GOAWAY</code> frame before closing the response.</p>
@@ -886,7 +905,7 @@ closed after an idle time, then you configure <code><a href="../dataobjects.html
 <h4 id="_setting_response_headers">Setting response headers</h4>
 <div class="paragraph">
 <p>HTTP response headers can be added to the response by adding them directly to the
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#headers()">headers</a></code>:</p>
+<code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#headers--">headers</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -897,7 +916,7 @@ headers.set("other-header", "wibble")</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Or you can use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#putHeader(java.lang.String,%20java.lang.String)">putHeader</a></code></p>
+<p>Or you can use <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#putHeader-java.lang.String-java.lang.String-">putHeader</a></code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -928,7 +947,7 @@ response.setChunked(true)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Default is non-chunked. When in chunked mode, each call to one of the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#write(io.vertx.core.buffer.Buffer)">write</a></code>
+<p>Default is non-chunked. When in chunked mode, each call to one of the <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#write-io.vertx.core.buffer.Buffer-">write</a></code>
 methods will result in a new HTTP chunk being written out.</p>
 </div>
 <div class="paragraph">
@@ -948,7 +967,7 @@ chunked response has no effect for an HTTP/2 stream
 </table>
 </div>
 <div class="paragraph">
-<p>To add trailers to the response, add them directly to the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#trailers()">trailers</a></code>.</p>
+<p>To add trailers to the response, add them directly to the <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#trailers--">trailers</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -959,7 +978,7 @@ trailers.set("X-wibble", "woobble").set("X-quux", "flooble")</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Or use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#putTrailer(java.lang.String,%20java.lang.String)">putTrailer</a></code>.</p>
+<p>Or use <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#putTrailer-java.lang.String-java.lang.String-">putTrailer</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -972,11 +991,11 @@ response.putTrailer("X-wibble", "woobble").putTrailer("X-quux", "flooble")</code
 <div class="sect3">
 <h4 id="_serving_files_directly_from_disk_or_the_classpath">Serving files directly from disk or the classpath</h4>
 <div class="paragraph">
-<p>If you were writing a web server, one way to serve a file from disk would be to open it as an <code><a href="../../groovydoc/io/vertx/groovy/core/file/AsyncFile.html">AsyncFile</a></code>
+<p>If you were writing a web server, one way to serve a file from disk would be to open it as an <code><a href="../../apidocs/io/vertx/core/file/AsyncFile.html">AsyncFile</a></code>
 and pump it to the HTTP response.</p>
 </div>
 <div class="paragraph">
-<p>Or you could load it it one go using <code><a href="../../groovydoc/io/vertx/groovy/core/file/FileSystem.html#readFile(java.lang.String,%20io.vertx.core.Handler)">readFile</a></code> and write it straight to the response.</p>
+<p>Or you could load it it one go using <code><a href="../../apidocs/io/vertx/core/file/FileSystem.html#readFile-java.lang.String-io.vertx.core.Handler-">readFile</a></code> and write it straight to the response.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively, Vert.x provides a method which allows you to serve a file from disk or the filesystem to an HTTP response
@@ -985,7 +1004,7 @@ Where supported by the underlying operating system this may result in the OS dir
 file to the socket without being copied through user-space at all.</p>
 </div>
 <div class="paragraph">
-<p>This is done by using <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#sendFile(java.lang.String)">sendFile</a></code>, and is usually more efficient for large
+<p>This is done by using <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#sendFile-java.lang.String-">sendFile</a></code>, and is usually more efficient for large
 files, but may be slower for small files.</p>
 </div>
 <div class="paragraph">
@@ -1006,7 +1025,7 @@ files, but may be slower for small files.</p>
 </div>
 <div class="paragraph">
 <p>Sending a file is asynchronous and may not complete until some time after the call has returned. If you want to
-be notified when the file has been writen you can use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#sendFile(java.lang.String,%20io.vertx.core.Handler)">sendFile</a></code></p>
+be notified when the file has been writen you can use <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#sendFile-java.lang.String-io.vertx.core.Handler-">sendFile</a></code></p>
 </div>
 <div class="paragraph">
 <p>Please see the chapter about <a href="#classpath">serving files from the classpath</a> for restrictions about the classpath resolution or disabling it.</p>
@@ -1087,9 +1106,9 @@ case you can just do:</p>
 <div class="sect3">
 <h4 id="_pumping_responses">Pumping responses</h4>
 <div class="paragraph">
-<p>The server response is a <code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> instance so you can pump to it from any
-<code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code>, e.g. <code><a href="../../groovydoc/io/vertx/groovy/core/file/AsyncFile.html">AsyncFile</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetSocket.html">NetSocket</a></code>,
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html">WebSocket</a></code> or <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html">HttpServerRequest</a></code>.</p>
+<p>The server response is a <code><a href="../../apidocs/io/vertx/core/streams/WriteStream.html">WriteStream</a></code> instance so you can pump to it from any
+<code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html">ReadStream</a></code>, e.g. <code><a href="../../apidocs/io/vertx/core/file/AsyncFile.html">AsyncFile</a></code>, <code><a href="../../apidocs/io/vertx/core/net/NetSocket.html">NetSocket</a></code>,
+<code><a href="../../apidocs/io/vertx/core/http/WebSocket.html">WebSocket</a></code> or <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html">HttpServerRequest</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example which echoes the request body back in the response for any PUT methods.
@@ -1098,9 +1117,7 @@ at any one time:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.HttpMethod
-import io.vertx.groovy.core.streams.Pump
-vertx.createHttpServer().requestHandler({ request -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.createHttpServer().requestHandler({ request -&gt;
   def response = request.response()
   if (request.method() == HttpMethod.PUT) {
     response.setChunked(true)
@@ -1122,14 +1139,12 @@ vertx.createHttpServer().requestHandler({ request -&gt;
 of frames to be sent and received.</p>
 </div>
 <div class="paragraph">
-<p>To send such frames, you can use the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#writeCustomFrame(int,%20int,%20io.vertx.core.buffer.Buffer)">writeCustomFrame</a></code> on the response.
+<p>To send such frames, you can use the <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#writeCustomFrame-int-int-io.vertx.core.buffer.Buffer-">writeCustomFrame</a></code> on the response.
 Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-
-def frameType = 40
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def frameType = 40
 def frameStatus = 10
 def payload = Buffer.buffer("some data")
 
@@ -1170,8 +1185,8 @@ request.response().reset(8)</code></pre>
 <p>The HTTP/2 specification defines the list of <a href="http://httpwg.org/specs/rfc7540.html#ErrorCodes">error codes</a> one can use.</p>
 </div>
 <div class="paragraph">
-<p>The request handler are notified of stream reset events with the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#exceptionHandler(io.vertx.core.Handler)">request handler</a></code> and
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#exceptionHandler(io.vertx.core.Handler)">response handler</a></code>:</p>
+<p>The request handler are notified of stream reset events with the <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#exceptionHandler-io.vertx.core.Handler-">request handler</a></code> and
+<code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#exceptionHandler-io.vertx.core.Handler-">response handler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1194,9 +1209,7 @@ request.response().reset(8)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.HttpMethod
-
-def response = request.response()
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def response = request.response()
 
 // Push main.js to the client
 response.push(HttpMethod.GET, "/main.js", { ar -&gt;
@@ -1225,7 +1238,7 @@ response.sendFile("&lt;html&gt;&lt;head&gt;&lt;script src=\"/main.js\"&gt;&lt;/s
 cache and does not want it anymore.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#push(io.vertx.core.http.HttpMethod,%20java.lang.String,%20java.lang.String,%20io.vertx.core.Handler)">push</a></code> method must be called before the initiating response ends, however
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#push-io.vertx.core.http.HttpMethod-java.lang.String-java.lang.String-io.vertx.core.Handler-">push</a></code> method must be called before the initiating response ends, however
 the pushed response can be written after.</p>
 </div>
 </div>
@@ -1245,7 +1258,7 @@ the pushed response can be written after.</p>
 <p>This allows to handle Client that support HTTP Compression and those that not support it at the same time.</p>
 </div>
 <div class="paragraph">
-<p>To enable compression use can configure it with <code><a href="../dataobjects.html#HttpServerOptions#setCompressionSupported(boolean)">compressionSupported</a></code>.</p>
+<p>To enable compression use can configure it with <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setCompressionSupported-boolean-">setCompressionSupported</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>By default compression is not enabled.</p>
@@ -1261,11 +1274,31 @@ compressions and send it back to the client.</p>
 <div class="paragraph">
 <p>Be aware that compression may be able to reduce network traffic but is more CPU-intensive.</p>
 </div>
+<div class="paragraph">
+<p>To address this latter issue Vert.x allows you to tune the 'compression level' parameter that is native of the gzip/deflate compression algorithms.</p>
+</div>
+<div class="paragraph">
+<p>Compression level allows to configure gizp/deflate algorithms in terms of the compression ratio of the resulting data and the computational cost of the compress/decompress operation.</p>
+</div>
+<div class="paragraph">
+<p>The compression level is an integer value ranged from '1' to '9', where '1' means lower compression ratio but fastest algorithm and '9' means maximum compression ratio available but a slower algorithm.</p>
+</div>
+<div class="paragraph">
+<p>Using compression levels higher that 1-2 usually allows to save just some bytes in size - the gain is not linear, and depends on the specific data to be compressed
+- but it comports a non-trascurable cost in term of CPU cycles required to the server while generating the compressed response data
+( Note that at moment Vert.x doesn&#8217;t support any form caching of compressed response data, even for static files, so the compression is done on-the-fly
+at every request body generation ) and in the same way it affects client(s) while decoding (inflating) received responses, operation that becomes more CPU-intensive
+the more the level increases.</p>
+</div>
+<div class="paragraph">
+<p>By default - if compression is enabled via <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setCompressionSupported-boolean-">setCompressionSupported</a></code> - Vert.x will use '6' as compression level,
+but the parameter can be configured to address any case with <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setCompressionLevel-int-">setCompressionLevel</a></code>.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_creating_an_http_client">Creating an HTTP client</h3>
 <div class="paragraph">
-<p>You create an <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html">HttpClient</a></code> instance with default options as follows:</p>
+<p>You create an <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html">HttpClient</a></code> instance with default options as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1287,17 +1320,15 @@ def client = vertx.createHttpClient(options)</code></pre>
 <p>Vert.x supports HTTP/2 over TLS <code>h2</code> and over TCP <code>h2c</code>.</p>
 </div>
 <div class="paragraph">
-<p>By default the http client performs HTTP/1.1 requests, to perform HTTP/2 requests the <code><a href="../dataobjects.html#HttpClientOptions#setProtocolVersion(io.vertx.core.http.HttpVersion)">protocolVersion</a></code>
-must be set to <code><a href="todo">HTTP_2</a></code>.</p>
+<p>By default the http client performs HTTP/1.1 requests, to perform HTTP/2 requests the <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setProtocolVersion-io.vertx.core.http.HttpVersion-">setProtocolVersion</a></code>
+must be set to <code><a href="../../apidocs/io/vertx/core/http/HttpVersion.html#HTTP_2">HTTP_2</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>For <code>h2</code> requests, TLS must be enabled with <em>Application-Layer Protocol Negotiation</em>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.HttpVersion
-
-def options = [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
   protocolVersion:"HTTP_2",
   ssl:true,
   useAlpn:true,
@@ -1312,9 +1343,7 @@ def client = vertx.createHttpClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.HttpVersion
-
-def options = [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
   protocolVersion:"HTTP_2"
 ]
 
@@ -1323,16 +1352,16 @@ def client = vertx.createHttpClient(options)</code></pre>
 </div>
 <div class="paragraph">
 <p><code>h2c</code> connections can also be established directly, i.e connection started with a prior knowledge, when
-<code><a href="../dataobjects.html#HttpClientOptions#setHttp2ClearTextUpgrade(boolean)">http2ClearTextUpgrade</a></code> options is set to false: after the
+<code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setHttp2ClearTextUpgrade-boolean-">setHttp2ClearTextUpgrade</a></code> options is set to false: after the
 connection is established, the client will send the HTTP/2 connection preface and expect to receive
 the same preface from the server.</p>
 </div>
 <div class="paragraph">
 <p>The http server may not support HTTP/2, the actual version can be checked
-with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#version()">version</a></code> when the response arrives.</p>
+with <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html#version--">version</a></code> when the response arrives.</p>
 </div>
 <div class="paragraph">
-<p>When a clients connects to an HTTP/2 server, it sends to the server its <code><a href="../dataobjects.html#HttpClientOptions#getInitialSettings()">initial settings</a></code>.
+<p>When a clients connects to an HTTP/2 server, it sends to the server its <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#getInitialSettings--">initial settings</a></code>.
 The settings define how the server can use the connection, the default initial settings for a client are the default
 values defined by the HTTP/2 RFC.</p>
 </div>
@@ -1406,7 +1435,7 @@ HEAD requests.</p>
 </div>
 <div class="paragraph">
 <p>The simplest way to do this with the Vert.x http client is using the methods prefixed with <code>Now</code>. For example
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html#getNow(int,%20java.lang.String,%20java.lang.String,%20io.vertx.core.Handler)">getNow</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#getNow-io.vertx.core.http.RequestOptions-io.vertx.core.Handler-">getNow</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>These methods create the http request and send it in a single method call and allow you to provide a handler that will be
@@ -1432,13 +1461,12 @@ client.headNow("/other-uri", { response -&gt;
 <h4 id="_writing_general_requests">Writing general requests</h4>
 <div class="paragraph">
 <p>At other times you don&#8217;t know the request method you want to send until run-time. For that use case we provide
-general purpose request methods such as <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html#request(io.vertx.core.http.HttpMethod,%20int,%20java.lang.String,%20java.lang.String)">request</a></code> which allow you to specify
+general purpose request methods such as <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#request-io.vertx.core.http.HttpMethod-io.vertx.core.http.RequestOptions-">request</a></code> which allow you to specify
 the HTTP method at run-time:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.http.HttpMethod
-def client = vertx.createHttpClient()
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = vertx.createHttpClient()
 
 client.request(HttpMethod.GET, "some-uri", { response -&gt;
   println("Received response with status code ${response.statusCode()}")
@@ -1457,11 +1485,11 @@ client.request(HttpMethod.POST, "foo-uri", { response -&gt;
 before sending it.</p>
 </div>
 <div class="paragraph">
-<p>To do this you can call one of the specific request methods such as <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html#post(int,%20java.lang.String,%20java.lang.String)">post</a></code> or
-one of the general purpose request methods such as <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html#request(io.vertx.core.http.HttpMethod,%20int,%20java.lang.String,%20java.lang.String)">request</a></code>.</p>
+<p>To do this you can call one of the specific request methods such as <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#post-io.vertx.core.http.RequestOptions-">post</a></code> or
+one of the general purpose request methods such as <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#request-io.vertx.core.http.HttpMethod-io.vertx.core.http.RequestOptions-">request</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>These methods don&#8217;t send the request immediately, but instead return an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code>
+<p>These methods don&#8217;t send the request immediately, but instead return an instance of <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html">HttpClientRequest</a></code>
 which can be used to write to the request body or write headers.</p>
 </div>
 <div class="paragraph">
@@ -1502,9 +1530,7 @@ client.post("some-uri", { response -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-
-// Write string encoded in UTF-8
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Write string encoded in UTF-8
 request.write("some data")
 
 // Write string encoded in specific encoding
@@ -1522,9 +1548,7 @@ single call to the <code>end</code> function.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-
-// Write string and end the request (send it) in a single call
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Write string and end the request (send it) in a single call
 request.end("some simple data")
 
 // Write buffer and end the request (send it) in a single call
@@ -1558,7 +1582,7 @@ up-front.</p>
 <div class="sect3">
 <h4 id="_writing_request_headers">Writing request headers</h4>
 <div class="paragraph">
-<p>You can write headers to a request using the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#headers()">headers</a></code> multi-map as follows:</p>
+<p>You can write headers to a request using the <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#headers--">headers</a></code> multi-map as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1569,11 +1593,11 @@ headers.set("content-type", "application/json").set("other-header", "foo")</code
 </div>
 </div>
 <div class="paragraph">
-<p>The headers are an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code> which provides operations for adding, setting and removing
+<p>The headers are an instance of <code><a href="../../apidocs/io/vertx/core/MultiMap.html">MultiMap</a></code> which provides operations for adding, setting and removing
 entries. Http headers allow more than one value for a specific key.</p>
 </div>
 <div class="paragraph">
-<p>You can also write headers using <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#putHeader(java.lang.String,%20java.lang.String)">putHeader</a></code></p>
+<p>You can also write headers using <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#putHeader-java.lang.String-java.lang.String-">putHeader</a></code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1589,15 +1613,15 @@ request.putHeader("content-type", "application/json").putHeader("other-header", 
 <div class="sect3">
 <h4 id="_non_standard_http_methods_2">Non standard HTTP methods</h4>
 <div class="paragraph">
-<p>The <code><a href="todo">OTHER</a></code> HTTP method is used for non standard methods, when this method
-is used, <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#setRawMethod(java.lang.String)">setRawMethod</a></code> must be used to
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpMethod.html#OTHER">OTHER</a></code> HTTP method is used for non standard methods, when this method
+is used, <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#setRawMethod-java.lang.String-">setRawMethod</a></code> must be used to
 set the raw method to send to the server.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_ending_http_requests">Ending HTTP requests</h4>
 <div class="paragraph">
-<p>Once you have finished with the HTTP request you must end it with one of the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#end(java.lang.String)">end</a></code>
+<p>Once you have finished with the HTTP request you must end it with one of the <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#end-java.lang.String-">end</a></code>
 operations.</p>
 </div>
 <div class="paragraph">
@@ -1618,8 +1642,7 @@ before calling <code>end</code> with no arguments</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-// End the request with a string
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// End the request with a string
 request.end("some-data")
 
 // End it with a buffer
@@ -1638,7 +1661,7 @@ request.end(buffer)</code></pre>
 to the server, whose size is not known in advance.</p>
 </div>
 <div class="paragraph">
-<p>You put the HTTP request into chunked mode using <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#setChunked(boolean)">setChunked</a></code>.</p>
+<p>You put the HTTP request into chunked mode using <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#setChunked-boolean-">setChunked</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>In chunked mode each call to write will cause a new chunk to be written to the wire. In chunked mode there is
@@ -1649,7 +1672,7 @@ no need to set the <code>Content-Length</code> of the request up-front.</p>
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">request.setChunked(true)
 
 // Write some chunks
-for (def i = 0;i &lt; 10;i++) {
+(0..&lt;10).each { i -&gt;
   request.write("this-is-chunk-${i}")
 }
 
@@ -1660,7 +1683,7 @@ request.end()</code></pre>
 <div class="sect3">
 <h4 id="_request_timeouts">Request timeouts</h4>
 <div class="paragraph">
-<p>You can set a timeout for a specific http request using <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#setTimeout(long)">setTimeout</a></code>.</p>
+<p>You can set a timeout for a specific http request using <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#setTimeout-long-">setTimeout</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If the request does not return any data within the timeout period an exception will be passed to the exception handler
@@ -1671,7 +1694,7 @@ request.end()</code></pre>
 <h4 id="_handling_exceptions">Handling exceptions</h4>
 <div class="paragraph">
 <p>You can handle exceptions corresponding to a request by setting an exception handler on the
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code> instance:</p>
+<code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html">HttpClientRequest</a></code> instance:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1686,7 +1709,7 @@ request.exceptionHandler({ e -&gt;
 </div>
 <div class="paragraph">
 <p>This does not handle non <em>2xx</em> response that need to be handled in the
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html">HttpClientResponse</a></code> code:</p>
+<code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html">HttpClientResponse</a></code> code:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1721,7 +1744,7 @@ request.end()</code></pre>
 <div class="paragraph">
 <p>Instead of providing a response handler in the call to create the client request object, alternatively, you can
 not provide a handler when the request is created and set it later on the request object itself, using
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#handler(io.vertx.core.Handler)">handler</a></code>, for example:</p>
+<code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#handler-io.vertx.core.Handler-">handler</a></code>, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1735,17 +1758,15 @@ request.handler({ response -&gt;
 <div class="sect3">
 <h4 id="_using_the_request_as_a_stream">Using the request as a stream</h4>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code> instance is also a <code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> which means
-you can pump to it from any <code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> instance.</p>
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html">HttpClientRequest</a></code> instance is also a <code><a href="../../apidocs/io/vertx/core/streams/WriteStream.html">WriteStream</a></code> which means
+you can pump to it from any <code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html">ReadStream</a></code> instance.</p>
 </div>
 <div class="paragraph">
 <p>For, example, you could pump a file on disk to a http request body as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.streams.Pump
-
-request.setChunked(true)
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">request.setChunked(true)
 def pump = Pump.pump(file, request)
 file.endHandler({ v -&gt;
   request.end()
@@ -1761,13 +1782,11 @@ pump.start()</code></pre>
 of frames to be sent and received.</p>
 </div>
 <div class="paragraph">
-<p>To send such frames, you can use the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#write(io.vertx.core.buffer.Buffer)">write</a></code> on the request. Here&#8217;s an example:</p>
+<p>To send such frames, you can use the <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#write-io.vertx.core.buffer.Buffer-">write</a></code> on the request. Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-
-def frameType = 40
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def frameType = 40
 def frameStatus = 10
 def payload = Buffer.buffer("some data")
 
@@ -1802,8 +1821,8 @@ present on the server, the server needs to accept the entire response.</p>
 <p>The HTTP/2 specification defines the list of <a href="http://httpwg.org/specs/rfc7540.html#ErrorCodes">error codes</a> one can use.</p>
 </div>
 <div class="paragraph">
-<p>The request handler are notified of stream reset events with the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#exceptionHandler(io.vertx.core.Handler)">request handler</a></code> and
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#exceptionHandler(io.vertx.core.Handler)">response handler</a></code>:</p>
+<p>The request handler are notified of stream reset events with the <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#exceptionHandler-io.vertx.core.Handler-">request handler</a></code> and
+<code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html#exceptionHandler-io.vertx.core.Handler-">response handler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1820,12 +1839,12 @@ present on the server, the server needs to accept the entire response.</p>
 <div class="sect2">
 <h3 id="_handling_http_responses">Handling http responses</h3>
 <div class="paragraph">
-<p>You receive an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html">HttpClientResponse</a></code> into the handler that you specify in of
-the request methods or by setting a handler directly on the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html">HttpClientRequest</a></code> object.</p>
+<p>You receive an instance of <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html">HttpClientResponse</a></code> into the handler that you specify in of
+the request methods or by setting a handler directly on the <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html">HttpClientRequest</a></code> object.</p>
 </div>
 <div class="paragraph">
-<p>You can query the status code and the status message of the response with <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#statusCode()">statusCode</a></code>
-and <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#statusMessage()">statusMessage</a></code>.</p>
+<p>You can query the status code and the status message of the response with <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html#statusCode--">statusCode</a></code>
+and <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html#statusMessage--">statusMessage</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1841,17 +1860,17 @@ and <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.
 <div class="sect3">
 <h4 id="_using_the_response_as_a_stream">Using the response as a stream</h4>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html">HttpClientResponse</a></code> instance is also a <code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> which means
-you can pump it to any <code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> instance.</p>
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html">HttpClientResponse</a></code> instance is also a <code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html">ReadStream</a></code> which means
+you can pump it to any <code><a href="../../apidocs/io/vertx/core/streams/WriteStream.html">WriteStream</a></code> instance.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_response_headers_and_trailers">Response headers and trailers</h4>
 <div class="paragraph">
-<p>Http responses can contain headers. Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#headers()">headers</a></code> to get the headers.</p>
+<p>Http responses can contain headers. Use <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html#headers--">headers</a></code> to get the headers.</p>
 </div>
 <div class="paragraph">
-<p>The object returned is a <code><a href="../../groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code> as HTTP headers can contain multiple values for single keys.</p>
+<p>The object returned is a <code><a href="../../apidocs/io/vertx/core/MultiMap.html">MultiMap</a></code> as HTTP headers can contain multiple values for single keys.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1863,7 +1882,7 @@ def contentLength = response.headers().get("content-lengh")</code></pre>
 <p>Chunked HTTP responses can also contain trailers - these are sent in the last chunk of the response body.</p>
 </div>
 <div class="paragraph">
-<p>You use <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#trailers()">trailers</a></code> to get the trailers. Trailers are also a <code><a href="../../groovydoc/io/vertx/groovy/core/MultiMap.html">MultiMap</a></code>.</p>
+<p>You use <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html#trailers--">trailers</a></code> to get the trailers. Trailers are also a <code><a href="../../apidocs/io/vertx/core/MultiMap.html">MultiMap</a></code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1877,8 +1896,8 @@ don&#8217;t wait for all the body to arrive before calling the response handler 
 might be waiting a long time, or run out of memory for large responses.</p>
 </div>
 <div class="paragraph">
-<p>As parts of the response body arrive, the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#handler(io.vertx.core.Handler)">handler</a></code> is called with
-a <code><a href="../../groovydoc/io/vertx/groovy/core/buffer/Buffer.html">Buffer</a></code> representing the piece of the body:</p>
+<p>As parts of the response body arrive, the <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html#handler-io.vertx.core.Handler-">handler</a></code> is called with
+a <code><a href="../../apidocs/io/vertx/core/buffer/Buffer.html">Buffer</a></code> representing the piece of the body:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1896,9 +1915,7 @@ either aggregate it yourself:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-
-client.getNow("some-uri", { response -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">client.getNow("some-uri", { response -&gt;
 
   // Create an empty buffer
   def totalBuffer = Buffer.buffer()
@@ -1917,7 +1934,7 @@ client.getNow("some-uri", { response -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>Or you can use the convenience <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#bodyHandler(io.vertx.core.Handler)">bodyHandler</a></code> which
+<p>Or you can use the convenience <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html#bodyHandler-io.vertx.core.Handler-">bodyHandler</a></code> which
 is called with the entire body when the response has been fully read:</p>
 </div>
 <div class="listingblock">
@@ -1935,17 +1952,141 @@ is called with the entire body when the response has been fully read:</p>
 <div class="sect3">
 <h4 id="_response_end_handler">Response end handler</h4>
 <div class="paragraph">
-<p>The response <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#endHandler(io.vertx.core.Handler)">endHandler</a></code> is called when the entire response body has been read
+<p>The response <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html#endHandler-io.vertx.core.Handler-">endHandler</a></code> is called when the entire response body has been read
 or immediately after the headers have been read and the response handler has been called if there is no body.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_reading_cookies_from_the_response">Reading cookies from the response</h4>
 <div class="paragraph">
-<p>You can retrieve the list of cookies from a response using <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientResponse.html#cookies()">cookies</a></code>.</p>
+<p>You can retrieve the list of cookies from a response using <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html#cookies--">cookies</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively you can just parse the <code>Set-Cookie</code> headers yourself in the response.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_30x_redirection_handling">30x redirection handling</h4>
+<div class="paragraph">
+<p>The client can be configured to follow HTTP redirections: when the client receives an
+<code>301</code>, <code>302</code>, <code>303</code> or <code>307</code> status code, it follows the redirection provided by the <code>Location</code> response header
+and the response handler is passed the redirected response instead of the original response.</p>
+</div>
+<div class="paragraph">
+<p>Here’s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">client.get("some-uri", { response -&gt;
+  println("Received response with status code ${response.statusCode()}")
+}).setFollowRedirects(true).end()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The redirection policy is as follow</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>on a <code>301</code>, <code>302</code> or <code>303</code> status code, follow the redirection with a <code>GET</code> method</p>
+</li>
+<li>
+<p>on a <code>307</code> status code, follow the redirection with the same HTTP method and the cached body</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+following redirections caches the request body
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The maximum redirects is <code>16</code> by default and can be changed with <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setMaxRedirects-int-">setMaxRedirects</a></code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = vertx.createHttpClient([
+  maxRedirects:32
+])
+
+client.get("some-uri", { response -&gt;
+  println("Received response with status code ${response.statusCode()}")
+}).setFollowRedirects(true).end()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One size does not fit all and the default redirection policy may not be adapted to your needs.</p>
+</div>
+<div class="paragraph">
+<p>The default redirection policy can changed with a custom implementation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">client.redirectHandler({ response -&gt;
+
+  // Only follow 301 code
+  if (response.statusCode() == 301 &amp;&amp; response.getHeader("Location") != null) {
+
+    // Compute the redirect URI
+    def absoluteURI = this.resolveURI(response.request().absoluteURI(), response.getHeader("Location"))
+
+    // Create a new ready to use request that the client will use
+    return Future.succeededFuture(client.getAbs(absoluteURI))
+  }
+
+  // We don't redirect
+  return null
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The policy handles the original <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html">HttpClientResponse</a></code> received and returns either <code>null</code>
+or a <code>Future&lt;HttpClientRequest&gt;</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>when <code>null</code> is returned, the original response is processed</p>
+</li>
+<li>
+<p>when a future is returned, the request will be sent on its successful completion</p>
+</li>
+<li>
+<p>when a future is returned, the exception handler set on the request is called on its failure</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The returned request must be unsent so the original request handlers can be sent and the client can send it after.</p>
+</div>
+<div class="paragraph">
+<p>Most of the original request settings will be propagated to the new request:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>request headers, unless if you have set some headers (including <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#setHost-java.lang.String-">setHost</a></code>)</p>
+</li>
+<li>
+<p>request body unless the returned request uses a <code>GET</code> method</p>
+</li>
+<li>
+<p>response handler</p>
+</li>
+<li>
+<p>request exception handler</p>
+</li>
+<li>
+<p>request timeout</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
@@ -1963,21 +2104,16 @@ it is ok to send the rest of the body.</p>
 Sending large amounts of data if the request might not be accepted is a waste of bandwidth and ties up the server
 in reading data that it will just discard.</p>
 </div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Vert.x allows you to set a `link:../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#continueHandler((@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler))[continueHandler]` on the
+<div class="paragraph">
+<p>Vert.x allows you to set a <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#continueHandler-io.vertx.core.Handler-">continueHandler</a></code> on the
 client request object</p>
-</dd>
-</dl>
 </div>
 <div class="paragraph">
 <p>This will be called if the server sends back a <code>Status: 100 (Continue)</code> response to signify that it is ok to send
 the rest of the request.</p>
 </div>
 <div class="paragraph">
-<p>This is used in conjunction with `<a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#sendHead()">sendHead</a>`to send the head of the request.</p>
+<p>This is used in conjunction with `<a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#sendHead--">sendHead</a>`to send the head of the request.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example:</p>
@@ -2003,11 +2139,11 @@ request.continueHandler({ v -&gt;
 when it receives an <code>Expect: 100-Continue</code> header.</p>
 </div>
 <div class="paragraph">
-<p>This is done by setting the option <code><a href="../dataobjects.html#HttpServerOptions#setHandle100ContinueAutomatically(boolean)">handle100ContinueAutomatically</a></code>.</p>
+<p>This is done by setting the option <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setHandle100ContinueAutomatically-boolean-">setHandle100ContinueAutomatically</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If you&#8217;d prefer to decide whether to send back continue responses manually, then this property should be set to
-<code>false</code> (the default), then you can inspect the headers and call <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerResponse.html#writeContinue()">writeContinue</a></code>
+<code>false</code> (the default), then you can inspect the headers and call <code><a href="../../apidocs/io/vertx/core/http/HttpServerResponse.html#writeContinue--">writeContinue</a></code>
 to have the client continue sending the body:</p>
 </div>
 <div class="listingblock">
@@ -2163,7 +2299,7 @@ will result in the following header added:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>To enable compression set <code><a href="../dataobjects.html#HttpClientOptions#setTryUseCompression(boolean)">tryUseCompression</a></code> on the options
+<p>To enable compression set <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setTryUseCompression-boolean-">setTryUseCompression</a></code> on the options
 used when creating the client.</p>
 </div>
 <div class="paragraph">
@@ -2180,7 +2316,7 @@ connections when you&#8217;re making multiple requests to the same server.</p>
 <p>For HTTP/1.x versions, the http client supports pooling of connections, allowing you to reuse connections between requests.</p>
 </div>
 <div class="paragraph">
-<p>For pooling to work, keep alive must be true using <code><a href="../dataobjects.html#HttpClientOptions#setKeepAlive(boolean)">keepAlive</a></code>
+<p>For pooling to work, keep alive must be true using <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setKeepAlive-boolean-">setKeepAlive</a></code>
 on the options used when configuring the client. The default value is true.</p>
 </div>
 <div class="paragraph">
@@ -2189,7 +2325,7 @@ When keep alive is disabled. Vert.x will add a <code>Connection: Close</code> he
 that the connection will be closed after completion of the response.</p>
 </div>
 <div class="paragraph">
-<p>The maximum number of connections to pool <strong>for each server</strong> is configured using <code><a href="../dataobjects.html#HttpClientOptions#setMaxPoolSize(int)">maxPoolSize</a></code></p>
+<p>The maximum number of connections to pool <strong>for each server</strong> is configured using <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setMaxPoolSize-int-">setMaxPoolSize</a></code></p>
 </div>
 <div class="paragraph">
 <p>When making a request with pooling enabled, Vert.x will create a new connection if there are less than the maximum number of
@@ -2199,7 +2335,7 @@ connections already created for that server, otherwise it will add the request t
 <p>Keep alive connections will not be closed by the client automatically. To close them you can close the client instance.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively you can set idle timeout using <code><a href="../dataobjects.html#HttpClientOptions#setIdleTimeout(int)">idleTimeout</a></code> - any
+<p>Alternatively you can set idle timeout using <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setIdleTimeout-int-">setIdleTimeout</a></code> - any
 connections not used within this timeout will be closed. Please note the idle timeout value is in seconds not milliseconds.</p>
 </div>
 </div>
@@ -2213,14 +2349,14 @@ connections not used within this timeout will be closed. Please note the idle ti
 returned. Pipe-lining is not appropriate for all requests.</p>
 </div>
 <div class="paragraph">
-<p>To enable pipe-lining, it must be enabled using <code><a href="../dataobjects.html#HttpClientOptions#setPipelining(boolean)">pipelining</a></code>.
+<p>To enable pipe-lining, it must be enabled using <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setPipelining-boolean-">setPipelining</a></code>.
 By default pipe-lining is disabled.</p>
 </div>
 <div class="paragraph">
 <p>When pipe-lining is enabled requests will be written to connections without waiting for previous responses to return.</p>
 </div>
 <div class="paragraph">
-<p>The number of pipe-lined requests over a single connection is limited by <code><a href="../dataobjects.html#HttpClientOptions#setPipeliningLimit(int)">pipeliningLimit</a></code>.
+<p>The number of pipe-lined requests over a single connection is limited by <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setPipeliningLimit-int-">setPipeliningLimit</a></code>.
 This option defines the maximum number of http requests sent to the server awaiting for a response. This limit ensures the
 fairness of the distribution of the client requests over the connections to the same server.</p>
 </div>
@@ -2232,12 +2368,12 @@ fairness of the distribution of the client requests over the connections to the 
 connection for each server, all the streams to the same server are multiplexed over the same connection.</p>
 </div>
 <div class="paragraph">
-<p>When the clients needs to use more than a single connection and use pooling, the <code><a href="../dataobjects.html#HttpClientOptions#setHttp2MaxPoolSize(int)">http2MaxPoolSize</a></code>
+<p>When the clients needs to use more than a single connection and use pooling, the <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setHttp2MaxPoolSize-int-">setHttp2MaxPoolSize</a></code>
 shall be used.</p>
 </div>
 <div class="paragraph">
 <p>When it is desirable to limit the number of multiplexed streams per connection and use a connection
-pool instead of a single connection, <code><a href="../dataobjects.html#HttpClientOptions#setHttp2MultiplexingLimit(int)">http2MultiplexingLimit</a></code>
+pool instead of a single connection, <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setHttp2MultiplexingLimit-int-">setHttp2MultiplexingLimit</a></code>
 can be used.</p>
 </div>
 <div class="listingblock">
@@ -2254,35 +2390,35 @@ def client = vertx.createHttpClient(clientOptions)</code></pre>
 <div class="paragraph">
 <p>The multiplexing limit for a connection is a setting set on the client that limits the number of streams
 of a single connection. The effective value can be even lower if the server sets a lower limit
-with the <code><a href="../dataobjects.html#Http2Settings#setMaxConcurrentStreams(long)">SETTINGS_MAX_CONCURRENT_STREAMS</a></code> setting.</p>
+with the <code><a href="../../apidocs/io/vertx/core/http/Http2Settings.html#setMaxConcurrentStreams-long-">SETTINGS_MAX_CONCURRENT_STREAMS</a></code> setting.</p>
 </div>
 <div class="paragraph">
-<p>HTTP/2 connections will not be closed by the client automatically. To close them you can call <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpConnection.html#close()">close</a></code>
+<p>HTTP/2 connections will not be closed by the client automatically. To close them you can call <code><a href="../../apidocs/io/vertx/core/http/HttpConnection.html#close--">close</a></code>
 or close the client instance.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively you can set idle timeout using <code><a href="../dataobjects.html#HttpClientOptions#setIdleTimeout(int)">idleTimeout</a></code> - any
+<p>Alternatively you can set idle timeout using <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setIdleTimeout-int-">setIdleTimeout</a></code> - any
 connections not used within this timeout will be closed. Please note the idle timeout value is in seconds not milliseconds.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_http_connections">HTTP connections</h3>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpConnection.html">HttpConnection</a></code> offers the API for dealing with HTTP connection events, lifecycle
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpConnection.html">HttpConnection</a></code> offers the API for dealing with HTTP connection events, lifecycle
 and settings.</p>
 </div>
 <div class="paragraph">
-<p>HTTP/2 implements fully the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpConnection.html">HttpConnection</a></code> API.</p>
+<p>HTTP/2 implements fully the <code><a href="../../apidocs/io/vertx/core/http/HttpConnection.html">HttpConnection</a></code> API.</p>
 </div>
 <div class="paragraph">
-<p>HTTP/1.x implements partially the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpConnection.html">HttpConnection</a></code> API: only the close operation,
+<p>HTTP/1.x implements partially the <code><a href="../../apidocs/io/vertx/core/http/HttpConnection.html">HttpConnection</a></code> API: only the close operation,
 the close handler and exception handler are implemented. This protocol does not provide semantics for
 the other operations.</p>
 </div>
 <div class="sect3">
 <h4 id="_server_connections">Server connections</h4>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#connection()">connection</a></code> method returns the request connection on the server:</p>
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#connection--">connection</a></code> method returns the request connection on the server:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2305,7 +2441,7 @@ server.connectionHandler({ connection -&gt;
 <div class="sect3">
 <h4 id="_client_connections">Client connections</h4>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClientRequest.html#connection()">connection</a></code> method returns the request connection on the client:</p>
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html#connection--">connection</a></code> method returns the request connection on the client:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2326,15 +2462,15 @@ server.connectionHandler({ connection -&gt;
 <div class="sect3">
 <h4 id="_connection_settings">Connection settings</h4>
 <div class="paragraph">
-<p>The configuration of an HTTP/2 is configured by the <code><a href="../dataobjects.html#Http2Settings">Http2Settings</a></code> data object.</p>
+<p>The configuration of an HTTP/2 is configured by the <code><a href="../../apidocs/io/vertx/core/http/Http2Settings.html">Http2Settings</a></code> data object.</p>
 </div>
 <div class="paragraph">
 <p>Each endpoint must respect the settings sent by the other side of the connection.</p>
 </div>
 <div class="paragraph">
 <p>When a connection is established, the client and the server exchange initial settings. Initial settings
-are configured by <code><a href="../dataobjects.html#HttpClientOptions#setInitialSettings(io.vertx.core.http.Http2Settings)">initialSettings</a></code> on the client and
-<code><a href="../dataobjects.html#HttpServerOptions#setInitialSettings(io.vertx.core.http.Http2Settings)">initialSettings</a></code> on the server.</p>
+are configured by <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setInitialSettings-io.vertx.core.http.Http2Settings-">setInitialSettings</a></code> on the client and
+<code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.html#setInitialSettings-io.vertx.core.http.Http2Settings-">setInitialSettings</a></code> on the server.</p>
 </div>
 <div class="paragraph">
 <p>The settings can be changed at any time after the connection is established:</p>
@@ -2362,7 +2498,7 @@ to be notified of the acknowledgment:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Conversely the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpConnection.html#remoteSettingsHandler(io.vertx.core.Handler)">remoteSettingsHandler</a></code> is notified
+<p>Conversely the <code><a href="../../apidocs/io/vertx/core/http/HttpConnection.html#remoteSettingsHandler-io.vertx.core.Handler-">remoteSettingsHandler</a></code> is notified
 when the new remote settings are received:</p>
 </div>
 <div class="listingblock">
@@ -2389,14 +2525,13 @@ this only applies to the HTTP/2 protocol
 <h4 id="_connection_ping">Connection ping</h4>
 <div class="paragraph">
 <p>HTTP/2 connection ping is useful for determining the connection round-trip time or check the connection
-validity: <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpConnection.html#ping(io.vertx.core.buffer.Buffer,%20io.vertx.core.Handler)">ping</a></code> sends a <code>PING</code> frame to the remote
+validity: <code><a href="../../apidocs/io/vertx/core/http/HttpConnection.html#ping-io.vertx.core.buffer.Buffer-io.vertx.core.Handler-">ping</a></code> sends a <code>PING</code> frame to the remote
 endpoint:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-def data = Buffer.buffer()
-for (def i = 0;i &lt; 8;i++) {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def data = Buffer.buffer()
+(0..&lt;8).each { i -&gt;
   data.appendByte(i)
 }
 connection.ping(data, { pong -&gt;
@@ -2435,7 +2570,7 @@ this only applies to the HTTP/2 protocol
 <div class="sect3">
 <h4 id="_connection_shutdown_and_go_away">Connection shutdown and go away</h4>
 <div class="paragraph">
-<p>Calling <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpConnection.html#shutdown()">shutdown</a></code> will send a <code>GOAWAY</code> frame to the
+<p>Calling <code><a href="../../apidocs/io/vertx/core/http/HttpConnection.html#shutdown--">shutdown</a></code> will send a <code>GOAWAY</code> frame to the
 remote side of the connection, asking it to stop creating streams: a client will stop doing new requests
 and a server will stop pushing responses. After the <code>GOAWAY</code> frame is sent, the connection
 waits some time (30 seconds by default) until all current streams closed and close the connection:</p>
@@ -2445,14 +2580,9 @@ waits some time (30 seconds by default) until all current streams closed and clo
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">connection.shutdown()</code></pre>
 </div>
 </div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">The `link:../../groovydoc/io/vertx/groovy/core/http/HttpConnection.html#shutdownHandler((@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler))[shutdownHandler]` notifies when all streams have been closed, the
+<div class="paragraph">
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpConnection.html#shutdownHandler-io.vertx.core.Handler-">shutdownHandler</a></code> notifies when all streams have been closed, the
 connection is not yet closed.</p>
-</dd>
-</dl>
 </div>
 <div class="paragraph">
 <p>It&#8217;s possible to just send a <code>GOAWAY</code> frame, the main difference with a shutdown is that
@@ -2474,14 +2604,9 @@ close:</p>
 })</code></pre>
 </div>
 </div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">The `link:../../groovydoc/io/vertx/groovy/core/http/HttpConnection.html#shutdownHandler((@io.vertx.codegen.annotations.Nullable </dt>
-<dd>
-<p>io.vertx.core.Handler))[shutdownHandler]` will be called when all current streams
+<div class="paragraph">
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpConnection.html#shutdownHandler-io.vertx.core.Handler-">shutdownHandler</a></code> will be called when all current streams
 have been closed and the connection can be closed:</p>
-</dd>
-</dl>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2512,7 +2637,7 @@ this only applies to the HTTP/2 protocol
 <div class="sect3">
 <h4 id="_connection_close">Connection close</h4>
 <div class="paragraph">
-<p>Connection <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpConnection.html#close()">close</a></code> closes the connection:</p>
+<p>Connection <code><a href="../../apidocs/io/vertx/core/http/HttpConnection.html#close--">close</a></code> closes the connection:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2525,7 +2650,7 @@ this only applies to the HTTP/2 protocol
 </ul>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpConnection.html#closeHandler(io.vertx.core.Handler)">closeHandler</a></code> notifies when a connection is closed.</p>
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpConnection.html#closeHandler-io.vertx.core.Handler-">closeHandler</a></code> notifies when a connection is closed.</p>
 </div>
 </div>
 </div>
@@ -2623,6 +2748,44 @@ server on your multi-core machine.</p>
 <div class="paragraph">
 <p>Please see <a href="#ssl">configuring net servers to use SSL</a> for more information.</p>
 </div>
+<div class="paragraph">
+<p>SSL can also be enabled/disabled per request with <code><a href="../../apidocs/io/vertx/core/http/RequestOptions.html">RequestOptions</a></code> or when
+specifying a scheme with <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#requestAbs-io.vertx.core.http.HttpMethod-java.lang.String-">requestAbs</a></code>
+method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">client.getNow([
+  host:"localhost",
+  port:8080,
+  uRI:"/",
+  ssl:true
+], { response -&gt;
+  println("Received response with status code ${response.statusCode()}")
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setSsl-boolean-">setSsl</a></code> setting acts as the default client setting.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../../apidocs/io/vertx/core/http/RequestOptions.html#setSsl-boolean-">setSsl</a></code> overrides the default client setting</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>setting the value to <code>false</code> will disable SSL/TLS even if the client is configured to use SSL/TLS</p>
+</li>
+<li>
+<p>setting the value to <code>true</code> will enable SSL/TLS  even if the client is configured to not use SSL/TLS, the actual
+client SSL/TLS (such as trust, key/certificate, ciphers, ALPN, &#8230;&#8203;) will be reused</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Likewise <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#requestAbs-io.vertx.core.http.HttpMethod-java.lang.String-">requestAbs</a></code> scheme
+also overrides the default client setting.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_websockets">WebSockets</h3>
@@ -2641,12 +2804,12 @@ connection between HTTP servers and HTTP clients (typically browsers).</p>
 <div class="sect4">
 <h5 id="_websocket_handler">WebSocket handler</h5>
 <div class="paragraph">
-<p>The first way involves providing a <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServer.html#websocketHandler(io.vertx.core.Handler)">websocketHandler</a></code>
+<p>The first way involves providing a <code><a href="../../apidocs/io/vertx/core/http/HttpServer.html#websocketHandler-io.vertx.core.Handler-">websocketHandler</a></code>
 on the server instance.</p>
 </div>
 <div class="paragraph">
 <p>When a WebSocket connection is made to the server, the handler will be called, passing in an instance of
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html">ServerWebSocket</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html">ServerWebSocket</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2656,7 +2819,7 @@ on the server instance.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>You can choose to reject the WebSocket by calling <code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#reject()">reject</a></code>.</p>
+<p>You can choose to reject the WebSocket by calling <code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#reject--">reject</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2674,7 +2837,7 @@ on the server instance.</p>
 <h5 id="_upgrading_to_websocket">Upgrading to WebSocket</h5>
 <div class="paragraph">
 <p>The second way of handling WebSockets is to handle the HTTP Upgrade request that was sent from the client, and
-call <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.html#upgrade()">upgrade</a></code> on the server request.</p>
+call <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#upgrade--">upgrade</a></code> on the server request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2695,23 +2858,23 @@ call <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServerRequest.
 <div class="sect4">
 <h5 id="_the_server_websocket">The server WebSocket</h5>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html">ServerWebSocket</a></code> instance enables you to retrieve the <code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#headers()">headers</a></code>,
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#path()">path</a></code>, <code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#query()">query</a></code> and
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/ServerWebSocket.html#uri()">URI</a></code> of the HTTP request of the WebSocket handshake.</p>
+<p>The <code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html">ServerWebSocket</a></code> instance enables you to retrieve the <code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#headers--">headers</a></code>,
+<code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#path--">path</a></code>, <code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#query--">query</a></code> and
+<code><a href="../../apidocs/io/vertx/core/http/ServerWebSocket.html#uri--">URI</a></code> of the HTTP request of the WebSocket handshake.</p>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_websockets_on_the_client">WebSockets on the client</h4>
 <div class="paragraph">
-<p>The Vert.x <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html">HttpClient</a></code> supports WebSockets.</p>
+<p>The Vert.x <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html">HttpClient</a></code> supports WebSockets.</p>
 </div>
 <div class="paragraph">
-<p>You can connect a WebSocket to a server using one of the <code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpClient.html#websocket(int,%20java.lang.String,%20java.lang.String,%20io.vertx.core.Handler)">websocket</a></code> operations and
+<p>You can connect a WebSocket to a server using one of the <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html#websocket-io.vertx.core.http.RequestOptions-io.vertx.core.Handler-">websocket</a></code> operations and
 providing a handler.</p>
 </div>
 <div class="paragraph">
-<p>The handler will be called with an instance of <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html">WebSocket</a></code> when the connection has been made:</p>
+<p>The handler will be called with an instance of <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html">WebSocket</a></code> when the connection has been made:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2724,21 +2887,24 @@ providing a handler.</p>
 <div class="sect3">
 <h4 id="_writing_messages_to_websockets">Writing messages to WebSockets</h4>
 <div class="paragraph">
-<p>If you wish to write a single binary WebSocket message to the WebSocket you can do this with
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html#writeBinaryMessage(io.vertx.core.buffer.Buffer)">writeBinaryMessage</a></code>:</p>
+<p>If you wish to write a single WebSocket message to the WebSocket you can do this with
+<code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeBinaryMessage-io.vertx.core.buffer.Buffer-">writeBinaryMessage</a></code> or
+<code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeTextMessage-java.lang.String-">writeTextMessage</a></code> :</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-// Write a simple message
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Write a simple binary message
 def buffer = Buffer.buffer().appendInt(123).appendFloat(1.23f)
+websocket.writeBinaryMessage(buffer)
 
-websocket.writeBinaryMessage(buffer)</code></pre>
+// Write a simple text message
+def message = "hello"
+websocket.writeTextMessage(message)</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>If the WebSocket message is larger than the maximum websocket frame size as configured with
-<code><a href="../dataobjects.html#HttpClientOptions#setMaxWebsocketFrameSize(int)">maxWebsocketFrameSize</a></code>
+<code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html#setMaxWebsocketFrameSize-int-">setMaxWebsocketFrameSize</a></code>
 then Vert.x will split it into multiple WebSocket frames before sending it on the wire.</p>
 </div>
 </div>
@@ -2753,19 +2919,17 @@ followed by zero or more <em>continuation</em> frames.</p>
 </div>
 <div class="paragraph">
 <p>To send a message consisting of multiple frames you create frames using
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocketFrame.html#binaryFrame(io.vertx.core.buffer.Buffer,%20boolean)">WebSocketFrame.binaryFrame</a></code>
-, <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocketFrame.html#textFrame(java.lang.String,%20boolean)">WebSocketFrame.textFrame</a></code> or
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocketFrame.html#continuationFrame(io.vertx.core.buffer.Buffer,%20boolean)">WebSocketFrame.continuationFrame</a></code> and write them
-to the WebSocket using <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html#writeFrame(io.vertx.core.http.WebSocketFrame)">writeFrame</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/core/http/WebSocketFrame.html#binaryFrame-io.vertx.core.buffer.Buffer-boolean-">WebSocketFrame.binaryFrame</a></code>
+, <code><a href="../../apidocs/io/vertx/core/http/WebSocketFrame.html#textFrame-java.lang.String-boolean-">WebSocketFrame.textFrame</a></code> or
+<code><a href="../../apidocs/io/vertx/core/http/WebSocketFrame.html#continuationFrame-io.vertx.core.buffer.Buffer-boolean-">WebSocketFrame.continuationFrame</a></code> and write them
+to the WebSocket using <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeFrame-io.vertx.core.http.WebSocketFrame-">writeFrame</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example for binary frames:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.http.WebSocketFrame
-
-def frame1 = WebSocketFrame.binaryFrame(buffer1, false)
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def frame1 = WebSocketFrame.binaryFrame(buffer1, false)
 websocket.writeFrame(frame1)
 
 def frame2 = WebSocketFrame.continuationFrame(buffer2, false)
@@ -2778,17 +2942,15 @@ websocket.writeFrame(frame3)</code></pre>
 </div>
 <div class="paragraph">
 <p>In many cases you just want to send a websocket message that consists of a single final frame, so we provide a couple
-of shortcut methods to do that with <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html#writeFinalBinaryFrame(io.vertx.core.buffer.Buffer)">writeFinalBinaryFrame</a></code>
-and <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html#writeFinalTextFrame(java.lang.String)">writeFinalTextFrame</a></code>.</p>
+of shortcut methods to do that with <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeFinalBinaryFrame-io.vertx.core.buffer.Buffer-">writeFinalBinaryFrame</a></code>
+and <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeFinalTextFrame-java.lang.String-">writeFinalTextFrame</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-
-// Send a websocket messages consisting of a single final text frame:
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Send a websocket messages consisting of a single final text frame:
 
 websocket.writeFinalTextFrame("Geronimo!")
 
@@ -2803,10 +2965,10 @@ websocket.writeFinalBinaryFrame(buff)</code></pre>
 <div class="sect3">
 <h4 id="_reading_frames_from_websockets">Reading frames from WebSockets</h4>
 <div class="paragraph">
-<p>To read frames from a WebSocket you use the <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html#frameHandler(io.vertx.core.Handler)">frameHandler</a></code>.</p>
+<p>To read frames from a WebSocket you use the <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#frameHandler-io.vertx.core.Handler-">frameHandler</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The frame handler will be called with instances of <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocketFrame.html">WebSocketFrame</a></code> when a frame arrives,
+<p>The frame handler will be called with instances of <code><a href="../../apidocs/io/vertx/core/http/WebSocketFrame.html">WebSocketFrame</a></code> when a frame arrives,
 for example:</p>
 </div>
 <div class="listingblock">
@@ -2820,14 +2982,14 @@ for example:</p>
 <div class="sect3">
 <h4 id="_closing_websockets">Closing WebSockets</h4>
 <div class="paragraph">
-<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocketBase.html#close()">close</a></code> to close the WebSocket connection when you have finished with it.</p>
+<p>Use <code><a href="../../apidocs/io/vertx/core/http/WebSocketBase.html#close--">close</a></code> to close the WebSocket connection when you have finished with it.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_streaming_websockets">Streaming WebSockets</h4>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/http/WebSocket.html">WebSocket</a></code> instance is also a <code><a href="../../groovydoc/io/vertx/groovy/core/streams/ReadStream.html">ReadStream</a></code> and a
-<code><a href="../../groovydoc/io/vertx/groovy/core/streams/WriteStream.html">WriteStream</a></code> so it can be used with pumps.</p>
+<p>The <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html">WebSocket</a></code> instance is also a <code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html">ReadStream</a></code> and a
+<code><a href="../../apidocs/io/vertx/core/streams/WriteStream.html">WriteStream</a></code> so it can be used with pumps.</p>
 </div>
 <div class="paragraph">
 <p>When using a WebSocket as a write stream or a read stream it can only be used with WebSockets connections that are
@@ -2846,17 +3008,15 @@ The CONNECT protocol uses HTTP/1.x but can connect to HTTP/1.x and HTTP/2 server
 HTTP/1.1 only.</p>
 </div>
 <div class="paragraph">
-<p>The proxy can be configured in the <code><a href="../dataobjects.html#HttpClientOptions">HttpClientOptions</a></code> by setting a
-<code><a href="../dataobjects.html#ProxyOptions">ProxyOptions</a></code> object containing proxy type, hostname, port and optionally username and password.</p>
+<p>The proxy can be configured in the <code><a href="../../apidocs/io/vertx/core/http/HttpClientOptions.html">HttpClientOptions</a></code> by setting a
+<code><a href="../../apidocs/io/vertx/core/net/ProxyOptions.html">ProxyOptions</a></code> object containing proxy type, hostname, port and optionally username and password.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example of using an HTTP proxy:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.net.ProxyType
-
-def options = [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
   proxyOptions:[
     type:"HTTP",
     host:"localhost",
@@ -2881,9 +3041,7 @@ the CONNECT method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.core.net.ProxyType
-
-def options = [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
   proxyOptions:[
     type:"SOCKS5",
     host:"localhost",
@@ -2916,7 +3074,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:00:58 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

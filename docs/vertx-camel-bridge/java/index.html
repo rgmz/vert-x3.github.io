@@ -184,7 +184,7 @@ build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-camel-bridge&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -197,7 +197,7 @@ build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-camel-bridge:3.3.3'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-camel-bridge:3.4.0'</code></pre>
 </div>
 </div>
 </div>
@@ -371,6 +371,45 @@ vertx.eventBus().send("camel-route", "hello", reply -&gt; {
 });</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>If the processing you apply is blocking, you <strong>must</strong> set <em>blocking</em> to <code>true</code>. This avoid executing the
+processing on the event loop thread:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">camel.addRoutes(new RouteBuilder() {
+  @Override
+  public void configure() throws Exception {
+    from("direct:my-route")
+      .process(new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+          // Do something blocking...
+        }
+      })
+      .to("http://localhost:8080");
+  }
+});
+
+CamelBridge bridge = CamelBridge.create(vertx, new CamelBridgeOptions(camel)
+  .addOutboundMapping(OutboundMapping.fromVertx("camel-route").toCamel("direct:my-route").setBlocking(true)));
+
+camel.start();
+bridge.start();
+
+vertx.eventBus().send("camel-route", "hello", reply -&gt; {
+  if (reply.succeeded()) {
+    Object theResponse = reply.result().body();
+  } else {
+    Throwable theCause = reply.cause();
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default it uses the default worker thread pool, this is customizable using the
+<code><a href="../../apidocs/io/vertx/camel/OutboundMapping.html#setWorkerExecutor-io.vertx.core.WorkerExecutor-">setWorkerExecutor</a></code> method.</p>
+</div>
 </div>
 </div>
 </div>
@@ -403,7 +442,7 @@ vertx.eventBus().send("camel-route", "hello", reply -&gt; {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

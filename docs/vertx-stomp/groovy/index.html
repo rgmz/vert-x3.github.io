@@ -206,7 +206,7 @@ descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-stomp&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -219,7 +219,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-stomp:3.3.3'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-stomp:3.4.0'</code></pre>
 </div>
 </div>
 </div>
@@ -234,23 +234,19 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx)).listen()</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx)).listen()</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>This creates a STOMP server listening on <code>localhost:61613</code> that is compliant with the STOMP specification.</p>
 </div>
 <div class="paragraph">
-<p>You can configure the port and host in the <code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/StompServer.html#listen(int,%20java.lang.String)">listen</a></code>
+<p>You can configure the port and host in the <code><a href="../../apidocs/io/vertx/ext/stomp/StompServer.html#listen-int-java.lang.String-">listen</a></code>
 method:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx)).listen(1234, "0.0.0.0")</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx)).listen(1234, "0.0.0.0")</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -259,9 +255,7 @@ bridge. To be notified when the server is ready, use a handler as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx)).listen({ ar -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx)).listen({ ar -&gt;
   if (ar.failed()) {
     println("Failing to start the STOMP server : ${ar.cause().getMessage()}")
   } else {
@@ -271,16 +265,14 @@ def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx))
 </div>
 </div>
 <div class="paragraph">
-<p>The handler receive a reference on the <code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/StompServer.html">StompServer</a></code>.</p>
+<p>The handler receive a reference on the <code><a href="../../apidocs/io/vertx/ext/stomp/StompServer.html">StompServer</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>You can also configure the host and port in <code><a href="../dataobjects.html#StompServerOptions">StompServerOptions</a></code>:</p>
+<p>You can also configure the host and port in <code><a href="../../apidocs/io/vertx/ext/stomp/StompServerOptions.html">StompServerOptions</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx, [
   port:1234,
   host:"0.0.0.0"
 ]).handler(StompServerHandler.create(vertx)).listen()</code></pre>
@@ -307,23 +299,21 @@ def server = StompServer.create(vertx, [
 <div class="sect2">
 <h3 id="_configuration">Configuration</h3>
 <div class="paragraph">
-<p>The <code><a href="../dataobjects.html#StompServerOptions">StompServerOptions</a></code> let you configure some aspects of the STOMP server.</p>
+<p>The <code><a href="../../apidocs/io/vertx/ext/stomp/StompServerOptions.html">StompServerOptions</a></code> let you configure some aspects of the STOMP server.</p>
 </div>
 <div class="paragraph">
 <p>First, the STOMP server is based on a
-<code><a href="../../groovydoc/io/vertx/groovy/core/net/NetServer.html">NetServer</a></code>, so you can configure the underlying <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetServer.html">NetServer</a></code> from
-the <code><a href="../dataobjects.html#StompServerOptions">StompServerOptions</a></code>. Alternatively you can also pass the
-<code><a href="../../groovydoc/io/vertx/groovy/core/net/NetServer.html">NetServer</a></code> you want to use:</p>
+<code><a href="../../apidocs/io/vertx/core/net/NetServer.html">NetServer</a></code>, so you can configure the underlying <code><a href="../../apidocs/io/vertx/core/net/NetServer.html">NetServer</a></code> from
+the <code><a href="../../apidocs/io/vertx/ext/stomp/StompServerOptions.html">StompServerOptions</a></code>. Alternatively you can also pass the
+<code><a href="../../apidocs/io/vertx/core/net/NetServer.html">NetServer</a></code> you want to use:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx, netServer).handler(StompServerHandler.create(vertx)).listen()</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx, netServer).handler(StompServerHandler.create(vertx)).listen()</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../dataobjects.html#StompServerOptions">StompServerOptions</a></code> let you configure:</p>
+<p>The <code><a href="../../apidocs/io/vertx/ext/stomp/StompServerOptions.html">StompServerOptions</a></code> let you configure:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -353,7 +343,7 @@ def server = StompServer.create(vertx, netServer).handler(StompServerHandler.cre
 </li>
 <li>
 <p>the size of the transaction chunk - defaults to 1000 (see
-<code><a href="../dataobjects.html#StompServerOptions#setTransactionChunkSize(int)">transactionChunkSize</a></code>)</p>
+<code><a href="../../apidocs/io/vertx/ext/stomp/StompServerOptions.html#setTransactionChunkSize-int-">setTransactionChunkSize</a></code>)</p>
 </li>
 <li>
 <p>the maximum number of subscriptions a client can handle - defaults to 1000</p>
@@ -365,9 +355,7 @@ def server = StompServer.create(vertx, netServer).handler(StompServerHandler.cre
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx, [
   heartbeat:[
     x:1000,
     y:1000
@@ -376,20 +364,18 @@ def server = StompServer.create(vertx, [
 </div>
 </div>
 <div class="paragraph">
-<p>Enabling security requires an additional <code><a href="../../groovydoc/io/vertx/groovy/ext/auth/AuthProvider.html">AuthProvider</a></code> handling the
+<p>Enabling security requires an additional <code><a href="../../apidocs/io/vertx/ext/auth/AuthProvider.html">AuthProvider</a></code> handling the
 authentication requests:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx, [
   secured:true
 ]).handler(StompServerHandler.create(vertx).authProvider(provider)).listen()</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>More information about <code><a href="../../groovydoc/io/vertx/groovy/ext/auth/AuthProvider.html">AuthProvider</a></code> is available
+<p>More information about <code><a href="../../apidocs/io/vertx/ext/auth/AuthProvider.html">AuthProvider</a></code> is available
 <a href="http://vertx.io/docs/#authentication_and_authorisation">here</a>.</p>
 </div>
 <div class="paragraph">
@@ -414,10 +400,7 @@ can configure the server to use queues, or mix both types:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.Destination
-import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).destinationFactory({ v, name -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).destinationFactory({ v, name -&gt;
   if (name.startsWith("/queue")) {
     return Destination.queue(vertx, name)
   } else {
@@ -435,10 +418,7 @@ created when the first subscription on this destination is received.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.Destination
-import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).destinationFactory({ v, name -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).destinationFactory({ v, name -&gt;
   if (name.startsWith("/forbidden")) {
     return null
   } else if (name.startsWith("/queue")) {
@@ -460,30 +440,28 @@ def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).
 <h3 id="_providing_your_own_type_of_destination">Providing your own type of destination</h3>
 <div class="paragraph">
 <p>On purpose the STOMP server does not implement any advanced feature. IF you need more advanced dispatching policy,
-you can implement your own type of destination by providing a <code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/DestinationFactory.html">DestinationFactory</a></code>
-returning your own <code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/Destination.html">Destination</a></code> object.</p>
+you can implement your own type of destination by providing a <code><a href="../../apidocs/io/vertx/ext/stomp/DestinationFactory.html">DestinationFactory</a></code>
+returning your own <code><a href="../../apidocs/io/vertx/ext/stomp/Destination.html">Destination</a></code> object.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_acknowledgment">Acknowledgment</h3>
 <div class="paragraph">
 <p>By default, the STOMP server does nothing when a message is not acknowledged. You can customize this by
-providing your own <code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/Destination.html">Destination</a></code> implementation.</p>
+providing your own <code><a href="../../apidocs/io/vertx/ext/stomp/Destination.html">Destination</a></code> implementation.</p>
 </div>
 <div class="paragraph">
 <p>The custom destination should call the</p>
 </div>
 <div class="paragraph">
-<p><code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/StompServerHandler.html#onAck(io.vertx.ext.stomp.StompServerConnection,%20io.vertx.ext.stomp.Frame,%20java.util.List)">onAck</a></code>
+<p><code><a href="../../apidocs/io/vertx/ext/stomp/StompServerHandler.html#onAck-io.vertx.ext.stomp.StompServerConnection-io.vertx.ext.stomp.Frame-java.util.List-">onAck</a></code>
 and
-<code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/StompServerHandler.html#onNack(io.vertx.ext.stomp.StompServerConnection,%20io.vertx.ext.stomp.Frame,%20java.util.List)">onNack</a></code>
-method in order to let the <code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/StompServerHandler.html">StompServerHandler</a></code> customizes the behavior:</p>
+<code><a href="../../apidocs/io/vertx/ext/stomp/StompServerHandler.html#onNack-io.vertx.ext.stomp.StompServerConnection-io.vertx.ext.stomp.Frame-java.util.List-">onNack</a></code>
+method in order to let the <code><a href="../../apidocs/io/vertx/ext/stomp/StompServerHandler.html">StompServerHandler</a></code> customizes the behavior:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).onAckHandler({ acknowledgement -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).onAckHandler({ acknowledgement -&gt;
   // Action to execute when the frames (one in `client-individual` mode, several
   // in `client` mode are acknowledged.
 }).onNackHandler({ acknowledgement -&gt;
@@ -502,9 +480,7 @@ Here are some examples:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).closeHandler({ connection -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).closeHandler({ connection -&gt;
   // client connection closed
 }).beginHandler({ frame -&gt;
   // transaction starts
@@ -529,12 +505,11 @@ at the default implementations.</p>
 <div class="sect2">
 <h3 id="_creating_a_stomp_client">Creating a STOMP client</h3>
 <div class="paragraph">
-<p>You create a <code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/StompClient.html">StompClient</a></code> instance with default options as follows:</p>
+<p>You create a <code><a href="../../apidocs/io/vertx/ext/stomp/StompClient.html">StompClient</a></code> instance with default options as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx).connect({ ar -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx).connect({ ar -&gt;
   if (ar.succeeded()) {
     def connection = ar.result()
 
@@ -546,13 +521,12 @@ def client = StompClient.create(vertx).connect({ ar -&gt;
 </div>
 <div class="paragraph">
 <p>The previous snippet creates a STOMP client connecting to "0.0.0.0:61613". Once connected, you get a
-<code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/StompClientConnection.html">StompClientConnection</a></code> that let you interact with the server. You can
+<code><a href="../../apidocs/io/vertx/ext/stomp/StompClientConnection.html">StompClientConnection</a></code> that let you interact with the server. You can
 configure the host and port as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx).connect(61613, "0.0.0.0", { ar -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx).connect(61613, "0.0.0.0", { ar -&gt;
   if (ar.succeeded()) {
     def connection = ar.result()
 
@@ -569,8 +543,7 @@ connections created with the client inherit of the error handler (but can have t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx).errorFrameHandler({ frame -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx).errorFrameHandler({ frame -&gt;
   // Received the ERROR frame
 }).connect(61613, "0.0.0.0", { ar -&gt;
   if (ar.succeeded()) {
@@ -583,12 +556,11 @@ def client = StompClient.create(vertx).errorFrameHandler({ frame -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>You can also configure the host and port in the <code><a href="../dataobjects.html#StompClientOptions">StompClientOptions</a></code>:</p>
+<p>You can also configure the host and port in the <code><a href="../../apidocs/io/vertx/ext/stomp/StompClientOptions.html">StompClientOptions</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx, [
   host:"localhost",
   port:1234
 ]).connect({ ar -&gt;
@@ -609,8 +581,7 @@ def client = StompClient.create(vertx, [
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx, [
   host:"localhost",
   port:1234
 ]).connect({ ar -&gt;
@@ -627,12 +598,11 @@ client.close()</code></pre>
 </div>
 <div class="paragraph">
 <p>However, this way would not notify the server of the disconnection. To cleanly close the connection, you should
-use the <code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/StompClientConnection.html#disconnect()">disconnect</a></code> method:</p>
+use the <code><a href="../../apidocs/io/vertx/ext/stomp/StompClientConnection.html#disconnect--">disconnect</a></code> method:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx, [
   host:"localhost",
   port:1234
 ]).connect({ ar -&gt;
@@ -654,13 +624,12 @@ connection is automatically closed.</p>
 <div class="sect2">
 <h3 id="_handling_errors">Handling errors</h3>
 <div class="paragraph">
-<p>On the <code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/StompClientConnection.html">StompClientConnection</a></code>, you can register an error handler receiving <code>ERROR</code>
+<p>On the <code><a href="../../apidocs/io/vertx/ext/stomp/StompClientConnection.html">StompClientConnection</a></code>, you can register an error handler receiving <code>ERROR</code>
 frames sent by the server. Notice that the server closes the connection with the client after having sent such frame:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx, [
   host:"localhost",
   port:1234
 ]).connect({ ar -&gt;
@@ -679,14 +648,12 @@ def client = StompClient.create(vertx, [
 <p>The client can also be notified when a connection drop has been detected. Connection failures are detected using the
 STOMP heartbeat mechanism. When the server has not sent a message in the heartbeat time window, the connection is
 closed and the <code>connectionDroppedHandler</code> is called (if set). To configure a <code>connectionDroppedHandler</code>, call
-<code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/StompClientConnection.html#connectionDroppedHandler(io.vertx.core.Handler)">connectionDroppedHandler</a></code>. The handler can
+<code><a href="../../apidocs/io/vertx/ext/stomp/StompClientConnection.html#connectionDroppedHandler-io.vertx.core.Handler-">connectionDroppedHandler</a></code>. The handler can
 for instance tries to reconnect to the server:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx).connect({ ar -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx).connect({ ar -&gt;
   if (ar.succeeded()) {
     def connection = ar.result()
     connection.connectionDroppedHandler({ con -&gt;
@@ -708,16 +675,15 @@ def client = StompClient.create(vertx).connect({ ar -&gt;
 <h3 id="_configuration_2">Configuration</h3>
 <div class="paragraph">
 <p>You can configure various aspect by passing a
-<code><a href="../dataobjects.html#StompClientOptions">StompClientOptions</a></code> when creating the <code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/StompClient.html">StompClient</a></code>. As the
-STOMP client relies on a <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetClient.html">NetClient</a></code>, you can configure the underlying Net Client from
-the <code><a href="../dataobjects.html#StompClientOptions">StompClientOptions</a></code>. Alternatively, you can pass the <code><a href="../../groovydoc/io/vertx/groovy/core/net/NetClient.html">NetClient</a></code>
+<code><a href="../../apidocs/io/vertx/ext/stomp/StompClientOptions.html">StompClientOptions</a></code> when creating the <code><a href="../../apidocs/io/vertx/ext/stomp/StompClient.html">StompClient</a></code>. As the
+STOMP client relies on a <code><a href="../../apidocs/io/vertx/core/net/NetClient.html">NetClient</a></code>, you can configure the underlying Net Client from
+the <code><a href="../../apidocs/io/vertx/ext/stomp/StompClientOptions.html">StompClientOptions</a></code>. Alternatively, you can pass the <code><a href="../../apidocs/io/vertx/core/net/NetClient.html">NetClient</a></code>
 you want to use in the
-<code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/StompClient.html#connect(io.vertx.core.net.NetClient,%20io.vertx.core.Handler)">connect</a></code> method:</p>
+<code><a href="../../apidocs/io/vertx/ext/stomp/StompClient.html#connect-io.vertx.core.net.NetClient-io.vertx.core.Handler-">connect</a></code> method:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx).connect(netClient, { ar -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx).connect(netClient, { ar -&gt;
   if (ar.succeeded()) {
     def connection = ar.result()
     connection.errorHandler({ frame -&gt;
@@ -730,7 +696,7 @@ def client = StompClient.create(vertx).connect(netClient, { ar -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../dataobjects.html#StompClientOptions">StompClientOptions</a></code> let you configure:</p>
+<p>The <code><a href="../../apidocs/io/vertx/ext/stomp/StompClientOptions.html">StompClientOptions</a></code> let you configure:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -762,8 +728,7 @@ def client = StompClient.create(vertx).connect(netClient, { ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx).connect({ ar -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx).connect({ ar -&gt;
   if (ar.succeeded()) {
     def connection = ar.result()
     connection.subscribe("/queue", { frame -&gt;
@@ -780,8 +745,7 @@ def client = StompClient.create(vertx).connect({ ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx).connect({ ar -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx).connect({ ar -&gt;
   if (ar.succeeded()) {
     def connection = ar.result()
     connection.subscribe("/queue", { frame -&gt;
@@ -805,9 +769,7 @@ def client = StompClient.create(vertx).connect({ ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx).connect({ ar -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx).connect({ ar -&gt;
   if (ar.succeeded()) {
     def connection = ar.result()
     def headers = [:]
@@ -822,7 +784,7 @@ def client = StompClient.create(vertx).connect({ ar -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>In Java and Groovy, you can use the <code>Headers</code> class to ease the header creation.</p>
+<p>In Java and Groovy, you can use the <code><a href="../../apidocs/io/vertx/ext/stomp/utils/Headers.html">Headers</a></code> class to ease the header creation.</p>
 </div>
 </div>
 <div class="sect2">
@@ -832,8 +794,7 @@ def client = StompClient.create(vertx).connect({ ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx).connect({ ar -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx).connect({ ar -&gt;
   if (ar.succeeded()) {
     def connection = ar.result()
     connection.subscribe("/queue", { frame -&gt;
@@ -856,9 +817,7 @@ only when the transaction is committed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx).connect({ ar -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx).connect({ ar -&gt;
   if (ar.succeeded()) {
     def connection = ar.result()
     def headers = [:]
@@ -884,9 +843,7 @@ def client = StompClient.create(vertx).connect({ ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-import io.vertx.groovy.ext.stomp.StompClient
-def client = StompClient.create(vertx).connect({ ar -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = StompClient.create(vertx).connect({ ar -&gt;
   if (ar.succeeded()) {
     def connection = ar.result()
 
@@ -916,9 +873,7 @@ addresses are event bus addresses that are transferred to STOMP.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).bridge([
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).bridge([
   inboundPermitteds:[
     [
       address:"/toBus"
@@ -938,9 +893,7 @@ delivery where only one STOMP client or Event Bus consumer is invoked:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).bridge([
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).bridge([
   inboundPermitteds:[
     [
       address:"/toBus"
@@ -962,9 +915,7 @@ message payload must meet. For instance, in the next examples, the payload must 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).bridge([
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).bridge([
   inboundPermitteds:[
     [
       address:"/toBus",
@@ -1012,14 +963,12 @@ HTML page, or as an npm module (<a href="https://www.npmjs.com/package/stompjs" 
 </div>
 <div class="paragraph">
 <p>To achieve the first step, you would need a HTTP server, and pass the
-<code><a href="../../groovydoc/io/vertx/groovy/ext/stomp/StompServer.html#webSocketHandler()">webSocketHandler</a></code> result to
-<code><a href="../../groovydoc/io/vertx/groovy/core/http/HttpServer.html#websocketHandler(io.vertx.core.Handler)">websocketHandler</a></code>:</p>
+<code><a href="../../apidocs/io/vertx/ext/stomp/StompServer.html#webSocketHandler--">webSocketHandler</a></code> result to
+<code><a href="../../apidocs/io/vertx/core/http/HttpServer.html#websocketHandler-io.vertx.core.Handler-">websocketHandler</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-def server = StompServer.create(vertx, [
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx, [
   port:-1,
   websocketBridge:true,
   websocketPath:"/stomp"
@@ -1057,16 +1006,13 @@ client.connect({}, function() {
 <div class="sectionbody">
 <div class="paragraph">
 <p>STOMP clients, client&#8217;s connections and server handlers support registering a received
-<code><a href="../dataobjects.html#Frame">Frame</a></code> handler that would be notified every time a frame is received from the wire. It lets
+<code><a href="../../apidocs/io/vertx/ext/stomp/Frame.html">Frame</a></code> handler that would be notified every time a frame is received from the wire. It lets
 you log the frames, or implement custom behavior. The handler is already called for <code>PING</code>
 frames, and <em>illegal / unknown</em> frames:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-import io.vertx.groovy.ext.stomp.StompClient
-def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).receivedFrameHandler({ sf -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx).receivedFrameHandler({ sf -&gt;
   println(sf.frame())
 })).listen()
 
@@ -1080,17 +1026,14 @@ def client = StompClient.create(vertx).receivedFrameHandler({ frame -&gt;
 </div>
 <div class="paragraph">
 <p>Frames not using a valid STOMP command use the <code>UNKNOWN</code> command. The original command is written
-in the headers using the <code><a href="todo">Frame.STOMP_FRAME_COMMAND</a></code> key.</p>
+in the headers using the <code><a href="../../apidocs/io/vertx/ext/stomp/Frame.html#STOMP_FRAME_COMMAND">Frame.STOMP_FRAME_COMMAND</a></code> key.</p>
 </div>
 <div class="paragraph">
 <p>You can also register a handler to be notified when a frame is going to be sent (written to the wire):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.stomp.StompServerHandler
-import io.vertx.groovy.ext.stomp.StompServer
-import io.vertx.groovy.ext.stomp.StompClient
-def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx)).writingFrameHandler({ sf -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = StompServer.create(vertx).handler(StompServerHandler.create(vertx)).writingFrameHandler({ sf -&gt;
   println(sf.frame())
 }).listen()
 
@@ -1108,7 +1051,7 @@ def client = StompClient.create(vertx).writingFrameHandler({ frame -&gt;
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

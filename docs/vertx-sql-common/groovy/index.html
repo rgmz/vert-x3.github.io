@@ -113,6 +113,8 @@
 <li><a href="#_callable_statements">Callable statements</a></li>
 <li><a href="#_batch_operations">Batch operations</a></li>
 <li><a href="#_executing_other_operations">Executing other operations</a></li>
+<li><a href="#_multiple_resultset_responses">Multiple ResultSet responses</a></li>
+<li><a href="#_streaming">Streaming</a></li>
 <li><a href="#_using_transactions">Using transactions</a></li>
 <li><a href="#_closing_connections">Closing connections</a></li>
 </ul>
@@ -135,6 +137,8 @@
 <li><a href="#_callable_statements">Callable statements</a></li>
 <li><a href="#_batch_operations">Batch operations</a></li>
 <li><a href="#_executing_other_operations">Executing other operations</a></li>
+<li><a href="#_multiple_resultset_responses">Multiple ResultSet responses</a></li>
+<li><a href="#_streaming">Streaming</a></li>
 <li><a href="#_using_transactions">Using transactions</a></li>
 <li><a href="#_closing_connections">Closing connections</a></li>
 </ul>
@@ -166,7 +170,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-sql-common&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -179,7 +183,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-sql-common:3.3.3'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-sql-common:3.4.0'</code></pre>
 </div>
 </div>
 </div>
@@ -188,7 +192,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 <h2 id="_the_sql_connection">The SQL Connection</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A connection to the database is represented by <code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html">SQLConnection</a></code>.</p>
+<p>A connection to the database is represented by <code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html">SQLConnection</a></code>.</p>
 </div>
 <div class="sect2">
 <h3 id="_auto_commit">Auto-commit</h3>
@@ -198,7 +202,7 @@ execute in its own transaction.</p>
 </div>
 <div class="paragraph">
 <p>If you wish to perform multiple operations in a single transaction you should set auto commit to false with
-<code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#setAutoCommit(boolean,%20io.vertx.core.Handler)">setAutoCommit</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#setAutoCommit-boolean-io.vertx.core.Handler-">setAutoCommit</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>When the operation is complete, the handler will be called:</p>
@@ -218,13 +222,13 @@ execute in its own transaction.</p>
 <div class="sect2">
 <h3 id="_executing_queries">Executing queries</h3>
 <div class="paragraph">
-<p>To execute a query use <code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#query(java.lang.String,%20io.vertx.core.Handler)">query</a></code></p>
+<p>To execute a query use <code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#query-java.lang.String-io.vertx.core.Handler-">query</a></code></p>
 </div>
 <div class="paragraph">
 <p>The query string is raw SQL that is passed through without changes to the actual database.</p>
 </div>
 <div class="paragraph">
-<p>The handler will be called with the results, represented by <code><a href="../dataobjects.html#ResultSet">ResultSet</a></code> when the query has
+<p>The handler will be called with the results, represented by <code><a href="../../apidocs/io/vertx/ext/sql/ResultSet.html">ResultSet</a></code> when the query has
 been run.</p>
 </div>
 <div class="listingblock">
@@ -240,14 +244,14 @@ been run.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../dataobjects.html#ResultSet">ResultSet</a></code> instance represents the results of a query.</p>
+<p>The <code><a href="../../apidocs/io/vertx/ext/sql/ResultSet.html">ResultSet</a></code> instance represents the results of a query.</p>
 </div>
 <div class="paragraph">
-<p>The list of column names are available with <code><a href="../dataobjects.html#ResultSet#getColumnNames()">getColumnNames</a></code>, and the actual results
-available with <code><a href="../dataobjects.html#ResultSet#getResults()">getResults</a></code></p>
+<p>The list of column names are available with <code><a href="../../apidocs/io/vertx/ext/sql/ResultSet.html#getColumnNames--">getColumnNames</a></code>, and the actual results
+available with <code><a href="../../apidocs/io/vertx/ext/sql/ResultSet.html#getResults--">getResults</a></code></p>
 </div>
 <div class="paragraph">
-<p>The results are a list of <code>JsonArray</code> instances, one for each row of the results.</p>
+<p>The results are a list of <code><a href="../../apidocs/io/vertx/core/json/JsonArray.html">JsonArray</a></code> instances, one for each row of the results.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -266,9 +270,9 @@ results.each { row -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>You can also retrieve the rows as a list of Json object instances with <code><a href="../dataobjects.html#ResultSet#getRows()">getRows</a></code> -
+<p>You can also retrieve the rows as a list of Json object instances with <code><a href="../../apidocs/io/vertx/ext/sql/ResultSet.html#getRows--">getRows</a></code> -
 this can give you a somewhat simpler API to work with, but please be aware that SQL results can contain duplicate
-column names - if that&#8217;s the case you should use <code><a href="../dataobjects.html#ResultSet#getResults()">getResults</a></code> instead.</p>
+column names - if that&#8217;s the case you should use <code><a href="../../apidocs/io/vertx/ext/sql/ResultSet.html#getResults--">getResults</a></code> instead.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s an example of iterating through the results as Json object instances:</p>
@@ -292,10 +296,10 @@ rows.each { row -&gt;
 <h3 id="_prepared_statement_queries">Prepared statement queries</h3>
 <div class="paragraph">
 <p>To execute a prepared statement query you can use
-<code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#queryWithParams(java.lang.String,%20io.vertx.core.json.JsonArray,%20io.vertx.core.Handler)">queryWithParams</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#queryWithParams-java.lang.String-io.vertx.core.json.JsonArray-io.vertx.core.Handler-">queryWithParams</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>This takes the query, containing the parameter place holders, and a <code>JsonArray</code> or parameter
+<p>This takes the query, containing the parameter place holders, and a <code><a href="../../apidocs/io/vertx/core/json/JsonArray.html">JsonArray</a></code> or parameter
 values.</p>
 </div>
 <div class="listingblock">
@@ -321,18 +325,18 @@ connection.queryWithParams(query, params, { res -&gt;
 <div class="sect2">
 <h3 id="_executing_insert_update_or_delete">Executing INSERT, UPDATE or DELETE</h3>
 <div class="paragraph">
-<p>To execute an operation which updates the database use <code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#update(java.lang.String,%20io.vertx.core.Handler)">update</a></code>.</p>
+<p>To execute an operation which updates the database use <code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#update-java.lang.String-io.vertx.core.Handler-">update</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The update string is raw SQL that is passed through without changes to the actual database.</p>
 </div>
 <div class="paragraph">
-<p>The handler will be called with the results, represented by <code><a href="../dataobjects.html#UpdateResult">UpdateResult</a></code> when the update has
+<p>The handler will be called with the results, represented by <code><a href="../../apidocs/io/vertx/ext/sql/UpdateResult.html">UpdateResult</a></code> when the update has
 been run.</p>
 </div>
 <div class="paragraph">
-<p>The update result holds the number of rows updated with <code><a href="../dataobjects.html#UpdateResult#getUpdated()">getUpdated</a></code>, and
-if the update generated keys, they are available with <code><a href="../dataobjects.html#UpdateResult#getKeys()">getKeys</a></code>.</p>
+<p>The update result holds the number of rows updated with <code><a href="../../apidocs/io/vertx/ext/sql/UpdateResult.html#getUpdated--">getUpdated</a></code>, and
+if the update generated keys, they are available with <code><a href="../../apidocs/io/vertx/ext/sql/UpdateResult.html#getKeys--">getKeys</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -354,10 +358,10 @@ if the update generated keys, they are available with <code><a href="../dataobje
 <h3 id="_prepared_statement_updates">Prepared statement updates</h3>
 <div class="paragraph">
 <p>To execute a prepared statement update you can use
-<code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#updateWithParams(java.lang.String,%20io.vertx.core.json.JsonArray,%20io.vertx.core.Handler)">updateWithParams</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#updateWithParams-java.lang.String-io.vertx.core.json.JsonArray-io.vertx.core.Handler-">updateWithParams</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>This takes the update, containing the parameter place holders, and a <code>JsonArray</code> or parameter
+<p>This takes the update, containing the parameter place holders, and a <code><a href="../../apidocs/io/vertx/core/json/JsonArray.html">JsonArray</a></code> or parameter
 values.</p>
 </div>
 <div class="listingblock">
@@ -388,12 +392,12 @@ connection.updateWithParams(update, params, { res -&gt;
 <h3 id="_callable_statements">Callable statements</h3>
 <div class="paragraph">
 <p>To execute a callable statement (either SQL functions or SQL procedures) you can use
-<code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#callWithParams(java.lang.String,%20io.vertx.core.json.JsonArray,%20io.vertx.core.json.JsonArray,%20io.vertx.core.Handler)">callWithParams</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#callWithParams-java.lang.String-io.vertx.core.json.JsonArray-io.vertx.core.json.JsonArray-io.vertx.core.Handler-">callWithParams</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>This takes the callable statement using the standard JDBC format <code>{ call func_proc_name() }</code>, optionally including
-parameter place holders e.g.: <code>{ call func_proc_name(?, ?) }</code>, a <code>JsonArray</code> containing the
-parameter values and finally a <code>JsonArray</code> containing the
+parameter place holders e.g.: <code>{ call func_proc_name(?, ?) }</code>, a <code><a href="../../apidocs/io/vertx/core/json/JsonArray.html">JsonArray</a></code> containing the
+parameter values and finally a <code><a href="../../apidocs/io/vertx/core/json/JsonArray.html">JsonArray</a></code> containing the
 output types e.g.: <code>[null, 'VARCHAR']</code>.</p>
 </div>
 <div class="paragraph">
@@ -513,13 +517,13 @@ String describing the type you want to receive.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Batched statements <code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#batch(java.util.List,%20io.vertx.core.Handler)">batch</a></code></p>
+<p>Batched statements <code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#batch-java.util.List-io.vertx.core.Handler-">batch</a></code></p>
 </li>
 <li>
-<p>Batched prepared statements <code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#batchWithParams(java.lang.String,%20java.util.List,%20io.vertx.core.Handler)">batchWithParams</a></code></p>
+<p>Batched prepared statements <code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#batchWithParams-java.lang.String-java.util.List-io.vertx.core.Handler-">batchWithParams</a></code></p>
 </li>
 <li>
-<p>Batched callable statements <code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#batchCallableWithParams(java.lang.String,%20java.util.List,%20java.util.List,%20io.vertx.core.Handler)">batchCallableWithParams</a></code></p>
+<p>Batched callable statements <code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#batchCallableWithParams-java.lang.String-java.util.List-java.util.List-io.vertx.core.Handler-">batchCallableWithParams</a></code></p>
 </li>
 </ul>
 </div>
@@ -570,7 +574,7 @@ connection.batchWithParams("INSERT INTO emp (name) VALUES (?)", batch, { res -&g
 <h3 id="_executing_other_operations">Executing other operations</h3>
 <div class="paragraph">
 <p>To execute any other database operation, e.g. a <code>CREATE TABLE</code> you can use
-<code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#execute(java.lang.String,%20io.vertx.core.Handler)">execute</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#execute-java.lang.String-io.vertx.core.Handler-">execute</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The string is passed through without changes to the actual database. The handler is called when the operation
@@ -591,14 +595,71 @@ connection.execute(sql, { execute -&gt;
 </div>
 </div>
 <div class="sect2">
+<h3 id="_multiple_resultset_responses">Multiple ResultSet responses</h3>
+<div class="paragraph">
+<p>In some cases your query might return more than one result set, in this case and to preserve the compatibility when
+the returned result set object is converted to pure json, the next result sets are chained to the current result set
+under the property <code>next</code>. A simple walk of all result sets can be achieved like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// do something with the result set...
+
+// next step
+rs = rs.next</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_streaming">Streaming</h3>
+<div class="paragraph">
+<p>When dealing with large data sets, it is not advised to use API just described but to stream data since it avoids
+inflating the whole response into memory and JSON and data is just processed on a row by row basis, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">connection.queryStream("SELECT * FROM large_table", { stream -&gt;
+  if (stream.succeeded()) {
+    stream.result().handler({ row -&gt;
+      // do something with the row...
+    })
+  }
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You still have full control on when the stream is pauses, resumed and ended. For cases where your query returns
+multiple result sets you should use the result set ended event to fetch the next one if available. If there is more
+data the stream handler will receive the new data, otherwise the end handler is invoked.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">connection.queryStream("SELECT * FROM large_table; SELECT * FROM other_table", { stream -&gt;
+  if (stream.succeeded()) {
+    def sqlRowStream = stream.result()
+
+    sqlRowStream.resultSetClosedHandler({ v -&gt;
+      // will ask to restart the stream with the new result set if any
+      sqlRowStream.moreResults()
+    }).handler({ row -&gt;
+      // do something with the row...
+    }).endHandler({ v -&gt;
+      // no more data available...
+    })
+  }
+})</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_using_transactions">Using transactions</h3>
 <div class="paragraph">
-<p>To use transactions first set auto-commit to false with <code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#setAutoCommit(boolean,%20io.vertx.core.Handler)">setAutoCommit</a></code>.</p>
+<p>To use transactions first set auto-commit to false with <code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#setAutoCommit-boolean-io.vertx.core.Handler-">setAutoCommit</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>You then do your transactional operations and when you want to commit or rollback use
-<code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#commit(io.vertx.core.Handler)">commit</a></code> or
-<code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#rollback(io.vertx.core.Handler)">rollback</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#commit-io.vertx.core.Handler-">commit</a></code> or
+<code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#rollback-io.vertx.core.Handler-">rollback</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Once the commit/rollback is complete the handler will be called and the next transaction will be automatically started.</p>
@@ -622,7 +683,7 @@ connection.commit({ res -&gt;
 <div class="sect2">
 <h3 id="_closing_connections">Closing connections</h3>
 <div class="paragraph">
-<p>When you&#8217;ve done with the connection you should return it to the pool with <code><a href="../../groovydoc/io/vertx/groovy/ext/sql/SQLConnection.html#close(io.vertx.core.Handler)">close</a></code>.</p>
+<p>When you&#8217;ve done with the connection you should return it to the pool with <code><a href="../../apidocs/io/vertx/ext/sql/SQLConnection.html#close-io.vertx.core.Handler-">close</a></code>.</p>
 </div>
 </div>
 </div>
@@ -634,7 +695,7 @@ connection.commit({ res -&gt;
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

@@ -114,7 +114,11 @@
 <li><a href="#_build_docker_images_for_fabric_8">Build Docker Images for Fabric 8</a></li>
 </ul>
 </li>
-<li><a href="#_the_executable_image">The executable image</a></li>
+<li><a href="#_the_executable_image">The executable image</a>
+<ul class="sectlevel2">
+<li><a href="#_customizing_the_stack">Customizing the stack</a></li>
+</ul>
+</li>
 <li><a href="#_deploying_a_fat_jar">Deploying a fat jar</a></li>
 </ul>
         </div>
@@ -135,7 +139,11 @@
 <li><a href="#_build_docker_images_for_fabric_8">Build Docker Images for Fabric 8</a></li>
 </ul>
 </li>
-<li><a href="#_the_executable_image">The executable image</a></li>
+<li><a href="#_the_executable_image">The executable image</a>
+<ul class="sectlevel2">
+<li><a href="#_customizing_the_stack">Customizing the stack</a></li>
+</ul>
+</li>
 <li><a href="#_deploying_a_fat_jar">Deploying a fat jar</a></li>
 </ul>
         </div>
@@ -219,7 +227,7 @@ COPY $VERTICLE_NAME $VERTICLE_HOME/
 # Launch the verticle                       <b class="conum">(5)</b>
 WORKDIR $VERTICLE_HOME
 ENTRYPOINT ["sh", "-c"]
-CMD ["vertx run $VERTICLE_NAME -cp $VERTICLE_HOME/*"]</code></pre>
+CMD ["exec vertx run $VERTICLE_NAME -cp $VERTICLE_HOME/*"]</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -286,8 +294,11 @@ is an optional information telling that the application wants to listen the port
 </td>
 <td class="content">
 You may also have noticed the convoluted way to launch the application. Instead of calling <code>vertx</code> directly, it
- uses <code>sh -c</code>. This is to turn around a Docker limitation not expanding variables in <code>CMD</code>. This way the launched
- shell does. More details on the Docker <a href="http://docs.docker.com/reference/builder/#cmd">builder documentation</a>.
+ uses <code>sh -c</code> along with <code>exec</code>. <code>sh -c</code> is to turn around a Docker limitation not expanding variables in <code>CMD</code>.
+ This way the launched shell does. More details on the Docker <a href="http://docs.docker.com/reference/builder/#cmd">builder documentation</a>.
+ <code>exec</code> is to make the <code>vertx</code> command process replace the shell, so that it gets pid 1 and receives signals,
+ like <code>SIGTERM</code> when running <code>docker stop</code>. Without <code>exec</code> the shell keeps running along with the <code>vertx</code> command process,
+ and the <code>vertx</code> command does not get signals, thus preventing graceful shutdown.
 </td>
 </tr>
 </table>
@@ -330,7 +341,7 @@ COPY $VERTICLE_NAME $VERTICLE_HOME/
 # Launch the verticle
 WORKDIR $VERTICLE_HOME
 ENTRYPOINT ["sh", "-c"]
-CMD ["vertx run $VERTICLE_NAME -cp $VERTICLE_HOME/*"]</code></pre>
+CMD ["exec vertx run $VERTICLE_NAME -cp $VERTICLE_HOME/*"]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -381,7 +392,7 @@ COPY $VERTICLE_NAME $VERTICLE_HOME/
 # Launch the verticle
 WORKDIR $VERTICLE_HOME
 ENTRYPOINT ["sh", "-c"]
-CMD ["vertx run $VERTICLE_NAME -cp $VERTICLE_HOME/*"]</code></pre>
+CMD ["exec vertx run $VERTICLE_NAME -cp $VERTICLE_HOME/*"]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -444,7 +455,7 @@ COPY $VERTICLE_FILE $VERTICLE_HOME/
 # Launch the verticle
 WORKDIR $VERTICLE_HOME
 ENTRYPOINT ["sh", "-c"]
-CMD ["vertx run $VERTICLE_NAME -cp $VERTICLE_HOME/*"]</pre>
+CMD ["exec vertx run $VERTICLE_NAME -cp $VERTICLE_HOME/*"]</pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -540,7 +551,7 @@ file contained in <code>$VERTICLE_HOME</code> you can use:</p>
 <div class="content">
 <pre class="prettyprint highlight"><code>COPY ./cluster.xml $VERTICLE_HOME/
 # ...
-CMD [export CLASSPATH=`find $VERTICLE_HOME -printf '%p:' | sed 's/:$//'`; vertx run $VERTICLE_NAME"]</code></pre>
+CMD [export CLASSPATH=`find $VERTICLE_HOME -printf '%p:' | sed 's/:$//'`; exec vertx run $VERTICLE_NAME"]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -624,7 +635,7 @@ ENV VERTICLE_NAME io.vertx.example.HelloWorldVerticle
 COPY ./verticles $VERTICLE_HOME
 
 ENTRYPOINT ["sh", "-c"]
-CMD ["vertx run $VERTICLE_NAME -cp $VERTICLE_HOME/*"]</code></pre>
+CMD ["exec vertx run $VERTICLE_NAME -cp $VERTICLE_HOME/*"]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -824,6 +835,84 @@ required by Fabric8. Then push your image on the Docker Registry provided by Fab
 <p>This command mounts the current directory (<code>PWD</code>) into <code>/verticles</code> and then launch the <code>vertx run</code> command. Notice the
 <code>-cp</code> parameter reusing the <code>/verticles</code> directory.</p>
 </div>
+<div class="sect2">
+<h3 id="_customizing_the_stack">Customizing the stack</h3>
+<div class="paragraph">
+<p>The <code>vertx/vertx3-exec</code> image provides the default "full" Vert.x stack. You may want to customize this stack and create
+ your own exec image. First, create a <code>vertx-stack.json</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-json" data-lang="json">{
+  "variables": {
+    "vertx.version": "3.3.3"
+  },
+  "dependencies": [
+    {
+      "groupId": "io.vertx",
+      "artifactId": "vertx-web",
+      "version": "${vertx.version}",
+      "included": true
+    },
+    {
+      "groupId": "io.vertx",
+      "artifactId": "vertx-lang-js",
+      "version": "${vertx.version}",
+      "included": true
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can list any dependency you need, not just the Vert.x artifacts
+(refer to the <a href="http://vertx.io/docs/vertx-stack-manager/stack-manager/">Stack Manager documentation</a> for details).</p>
+</div>
+<div class="paragraph">
+<p>Then write a <code>Dockerfile</code> for your custom executable image:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>FROM vertx/vertx3-exec                                     <b class="conum">(1)</b>
+
+COPY vertx-stack.json ${VERTX_HOME}/vertx-stack.json       <b class="conum">(2)</b>
+
+RUN vertx resolve &amp;&amp; rm -rf ${HOME}/.m2                    <b class="conum">(3)</b></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Extend the Vert.x executable image</p>
+</li>
+<li>
+<p>Replace the stack file in the Vert.x command installation</p>
+</li>
+<li>
+<p>Resolve dependencies</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>You should know be able to build your custom executable image:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">docker build -t mycompany/my-vertx3-exec .</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And run your verticle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">docker run -i -t -p 8080:8080 \
+    -v $PWD:/verticles mycompany/my-vertx3-exec \
+    run io.vertx.sample.RandomGeneratorVerticle \
+    -cp /verticles/MY_VERTICLE.jar</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -838,7 +927,7 @@ don&#8217;t need the images provided by Vert.x, you can directly use a base <em>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>FROM java:8u77-jre-alpine                                           <b class="conum">(1)</b>
+<pre class="prettyprint highlight"><code>FROM openjdk:8-jre-alpine                                           <b class="conum">(1)</b>
 
 ENV VERTICLE_FILE hello-verticle-fatjar-3.0.0-SNAPSHOT-fat.jar      <b class="conum">(2)</b>
 
@@ -853,7 +942,7 @@ COPY target/$VERTICLE_FILE $VERTICLE_HOME/                          <b class="co
 # Launch the verticle
 WORKDIR $VERTICLE_HOME
 ENTRYPOINT ["sh", "-c"]
-CMD ["java -jar $VERTICLE_FILE"]                                    <b class="conum">(4)</b></code></pre>
+CMD ["exec java -jar $VERTICLE_FILE"]                               <b class="conum">(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -896,7 +985,7 @@ settings presented above are still valid.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

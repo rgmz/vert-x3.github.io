@@ -121,7 +121,7 @@
 <h2 id="_mongo_auth_provider_implementation">Mongo Auth Provider implementation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We provide an implementation of <code><a href="../../groovydoc/io/vertx/groovy/ext/auth/AuthProvider.html">AuthProvider</a></code> which uses the Vert.x <code><a href="../../groovydoc/io/vertx/groovy/ext/mongo/MongoClient.html">MongoClient</a></code>
+<p>We provide an implementation of <code><a href="../../apidocs/io/vertx/ext/auth/AuthProvider.html">AuthProvider</a></code> which uses the Vert.x <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html">MongoClient</a></code>
 to perform authentication and authorisation against a MongoDb.</p>
 </div>
 <div class="paragraph">
@@ -140,7 +140,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-auth-mongo&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -153,27 +153,25 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-mongo:3.3.3'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-mongo:3.4.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To create an instance you first need an instance of <code><a href="../../groovydoc/io/vertx/groovy/ext/mongo/MongoClient.html">MongoClient</a></code>. To learn how to create one
+<p>To create an instance you first need an instance of <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html">MongoClient</a></code>. To learn how to create one
 of those please consult the documentation for the MongoClient.</p>
 </div>
 <div class="paragraph">
-<p>Once you&#8217;ve got one of those you can create a <code><a href="../../groovydoc/io/vertx/groovy/ext/auth/mongo/MongoAuth.html">MongoAuth</a></code> instance as follows:</p>
+<p>Once you&#8217;ve got one of those you can create a <code><a href="../../apidocs/io/vertx/ext/auth/mongo/MongoAuth.html">MongoAuth</a></code> instance as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.mongo.MongoClient
-import io.vertx.groovy.ext.auth.mongo.MongoAuth
-def client = MongoClient.createShared(vertx, mongoClientConfig)
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = MongoClient.createShared(vertx, mongoClientConfig)
 def authProperties = [:]
 def authProvider = MongoAuth.create(client, authProperties)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Once you&#8217;ve got your instance you can authenticate and authorise with it just like any <code><a href="../../groovydoc/io/vertx/groovy/ext/auth/AuthProvider.html">AuthProvider</a></code>.</p>
+<p>Once you&#8217;ve got your instance you can authenticate and authorise with it just like any <code><a href="../../apidocs/io/vertx/ext/auth/AuthProvider.html">AuthProvider</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The out of the box config assumes the usage of the collection with name "user", the username stored and read by field "username"
@@ -197,30 +195,30 @@ insert the row and fail if duplicate.</p>
 <p>You can also change all the defaults for the mongo collection and column names using any of the methods:</p>
 </div>
 <div class="paragraph">
-<p><code><a href="../../groovydoc/io/vertx/groovy/ext/auth/mongo/MongoAuth.html#setCollectionName(java.lang.String)">setCollectionName</a></code>
-<code><a href="../../groovydoc/io/vertx/groovy/ext/auth/mongo/MongoAuth.html#setUsernameField(java.lang.String)">setUsernameField</a></code>
-<code><a href="../../groovydoc/io/vertx/groovy/ext/auth/mongo/MongoAuth.html#setPasswordField(java.lang.String)">setPasswordField</a></code>
-<code><a href="../../groovydoc/io/vertx/groovy/ext/auth/mongo/MongoAuth.html#setPermissionField(java.lang.String)">setPermissionField</a></code>
-<code><a href="../../groovydoc/io/vertx/groovy/ext/auth/mongo/MongoAuth.html#setRoleField(java.lang.String)">setRoleField</a></code>
+<p><code><a href="../../apidocs/io/vertx/ext/auth/mongo/MongoAuth.html#setCollectionName-java.lang.String-">setCollectionName</a></code>
+<code><a href="../../apidocs/io/vertx/ext/auth/mongo/MongoAuth.html#setUsernameField-java.lang.String-">setUsernameField</a></code>
+<code><a href="../../apidocs/io/vertx/ext/auth/mongo/MongoAuth.html#setPasswordField-java.lang.String-">setPasswordField</a></code>
+<code><a href="../../apidocs/io/vertx/ext/auth/mongo/MongoAuth.html#setPermissionField-java.lang.String-">setPermissionField</a></code>
+<code><a href="../../apidocs/io/vertx/ext/auth/mongo/MongoAuth.html#setRoleField-java.lang.String-">setRoleField</a></code>
 if you want to adapt that to your needs.</p>
 </div>
 <div class="paragraph">
 <p>The default implementation assumes that the password is stored in the database as a SHA-512 hash after being
 concatenated with a salt. It also assumes the salt is stored in the table too. The field, where the salt is
-stored can be set by <code><a href="../../groovydoc/io/vertx/groovy/ext/auth/mongo/MongoAuth.html#setSaltField(java.lang.String)">setSaltField</a></code>, the default is "salt".
-You are able to change this behaviour by using <code><a href="../../groovydoc/io/vertx/groovy/ext/auth/mongo/HashStrategy.html#setSaltStyle(io.vertx.ext.auth.mongo.HashSaltStyle)">setSaltStyle</a></code>.
-The HashStrategy you can retrieve by  <code><a href="../../groovydoc/io/vertx/groovy/ext/auth/mongo/MongoAuth.html#getHashStrategy()">getHashStrategy</a></code>.
+stored can be set by <code><a href="../../apidocs/io/vertx/ext/auth/mongo/MongoAuth.html#setSaltField-java.lang.String-">setSaltField</a></code>, the default is "salt".
+You are able to change this behaviour by using <code><a href="../../apidocs/io/vertx/ext/auth/mongo/HashStrategy.html#setSaltStyle-io.vertx.ext.auth.mongo.HashSaltStyle-">setSaltStyle</a></code>.
+The HashStrategy you can retrieve by  <code><a href="../../apidocs/io/vertx/ext/auth/mongo/MongoAuth.html#getHashStrategy--">getHashStrategy</a></code>.
 By using this, you are able to set:
-<code><a href="todo">NO_SALT</a></code> by which passwords are not crypted and stored
+<code><a href="../../apidocs/io/vertx/ext/auth/mongo/HashSaltStyle.html#NO_SALT">NO_SALT</a></code> by which passwords are not crypted and stored
 in cleartext. ( see the warning below! )
-<code><a href="todo">COLUMN</a></code>, which will create a salt per user and store this
+<code><a href="../../apidocs/io/vertx/ext/auth/mongo/HashSaltStyle.html#COLUMN">COLUMN</a></code>, which will create a salt per user and store this
 inside the defined column of the user. ( see the warning below! )
-<code><a href="todo">EXTERNAL</a></code>, which will store only the crypted password in the
-database and will use a salt from external, which you will have to set by <code><a href="../../groovydoc/io/vertx/groovy/ext/auth/mongo/HashStrategy.html#setExternalSalt(java.lang.String)">setExternalSalt</a></code></p>
+<code><a href="../../apidocs/io/vertx/ext/auth/mongo/HashSaltStyle.html#EXTERNAL">EXTERNAL</a></code>, which will store only the crypted password in the
+database and will use a salt from external, which you will have to set by <code><a href="../../apidocs/io/vertx/ext/auth/mongo/HashStrategy.html#setExternalSalt-java.lang.String-">setExternalSalt</a></code></p>
 </div>
 <div class="paragraph">
 <p>If you want to override this behaviour you can do so by providing an alternative hash strategy and setting it with
- <code><a href="../../groovydoc/io/vertx/groovy/ext/auth/mongo/MongoAuth.html#setHashStrategy(io.vertx.ext.auth.mongo.HashStrategy)">setHashStrategy</a></code></p>
+ <code><a href="../../apidocs/io/vertx/ext/auth/mongo/MongoAuth.html#setHashStrategy-io.vertx.ext.auth.mongo.HashStrategy-">setHashStrategy</a></code></p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -229,7 +227,7 @@ database and will use a salt from external, which you will have to set by <code>
 <div class="title">Warning</div>
 </td>
 <td class="content">
-It is strongly advised to use the <code><a href="todo">EXTERNAL</a></code> option.
+It is strongly advised to use the <code><a href="../../apidocs/io/vertx/ext/auth/mongo/HashSaltStyle.html#EXTERNAL">EXTERNAL</a></code> option.
 The NO_SALT option is existing for development phase only and even the COLUMN option is not recommended, cause
 salt and password are stored inside the same place!
 </td>
@@ -262,8 +260,8 @@ authProvider.authenticate(authInfo, { res -&gt;
 </div>
 <div class="paragraph">
 <p>Instead of the <code>username</code> and <code>password</code> field names used in the previous snippet, you should use:
-<code><a href="../../groovydoc/io/vertx/groovy/ext/auth/mongo/MongoAuth.html#setUsernameCredentialField(java.lang.String)">setUsernameCredentialField</a></code> and
-<code><a href="../../groovydoc/io/vertx/groovy/ext/auth/mongo/MongoAuth.html#setPasswordCredentialField(java.lang.String)">setPasswordCredentialField</a></code></p>
+<code><a href="../../apidocs/io/vertx/ext/auth/mongo/MongoAuth.html#setUsernameCredentialField-java.lang.String-">setUsernameCredentialField</a></code> and
+<code><a href="../../apidocs/io/vertx/ext/auth/mongo/MongoAuth.html#setPasswordCredentialField-java.lang.String-">setPasswordCredentialField</a></code></p>
 </div>
 </div>
 </div>
@@ -277,7 +275,7 @@ can have zero or more permissions.</p>
 </div>
 <div class="paragraph">
 <p>If validating if a user has a particular permission simply pass the permission into.
-<code><a href="../../groovydoc/io/vertx/groovy/ext/auth/User.html#isAuthorised(java.lang.String,%20io.vertx.core.Handler)">isAuthorised</a></code> as follows:</p>
+<code><a href="../../apidocs/io/vertx/ext/auth/User.html#isAuthorised-java.lang.String-io.vertx.core.Handler-">isAuthorised</a></code> as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -295,9 +293,7 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.auth.mongo.MongoAuth
-
-user.isAuthorised("${MongoAuth.ROLE_PREFIX}manager", { res -&gt;
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">user.isAuthorised("${MongoAuth.ROLE_PREFIX}manager", { res -&gt;
   if (res.succeeded()) {
     def hasRole = res.result()
   } else {
@@ -315,7 +311,7 @@ user.isAuthorised("${MongoAuth.ROLE_PREFIX}manager", { res -&gt;
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

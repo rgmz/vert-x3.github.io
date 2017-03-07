@@ -279,6 +279,18 @@ The settings define how the client can use the connection, the default initial s
 </li>
 </ul>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Worker Verticles are not compatible with HTTP/2
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_logging_network_server_activity">Logging network server activity</h3>
@@ -713,6 +725,20 @@ to arbitrary places on your filesystem. See <a href="#Security notes">security n
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_handling_compressed_body">Handling compressed body</h4>
+<div class="paragraph">
+<p>Vert.x can handle compressed body payloads which are encoded by the client with the <em>deflate</em> or <em>gzip</em>
+algorithms.</p>
+</div>
+<div class="paragraph">
+<p>To enable decompression set <code><a href="../dataobjects.html#HttpServerOptions#set_decompression_supported-instance_method">decompressionSupported</a></code> on the
+options when creating the server.</p>
+</div>
+<div class="paragraph">
+<p>By default decompression is disabled.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1253,6 +1279,26 @@ compressions and send it back to the client.</p>
 <div class="paragraph">
 <p>Be aware that compression may be able to reduce network traffic but is more CPU-intensive.</p>
 </div>
+<div class="paragraph">
+<p>To address this latter issue Vert.x allows you to tune the 'compression level' parameter that is native of the gzip/deflate compression algorithms.</p>
+</div>
+<div class="paragraph">
+<p>Compression level allows to configure gizp/deflate algorithms in terms of the compression ratio of the resulting data and the computational cost of the compress/decompress operation.</p>
+</div>
+<div class="paragraph">
+<p>The compression level is an integer value ranged from '1' to '9', where '1' means lower compression ratio but fastest algorithm and '9' means maximum compression ratio available but a slower algorithm.</p>
+</div>
+<div class="paragraph">
+<p>Using compression levels higher that 1-2 usually allows to save just some bytes in size - the gain is not linear, and depends on the specific data to be compressed
+- but it comports a non-trascurable cost in term of CPU cycles required to the server while generating the compressed response data
+( Note that at moment Vert.x doesn&#8217;t support any form caching of compressed response data, even for static files, so the compression is done on-the-fly
+at every request body generation ) and in the same way it affects client(s) while decoding (inflating) received responses, operation that becomes more CPU-intensive
+the more the level increases.</p>
+</div>
+<div class="paragraph">
+<p>By default - if compression is enabled via <code><a href="../dataobjects.html#HttpServerOptions#set_compression_supported-instance_method">compressionSupported</a></code> - Vert.x will use '6' as compression level,
+but the parameter can be configured to address any case with <code><a href="../dataobjects.html#HttpServerOptions#set_compression_level-instance_method">compressionLevel</a></code>.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_creating_an_http_client">Creating an HTTP client</h3>
@@ -1636,10 +1682,8 @@ no need to set the <code>Content-Length</code> of the request up-front.</p>
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.set_chunked(true)
 
 # Write some chunks
-i = 0
-while (i &lt; 10)
+(0...10).each do |i|
   request.write("this-is-chunk-#{i}")
-  i+=1
 end
 
 request.end()</code></pre>
@@ -1776,7 +1820,7 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.reset()</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.reset?()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1784,7 +1828,7 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.reset(8)</code></pre>
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.reset?(8)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1938,6 +1982,132 @@ or immediately after the headers have been read and the response handler has bee
 </div>
 </div>
 <div class="sect3">
+<h4 id="_30x_redirection_handling">30x redirection handling</h4>
+<div class="paragraph">
+<p>The client can be configured to follow HTTP redirections: when the client receives an
+<code>301</code>, <code>302</code>, <code>303</code> or <code>307</code> status code, it follows the redirection provided by the <code>Location</code> response header
+and the response handler is passed the redirected response instead of the original response.</p>
+</div>
+<div class="paragraph">
+<p>Here’s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client.get("some-uri") { |response|
+  puts "Received response with status code #{response.status_code()}"
+}.set_follow_redirects(true).end()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The redirection policy is as follow</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>on a <code>301</code>, <code>302</code> or <code>303</code> status code, follow the redirection with a <code>GET</code> method</p>
+</li>
+<li>
+<p>on a <code>307</code> status code, follow the redirection with the same HTTP method and the cached body</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+following redirections caches the request body
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The maximum redirects is <code>16</code> by default and can be changed with <code><a href="../dataobjects.html#HttpClientOptions#set_max_redirects-instance_method">maxRedirects</a></code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_http_client({
+  'maxRedirects' =&gt; 32
+})
+
+client.get("some-uri") { |response|
+  puts "Received response with status code #{response.status_code()}"
+}.set_follow_redirects(true).end()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One size does not fit all and the default redirection policy may not be adapted to your needs.</p>
+</div>
+<div class="paragraph">
+<p>The default redirection policy can changed with a custom implementation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/future'
+
+client.redirect_handler(lambda { |response|
+
+  # Only follow 301 code
+  if (response.status_code() == 301 &amp;&amp; response.get_header("Location") != nil)
+
+    # Compute the redirect URI
+    absoluteURI = resolve_uri(response.request().absolute_uri(), response.get_header("Location"))
+
+    # Create a new ready to use request that the client will use
+    return Vertx::Future.succeeded_future(client.get_abs(absoluteURI))
+  end
+
+  # We don't redirect
+  return nil
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The policy handles the original <code><a href="../../yardoc/Vertx/HttpClientResponse.html">HttpClientResponse</a></code> received and returns either <code>null</code>
+or a <code>Future&lt;HttpClientRequest&gt;</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>when <code>null</code> is returned, the original response is processed</p>
+</li>
+<li>
+<p>when a future is returned, the request will be sent on its successful completion</p>
+</li>
+<li>
+<p>when a future is returned, the exception handler set on the request is called on its failure</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The returned request must be unsent so the original request handlers can be sent and the client can send it after.</p>
+</div>
+<div class="paragraph">
+<p>Most of the original request settings will be propagated to the new request:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>request headers, unless if you have set some headers (including <code><a href="../../yardoc/Vertx/HttpClientRequest.html#set_host-instance_method">setHost</a></code>)</p>
+</li>
+<li>
+<p>request body unless the returned request uses a <code>GET</code> method</p>
+</li>
+<li>
+<p>response handler</p>
+</li>
+<li>
+<p>request exception handler</p>
+</li>
+<li>
+<p>request timeout</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_100_continue_handling">100-Continue handling</h4>
 <div class="paragraph">
 <p>According to the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html">HTTP 1.1 specification</a> a client can set a
@@ -2079,7 +2249,7 @@ request.end()</code></pre>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request.push_handler() { |pushedRequest|
   if (pushedRequest.path().==("/main.js"))
-    pushedRequest.reset()
+    pushedRequest.reset?()
   else
     # Handle it
   end
@@ -2380,10 +2550,8 @@ endpoint:</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/buffer'
 data = Vertx::Buffer.buffer()
-i = 0
-while (i &lt; 8)
+(0...8).each do |i|
   data.append_byte(i)
-  i+=1
 end
 connection.ping(data) { |pong_err,pong|
   puts "Remote side replied"
@@ -2599,6 +2767,44 @@ server on your multi-core machine.</p>
 <div class="paragraph">
 <p>Please see <a href="#ssl">configuring net servers to use SSL</a> for more information.</p>
 </div>
+<div class="paragraph">
+<p>SSL can also be enabled/disabled per request with <code><a href="../dataobjects.html#RequestOptions">RequestOptions</a></code> or when
+specifying a scheme with <code><a href="../../yardoc/Vertx/HttpClient.html#request_abs-instance_method">requestAbs</a></code>
+method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client.get_now({
+  'host' =&gt; "localhost",
+  'port' =&gt; 8080,
+  'uRI' =&gt; "/",
+  'ssl' =&gt; true
+}) { |response|
+  puts "Received response with status code #{response.status_code()}"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../dataobjects.html#HttpClientOptions#set_ssl-instance_method">ssl</a></code> setting acts as the default client setting.</p>
+</div>
+<div class="paragraph">
+<p>The <code><a href="../dataobjects.html#RequestOptions#set_ssl-instance_method">ssl</a></code> overrides the default client setting</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>setting the value to <code>false</code> will disable SSL/TLS even if the client is configured to use SSL/TLS</p>
+</li>
+<li>
+<p>setting the value to <code>true</code> will enable SSL/TLS  even if the client is configured to not use SSL/TLS, the actual
+client SSL/TLS (such as trust, key/certificate, ciphers, ALPN, &#8230;&#8203;) will be reused</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Likewise <code><a href="../../yardoc/Vertx/HttpClient.html#request_abs-instance_method">requestAbs</a></code> scheme
+also overrides the default client setting.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_websockets">WebSockets</h3>
@@ -2700,16 +2906,20 @@ providing a handler.</p>
 <div class="sect3">
 <h4 id="_writing_messages_to_websockets">Writing messages to WebSockets</h4>
 <div class="paragraph">
-<p>If you wish to write a single binary WebSocket message to the WebSocket you can do this with
-<code><a href="../../yardoc/Vertx/WebSocket.html#write_binary_message-instance_method">writeBinaryMessage</a></code>:</p>
+<p>If you wish to write a single WebSocket message to the WebSocket you can do this with
+<code><a href="../../yardoc/Vertx/WebSocket.html#write_binary_message-instance_method">writeBinaryMessage</a></code> or
+<code><a href="../../yardoc/Vertx/WebSocket.html#write_text_message-instance_method">writeTextMessage</a></code> :</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/buffer'
-# Write a simple message
+# Write a simple binary message
 buffer = Vertx::Buffer.buffer().append_int(123).append_float(1.23)
+websocket.write_binary_message(buffer)
 
-websocket.write_binary_message(buffer)</code></pre>
+# Write a simple text message
+message = "hello"
+websocket.write_text_message(message)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2888,7 +3098,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:00:58 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

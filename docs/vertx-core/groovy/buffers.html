@@ -148,7 +148,7 @@ necessary to accommodate any bytes written to it. You can perhaps think of a buf
 <div class="sect2">
 <h3 id="_creating_buffers">Creating buffers</h3>
 <div class="paragraph">
-<p>Buffers can create by using one of the static <code><a href="../../groovydoc/io/vertx/groovy/core/buffer/Buffer.html#buffer()">Buffer.buffer</a></code> methods.</p>
+<p>Buffers can create by using one of the static <code><a href="../../apidocs/io/vertx/core/buffer/Buffer.html#buffer--">Buffer.buffer</a></code> methods.</p>
 </div>
 <div class="paragraph">
 <p>Buffers can be initialised from strings or byte arrays, or empty buffers can be created.</p>
@@ -161,8 +161,7 @@ necessary to accommodate any bytes written to it. You can perhaps think of a buf
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-def buff = Buffer.buffer()</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def buff = Buffer.buffer()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -170,8 +169,7 @@ def buff = Buffer.buffer()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-def buff = Buffer.buffer("some string")</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def buff = Buffer.buffer("some string")</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -179,8 +177,7 @@ def buff = Buffer.buffer("some string")</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-def buff = Buffer.buffer("some string", "UTF-16")</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def buff = Buffer.buffer("some string", "UTF-16")</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -193,8 +190,7 @@ more efficient than the buffer automatically resizing multiple times as data is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-def buff = Buffer.buffer(10000)</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def buff = Buffer.buffer(10000)</code></pre>
 </div>
 </div>
 </div>
@@ -216,8 +212,7 @@ Append methods exist for appending various different types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-def buff = Buffer.buffer()
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def buff = Buffer.buffer()
 
 buff.appendInt(123).appendString("hello\n")
 
@@ -237,8 +232,7 @@ represents the position in the buffer where to start writing the data.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-def buff = Buffer.buffer()
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def buff = Buffer.buffer()
 
 buff.setInt(1000, 123)
 buff.setString(0, "hello")</code></pre>
@@ -254,8 +248,7 @@ The first argument to these methods is an index in the buffer from where to get 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-def buff = Buffer.buffer()
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def buff = Buffer.buffer()
 for (def i = 0;i &lt; buff.length();4) {
   println("int value at ${i} is ${buff.getInt(i)}")
 }</code></pre>
@@ -274,8 +267,7 @@ network protocol optimized to minimize bandwidth consumption.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-def buff = Buffer.buffer(128)
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def buff = Buffer.buffer(128)
 def pos = 15
 buff.setUnsignedByte(pos, 200)
 println(buff.getUnsignedByte(pos))</code></pre>
@@ -288,21 +280,21 @@ println(buff.getUnsignedByte(pos))</code></pre>
 <div class="sect2">
 <h3 id="_buffer_length">Buffer length</h3>
 <div class="paragraph">
-<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/buffer/Buffer.html#length()">length</a></code> to obtain the length of the buffer.
+<p>Use <code><a href="../../apidocs/io/vertx/core/buffer/Buffer.html#length--">length</a></code> to obtain the length of the buffer.
 The length of a buffer is the index of the byte in the buffer with the largest index + 1.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_copying_buffers">Copying buffers</h3>
 <div class="paragraph">
-<p>Use <code><a href="../../groovydoc/io/vertx/groovy/core/buffer/Buffer.html#copy()">copy</a></code> to make a copy of the buffer</p>
+<p>Use <code><a href="../../apidocs/io/vertx/core/buffer/Buffer.html#copy--">copy</a></code> to make a copy of the buffer</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_slicing_buffers">Slicing buffers</h3>
 <div class="paragraph">
 <p>A sliced buffer is a new buffer which backs onto the original buffer, i.e. it does not copy the underlying data.
-Use <code><a href="../../groovydoc/io/vertx/groovy/core/buffer/Buffer.html#slice()">slice</a></code> to create a sliced buffers</p>
+Use <code><a href="../../apidocs/io/vertx/core/buffer/Buffer.html#slice--">slice</a></code> to create a sliced buffers</p>
 </div>
 </div>
 <div class="sect2">
@@ -320,7 +312,7 @@ Use <code><a href="../../groovydoc/io/vertx/groovy/core/buffer/Buffer.html#slice
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:00:58 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

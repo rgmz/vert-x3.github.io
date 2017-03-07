@@ -224,7 +224,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-dropwizard-metrics&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -237,7 +237,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-dropwizard-metrics:3.3.3'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-dropwizard-metrics:3.4.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -357,6 +357,16 @@ metrics.handlers;</code></pre>
 Array.prototype.forEach.call(metricsNames, function(metricsName) {
   console.log("Known metrics name " + metricsName);
 });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>baseName</code> defaults to <code>vertx</code>, but can be set to a custom value:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var metricsOptions = {
+  "baseName" : "foo"
+};</code></pre>
 </div>
 </div>
 </div>
@@ -789,6 +799,28 @@ var vertx = Vertx.vertx({
       },
       {
         "value" : "/foo/.*",
+        "type" : "REGEX"
+      }
+    ]
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In case if the uri contains some path parameters like <code>/users/:userId</code> it might not make sense to have a separate entry in the registry for each user
+id (like <code>get-requests./users/1</code>, <code>get-requests./users/2</code> and so on) but a summarized one. To achieve that you can set an alias to the match instance
+in this case the alias will be used as a part of the registry name instead of uri like <code>&lt;http-method&gt;-requests.&lt;alias&gt;</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
+var vertx = Vertx.vertx({
+  "metricsOptions" : {
+    "enabled" : true,
+    "monitoredHttpServerUris" : [
+      {
+        "value" : "/users/.*",
+        "alias" : "users",
         "type" : "REGEX"
       }
     ]
@@ -1252,7 +1284,7 @@ details about check configuration.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

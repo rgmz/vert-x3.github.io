@@ -182,7 +182,7 @@ build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-camel-bridge&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -195,7 +195,7 @@ build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-camel-bridge:3.3.3'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-camel-bridge:3.4.0'</code></pre>
 </div>
 </div>
 </div>
@@ -215,7 +215,7 @@ io.vertx.camel.CamelBridge.create(vertx, new io.vertx.camel.CamelBridgeOptions(c
 <div class="paragraph">
 <p>The bridge requires a <code>CamelContext</code>. It will find the endpoint from the context. The bridge needs to be started
 before being used. Be aware the the <code>start</code> method is asynchronous. You can use
-<code>start</code> to be notified when the bridge has been started.</p>
+<code><a href="../../apidocs/io/vertx/camel/CamelBridge.html#start-io.vertx.core.Handler-">start</a></code> to be notified when the bridge has been started.</p>
 </div>
 <div class="sect2">
 <h3 id="_inbound_mapping">Inbound mapping</h3>
@@ -251,7 +251,7 @@ sets, it looks in the Camel context for a converter between the Camel message pa
 </ul>
 </div>
 <div class="paragraph">
-<p><em>Note</em>: <code>org.fusesource.hawtbuf.Buffer</code> are automatically converted to <code><a href="../../groovydoc/io/vertx/groovy/core/buffer/Buffer.html">Buffer</a></code>.</p>
+<p><em>Note</em>: <code>org.fusesource.hawtbuf.Buffer</code> are automatically converted to <code><a href="../../apidocs/io/vertx/core/buffer/Buffer.html">Buffer</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>If <code>send</code> is used (so not <code>publish</code>), and when the Camel exchange expect a reply (<em>In Out</em> exchange), the Vert.x
@@ -259,21 +259,7 @@ code expect as reply to the sent message. When the reply arrives it is propagate
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def endpoint = camel.getEndpoint("direct:stuff")
-
-def bridge = io.vertx.camel.CamelBridge.create(vertx, new io.vertx.camel.CamelBridgeOptions(camel).addInboundMapping(new io.vertx.camel.InboundMapping().setAddress("test-reply").setEndpoint(endpoint)))
-
-vertx.eventBus().consumer("with-reply", { message -&gt;
-  message.reply("How are you ?")
-})
-
-camel.start()
-bridge.start()
-
-def template = camel.createProducerTemplate()
-def future = template.asyncRequestBody(endpoint, "hello")
-def response = template.extractFutureBody(future, java.lang.String.class)
-// response == How are you ?</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
 </div>
 </div>
 </div>
@@ -334,6 +320,32 @@ vertx.eventBus().send("camel-route", "hello", { reply -&gt;
 })</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>If the processing you apply is blocking, you <strong>must</strong> set <em>blocking</em> to <code>true</code>. This avoid executing the
+processing on the event loop thread:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">camel.addRoutes(new org.apache.camel.builder.RouteBuilder())
+
+def bridge = io.vertx.camel.CamelBridge.create(vertx, new io.vertx.camel.CamelBridgeOptions(camel).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx("camel-route").toCamel("direct:my-route").setBlocking(true)))
+
+camel.start()
+bridge.start()
+
+vertx.eventBus().send("camel-route", "hello", { reply -&gt;
+  if (reply.succeeded()) {
+    def theResponse = reply.result().body()
+  } else {
+    def theCause = reply.cause()
+  }
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default it uses the default worker thread pool, this is customizable using the
+<code><a href="../../apidocs/io/vertx/camel/OutboundMapping.html#setWorkerExecutor-io.vertx.core.WorkerExecutor-">setWorkerExecutor</a></code> method.</p>
+</div>
 </div>
 </div>
 </div>
@@ -342,7 +354,7 @@ vertx.eventBus().send("camel-route", "hello", { reply -&gt;
 <div class="sectionbody">
 <div class="paragraph">
 <p>Don&#8217;t forget to stop the bridge using the <code>stop</code> method. The <code>stop</code> method is asynchronous. You can use
-<code>stop</code> to be notified when the bridge has been stopped.</p>
+<code><a href="../../apidocs/io/vertx/camel/CamelBridge.html#stop-io.vertx.core.Handler-">stop</a></code> to be notified when the bridge has been stopped.</p>
 </div>
 </div>
 </div>
@@ -353,7 +365,7 @@ vertx.eventBus().send("camel-route", "hello", { reply -&gt;
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

@@ -288,8 +288,7 @@ vertx.fileSystem().open("target/classes/hello.txt", OpenOptions(), (AsyncFile|Th
   if (is AsyncFile result) {
     value file = result;
     value buff = buffer.buffer("foo");
-    variable value i = 0;
-    while (i &lt; 5) {
+    for (i in 0:5) {
       file.write(buff, buff.length() * i, (Throwable? ar) {
         if (!exists ar) {
           print("Written ok!");
@@ -298,7 +297,7 @@ vertx.fileSystem().open("target/classes/hello.txt", OpenOptions(), (AsyncFile|Th
           print("Failed to write: ``ar``");
         };
       });
-      i++};
+    };
   } else {
     print("Cannot open file ``result``");
   };
@@ -350,8 +349,7 @@ vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), (Asy
   if (is AsyncFile result) {
     value file = result;
     value buff = buffer.buffer(1000);
-    variable value i = 0;
-    while (i &lt; 10) {
+    for (i in 0:10) {
       file.read(buff, i * 100, i * 100, 100, (Buffer|Throwable ar) {
         if (is Buffer ar) {
           print("Read ok!");
@@ -359,7 +357,7 @@ vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), (Asy
           print("Failed to write: ``ar``");
         };
       });
-      i++};
+    };
   } else {
     print("Cannot open file ``result``");
   };
@@ -488,7 +486,7 @@ if you want to be notified when the close has been completed you can specify a h
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

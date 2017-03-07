@@ -167,7 +167,7 @@ and NetClient (see above).</p>
 <div class="sect2">
 <h3 id="_creating_a_datagramsocket">Creating a DatagramSocket</h3>
 <div class="paragraph">
-<p>To use UDP you first need t create a <code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramSocket.html">DatagramSocket</a></code>. It does not matter here if you only want to send data or send
+<p>To use UDP you first need t create a <code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html">DatagramSocket</a></code>. It does not matter here if you only want to send data or send
 and receive.</p>
 </div>
 <div class="listingblock">
@@ -176,7 +176,7 @@ and receive.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The returned <code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramSocket.html">DatagramSocket</a></code> will not be bound to a specific port. This is not a
+<p>The returned <code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html">DatagramSocket</a></code> will not be bound to a specific port. This is not a
 problem if you only want to send data (like a client), but more on this in the next section.</p>
 </div>
 </div>
@@ -194,8 +194,7 @@ them in a persistent fashion.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-def socket = vertx.createDatagramSocket([:])
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def socket = vertx.createDatagramSocket([:])
 def buffer = Buffer.buffer("content")
 // Send a Buffer
 socket.send(buffer, 1234, "10.0.0.1", { asyncResult -&gt;
@@ -211,26 +210,26 @@ socket.send("A string used as content", 1234, "10.0.0.1", { asyncResult -&gt;
 <div class="sect2">
 <h3 id="_receiving_datagram_packets">Receiving Datagram packets</h3>
 <div class="paragraph">
-<p>If you want to receive packets you need to bind the <code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramSocket.html">DatagramSocket</a></code> by calling
+<p>If you want to receive packets you need to bind the <code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html">DatagramSocket</a></code> by calling
 <code>listen(&#8230;&#8203;)}</code> on it.</p>
 </div>
 <div class="paragraph">
-<p>This way you will be able to receive <code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramPacket.html">DatagramPacket</a>`s that were sent to the address and port on
-which the `<a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramSocket.html">DatagramSocket</a></code> listens.</p>
+<p>This way you will be able to receive <code><a href="../../apidocs/io/vertx/core/datagram/DatagramPacket.html">DatagramPacket</a>`s that were sent to the address and port on
+which the `<a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html">DatagramSocket</a></code> listens.</p>
 </div>
 <div class="paragraph">
-<p>Beside this you also want to set a <code>Handler</code> which will be called for each received <code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramPacket.html">DatagramPacket</a></code>.</p>
+<p>Beside this you also want to set a <code>Handler</code> which will be called for each received <code><a href="../../apidocs/io/vertx/core/datagram/DatagramPacket.html">DatagramPacket</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramPacket.html">DatagramPacket</a></code> has the following methods:</p>
+<p>The <code><a href="../../apidocs/io/vertx/core/datagram/DatagramPacket.html">DatagramPacket</a></code> has the following methods:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramPacket.html#sender()">sender</a></code>: The InetSocketAddress which represent the sender of the packet</p>
+<p><code><a href="../../apidocs/io/vertx/core/datagram/DatagramPacket.html#sender--">sender</a></code>: The InetSocketAddress which represent the sender of the packet</p>
 </li>
 <li>
-<p><code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramPacket.html#data()">data</a></code>: The Buffer which holds the data which was received.</p>
+<p><code><a href="../../apidocs/io/vertx/core/datagram/DatagramPacket.html#data--">data</a></code>: The Buffer which holds the data which was received.</p>
 </li>
 </ul>
 </div>
@@ -281,8 +280,7 @@ to which you can send packets.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.core.buffer.Buffer
-def socket = vertx.createDatagramSocket([:])
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def socket = vertx.createDatagramSocket([:])
 def buffer = Buffer.buffer("content")
 // Send a Buffer to a multicast address
 socket.send(buffer, 1234, "230.0.0.1", { asyncResult -&gt;
@@ -296,18 +294,18 @@ socket.send(buffer, 1234, "230.0.0.1", { asyncResult -&gt;
 <div class="sect4">
 <h5 id="_receiving_multicast_packets">Receiving Multicast packets</h5>
 <div class="paragraph">
-<p>If you want to receive packets for specific Multicast group you need to bind the <code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramSocket.html">DatagramSocket</a></code> by
+<p>If you want to receive packets for specific Multicast group you need to bind the <code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html">DatagramSocket</a></code> by
 calling <code>listen(&#8230;&#8203;)</code> on it and join the Multicast group.</p>
 </div>
 <div class="paragraph">
 <p>This way you will be able to receive DatagramPackets that were sent to the address and port on which the
-<code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramSocket.html">DatagramSocket</a></code> listens and also to those sent to the Multicast group.</p>
+<code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html">DatagramSocket</a></code> listens and also to those sent to the Multicast group.</p>
 </div>
 <div class="paragraph">
 <p>Beside this you also want to set a Handler which will be called for each received DatagramPacket.</p>
 </div>
 <div class="paragraph">
-<p>The <code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramPacket.html">DatagramPacket</a></code> has the following methods:</p>
+<p>The <code><a href="../../apidocs/io/vertx/core/datagram/DatagramPacket.html">DatagramPacket</a></code> has the following methods:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -417,36 +415,36 @@ socket.blockMulticastGroup("230.0.0.1", "10.0.0.2", { asyncResult -&gt;
 <div class="sect3">
 <h4 id="_datagramsocket_properties">DatagramSocket properties</h4>
 <div class="paragraph">
-<p>When creating a <code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramSocket.html">DatagramSocket</a></code> there are multiple properties you can set to
-change it&#8217;s behaviour with the <code><a href="../dataobjects.html#DatagramSocketOptions">DatagramSocketOptions</a></code> object. Those are listed here:</p>
+<p>When creating a <code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html">DatagramSocket</a></code> there are multiple properties you can set to
+change it&#8217;s behaviour with the <code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocketOptions.html">DatagramSocketOptions</a></code> object. Those are listed here:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="../dataobjects.html#DatagramSocketOptions#setSendBufferSize(int)">sendBufferSize</a></code> Sets the send buffer size in bytes.</p>
+<p><code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocketOptions.html#setSendBufferSize-int-">setSendBufferSize</a></code> Sets the send buffer size in bytes.</p>
 </li>
 <li>
-<p><code><a href="../dataobjects.html#DatagramSocketOptions#setReceiveBufferSize(int)">receiveBufferSize</a></code> Sets the TCP receive buffer size
+<p><code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocketOptions.html#setReceiveBufferSize-int-">setReceiveBufferSize</a></code> Sets the TCP receive buffer size
 in bytes.</p>
 </li>
 <li>
-<p><code><a href="../dataobjects.html#DatagramSocketOptions#setReuseAddress(boolean)">reuseAddress</a></code> If true then addresses in TIME_WAIT
+<p><code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocketOptions.html#setReuseAddress-boolean-">setReuseAddress</a></code> If true then addresses in TIME_WAIT
 state can be reused after they have been closed.</p>
 </li>
 <li>
-<p><code><a href="../dataobjects.html#DatagramSocketOptions#setTrafficClass(int)">trafficClass</a></code></p>
+<p><code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocketOptions.html#setTrafficClass-int-">setTrafficClass</a></code></p>
 </li>
 <li>
-<p><code><a href="../dataobjects.html#DatagramSocketOptions#setBroadcast(boolean)">broadcast</a></code> Sets or clears the SO_BROADCAST socket
+<p><code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocketOptions.html#setBroadcast-boolean-">setBroadcast</a></code> Sets or clears the SO_BROADCAST socket
 option. When this option is set, Datagram (UDP) packets may be sent to a local interface&#8217;s broadcast address.</p>
 </li>
 <li>
-<p><code><a href="../dataobjects.html#DatagramSocketOptions#setMulticastNetworkInterface(java.lang.String)">multicastNetworkInterface</a></code> Sets or clears
+<p><code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocketOptions.html#setMulticastNetworkInterface-java.lang.String-">setMulticastNetworkInterface</a></code> Sets or clears
 the IP_MULTICAST_LOOP socket option. When this option is set, multicast packets will also be received on the
 local interface.</p>
 </li>
 <li>
-<p><code><a href="../dataobjects.html#DatagramSocketOptions#setMulticastTimeToLive(int)">multicastTimeToLive</a></code> Sets the IP_MULTICAST_TTL socket
+<p><code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocketOptions.html#setMulticastTimeToLive-int-">setMulticastTimeToLive</a></code> Sets the IP_MULTICAST_TTL socket
 option. TTL stands for "Time to Live," but in this context it specifies the number of IP hops that a packet is
 allowed to go through, specifically for multicast traffic. Each router or gateway that forwards a packet decrements
 the TTL. If the TTL is decremented to 0 by a router, it will not be forwarded.</p>
@@ -458,14 +456,14 @@ the TTL. If the TTL is decremented to 0 by a router, it will not be forwarded.</
 <h4 id="_datagramsocket_local_address">DatagramSocket Local Address</h4>
 <div class="paragraph">
 <p>You can find out the local address of the socket (i.e. the address of this side of the UDP Socket) by calling
-<code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramSocket.html#localAddress()">localAddress</a></code>. This will only return an <code>InetSocketAddress</code> if you
-bound the <code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramSocket.html">DatagramSocket</a></code> with <code>listen(&#8230;&#8203;)</code> before, otherwise it will return null.</p>
+<code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html#localAddress--">localAddress</a></code>. This will only return an <code>InetSocketAddress</code> if you
+bound the <code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html">DatagramSocket</a></code> with <code>listen(&#8230;&#8203;)</code> before, otherwise it will return null.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_closing_a_datagramsocket">Closing a DatagramSocket</h4>
 <div class="paragraph">
-<p>You can close a socket by invoking the <code><a href="../../groovydoc/io/vertx/groovy/core/datagram/DatagramSocket.html#close(io.vertx.core.Handler)">close</a></code> method. This will close
+<p>You can close a socket by invoking the <code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html#close-io.vertx.core.Handler-">close</a></code> method. This will close
 the socket and release all resources</p>
 </div>
 </div>
@@ -479,7 +477,7 @@ the socket and release all resources</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:00:58 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>

@@ -103,6 +103,7 @@
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
 <li><a href="#_jdbc_auth_provider_implementation">JDBC Auth Provider implementation</a></li>
+<li><a href="#_hashing_passwords">Hashing passwords</a></li>
 <li><a href="#_authentication">Authentication</a></li>
 <li><a href="#_authorisation_permission_role_model">Authorisation - Permission-Role Model</a></li>
 </ul>
@@ -113,6 +114,7 @@
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
 <li><a href="#_jdbc_auth_provider_implementation">JDBC Auth Provider implementation</a></li>
+<li><a href="#_hashing_passwords">Hashing passwords</a></li>
 <li><a href="#_authentication">Authentication</a></li>
 <li><a href="#_authorisation_permission_role_model">Authorisation - Permission-Role Model</a></li>
 </ul>
@@ -140,7 +142,7 @@ add the following dependency to the <em>dependencies</em> section of your build 
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-auth-jdbc&lt;/artifactId&gt;
-  &lt;version&gt;3.3.3&lt;/version&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -153,7 +155,7 @@ add the following dependency to the <em>dependencies</em> section of your build 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jdbc:3.3.3'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jdbc:3.4.0'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -167,7 +169,7 @@ of those please consult the documentation for the JDBC client.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">JDBCClient jdbcClient = JDBCClient.createShared(vertx, jdbcClientConfig);
 
-JDBCAuth authProvider = JDBCAuth.create(jdbcClient);</code></pre>
+JDBCAuth authProvider = JDBCAuth.create(vertx, jdbcClient);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -183,6 +185,38 @@ database schema.</p>
 <div class="paragraph">
 <p>The default implementation assumes that the password is stored in the database as a SHA-512 hash after being
 concatenated with a salt. It also assumes the salt is stored in the table too.</p>
+</div>
+<div class="paragraph">
+<p>The basic data definition for the storage should look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-sql" data-lang="sql">--
+-- Take this script with a grain of salt and adapt it to your RDBMS
+--
+CREATE TABLE `user` (
+  `username` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `password_salt` VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE `user_roles` (
+  `username` VARCHAR(255) NOT NULL,
+  `role` VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE `roles_perms` (
+  `role` VARCHAR(255) NOT NULL,
+  `perm` VARCHAR(255) NOT NULL
+);
+
+ALTER TABLE user ADD CONSTRAINT `pk_username` PRIMARY KEY (username);
+ALTER TABLE user_roles ADD CONSTRAINT `pk_user_roles` PRIMARY KEY (username, role);
+ALTER TABLE roles_perms ADD CONSTRAINT `pk_roles_perms` PRIMARY KEY (role);
+
+ALTER TABLE user_roles ADD CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES user(username);
+ALTER TABLE user_roles ADD CONSTRAINT fk_roles FOREIGN KEY (role) REFERENCES roles_perms(role);</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>If you want to override this behaviour you can do so by providing an alternative hash strategy and setting it with
@@ -201,6 +235,41 @@ never to store your passwords as plain text.
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_hashing_passwords">Hashing passwords</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Like any application there will be a time where you need to store new users into the database. Has you have learn
+passwords are not stored in plain text but hashed according to the hashing strategy. The same strategy is required
+to hash new password before storing it to the database. Doing it is a 3 step task.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Generate a salt string</p>
+</li>
+<li>
+<p>Hash the password given the salt string</p>
+</li>
+<li>
+<p>Store it to the database</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">String salt = auth.generateSalt();
+String hash = auth.computeHash("sausages", salt);
+// save to the database
+conn.updateWithParams("INSERT INTO user VALUES (?, ?, ?)", new JsonArray().add("tim").add(hash).add(salt), res -&gt; {
+  if (res.succeeded()) {
+    // success!
+  }
+});</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -276,7 +345,7 @@ can have zero or more permissions.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2016-09-08 18:01:00 CEST
+                Last updated 2017-03-06 23:34:44 CET
               
               
             </div>
