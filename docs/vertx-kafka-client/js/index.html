@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -108,6 +109,7 @@
 <li><a href="#_getting_topic_partition_information">Getting topic partition information</a></li>
 <li><a href="#_manual_offset_commit">Manual offset commit</a></li>
 <li><a href="#_seeking_in_a_topic_partition">Seeking in a topic partition</a></li>
+<li><a href="#_offset_lookup">Offset lookup</a></li>
 <li><a href="#_message_flow_control">Message flow control</a></li>
 <li><a href="#_closing_a_consumer">Closing a consumer</a></li>
 <li><a href="#_sending_messages_to_a_topic">Sending messages to a topic</a></li>
@@ -131,6 +133,7 @@
 <li><a href="#_getting_topic_partition_information">Getting topic partition information</a></li>
 <li><a href="#_manual_offset_commit">Manual offset commit</a></li>
 <li><a href="#_seeking_in_a_topic_partition">Seeking in a topic partition</a></li>
+<li><a href="#_offset_lookup">Offset lookup</a></li>
 <li><a href="#_message_flow_control">Message flow control</a></li>
 <li><a href="#_closing_a_consumer">Closing a consumer</a></li>
 <li><a href="#_sending_messages_to_a_topic">Sending messages to a topic</a></li>
@@ -188,7 +191,7 @@ of your build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-kafka-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.0&lt;/version&gt;
+  &lt;version&gt;3.4.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -201,7 +204,7 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-kafka-client:3.4.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-kafka-client:3.4.1</code></pre>
 </div>
 </div>
 </div>
@@ -536,7 +539,7 @@ consumer.commit(function (ar, ar_err) {
 <div class="sectionbody">
 <div class="paragraph">
 <p>Apache Kafka can retain messages for a long period of time and the consumer can seek inside a topic partition
-and obtain arbitraty access to the messages.</p>
+and obtain arbitrary access to the messages.</p>
 </div>
 <div class="paragraph">
 <p>You can use <code><a href="../../jsdoc/module-vertx-kafka-client-js_kafka_consumer-KafkaConsumer.html#seek">seek</a></code> to change the offset for reading at a specific
@@ -594,6 +597,85 @@ consumer.seekToEnd(Java.type("java.util.Collections").singleton(topicPartition),
     console.log("Seeking done");
   }
 });</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_offset_lookup">Offset lookup</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can use the beginningOffsets API introduced in Kafka 0.10.1.1 to get the first offset
+for a given partition. In contrast to <code><a href="../../jsdoc/module-vertx-kafka-client-js_kafka_consumer-KafkaConsumer.html#seekToBeginning">seekToBeginning</a></code>,
+it does not change the consumer&#8217;s offset.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var topicPartitions = new (Java.type("java.util.HashSet"))();
+var topicPartition = {
+  "topic" : "test",
+  "partition" : 0
+};
+topicPartitions.add(topicPartition);
+
+consumer.beginningOffsets(topicPartitions, function (done, done_err) {
+  if (done_err == null) {
+    var results = done;
+    results.forEach(function (beginningOffset, topic) {
+      console.log("Beginning offset for topic=" + topic.topic + ", partition=" + topic.partition + ", beginningOffset=" + beginningOffset);
+    });
+  }
+});
+
+// Convenience method for single-partition lookup
+consumer.beginningOffsets(topicPartition, function (done, done_err) {
+  if (done_err == null) {
+    var beginningOffset = done;
+    console.log("Beginning offset for topic=" + topicPartition.topic + ", partition=" + topicPartition.partition + ", beginningOffset=" + beginningOffset);
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use the endOffsets API introduced in Kafka 0.10.1.1 to get the last offset
+for a given partition. In contrast to <code><a href="../../jsdoc/module-vertx-kafka-client-js_kafka_consumer-KafkaConsumer.html#seekToEnd">seekToEnd</a></code>,
+it does not change the consumer&#8217;s offset.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var topicPartitions = new (Java.type("java.util.HashSet"))();
+var topicPartition = {
+  "topic" : "test",
+  "partition" : 0
+};
+topicPartitions.add(topicPartition);
+
+consumer.endOffsets(topicPartitions, function (done, done_err) {
+  if (done_err == null) {
+    var results = done;
+    results.forEach(function (endOffset, topic) {
+      console.log("End offset for topic=" + topic.topic + ", partition=" + topic.partition + ", endOffset=" + endOffset);
+    });
+  }
+});
+
+// Convenience method for single-partition lookup
+consumer.endOffsets(topicPartition, function (done, done_err) {
+  if (done_err == null) {
+    var endOffset = done;
+    console.log("End offset for topic=" + topicPartition.topic + ", partition=" + topicPartition.partition + ", endOffset=" + endOffset);
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use the offsetsForTimes API introduced in Kafka 0.10.1.1 to look up an offset by
+timestamp, i.e. search parameter is an epoch timestamp and the call returns the lowest offset
+with ingestion timestamp &gt;= given timestamp.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
 </div>
 </div>
 </div>
@@ -952,7 +1034,7 @@ config["acks"] = "1";</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-06 23:34:44 CET
+                Last updated 2017-03-15 15:54:14 CET
               
               
             </div>

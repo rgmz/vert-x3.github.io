@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -108,6 +109,7 @@
 <li><a href="#_getting_topic_partition_information">Getting topic partition information</a></li>
 <li><a href="#_manual_offset_commit">Manual offset commit</a></li>
 <li><a href="#_seeking_in_a_topic_partition">Seeking in a topic partition</a></li>
+<li><a href="#_offset_lookup">Offset lookup</a></li>
 <li><a href="#_message_flow_control">Message flow control</a></li>
 <li><a href="#_closing_a_consumer">Closing a consumer</a></li>
 <li><a href="#_sending_messages_to_a_topic">Sending messages to a topic</a></li>
@@ -133,6 +135,7 @@
 <li><a href="#_getting_topic_partition_information">Getting topic partition information</a></li>
 <li><a href="#_manual_offset_commit">Manual offset commit</a></li>
 <li><a href="#_seeking_in_a_topic_partition">Seeking in a topic partition</a></li>
+<li><a href="#_offset_lookup">Offset lookup</a></li>
 <li><a href="#_message_flow_control">Message flow control</a></li>
 <li><a href="#_closing_a_consumer">Closing a consumer</a></li>
 <li><a href="#_sending_messages_to_a_topic">Sending messages to a topic</a></li>
@@ -192,7 +195,7 @@ of your build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-kafka-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.0&lt;/version&gt;
+  &lt;version&gt;3.4.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -205,7 +208,7 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-kafka-client:3.4.0</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-kafka-client:3.4.1</code></pre>
 </div>
 </div>
 </div>
@@ -559,7 +562,7 @@ the offset.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Apache Kafka can retain messages for a long period of time and the consumer can seek inside a topic partition
-and obtain arbitraty access to the messages.</p>
+and obtain arbitrary access to the messages.</p>
 </div>
 <div class="paragraph">
 <p>You can use <code><a href="../../apidocs/io/vertx/kafka/client/consumer/KafkaConsumer.html#seek-io.vertx.kafka.client.common.TopicPartition-long-">seek</a></code> to change the offset for reading at a specific
@@ -612,6 +615,110 @@ consumer.seekToEnd(Collections.singleton(topicPartition), done -&gt; {
 
   if (done.succeeded()) {
     System.out.println("Seeking done");
+  }
+});</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_offset_lookup">Offset lookup</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can use the beginningOffsets API introduced in Kafka 0.10.1.1 to get the first offset
+for a given partition. In contrast to <code><a href="../../apidocs/io/vertx/kafka/client/consumer/KafkaConsumer.html#seekToBeginning-io.vertx.kafka.client.common.TopicPartition-">seekToBeginning</a></code>,
+it does not change the consumer&#8217;s offset.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Set&lt;TopicPartition&gt; topicPartitions = new HashSet&lt;&gt;();
+TopicPartition topicPartition = new TopicPartition().setTopic("test").setPartition(0);
+topicPartitions.add(topicPartition);
+
+consumer.beginningOffsets(topicPartitions, done -&gt; {
+  if(done.succeeded()) {
+    Map&lt;TopicPartition, Long&gt; results = done.result();
+    results.forEach((topic, beginningOffset) -&gt;
+      System.out.println("Beginning offset for topic="+topic.getTopic()+", partition="+
+        topic.getPartition()+", beginningOffset="+beginningOffset));
+  }
+});
+
+// Convenience method for single-partition lookup
+consumer.beginningOffsets(topicPartition, done -&gt; {
+  if(done.succeeded()) {
+    Long beginningOffset = done.result();
+      System.out.println("Beginning offset for topic="+topicPartition.getTopic()+", partition="+
+        topicPartition.getPartition()+", beginningOffset="+beginningOffset);
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use the endOffsets API introduced in Kafka 0.10.1.1 to get the last offset
+for a given partition. In contrast to <code><a href="../../apidocs/io/vertx/kafka/client/consumer/KafkaConsumer.html#seekToEnd-io.vertx.kafka.client.common.TopicPartition-">seekToEnd</a></code>,
+it does not change the consumer&#8217;s offset.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Set&lt;TopicPartition&gt; topicPartitions = new HashSet&lt;&gt;();
+TopicPartition topicPartition = new TopicPartition().setTopic("test").setPartition(0);
+topicPartitions.add(topicPartition);
+
+consumer.endOffsets(topicPartitions, done -&gt; {
+  if(done.succeeded()) {
+    Map&lt;TopicPartition, Long&gt; results = done.result();
+    results.forEach((topic, endOffset) -&gt;
+      System.out.println("End offset for topic="+topic.getTopic()+", partition="+
+        topic.getPartition()+", endOffset="+endOffset));
+  }
+});
+
+// Convenience method for single-partition lookup
+consumer.endOffsets(topicPartition, done -&gt; {
+  if(done.succeeded()) {
+    Long endOffset = done.result();
+      System.out.println("End offset for topic="+topicPartition.getTopic()+", partition="+
+        topicPartition.getPartition()+", endOffset="+endOffset);
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use the offsetsForTimes API introduced in Kafka 0.10.1.1 to look up an offset by
+timestamp, i.e. search parameter is an epoch timestamp and the call returns the lowest offset
+with ingestion timestamp &gt;= given timestamp.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Map&lt;TopicPartition, Long&gt; topicPartitionsWithTimestamps = new HashMap&lt;&gt;();
+TopicPartition topicPartition = new TopicPartition().setTopic("test").setPartition(0);
+
+// We are interested in the offset for data ingested 60 seconds ago
+long timestamp = (System.currentTimeMillis() - 60000);
+
+topicPartitionsWithTimestamps.put(topicPartition, timestamp);
+consumer.offsetsForTimes(topicPartitionsWithTimestamps, done -&gt; {
+  if(done.succeeded()) {
+    Map&lt;TopicPartition, OffsetAndTimestamp&gt; results = done.result();
+    results.forEach((topic, offset) -&gt;
+      System.out.println("Offset for topic="+topic.getTopic()+
+        ", partition="+topic.getPartition()+"\n"+
+        ", timestamp="+timestamp+", offset="+offset.getOffset()+
+        ", offsetTimestamp="+offset.getTimestamp()));
+
+  }
+});
+
+// Convenience method for single-partition lookup
+consumer.offsetsForTimes(topicPartition, timestamp, done -&gt; {
+  if(done.succeeded()) {
+    OffsetAndTimestamp offsetAndTimestamp = done.result();
+      System.out.println("Offset for topic="+topicPartition.getTopic()+
+        ", partition="+topicPartition.getPartition()+"\n"+
+        ", timestamp="+timestamp+", offset="+offsetAndTimestamp.getOffset()+
+        ", offsetTimestamp="+offsetAndTimestamp.getTimestamp());
+
   }
 });</code></pre>
 </div>
@@ -1050,7 +1157,7 @@ stream of <code><a href="../../apidocs/org/apache/kafka/clients/producer/Produce
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-06 23:34:44 CET
+                Last updated 2017-03-15 15:54:14 CET
               
               
             </div>

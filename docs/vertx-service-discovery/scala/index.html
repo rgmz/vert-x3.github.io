@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -187,7 +188,7 @@ proxies, HTTP endpoints, data sources&#8230;&#8203;</p>
 functionality. It can be qualified by its type, metadata, and location. So a <code>service</code> can be a database, a
 service proxy, a HTTP endpoint and any other resource you can imagine as soon as you can describe it, discover it
 and interact with it. It does not have to be a vert.x entity, but can be anything. Each service is described by a
-<code><a href="../../apidocs/io/vertx/servicediscovery/Record.html">Record</a></code>.</p>
+<code><a href="../dataobjects.html#Record">Record</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The service discovery implements the interactions defined in service-oriented computing. And to some extent,
@@ -219,7 +220,7 @@ departure of services.</p>
 <p>lookup services</p>
 </li>
 <li>
-<p>bind to a selected service (it gets a <code><a href="../../apidocs/io/vertx/servicediscovery/ServiceReference.html">ServiceReference</a></code>) and use it</p>
+<p>bind to a selected service (it gets a <code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceReference.html">ServiceReference</a></code>) and use it</p>
 </li>
 <li>
 <p>release the service once the consumer is done with it</p>
@@ -231,7 +232,7 @@ departure of services.</p>
 </div>
 <div class="paragraph">
 <p>Consumer would 1) lookup a service record matching their need, 2) retrieve the
-<code><a href="../../apidocs/io/vertx/servicediscovery/ServiceReference.html">ServiceReference</a></code> that give access to the service, 3) get a service object to access
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceReference.html">ServiceReference</a></code> that give access to the service, 3) get a service object to access
 the service, 4) release the service object once done.</p>
 </div>
 <div class="paragraph">
@@ -240,10 +241,10 @@ from which type it is (JDBC client, Http client&#8230;&#8203;).</p>
 </div>
 <div class="paragraph">
 <p>As stated above, the central piece of information shared by the providers and consumers are
-<code><a href="../../apidocs/io/vertx/servicediscovery/Record.html">records</a></code>.</p>
+<code><a href="../dataobjects.html#Record">records</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>Providers and consumers must create their own <code><a href="../../apidocs/io/vertx/servicediscovery/ServiceDiscovery.html">ServiceDiscovery</a></code> instance. These
+<p>Providers and consumers must create their own <code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceDiscovery.html">ServiceDiscovery</a></code> instance. These
 instances are collaborating in the background (distributed structure) to keep the set of services in sync.</p>
 </div>
 <div class="paragraph">
@@ -268,9 +269,9 @@ descriptor:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-&lt;groupId&gt;${maven.groupId}&lt;/groupId&gt;
-&lt;artifactId&gt;${maven.artifactId}&lt;/artifactId&gt;
-&lt;version&gt;${maven.version}&lt;/version&gt;
+&lt;groupId&gt;io.vertx&lt;/groupId&gt;
+&lt;artifactId&gt;vertx-service-discovery-scala_2.12&lt;/artifactId&gt;
+&lt;version&gt;3.4.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -283,7 +284,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile '${maven.groupId}:${maven.artifactId}:${maven.version}'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-scala_2.12:3.4.1'</code></pre>
 </div>
 </div>
 </div>
@@ -297,7 +298,7 @@ descriptor:</p>
 <div class="sect2">
 <h3 id="_service_records">Service records</h3>
 <div class="paragraph">
-<p>A service <code><a href="../../apidocs/io/vertx/servicediscovery/Record.html">Record</a></code> is an object that describes a service published by a service
+<p>A service <code><a href="../dataobjects.html#Record">Record</a></code> is an object that describes a service published by a service
 provider. It contains a name, some metadata, a location object (describing where is the service). This record is
 the only object shared by the provider (having published it) and the consumer (retrieve it when doing a lookup).</p>
 </div>
@@ -319,8 +320,8 @@ describing the provider. It may be a single entity (a provider publishing itself
 <h3 id="_service_consumer">Service Consumer</h3>
 <div class="paragraph">
 <p>Service consumers search for services in the service discovery. Each lookup retrieves <code>0..n</code>
-<code><a href="../../apidocs/io/vertx/servicediscovery/Record.html">Record</a></code>. From these records, a consumer can retrieve a
-<code><a href="../../apidocs/io/vertx/servicediscovery/ServiceReference.html">ServiceReference</a></code>, representing the binding between the consumer and the provider.
+<code><a href="../dataobjects.html#Record">Record</a></code>. From these records, a consumer can retrieve a
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceReference.html">ServiceReference</a></code>, representing the binding between the consumer and the provider.
 This reference allows the consumer to retrieve the <em>service object</em> (to use the service),  and release the service.</p>
 </div>
 <div class="paragraph">
@@ -368,8 +369,8 @@ the record that has been modified.</p>
 </div>
 <div class="paragraph">
 <p>In addition, in order to track who is using who, every time a reference is retrieved with
-<code><a href="../../apidocs/io/vertx/servicediscovery/ServiceDiscovery.html#getReference-io.vertx.servicediscovery.Record-">getReference</a></code> or released with
-<code><a href="../../apidocs/io/vertx/servicediscovery/ServiceReference.html#release--">release</a></code>, events are emitted on the event bus to track the
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceDiscovery.html#getReference(io.vertx.servicediscovery.Record)">getReference</a></code> or released with
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceReference.html#release()">release</a></code>, events are emitted on the event bus to track the
 service usages.</p>
 </div>
 <div class="paragraph">
@@ -381,12 +382,12 @@ service usages.</p>
 <div class="paragraph">
 <p>The service discovery uses a Vert.x distributed data structure to store the records. So, all members of the cluster
 have access to all the records. This is the default backend implementation. You can implement your own by
-implementing the <code><a href="../../apidocs/io/vertx/servicediscovery/spi/ServiceDiscoveryBackend.html">ServiceDiscoveryBackend</a></code> SPI. For instance, we provide an
+implementing the <code>ServiceDiscoveryBackend</code> SPI. For instance, we provide an
 implementation based on Redis.</p>
 </div>
 <div class="paragraph">
 <p>Notice that the discovery does not require Vert.x clustering. In single-node mode, the structure is local. It can
-be populated with `<a href="../../apidocs/io/vertx/servicediscovery/spi/ServiceImporter.html">ServiceImporter</a>`s.</p>
+be populated with `<a href="../../scaladocs/io/vertx/scala/servicediscovery/spi/ServiceImporter.html">ServiceImporter</a>`s.</p>
 </div>
 </div>
 </div>
@@ -395,19 +396,19 @@ be populated with `<a href="../../apidocs/io/vertx/servicediscovery/spi/ServiceI
 <h2 id="_creating_a_service_discovery_instance">Creating a service discovery instance</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Publishers and consumers must create their own <code><a href="../../apidocs/io/vertx/servicediscovery/ServiceDiscovery.html">ServiceDiscovery</a></code>
+<p>Publishers and consumers must create their own <code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceDiscovery.html">ServiceDiscovery</a></code>
 instance to use the discovery infrastructure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Use default configuration
-def discovery = ServiceDiscovery.create(vertx)
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Use default configuration
+var discovery = ServiceDiscovery.create(vertx)
 
 // Customize the configuration
-discovery = ServiceDiscovery.create(vertx, [
-  announceAddress:"service-announce",
-  name:"my-name"
-])
+discovery = ServiceDiscovery.create(vertx, ServiceDiscoveryOptions()
+  .setAnnounceAddress("service-announce")
+  .setName("my-name")
+)
 
 // Do something...
 
@@ -447,42 +448,40 @@ discovery importers and exporters you have configured and releases the service r
 </ol>
 </div>
 <div class="paragraph">
-<p>To create records, you can either use the <code><a href="../../apidocs/io/vertx/servicediscovery/Record.html">Record</a></code> class, or use convenient methods
+<p>To create records, you can either use the <code><a href="../dataobjects.html#Record">Record</a></code> class, or use convenient methods
 from the service types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Manual record creation
-def record = [
-  type:"eventbus-service-proxy",
-  location:[
-    endpoint:"the-service-address"
-  ],
-  name:"my-service",
-  metadata:[
-    'some-label':"some-value"
-  ]
-]
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Manual record creation
+var record = Record()
+  .setType("eventbus-service-proxy")
+  .setLocation(new io.vertx.core.json.JsonObject().put("endpoint", "the-service-address"))
+  .setName("my-service")
+  .setMetadata(new io.vertx.core.json.JsonObject().put("some-label", "some-value"))
 
-discovery.publish(record, { ar -&gt;
-  if (ar.succeeded()) {
+
+discovery.publishFuture(record).onComplete{
+  case Success(result) =&gt; {
     // publication succeeded
-    def publishedRecord = ar.result()
-  } else {
-    // publication failed
+    var publishedRecord = result
   }
-})
+  case Failure(cause) =&gt; {
+    println(s"$cause")
+  }
+}
 
 // Record creation from a type
 record = HttpEndpoint.createRecord("some-rest-api", "localhost", 8080, "/api")
-discovery.publish(record, { ar -&gt;
-  if (ar.succeeded()) {
+discovery.publishFuture(record).onComplete{
+  case Success(result) =&gt; {
     // publication succeeded
-    def publishedRecord = ar.result()
-  } else {
-    // publication failed
+    var publishedRecord = result
   }
-})</code></pre>
+  case Failure(cause) =&gt; {
+    println(s"$cause")
+  }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -498,13 +497,14 @@ discovery.publish(record, { ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">discovery.unpublish(record.registration, { ar -&gt;
-  if (ar.succeeded()) {
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">discovery.unpublishFuture(todo-renderDataObjectMemberSelect).onComplete{
+  case Success(result) =&gt; {
     // Ok
-  } else {
-    // cannot un-publish the service, may have already been removed, or the record is not published
   }
-})</code></pre>
+  case Failure(cause) =&gt; {
+    println(s"$cause")
+  }
+}</code></pre>
 </div>
 </div>
 </div>
@@ -526,7 +526,7 @@ the matching ones. In the first case, the first matching record is returned.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>A function taking a <code><a href="../../apidocs/io/vertx/servicediscovery/Record.html">Record</a></code> as parameter and returning a boolean (it&#8217;s a
+<p>A function taking a <code><a href="../dataobjects.html#Record">Record</a></code> as parameter and returning a boolean (it&#8217;s a
 predicate)</p>
 </li>
 <li>
@@ -556,93 +556,95 @@ records, you must return <em>true</em> regardless the record.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get any record
-discovery.getRecord({ r -&gt;
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Get any record
+discovery.getRecordFuture((r: io.vertx.scala.servicediscovery.Record) =&gt; {
   true
-}, { ar -&gt;
-  if (ar.succeeded()) {
-    if (ar.result() != null) {
+}).onComplete{
+  case Success(result) =&gt; {
+    if (result != null) {
       // we have a record
     } else {
       // the lookup succeeded, but no matching service
     }
-  } else {
-    // lookup failed
   }
-})
+  case Failure(cause) =&gt; {
+    println(s"$cause")
+  }
+}
 
-discovery.getRecord(null, { ar -&gt;
-  if (ar.succeeded()) {
-    if (ar.result() != null) {
+discovery.getRecordFuture(null).onComplete{
+  case Success(result) =&gt; {
+    if (result != null) {
       // we have a record
     } else {
       // the lookup succeeded, but no matching service
     }
-  } else {
-    // lookup failed
   }
-})
+  case Failure(cause) =&gt; {
+    println(s"$cause")
+  }
+}
 
 
 // Get a record by name
-discovery.getRecord({ r -&gt;
-  r.name == "some-name"
-}, { ar -&gt;
-  if (ar.succeeded()) {
-    if (ar.result() != null) {
+discovery.getRecordFuture((r: io.vertx.scala.servicediscovery.Record) =&gt; {
+  todo-renderDataObjectMemberSelect == "some-name"
+}).onComplete{
+  case Success(result) =&gt; {
+    if (result != null) {
       // we have a record
     } else {
       // the lookup succeeded, but no matching service
     }
-  } else {
-    // lookup failed
   }
-})
+  case Failure(cause) =&gt; {
+    println(s"$cause")
+  }
+}
 
-discovery.getRecord([
-  name:"some-service"
-], { ar -&gt;
-  if (ar.succeeded()) {
-    if (ar.result() != null) {
+discovery.getRecordFuture(new io.vertx.core.json.JsonObject().put("name", "some-service")).onComplete{
+  case Success(result) =&gt; {
+    if (result != null) {
       // we have a record
     } else {
       // the lookup succeeded, but no matching service
     }
-  } else {
-    // lookup failed
   }
-})
+  case Failure(cause) =&gt; {
+    println(s"$cause")
+  }
+}
 
 // Get all records matching the filter
-discovery.getRecords({ r -&gt;
-  "some-value" == r.metadata.some-label
-}, { ar -&gt;
-  if (ar.succeeded()) {
-    def results = ar.result()
+discovery.getRecordsFuture((r: io.vertx.scala.servicediscovery.Record) =&gt; {
+  "some-value" == todo-renderDataObjectMemberSelect.getValue("some-label")
+}).onComplete{
+  case Success(result) =&gt; {
+    var results = result
     // If the list is not empty, we have matching record
     // Else, the lookup succeeded, but no matching service
-  } else {
-    // lookup failed
   }
-})
+  case Failure(cause) =&gt; {
+    println(s"$cause")
+  }
+}
 
 
-discovery.getRecords([
-  'some-label':"some-value"
-], { ar -&gt;
-  if (ar.succeeded()) {
-    def results = ar.result()
+discovery.getRecordsFuture(new io.vertx.core.json.JsonObject().put("some-label", "some-value")).onComplete{
+  case Success(result) =&gt; {
+    var results = result
     // If the list is not empty, we have matching record
     // Else, the lookup succeeded, but no matching service
-  } else {
-    // lookup failed
   }
-})</code></pre>
+  case Failure(cause) =&gt; {
+    println(s"$cause")
+  }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>You can retrieve a single record or all matching records with
-<code><a href="../../apidocs/io/vertx/servicediscovery/ServiceDiscovery.html#getRecords-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">getRecords</a></code>.
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceDiscovery.html#getRecords(io.vertx.core.json.JsonObject,%20io.vertx.core.Handler)">getRecords</a></code>.
 By default, record lookup does include only records with a <code>status</code> set to <code>UP</code>. This can be overridden:</p>
 </div>
 <div class="ulist">
@@ -652,7 +654,7 @@ By default, record lookup does include only records with a <code>status</code> s
 </li>
 <li>
 <p>when using function, set the <code>includeOutOfService</code> parameter to <code>true</code> in
-<code><a href="../../apidocs/io/vertx/servicediscovery/ServiceDiscovery.html#getRecords-java.util.function.Function-boolean-io.vertx.core.Handler-">getRecords</a></code>
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceDiscovery.html#getRecords(java.util.function.Function,%20boolean,%20io.vertx.core.Handler)">getRecords</a></code>
 .</p>
 </li>
 </ul>
@@ -663,19 +665,19 @@ By default, record lookup does include only records with a <code>status</code> s
 <h2 id="_retrieving_a_service_reference">Retrieving a service reference</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Once you have chosen the <code><a href="../../apidocs/io/vertx/servicediscovery/Record.html">Record</a></code>, you can retrieve a
-<code><a href="../../apidocs/io/vertx/servicediscovery/ServiceReference.html">ServiceReference</a></code> and then the service object:</p>
+<p>Once you have chosen the <code><a href="../dataobjects.html#Record">Record</a></code>, you can retrieve a
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceReference.html">ServiceReference</a></code> and then the service object:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def reference1 = discovery.getReference(record1)
-def reference2 = discovery.getReference(record2)
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var reference1 = discovery.getReference(record1)
+var reference2 = discovery.getReference(record2)
 
 // Then, gets the service object, the returned type depends on the service type:
 // For http endpoint:
-def client = reference1.getAs(HttpClient.class)
+var client = reference1.getAs(HttpClient.class)
 // For message source
-def consumer = reference2.getAs(MessageConsumer.class)
+var consumer = reference2.getAs(MessageConsumer.class)
 
 // When done with the service
 reference1.release()
@@ -689,17 +691,17 @@ reference2.release()</code></pre>
 <p>The service reference represents a binding with the service provider.</p>
 </div>
 <div class="paragraph">
-<p>When retrieving a service reference you can pass a <code><a href="../../apidocs/io/vertx/core/json/JsonObject.html">JsonObject</a></code> used to configure the
+<p>When retrieving a service reference you can pass a <code>JsonObject</code> used to configure the
 service object. It can contain various data about the service object. Some service types do not need additional
 configuration, some require configuration (as data sources):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def reference = discovery.getReferenceWithConfiguration(record, conf)
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var reference = discovery.getReferenceWithConfiguration(record, conf)
 
 // Then, gets the service object, the returned type depends on the service type:
 // For http endpoint:
-def client = reference.getAs(JDBCClient.class)
+var client = reference.getAs(JDBCClient.class)
 
 // Do something with the client...
 
@@ -709,9 +711,9 @@ reference.release()</code></pre>
 </div>
 <div class="paragraph">
 <p>In the previous examples, the code uses
-<code><a href="../../apidocs/io/vertx/servicediscovery/ServiceReference.html#getAs-java.lang.Class-">getAs</a></code>. The parameter is the type of
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceReference.html#getAs(java.lang.Class)">getAs</a></code>. The parameter is the type of
 object you expect to get. If you are using Java, you can use
-<code><a href="../../apidocs/io/vertx/servicediscovery/ServiceReference.html#get--">get</a></code>. However in the other language you must pass the expected
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceReference.html#get()">get</a></code>. However in the other language you must pass the expected
 type.</p>
 </div>
 </div>
@@ -729,30 +731,30 @@ different services.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code><a href="../../apidocs/io/vertx/servicediscovery/types/HttpEndpoint.html">HttpEndpoint</a></code> - for REST API&#8217;s, the service object is a
-<code><a href="../../apidocs/io/vertx/core/http/HttpClient.html">HttpClient</a></code> configured on the host and port (the location is the url).</p>
+<p><code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/HttpEndpoint.html">HttpEndpoint</a></code> - for REST API&#8217;s, the service object is a
+<code><a href="../../scaladocs/io/vertx/scala/core/http/HttpClient.html">HttpClient</a></code> configured on the host and port (the location is the url).</p>
 </li>
 <li>
-<p><code><a href="../../apidocs/io/vertx/servicediscovery/types/EventBusService.html">EventBusService</a></code> - for service proxies, the service object is a proxy. Its
+<p><code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/EventBusService.html">EventBusService</a></code> - for service proxies, the service object is a proxy. Its
 type is the proxies interface (the location is the address).</p>
 </li>
 <li>
-<p><code><a href="../../apidocs/io/vertx/servicediscovery/types/MessageSource.html">MessageSource</a></code> - for message sources (publisher), the service object is a
-<code><a href="../../apidocs/io/vertx/core/eventbus/MessageConsumer.html">MessageConsumer</a></code> (the location is the address).</p>
+<p><code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/MessageSource.html">MessageSource</a></code> - for message sources (publisher), the service object is a
+<code><a href="../../scaladocs/io/vertx/scala/core/eventbus/MessageConsumer.html">MessageConsumer</a></code> (the location is the address).</p>
 </li>
 <li>
-<p><code><a href="../../apidocs/io/vertx/servicediscovery/types/JDBCDataSource.html">JDBCDataSource</a></code> - for JDBC data sources, the service object is a
-<code><a href="../../apidocs/io/vertx/ext/jdbc/JDBCClient.html">JDBCClient</a></code> (the configuration of the client is computed from the location, metadata and
+<p><code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/JDBCDataSource.html">JDBCDataSource</a></code> - for JDBC data sources, the service object is a
+<code><a href="../../scaladocs/io/vertx/scala/ext/jdbc/JDBCClient.html">JDBCClient</a></code> (the configuration of the client is computed from the location, metadata and
 consumer configuration).</p>
 </li>
 <li>
-<p><code><a href="../../apidocs/io/vertx/servicediscovery/types/RedisDataSource.html">RedisDataSource</a></code> - for Redis data sources, the service object is a
-<code><a href="../../apidocs/io/vertx/redis/RedisClient.html">RedisClient</a></code> (the configuration of the client is computed from the location, metadata and
+<p><code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/RedisDataSource.html">RedisDataSource</a></code> - for Redis data sources, the service object is a
+<code><a href="../../scaladocs/io/vertx/scala/redis/RedisClient.html">RedisClient</a></code> (the configuration of the client is computed from the location, metadata and
 consumer configuration).</p>
 </li>
 <li>
-<p><code><a href="../../apidocs/io/vertx/servicediscovery/types/MongoDataSource.html">MongoDataSource</a></code> - for Mongo data sources, the service object is a
-<code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html">MongoClient</a></code> (the configuration of the client is computed from the location, metadata and
+<p><code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/MongoDataSource.html">MongoDataSource</a></code> - for Mongo data sources, the service object is a
+<code><a href="../../scaladocs/io/vertx/scala/ext/mongo/MongoClient.html">MongoClient</a></code> (the configuration of the client is computed from the location, metadata and
 consumer configuration).</p>
 </li>
 </ul>
@@ -763,9 +765,9 @@ consumer configuration).</p>
 <div class="sect2">
 <h3 id="_services_with_no_type">Services with no type</h3>
 <div class="paragraph">
-<p>Some records may have no type (<code><a href="../../apidocs/io/vertx/servicediscovery/spi/ServiceType.html#UNKNOWN">ServiceType.UNKNOWN</a></code>). It is not possible to
+<p>Some records may have no type (<code><a href="todo">ServiceType.UNKNOWN</a></code>). It is not possible to
 retrieve a reference for these records, but you can build the connection details from the <code>location</code> and
-<code>metadata</code> of the <code><a href="../../apidocs/io/vertx/servicediscovery/Record.html">Record</a></code>.</p>
+<code>metadata</code> of the <code><a href="../dataobjects.html#Record">Record</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Using these services does not fire service usage events.</p>
@@ -775,29 +777,28 @@ retrieve a reference for these records, but you can build the connection details
 <h3 id="_http_endpoints">HTTP endpoints</h3>
 <div class="paragraph">
 <p>A HTTP endpoint represents a REST API or a service accessible using HTTP requests. The HTTP endpoint service
-objects are <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html">HttpClient</a></code> configured with the host, port and ssl.</p>
+objects are <code><a href="../../scaladocs/io/vertx/scala/core/http/HttpClient.html">HttpClient</a></code> configured with the host, port and ssl.</p>
 </div>
 <div class="sect3">
 <h4 id="_publishing_a_http_endpoint">Publishing a HTTP endpoint</h4>
 <div class="paragraph">
-<p>To publish a HTTP endpoint, you need a <code><a href="../../apidocs/io/vertx/servicediscovery/Record.html">Record</a></code>. You can create the record using
-<code><a href="../../apidocs/io/vertx/servicediscovery/types/HttpEndpoint.html#createRecord-java.lang.String-java.lang.String-int-java.lang.String-io.vertx.core.json.JsonObject-">HttpEndpoint.createRecord</a></code>.</p>
+<p>To publish a HTTP endpoint, you need a <code><a href="../dataobjects.html#Record">Record</a></code>. You can create the record using
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/HttpEndpoint.html#createRecord(java.lang.String,%20java.lang.String,%20int,%20java.lang.String,%20io.vertx.core.json.JsonObject)">HttpEndpoint.createRecord</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>The next snippet illustrates hot to create a <code><a href="../../apidocs/io/vertx/servicediscovery/Record.html">Record</a></code> from
-<code><a href="../../apidocs/io/vertx/servicediscovery/types/HttpEndpoint.html">HttpEndpoint</a></code>:</p>
+<p>The next snippet illustrates hot to create a <code><a href="../dataobjects.html#Record">Record</a></code> from
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/HttpEndpoint.html">HttpEndpoint</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def record1 = HttpEndpoint.createRecord("some-http-service", "localhost", 8433, "/api")
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var record1 = HttpEndpoint.createRecord("some-http-service", "localhost", 8433, "/api")
 
-discovery.publish(record1, { ar -&gt;
-  // ...
-})
+discovery.publishFuture(record1).onComplete{
+  case Success(result) =&gt; println("Success")
+  case Failure(cause) =&gt; println("Failure")
+}
 
-def record2 = HttpEndpoint.createRecord("some-other-name", true, "localhost", 8433, "/api", [
-  'some-metadata':"some value"
-])</code></pre>
+var record2 = HttpEndpoint.createRecord("some-other-name", true, "localhost", 8433, "/api", new io.vertx.core.json.JsonObject().put("some-metadata", "some value"))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -809,48 +810,30 @@ publication must be done by another entity having this info. Generally it&#8217;
 <h4 id="_consuming_a_http_endpoint">Consuming a HTTP endpoint</h4>
 <div class="paragraph">
 <p>Once a HTTP endpoint is published, a consumer can retrieve it. The service object is a
-<code><a href="../../apidocs/io/vertx/core/http/HttpClient.html">HttpClient</a></code> with a port and host configured:</p>
+<code><a href="../../scaladocs/io/vertx/scala/core/http/HttpClient.html">HttpClient</a></code> with a port and host configured:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get the record
-discovery.getRecord([
-  name:"some-http-service"
-], { ar -&gt;
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
-    def reference = discovery.getReference(ar.result())
-    // Retrieve the service object
-    def client = reference.getAs(HttpClient.class)
-
-    // You need to path the complete path
-    client.getNow("/api/persons", { response -&gt;
-
-      // ...
-
-      // Dont' forget to release the service
-      reference.release()
-
-    })
-  }
-})</code></pre>
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Get the record
+discovery.getRecordFuture(new io.vertx.core.json.JsonObject().put("name", "some-http-service")).onComplete{
+  case Success(result) =&gt; println("Success")
+  case Failure(cause) =&gt; println("Failure")
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>You can also use the
-<code><a href="../../apidocs/io/vertx/servicediscovery/types/HttpEndpoint.html#getClient-io.vertx.servicediscovery.ServiceDiscovery-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">HttpEndpoint.getClient</a></code>
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/HttpEndpoint.html#getClient(io.vertx.servicediscovery.ServiceDiscovery,%20io.vertx.core.json.JsonObject,%20io.vertx.core.Handler)">HttpEndpoint.getClient</a></code>
 method to combine lookup and service retrieval in one call:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">HttpEndpoint.getClient(discovery, [
-  name:"some-http-service"
-], { ar -&gt;
-  if (ar.succeeded()) {
-    def client = ar.result()
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">HttpEndpoint.getClient(discovery, new io.vertx.core.json.JsonObject().put("name", "some-http-service"), {
+  case Success(result) =&gt; {
+    var client = result
 
     // You need to path the complete path
-    client.getNow("/api/persons", { response -&gt;
+    client.getNow("/api/persons", (response: io.vertx.scala.core.http.HttpClientResponse) =&gt; {
 
       // ...
 
@@ -859,41 +842,26 @@ method to combine lookup and service retrieval in one call:</p>
 
     })
   }
+  case Failure(cause) =&gt; println("Failure")
 })</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>In this second version, the service object is released using
-<code><a href="../../apidocs/io/vertx/servicediscovery/ServiceDiscovery.html#releaseServiceObject-io.vertx.servicediscovery.ServiceDiscovery-java.lang.Object-">ServiceDiscovery.releaseServiceObject</a></code>,
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceDiscovery.html#releaseServiceObject(io.vertx.servicediscovery.ServiceDiscovery,%20java.lang.Object)">ServiceDiscovery.releaseServiceObject</a></code>,
 so you don&#8217;t need to keep the service reference.</p>
 </div>
 <div class="paragraph">
-<p>Since Vert.x 3.4.0, another client has been provided. This higher-level client, named <code><a href="../../apidocs/io/vertx/ext/web/client/WebClient.html">WebClient</a></code>
-tends to be easier to use. You can retrieve a <code><a href="../../apidocs/io/vertx/ext/web/client/WebClient.html">WebClient</a></code> instances using:</p>
+<p>Since Vert.x 3.4.0, another client has been provided. This higher-level client, named <code><a href="../../scaladocs/io/vertx/scala/ext/web/client/WebClient.html">WebClient</a></code>
+tends to be easier to use. You can retrieve a <code><a href="../../scaladocs/io/vertx/scala/ext/web/client/WebClient.html">WebClient</a></code> instances using:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get the record
-discovery.getRecord([
-  name:"some-http-service"
-], { ar -&gt;
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
-    def reference = discovery.getReference(ar.result())
-    // Retrieve the service object
-    def client = reference.getAs(WebClient.class)
-
-    // You need to path the complete path
-    client.get("/api/persons").send({ response -&gt;
-
-      // ...
-
-      // Dont' forget to release the service
-      reference.release()
-
-    })
-  }
-})</code></pre>
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Get the record
+discovery.getRecordFuture(new io.vertx.core.json.JsonObject().put("name", "some-http-service")).onComplete{
+  case Success(result) =&gt; println("Success")
+  case Failure(cause) =&gt; println("Failure")
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -901,22 +869,17 @@ discovery.getRecord([
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">HttpEndpoint.getWebClient(discovery, [
-  name:"some-http-service"
-], { ar -&gt;
-  if (ar.succeeded()) {
-    def client = ar.result()
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">HttpEndpoint.getWebClient(discovery, new io.vertx.core.json.JsonObject().put("name", "some-http-service"), {
+  case Success(result) =&gt; {
+    var client = result
 
     // You need to path the complete path
-    client.get("/api/persons").send({ response -&gt;
-
-      // ...
-
-      // Dont' forget to release the service
-      ServiceDiscovery.releaseServiceObject(discovery, client)
-
-    })
+    client.get("/api/persons").sendFuture().onComplete{
+      case Success(result) =&gt; println("Success")
+      case Failure(cause) =&gt; println("Failure")
+    }
   }
+  case Failure(cause) =&gt; println("Failure")
 })</code></pre>
 </div>
 </div>
@@ -927,7 +890,7 @@ discovery.getRecord([
 <div class="paragraph">
 <p>Event bus services are service proxies. They implement async-RPC services on top of the event bus. When retrieving
 a service object from an event bus service, you get a service proxy of the right type. You can access helper
-methods from <code><a href="../../apidocs/io/vertx/servicediscovery/types/EventBusService.html">EventBusService</a></code>.</p>
+methods from <code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/EventBusService.html">EventBusService</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Notice that service proxies (service implementations and service interfaces) are developed in Java.</p>
@@ -935,17 +898,16 @@ methods from <code><a href="../../apidocs/io/vertx/servicediscovery/types/EventB
 <div class="sect3">
 <h4 id="_publishing_an_event_bus_service">Publishing an event bus service</h4>
 <div class="paragraph">
-<p>To publish an event bus service, you need to create a <code><a href="../../apidocs/io/vertx/servicediscovery/Record.html">Record</a></code>:</p>
+<p>To publish an event bus service, you need to create a <code><a href="../dataobjects.html#Record">Record</a></code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def record = EventBusService.createRecord("some-eventbus-service", "address", "examples.MyService", [
-  'some-metadata':"some value"
-])
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var record = EventBusService.createRecord("some-eventbus-service", "address", "examples.MyService", new io.vertx.core.json.JsonObject().put("some-metadata", "some value"))
 
-discovery.publish(record, { ar -&gt;
-  // ...
-})</code></pre>
+discovery.publishFuture(record).onComplete{
+  case Success(result) =&gt; println("Success")
+  case Failure(cause) =&gt; println("Failure")
+}</code></pre>
 </div>
 </div>
 </div>
@@ -953,24 +915,7 @@ discovery.publish(record, { ar -&gt;
 <h4 id="_consuming_an_event_bus_service">Consuming an event bus service</h4>
 <div class="paragraph">
 <p>To consume an event bus service you can either retrieve the record and then get the reference, or use the
-<code><a href="../../apidocs/io/vertx/servicediscovery/types/EventBusService.html">EventBusService</a></code> interface that combines the two operations in one call.</p>
-</div>
-<div class="paragraph">
-<p>However, as the service is searched by (Java) interface, you need to specify the type of client you expect.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">EventBusService.getServiceProxyWithJsonFilter(discovery, [
-'service.interface':"org.acme.MyService"
-], examples.MyService.class, { ar -&gt;
-if (ar.succeeded()) {
-def service = ar.result()
-
-// Dont' forget to release the service
-ServiceDiscovery.releaseServiceObject(discovery, service)
-}
-})</code></pre>
-</div>
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/EventBusService.html">EventBusService</a></code> interface that combines the two operations in one call.</p>
 </div>
 </div>
 </div>
@@ -978,7 +923,7 @@ ServiceDiscovery.releaseServiceObject(discovery, service)
 <h3 id="_message_source">Message source</h3>
 <div class="paragraph">
 <p>A message source is a component sending messages on the event bus on a specific address. Message source clients are
-<code><a href="../../apidocs/io/vertx/core/eventbus/MessageConsumer.html">MessageConsumer</a></code>.</p>
+<code><a href="../../scaladocs/io/vertx/scala/core/eventbus/MessageConsumer.html">MessageConsumer</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The <em>location</em> or a message source service is the event bus address on which messages are sent.</p>
@@ -991,7 +936,7 @@ ServiceDiscovery.releaseServiceObject(discovery, service)
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>create a record, using <code><a href="../../apidocs/io/vertx/servicediscovery/types/MessageSource.html">MessageSource</a></code></p>
+<p>create a record, using <code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/MessageSource.html">MessageSource</a></code></p>
 </li>
 <li>
 <p>publish the record</p>
@@ -1000,11 +945,12 @@ ServiceDiscovery.releaseServiceObject(discovery, service)
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def record = MessageSource.createRecord("some-message-source-service", "some-address")
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var record = MessageSource.createRecord("some-message-source-service", "some-address")
 
-discovery.publish(record, { ar -&gt;
-  // ...
-})
+discovery.publishFuture(record).onComplete{
+  case Success(result) =&gt; println("Success")
+  case Failure(cause) =&gt; println("Failure")
+}
 
 record = MessageSource.createRecord("some-other-message-source-service", "some-address", "examples.MyData")</code></pre>
 </div>
@@ -1017,51 +963,33 @@ record = MessageSource.createRecord("some-other-message-source-service", "some-a
 <h4 id="_consuming_a_message_source">Consuming a message source</h4>
 <div class="paragraph">
 <p>On the consumer side, you can retrieve the record and the reference, or use the
-<code><a href="../../apidocs/io/vertx/servicediscovery/types/MessageSource.html">MessageSource</a></code> class to retrieve the service is one call.</p>
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/MessageSource.html">MessageSource</a></code> class to retrieve the service is one call.</p>
 </div>
 <div class="paragraph">
 <p>With the first approach, the code is the following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get the record
-discovery.getRecord([
-  name:"some-message-source-service"
-], { ar -&gt;
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
-    def reference = discovery.getReference(ar.result())
-    // Retrieve the service object
-    def consumer = reference.getAs(MessageConsumer.class)
-
-    // Attach a message handler on it
-    consumer.handler({ message -&gt;
-      // message handler
-      def payload = message.body()
-    })
-
-    // ...
-    // when done
-    reference.release()
-  }
-})</code></pre>
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Get the record
+discovery.getRecordFuture(new io.vertx.core.json.JsonObject().put("name", "some-message-source-service")).onComplete{
+  case Success(result) =&gt; println("Success")
+  case Failure(cause) =&gt; println("Failure")
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>When, using <code><a href="../../apidocs/io/vertx/servicediscovery/types/MessageSource.html">MessageSource</a></code>, it becomes:</p>
+<p>When, using <code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/MessageSource.html">MessageSource</a></code>, it becomes:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">MessageSource.getConsumer(discovery, [
-  name:"some-message-source-service"
-], { ar -&gt;
-  if (ar.succeeded()) {
-    def consumer = ar.result()
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">MessageSource.getConsumer(discovery, new io.vertx.core.json.JsonObject().put("name", "some-message-source-service"), {
+  case Success(result) =&gt; {
+    var consumer = result
 
     // Attach a message handler on it
-    consumer.handler({ message -&gt;
+    consumer.handler((message: io.vertx.scala.core.eventbus.Message&lt;io.vertx.scala.core.json.JsonObject&gt;) =&gt; {
       // message handler
-      def payload = message.body()
+      var payload = message.body()
     })
     // ...
 
@@ -1069,6 +997,7 @@ discovery.getRecord([
     ServiceDiscovery.releaseServiceObject(discovery, consumer)
 
   }
+  case Failure(cause) =&gt; println("Failure")
 })</code></pre>
 </div>
 </div>
@@ -1078,7 +1007,7 @@ discovery.getRecord([
 <h3 id="_jdbc_data_source">JDBC Data source</h3>
 <div class="paragraph">
 <p>Data sources represents databases or data stores. JDBC data sources are a specialization for databases accessible
-using a JDBC driver. The client of a JDBC data source service is a <code><a href="../../apidocs/io/vertx/ext/jdbc/JDBCClient.html">JDBCClient</a></code>.</p>
+using a JDBC driver. The client of a JDBC data source service is a <code><a href="../../scaladocs/io/vertx/scala/ext/jdbc/JDBCClient.html">JDBCClient</a></code>.</p>
 </div>
 <div class="sect3">
 <h4 id="_publishing_a_jdbc_service">Publishing a JDBC service</h4>
@@ -1088,7 +1017,7 @@ using a JDBC driver. The client of a JDBC data source service is a <code><a href
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>create a record, using <code><a href="../../apidocs/io/vertx/servicediscovery/types/JDBCDataSource.html">JDBCDataSource</a></code></p>
+<p>create a record, using <code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/JDBCDataSource.html">JDBCDataSource</a></code></p>
 </li>
 <li>
 <p>publish the record</p>
@@ -1097,15 +1026,12 @@ using a JDBC driver. The client of a JDBC data source service is a <code><a href
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def record = JDBCDataSource.createRecord("some-data-source-service", [
-  url:"some jdbc url"
-], [
-  'some-metadata':"some-value"
-])
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var record = JDBCDataSource.createRecord("some-data-source-service", new io.vertx.core.json.JsonObject().put("url", "some jdbc url"), new io.vertx.core.json.JsonObject().put("some-metadata", "some-value"))
 
-discovery.publish(record, { ar -&gt;
-  // ...
-})</code></pre>
+discovery.publishFuture(record).onComplete{
+  case Success(result) =&gt; println("Success")
+  case Failure(cause) =&gt; println("Failure")
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1119,46 +1045,26 @@ in front.</p>
 <h4 id="_consuming_a_jdbc_service">Consuming a JDBC service</h4>
 <div class="paragraph">
 <p>As stated in the previous section, how to access a data source depends on the data source itself. To build the
-<code><a href="../../apidocs/io/vertx/ext/jdbc/JDBCClient.html">JDBCClient</a></code>, you can merge configuration: the record location, the metadata and a json object provided by
+<code><a href="../../scaladocs/io/vertx/scala/ext/jdbc/JDBCClient.html">JDBCClient</a></code>, you can merge configuration: the record location, the metadata and a json object provided by
 the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get the record
-discovery.getRecord([
-  name:"some-data-source-service"
-], { ar -&gt;
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
-    def reference = discovery.getReferenceWithConfiguration(ar.result(), [
-      username:"clement",
-      password:"*****"
-    ])
-
-    // Retrieve the service object
-    def client = reference.getAs(JDBCClient.class)
-
-    // ...
-
-    // when done
-    reference.release()
-  }
-})</code></pre>
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Get the record
+discovery.getRecordFuture(new io.vertx.core.json.JsonObject().put("name", "some-data-source-service")).onComplete{
+  case Success(result) =&gt; println("Success")
+  case Failure(cause) =&gt; println("Failure")
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can also use the <code><a href="../../apidocs/io/vertx/ext/jdbc/JDBCClient.html">JDBCClient</a></code> class to the lookup and retrieval in one call:</p>
+<p>You can also use the <code><a href="../../scaladocs/io/vertx/scala/ext/jdbc/JDBCClient.html">JDBCClient</a></code> class to the lookup and retrieval in one call:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">JDBCDataSource.getJDBCClient(discovery, [
-  name:"some-data-source-service"
-], [
-  username:"clement",
-  password:"*****"
-], { ar -&gt;
-  if (ar.succeeded()) {
-    def client = ar.result()
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">JDBCDataSource.getJDBCClient(discovery, new io.vertx.core.json.JsonObject().put("name", "some-data-source-service"), new io.vertx.core.json.JsonObject().put("username", "clement").put("password", "*****"), {
+  case Success(result) =&gt; {
+    var client = result
 
     // ...
 
@@ -1166,6 +1072,7 @@ discovery.getRecord([
     ServiceDiscovery.releaseServiceObject(discovery, client)
 
   }
+  case Failure(cause) =&gt; println("Failure")
 })</code></pre>
 </div>
 </div>
@@ -1175,7 +1082,7 @@ discovery.getRecord([
 <h3 id="_redis_data_source">Redis Data source</h3>
 <div class="paragraph">
 <p>Redis data sources are a specialization for Redis persistence databases.
-The client of a Redis data source service is a <code><a href="../../apidocs/io/vertx/redis/RedisClient.html">RedisClient</a></code>.</p>
+The client of a Redis data source service is a <code><a href="../../scaladocs/io/vertx/scala/redis/RedisClient.html">RedisClient</a></code>.</p>
 </div>
 <div class="sect3">
 <h4 id="_publishing_a_redis_service">Publishing a Redis service</h4>
@@ -1185,7 +1092,7 @@ The client of a Redis data source service is a <code><a href="../../apidocs/io/v
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>create a record, using <code><a href="../../apidocs/io/vertx/servicediscovery/types/RedisDataSource.html">RedisDataSource</a></code></p>
+<p>create a record, using <code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/RedisDataSource.html">RedisDataSource</a></code></p>
 </li>
 <li>
 <p>publish the record</p>
@@ -1194,15 +1101,12 @@ The client of a Redis data source service is a <code><a href="../../apidocs/io/v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def record = RedisDataSource.createRecord("some-redis-data-source-service", [
-  url:"localhost"
-], [
-  'some-metadata':"some-value"
-])
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var record = RedisDataSource.createRecord("some-redis-data-source-service", new io.vertx.core.json.JsonObject().put("url", "localhost"), new io.vertx.core.json.JsonObject().put("some-metadata", "some-value"))
 
-discovery.publish(record, { ar -&gt;
-  // ...
-})</code></pre>
+discovery.publishFuture(record).onComplete{
+  case Success(result) =&gt; println("Success")
+  case Failure(cause) =&gt; println("Failure")
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1214,40 +1118,26 @@ source (url, port&#8230;&#8203;).</p>
 <h4 id="_consuming_a_redis_service">Consuming a Redis service</h4>
 <div class="paragraph">
 <p>As stated in the previous section, how to access a data source depends on the data source itself. To build the
-<code><a href="../../apidocs/io/vertx/redis/RedisClient.html">RedisClient</a></code>, you can merge configuration: the record location, the metadata and a json object provided by
+<code><a href="../../scaladocs/io/vertx/scala/redis/RedisClient.html">RedisClient</a></code>, you can merge configuration: the record location, the metadata and a json object provided by
 the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get the record
-discovery.getRecord([
-  name:"some-redis-data-source-service"
-], { ar -&gt;
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
-    def reference = discovery.getReference(ar.result())
-
-    // Retrieve the service instance
-    def client = reference.getAs(RedisClient.class)
-
-    // ...
-
-    // when done
-    reference.release()
-  }
-})</code></pre>
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Get the record
+discovery.getRecordFuture(new io.vertx.core.json.JsonObject().put("name", "some-redis-data-source-service")).onComplete{
+  case Success(result) =&gt; println("Success")
+  case Failure(cause) =&gt; println("Failure")
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can also use the <code><a href="../../apidocs/io/vertx/servicediscovery/types/RedisDataSource.html">RedisDataSource</a></code> class to the lookup and retrieval in one call:</p>
+<p>You can also use the <code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/RedisDataSource.html">RedisDataSource</a></code> class to the lookup and retrieval in one call:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">RedisDataSource.getRedisClient(discovery, [
-  name:"some-redis-data-source-service"
-], { ar -&gt;
-  if (ar.succeeded()) {
-    def client = ar.result()
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">RedisDataSource.getRedisClient(discovery, new io.vertx.core.json.JsonObject().put("name", "some-redis-data-source-service"), {
+  case Success(result) =&gt; {
+    var client = result
 
     // ...
 
@@ -1255,6 +1145,7 @@ discovery.getRecord([
     ServiceDiscovery.releaseServiceObject(discovery, client)
 
   }
+  case Failure(cause) =&gt; println("Failure")
 })</code></pre>
 </div>
 </div>
@@ -1264,7 +1155,7 @@ discovery.getRecord([
 <h3 id="_mongo_data_source">Mongo Data source</h3>
 <div class="paragraph">
 <p>Mongo data sources are a specialization for MongoDB databases.
-The client of a Mongo data source service is a <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html">MongoClient</a></code>.</p>
+The client of a Mongo data source service is a <code><a href="../../scaladocs/io/vertx/scala/ext/mongo/MongoClient.html">MongoClient</a></code>.</p>
 </div>
 <div class="sect3">
 <h4 id="_publishing_a_mongo_service">Publishing a Mongo service</h4>
@@ -1274,7 +1165,7 @@ The client of a Mongo data source service is a <code><a href="../../apidocs/io/v
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>create a record, using <code><a href="../../apidocs/io/vertx/servicediscovery/types/MongoDataSource.html">MongoDataSource</a></code></p>
+<p>create a record, using <code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/MongoDataSource.html">MongoDataSource</a></code></p>
 </li>
 <li>
 <p>publish the record</p>
@@ -1283,15 +1174,12 @@ The client of a Mongo data source service is a <code><a href="../../apidocs/io/v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def record = MongoDataSource.createRecord("some-data-source-service", [
-  connection_string:"some mongo connection"
-], [
-  'some-metadata':"some-value"
-])
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var record = MongoDataSource.createRecord("some-data-source-service", new io.vertx.core.json.JsonObject().put("connection_string", "some mongo connection"), new io.vertx.core.json.JsonObject().put("some-metadata", "some-value"))
 
-discovery.publish(record, { ar -&gt;
-  // ...
-})</code></pre>
+discovery.publishFuture(record).onComplete{
+  case Success(result) =&gt; println("Success")
+  case Failure(cause) =&gt; println("Failure")
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1303,46 +1191,26 @@ source (url, port&#8230;&#8203;).</p>
 <h4 id="_consuming_a_mongo_service">Consuming a Mongo service</h4>
 <div class="paragraph">
 <p>As stated in the previous section, how to access a data source depends on the data source itself. To build the
-<code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html">MongoClient</a></code>, you can merge configuration: the record location, the metadata and a json object
+<code><a href="../../scaladocs/io/vertx/scala/ext/mongo/MongoClient.html">MongoClient</a></code>, you can merge configuration: the record location, the metadata and a json object
 provided by the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get the record
-discovery.getRecord([
-  name:"some-data-source-service"
-], { ar -&gt;
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
-    def reference = discovery.getReferenceWithConfiguration(ar.result(), [
-      username:"clement",
-      password:"*****"
-    ])
-
-    // Retrieve the service object
-    def client = reference.get()
-
-    // ...
-
-    // when done
-    reference.release()
-  }
-})</code></pre>
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Get the record
+discovery.getRecordFuture(new io.vertx.core.json.JsonObject().put("name", "some-data-source-service")).onComplete{
+  case Success(result) =&gt; println("Success")
+  case Failure(cause) =&gt; println("Failure")
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can also use the <code><a href="../../apidocs/io/vertx/servicediscovery/types/MongoDataSource.html">MongoDataSource</a></code> class to the lookup and retrieval in one call:</p>
+<p>You can also use the <code><a href="../../scaladocs/io/vertx/scala/servicediscovery/types/MongoDataSource.html">MongoDataSource</a></code> class to the lookup and retrieval in one call:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">MongoDataSource.getMongoClient(discovery, [
-  name:"some-data-source-service"
-], [
-  username:"clement",
-  password:"*****"
-], { ar -&gt;
-  if (ar.succeeded()) {
-    def client = ar.result()
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">MongoDataSource.getMongoClient(discovery, new io.vertx.core.json.JsonObject().put("name", "some-data-source-service"), new io.vertx.core.json.JsonObject().put("username", "clement").put("password", "*****"), {
+  case Success(result) =&gt; {
+    var client = result
 
     // ...
 
@@ -1350,6 +1218,7 @@ discovery.getRecord([
     ServiceDiscovery.releaseServiceObject(discovery, client)
 
   }
+  case Failure(cause) =&gt; println("Failure")
 })</code></pre>
 </div>
 </div>
@@ -1362,7 +1231,7 @@ discovery.getRecord([
 <div class="sectionbody">
 <div class="paragraph">
 <p>Every time a provider is published or removed, an event is published on the <em>vertx.discovery.announce</em> address.
-This address is configurable from the <code><a href="../../apidocs/io/vertx/servicediscovery/ServiceDiscoveryOptions.html">ServiceDiscoveryOptions</a></code>.</p>
+This address is configurable from the <code><a href="../dataobjects.html#ServiceDiscoveryOptions">ServiceDiscoveryOptions</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The received record has a <code>status</code> field indicating the new state of the record:</p>
@@ -1387,13 +1256,13 @@ This address is configurable from the <code><a href="../../apidocs/io/vertx/serv
 <div class="sectionbody">
 <div class="paragraph">
 <p>Every time a service reference is retrieved (<code>bind</code>) or released (<code>release</code>), an event is published on the <em>vertx
-.discovery.usage</em> address. This address is configurable from the <code><a href="../../apidocs/io/vertx/servicediscovery/ServiceDiscoveryOptions.html">ServiceDiscoveryOptions</a></code>.</p>
+.discovery.usage</em> address. This address is configurable from the <code><a href="../dataobjects.html#ServiceDiscoveryOptions">ServiceDiscoveryOptions</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>It lets you listen for service usage and map the service bindings.</p>
 </div>
 <div class="paragraph">
-<p>The received message is a <code><a href="../../apidocs/io/vertx/core/json/JsonObject.html">JsonObject</a></code> containing:</p>
+<p>The received message is a <code>JsonObject</code> containing:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1409,12 +1278,12 @@ This address is configurable from the <code><a href="../../apidocs/io/vertx/serv
 </ul>
 </div>
 <div class="paragraph">
-<p>This <code>id</code> is configurable from the <code><a href="../../apidocs/io/vertx/servicediscovery/ServiceDiscoveryOptions.html">ServiceDiscoveryOptions</a></code>. By default it&#8217;s "localhost" on
+<p>This <code>id</code> is configurable from the <code><a href="../dataobjects.html#ServiceDiscoveryOptions">ServiceDiscoveryOptions</a></code>. By default it&#8217;s "localhost" on
 single node configuration and the id of the node in clustered mode.</p>
 </div>
 <div class="paragraph">
 <p>You can disable the service usage support by setting the usage address to <code>null</code> with
-<code><a href="../../apidocs/io/vertx/servicediscovery/ServiceDiscoveryOptions.html#setUsageAddress-java.lang.String-">setUsageAddress</a></code>.</p>
+<code><a href="../dataobjects.html#ServiceDiscoveryOptions#setUsageAddress(java.lang.String)">usageAddress</a></code>.</p>
 </div>
 </div>
 </div>
@@ -1426,9 +1295,9 @@ single node configuration and the id of the node in clustered mode.</p>
 Each bridge decides how the services are imported and exported. It does not have to be bi-directional.</p>
 </div>
 <div class="paragraph">
-<p>You can provide your own bridge by implementing the <code><a href="../../apidocs/io/vertx/servicediscovery/spi/ServiceImporter.html">ServiceImporter</a></code> interface and
+<p>You can provide your own bridge by implementing the <code><a href="../../scaladocs/io/vertx/scala/servicediscovery/spi/ServiceImporter.html">ServiceImporter</a></code> interface and
 register it using
-<code><a href="../../apidocs/io/vertx/servicediscovery/ServiceDiscovery.html#registerServiceImporter-io.vertx.servicediscovery.spi.ServiceImporter-io.vertx.core.json.JsonObject-">registerServiceImporter</a></code>.</p>
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/ServiceDiscovery.html#registerServiceImporter(io.vertx.servicediscovery.spi.ServiceImporter,%20io.vertx.core.json.JsonObject)">registerServiceImporter</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>The second parameter can provide an optional configuration for the bridge.</p>
@@ -1439,16 +1308,16 @@ register it using
 <div class="paragraph">
 <p>{@link io.vertx.servicediscovery.spi.ServiceImporter#start)}
 method is called. It lets you configure the bridge. When the bridge is configured, ready and has imported /
-exported the initial services, it must complete the given <code><a href="../../apidocs/io/vertx/core/Future.html">Future</a></code>. If the bridge starts
+exported the initial services, it must complete the given <code><a href="../../scaladocs/io/vertx/scala/core/Future.html">Future</a></code>. If the bridge starts
 method is blocking, it must use an
-<code><a href="../../apidocs/io/vertx/core/Vertx.html#executeBlocking-io.vertx.core.Handler-boolean-io.vertx.core.Handler-">executeBlocking</a></code> construct, and
+<code><a href="../../scaladocs/io/vertx/scala/core/Vertx.html#executeBlocking(io.vertx.core.Handler,%20boolean,%20io.vertx.core.Handler)">executeBlocking</a></code> construct, and
 complete the given future object.</p>
 </div>
 <div class="paragraph">
 <p>When the service discovery is stopped, the bridge is stopped. The
-<code><a href="../../apidocs/io/vertx/servicediscovery/spi/ServiceImporter.html#close-io.vertx.core.Handler-">close</a></code>
+<code><a href="../../scaladocs/io/vertx/scala/servicediscovery/spi/ServiceImporter.html#close(io.vertx.core.Handler)">close</a></code>
 method is called that provides the opportunity to cleanup resources, removed imported / exported services&#8230;&#8203; This
-method must complete the given <code><a href="../../apidocs/io/vertx/core/Future.html">Future</a></code> to notify the caller of the completion.</p>
+method must complete the given <code><a href="../../scaladocs/io/vertx/scala/core/Future.html">Future</a></code> to notify the caller of the completion.</p>
 </div>
 <div class="paragraph">
 <p>Notice than in a cluster, only one member needs to register the bridge as the records are accessible by all members.</p>
@@ -1495,7 +1364,7 @@ backends you can use in your application.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-06 23:34:44 CET
+                Last updated 2017-03-15 15:54:14 CET
               
               
             </div>

@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -195,7 +196,7 @@ vertx.deployVerticle(s"scala:${classOf[HelloWorldVerticle].getName}")</code></pr
 </div>
 </div>
 <div class="paragraph">
-<p>There is also a little helper available.</p>
+<p>There is also a little helper-method available.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -235,17 +236,13 @@ You use this if you want to do some verticle cleanup that takes some time.</p>
 import scala.concurrent.{Future, Promise}
 
 public class HelloWorldVerticle extends ScalaVerticle {
- public void start(): Future[Unit] = {
+ public void startFuture(): Future[Unit] = {
   println "starting"
   val promise = Promise[Unit]()
-  vertx.deployVerticleFuture("v.rb").onComplete{
-   case Success(deploymentId) =&gt; promise.success(())
-   case Failure(throwable) =&gt; promise.failure(throwable)
-  }
-  promise.future
+  vertx.deployVerticleFuture("v.rb")
  }
 
- public void stop(): Future[Unit] = {
+ public void stopFuture(): Future[Unit] = {
   println("stopping")
   Future.successful(())
  }
@@ -273,7 +270,7 @@ Vert.x will automatically undeploy any child verticles when the parent is undepl
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-06 23:34:44 CET
+                Last updated 2017-03-15 15:54:14 CET
               
               
             </div>
