@@ -8,6 +8,161 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Scala is here</title>
+          <description>
+      &lt;article&gt;&lt;h2 id=&quot;tl-dr&quot;&gt;TL;DR&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Scala support for Vert.x is here!&lt;/li&gt;
+&lt;li&gt;It is based on Scala 2.12, no support for 2.11 planned&lt;/li&gt;
+&lt;li&gt;all Vert.x-modules are available in a Scala flavor&lt;/li&gt;
+&lt;li&gt;It’s awesome&lt;/li&gt;
+&lt;li&gt;Get started &lt;a href=&quot;https://github.com/vert-x3/vertx-sbt-starter&quot;&gt;here&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt;
+&lt;p&gt;The rise of &lt;a href=&quot;http://scala-lang.org/&quot;&gt;Scala&lt;/a&gt; as one of the most important languages on the JVM caught many (me included) by surprise. This hybrid of functional and imperative paradigms struck a chord with many developers. Thanks to Scala a lot of people who’d never have touched a language like Haskell got exposed to functional programming. This exposure was one of the driving forces to get streams and lambda into the JVM.&lt;/p&gt;
+&lt;p&gt;With the release of Vert.x 3.4.0 we finally introduced Scala to the family of supported languages: &lt;a href=&quot;https://github.com/vert-x3/vertx-lang-scala&quot;&gt;vertx-lang-scala&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In this post I will introduce the new stack and how the power of Scala can be used in your favorite reactive toolkit.&lt;/p&gt;
+&lt;h2 id=&quot;basics&quot;&gt;Basics&lt;/h2&gt;
+&lt;p&gt;vertx-lang-scala is based on Scala 2.12. There are no plans to support 2.11.&lt;/p&gt;
+&lt;p&gt;All modules available for Vert.x are supported (you can check  &lt;a href=&quot;https://github.com/vert-x3/vertx-lang-scala/tree/master/vertx-lang-scala-stack&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Modules use the following naming-scheme: &lt;em&gt;io.vertx:&lt;name-of-vertx-module&gt;-scala_2.12:&lt;vertx-major-version&gt;&lt;/em&gt;. The Scala version of &lt;em&gt;io.vertx:vert-web:3.4.0&lt;/em&gt; would be &lt;em&gt;io.vertx:vertx-web-scala_2.12:3.4.0&lt;/em&gt;.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;There is an sbt-based &lt;a href=&quot;https://github.com/vert-x3/vertx-sbt-starter&quot;&gt;quickstart-project&lt;/a&gt; available that will be updated for each Vert.x-release.&lt;/p&gt;
+&lt;p&gt;Please note: Although &lt;a href=&quot;http://www.scala-sbt.org/&quot;&gt;sbt&lt;/a&gt; is used in this quickstart it is by no means required. There are no special plugins involved so vertx-lang-scala can easily be used with &lt;a href=&quot;https://docs.gradle.org/current/userguide/scala_plugin.html&quot;&gt;Gradle&lt;/a&gt; or &lt;a href=&quot;https://github.com/davidB/scala-maven-plugin&quot;&gt;Maven&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I use sbt as it is the default build system used for Scala projects.&lt;/p&gt;
+&lt;h2 id=&quot;quickstart&quot;&gt;Quickstart&lt;/h2&gt;
+&lt;p&gt;Let’s get started by cloning the quickstart:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;git clone git@github.com:vert-x3/vertx-sbt-starter.git&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You just got the following things:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;An sbt project containing dependencies to Vert.x-core and Vert.x-web&lt;/li&gt;
+&lt;li&gt;The ability to create a fat-jat via &lt;code&gt;sbt assembly&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;The ability to create a docker container via &lt;code&gt;sbt docker&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;A few example verticles&lt;/li&gt;
+&lt;li&gt;Unit test examples&lt;/li&gt;
+&lt;li&gt;a pre-configured Scala-shell inside sbt&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We will now run the application to get some quick satisfaction. Use &lt;code&gt;sbt assembly&lt;/code&gt; to produce the fat-jar followed by &lt;code&gt;java -jar target/scala-2.12/vertx-scala-sbt-assembly-0.1-SNAPSHOT.jar&lt;/code&gt;. Now point your browser to &lt;a href=&quot;http://localhost:8666/hello&quot;&gt;http://localhost:8666/hello&lt;/a&gt; for a classic welcome message.&lt;/p&gt;
+&lt;h2 id=&quot;the-details&quot;&gt;The details&lt;/h2&gt;
+&lt;p&gt;Open your IDE so we can take a look at what’s going on under the hood. We start with the &lt;em&gt;HttpVerticle&lt;/em&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; io.vertx.scala.sbt
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.lang.scala.&lt;span class=&quot;hljs-type&quot;&gt;ScalaVerticle&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.scala.ext.web.&lt;span class=&quot;hljs-type&quot;&gt;Router&lt;/span&gt;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; scala.concurrent.&lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;
+
+&lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;HttpVerticle&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;ScalaVerticle&lt;/span&gt; {&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;// &lt;1&gt;&lt;/span&gt;
+
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;startFuture&lt;/span&gt;(&lt;/span&gt;): &lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;[&lt;span class=&quot;hljs-type&quot;&gt;Unit&lt;/span&gt;] = { &lt;span class=&quot;hljs-comment&quot;&gt;// &lt;2&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;router&lt;/span&gt; =&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Router&lt;/span&gt;.router(vertx) &lt;span class=&quot;hljs-comment&quot;&gt;// &lt;3&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;route&lt;/span&gt; =&lt;/span&gt; router
+      .get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/hello&quot;&lt;/span&gt;)
+        .handler(_.response().end(&lt;span class=&quot;hljs-string&quot;&gt;&quot;world&quot;&lt;/span&gt;))
+
+    vertx &lt;span class=&quot;hljs-comment&quot;&gt;//&lt;4&gt;&lt;/span&gt;
+      .createHttpServer()
+      .requestHandler(router.accept)
+      .listenFuture(&lt;span class=&quot;hljs-number&quot;&gt;8666&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;0.0.0.0&quot;&lt;/span&gt;)  &lt;span class=&quot;hljs-comment&quot;&gt;// &lt;5&gt;&lt;/span&gt;
+        .map(_ =&gt; ()) &lt;span class=&quot;hljs-comment&quot;&gt;// &lt;6&gt;&lt;/span&gt;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;ScalaVerticle&lt;/em&gt; is the base class for all Scala-Verticles. It provides all required methods to integrate with the Vert.x-runtime.&lt;/li&gt;
+&lt;li&gt;There are two ways to start a Verticle. Overriding &lt;em&gt;startFuture&lt;/em&gt;, like in this example, tells Vert.x to only consider the Verticle fully started after the returned &lt;em&gt;Future[Unit]&lt;/em&gt; has been successfully completed. Alternatively one can override &lt;em&gt;start&lt;/em&gt; and by that signal to Vert.x the instant availability of the Verticle.&lt;/li&gt;
+&lt;li&gt;This block creates a &lt;em&gt;Router&lt;/em&gt; for incoming HTTP-requests. It registers a handler to answer with “world” if a request to the URL “/hello” arrives. The class is coming from the &lt;a href=&quot;http://vertx.io/docs/vertx-web/scala/&quot;&gt;Vert.x-web-module&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Every Verticle has access to the Vert.x-instance. Here we use it to create a webserver and register our router to handle incoming requests.&lt;/li&gt;
+&lt;li&gt;We finally reached the reason why I use &lt;em&gt;startFuture&lt;/em&gt; in the first place. All operations in Vert.x are asynchronous. So starting the webserver most definitely means it takes some more time until it bound to the given port (8666 in this case). That’s why &lt;em&gt;listenFuture&lt;/em&gt; is used, which returns a &lt;em&gt;Future&lt;/em&gt; which in turn contains the actual instance of the webserver that just got started. So our Verticle will be ready to receive requests &lt;em&gt;after&lt;/em&gt; the returned &lt;em&gt;Future&lt;/em&gt; has been completed.&lt;/li&gt;
+&lt;li&gt;In most cases we can return the &lt;em&gt;Future&lt;/em&gt; directly. In this case the &lt;em&gt;Future&lt;/em&gt; returned by &lt;em&gt;listenFuture&lt;/em&gt; has the wrong type. We get a &lt;em&gt;Future[HttpServer]&lt;/em&gt; but we need a &lt;em&gt;Future[Unit]&lt;/em&gt; as you can see in the signature of &lt;em&gt;startFuture&lt;/em&gt;. This call takes care of mapping the given &lt;em&gt;Future[HttpServer]&lt;/em&gt; to the required return type.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;testing&quot;&gt;Testing&lt;/h2&gt;
+&lt;p&gt;I use &lt;a href=&quot;http://www.scalatest.org/&quot;&gt;ScalaTest&lt;/a&gt; for all my testing needs. It comes with stellar support for asynchronous operations and is a perfect fit for testing Vert.x-applications.&lt;/p&gt;
+&lt;p&gt;The following &lt;em&gt;HttpVerticleSpec&lt;/em&gt; shows how to test an HTTP-API using only Vert.x-classes. Personally I prefer &lt;a href=&quot;http://rest-assured.io/&quot;&gt;REST-assured&lt;/a&gt; with its rich DSL. For this post I wanted to stick with Vert.x-API, so here we go.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs scala&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; io.vertx.scala.sbt
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; org.scalatest.&lt;span class=&quot;hljs-type&quot;&gt;Matchers&lt;/span&gt;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; scala.concurrent.&lt;span class=&quot;hljs-type&quot;&gt;Promise&lt;/span&gt;
+
+&lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;HttpVerticleSpec&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;VerticleTesting&lt;/span&gt;[&lt;/span&gt;&lt;span class=&quot;hljs-type&quot;&gt;HttpVerticle&lt;/span&gt;] &lt;span class=&quot;hljs-keyword&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Matchers&lt;/span&gt; { &lt;span class=&quot;hljs-comment&quot;&gt;// &lt;1&gt;&lt;/span&gt;
+
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;HttpVerticle&quot;&lt;/span&gt; should &lt;span class=&quot;hljs-string&quot;&gt;&quot;bind to 8666 and answer with &#39;world&#39;&quot;&lt;/span&gt; in { &lt;span class=&quot;hljs-comment&quot;&gt;// &lt;2&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;promise&lt;/span&gt; =&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Promise&lt;/span&gt;[&lt;span class=&quot;hljs-type&quot;&gt;String&lt;/span&gt;] &lt;span class=&quot;hljs-comment&quot;&gt;// &lt;3&gt;&lt;/span&gt;
+
+    vertx.createHttpClient()  &lt;span class=&quot;hljs-comment&quot;&gt;// &lt;4&gt;&lt;/span&gt;
+      .getNow(&lt;span class=&quot;hljs-number&quot;&gt;8666&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;127.0.0.1&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/hello&quot;&lt;/span&gt;,
+        r =&gt; {
+          r.exceptionHandler(promise.failure)
+          r.bodyHandler(b =&gt; promise.success(b.toString))
+        })
+
+    promise.future.map(res =&gt; res should equal(&lt;span class=&quot;hljs-string&quot;&gt;&quot;world&quot;&lt;/span&gt;)) &lt;span class=&quot;hljs-comment&quot;&gt;// &lt;5&gt;&lt;/span&gt;
+  }
+
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;VerticleTesting&lt;/em&gt; is a base class for your tests included with the quickstart-project. It’s a small helper that takes care of deploying/un-deploying the Verticle to be tested and manages a Vert.x-instance. It additionally extends &lt;a href=&quot;http://www.scalatest.org/user_guide/async_testing&quot;&gt;AsyncFlatSpec&lt;/a&gt; so we can use Futures as test-return-types.&lt;/li&gt;
+&lt;li&gt;Isn’t it nice and readable?&lt;/li&gt;
+&lt;li&gt;The promise is required as the whole test will run async&lt;/li&gt;
+&lt;li&gt;We use the vertx-instance provided by &lt;em&gt;VerticleTesting&lt;/em&gt; to create a Netty-based HttpClient. We instruct the client to call the specified URL and to succeed the &lt;em&gt;Promise&lt;/em&gt; with the returned body.&lt;/li&gt;
+&lt;li&gt;This creates the actual assertion. After getting the &lt;em&gt;Future&lt;/em&gt; from the &lt;em&gt;Promise&lt;/em&gt; an assertion is created: &lt;em&gt;The Result should be equal to the String “world”&lt;/em&gt;. ScalaTest takes care of evaluating the returned &lt;em&gt;Future&lt;/em&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;That’s all you need to get started!&lt;/p&gt;
+&lt;h2 id=&quot;futures-in-vertx-lang-scala&quot;&gt;Futures in vertx-lang-scala&lt;/h2&gt;
+&lt;p&gt;Now for a more in depth topic I think is worth mentioning. vertx-lang-scala treats async operations the Scala-way which is a little different from what you might be used from Vert.x. For async operations like subscribing to the eventbus or deploying a Verticle you would call a method like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs scala&quot;&gt;vertx.deployVerticle(&lt;span class=&quot;hljs-string&quot;&gt;&quot;com.foo.OtherVerticle&quot;&lt;/span&gt;, res -&gt; {
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (res.succeeded()) {
+    startFuture.complete();
+  } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+    startFuture.fail(res.cause());
+  }
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;em&gt;deployVerticle&lt;/em&gt; method takes the Verticle-name and a &lt;em&gt;Handler[AsyncResult]&lt;/em&gt; as its arguments. The &lt;em&gt;Handler[AsyncResult]&lt;/em&gt; is called after Vert.x tried deploying the Verticle. This style can also be used for Scala (which might ease the transition when coming from the Java-world) but their is a way more &lt;em&gt;scalaish&lt;/em&gt; way of doing this.&lt;/p&gt;
+&lt;p&gt;For every method taking a &lt;em&gt;Handler[AsyncResult]&lt;/em&gt; as its argument I create an alternative method using &lt;a href=&quot;http://docs.scala-lang.org/overviews/core/futures.html&quot;&gt;Scala-Futures&lt;/a&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs scala&quot;&gt;vertx.deployVerticleFuture(&lt;span class=&quot;hljs-string&quot;&gt;&quot;com.foo.OtherVerticle&quot;&lt;/span&gt;) &lt;span class=&quot;hljs-comment&quot;&gt;// &lt;1&gt;&lt;/span&gt;
+  .onComplete{  &lt;span class=&quot;hljs-comment&quot;&gt;// &lt;2&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Success&lt;/span&gt;(s) =&gt; println(s&lt;span class=&quot;hljs-string&quot;&gt;&quot;Verticle id is: $s&quot;&lt;/span&gt;) &lt;span class=&quot;hljs-comment&quot;&gt;// &lt;3&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Failure&lt;/span&gt;(t) =&gt; t.printStackTrace()
+  }&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;A method providing a &lt;em&gt;Future&lt;/em&gt; based alternative gets &lt;em&gt;Future&lt;/em&gt; appended to its name and returns a &lt;em&gt;Future&lt;/em&gt; instead of taking a &lt;em&gt;Handler&lt;/em&gt; as its argument.&lt;/li&gt;
+&lt;li&gt;We are now free to use &lt;em&gt;Future&lt;/em&gt; the way we want. In this case onComplete is used to react on the completion.&lt;/li&gt;
+&lt;li&gt;Pattern matching on the result &lt;em&gt;&lt;3&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I strongly recommend using this approach over using &lt;em&gt;Handlers&lt;/em&gt; as you won’t run into Callback-hell and you get all the goodies Scala provides for async operations.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Future and Promise both need a ExecutionContext &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; The &lt;a href=&quot;https://github.com/vert-x3/vertx-lang-scala/blob/master/vertx-lang-scala/src/main/scala/io/vertx/lang/scala/VertxExecutionContext.scala&quot;&gt;VertxExecutionContext&lt;/a&gt; is made implicitly available inside the &lt;a href=&quot;https://github.com/vert-x3/vertx-lang-scala/blob/master/vertx-lang-scala/src/main/scala/io/vertx/lang/scala/ScalaVerticle.scala&quot;&gt;ScalaVerticle&lt;/a&gt;. It makes sure all  operations are executed on the correct Event Loop. If you are using Vert.x without Verticles you have to provide it on your own.
+&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;h2 id=&quot;using-the-console&quot;&gt;Using the console&lt;/h2&gt;
+&lt;p&gt;A great feature of sbt is the embedded, configurable Scala-console. The console available in the quickstart-project is pre-configured to provide a fresh Vert.x-instance and all required imports so you can start playing around with Vert.x in an instant.&lt;/p&gt;
+&lt;p&gt;Execute the following commands in the project-folder to deploy the &lt;em&gt;HttpVerticle&lt;/em&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;sbt
+&gt; console
+scala&gt; vertx.deployVerticle(nameForVerticle[HttpVerticle])
+scala&gt; vertx.deploymentIDs&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After  executing this sequence you can now point your browser &lt;a href=&quot;http://localhost:8666/hello&quot;&gt;http://localhost:8666/hello&lt;/a&gt; to see our message. The last command issued shows the Ids under which Verticles have been deployed.&lt;/p&gt;
+&lt;p&gt;To get rid of the deployment you can now type &lt;code&gt;vertx.undeploy(vertx.deploymentIDs.head)&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;that-s-it-&quot;&gt;That’s it!&lt;/h2&gt;
+&lt;p&gt;This was a very quick introduction to our new Scala-stack. I hope to have given you a little taste of the Scala goodness now available with Vert.x. I recommend digging a little more through the quickstart to get a feeling for what’s there.
+In my next blog post I will explain some of the decisions I made and the obstacles I faced with the differences between Java and Scala /Hint: They are way bigger than I was aware of).&lt;/p&gt;
+&lt;p&gt;Enjoy!&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 20 Mar 2017 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/scala-is-here</link>
+          <guid isPermaLink="true">http://vertx.io/blog/scala-is-here</guid>
+          <author>
+            <name>codepitbull</name>
+            <uri>http://github.com/codepitbull</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Data-driven Apps made easy with Vert.x 3.4.0 and headless CMS Gentics Mesh</title>
           <description>
       &lt;article&gt;&lt;p&gt;In this article, I would like to share why Vert.x is not only a robust foundation for the &lt;a href=&quot;http://getmesh.io/&quot;&gt;headless Content Management System Gentics Mesh&lt;/a&gt; but also how the recent release 3.4.0 can be used to build a template-based web server with Gentics Mesh and handlebars.&lt;/p&gt;
