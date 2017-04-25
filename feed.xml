@@ -8,6 +8,177 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Building a real-time web app with Angular/Ngrx and Vert.x</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;Nowadays, there are multiple tech stacks to build a real-time web app. What are the best choices to build real-time Angular client apps, connected to a JVM-based backend? This article describes an Angular+Vertx real-time architecture with a Proof of Concept demo app.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;this is a re-publication of the following &lt;a href=&quot;https://medium.com/@benorama/building-a-realtime-web-app-with-angular-ngrx-and-vert-x-a5381c0397a1&quot;&gt;Medium post&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Welcome to the real-time web!&lt;/strong&gt; It’s time to move on from traditional synchronous HTTP request/response architectures to reactive apps with connected clients (ouch… that’s a lot of buzzwords in just one sentence)!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/vertx-realtime-angular-ngrx/data-in-motion.jpg&quot; alt=&quot;Real-time app&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Image source: &lt;a href=&quot;https://www.voxxed.com&quot;&gt;https://www.voxxed.com&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;To build this kind of app, &lt;a href=&quot;https://www.meteor.com&quot;&gt;MeteorJS&lt;/a&gt; is the new cool kid on the block (v1.0 released in october 2014): &lt;strong&gt;a full stack Javascript platform to build connected-client reactive applications&lt;/strong&gt;. It allows JS developers to build and deploy amazing modern web and mobile apps (iOS/Android) in no time, using a unified backend+frontend code within a single app repo. That’s a pretty ambitious approach but it requires a very opinionated and highly coupled JS tech stack and it’s still a pretty niche framework.&lt;/p&gt;
+&lt;p&gt;Moreover, we are a Java shop on the backend. At AgoraPulse, we rely heavily on :&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://angular.io&quot;&gt;Angular&lt;/a&gt; and &lt;a href=&quot;http://ionicframework.com&quot;&gt;Ionic&lt;/a&gt; for the JS frontend (with a shared business/data architecture based on Ngrx),&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.groovy-lang.org&quot;&gt;Groovy&lt;/a&gt; and &lt;a href=&quot;https://grails.org&quot;&gt;Grails&lt;/a&gt; ecosystem for the JVM backend.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;So my question is:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;What are the best choices to build real-time Angular client apps, connected to a JVM-based backend these days?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Our requirements are pretty basic. We don’t need full Meteor’s end-to-end application model.
+We just want to be able to :&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;build a reactive app with an event bus on the JVM, and&lt;/li&gt;
+&lt;li&gt;extend the event bus down to the browser to be able to publish/subscribe to real-time events from an Angular app.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;server-side-jvm-&quot;&gt;Server side (JVM)&lt;/h2&gt;
+&lt;p&gt;Reactive apps is a hot topic nowadays and there are many great libs/platforms to build this type of event-driven architecture on the JVM:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://vertx.io&quot;&gt;Vert.x&lt;/a&gt;,&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.lightbend.com&quot;&gt;Lightbend&lt;/a&gt; platform (Play, Akka, Scala),&lt;/li&gt;
+&lt;li&gt;Spring &lt;a href=&quot;http://projectreactor.io&quot;&gt;Project Reactor&lt;/a&gt; (integrated into Grails 3.0).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;client-side&quot;&gt;Client side&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;http://facebook.github.io/react/&quot;&gt;ReactJS&lt;/a&gt; and &lt;a href=&quot;https://angular.io&quot;&gt;Angular&lt;/a&gt; are the two most popular framework right now to build modern JS apps. Most platforms use &lt;a href=&quot;https://github.com/sockjs/sockjs-client&quot;&gt;SockJS&lt;/a&gt; to handle real-time connections:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-web/groovy/&quot;&gt;Vertx-web&lt;/a&gt; provides a SockJS server implementation with an event bus bridge and a &lt;a href=&quot;http://vertx.io/docs/vertx-web/groovy/#_sockjs_event_bus_bridge&quot;&gt;vertx-evenbus.js&lt;/a&gt; client library (very easy to use),&lt;/li&gt;
+&lt;li&gt;Spring provides websocket SockJS support though Spring Messaging and Websocket libs (see an example &lt;a href=&quot;https://spring.io/guides/gs/messaging-stomp-websocket/&quot;&gt;here&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;final-choice-vert-x-angular&quot;&gt;Final choice: Vert.x + Angular&lt;/h2&gt;
+&lt;p&gt;In the end, I’ve chosen to experiment with Vert.x for its excellent Groovy support, distributed event bus, scalability and ease of use.&lt;/p&gt;
+&lt;p&gt;I enjoyed it very much. Let me show you the result of my experimentation which is the root of our real-time features coming very soon in AgoraPulse v6.0!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/vertx-realtime-angular-ngrx/vertx-logo.png&quot; alt=&quot;Vertx logo&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;why-vert-x-&quot;&gt;Why Vert.x?&lt;/h2&gt;
+&lt;p&gt;Like other reactive platform, Vert.x is event driven and non blocking. It scales very well (even more that Node.js).&lt;/p&gt;
+&lt;p&gt;Unlike other reactive platforms, Vert.x is polyglot: you can use Vert.x with multiple languages including Java, JavaScript, Groovy, Ruby, Ceylon, Scala and Kotlin.&lt;/p&gt;
+&lt;p&gt;Unlike Node.js, Vert.x is a general purpose tool-kit and unopinionated. It’s a versatile platform suitable for many things: from simple network utilities, sophisticated modern web applications, HTTP/REST microservices or a full blown back-end message-bus application.&lt;/p&gt;
+&lt;p&gt;Like other reactive platforms, it looks scary in the begining when you read the documentation… ;) But once you start playing with it, it remains fun and simple to use, especially with Groovy! Vert.x really allows you to build substantial systems without getting tangled in complexity.&lt;/p&gt;
+&lt;p&gt;In my case, I was mainly interested by the distributed event-bus provided (a core feature of Vert.x).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;To validate our approach, we built prototypes with the following goals:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;share and synchronize a common (Ngrx-based) state between multiple connected clients, and&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;distribute real-time (Ngrx-based) actions across multiple connected clients, which impact local states/reducers.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;Note: &lt;a href=&quot;https://github.com/ngrx/store&quot;&gt;@ngrx/store&lt;/a&gt; is a RxJS powered state management inspired by Redux for Angular apps. It’s currently the most popular way to structure complex business logic in Angular apps.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/vertx-realtime-angular-ngrx/redux.png&quot; alt=&quot;Redux&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Source: &lt;a href=&quot;https://www.smashingmagazine.com/2016/06/an-introduction-to-redux/&quot;&gt;https://www.smashingmagazine.com/2016/06/an-introduction-to-redux/&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&quot;proof-of-concept&quot;&gt;PROOF OF CONCEPT&lt;/h2&gt;
+&lt;p&gt;Here is the repo of our initial proof of concept:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://github.com/benorama/ngrx-realtime-app&quot;&gt;http://github.com/benorama/ngrx-realtime-app&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The repo is divided into two separate projects:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Vert.x server app&lt;/strong&gt;, based on &lt;a href=&quot;http://vertx.io&quot;&gt;Vert.x&lt;/a&gt; (version 3.3), managed by &lt;a href=&quot;https://gradle.org&quot;&gt;Gradle&lt;/a&gt;, with a main verticle developed in &lt;a href=&quot;http://groovy-lang.org&quot;&gt;Groovy&lt;/a&gt; lang.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Angular client app&lt;/strong&gt;, based on Angular (version 4.0.1), managed by &lt;a href=&quot;https://angular.io&quot;&gt;Angular&lt;/a&gt; CLI with state, reducers and actions logic based on &lt;a href=&quot;https://github.com/ngrx/store&quot;&gt;@ngrx/store&lt;/a&gt; (version 2.2.1)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For the demo, we are using the counter example code (actions and reducers) from &lt;a href=&quot;https://github.com/ngrx/store&quot;&gt;@ngrx/store&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The counter client business logic is based on:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;CounterState&lt;/code&gt; interface, counter state model,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;counterReducer&lt;/code&gt; reducer, counter state management based on dispatched actions, and&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Increment&lt;/em&gt;, &lt;em&gt;decrement&lt;/em&gt; and &lt;em&gt;reset&lt;/em&gt; counter actions.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;State is maintained server-side with a simple singleton &lt;code&gt;CounterService&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs groovy&quot;&gt;&lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;CounterService&lt;/span&gt; {&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; INCREMENT = &lt;span class=&quot;hljs-string&quot;&gt;&#39;[Counter] Increment&#39;&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; DECREMENT = &lt;span class=&quot;hljs-string&quot;&gt;&#39;[Counter] Decrement&#39;&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;static&lt;/span&gt; RESET = &lt;span class=&quot;hljs-string&quot;&gt;&#39;[Counter] Reset&#39;&lt;/span&gt;
+    &lt;span class=&quot;hljs-typename&quot;&gt;int&lt;/span&gt; total = &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;hljs-typename&quot;&gt;void&lt;/span&gt; handleEvent(event) {
+        &lt;span class=&quot;hljs-keyword&quot;&gt;switch&lt;/span&gt;(event.type) {
+            &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;INCREMENT:&lt;/span&gt;
+                total++
+                &lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt;
+            &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;DECREMENT:&lt;/span&gt;
+                total--
+                &lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt;
+            &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;RESET:&lt;/span&gt;
+                total = &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;
+                &lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt;
+        }
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;client-state-initialization-through-request-response&quot;&gt;Client state initialization through Request/Response&lt;/h3&gt;
+&lt;p&gt;Initial state is initialized with simple &lt;strong&gt;request/response&lt;/strong&gt; (or send/reply) on the event bus.
+Once the client is connected, it sends a request to the event bus at the address &lt;strong&gt;counter::total&lt;/strong&gt;. The server replies directly with the value of &lt;code&gt;CounterService&lt;/code&gt; total and the client dispatches locally a &lt;em&gt;reset&lt;/em&gt; action with the total value from the reply.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/vertx-realtime-angular-ngrx/vertx-request-response.png&quot; alt=&quot;Vertx Request Response&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Source: &lt;a href=&quot;https://www.slideshare.net/RedHatDevelopers/vertx-microservices-were-never-so-easy-clement-escoffier&quot;&gt;https://www.slideshare.net/RedHatDevelopers/vertx-microservices-were-never-so-easy-clement-escoffier&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Here is an extract of the corresponding code (from &lt;code&gt;AppEventBusService&lt;/code&gt;):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs typescript&quot;&gt;initializeCounter() {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.eventBusService.send(&lt;span class=&quot;hljs-string&quot;&gt;&#39;counter::total&#39;&lt;/span&gt;, body, (error, message) =&gt; {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Handle reply&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (message &amp;&amp; message.body) {
+            &lt;span class=&quot;hljs-keyword&quot;&gt;let&lt;/span&gt; localAction = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; CounterActions.ResetAction();
+            localAction.payload = message.body; &lt;span class=&quot;hljs-comment&quot;&gt;// Total value&lt;/span&gt;
+            &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.store.dispatch(localAction);
+        }
+    });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;actions-distribution-through-publish-subscribe&quot;&gt;Actions distribution through Publish/Subscribe&lt;/h3&gt;
+&lt;p&gt;Action distribution/sync uses the &lt;strong&gt;publish/subscribe&lt;/strong&gt; pattern.&lt;/p&gt;
+&lt;p&gt;Counter actions are published from the client to the event bus at the address &lt;strong&gt;counter::actions&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Any client that have subscribed to &lt;strong&gt;counter::actions&lt;/strong&gt; address will receive the actions and redispatch them locally to impact app states/reducers.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/vertx-realtime-angular-ngrx/vertx-publish-subscribe.png&quot; alt=&quot;Vertx Publish Subscribe&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Source: &lt;a href=&quot;https://www.slideshare.net/RedHatDevelopers/vertx-microservices-were-never-so-easy-clement-escoffier&quot;&gt;https://www.slideshare.net/RedHatDevelopers/vertx-microservices-were-never-so-easy-clement-escoffier&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Here is an extract of the corresponding code (from &lt;code&gt;AppEventBusService&lt;/code&gt;):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs typescript&quot;&gt;publishAction(action: RemoteAction) {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (action.publishedByUser) {
+        &lt;span class=&quot;hljs-built_in&quot;&gt;console&lt;/span&gt;.error(&lt;span class=&quot;hljs-string&quot;&gt;&quot;This action has already been published&quot;&lt;/span&gt;);
+        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt;;
+    }
+    action.publishedByUser = &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.currentUser;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.eventBusService.publish(action.eventBusAddress, action);
+}
+subscribeToActions(eventBusAddress: &lt;span class=&quot;hljs-built_in&quot;&gt;string&lt;/span&gt;) {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.eventBusService.registerHandler(eventBusAddress, (error, message) =&gt; {
+        &lt;span class=&quot;hljs-comment&quot;&gt;// Handle message from subscription&lt;/span&gt;
+        &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (message.body.publishedByUser === &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.currentUser) {
+            &lt;span class=&quot;hljs-comment&quot;&gt;// Ignore action sent by current manager&lt;/span&gt;
+            &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt;;
+        }
+        &lt;span class=&quot;hljs-keyword&quot;&gt;let&lt;/span&gt; localAction = message.body;
+        &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.store.dispatch(localAction);
+    });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The event bus publishing logic is achieved through a simple Ngrx Effects. Any actions that extend &lt;code&gt;RemoteAction&lt;/code&gt; class will be published to the event bus.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs typescript&quot;&gt;@Injectable()
+&lt;span class=&quot;hljs-keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; AppEventBusEffects {
+
+    &lt;span class=&quot;hljs-constructor&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;constructor&lt;/span&gt;(private actions$: Actions, private appEventBusService: AppEventBusService) &lt;/span&gt;{}
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Listen to all actions and publish remote actions to account event bus&lt;/span&gt;
+    @Effect({dispatch: &lt;span class=&quot;hljs-literal&quot;&gt;false&lt;/span&gt;}) remoteAction$ = &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.actions$
+        .filter(action =&gt; action &lt;span class=&quot;hljs-keyword&quot;&gt;instanceof&lt;/span&gt; RemoteAction &amp;&amp; action.publishedByUser == &lt;span class=&quot;hljs-literal&quot;&gt;undefined&lt;/span&gt;)
+        .do((action: RemoteAction) =&gt; {
+            &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.appEventBusService.publishAction(action);
+        });
+  @Effect({dispatch: &lt;span class=&quot;hljs-literal&quot;&gt;false&lt;/span&gt;}) login$ = &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.actions$
+        .ofType(UserActionTypes.LOGIN)
+        .do(() =&gt; {
+            &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.appEventBusService.connect();
+        });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can see all of this in action by locally launching the server and the client app in two separate browser windows.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/vertx-realtime-angular-ngrx/demo-app-screen.png&quot; alt=&quot;Demo app screen&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Bonus: the demo app also includes user status (offline/online), based of the event bus connection status.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;The counter state is shared and synchronized between connected clients and each local action is distributed in real-time to other clients.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mission accomplished!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Typescript version of Vertx EventBus Client &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; The app uses our own Typescript version of the official JS &lt;a href=&quot;https://github.com/vert-x3/vertx-bus-bower&quot;&gt;Vertx EventBus Client&lt;/a&gt;. It can be found &lt;a href=&quot;https://gist.github.com/benorama/93373c3c1c3574732d6cc1b4754aab9f&quot;&gt;here&lt;/a&gt;, any feedback, improvement suggestions are welcome!&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Wed, 26 Apr 2017 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/building-a-real-time-web-app-with-angular-ngrx-and-vert-x</link>
+          <guid isPermaLink="true">http://vertx.io/blog/building-a-real-time-web-app-with-angular-ngrx-and-vert-x</guid>
+          <author>
+            <name>benorama</name>
+            <uri>http://github.com/benorama</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Dynamic Routing in Serverless Microservice with Vert.x Event Bus</title>
           <description>
       &lt;article&gt;&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;this is a re-publication of the following &lt;a href=&quot;https://www.rowellbelen.com/dynamic-routing-in-serverless-microservice-with-vert-x-event-bus/&quot;&gt;blog post&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
