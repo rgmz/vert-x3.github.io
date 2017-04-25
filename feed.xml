@@ -19,7 +19,7 @@
 &lt;p&gt;To build this kind of app, &lt;a href=&quot;https://www.meteor.com&quot;&gt;MeteorJS&lt;/a&gt; is the new cool kid on the block (v1.0 released in october 2014): &lt;strong&gt;a full stack Javascript platform to build connected-client reactive applications&lt;/strong&gt;. It allows JS developers to build and deploy amazing modern web and mobile apps (iOS/Android) in no time, using a unified backend+frontend code within a single app repo. That’s a pretty ambitious approach but it requires a very opinionated and highly coupled JS tech stack and it’s still a pretty niche framework.&lt;/p&gt;
 &lt;p&gt;Moreover, we are a Java shop on the backend. At AgoraPulse, we rely heavily on :&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://angular.io&quot;&gt;Angular&lt;/a&gt; and &lt;a href=&quot;http://ionicframework.com&quot;&gt;Ionic&lt;/a&gt; for the JS frontend (with a shared business/data architecture based on Ngrx),&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://angular.io&quot;&gt;Angular&lt;/a&gt; and &lt;a href=&quot;http://ionicframework.com&quot;&gt;Ionic&lt;/a&gt; for the JS frontend (with a shared business/data architecture based on &lt;a href=&quot;https://github.com/ngrx/store&quot;&gt;Ngrx&lt;/a&gt;),&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://www.groovy-lang.org&quot;&gt;Groovy&lt;/a&gt; and &lt;a href=&quot;https://grails.org&quot;&gt;Grails&lt;/a&gt; ecosystem for the JVM backend.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;So my question is:&lt;/p&gt;
@@ -32,23 +32,22 @@ We just want to be able to :&lt;/p&gt;
 &lt;li&gt;build a reactive app with an event bus on the JVM, and&lt;/li&gt;
 &lt;li&gt;extend the event bus down to the browser to be able to publish/subscribe to real-time events from an Angular app.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h2 id=&quot;server-side-jvm-&quot;&gt;Server side (JVM)&lt;/h2&gt;
+&lt;h3 id=&quot;server-side-jvm-&quot;&gt;Server side (JVM)&lt;/h3&gt;
 &lt;p&gt;Reactive apps is a hot topic nowadays and there are many great libs/platforms to build this type of event-driven architecture on the JVM:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;http://vertx.io&quot;&gt;Vert.x&lt;/a&gt;,&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://www.lightbend.com&quot;&gt;Lightbend&lt;/a&gt; platform (Play, Akka, Scala),&lt;/li&gt;
 &lt;li&gt;Spring &lt;a href=&quot;http://projectreactor.io&quot;&gt;Project Reactor&lt;/a&gt; (integrated into Grails 3.0).&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&quot;client-side&quot;&gt;Client side&lt;/h2&gt;
+&lt;h3 id=&quot;client-side&quot;&gt;Client side&lt;/h3&gt;
 &lt;p&gt;&lt;a href=&quot;http://facebook.github.io/react/&quot;&gt;ReactJS&lt;/a&gt; and &lt;a href=&quot;https://angular.io&quot;&gt;Angular&lt;/a&gt; are the two most popular framework right now to build modern JS apps. Most platforms use &lt;a href=&quot;https://github.com/sockjs/sockjs-client&quot;&gt;SockJS&lt;/a&gt; to handle real-time connections:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-web/groovy/&quot;&gt;Vertx-web&lt;/a&gt; provides a SockJS server implementation with an event bus bridge and a &lt;a href=&quot;http://vertx.io/docs/vertx-web/groovy/#_sockjs_event_bus_bridge&quot;&gt;vertx-evenbus.js&lt;/a&gt; client library (very easy to use),&lt;/li&gt;
 &lt;li&gt;Spring provides websocket SockJS support though Spring Messaging and Websocket libs (see an example &lt;a href=&quot;https://spring.io/guides/gs/messaging-stomp-websocket/&quot;&gt;here&lt;/a&gt;)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&quot;final-choice-vert-x-angular&quot;&gt;Final choice: Vert.x + Angular&lt;/h2&gt;
+&lt;h3 id=&quot;final-choice-vert-x-angular&quot;&gt;Final choice: Vert.x + Angular&lt;/h3&gt;
 &lt;p&gt;In the end, I’ve chosen to experiment with Vert.x for its excellent Groovy support, distributed event bus, scalability and ease of use.&lt;/p&gt;
 &lt;p&gt;I enjoyed it very much. Let me show you the result of my experimentation which is the root of our real-time features coming very soon in AgoraPulse v6.0!&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/blog/vertx-realtime-angular-ngrx/vertx-logo.png&quot; alt=&quot;Vertx logo&quot;&gt;&lt;/p&gt;
 &lt;h2 id=&quot;why-vert-x-&quot;&gt;Why Vert.x?&lt;/h2&gt;
 &lt;p&gt;Like other reactive platform, Vert.x is event driven and non blocking. It scales very well (even more that Node.js).&lt;/p&gt;
 &lt;p&gt;Unlike other reactive platforms, Vert.x is polyglot: you can use Vert.x with multiple languages including Java, JavaScript, Groovy, Ruby, Ceylon, Scala and Kotlin.&lt;/p&gt;
@@ -154,7 +153,8 @@ subscribeToActions(eventBusAddress: &lt;span class=&quot;hljs-built_in&quot;&gt;
         .do((action: RemoteAction) =&gt; {
             &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.appEventBusService.publishAction(action);
         });
-  @Effect({dispatch: &lt;span class=&quot;hljs-literal&quot;&gt;false&lt;/span&gt;}) login$ = &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.actions$
+
+    @Effect({dispatch: &lt;span class=&quot;hljs-literal&quot;&gt;false&lt;/span&gt;}) login$ = &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.actions$
         .ofType(UserActionTypes.LOGIN)
         .do(() =&gt; {
             &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.appEventBusService.connect();
