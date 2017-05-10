@@ -8,6 +8,252 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Time scheduling with Chime</title>
+          <description>
+      &lt;article&gt;&lt;h2 id=&quot;time-scheduling-&quot;&gt;Time scheduling.&lt;/h2&gt;
+&lt;p&gt;Eclipse Vert.x executes periodic and delayed actions with
+&lt;a href=&quot;http://vertx.io/docs/vertx-core/java/#_executing_periodic_and_delayed_actions&quot;&gt;periodic and one-shot timers&lt;/a&gt;.
+This is the base for time scheduling and reach feature extension must be rather interesting.
+Be notified at certain date / time, take into account holidays,
+repeat notifications until a given date, apply time zone,
+take into account daylight saving time etc.
+There are a lot of useful features time scheduler may introduce to the Vert.x stack.  &lt;/p&gt;
+&lt;h2 id=&quot;chime-&quot;&gt;Chime.&lt;/h2&gt;
+&lt;p&gt; &lt;a href=&quot;https://github.com/LisiLisenok/Chime&quot;&gt;Chime&lt;/a&gt; is time scheduler verticle which works on &lt;em&gt;Vert.x&lt;/em&gt; event bus and provides:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;scheduling with &lt;em&gt;cron-style&lt;/em&gt;, &lt;em&gt;interval&lt;/em&gt; or &lt;em&gt;union&lt;/em&gt; timers:&lt;ul&gt;
+&lt;li&gt;at a certain time of day (to the second);  &lt;/li&gt;
+&lt;li&gt;on certain days of the week, month or year;  &lt;/li&gt;
+&lt;li&gt;with a given time interval;  &lt;/li&gt;
+&lt;li&gt;with nearly any combination of all of above;  &lt;/li&gt;
+&lt;li&gt;repeating a given number of times;  &lt;/li&gt;
+&lt;li&gt;repeating until a given time / date;  &lt;/li&gt;
+&lt;li&gt;repeating infinitely  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;proxying event bus with conventional interfaces  &lt;/li&gt;
+&lt;li&gt;applying time zones available on &lt;em&gt;JVM&lt;/em&gt; with daylight saving time taken into account  &lt;/li&gt;
+&lt;li&gt;flexible timers management system:  &lt;ul&gt;
+&lt;li&gt;grouping timers;  &lt;/li&gt;
+&lt;li&gt;defining a timer start or end times  &lt;/li&gt;
+&lt;li&gt;pausing / resuming;  &lt;/li&gt;
+&lt;li&gt;fire counting;  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;listening and sending messages via event bus with &lt;em&gt;JSON&lt;/em&gt;;  &lt;/li&gt;
+&lt;li&gt;&lt;em&gt;publishing&lt;/em&gt; or &lt;em&gt;sending&lt;/em&gt; timer fire event to the address of your choice.  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block info&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-info-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;&lt;em&gt;Chime&lt;/em&gt; is written in &lt;a href=&quot;https://ceylon-lang.org&quot;&gt;Ceylon&lt;/a&gt; and is available at
+&lt;a href=&quot;https://herd.ceylon-lang.org/modules/herd.schedule.chime&quot;&gt;Ceylon Herd&lt;/a&gt;.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;running-&quot;&gt;Running.&lt;/h2&gt;
+&lt;h3 id=&quot;ceylon-users-&quot;&gt;Ceylon users.&lt;/h3&gt;
+&lt;p&gt;Deploy &lt;em&gt;Chime&lt;/em&gt; using &lt;code&gt;Verticle.deployVerticle&lt;/code&gt; method.  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-tag&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;hljs-tag&quot;&gt;io&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.vertx&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.ceylon&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.core&lt;/span&gt; {&lt;span class=&quot;hljs-attribute&quot;&gt;vertx&lt;/span&gt;}
+&lt;span class=&quot;hljs-tag&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;hljs-tag&quot;&gt;herd&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.schedule&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.chime&lt;/span&gt; {&lt;span class=&quot;hljs-attribute&quot;&gt;Chime&lt;/span&gt;}
+&lt;span class=&quot;hljs-attribute&quot;&gt;Chime&lt;/span&gt;().&lt;span class=&quot;hljs-function&quot;&gt;deploy&lt;/span&gt;(vertx.&lt;span class=&quot;hljs-function&quot;&gt;vertx&lt;/span&gt;());&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or with &lt;code&gt;vertx.deployVerticle(\&quot;ceylon:herd.schedule.chime/0.2.1\&quot;);&lt;/code&gt;
+but ensure that Ceylon verticle factory is available at class path.   &lt;/p&gt;
+&lt;h3 id=&quot;java-users-&quot;&gt;Java users.&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Ensure that Ceylon verticle factory is available at class path.  &lt;/li&gt;
+&lt;li&gt;Put Ceylon versions to consistency. For instance, Vert.x 3.4.1 depends on Ceylon 1.3.0
+while Chime 0.2.1 depends on Ceylon 1.3.2. &lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-core/java/#_deploying_verticles_programmatically&quot;&gt;Deploy verticle&lt;/a&gt;, like:  &lt;pre&gt;&lt;code&gt;vertx.&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-title&quot;&gt;deployVerticle&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;ceylon:herd.schedule.chime/0.2.1&quot;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block info&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-info-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;example with Maven is available at &lt;a href=&quot;https://github.com/LisiLisenok/ChimeJavaExample&quot;&gt;Github&lt;/a&gt;.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;schedulers-&quot;&gt;Schedulers.&lt;/h2&gt;
+&lt;p&gt;Well, &lt;em&gt;Chime&lt;/em&gt; verticle is deployed. Let’s see its structure.&lt;br&gt;In order to provide flexible and broad ways to manage timing two level architecture is adopted.
+It consists of schedulers and timers. Timer is a unit which fires at a given time.
+While scheduler is a set or group of timers and provides following:    &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;creating and deleting timers;  &lt;/li&gt;
+&lt;li&gt;pausing / resuming all timers working within the scheduler;  &lt;/li&gt;
+&lt;li&gt;info on the running timers;  &lt;/li&gt;
+&lt;li&gt;default time zone;  &lt;/li&gt;
+&lt;li&gt;listening event bus at the given scheduler address for the requests to.  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Any timer operates within some scheduler. And one or several schedulers have to be created before starting scheduling.&lt;br&gt;When &lt;em&gt;Chime&lt;/em&gt; verticle is deployed it starts listen event bus at &lt;strong&gt;chime&lt;/strong&gt; address (can be configured).
+In order to create scheduler send to this address a JSON message.  &lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{
+    &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;operation&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;create&quot;&lt;/span&gt;&lt;/span&gt;,
+    &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;name&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;scheduler name&quot;&lt;/span&gt;
+&lt;/span&gt;}&lt;/code&gt;&lt;/pre&gt;
+
+
+&lt;p&gt;Once scheduler is created it starts listen event bus at &lt;strong&gt;scheduler name&lt;/strong&gt; address.
+Sending messages to &lt;strong&gt;chime&lt;/strong&gt; address or to &lt;strong&gt;scheduler name&lt;/strong&gt; address are rather equivalent,
+excepting that chime address provides services for every scheduler, while scheduler address
+provides services for this particular scheduler only.&lt;br&gt;The request sent to the &lt;em&gt;Chime&lt;/em&gt; has to contain &lt;strong&gt;operation&lt;/strong&gt; and &lt;strong&gt;name&lt;/strong&gt; keys.
+Name key provides scheduler or timer name. While operation key shows an action &lt;em&gt;Chime&lt;/em&gt; has to perform.
+There are only four possible operations:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;create - create new scheduler or timer;  &lt;/li&gt;
+&lt;li&gt;delete - delete scheduler or timer;  &lt;/li&gt;
+&lt;li&gt;info - request info on &lt;em&gt;Chime&lt;/em&gt; or on a particular scheduler or timer;  &lt;/li&gt;
+&lt;li&gt;state - set or get scheduler or timer state (running, paused or completed).  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;timers-&quot;&gt;Timers.&lt;/h2&gt;
+&lt;p&gt;Now we have scheduler created and timers can be run within. There are two ways to access a given timer:  &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Sending message to &lt;strong&gt;chime&lt;/strong&gt; address with ‘name’ field set to &lt;strong&gt;scheduler name:timer name&lt;/strong&gt;.  &lt;/li&gt;
+&lt;li&gt;Sending message to &lt;strong&gt;scheduler name&lt;/strong&gt; address with ‘name’ field set to either &lt;strong&gt;timer name&lt;/strong&gt; or &lt;strong&gt;scheduler name:timer name&lt;/strong&gt;.  &lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;a href=&quot;https://modules.ceylon-lang.org/repo/1/herd/schedule/chime/0.2.1/module-doc/api/index.html#timer-request&quot;&gt;Timer request&lt;/a&gt; is rather complicated and contains a lot of details. In this blog post only basic features are considered:  &lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{
+    &quot;operation&quot;: &quot;create&quot;,
+    &quot;name&quot;: &quot;scheduler name:timer name&quot;,
+    &quot;description&quot;: {}
+};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is rather similar to request sent to create a scheduler.
+The difference is only &lt;strong&gt;description&lt;/strong&gt; field is added.
+This description is an JSON object which identifies particular timer type and its details.&lt;br&gt;The other fields not shown here are optional and includes:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;initial timer state (paused or running);  &lt;/li&gt;
+&lt;li&gt;start or end date-time;  &lt;/li&gt;
+&lt;li&gt;number of repeating times;  &lt;/li&gt;
+&lt;li&gt;is timer message to be published or sent;  &lt;/li&gt;
+&lt;li&gt;timer fire message and delivery options;  &lt;/li&gt;
+&lt;li&gt;time zone.  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;timer-descriptions-&quot;&gt;Timer descriptions.&lt;/h2&gt;
+&lt;p&gt;Currently, three types of timers are supported:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Interval timer&lt;/strong&gt; which fires after each given time period (minimum 1 second):  &lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{
+  &quot;type&quot;: &quot;interval&quot;,
+  &quot;delay&quot;: &quot;timer delay in seconds, Integer&quot;
+};&lt;/code&gt;&lt;/pre&gt;  
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Cron style timer&lt;/strong&gt; which is defined with cron-style:&lt;br&gt;&lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{&lt;br&gt;  “type”: “cron”,&lt;br&gt;  “seconds”: “seconds in cron style, String”,&lt;br&gt;  “minutes”: “minutes in cron style, String”,&lt;br&gt;  “hours”: “hours in cron style, String”,&lt;br&gt;  “days of month”: “days of month in cron style, String”,&lt;br&gt;  “months”: “months in cron style, String”,&lt;br&gt;  “days of week”: “days of week in cron style, String, optional”,&lt;br&gt;  “years”: “years in cron style, String, optional”&lt;br&gt;};&lt;/code&gt;&lt;/pre&gt;&lt;br&gt;Cron timer is rather powerful and flexible. Investigate &lt;a href=&quot;https://modules.ceylon-lang.org/repo/1/herd/schedule/chime/0.2.1/module-doc/api/index.html#cron-expression&quot;&gt;specification&lt;/a&gt; for the complete list of features.  &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Union timer&lt;/strong&gt; which combines a number of timers into a one:&lt;br&gt;&lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{&lt;br&gt;  “type”: “union”,&lt;br&gt;  “timers”: [“list of the timer descriptions”]&lt;br&gt;};&lt;/code&gt;&lt;/pre&gt;&lt;br&gt;Union timer may be useful to fire at a list of specific dates / times.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;timer-events-&quot;&gt;Timer events.&lt;/h2&gt;
+&lt;p&gt;Once timer is started it sends or publishes messages to &lt;strong&gt;scheduler name:timer name&lt;/strong&gt; address in JSON format.
+Two types of events are sent:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;fire event which occurs when time reaches next timer value:  &lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{  
+  &quot;name&quot;: &quot;scheduler name:timer name, String&quot;,  
+  &quot;event&quot;: &quot;fire&quot;,  
+  &quot;count&quot;: &quot;total number of fire times, Integer&quot;,  
+  &quot;time&quot;: &quot;ISO formated time / date, String&quot;,  
+  &quot;seconds&quot;: &quot;number of seconds since last minute, Integer&quot;,  
+  &quot;minutes&quot;: &quot;number of minutes since last hour, Integer&quot;,  
+  &quot;hours&quot;: &quot;hour of day, Integer&quot;,  
+  &quot;day of month&quot;: &quot;day of month, Integer&quot;,  
+  &quot;month&quot;: &quot;month, Integer&quot;,  
+  &quot;year&quot;: &quot;year, Integer&quot;,  
+  &quot;time zone&quot;: &quot;time zone the timer works in, String&quot;
+};&lt;/code&gt;&lt;/pre&gt;  &lt;/li&gt;
+&lt;li&gt;complete event which occurs when timer is exhausted by some criteria given at timer create request:  &lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{  
+  &quot;name&quot;: &quot;scheduler name:timer name, String&quot;,  
+  &quot;event&quot;: &quot;complete&quot;,  
+  &quot;count&quot;: &quot;total number of fire times, Integer&quot;  
+};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Basically, now we know everything to be happy with &lt;em&gt;Chime&lt;/em&gt;: schedulers and requests to them, timers and timer events.
+Will see some examples in the next section.  &lt;/p&gt;
+&lt;h2 id=&quot;examples-&quot;&gt;Examples.&lt;/h2&gt;
+&lt;h3 id=&quot;ceylon-example-&quot;&gt;Ceylon example.&lt;/h3&gt;
+&lt;p&gt;Let’s consider a timer which has to fire every month at 16-30 last Sunday.  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// listen the timer events&lt;/span&gt;
+eventBus.consumer (
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;my scheduler:my timer&quot;&lt;/span&gt;,
+    (Throwable|Message&lt;JsonObject?&gt; msg) {
+        &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (is Message&lt;JsonObject?&gt; msg) { print(msg.body()); }
+        &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; { print(msg); }    
+    }
+);
+&lt;span class=&quot;hljs-comment&quot;&gt;// create scheduler and timer&lt;/span&gt;
+eventBus.send&lt;JsonObject&gt; (
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;chime&quot;&lt;/span&gt;,
+    JsonObject {
+        &lt;span class=&quot;hljs-string&quot;&gt;&quot;operation&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;create&quot;&lt;/span&gt;,
+        &lt;span class=&quot;hljs-string&quot;&gt;&quot;name&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;my scheduler:my timer&quot;&lt;/span&gt;,
+        &lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt; -&gt; JsonObject {
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;type&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;cron&quot;&lt;/span&gt;,
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;seconds&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;0&quot;&lt;/span&gt;,
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;minutes&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;30&quot;&lt;/span&gt;,
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;hours&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;16&quot;&lt;/span&gt;,
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;days of month&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;*&quot;&lt;/span&gt;,
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;months&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;*&quot;&lt;/span&gt;,
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;days of week&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;SundayL&quot;&lt;/span&gt;
+        }
+    }
+);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;div class=&#39;admonition-block info&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-info-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;‘*’ means any, ‘SundayL’ means last Sunday.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;  &lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;If ‘create’ request is sent to Chime address with name set to ‘scheduler name:timer name’ and corresponding scheduler hasn’t been created before then Chime creates both new scheduler and new timer.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;  &lt;/p&gt;
+&lt;h3 id=&quot;java-example-&quot;&gt;Java example.&lt;/h3&gt;
+&lt;p&gt;Let’s consider a timer which has to fire every Monday at 8-30 and every Friday at 17-30.  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// listen the timer events&lt;/span&gt;
+MessageConsumer&lt;JsonObject&gt; consumer = eventBus.consumer(&lt;span class=&quot;hljs-string&quot;&gt;&quot;my scheduler:my timer&quot;&lt;/span&gt;);
+consumer.handler (
+    message -&gt; {
+        System.out.&lt;span class=&quot;hljs-built_in&quot;&gt;println&lt;/span&gt;(message.body());
+      }
+);
+&lt;span class=&quot;hljs-comment&quot;&gt;// description of timers&lt;/span&gt;
+JsonObject mondayTimer = (&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;cron&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;seconds&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;0&quot;&lt;/span&gt;).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;minutes&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;30&quot;&lt;/span&gt;).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;hours&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;8&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;days of month&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;*&quot;&lt;/span&gt;).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;months&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;*&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;days of week&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Monday&quot;&lt;/span&gt;);
+JsonObject fridayTimer = (&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;cron&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;seconds&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;0&quot;&lt;/span&gt;).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;minutes&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;30&quot;&lt;/span&gt;).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;hours&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;17&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;days of month&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;*&quot;&lt;/span&gt;).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;months&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;*&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;days of week&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Friday&quot;&lt;/span&gt;);
+&lt;span class=&quot;hljs-comment&quot;&gt;// union timer - combines mondayTimer and fridayTimer&lt;/span&gt;
+JsonArray combination = (&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonArray()).&lt;span class=&quot;hljs-built_in&quot;&gt;add&lt;/span&gt;(mondayTimer)
+    .&lt;span class=&quot;hljs-built_in&quot;&gt;add&lt;/span&gt;(fridayTimer);
+JsonObject timer = (&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;union&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;timers&quot;&lt;/span&gt;, combination);
+&lt;span class=&quot;hljs-comment&quot;&gt;// create scheduler and timer&lt;/span&gt;
+eventBus.send (
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;chime&quot;&lt;/span&gt;,
+    (&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;operation&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;create&quot;&lt;/span&gt;)
+        .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;name&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;my scheduler:my timer&quot;&lt;/span&gt;)
+        .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt;, timer)
+);&lt;/code&gt;&lt;/pre&gt;  
+
+&lt;p&gt;&lt;div class=&#39;admonition-block important&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-exclamation-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;Ensure that Ceylon verticle factory with right version is available at class path.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;at-the-end-&quot;&gt;At the end.&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;herd.schedule.chime&lt;/code&gt; module provides some features not mentioned here:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;convenient builders useful to fill in JSON description of various timers;  &lt;/li&gt;
+&lt;li&gt;proxying event bus with conventional interfaces;  &lt;/li&gt;
+&lt;li&gt;reading JSON timer event into an object;  &lt;/li&gt;
+&lt;li&gt;attaching JSON message to the timer fire event;  &lt;/li&gt;
+&lt;li&gt;managing time zones.  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There are also some ideas for the future:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;custom or user-defined timers;  &lt;/li&gt;
+&lt;li&gt;limiting the timer fire time / date with calendar;  &lt;/li&gt;
+&lt;li&gt;extracting timer fire message from external source.  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;This is very quick introduction to the &lt;em&gt;Chime&lt;/em&gt; and if you are interested in you may read
+more in &lt;a href=&quot;https://modules.ceylon-lang.org/repo/1/herd/schedule/chime/0.2.1/module-doc/api/index.html&quot;&gt;Chime documentation&lt;/a&gt; or even &lt;a href=&quot;https://github.com/LisiLisenok/Chime&quot;&gt;contribute&lt;/a&gt; to.  &lt;/p&gt;
+&lt;p&gt;Thank’s for the reading and enjoy with coding!  &lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Tue, 09 May 2017 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/time-scheduling-with-chime</link>
+          <guid isPermaLink="true">http://vertx.io/blog/time-scheduling-with-chime</guid>
+          <author>
+            <name>LisiLisenok</name>
+            <uri>http://github.com/LisiLisenok</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Building a real-time web app with Angular/Ngrx and Vert.x</title>
           <description>
       &lt;article&gt;&lt;p&gt;Nowadays, there are multiple tech stacks to build a real-time web app. What are the best choices to build real-time Angular client apps, connected to a JVM-based backend? This article describes an Angular+Vertx real-time architecture with a Proof of Concept demo app.&lt;/p&gt;
