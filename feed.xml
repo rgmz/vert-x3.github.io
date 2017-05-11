@@ -8,6 +8,252 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Time scheduling with Chime</title>
+          <description>
+      &lt;article&gt;&lt;h2 id=&quot;time-scheduling-&quot;&gt;Time scheduling.&lt;/h2&gt;
+&lt;p&gt;Eclipse Vert.x executes periodic and delayed actions with
+&lt;a href=&quot;http://vertx.io/docs/vertx-core/java/#_executing_periodic_and_delayed_actions&quot;&gt;periodic and one-shot timers&lt;/a&gt;.
+This is the base for time scheduling and reach feature extension must be rather interesting.
+Be notified at certain date / time, take into account holidays,
+repeat notifications until a given date, apply time zone,
+take into account daylight saving time etc.
+There are a lot of useful features time scheduler may introduce to the Vert.x stack.  &lt;/p&gt;
+&lt;h2 id=&quot;chime-&quot;&gt;Chime.&lt;/h2&gt;
+&lt;p&gt; &lt;a href=&quot;https://github.com/LisiLisenok/Chime&quot;&gt;Chime&lt;/a&gt; is time scheduler verticle which works on &lt;em&gt;Vert.x&lt;/em&gt; event bus and provides:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;scheduling with &lt;em&gt;cron-style&lt;/em&gt;, &lt;em&gt;interval&lt;/em&gt; or &lt;em&gt;union&lt;/em&gt; timers:&lt;ul&gt;
+&lt;li&gt;at a certain time of day (to the second);  &lt;/li&gt;
+&lt;li&gt;on certain days of the week, month or year;  &lt;/li&gt;
+&lt;li&gt;with a given time interval;  &lt;/li&gt;
+&lt;li&gt;with nearly any combination of all of above;  &lt;/li&gt;
+&lt;li&gt;repeating a given number of times;  &lt;/li&gt;
+&lt;li&gt;repeating until a given time / date;  &lt;/li&gt;
+&lt;li&gt;repeating infinitely  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;proxying event bus with conventional interfaces  &lt;/li&gt;
+&lt;li&gt;applying time zones available on &lt;em&gt;JVM&lt;/em&gt; with daylight saving time taken into account  &lt;/li&gt;
+&lt;li&gt;flexible timers management system:  &lt;ul&gt;
+&lt;li&gt;grouping timers;  &lt;/li&gt;
+&lt;li&gt;defining a timer start or end times  &lt;/li&gt;
+&lt;li&gt;pausing / resuming;  &lt;/li&gt;
+&lt;li&gt;fire counting;  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;listening and sending messages via event bus with &lt;em&gt;JSON&lt;/em&gt;;  &lt;/li&gt;
+&lt;li&gt;&lt;em&gt;publishing&lt;/em&gt; or &lt;em&gt;sending&lt;/em&gt; timer fire event to the address of your choice.  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block info&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-info-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;&lt;em&gt;Chime&lt;/em&gt; is written in &lt;a href=&quot;https://ceylon-lang.org&quot;&gt;Ceylon&lt;/a&gt; and is available at
+&lt;a href=&quot;https://herd.ceylon-lang.org/modules/herd.schedule.chime&quot;&gt;Ceylon Herd&lt;/a&gt;.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;running-&quot;&gt;Running.&lt;/h2&gt;
+&lt;h3 id=&quot;ceylon-users-&quot;&gt;Ceylon users.&lt;/h3&gt;
+&lt;p&gt;Deploy &lt;em&gt;Chime&lt;/em&gt; using &lt;code&gt;Verticle.deployVerticle&lt;/code&gt; method.  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-tag&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;hljs-tag&quot;&gt;io&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.vertx&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.ceylon&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.core&lt;/span&gt; {&lt;span class=&quot;hljs-attribute&quot;&gt;vertx&lt;/span&gt;}
+&lt;span class=&quot;hljs-tag&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;hljs-tag&quot;&gt;herd&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.schedule&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.chime&lt;/span&gt; {&lt;span class=&quot;hljs-attribute&quot;&gt;Chime&lt;/span&gt;}
+&lt;span class=&quot;hljs-attribute&quot;&gt;Chime&lt;/span&gt;().&lt;span class=&quot;hljs-function&quot;&gt;deploy&lt;/span&gt;(vertx.&lt;span class=&quot;hljs-function&quot;&gt;vertx&lt;/span&gt;());&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or with &lt;code&gt;vertx.deployVerticle(\&quot;ceylon:herd.schedule.chime/0.2.1\&quot;);&lt;/code&gt;
+but ensure that Ceylon verticle factory is available at class path.   &lt;/p&gt;
+&lt;h3 id=&quot;java-users-&quot;&gt;Java users.&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Ensure that Ceylon verticle factory is available at class path.  &lt;/li&gt;
+&lt;li&gt;Put Ceylon versions to consistency. For instance, Vert.x 3.4.1 depends on Ceylon 1.3.0
+while Chime 0.2.1 depends on Ceylon 1.3.2. &lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-core/java/#_deploying_verticles_programmatically&quot;&gt;Deploy verticle&lt;/a&gt;, like:  &lt;pre&gt;&lt;code&gt;vertx.&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-title&quot;&gt;deployVerticle&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;ceylon:herd.schedule.chime/0.2.1&quot;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block info&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-info-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;example with Maven is available at &lt;a href=&quot;https://github.com/LisiLisenok/ChimeJavaExample&quot;&gt;Github&lt;/a&gt;.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;schedulers-&quot;&gt;Schedulers.&lt;/h2&gt;
+&lt;p&gt;Well, &lt;em&gt;Chime&lt;/em&gt; verticle is deployed. Let’s see its structure.&lt;br&gt;In order to provide flexible and broad ways to manage timing two level architecture is adopted.
+It consists of schedulers and timers. Timer is a unit which fires at a given time.
+While scheduler is a set or group of timers and provides following:    &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;creating and deleting timers;  &lt;/li&gt;
+&lt;li&gt;pausing / resuming all timers working within the scheduler;  &lt;/li&gt;
+&lt;li&gt;info on the running timers;  &lt;/li&gt;
+&lt;li&gt;default time zone;  &lt;/li&gt;
+&lt;li&gt;listening event bus at the given scheduler address for the requests to.  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Any timer operates within some scheduler. And one or several schedulers have to be created before starting scheduling.&lt;br&gt;When &lt;em&gt;Chime&lt;/em&gt; verticle is deployed it starts listen event bus at &lt;strong&gt;chime&lt;/strong&gt; address (can be configured).
+In order to create scheduler send to this address a JSON message.  &lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{
+    &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;operation&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;create&quot;&lt;/span&gt;&lt;/span&gt;,
+    &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;name&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;scheduler name&quot;&lt;/span&gt;
+&lt;/span&gt;}&lt;/code&gt;&lt;/pre&gt;
+
+
+&lt;p&gt;Once scheduler is created it starts listen event bus at &lt;strong&gt;scheduler name&lt;/strong&gt; address.
+Sending messages to &lt;strong&gt;chime&lt;/strong&gt; address or to &lt;strong&gt;scheduler name&lt;/strong&gt; address are rather equivalent,
+excepting that chime address provides services for every scheduler, while scheduler address
+provides services for this particular scheduler only.&lt;br&gt;The request sent to the &lt;em&gt;Chime&lt;/em&gt; has to contain &lt;strong&gt;operation&lt;/strong&gt; and &lt;strong&gt;name&lt;/strong&gt; keys.
+Name key provides scheduler or timer name. While operation key shows an action &lt;em&gt;Chime&lt;/em&gt; has to perform.
+There are only four possible operations:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;create - create new scheduler or timer;  &lt;/li&gt;
+&lt;li&gt;delete - delete scheduler or timer;  &lt;/li&gt;
+&lt;li&gt;info - request info on &lt;em&gt;Chime&lt;/em&gt; or on a particular scheduler or timer;  &lt;/li&gt;
+&lt;li&gt;state - set or get scheduler or timer state (running, paused or completed).  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;timers-&quot;&gt;Timers.&lt;/h2&gt;
+&lt;p&gt;Now we have scheduler created and timers can be run within. There are two ways to access a given timer:  &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Sending message to &lt;strong&gt;chime&lt;/strong&gt; address with ‘name’ field set to &lt;strong&gt;scheduler name:timer name&lt;/strong&gt;.  &lt;/li&gt;
+&lt;li&gt;Sending message to &lt;strong&gt;scheduler name&lt;/strong&gt; address with ‘name’ field set to either &lt;strong&gt;timer name&lt;/strong&gt; or &lt;strong&gt;scheduler name:timer name&lt;/strong&gt;.  &lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;a href=&quot;https://modules.ceylon-lang.org/repo/1/herd/schedule/chime/0.2.1/module-doc/api/index.html#timer-request&quot;&gt;Timer request&lt;/a&gt; is rather complicated and contains a lot of details. In this blog post only basic features are considered:  &lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{
+    &quot;operation&quot;: &quot;create&quot;,
+    &quot;name&quot;: &quot;scheduler name:timer name&quot;,
+    &quot;description&quot;: {}
+};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is rather similar to request sent to create a scheduler.
+The difference is only &lt;strong&gt;description&lt;/strong&gt; field is added.
+This description is an JSON object which identifies particular timer type and its details.&lt;br&gt;The other fields not shown here are optional and includes:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;initial timer state (paused or running);  &lt;/li&gt;
+&lt;li&gt;start or end date-time;  &lt;/li&gt;
+&lt;li&gt;number of repeating times;  &lt;/li&gt;
+&lt;li&gt;is timer message to be published or sent;  &lt;/li&gt;
+&lt;li&gt;timer fire message and delivery options;  &lt;/li&gt;
+&lt;li&gt;time zone.  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;timer-descriptions-&quot;&gt;Timer descriptions.&lt;/h2&gt;
+&lt;p&gt;Currently, three types of timers are supported:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Interval timer&lt;/strong&gt; which fires after each given time period (minimum 1 second):  &lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{
+  &quot;type&quot;: &quot;interval&quot;,
+  &quot;delay&quot;: &quot;timer delay in seconds, Integer&quot;
+};&lt;/code&gt;&lt;/pre&gt;  
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Cron style timer&lt;/strong&gt; which is defined with cron-style:&lt;br&gt;&lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{&lt;br&gt;  “type”: “cron”,&lt;br&gt;  “seconds”: “seconds in cron style, String”,&lt;br&gt;  “minutes”: “minutes in cron style, String”,&lt;br&gt;  “hours”: “hours in cron style, String”,&lt;br&gt;  “days of month”: “days of month in cron style, String”,&lt;br&gt;  “months”: “months in cron style, String”,&lt;br&gt;  “days of week”: “days of week in cron style, String, optional”,&lt;br&gt;  “years”: “years in cron style, String, optional”&lt;br&gt;};&lt;/code&gt;&lt;/pre&gt;&lt;br&gt;Cron timer is rather powerful and flexible. Investigate &lt;a href=&quot;https://modules.ceylon-lang.org/repo/1/herd/schedule/chime/0.2.1/module-doc/api/index.html#cron-expression&quot;&gt;specification&lt;/a&gt; for the complete list of features.  &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Union timer&lt;/strong&gt; which combines a number of timers into a one:&lt;br&gt;&lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{&lt;br&gt;  “type”: “union”,&lt;br&gt;  “timers”: [“list of the timer descriptions”]&lt;br&gt;};&lt;/code&gt;&lt;/pre&gt;&lt;br&gt;Union timer may be useful to fire at a list of specific dates / times.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;timer-events-&quot;&gt;Timer events.&lt;/h2&gt;
+&lt;p&gt;Once timer is started it sends or publishes messages to &lt;strong&gt;scheduler name:timer name&lt;/strong&gt; address in JSON format.
+Two types of events are sent:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;fire event which occurs when time reaches next timer value:  &lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{  
+  &quot;name&quot;: &quot;scheduler name:timer name, String&quot;,  
+  &quot;event&quot;: &quot;fire&quot;,  
+  &quot;count&quot;: &quot;total number of fire times, Integer&quot;,  
+  &quot;time&quot;: &quot;ISO formated time / date, String&quot;,  
+  &quot;seconds&quot;: &quot;number of seconds since last minute, Integer&quot;,  
+  &quot;minutes&quot;: &quot;number of minutes since last hour, Integer&quot;,  
+  &quot;hours&quot;: &quot;hour of day, Integer&quot;,  
+  &quot;day of month&quot;: &quot;day of month, Integer&quot;,  
+  &quot;month&quot;: &quot;month, Integer&quot;,  
+  &quot;year&quot;: &quot;year, Integer&quot;,  
+  &quot;time zone&quot;: &quot;time zone the timer works in, String&quot;
+};&lt;/code&gt;&lt;/pre&gt;  &lt;/li&gt;
+&lt;li&gt;complete event which occurs when timer is exhausted by some criteria given at timer create request:  &lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{  
+  &quot;name&quot;: &quot;scheduler name:timer name, String&quot;,  
+  &quot;event&quot;: &quot;complete&quot;,  
+  &quot;count&quot;: &quot;total number of fire times, Integer&quot;  
+};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Basically, now we know everything to be happy with &lt;em&gt;Chime&lt;/em&gt;: schedulers and requests to them, timers and timer events.
+Will see some examples in the next section.  &lt;/p&gt;
+&lt;h2 id=&quot;examples-&quot;&gt;Examples.&lt;/h2&gt;
+&lt;h3 id=&quot;ceylon-example-&quot;&gt;Ceylon example.&lt;/h3&gt;
+&lt;p&gt;Let’s consider a timer which has to fire every month at 16-30 last Sunday.  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// listen the timer events&lt;/span&gt;
+eventBus.consumer (
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;my scheduler:my timer&quot;&lt;/span&gt;,
+    (Throwable|Message&lt;JsonObject?&gt; msg) {
+        &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (is Message&lt;JsonObject?&gt; msg) { print(msg.body()); }
+        &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; { print(msg); }    
+    }
+);
+&lt;span class=&quot;hljs-comment&quot;&gt;// create scheduler and timer&lt;/span&gt;
+eventBus.send&lt;JsonObject&gt; (
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;chime&quot;&lt;/span&gt;,
+    JsonObject {
+        &lt;span class=&quot;hljs-string&quot;&gt;&quot;operation&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;create&quot;&lt;/span&gt;,
+        &lt;span class=&quot;hljs-string&quot;&gt;&quot;name&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;my scheduler:my timer&quot;&lt;/span&gt;,
+        &lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt; -&gt; JsonObject {
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;type&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;cron&quot;&lt;/span&gt;,
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;seconds&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;0&quot;&lt;/span&gt;,
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;minutes&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;30&quot;&lt;/span&gt;,
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;hours&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;16&quot;&lt;/span&gt;,
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;days of month&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;*&quot;&lt;/span&gt;,
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;months&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;*&quot;&lt;/span&gt;,
+            &lt;span class=&quot;hljs-string&quot;&gt;&quot;days of week&quot;&lt;/span&gt; -&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;SundayL&quot;&lt;/span&gt;
+        }
+    }
+);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;div class=&#39;admonition-block info&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-info-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;‘*’ means any, ‘SundayL’ means last Sunday.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;  &lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;If ‘create’ request is sent to Chime address with name set to ‘scheduler name:timer name’ and corresponding scheduler hasn’t been created before then Chime creates both new scheduler and new timer.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;  &lt;/p&gt;
+&lt;h3 id=&quot;java-example-&quot;&gt;Java example.&lt;/h3&gt;
+&lt;p&gt;Let’s consider a timer which has to fire every Monday at 8-30 and every Friday at 17-30.  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// listen the timer events&lt;/span&gt;
+MessageConsumer&lt;JsonObject&gt; consumer = eventBus.consumer(&lt;span class=&quot;hljs-string&quot;&gt;&quot;my scheduler:my timer&quot;&lt;/span&gt;);
+consumer.handler (
+    message -&gt; {
+        System.out.&lt;span class=&quot;hljs-built_in&quot;&gt;println&lt;/span&gt;(message.body());
+      }
+);
+&lt;span class=&quot;hljs-comment&quot;&gt;// description of timers&lt;/span&gt;
+JsonObject mondayTimer = (&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;cron&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;seconds&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;0&quot;&lt;/span&gt;).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;minutes&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;30&quot;&lt;/span&gt;).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;hours&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;8&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;days of month&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;*&quot;&lt;/span&gt;).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;months&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;*&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;days of week&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Monday&quot;&lt;/span&gt;);
+JsonObject fridayTimer = (&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;cron&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;seconds&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;0&quot;&lt;/span&gt;).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;minutes&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;30&quot;&lt;/span&gt;).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;hours&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;17&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;days of month&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;*&quot;&lt;/span&gt;).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;months&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;*&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;days of week&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Friday&quot;&lt;/span&gt;);
+&lt;span class=&quot;hljs-comment&quot;&gt;// union timer - combines mondayTimer and fridayTimer&lt;/span&gt;
+JsonArray combination = (&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonArray()).&lt;span class=&quot;hljs-built_in&quot;&gt;add&lt;/span&gt;(mondayTimer)
+    .&lt;span class=&quot;hljs-built_in&quot;&gt;add&lt;/span&gt;(fridayTimer);
+JsonObject timer = (&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;union&quot;&lt;/span&gt;)
+    .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;timers&quot;&lt;/span&gt;, combination);
+&lt;span class=&quot;hljs-comment&quot;&gt;// create scheduler and timer&lt;/span&gt;
+eventBus.send (
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;chime&quot;&lt;/span&gt;,
+    (&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()).put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;operation&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;create&quot;&lt;/span&gt;)
+        .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;name&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;my scheduler:my timer&quot;&lt;/span&gt;)
+        .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt;, timer)
+);&lt;/code&gt;&lt;/pre&gt;  
+
+&lt;p&gt;&lt;div class=&#39;admonition-block important&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-exclamation-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;Ensure that Ceylon verticle factory with right version is available at class path.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;at-the-end-&quot;&gt;At the end.&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;herd.schedule.chime&lt;/code&gt; module provides some features not mentioned here:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;convenient builders useful to fill in JSON description of various timers;  &lt;/li&gt;
+&lt;li&gt;proxying event bus with conventional interfaces;  &lt;/li&gt;
+&lt;li&gt;reading JSON timer event into an object;  &lt;/li&gt;
+&lt;li&gt;attaching JSON message to the timer fire event;  &lt;/li&gt;
+&lt;li&gt;managing time zones.  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There are also some ideas for the future:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;custom or user-defined timers;  &lt;/li&gt;
+&lt;li&gt;limiting the timer fire time / date with calendar;  &lt;/li&gt;
+&lt;li&gt;extracting timer fire message from external source.  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;This is very quick introduction to the &lt;em&gt;Chime&lt;/em&gt; and if you are interested in you may read
+more in &lt;a href=&quot;https://modules.ceylon-lang.org/repo/1/herd/schedule/chime/0.2.1/module-doc/api/index.html&quot;&gt;Chime documentation&lt;/a&gt; or even &lt;a href=&quot;https://github.com/LisiLisenok/Chime&quot;&gt;contribute&lt;/a&gt; to.  &lt;/p&gt;
+&lt;p&gt;Thank’s for the reading and enjoy with coding!  &lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Tue, 09 May 2017 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/time-scheduling-with-chime</link>
+          <guid isPermaLink="true">http://vertx.io/blog/time-scheduling-with-chime</guid>
+          <author>
+            <name>LisiLisenok</name>
+            <uri>http://github.com/LisiLisenok</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Building a real-time web app with Angular/Ngrx and Vert.x</title>
           <description>
       &lt;article&gt;&lt;p&gt;Nowadays, there are multiple tech stacks to build a real-time web app. What are the best choices to build real-time Angular client apps, connected to a JVM-based backend? This article describes an Angular+Vertx real-time architecture with a Proof of Concept demo app.&lt;/p&gt;
@@ -169,7 +415,7 @@ subscribeToActions(eventBusAddress: &lt;span class=&quot;hljs-built_in&quot;&gt;
 &lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Typescript version of Vertx EventBus Client &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; The app uses our own Typescript version of the official JS &lt;a href=&quot;https://github.com/vert-x3/vertx-bus-bower&quot;&gt;Vertx EventBus Client&lt;/a&gt;. It can be found &lt;a href=&quot;https://gist.github.com/benorama/93373c3c1c3574732d6cc1b4754aab9f&quot;&gt;here&lt;/a&gt;, any feedback, improvement suggestions are welcome!&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Wed, 26 Apr 2017 01:00:00 +0100</pubDate>
+          <pubDate>Wed, 26 Apr 2017 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/building-a-real-time-web-app-with-angular-ngrx-and-vert-x</link>
           <guid isPermaLink="true">http://vertx.io/blog/building-a-real-time-web-app-with-angular-ngrx-and-vert-x</guid>
           <author>
@@ -216,7 +462,7 @@ subscribeToActions(eventBusAddress: &lt;span class=&quot;hljs-built_in&quot;&gt;
 &lt;/blockquote&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Fri, 14 Apr 2017 01:00:00 +0100</pubDate>
+          <pubDate>Fri, 14 Apr 2017 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/dynamic-routing-in-serverless-microservice-with-vert-x-event-bus</link>
           <guid isPermaLink="true">http://vertx.io/blog/dynamic-routing-in-serverless-microservice-with-vert-x-event-bus</guid>
           <author>
@@ -371,7 +617,7 @@ In my next blog post I will explain some of the decisions I made and the obstacl
 &lt;p&gt;Enjoy!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 20 Mar 2017 00:00:00 +0000</pubDate>
+          <pubDate>Mon, 20 Mar 2017 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/scala-is-here</link>
           <guid isPermaLink="true">http://vertx.io/blog/scala-is-here</guid>
           <author>
@@ -449,7 +695,7 @@ The templates in the example should cover most common cases.   &lt;/p&gt;
 &lt;p&gt;Thanks for reading. If you have any futher questions or feedback don’t hesitate to send me a tweet to &lt;a href=&quot;https://twitter.com/Jotschi/&quot;&gt;@Jotschi&lt;/a&gt; or &lt;a href=&quot;https://twitter.com/genticsmesh/&quot;&gt;@genticsmesh&lt;/a&gt;.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 13 Mar 2017 00:00:00 +0000</pubDate>
+          <pubDate>Mon, 13 Mar 2017 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/data-driven-apps-made-easy-with-vert-x-3-4-0-and-headless-cms-gentics-mesh</link>
           <guid isPermaLink="true">http://vertx.io/blog/data-driven-apps-made-easy-with-vert-x-3-4-0-and-headless-cms-gentics-mesh</guid>
           <author>
@@ -512,7 +758,7 @@ follow the OWASP recommendations. Also, Vert.x web got many usability improvemen
 &lt;p&gt;The artifacts have been deployed to &lt;a href=&quot;http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.vertx%22%20AND%20v%3A%223.4.1%22&quot;&gt;Maven Central&lt;/a&gt; and you can get the distribution on &lt;a href=&quot;https://bintray.com/vertx/downloads/distribution/3.4.1/view&quot;&gt;Bintray&lt;/a&gt;.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Tue, 07 Mar 2017 00:00:00 +0000</pubDate>
+          <pubDate>Tue, 07 Mar 2017 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/vert-x-3-4-0-is-released</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-4-0-is-released</guid>
           <author>
@@ -741,7 +987,7 @@ server.listen(ar -&gt; {
  Vert.x committers and many other people who have given a lot of effort to this upcoming 3.4.0!!!!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Thu, 09 Feb 2017 00:00:00 +0000</pubDate>
+          <pubDate>Thu, 09 Feb 2017 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/vert-x-3-4-0-beta1-release</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-4-0-beta1-release</guid>
           <author>
@@ -817,7 +1063,7 @@ While getting back onto the correct context may not be critical if you have rema
 &lt;p&gt;Thanks very much to the vert.x core team for their clear github pages on the eventloop, and also to &lt;a href=&quot;https://twitter.com/alexlehm?lang=en&quot;&gt;Alexander Lehmann&lt;/a&gt; for his answers to my stupid and naive questions on the &lt;a href=&quot;https://groups.google.com/forum/#!forum/vertx&quot;&gt;Vert.x google group&lt;/a&gt;.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Tue, 31 Jan 2017 00:00:00 +0000</pubDate>
+          <pubDate>Tue, 31 Jan 2017 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/an-introduction-to-the-vert-x-context-object</link>
           <guid isPermaLink="true">http://vertx.io/blog/an-introduction-to-the-vert-x-context-object</guid>
           <author>
@@ -947,7 +1193,7 @@ It also uses HTTP status codes in application properties of the different messag
 &lt;p&gt;While creating APIs using AMQP can be very easy, it doesn’t mean that AMQP is the best protocol for all APIs. There are definitely APIs where HTTP is more suitable. But in some use cases, AMQP has clear advantages. In my LiveScore example it is especially one to many communication. It is important to keep the mind open and select the best available for given service.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Wed, 25 Jan 2017 00:00:00 +0000</pubDate>
+          <pubDate>Wed, 25 Jan 2017 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/building-services-and-apis-with-amqp-1-0</link>
           <guid isPermaLink="true">http://vertx.io/blog/building-services-and-apis-with-amqp-1-0</guid>
           <author>
@@ -987,7 +1233,7 @@ It also uses HTTP status codes in application properties of the different messag
 &lt;p&gt;This ecosystem will grow in the future and Vert.x will be a leading actor in the IoT applications world based on a microservices architecture !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Thu, 29 Dec 2016 00:00:00 +0000</pubDate>
+          <pubDate>Thu, 29 Dec 2016 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/internet-of-things-reactive-and-asynchronous-with-vert-x</link>
           <guid isPermaLink="true">http://vertx.io/blog/internet-of-things-reactive-and-asynchronous-with-vert-x</guid>
           <author>
@@ -1073,7 +1319,7 @@ foo&lt;span class=&quot;hljs-class&quot;&gt;.bar&lt;/span&gt;&lt;span class=&quo
 &lt;p&gt;Run, redeploy and other features of the &lt;a href=&quot;http://vmp.fabric8.io&quot;&gt;fabric8 Vert.x Maven Plugin&lt;/a&gt; will be explored in detail in the next part of this series, until then have fun with &lt;a href=&quot;http://vmp.fabric8.io&quot;&gt;fabric8 Vert.x Maven Plugin&lt;/a&gt;!!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Wed, 07 Dec 2016 00:00:00 +0000</pubDate>
+          <pubDate>Wed, 07 Dec 2016 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/getting-started-with-new-fabric8-vert-x-maven-plugin</link>
           <guid isPermaLink="true">http://vertx.io/blog/getting-started-with-new-fabric8-vert-x-maven-plugin</guid>
           <author>
@@ -1117,7 +1363,7 @@ foo&lt;span class=&quot;hljs-class&quot;&gt;.bar&lt;/span&gt;&lt;span class=&quo
 &lt;p&gt;You can expect this new code to land for 3.4 as it is not available in the current release (3.3.3).&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Fri, 02 Dec 2016 00:00:00 +0000</pubDate>
+          <pubDate>Fri, 02 Dec 2016 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/oauth2-got-easy</link>
           <guid isPermaLink="true">http://vertx.io/blog/oauth2-got-easy</guid>
           <author>
@@ -1299,7 +1545,7 @@ This command will launch a virtual machine hosting Jenkins with the required plu
 &lt;p&gt;Thanks for reading!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Wed, 28 Sep 2016 01:00:00 +0100</pubDate>
+          <pubDate>Wed, 28 Sep 2016 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-featuring-continuous-delivery-with-jenkins-and-ansible</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-featuring-continuous-delivery-with-jenkins-and-ansible</guid>
           <author>
@@ -1328,7 +1574,7 @@ This command will launch a virtual machine hosting Jenkins with the required plu
 &lt;p&gt;Happy coding !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 12 Sep 2016 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 12 Sep 2016 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-3-3-3-is-released</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-3-3-is-released</guid>
           <author>
@@ -1564,7 +1810,7 @@ mvn &lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; &lt;span cla
 &lt;p&gt;Happy logging!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Thu, 08 Sep 2016 01:00:00 +0100</pubDate>
+          <pubDate>Thu, 08 Sep 2016 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/centralized-logging-for-vert-x-applications-using-the-elk-stack</link>
           <guid isPermaLink="true">http://vertx.io/blog/centralized-logging-for-vert-x-applications-using-the-elk-stack</guid>
           <author>
@@ -1660,7 +1906,7 @@ mvn &lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; &lt;span cla
 &lt;p&gt;Enjoy the code carnival with Vert.x!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Thu, 01 Sep 2016 01:00:00 +0100</pubDate>
+          <pubDate>Thu, 01 Sep 2016 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-blueprint-tutorials</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-blueprint-tutorials</guid>
           <author>
@@ -1702,7 +1948,7 @@ mvn &lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; &lt;span cla
 &lt;p&gt;If you are going at one of these conferences, don’t miss the opportunity to learn more about Vert.x!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Fri, 26 Aug 2016 01:00:00 +0100</pubDate>
+          <pubDate>Fri, 26 Aug 2016 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-fall-conferences</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-fall-conferences</guid>
           <author>
@@ -1736,7 +1982,7 @@ mvn &lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; &lt;span cla
 &lt;p&gt;Happy coding !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Tue, 12 Jul 2016 01:00:00 +0100</pubDate>
+          <pubDate>Tue, 12 Jul 2016 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-3-3-2-is-released</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-3-2-is-released</guid>
           <author>
@@ -1775,7 +2021,7 @@ mvn &lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; &lt;span cla
 &lt;p&gt;Happy coding !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Fri, 24 Jun 2016 01:00:00 +0100</pubDate>
+          <pubDate>Fri, 24 Jun 2016 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-3-3-0-is-released</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-3-0-is-released</guid>
           <author>
@@ -1806,7 +2052,7 @@ setup a realm on keycloak and once you’re done, export the configuration to yo
 &lt;p&gt;Don’t forget to follow our &lt;a href=&quot;https://www.youtube.com/channel/UCGN6L3tRhs92Uer3c6VxOSA&quot;&gt;youtube channel&lt;/a&gt;!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Wed, 30 Mar 2016 01:00:00 +0100</pubDate>
+          <pubDate>Wed, 30 Mar 2016 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vertx-3-and-keycloak-tutorial</link>
           <guid isPermaLink="true">http://vertx.io/blog/vertx-3-and-keycloak-tutorial</guid>
           <author>
@@ -1838,7 +2084,7 @@ to form a cluster.&lt;/p&gt;
 &lt;p&gt;Don’t forget to follow our &lt;a href=&quot;https://www.youtube.com/channel/UCGN6L3tRhs92Uer3c6VxOSA&quot;&gt;youtube channel&lt;/a&gt;!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Thu, 17 Mar 2016 00:00:00 +0000</pubDate>
+          <pubDate>Thu, 17 Mar 2016 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/vertx-3-and-azure-cloud-platform-tutorial</link>
           <guid isPermaLink="true">http://vertx.io/blog/vertx-3-and-azure-cloud-platform-tutorial</guid>
           <author>
@@ -1870,7 +2116,7 @@ The vert.x distribution is also available from &lt;a href=&quot;http://sdkman.io
 &lt;p&gt;Happy coding !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Fri, 05 Feb 2016 00:00:00 +0000</pubDate>
+          <pubDate>Fri, 05 Feb 2016 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/vert-x-3-2-1-is-released</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-2-1-is-released</guid>
           <author>
@@ -1987,7 +2233,7 @@ http-client http://vertx.io
 &lt;p&gt;Our command is very simple, it only implements the very minimum, in future posts we will improve the command with support with more HTTP methods, SSL support or header support with the the Vert.x CLI API.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 25 Jan 2016 00:00:00 +0000</pubDate>
+          <pubDate>Mon, 25 Jan 2016 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/intro-to-vert-x-shell</link>
           <guid isPermaLink="true">http://vertx.io/blog/intro-to-vert-x-shell</guid>
           <author>
@@ -2126,7 +2372,7 @@ http-client http://vertx.io
 &lt;p&gt;Don’t forget that you still can’t use the &lt;code&gt;assert&lt;/code&gt; methods from Junit, as they don’t report on the &lt;code&gt;TestContext&lt;/code&gt;.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 18 Jan 2016 00:00:00 +0000</pubDate>
+          <pubDate>Mon, 18 Jan 2016 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/using-hamcrest-matchers-with-vert-x-unit</link>
           <guid isPermaLink="true">http://vertx.io/blog/using-hamcrest-matchers-with-vert-x-unit</guid>
           <author>
@@ -2401,7 +2647,7 @@ We created a lightweight, high-performance and scalable micro-service written in
 We discussed what Vert.x offers, among others, a distributed event bus and an elegant API that allows you to create applications in no time.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Fri, 15 Jan 2016 00:00:00 +0000</pubDate>
+          <pubDate>Fri, 15 Jan 2016 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/real-time-bidding-with-websockets-and-vert-x</link>
           <guid isPermaLink="true">http://vertx.io/blog/real-time-bidding-with-websockets-and-vert-x</guid>
           <author>
@@ -2493,7 +2739,7 @@ TypeScript on the other hand gives you much more features such as static
 typing that you will certainly find useful for any larger project.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Sun, 03 Jan 2016 00:00:00 +0000</pubDate>
+          <pubDate>Sun, 03 Jan 2016 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/ecmascript-6-7-on-the-jvm-with-typescript-and-vert-x</link>
           <guid isPermaLink="true">http://vertx.io/blog/ecmascript-6-7-on-the-jvm-with-typescript-and-vert-x</guid>
           <author>
@@ -2552,7 +2798,7 @@ typing that you will certainly find useful for any larger project.&lt;/p&gt;
 &lt;p&gt;With this configuration, the application is launched in background using your own &lt;code&gt;Main&lt;/code&gt; class, and will restart the application every time you change your source code (you can even change the source code of your &lt;code&gt;Main&lt;/code&gt; class).&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Sun, 20 Dec 2015 00:00:00 +0000</pubDate>
+          <pubDate>Sun, 20 Dec 2015 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/automatic-redeployment-in-eclipse-ide</link>
           <guid isPermaLink="true">http://vertx.io/blog/automatic-redeployment-in-eclipse-ide</guid>
           <author>
@@ -2598,7 +2844,7 @@ The vert.x distribution is also available from &lt;a href=&quot;http://sdkman.io
  and you can get the distribution on &lt;a href=&quot;https://bintray.com/vertx/downloads/distribution/3.2.0/view&quot;&gt;Bintray&lt;/a&gt;.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Tue, 15 Dec 2015 00:00:00 +0000</pubDate>
+          <pubDate>Tue, 15 Dec 2015 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/vert-x-3-2-0-is-released</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-2-0-is-released</guid>
           <author>
@@ -2851,7 +3097,7 @@ java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;
 &lt;p&gt;Stay tuned  &amp; Happy coding !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 30 Nov 2015 00:00:00 +0000</pubDate>
+          <pubDate>Mon, 30 Nov 2015 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/combine-vert-x-and-mongo-to-build-a-giant</link>
           <guid isPermaLink="true">http://vertx.io/blog/combine-vert-x-and-mongo-to-build-a-giant</guid>
           <author>
@@ -2937,7 +3183,7 @@ you now compile your project:&lt;/p&gt;
 &lt;p&gt;You have your first back to the future &lt;code&gt;ES6&lt;/code&gt; verticle!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Wed, 25 Nov 2015 00:00:00 +0000</pubDate>
+          <pubDate>Wed, 25 Nov 2015 01:00:00 +0100</pubDate>
           <link>http://vertx.io/blog/vert-x-es6-back-to-the-future</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-es6-back-to-the-future</guid>
           <author>
@@ -3167,7 +3413,7 @@ This method checks that the `SQLConnection` is available and then start executin
 &lt;p&gt;Stay tuned, and happy coding !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 19 Oct 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 19 Oct 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/using-the-asynchronous-sql-client</link>
           <guid isPermaLink="true">http://vertx.io/blog/using-the-asynchronous-sql-client</guid>
           <author>
@@ -3210,7 +3456,7 @@ regular terminals using different protocols.&lt;/p&gt;
  and you can get the distribution on &lt;a href=&quot;https://bintray.com/vertx/downloads/distribution/3.1.0/view&quot;&gt;Bintray&lt;/a&gt;.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Thu, 08 Oct 2015 01:00:00 +0100</pubDate>
+          <pubDate>Thu, 08 Oct 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-3-1-0-is-released</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-1-0-is-released</guid>
           <author>
@@ -3398,7 +3644,7 @@ supported languages using the same technique). We create a &lt;a href=&quot;http
 &lt;p&gt;You can get the full source code for this article &lt;a href=&quot;https://github.com/pmlopes/vert-x3-experiments/tree/experiments/raml&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Thu, 17 Sep 2015 01:00:00 +0100</pubDate>
+          <pubDate>Thu, 17 Sep 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/contract-driven-rest-services-with-vert-x3</link>
           <guid isPermaLink="true">http://vertx.io/blog/contract-driven-rest-services-with-vert-x3</guid>
           <author>
@@ -3554,7 +3800,7 @@ SEVERE: java&lt;span class=&quot;hljs-class&quot;&gt;.net&lt;/span&gt;&lt;span c
 &lt;/ul&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 14 Sep 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 14 Sep 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/writing-secure-vert-x-web-apps</link>
           <guid isPermaLink="true">http://vertx.io/blog/writing-secure-vert-x-web-apps</guid>
           <author>
@@ -3810,7 +4056,7 @@ on the other window, if you then draw on the second you should get the mirror ef
 &lt;p&gt;Have fun!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 31 Aug 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 31 Aug 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x3-real-time-web-apps</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-real-time-web-apps</guid>
           <author>
@@ -4209,7 +4455,7 @@ So, now we have integration tests let&#39;s try:
 &lt;p&gt;Stay Tuned &amp; Happy Coding !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 03 Aug 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 03 Aug 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/unit-and-integration-tests</link>
           <guid isPermaLink="true">http://vertx.io/blog/unit-and-integration-tests</guid>
           <author>
@@ -4521,7 +4767,7 @@ java -jar target/&lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt;-&lt;
 &lt;p&gt;Say Tuned &amp; Happy Coding !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 27 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 27 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/some-rest-with-vert-x</link>
           <guid isPermaLink="true">http://vertx.io/blog/some-rest-with-vert-x</guid>
           <author>
@@ -4621,7 +4867,7 @@ vertx.deployVerticle(MyFirstVerticle.class.getName(), options, context.asyncAsse
 &lt;p&gt;Happy Coding and &amp; Stay Tuned!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 20 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 20 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-application-configuration</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-application-configuration</guid>
           <author>
@@ -4839,7 +5085,7 @@ vertx.deployVerticle(MyFirstVerticle.class.getName(), options, context.asyncAsse
 &lt;p&gt;Happy coding &amp; Stay tuned !&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Tue, 14 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Tue, 14 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/my-first-vert-x-3-application</link>
           <guid isPermaLink="true">http://vertx.io/blog/my-first-vert-x-3-application</guid>
           <author>
@@ -4956,7 +5202,7 @@ for example &lt;code&gt;package.json&lt;/code&gt;:&lt;/p&gt;
 &lt;p&gt;That’s it for now. Hopefully this will help you get started working with &lt;code&gt;vert.x&lt;/code&gt;!&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 13 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 13 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x3-says-hello-to-npm-users</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-says-hello-to-npm-users</guid>
           <author>
@@ -5074,7 +5320,7 @@ so, if something does come up, it should be a small one (KNOCK ON WOOD)&lt;/p&gt
 &lt;p&gt;Mark S&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Mon, 06 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Mon, 06 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</link>
           <guid isPermaLink="true">http://vertx.io/blog/checklist-for-migrating-from-vert-x-2-1-x-to-vert-x-3-part-one</guid>
           <author>
@@ -5114,7 +5360,7 @@ Content-Length: &lt;span class=&quot;hljs-number&quot;&gt;75&lt;/span&gt;
 
 {&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;customer_name&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-string&quot;&gt;&quot;John&quot;&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;items&quot;&lt;/span&gt;:{&lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-string&quot;&gt;&quot;milk&quot;&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&quot;quantity&quot;&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;4&lt;/span&gt;}}&lt;/code&gt;&lt;/pre&gt;&lt;/article&gt;
       </description>
-          <pubDate>Fri, 03 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Fri, 03 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x3-and-postgresql-json-type</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-and-postgresql-json-type</guid>
           <author>
@@ -5172,7 +5418,7 @@ service my-service-script restart&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;That’s all, enjoy !&lt;/strong&gt;&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Thu, 02 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Thu, 02 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-3-init-d-script</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-init-d-script</guid>
           <author>
@@ -5297,7 +5543,7 @@ choose any format he likes.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;http://vertx.io/assets/blog/vertx3-web-easy-as-pi/rpi.png&quot; alt=&quot;Screenshot&quot; class=&quot;img-responsive&quot;&gt;&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Wed, 01 Jul 2015 01:00:00 +0100</pubDate>
+          <pubDate>Wed, 01 Jul 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x3-web-easy-as-pi</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x3-web-easy-as-pi</guid>
           <author>
@@ -5324,7 +5570,7 @@ choose any format he likes.&lt;/p&gt;
 &lt;p&gt;The artifacts has been deployed to &lt;a href=&quot;http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.vertx%22%20AND%20v%3A%222.1.6%22&quot;&gt;Maven Central&lt;/a&gt;, and you can get the distribution on &lt;a href=&quot;https://bintray.com/vertx/downloads/distribution/2.1.6/view&quot;&gt;Bintray&lt;/a&gt;.&lt;/p&gt;
 &lt;/article&gt;
       </description>
-          <pubDate>Tue, 30 Jun 2015 01:00:00 +0100</pubDate>
+          <pubDate>Tue, 30 Jun 2015 02:00:00 +0200</pubDate>
           <link>http://vertx.io/blog/vert-x-2-1-6-released</link>
           <guid isPermaLink="true">http://vertx.io/blog/vert-x-2-1-6-released</guid>
           <author>
