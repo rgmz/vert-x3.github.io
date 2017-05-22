@@ -8,6 +8,129 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Presentation of the Vert.x-Swagger project</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;This post is an introduction to the &lt;a href=&quot;https://github.com/phiz71/vertx-swagger&quot;&gt;Vert.x-Swagger&lt;/a&gt; project, and describe how to use the &lt;code&gt;Swagger-Codegen&lt;/code&gt; plugin and the &lt;code&gt;SwaggerRouter&lt;/code&gt; class.&lt;/p&gt;
+&lt;h2 id=&quot;eclipse-vert-x-swagger&quot;&gt;Eclipse Vert.x &amp; Swagger&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;http://vertx.io/docs/vertx-core/java/&quot;&gt;Vert.x&lt;/a&gt; and &lt;a href=&quot;http://vertx.io/docs/vertx-web/java/&quot;&gt;Vert.x Web&lt;/a&gt; are very convenient to write REST API and especially the &lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/ext/web/Router.html&quot;&gt;Router&lt;/a&gt; which is very useful to manage all resources of an API.&lt;/p&gt;
+&lt;p&gt;But when I start a new API, I usually use the “design-first” approach and &lt;a href=&quot;http://swagger.io/specification/&quot;&gt;Swagger&lt;/a&gt; is my best friend to define what my API is supposed to do. And then, comes the “boring” part of the job : convert the swagger file content into java code. That’s always the same : resources, operations, models…&lt;/p&gt;
+&lt;p&gt;Fortunately, Swagger provides a codegen tool : &lt;a href=&quot;https://github.com/swagger-api/swagger-codegen&quot;&gt;Swagger-Codegen&lt;/a&gt;. With this tool, you can generate a server stub based on your swagger definition file. 
+However, even if this generator provides many different languages and framework, Vert.X is missing.&lt;/p&gt;
+&lt;p&gt;This is where the &lt;a href=&quot;https://github.com/phiz71/vertx-swagger&quot;&gt;Vert.x-Swagger&lt;/a&gt; project comes in.&lt;/p&gt;
+&lt;h2 id=&quot;the-project&quot;&gt;The project&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Vert.x-Swagger&lt;/strong&gt; is a maven project providing 2 modules.&lt;/p&gt;
+&lt;h3 id=&quot;vertx-swagger-codegen&quot;&gt;vertx-swagger-codegen&lt;/h3&gt;
+&lt;p&gt;It’s a &lt;a href=&quot;https://github.com/swagger-api/swagger-codegen&quot;&gt;Swagger-Codegen&lt;/a&gt; plugin, which add the capability of generating a Java Vert.x WebServer to the generator.&lt;/p&gt;
+&lt;p&gt;The generated server mainly contains :&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;POJOs for &lt;code&gt;definitions&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;one Verticle per &lt;code&gt;tag&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;one MainVerticle, which manage others APIVerticle and start an HttpServer.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;the MainVerticle use &lt;em&gt;vertx-swagger-router&lt;/em&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;h3 id=&quot;vertx-swagger-router&quot;&gt;vertx-swagger-router&lt;/h3&gt;
+&lt;p&gt;The main class of this module is &lt;code&gt;SwaggerRouter&lt;/code&gt;. It’s more or less a &lt;em&gt;Factory&lt;/em&gt; (and maybe I should rename the class) that can create a &lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/ext/web/Router.html&quot;&gt;Router&lt;/a&gt;, using the swagger definition file to configure all the routes. For each route, it extracts parameters from the request (&lt;code&gt;Query&lt;/code&gt;, &lt;code&gt;Path&lt;/code&gt;, &lt;code&gt;Header&lt;/code&gt;, &lt;code&gt;Body&lt;/code&gt;, &lt;code&gt;Form&lt;/code&gt;) and send them on the eventBus, using either the &lt;code&gt;operationId&lt;/code&gt; as the address or a computed id (just a parameter in the constructor).&lt;/p&gt;
+&lt;h2 id=&quot;let-see-how-it-works&quot;&gt;Let see how it works&lt;/h2&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block info&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-info-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;For this post, I will use a simplified swagger file but you can find a more complex example &lt;a href=&quot;https://github.com/phiz71/vertx-swagger/tree/master/sample/petstore-vertx-server&quot;&gt;here&lt;/a&gt; based on the &lt;a href=&quot;http://petstore.swagger.io/&quot;&gt;petstore&lt;/a&gt; swagger file&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;h3 id=&quot;generating-the-server&quot;&gt;Generating the server&lt;/h3&gt;
+&lt;p&gt;First, choose your swagger definition. Here’s a YAML File, but it could be a JSON file :&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/phiz71/6c654f3da2d4124d3fe65e5aaaaedf55.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;Then, download these libraries :&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/2.2.2/swagger-codegen-cli-2.2.2.jar&quot;&gt;swagger-codegen-cli&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://central.maven.org/maven2/com/github/phiz71/vertx-swagger-codegen/1.0.0/vertx-swagger-codegen-1.0.0.jar&quot;&gt;vertx-swagger-codegen&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Finally, run this command&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;java -cp /path/to/swagger-codegen-cli-&lt;span class=&quot;hljs-number&quot;&gt;2.2&lt;/span&gt;.&lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt;.jar:/path/to/vertx-swagger-codegen-&lt;span class=&quot;hljs-number&quot;&gt;1.0&lt;/span&gt;.&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;.jar io.swagger.codegen.SwaggerCodegen generate \
+  &lt;span class=&quot;hljs-operator&quot;&gt;-l&lt;/span&gt; java-vertx \
+  -o path/to/destination/folder \
+  -i path/to/swagger/definition \
+  --group-id your.group.id \
+  --artifact-id your.artifact.id&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;div class=&#39;admonition-block info&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-info-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;For more Information about how SwaggerCodegen works &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; you can read this &lt;a href=&quot;https://github.com/swagger-api/swagger-codegen#getting-started&quot;&gt;https://github.com/swagger-api/swagger-codegen#getting-started&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;You should have something like that in your console:&lt;/p&gt;
+&lt;p&gt;&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;[main] INFO io&lt;span class=&quot;hljs-class&quot;&gt;.swagger&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.parser&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.Swagger20Parser&lt;/span&gt; - reading from ./wineCellarSwagger&lt;span class=&quot;hljs-class&quot;&gt;.yaml&lt;/span&gt;
+[main] INFO io&lt;span class=&quot;hljs-class&quot;&gt;.swagger&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.codegen&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.AbstractGenerator&lt;/span&gt; - writing file [path/to/destination/folder]/src/main/java/io/swagger/server/api/model/Bottle&lt;span class=&quot;hljs-class&quot;&gt;.java&lt;/span&gt;
+[main] INFO io&lt;span class=&quot;hljs-class&quot;&gt;.swagger&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.codegen&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.AbstractGenerator&lt;/span&gt; - writing file [path/to/destination/folder]/src/main/java/io/swagger/server/api/model/CellarInformation&lt;span class=&quot;hljs-class&quot;&gt;.java&lt;/span&gt;
+[main] INFO io&lt;span class=&quot;hljs-class&quot;&gt;.swagger&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.codegen&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.AbstractGenerator&lt;/span&gt; - writing file [path/to/destination/folder]/src/main/java/io/swagger/server/api/verticle/BottlesApi&lt;span class=&quot;hljs-class&quot;&gt;.java&lt;/span&gt;
+[main] INFO io&lt;span class=&quot;hljs-class&quot;&gt;.swagger&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.codegen&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.AbstractGenerator&lt;/span&gt; - writing file [path/to/destination/folder]/src/main/java/io/swagger/server/api/verticle/BottlesApiVerticle&lt;span class=&quot;hljs-class&quot;&gt;.java&lt;/span&gt;
+[main] INFO io&lt;span class=&quot;hljs-class&quot;&gt;.swagger&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.codegen&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.AbstractGenerator&lt;/span&gt; - writing file [path/to/destination/folder]/src/main/java/io/swagger/server/api/verticle/InformationApi&lt;span class=&quot;hljs-class&quot;&gt;.java&lt;/span&gt;
+[main] INFO io&lt;span class=&quot;hljs-class&quot;&gt;.swagger&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.codegen&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.AbstractGenerator&lt;/span&gt; - writing file [path/to/destination/folder]/src/main/java/io/swagger/server/api/verticle/InformationApiVerticle&lt;span class=&quot;hljs-class&quot;&gt;.java&lt;/span&gt;
+[main] INFO io&lt;span class=&quot;hljs-class&quot;&gt;.swagger&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.codegen&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.AbstractGenerator&lt;/span&gt; - writing file [path/to/destination/folder]/src/main/resources/swagger&lt;span class=&quot;hljs-class&quot;&gt;.json&lt;/span&gt;
+[main] INFO io&lt;span class=&quot;hljs-class&quot;&gt;.swagger&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.codegen&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.AbstractGenerator&lt;/span&gt; - writing file [path/to/destination/folder]/src/main/java/io/swagger/server/api/MainApiVerticle&lt;span class=&quot;hljs-class&quot;&gt;.java&lt;/span&gt;
+[main] INFO io&lt;span class=&quot;hljs-class&quot;&gt;.swagger&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.codegen&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.AbstractGenerator&lt;/span&gt; - writing file [path/to/destination/folder]/src/main/resources/vertx-default-jul-logging&lt;span class=&quot;hljs-class&quot;&gt;.properties&lt;/span&gt;
+[main] INFO io&lt;span class=&quot;hljs-class&quot;&gt;.swagger&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.codegen&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.AbstractGenerator&lt;/span&gt; - writing file [path/to/destination/folder]/pom&lt;span class=&quot;hljs-class&quot;&gt;.xml&lt;/span&gt;
+[main] INFO io&lt;span class=&quot;hljs-class&quot;&gt;.swagger&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.codegen&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.AbstractGenerator&lt;/span&gt; - writing file [path/to/destination/folder]/README&lt;span class=&quot;hljs-class&quot;&gt;.md&lt;/span&gt;
+[main] INFO io&lt;span class=&quot;hljs-class&quot;&gt;.swagger&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.codegen&lt;/span&gt;&lt;span class=&quot;hljs-class&quot;&gt;.AbstractGenerator&lt;/span&gt; - writing file [path/to/destination/folder]/.swagger-codegen-ignore&lt;/code&gt;&lt;/pre&gt;
+And this in your destination folder:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/blog/vertx-swagger-presentation/GeneratedProject.png&quot; alt=&quot;Generated sources&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;what-have-been-created-&quot;&gt;What have been created ?&lt;/h3&gt;
+&lt;p&gt;As you can see in &lt;strong&gt;1&lt;/strong&gt;,  the &lt;em&gt;vertx-swagger-codegen&lt;/em&gt; plugin has created one POJO by &lt;code&gt;definition&lt;/code&gt; in the swagger file.&lt;/p&gt;
+&lt;h4 id=&quot;example-the-bottle-definition&quot;&gt;Example : the bottle definition&lt;/h4&gt;
+&lt;script src=&quot;https://gist.github.com/phiz71/eabafda440b24881126089128d677121.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;In &lt;strong&gt;2a&lt;/strong&gt; and &lt;strong&gt;2b&lt;/strong&gt; you can find :&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;an interface which contains a function per &lt;code&gt;operation&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;a verticle which defines all &lt;code&gt;operationId&lt;/code&gt; and create &lt;a href=&quot;http://vertx.io/docs/vertx-core/java/#_the_event_bus_api&quot;&gt;EventBus&lt;/a&gt; consumers &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;example-the-bottles-interface&quot;&gt;Example : the Bottles interface&lt;/h4&gt;
+&lt;script src=&quot;https://gist.github.com/phiz71/be1ca2f550f44aea7fb2710b383e26ed.js&quot;&gt;&lt;/script&gt;
+
+&lt;h4 id=&quot;example-the-bottles-verticle&quot;&gt;Example : the Bottles verticle&lt;/h4&gt;
+&lt;script src=&quot;https://gist.github.com/phiz71/c0aadbb4f26ebed8e2e145d0b4a8d210.js&quot;&gt;&lt;/script&gt;
+
+&lt;h3 id=&quot;-and-now-&quot;&gt;… and now ?&lt;/h3&gt;
+&lt;p&gt;Line &lt;code&gt;23&lt;/code&gt; of &lt;code&gt;BottlesApiVerticle.java&lt;/code&gt;, you can see this&lt;/p&gt;
+&lt;p&gt;&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;BottlesApi service = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; BottlesApiImpl();&lt;/code&gt;&lt;/pre&gt;
+This line will not compile until the &lt;code&gt;BottlesApiImpl&lt;/code&gt; class is created.&lt;/p&gt;
+&lt;p&gt;In all &lt;strong&gt;XXXAPI&lt;/strong&gt;Verticles, you will find a variable called &lt;em&gt;service&lt;/em&gt;. It is a &lt;strong&gt;XXXAPI&lt;/strong&gt; type and it is instanciated with a &lt;strong&gt;XXXAPI&lt;/strong&gt;Impl contructor. This class does not exist yet since it is the business of your API.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;And so you will have to create these implementations.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;fine-but-what-if-i-don-t-want-to-build-my-api-like-this-&quot;&gt;Fine, but what if I don’t want to build my API like this ?&lt;/h2&gt;
+&lt;p&gt;Well, Vert.x is &lt;strong&gt;unopinionated&lt;/strong&gt; but the way the &lt;em&gt;vertx-swagger-codegen&lt;/em&gt; creates the server stub &lt;strong&gt;is not&lt;/strong&gt;. 
+So if you want to implement your API the way you want, while enjoying dynamic routing based on a swagger file, the &lt;em&gt;vertx-swagger-router&lt;/em&gt; library can be used standalone. &lt;/p&gt;
+&lt;p&gt;Just import this jar into your project :&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/phiz71/56e723362a1d1370c7262bff246fb087.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;You will be able to create your &lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/ext/web/Router.html&quot;&gt;Router&lt;/a&gt; like this :&lt;/p&gt;
+&lt;p&gt;&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;FileSystem vertxFileSystem = vertx.fileSystem();
+vertxFileSystem.readFile(&lt;span class=&quot;hljs-string&quot;&gt;“&lt;strong&gt;&lt;em&gt;YOUR_SWAGGER_FILE&lt;/em&gt;&lt;/strong&gt;“&lt;/span&gt;, readFile -&gt; {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (readFile.succeeded()) {
+        Swagger swagger = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; SwaggerParser().parse(readFile.result().toString(Charset.forName(&lt;span class=&quot;hljs-string&quot;&gt;“utf-8”&lt;/span&gt;))); 
+        Router swaggerRouter = SwaggerRouter.swaggerRouter(Router.router(vertx), swagger, vertx.eventBus(), &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; OperationIdServiceIdResolver());
+        […]
+   } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+        […]
+   }
+});&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;You can ignore the last parameter in &lt;code&gt;SwaggerRouter.swaggerRouter(...)&lt;/code&gt;. As a result, addresses will be computed instead of using &lt;code&gt;operationId&lt;/code&gt; from the swagger file. 
+For instance, &lt;code&gt;GET /bottles/{bottle_id}&lt;/code&gt; will become &lt;em&gt;GET_bottles_bottle-id&lt;/em&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Vert.x and Swagger are great tools to build and document an API but using both in the same project can be painful. The &lt;a href=&quot;https://github.com/phiz71/vertx-swagger&quot;&gt;Vert.x-Swagger&lt;/a&gt; project was made to save time, letting the developers focusing on business code.
+It can be seen as an API framework over Vert.X.&lt;/p&gt;
+&lt;p&gt;You can also use the &lt;code&gt;SwaggerRouter&lt;/code&gt; in your own project without using Swagger-Codegen.&lt;/p&gt;
+&lt;p&gt;In future releases, more information from the swagger file will be used to configure the router and certainly others languages will be supported.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt;Though Vert.x is polyglot, Vert.x-Swagger project only supports Java. If you want to contribute to support more languages, you’re welcome :) &lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt; &lt;/p&gt;
+&lt;p&gt;Thanks for reading.&lt;/p&gt;
+&lt;style type=&quot;text/css&quot;&gt;
+  .gist-file
+  .gist-data {max-height: 500px}
+&lt;/style&gt;
+
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 22 May 2017 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/presentation-of-the-vert-x-swagger-project</link>
+          <guid isPermaLink="true">http://vertx.io/blog/presentation-of-the-vert-x-swagger-project</guid>
+          <author>
+            <name>phiz71</name>
+            <uri>http://github.com/phiz71</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Time scheduling with Chime</title>
           <description>
       &lt;article&gt;&lt;h2 id=&quot;time-scheduling-&quot;&gt;Time scheduling.&lt;/h2&gt;
