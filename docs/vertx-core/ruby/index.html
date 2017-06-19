@@ -653,12 +653,12 @@ project descriptor to access the Vert.x Core API and enable the Ruby support:</p
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
  &lt;artifactId&gt;vertx-core&lt;/artifactId&gt;
- &lt;version&gt;3.4.1&lt;/version&gt;
+ &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;
 &lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-lang-ruby&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -671,8 +671,8 @@ project descriptor to access the Vert.x Core API and enable the Ruby support:</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile "io.vertx:vertx-core:3.4.1"
-compile "io.vertx:vertx-lang-ruby:3.4.1"</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile "io.vertx:vertx-core:3.4.2"
+compile "io.vertx:vertx-lang-ruby:3.4.2"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -683,20 +683,8 @@ compile "io.vertx:vertx-lang-ruby:3.4.1"</code></pre>
 <div class="sect1">
 <h2 id="_in_the_beginning_there_was_vert_x">In the beginning there was Vert.x</h2>
 <div class="sectionbody">
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Much of this is Java specific - need someway of swapping in language specific parts
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
-<p>You can&#8217;t do much in Vert.x-land unless you can commune with a <code><a href="../../yardoc/Vertx/Vertx.html">Vertx</a></code> object!</p>
+<p>You can&#8217;t do much in Vert.x-land unless you can communicate with a <code><a href="../../yardoc/Vertx/Vertx.html">Vertx</a></code> object!</p>
 </div>
 <div class="paragraph">
 <p>It&#8217;s the control centre of Vert.x and is how you do pretty much everything, including creating clients and servers,
@@ -713,9 +701,6 @@ getting a reference to the event bus, setting timers, as well as many other thin
 <pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/vertx'
 vertx = Vertx::Vertx.vertx()</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>If you&#8217;re using Verticles</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1089,7 +1074,7 @@ on the worker pool.</p>
 <p>A worker verticle is always executed with a thread from the worker pool.</p>
 </div>
 <div class="paragraph">
-<p>By default blocking code is executed on the Vert.x blocking code pool, configured with <code><a href="../dataobjects.html#VertxOptions#set_worker_pool_size-instance_method">workerPoolSize</a></code>.</p>
+<p>By default blocking code is executed on the Vert.x worker pool, configured with <code><a href="../dataobjects.html#VertxOptions#set_worker_pool_size-instance_method">workerPoolSize</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Additional pools can be created for different purposes:</p>
@@ -4125,10 +4110,113 @@ options = {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_application_layer_protocol_negotiation">Application-Layer Protocol Negotiation</h4>
+<h4 id="_server_name_indication_sni">Server Name Indication (SNI)</h4>
 <div class="paragraph">
-<p>ALPN is a TLS extension for applicationl layer protocol negotitation. It is used by HTTP/2: during the TLS handshake
-the client gives the list of application protocols it accepts and the server responds with a protocol it supports.</p>
+<p>Server Name Indication (SNI) is a TLS extension by which a client specifies an hostname attempting to connect: during
+the TLS handshake the clients gives a server name and the server can use it to respond with a specific certificate
+for this server name instead of the default deployed certificate.</p>
+</div>
+<div class="paragraph">
+<p>When SNI is active the server uses</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the certificate CN or SAN DNS (Subject Alternative Name with DNS) to do an exact match, e.g <code>www.example.com</code></p>
+</li>
+<li>
+<p>the certificate CN or SAN DNS certificate to match a wildcard name, e.g <code>*.example.com</code></p>
+</li>
+<li>
+<p>otherwise the first certificate when the client does not present a server name or the presenter server name cannot be matched</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can enable SNI on the server by setting <code><a href="../dataobjects.html#NetServerOptions#set_sni-instance_method">sni</a></code> to <code>true</code> and
+configured the server with multiple key/certificate pairs.</p>
+</div>
+<div class="paragraph">
+<p>Java KeyStore files or PKCS12 files can store multiple key/cert pairs out of the box.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">keyCertOptions = {
+  'path' =&gt; "keystore.jks",
+  'password' =&gt; "wibble"
+}
+
+netServer = vertx.create_net_server({
+  'keyStoreOptions' =&gt; keyCertOptions,
+  'ssl' =&gt; true,
+  'sni' =&gt; true
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code><a href="../dataobjects.html#PemKeyCertOptions">PemKeyCertOptions</a></code> can be configured to hold multiple entries:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">keyCertOptions = {
+  'keyPaths' =&gt; ["default-key.pem", "host1-key.pem", "etc..."],
+  'certPaths' =&gt; ["default-cert.pem", "host2-key.pem", "etc..."]
+}
+
+netServer = vertx.create_net_server({
+  'pemKeyCertOptions' =&gt; keyCertOptions,
+  'ssl' =&gt; true,
+  'sni' =&gt; true
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The client implicitly sends the connecting host as an SNI server name for Fully Qualified Domain Name (FQDN).</p>
+</div>
+<div class="paragraph">
+<p>You can provide an explicit server name when connecting a socket</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">client = vertx.create_net_client({
+  'trustStoreOptions' =&gt; trustOptions,
+  'ssl' =&gt; true
+})
+
+# Connect to 'localhost' and present 'server.name' server name
+client.connect(1234, "localhost", "server.name") { |res_err,res|
+  if (res_err == nil)
+    puts "Connected!"
+    socket = res
+  else
+    puts "Failed to connect: #{res_err.get_message()}"
+  end
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It can be used for different purposes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>present a server name different than the server host</p>
+</li>
+<li>
+<p>present a server name while connecting to an IP</p>
+</li>
+<li>
+<p>force to present a server name when using shortname</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_application_layer_protocol_negotiation_alpn">Application-Layer Protocol Negotiation (ALPN)</h4>
+<div class="paragraph">
+<p>Application-Layer Protocol Negotiation (ALPN) is a TLS extension for application layer protocol negotiation. It is used by
+HTTP/2: during the TLS handshake the client gives the list of application protocols it accepts and the server responds
+with a protocol it supports.</p>
 </div>
 <div class="paragraph">
 <p>Java 8 does not supports ALPN out of the box, so ALPN should be enabled by other means:</p>
@@ -6060,7 +6148,7 @@ or immediately after the headers have been read and the response handler has bee
 and the response handler is passed the redirected response instead of the original response.</p>
 </div>
 <div class="paragraph">
-<p>Here’s an example:</p>
+<p>Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6876,6 +6964,15 @@ client SSL/TLS (such as trust, key/certificate, ciphers, ALPN, &#8230;&#8203;) w
 <p>Likewise <code><a href="../../yardoc/Vertx/HttpClient.html#request_abs-instance_method">requestAbs</a></code> scheme
 also overrides the default client setting.</p>
 </div>
+<div class="sect3">
+<h4 id="_server_name_indication_sni_2">Server Name Indication (SNI)</h4>
+<div class="paragraph">
+<p>Vert.x http servers can be configured to use SNI in exactly the same way as net.adoc.</p>
+</div>
+<div class="paragraph">
+<p>Vert.x http client will present the actual hostname as <em>server name</em> during the TLS handshake.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_websockets">WebSockets</h3>
@@ -7151,6 +7248,30 @@ client = vertx.create_http_client(options)</code></pre>
 <div class="paragraph">
 <p>The DNS resolution is always done on the proxy server, to achieve the functionality of a SOCKS4 client, it is necessary
 to resolve the DNS address locally.</p>
+</div>
+<div class="sect3">
+<h4 id="_handling_of_other_protocols">Handling of other protocols</h4>
+<div class="paragraph">
+<p>The HTTP proxy implementation supports getting ftp:// urls if the proxy supports
+that, which isn&#8217;t available in non-proxy getAbs requests.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
+  'proxyOptions' =&gt; {
+    'type' =&gt; "HTTP"
+  }
+}
+client = vertx.create_http_client(options)
+client.get_abs("ftp://ftp.gnu.org/gnu/") { |response|
+  puts "Received response with status code #{response.status_code()}"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Support for other protocols is not available since java.net.URL does not
+support them (gopher:// for example).</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -7723,9 +7844,12 @@ is served even if the classpath resource changes (e.g. in a development
 system).</p>
 </div>
 <div class="paragraph">
-<p>This caching behaviour can be disabled by setting the system
-property <code>vertx.disableFileCaching</code> to <code>true</code>. The path where the files are
-cached is <code>.vertx</code> by default and can be customized by setting the system
+<p>This caching behaviour can be set on the <code><a href="../dataobjects.html#VertxOptions#set_file_resolver_caching_enabled-instance_method">fileResolverCachingEnabled</a></code>
+option. The default value of this option is <code>true</code> unless the system property <code>vertx.disableFileCaching</code> is
+defined.</p>
+</div>
+<div class="paragraph">
+<p>The path where the files are cached is <code>.vertx</code> by default and can be customized by setting the system
 property <code>vertx.cacheDirBase</code>.</p>
 </div>
 <div class="paragraph">
@@ -9254,7 +9378,7 @@ java io.vertx.core.Launcher run org.acme.MyVerticle --redeploy="**/*.class"  --l
 <div class="paragraph">
 <p>The redeployment process is implemented as follows. First your application is launched as a background application
 (with the <code>start</code> command). On matching file changes, the process is stopped and the application is restarted.
-This way avoids leaks.</p>
+This avoids leaks, as the process is restarted.</p>
 </div>
 <div class="paragraph">
 <p>To enable the live redeploy, pass the <code>--redeploy</code> option to the <code>run</code> command. The <code>--redeploy</code> indicates the
@@ -9263,7 +9387,8 @@ several sets by separating them using a comma (<code>,</code>). Patterns are rel
 </div>
 <div class="paragraph">
 <p>Parameters passed to the <code>run</code> command are passed to the application. Java Virtual Machine options can be
-configured using <code>--java-opts</code>.</p>
+configured using <code>--java-opts</code>. For instance, to pass the the <code>conf</code> parameter or a system property, you need to
+use: <code>--java-opts="-conf=my-conf.json -Dkey=value"</code></p>
 </div>
 <div class="paragraph">
 <p>The <code>--launcher-class</code> option determine with with <em>main</em> class the application is launcher. It&#8217;s generally
@@ -9305,7 +9430,14 @@ java -jar build/libs/my-fat-jar.jar --redeploy="src/**/*.java" --on-redeploy='./
 <div class="paragraph">
 <p>The "on-redeploy" option specifies a command invoked after the shutdown of the application and before the
 restart. So you can hook your build tool if it updates some runtime artifacts. For instance, you can launch <code>gulp</code>
-or <code>grunt</code> to update your resources.</p>
+or <code>grunt</code> to update your resources. Don&#8217;t forget that passing parameters to your application requires the
+<code>--java-opts</code> param:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>java -jar target/my-fat-jar.jar --redeploy="**/*.java" --on-redeploy="mvn package" --java-opts="-Dkey=val"
+java -jar build/libs/my-fat-jar.jar --redeploy="src/**/*.java" --on-redeploy='./gradlew shadowJar' --java-opts="-Dkey=val"</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>The redeploy feature also supports the following settings:</p>
@@ -9443,6 +9575,19 @@ logger = Java::IoVertxCoreLogging::LoggerFactory.get_logger(className)
 logger.info("something happened")
 logger.error("oops!", exception)</code></pre>
 </div>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+Logging backends use different formats to represent replaceable tokens in parameterized messages.
+As a consequence, if you rely on Vert.x parameterized logging methods, you won&#8217;t be able to switch backends without changing your code.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -10445,7 +10590,7 @@ very careful when using this settings.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:36 CEST
               
               
             </div>

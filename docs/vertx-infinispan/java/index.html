@@ -158,7 +158,7 @@
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-infinispan&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -193,12 +193,12 @@
 <h2 id="_using_this_cluster_manager">Using this cluster manager</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you are using Vert.x from the command line, the jar corresponding to this cluster manager (it will be named <code>vertx-infinispan-3.4.1.jar</code>
+<p>If you are using Vert.x from the command line, the jar corresponding to this cluster manager (it will be named <code>vertx-infinispan-3.4.2.jar</code>
 should be in the <code>lib</code> directory of the Vert.x installation.</p>
 </div>
 <div class="paragraph">
 <p>If you want clustering with this cluster manager in your Vert.x Maven or Gradle project then just add a dependency to
-the artifact: <code>io.vertx:vertx-infinispan:3.4.1</code> in your project.</p>
+the artifact: <code>io.vertx:vertx-infinispan:3.4.2</code> in your project.</p>
 </div>
 <div class="paragraph">
 <p>If the jar is on your classpath as above then Vert.x will automatically detect this and use it as the cluster manager.
@@ -230,41 +230,31 @@ Vertx.clusteredVertx(options, res -&gt; {
 <h2 id="_configuring_this_cluster_manager">Configuring this cluster manager</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Usually the cluster manager is configured by two files packaged inside the jar:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/vert-x3/vertx-infinispan/blob/master/src/main/resources/infinispan.xml"><code>infinispan.xml</code></a></p>
-</li>
-<li>
-<p><a href="https://github.com/vert-x3/vertx-infinispan/blob/master/src/main/resources/jgroups.xml"><code>jgroups.xml</code></a></p>
-</li>
-</ul>
+<p>The default cluster manager configuration can be modified with <code>infinispan.xml</code> and/or <code>jgroups.xml</code> files.
+The former configures the data grid, the latter group management and member discovery.</p>
 </div>
 <div class="paragraph">
-<p>If you want to override one or both of them, place a file with the same name on your classpath and it
-will be used instead. If you want to embed your custom file in a fat jar, it must be located at the root of the
-fat jar. If it&#8217;s an external file, the <strong>directory</strong> containing the file must be added to the classpath. For
+<p>You can place one or both of them on your classpath.
+If you want to embed your custom file in a fat jar, it must be located at the root of the fat jar.
+If it&#8217;s an external file, the <strong>directory</strong> containing the file must be added to the classpath. For
 example, if you are using the <em>launcher</em> class from Vert.x, the classpath enhancement can be done as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code># If the infinispan.xml is in the current directory:
-java -jar ... -cp . -cluster
-vertx run MyVerticle -cp . -cluster
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell"># If infinispan.xml and/or jgroups.xml files are in the current directory:
+java -jar my-app.jar -cp . -cluster
 
-# If the infinispan.xml is in the conf directory
-java -jar ... -cp conf -cluster</code></pre>
+# If infinispan.xml and/or jgroups.xml files are in the conf directory:
+java -jar my-app.jar -cp conf -cluster</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Another way to override the <code>infinispan.xml</code> configuration is by providing the system property <code>vertx.infinispan.config</code> with a
-location:</p>
+<p>Another way to override the configuration is by providing the file locations via system properties:
+<code>vertx.infinispan.config</code> and/or <code>vertx.jgroups.config</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code># Use a cluster configuration located in an external file
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell"># Use a cluster configuration located in an external file
 java -Dvertx.infinispan.config=./config/my-infinispan.xml -jar ... -cluster
 
 # Or use a custom configuration from the classpath
@@ -275,36 +265,31 @@ java -Dvertx.infinispan.config=my/package/config/my-infinispan.xml -jar ... -clu
 <p>The cluster manager will search for the file in classpath first, and fallback to the filesystem.</p>
 </div>
 <div class="paragraph">
-<p>The <code>vertx.infinispan.config</code> system property, when present, overrides any <code>infinispan.xml</code> on the classpath.</p>
+<p>The system properties, when present, override any <code>infinispan.xml</code> or <code>jgroups.xml</code> on the classpath.</p>
 </div>
 <div class="paragraph">
 <p>The xml files are Infinispan and JGroups configuration files and are described in detail in the documentation on the Infinispan and JGroups web-sites.</p>
 </div>
-<div class="paragraph">
-<p>You can also specify configuration programmatically if embedding:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ClusterManager mgr = new InfinispanClusterManager("custom-infinispan.xml");
-
-VertxOptions options = new VertxOptions().setClusterManager(mgr);
-
-Vertx.clusteredVertx(options, res -&gt; {
-  if (res.succeeded()) {
-    Vertx vertx = res.result();
-  } else {
-    // failed!
-  }
-});</code></pre>
-</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+if a <code>jgroups.xml</code> file is on the classpath or if you set the <code>vertx.jgroups.config</code> system property,
+it will override any JGroups <code>stack-file</code> path defined in the Infinispan configuration file.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>JGroups supports several different transports including multicast and TCP. The default configuration uses
-multicast for discovery so you must have multicast enabled on your network for this to work.</p>
+<p>The default JGroups configuration uses multicast for discovery and TCP for group management.
+Make sure multicast is enabled on your network for this to work.</p>
 </div>
 <div class="paragraph">
 <p>For full documentation on how to configure the transport differently or use a different transport please consult the
-JGroups documentation.</p>
+Infinispan / JGroups documentations.</p>
 </div>
 </div>
 </div>
@@ -317,7 +302,9 @@ JGroups documentation.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-java" data-lang="java">ClusterManager mgr = new InfinispanClusterManager(cacheManager);
+
 VertxOptions options = new VertxOptions().setClusterManager(mgr);
+
 Vertx.clusteredVertx(options, res -&gt; {
   if (res.succeeded()) {
     Vertx vertx = res.result();
@@ -358,20 +345,25 @@ Vertx.clusteredVertx(options, res -&gt; {
 <h2 id="_configuring_for_openshift_3">Configuring for Openshift 3</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In order to run a Vert.x cluster on Openshift 3, a few configuration and dependencies changes are needed.</p>
+<p>On Openshift 3, JGroups should be configured to use the <code>KUBE_PING</code> protocol.</p>
 </div>
 <div class="paragraph">
-<p>First, add the JGroups <code>KUBE_PING</code> protocol JAR to the stack.</p>
+<p>First, add the <code>org.infinispan:infinispan-cloud:9.0.0.Final</code> dependency to your project.
+With Maven it looks like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;org.jgroups.kubernetes&lt;/groupId&gt;
-  &lt;artifactId&gt;kubernetes&lt;/artifactId&gt;
-  &lt;version&gt;0.9.0&lt;/version&gt;
+  &lt;groupId&gt;org.infinispan&lt;/groupId&gt;
+  &lt;artifactId&gt;infinispan-cloud&lt;/artifactId&gt;
+  &lt;version&gt;9.0.0.Final&lt;/version&gt;
   &lt;exclusions&gt;
-    &lt;exclusion&gt;                                          <b class="conum">(1)</b>
-      &lt;artifactId&gt;undertow-core&lt;/artifactId&gt;
+    &lt;exclusion&gt;
+      &lt;groupId&gt;org.jgroups&lt;/groupId&gt;                <b class="conum">(1)</b>
+      &lt;artifactId&gt;jgroups&lt;/artifactId&gt;
+    &lt;/exclusion&gt;
+    &lt;exclusion&gt;
+      &lt;artifactId&gt;undertow-core&lt;/artifactId&gt;        <b class="conum">(2)</b>
       &lt;groupId&gt;io.undertow&lt;/groupId&gt;
     &lt;/exclusion&gt;
   &lt;/exclusions&gt;
@@ -381,82 +373,23 @@ Vertx.clusteredVertx(options, res -&gt; {
 <div class="colist arabic">
 <ol>
 <li>
+<p>make sure to use the <code>infinispan-core</code> JGroups version</p>
+</li>
+<li>
 <p>avoid extra dependencies, <code>KUBE_PING</code> works fine with the JDK&#8217;s Http server</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>Then override the default JGroups config so that <code>KUBE_PING</code> becomes the discovery protocol.</p>
+<p>Then, set the <code>vertx.jgroups.config</code> system property to <code>default-configs/default-jgroups-kubernetes.xml</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;config xmlns="urn:org:jgroups"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/JGroups-3.6.xsd"&gt;
-
-  &lt;TCP bind_addr="${jgroups.tcp.address:match-interface:eth.*}"
-       bind_port="${jgroups.tcp.port:7800}"
-       enable_diagnostics="false"
-       thread_naming_pattern="pl"
-       send_buf_size="640k"
-       sock_conn_timeout="300"
-       bundler_type="transfer-queue"
-
-       thread_pool.min_threads="${jgroups.thread_pool.min_threads:2}"
-       thread_pool.max_threads="${jgroups.thread_pool.max_threads:30}"
-       thread_pool.keep_alive_time="60000"
-       thread_pool.queue_enabled="false"
-
-       internal_thread_pool.min_threads="${jgroups.internal_thread_pool.min_threads:5}"
-       internal_thread_pool.max_threads="${jgroups.internal_thread_pool.max_threads:20}"
-       internal_thread_pool.keep_alive_time="60000"
-       internal_thread_pool.queue_enabled="true"
-       internal_thread_pool.queue_max_size="500"
-
-       oob_thread_pool.min_threads="${jgroups.oob_thread_pool.min_threads:20}"
-       oob_thread_pool.max_threads="${jgroups.oob_thread_pool.max_threads:200}"
-       oob_thread_pool.keep_alive_time="60000"
-       oob_thread_pool.queue_enabled="false"
-  /&gt;
-  &lt;kubernetes.KUBE_PING
-  /&gt;
-  &lt;MERGE3 min_interval="10000"
-*           max_interval="30000"
-*   /&gt;
-  &lt;FD_SOCK/&gt;
-  &lt;FD_ALL timeout="60000"
-*           interval="15000"
-*           timeout_check_interval="5000"
-*   /&gt;
-  &lt;VERIFY_SUSPECT timeout="5000"/&gt;
-  &lt;pbcast.NAKACK2 use_mcast_xmit="false"
-                  xmit_interval="1000"
-                  xmit_table_num_rows="50"
-                  xmit_table_msgs_per_row="1024"
-                  xmit_table_max_compaction_time="30000"
-                  max_msg_batch_size="100"
-                  resend_last_seqno="true"
-  /&gt;
-  &lt;UNICAST3 xmit_interval="500"
-*             xmit_table_num_rows="50"
-*             xmit_table_msgs_per_row="1024"
-*             xmit_table_max_compaction_time="30000"
-*             max_msg_batch_size="100"
-*             conn_expiry_timeout="0"
-*   /&gt;
-  &lt;pbcast.STABLE stability_delay="500"
-                 desired_avg_gossip="5000"
-                 max_bytes="1M"
-  /&gt;
-  &lt;pbcast.GMS print_local_addr="false"
-              join_timeout="${jgroups.join_timeout:5000}"
-  /&gt;
-  &lt;MFC max_credits="2m"
-*        min_threshold="0.40"
-*   /&gt;
-  &lt;FRAG3/&gt;
-&lt;/config&gt;</code></pre>
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">-Dvertx.jgroups.config=default-configs/default-jgroups-kubernetes.xml</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>This JGroups stack file is located in the <code>infinispan-cloud</code> JAR and preconfigured for Kubernetes/Openshift3.</p>
 </div>
 <div class="paragraph">
 <p><code>KUBE_PING</code> listens to requests on port <code>8888</code> by default, so make sure to declare it when building the container image.</p>
@@ -672,7 +605,7 @@ more details or want to implement your own logging backend implementation.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:36 CEST
               
               
             </div>

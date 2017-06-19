@@ -17,7 +17,6 @@ Rainbow.extend( "ceylon", [
     pattern: /(import|module|package)(\s)*((\w|\.)+)/g
   },
   {
-    // see http://docs.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html
     name: "keyword",
     pattern: /\b(assembly|module|package|import|alias|class|interface|object|given|value|assign|void|function|new|of|extends|satisfies|abstracts|in|out|return|break|continue|throw|assert|dynamic|if|else|switch|case|for|while|try|catch|finally|then|let|this|outer|super|is|exists|nonempty|while)\b/g
   },
@@ -35,11 +34,11 @@ Rainbow.extend( "ceylon", [
   },
   {
     name: "comment",
-    pattern: /\/\*[\s\S]*?\*\/|(\/\/).*?$/gm
+    pattern: /\/\*[\s\S]*?\*\/|(\/\/).*?$|(\#\!).*?$/gm
   },
   {
     name: "entity.function",
-    pattern: /\b(shared|abstract|formal|default|actual|variable|deprecated|small|late|literal|doc|by|see|throws|optional|license|tagged|final|native|annotation|sealed)\b/g
+    pattern: /\b(shared|abstract|static|formal|default|actual|variable|deprecated|small|late|literal|doc|by|see|since|throws|optional|license|tagged|final|native|annotation|sealed)\b/g
   },
   {
     name: "entity.class",

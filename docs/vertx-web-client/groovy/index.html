@@ -207,7 +207,7 @@ be used.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-web-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -221,7 +221,7 @@ be used.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-web-client:3.4.1'
+  compile 'io.vertx:vertx-web-client:3.4.2'
 }</code></pre>
 </div>
 </div>
@@ -556,8 +556,8 @@ get.send({ ar -&gt;
 </div>
 </div>
 <div class="paragraph">
-<p>When you need to mutate a request, the <code><a href="../../apidocs/io/vertx/ext/web/client/HttpRequest.html#copy--">copy</a></code> returns a copy of the
-request</p>
+<p>Beware though that <code><a href="../../apidocs/io/vertx/ext/web/client/HttpRequest.html">HttpRequest</a></code> instances are mutable.
+Therefore you should call the <code><a href="../../apidocs/io/vertx/ext/web/client/HttpRequest.html#copy--">copy</a></code> method before modifying a cached instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -568,8 +568,8 @@ get.send({ ar -&gt;
   }
 })
 
-// Same request again
-get.putHeader("an-header", "with-some-value").send({ ar -&gt;
+// The "get" request instance remains unmodified
+get.copy().putHeader("a-header", "with-some-value").send({ ar -&gt;
   if (ar.succeeded()) {
     // Ok
   }
@@ -848,7 +848,7 @@ def client = WebClient.create(vertx, [
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:36 CEST
               
               
             </div>

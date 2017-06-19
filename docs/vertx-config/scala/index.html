@@ -122,8 +122,21 @@
 <li><a href="#_reading_configuration_as_a_stream">Reading configuration as a stream</a></li>
 <li><a href="#_retrieving_the_configuration_as_a_future">Retrieving the configuration as a Future</a></li>
 <li><a href="#_extending_the_config_retriever">Extending the Config Retriever</a></li>
-<li><a href="#_additional_formats">Additional formats</a></li>
-<li><a href="#_additional_stores">Additional stores</a></li>
+<li><a href="#_additional_formats">Additional formats</a>
+<ul class="sectlevel2">
+<li><a href="#_hocon_configuration_format">Hocon Configuration Format</a></li>
+<li><a href="#_yaml_configuration_format">Yaml Configuration Format</a></li>
+</ul>
+</li>
+<li><a href="#_additional_stores">Additional stores</a>
+<ul class="sectlevel2">
+<li><a href="#_git_configuration_store">Git Configuration Store</a></li>
+<li><a href="#_kubernetes_configmap_store">Kubernetes ConfigMap Store</a></li>
+<li><a href="#_redis_configuration_store">Redis Configuration Store</a></li>
+<li><a href="#_zookeeper_configuration_store">Zookeeper Configuration Store</a></li>
+<li><a href="#_spring_config_server_store">Spring Config Server Store</a></li>
+</ul>
+</li>
 </ul>
         </div>
       </div>
@@ -151,8 +164,21 @@
 <li><a href="#_reading_configuration_as_a_stream">Reading configuration as a stream</a></li>
 <li><a href="#_retrieving_the_configuration_as_a_future">Retrieving the configuration as a Future</a></li>
 <li><a href="#_extending_the_config_retriever">Extending the Config Retriever</a></li>
-<li><a href="#_additional_formats">Additional formats</a></li>
-<li><a href="#_additional_stores">Additional stores</a></li>
+<li><a href="#_additional_formats">Additional formats</a>
+<ul class="sectlevel2">
+<li><a href="#_hocon_configuration_format">Hocon Configuration Format</a></li>
+<li><a href="#_yaml_configuration_format">Yaml Configuration Format</a></li>
+</ul>
+</li>
+<li><a href="#_additional_stores">Additional stores</a>
+<ul class="sectlevel2">
+<li><a href="#_git_configuration_store">Git Configuration Store</a></li>
+<li><a href="#_kubernetes_configmap_store">Kubernetes ConfigMap Store</a></li>
+<li><a href="#_redis_configuration_store">Redis Configuration Store</a></li>
+<li><a href="#_zookeeper_configuration_store">Zookeeper Configuration Store</a></li>
+<li><a href="#_spring_config_server_store">Spring Config Server Store</a></li>
+</ul>
+</li>
 </ul>
         </div>
         <div id="preamble">
@@ -225,7 +251,7 @@ and and a syntax (json by default)</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-config-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -238,7 +264,7 @@ and and a syntax (json by default)</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-config-scala_2.12:3.4.1'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-config-scala_2.12:3.4.2'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -646,11 +672,150 @@ configuration store (place from where the configuration data is retrieved)</p>
 <p>In addition of the out of the box format supported by this library, Vert.x Config provides additional
 formats you can use in your application.</p>
 </div>
+<div class="sect2">
+<h3 id="_hocon_configuration_format">Hocon Configuration Format</h3>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::hocon-format.adoc[]</p>
+<p>The Hocon Configuration Format extends the Vert.x Configuration Retriever and provides the
+support for the HOCON(<a href="https://github.com/typesafehub/config/blob/master/HOCON.md" class="bare">https://github.com/typesafehub/config/blob/master/HOCON.md</a>) format.</p>
 </div>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::yaml-format.adoc[]</p>
+<p>It supports includes, json, properties, macros&#8230;&#8203;</p>
+</div>
+<div class="sect3">
+<h4 id="_using_the_hocon_configuration_format">Using the Hocon Configuration Format</h4>
+<div class="paragraph">
+<p>To use the Hocon Configuration Format, add the following dependency to the
+<em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-config-hocon-scala_2.12&lt;/artifactId&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-config&lt;/artifactId&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-config:3.4.2'
+compile 'io.vertx:vertx-config-hocon-scala_2.12:3.4.2'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_store_to_use_hocon">Configuring the store to use HOCON</h4>
+<div class="paragraph">
+<p>Once added to your classpath or dependencies, you need to configure the
+<code><a href="../../scaladocs/io/vertx/scala/config/ConfigRetriever.html">ConfigRetriever</a></code> to use this format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var store = ConfigStoreOptions()
+  .setType("file")
+  .setFormat("hocon")
+  .setConfig(new io.vertx.core.json.JsonObject().put("path", "my-config.conf"))
+
+
+var retriever = ConfigRetriever.create(vertx, ConfigRetrieverOptions()
+  .setStores(Set(store))
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You just need to set <code>format</code> to <code>hocon</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_yaml_configuration_format">Yaml Configuration Format</h3>
+<div class="paragraph">
+<p>The Yaml Configuration Format extends the Vert.x Configuration Retriever and provides the
+support for the Yaml Configuration Format format.</p>
+</div>
+<div class="sect3">
+<h4 id="_using_the_yaml_configuration_format">Using the Yaml Configuration Format</h4>
+<div class="paragraph">
+<p>To use the Yaml Configuration Format, add the following dependency to the
+<em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-config-yaml-scala_2.12&lt;/artifactId&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-config&lt;/artifactId&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-config:3.4.2'
+compile 'io.vertx:vertx-config-yaml-scala_2.12:3.4.2'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_store_to_use_yaml">Configuring the store to use YAML</h4>
+<div class="paragraph">
+<p>Once added to your classpath or dependencies, you need to configure the
+<code><a href="../../scaladocs/io/vertx/scala/config/ConfigRetriever.html">ConfigRetriever</a></code> to use this format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var store = ConfigStoreOptions()
+  .setType("file")
+  .setFormat("yaml")
+  .setConfig(new io.vertx.core.json.JsonObject().put("path", "my-config.yaml"))
+
+
+var retriever = ConfigRetriever.create(vertx, ConfigRetrieverOptions()
+  .setStores(Set(store))
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You just need to set <code>format</code> to <code>yaml</code>.</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -661,20 +826,480 @@ formats you can use in your application.</p>
 <p>In addition of the out of the box stores supported by this library, Vert.x Config provides additional
 stores you can use in your application.</p>
 </div>
+<div class="sect2">
+<h3 id="_git_configuration_store">Git Configuration Store</h3>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::git-store.adoc[]</p>
+<p>The Git Configuration Store is an extension to the Vert.x Configuration Retriever to
+retrieve configuration from a Git repository.</p>
+</div>
+<div class="sect3">
+<h4 id="_using_the_git_configuration_store">Using the Git Configuration Store</h4>
+<div class="paragraph">
+<p>To use the Git Configuration, add the following dependency to the
+<em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-config-git-scala_2.12&lt;/artifactId&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-config&lt;/artifactId&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-config:3.4.2'
+compile 'io.vertx:vertx-config-git-scala_2.12:3.4.2'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_store">Configuring the store</h4>
+<div class="paragraph">
+<p>Once added to your classpath or dependencies, you need to configure the
+<code><a href="../../scaladocs/io/vertx/scala/config/ConfigRetriever.html">ConfigRetriever</a></code> to use this store:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var git = ConfigStoreOptions()
+  .setType("git")
+  .setConfig(new io.vertx.core.json.JsonObject().put("url", "https://github.com/cescoffier/vertx-config-test.git").put("path", "local").put("filesets", new io.vertx.core.json.JsonArray().add(new io.vertx.core.json.JsonObject().put("pattern", "*.json"))))
+
+
+var retriever = ConfigRetriever.create(vertx, ConfigRetrieverOptions()
+  .setStores(Set(git))
+)</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::kubernetes-store.adoc[]</p>
+<p>The configuration requires:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <code>url</code> of the repository</p>
+</li>
+<li>
+<p>the <code>path</code> where the repository is cloned (local directory)</p>
+</li>
+<li>
+<p>at least <code>fileset</code> indicating the set of files to read (same behavior as the
+directory configuration store).</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::redis-store.adoc[]</p>
+<p>You can also configure the <code>branch</code> (<code>master</code> by default) to use and the name of the
+<code>remote</code> repository (<code>origin</code> by default).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_how_does_it_works">How does it works</h4>
+<div class="paragraph">
+<p>If the local <code>path</code> does not exist, the configuration store clones the repository into
+this directory. Then it reads the file matching the different file sets.</p>
 </div>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::zookeeper-store.adoc[]</p>
+<p>It the local <code>path</code> exist, it tried to update it (it switches branch if needed)). If the
+update failed the configuration retrieval fails.</p>
 </div>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::spring-store.adoc[]</p>
+<p>Periodically, the repositories is updated to check if the configuration has been updated.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_kubernetes_configmap_store">Kubernetes ConfigMap Store</h3>
+<div class="paragraph">
+<p>The Kubernetes ConfigMap Store extends the Vert.x Configuration Retriever and provides the
+support Kubernetes Config Map and Secrets.</p>
+</div>
+<div class="paragraph">
+<p>So, configuration is retrieved by reading the config map or the secrets.</p>
+</div>
+<div class="sect3">
+<h4 id="_using_the_kubernetes_configmap_store">Using the Kubernetes ConfigMap Store</h4>
+<div class="paragraph">
+<p>To use the Kubernetes ConfigMap Store, add the following dependency to the
+<em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+&lt;groupId&gt;io.vertx&lt;/groupId&gt;
+&lt;artifactId&gt;vertx-config-kubernetes-configmap-scala_2.12&lt;/artifactId&gt;
+&lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+&lt;groupId&gt;io.vertx&lt;/groupId&gt;
+&lt;artifactId&gt;vertx-config&lt;/artifactId&gt;
+&lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-config:3.4.2'
+compile 'io.vertx:vertx-config-kubernetes-configmap-scala_2.12:3.4.2'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_store_2">Configuring the store</h4>
+<div class="paragraph">
+<p>Once added to your classpath or dependencies, you need to configure the
+<code><a href="../../scaladocs/io/vertx/scala/config/ConfigRetriever.html">ConfigRetriever</a></code> to use this store:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var store = ConfigStoreOptions()
+  .setType("configmap")
+  .setConfig(new io.vertx.core.json.JsonObject().put("namespace", "my-project-namespace").put("name", "configmap-name"))
+
+
+var retriever = ConfigRetriever.create(vertx, ConfigRetrieverOptions()
+  .setStores(Set(store))
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You need to configure the store to find the right configmap. this is done with:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>namespace</code> - the project namespace, <code>default</code> by default. If the <code>KUBERNETES_NAMESPACE</code> ENV variable is set, it
+uses this value.</p>
+</li>
+<li>
+<p><code>name</code> - the name of the config map</p>
+</li>
+<li>
+<p><code>optional</code> - whether or not the config map is optional (<code>true</code> by default)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If the config map is composed by several element, you can use the <code>key</code> parameter to tell
+which <code>key</code> is read</p>
+</div>
+<div class="paragraph">
+<p>The application must have the permissions to read the config map.</p>
+</div>
+<div class="paragraph">
+<p>To read data from a secret, just configure the <code>secret</code> property to <code>true</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var store = ConfigStoreOptions()
+  .setType("configmap")
+  .setConfig(new io.vertx.core.json.JsonObject().put("namespace", "my-project-namespace").put("name", "my-secret").put("secret", true))
+
+
+var retriever = ConfigRetriever.create(vertx, ConfigRetrieverOptions()
+  .setStores(Set(store))
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the config map is not available, an empty JSON object is passed as configuration chunk. To disable this
+behavior and explicitly fail, you can set the <code>optional</code> configuration to <code>false</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_redis_configuration_store">Redis Configuration Store</h3>
+<div class="paragraph">
+<p>The Redis Configuration Store extends the Vert.x Configuration Retriever and provides the
+way to retrieve configuration from a Redis server.</p>
+</div>
+<div class="sect3">
+<h4 id="_using_the_redis_configuration_store">Using the Redis Configuration Store</h4>
+<div class="paragraph">
+<p>To use the Redis Configuration Store, add the following dependency to the
+<em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-config-redis-scala_2.12&lt;/artifactId&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-config&lt;/artifactId&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-config:3.4.2'
+compile 'io.vertx:vertx-config-redis-scala_2.12:3.4.2'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_store_3">Configuring the store</h4>
+<div class="paragraph">
+<p>Once added to your classpath or dependencies, you need to configure the
+<code><a href="../../scaladocs/io/vertx/scala/config/ConfigRetriever.html">ConfigRetriever</a></code> to use this store:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var store = ConfigStoreOptions()
+  .setType("redis")
+  .setConfig(new io.vertx.core.json.JsonObject().put("host", "localhost").put("port", 6379).put("key", "my-configuration"))
+
+
+var retriever = ConfigRetriever.create(vertx, ConfigRetrieverOptions()
+  .setStores(Set(store))
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The store configuration is used to create an instance of
+<code><a href="../../scaladocs/io/vertx/scala/redis/RedisClient.html">RedisClient</a></code>. check the documentation of the Vert.x Redis Client
+for further details.</p>
+</div>
+<div class="paragraph">
+<p>In addition, you can set the <code>key</code> instructing the store in which <em>field</em> the configuration
+is stored. <code>configuration</code> is used by default.</p>
+</div>
+<div class="paragraph">
+<p>The created Redis client retrieves the configuration using the <code>HGETALL</code> configuration.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_zookeeper_configuration_store">Zookeeper Configuration Store</h3>
+<div class="paragraph">
+<p>The Zookeeper Configuration Store extends the Vert.x Configuration Retriever and provides the
+way to retrieve configuration from a Zookeeper server.</p>
+</div>
+<div class="paragraph">
+<p>It uses Apache Curator as client.</p>
+</div>
+<div class="sect3">
+<h4 id="_using_the_zookeeper_configuration_store">Using the Zookeeper Configuration Store</h4>
+<div class="paragraph">
+<p>To use the Redis Configuration Store, add the following dependency to the
+<em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-config-zookeeper-scala_2.12&lt;/artifactId&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-config&lt;/artifactId&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-config:3.4.2'
+compile 'io.vertx:vertx-config-zookeeper-scala_2.12:3.4.2'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_store_4">Configuring the store</h4>
+<div class="paragraph">
+<p>Once added to your classpath or dependencies, you need to configure the
+<code><a href="../../scaladocs/io/vertx/scala/config/ConfigRetriever.html">ConfigRetriever</a></code> to use this store:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var store = ConfigStoreOptions()
+  .setType("zookeeper")
+  .setConfig(new io.vertx.core.json.JsonObject().put("connection", "localhost:2181").put("path", "/path/to/my/conf"))
+
+
+var retriever = ConfigRetriever.create(vertx, ConfigRetrieverOptions()
+  .setStores(Set(store))
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The store configuration is used to configure the Apache Curator client and the <em>path</em> of the Zookeeper node
+containing the configuration. Notice that the format of the configuration can be JSON, or any supported format.</p>
+</div>
+<div class="paragraph">
+<p>The configuration requires the <code>configuration</code> attribute indicating the connection <em>string</em> of the Zookeeper
+server, and the <code>path</code> attribute indicating the path of the node containing the configuration.</p>
+</div>
+<div class="paragraph">
+<p>In addition you can configure:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>maxRetries</code>: the number of connection attempt, 3 by default</p>
+</li>
+<li>
+<p><code>baseSleepTimeBetweenRetries</code>: the amount of milliseconds to wait between retries (exponential backoff strategy).
+1000 ms by default.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_spring_config_server_store">Spring Config Server Store</h3>
+<div class="paragraph">
+<p>The Spring Config Server Store extends the Vert.x Configuration Retriever and provides the
+a way to retrieve configuration from a Spring Server.</p>
+</div>
+<div class="sect3">
+<h4 id="_using_the_spring_config_server_store">Using the Spring Config Server Store</h4>
+<div class="paragraph">
+<p>To use the Spring Config Server Store, add the following dependency to the
+<em>dependencies</em> section of your build descriptor:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-config-spring-config-server-scala_2.12&lt;/artifactId&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
+  &lt;artifactId&gt;vertx-config&lt;/artifactId&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-config:3.4.2'
+compile 'io.vertx:vertx-config-spring-config-server-scala_2.12:3.4.2'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_store_5">Configuring the store</h4>
+<div class="paragraph">
+<p>Once added to your classpath or dependencies, you need to configure the
+<code><a href="../../scaladocs/io/vertx/scala/config/ConfigRetriever.html">ConfigRetriever</a></code> to use this store:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var store = ConfigStoreOptions()
+  .setType("spring-config-server")
+  .setConfig(new io.vertx.core.json.JsonObject().put("url", "http://localhost:8888/foo/development"))
+
+
+var retriever = ConfigRetriever.create(vertx, ConfigRetrieverOptions()
+  .setStores(Set(store))
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Configurable attributes are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>url</code> - the <code>url</code> to retrieve the configuration (mandatory)</p>
+</li>
+<li>
+<p><code>timeout</code> - the timeout (in milliseconds) to retrieve the configuration, 3000 by default</p>
+</li>
+<li>
+<p><code>user</code> - the <code>user</code> (no authentication by default)</p>
+</li>
+<li>
+<p><code>password</code> - the <code>password</code></p>
+</li>
+<li>
+<p><code>httpClientConfiguration</code> - the configuration of the underlying HTTP client</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -685,7 +1310,7 @@ stores you can use in your application.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:38 CEST
               
               
             </div>

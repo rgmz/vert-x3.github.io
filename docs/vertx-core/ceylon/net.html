@@ -1391,10 +1391,113 @@ options = NetServerOptions {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_application_layer_protocol_negotiation">Application-Layer Protocol Negotiation</h4>
+<h4 id="_server_name_indication_sni">Server Name Indication (SNI)</h4>
 <div class="paragraph">
-<p>ALPN is a TLS extension for applicationl layer protocol negotitation. It is used by HTTP/2: during the TLS handshake
-the client gives the list of application protocols it accepts and the server responds with a protocol it supports.</p>
+<p>Server Name Indication (SNI) is a TLS extension by which a client specifies an hostname attempting to connect: during
+the TLS handshake the clients gives a server name and the server can use it to respond with a specific certificate
+for this server name instead of the default deployed certificate.</p>
+</div>
+<div class="paragraph">
+<p>When SNI is active the server uses</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the certificate CN or SAN DNS (Subject Alternative Name with DNS) to do an exact match, e.g <code>www.example.com</code></p>
+</li>
+<li>
+<p>the certificate CN or SAN DNS certificate to match a wildcard name, e.g <code>*.example.com</code></p>
+</li>
+<li>
+<p>otherwise the first certificate when the client does not present a server name or the presenter server name cannot be matched</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can enable SNI on the server by setting <code><a href="../../ceylondoc/vertx-core//net/NetServerOptions.type.html#setSni(boolean)">sni</a></code> to <code>true</code> and
+configured the server with multiple key/certificate pairs.</p>
+</div>
+<div class="paragraph">
+<p>Java KeyStore files or PKCS12 files can store multiple key/cert pairs out of the box.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value keyCertOptions = JksOptions {
+  path = "keystore.jks";
+  password = "wibble";
+};
+
+value netServer = vertx.createNetServer(NetServerOptions {
+  keyStoreOptions = keyCertOptions;
+  ssl = true;
+  sni = true;
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code><a href="../../ceylondoc/vertx-core//net/PemKeyCertOptions.type.html">PemKeyCertOptions</a></code> can be configured to hold multiple entries:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value keyCertOptions = PemKeyCertOptions {
+  keyPaths = ArrayList { "default-key.pem",  "host1-key.pem",  "etc..." };
+  certPaths = ArrayList { "default-cert.pem",  "host2-key.pem",  "etc..." };
+};
+
+value netServer = vertx.createNetServer(NetServerOptions {
+  pemKeyCertOptions = keyCertOptions;
+  ssl = true;
+  sni = true;
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The client implicitly sends the connecting host as an SNI server name for Fully Qualified Domain Name (FQDN).</p>
+</div>
+<div class="paragraph">
+<p>You can provide an explicit server name when connecting a socket</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createNetClient(NetClientOptions {
+  trustStoreOptions = trustOptions;
+  ssl = true;
+});
+
+// Connect to 'localhost' and present 'server.name' server name
+client.connect(1234, "localhost", "server.name", (NetSocket|Throwable res) {
+  if (is NetSocket res) {
+    print("Connected!");
+    value socket = res;
+  } else {
+    print("Failed to connect: ``res.getMessage()``");
+  };
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It can be used for different purposes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>present a server name different than the server host</p>
+</li>
+<li>
+<p>present a server name while connecting to an IP</p>
+</li>
+<li>
+<p>force to present a server name when using shortname</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_application_layer_protocol_negotiation_alpn">Application-Layer Protocol Negotiation (ALPN)</h4>
+<div class="paragraph">
+<p>Application-Layer Protocol Negotiation (ALPN) is a TLS extension for application layer protocol negotiation. It is used by
+HTTP/2: during the TLS handshake the client gives the list of application protocols it accepts and the server responds
+with a protocol it supports.</p>
 </div>
 <div class="paragraph">
 <p>Java 8 does not supports ALPN out of the box, so ALPN should be enabled by other means:</p>
@@ -1515,7 +1618,7 @@ to resolve the DNS address locally.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:36 CEST
               
               
             </div>

@@ -1975,7 +1975,7 @@ or immediately after the headers have been read and the response handler has bee
 and the response handler is passed the redirected response instead of the original response.</p>
 </div>
 <div class="paragraph">
-<p>Here’s an example:</p>
+<p>Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2791,6 +2791,15 @@ client SSL/TLS (such as trust, key/certificate, ciphers, ALPN, &#8230;&#8203;) w
 <p>Likewise <code><a href="../../scaladocs/io/vertx/scala/core/http/HttpClient.html#requestAbs(io.vertx.core.http.HttpMethod,%20java.lang.String)">requestAbs</a></code> scheme
 also overrides the default client setting.</p>
 </div>
+<div class="sect3">
+<h4 id="_server_name_indication_sni">Server Name Indication (SNI)</h4>
+<div class="paragraph">
+<p>Vert.x http servers can be configured to use SNI in exactly the same way as net.adoc.</p>
+</div>
+<div class="paragraph">
+<p>Vert.x http client will present the actual hostname as <em>server name</em> during the TLS handshake.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_websockets">WebSockets</h3>
@@ -3062,6 +3071,30 @@ var client = vertx.createHttpClient(options)</code></pre>
 <p>The DNS resolution is always done on the proxy server, to achieve the functionality of a SOCKS4 client, it is necessary
 to resolve the DNS address locally.</p>
 </div>
+<div class="sect3">
+<h4 id="_handling_of_other_protocols">Handling of other protocols</h4>
+<div class="paragraph">
+<p>The HTTP proxy implementation supports getting ftp:// urls if the proxy supports
+that, which isn&#8217;t available in non-proxy getAbs requests.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = HttpClientOptions()
+  .setProxyOptions(ProxyOptions()
+    .setType(ProxyType.HTTP)
+  )
+
+var client = vertx.createHttpClient(options)
+client.getAbs("ftp://ftp.gnu.org/gnu/", (response: io.vertx.scala.core.http.HttpClientResponse) =&gt; {
+  println(s"Received response with status code ${response.statusCode()}")
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Support for other protocols is not available since java.net.URL does not
+support them (gopher:// for example).</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_automatic_clean_up_in_verticles">Automatic clean-up in verticles</h3>
@@ -3079,7 +3112,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:38 CEST
               
               
             </div>

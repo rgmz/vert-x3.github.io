@@ -224,7 +224,59 @@ fs.open("/data.txt", new OpenOptions(), result -&gt; {
 </div>
 </div>
 <div class="paragraph">
-<p>Such observables are <strong>hot</strong> observables, i.e. they will produce notifications regardless of subscriptions.</p>
+<p>Such observables are <strong>hot</strong> observables, i.e. they will produce notifications regardless of subscriptions because
+a <code>ReadStream</code> can potentially emit items spontaneously or not, depending on the implementation:</p>
+</div>
+<div class="paragraph">
+<p>At subscription time, the adapter calls <code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html#handler-io.vertx.core.Handler-">handler</a></code>
+to set its own handler.</p>
+</div>
+<div class="paragraph">
+<p>Some <code>ReadStream</code> implementations can start to emit events after this call, others will emit events whether an
+handler is set or not:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>AsyncFile</code> produces buffer events after the handler is set</p>
+</li>
+<li>
+<p><code>HttpServerRequest</code> produces events independantly of the handler (i.e buffer may be lost if no handler is set)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In both cases, subscribing to the <code>Observable</code> in the same call is safe because the event loop or the worker
+verticles cannot be called concurrently, so the subscription will always happens before the handler starts emitting
+data.</p>
+</div>
+<div class="paragraph">
+<p>When you need to delay the subscription, you need to <code>pause</code> the <code>ReadStream</code> and then <code>resume</code> it, which is what
+you would do with a <code>ReadStream</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">server.requestHandler(request -&gt; {
+  if (request.method() == HttpMethod.POST) {
+
+    // Stop receiving buffers
+    request.pause();
+
+    checkAuth(res -&gt; {
+
+      // Now we can receive buffers again
+      request.resume();
+
+      if (res.succeeded()) {
+        Observable&lt;Buffer&gt; observable = request.toObservable();
+        observable.subscribe(buff -&gt; {
+          // Get buffers
+        });
+      }
+    });
+  }
+});</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Likewise it is possible to turn an existing <code>Observable</code> into a Vert.x <code>ReadStream</code>.</p>
@@ -782,10 +834,10 @@ requestObservable.subscribe(request -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>Observable&lt;HttpServerRequest&gt; requestObservable = server.requestStream().toObservable();
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Observable&lt;HttpServerRequest&gt; requestObservable = server.requestStream().toObservable();
 requestObservable.subscribe(request -&gt; {
   Observable&lt;Buffer&gt; observable = request.toObservable();
-});</pre>
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -794,12 +846,12 @@ a json request to an object:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>Observable&lt;HttpServerRequest&gt; requestObservable = server.requestStream().toObservable();
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Observable&lt;HttpServerRequest&gt; requestObservable = server.requestStream().toObservable();
 requestObservable.subscribe(request -&gt; {
   Observable&lt;MyPojo&gt; observable = request.
       toObservable().
       lift(io.vertx.rxjava.core.RxHelper.unmarshaller(MyPojo.class));
-});</pre>
+});</code></pre>
 </div>
 </div>
 </div>
@@ -881,7 +933,7 @@ socketObservable.subscribe(
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:36 CEST
               
               
             </div>

@@ -142,7 +142,7 @@ add the following dependency to the <em>dependencies</em> section of your build 
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-auth-jdbc&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -155,7 +155,7 @@ add the following dependency to the <em>dependencies</em> section of your build 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jdbc:3.4.1'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jdbc:3.4.2'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -275,6 +275,73 @@ conn.updateWithParams("INSERT INTO user VALUES (?, ?, ?)", [
 })</code></pre>
 </div>
 </div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+Hashing user password with salt can be not enough, this approach his good enough for avoiding rainbow tables
+attacks or precomputed table attacks but if the attacker gets the database it will be easier to setup a brute force
+attack. This kind of attack is slower but all required information is given: the hash and the salt.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To make the hash attack more complex the default strategy allows you to provide an application level list of nonces
+to be used in the computation. This list should not be stored in the database since it add an extra variable to the
+computation that is unknown, making the brute force attack as potentially the only way to crack the hash. You might
+want to refresh the nonces now and then so you should add and never remove entries to the list, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">auth.setNonces([
+  "random_hash_1",
+  "random_hash_1"
+])</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In order to decode there is no change required to the code, however to generate a new user you must specify which
+nonce (by it&#8217;s index) you want to use. If you look at the previous example, the usage is quite similar:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Generate a salt string</p>
+</li>
+<li>
+<p>Hash the password given the salt string and choosen nonce</p>
+</li>
+<li>
+<p>Store it to the database</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">auth.setNonces([
+  "random_hash_1",
+  "random_hash_1"
+])
+
+def salt = auth.generateSalt()
+// we will pick the second nonce
+def hash = auth.computeHash("sausages", salt, 1)
+// save to the database
+conn.updateWithParams("INSERT INTO user VALUES (?, ?, ?)", [
+  "tim",
+  hash,
+  salt
+], { res -&gt;
+  if (res.succeeded()) {
+    // success!
+  }
+})</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -352,7 +419,7 @@ can have zero or more permissions.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:36 CEST
               
               
             </div>

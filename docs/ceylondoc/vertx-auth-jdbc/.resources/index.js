@@ -17,7 +17,10 @@ var index = [
 {'name': 'JDBCAuth.setPermissionsQuery', 'type': 'function', 'url': 'JDBCAuth.type.html#setPermissionsQuery', 'doc': '<p>Set the permissions query to use.</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'JDBCAuth.setRolePrefix', 'type': 'function', 'url': 'JDBCAuth.type.html#setRolePrefix', 'doc': '<p>Set the role prefix to distinguish from permissions when checking for isPermitted requests.</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'JDBCAuth.computeHash', 'type': 'function', 'url': 'JDBCAuth.type.html#computeHash', 'doc': '<p>Compute the hashed password given the unhashed password and the salt</p>', 'tags': [],'icons': ['icon-shared-member']},
+{'name': 'JDBCAuth.computeHash', 'type': 'function', 'url': 'JDBCAuth.type.html#computeHash', 'doc': '<p>Compute the hashed password given the unhashed password and the salt without nonce</p>', 'tags': [],'icons': ['icon-shared-member']},
+{'name': 'JDBCAuth.computeHash', 'type': 'function', 'url': 'JDBCAuth.type.html#computeHash', 'doc': '<p>Compute the hashed password given the unhashed password and the salt</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'JDBCAuth.generateSalt', 'type': 'function', 'url': 'JDBCAuth.type.html#generateSalt', 'doc': '<p>Compute a salt string.</p>', 'tags': [],'icons': ['icon-shared-member']},
+{'name': 'JDBCAuth.setNonces', 'type': 'function', 'url': 'JDBCAuth.type.html#setNonces', 'doc': '<p>Provide a application configuration level on hash nonce\'s as a ordered list of\nnonces where each position corresponds…</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'JDBCAuth', 'type': 'class', 'url': 'JDBCAuth.type.html', 'doc': '<p>Factory interface for creating <code>io.vertx.ext.auth.AuthProvider</code> instances that use the Vert.x JDBC client</p>', 'tags': [],'icons': ['icon-class']},
 {'name': 'io.vertx.ceylon.auth.jdbc', 'type': 'module', 'url': 'index.html', 'doc': '', 'tags': [],'icons': ['icon-module']}];
 var tagIndex = [

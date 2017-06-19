@@ -115,6 +115,20 @@
 <li><a href="#_verifying_jwt_tokens">Verifying JWT tokens</a></li>
 </ul>
 </li>
+<li><a href="#_authorization_with_jwt_tokens">Authorization with JWT tokens</a>
+<ul class="sectlevel2">
+<li><a href="#_check_for_a_specific_authorities">Check for a specific authorities</a></li>
+</ul>
+</li>
+<li><a href="#_token_management">Token Management</a>
+<ul class="sectlevel2">
+<li><a href="#_check_if_it_is_expired">Check if it is expired</a></li>
+<li><a href="#_refresh_token">Refresh token</a></li>
+<li><a href="#_revoke_token">Revoke token</a></li>
+<li><a href="#_introspect">Introspect</a></li>
+<li><a href="#_logging_out">Logging out</a></li>
+</ul>
+</li>
 </ul>
         </div>
       </div>
@@ -135,13 +149,27 @@
 <li><a href="#_verifying_jwt_tokens">Verifying JWT tokens</a></li>
 </ul>
 </li>
+<li><a href="#_authorization_with_jwt_tokens">Authorization with JWT tokens</a>
+<ul class="sectlevel2">
+<li><a href="#_check_for_a_specific_authorities">Check for a specific authorities</a></li>
+</ul>
+</li>
+<li><a href="#_token_management">Token Management</a>
+<ul class="sectlevel2">
+<li><a href="#_check_if_it_is_expired">Check if it is expired</a></li>
+<li><a href="#_refresh_token">Refresh token</a></li>
+<li><a href="#_revoke_token">Revoke token</a></li>
+<li><a href="#_introspect">Introspect</a></li>
+<li><a href="#_logging_out">Logging out</a></li>
+</ul>
+</li>
 </ul>
         </div>
         <div class="sect1">
 <h2 id="_the_oauth2_auth_provider">The OAuth2 auth provider</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This component contains an out of the box OAuth2 implementation.</p>
+<p>This component contains an out of the box OAuth2 Relay Party implementation.</p>
 </div>
 <div class="paragraph">
 <p>To use this project, add the following
@@ -159,7 +187,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-auth-oauth2&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -172,7 +200,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-oauth2:3.4.1'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-oauth2:3.4.2'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -630,6 +658,232 @@ oauth2.decodeToken("jwt-token", { res -&gt;
 })</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Until now we covered mostly authentication, although the implementation is relay party (that means that the real
+authentication happens somewhere else), there is more you can do with the handler. For example you can also do
+authorization if the provider is known to support JSON web tokens. This is a common feature if your provider is a
+OpenId Connect provider or if the provider does support `access_token`s as JWTs.</p>
+</div>
+<div class="paragraph">
+<p>Such provider is Keycloak that is a OpenId Connect implementation. In that case you will be able to perform
+authorization in a very easy way.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authorization_with_jwt_tokens">Authorization with JWT tokens</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Given that Keycloak does provide <code>JWT</code> `access_token`s one can authorize at two distinct levels:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>role</p>
+</li>
+<li>
+<p>authority</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To distinct the two, the auth provider follows the same recommendations from the base user class, i.e.: use the`:` as
+a separator for the two. It should be noted that both role and authorities do not need to be together, in the most
+simple case an authority is enough.</p>
+</div>
+<div class="paragraph">
+<p>In order to map to keycloak&#8217;s token format the following checks are performed:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If no role is provided, it is assumed to the the provider realm name</p>
+</li>
+<li>
+<p>If the role is <code>realm</code> then the lookup happens in <code>realm_access</code> list</p>
+</li>
+<li>
+<p>If a role is provided then the lookup happends in the <code>resource_access</code> list under the role name</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_check_for_a_specific_authorities">Check for a specific authorities</h3>
+<div class="paragraph">
+<p>Here is one example how you can perform authorization after the user has been loaded from the oauth2 handshake, for
+example you want to see if the user can <code>print</code> in the current application:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.isAuthorised("print", { res -&gt;
+  // in this case it is assumed that the role is the current application
+  if (res.succeeded() &amp;&amp; res.result()) {
+    // Yes the user can print
+  }
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However this is quite specific, you might want to verify if the user can <code>add-user</code> to the whole system (the realm):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.isAuthorised("realm:add-user", { res -&gt;
+  // the role is "realm"
+  // the authority is "add-user"
+  if (res.succeeded() &amp;&amp; res.result()) {
+    // Yes the user can add users to the application
+  }
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or if the user can access the <code>year-report</code> in the <code>finance</code> department:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.isAuthorised("finance:year-report", { res -&gt;
+  // the role is "finance"
+  // the authority is "year-report"
+  if (res.succeeded() &amp;&amp; res.result()) {
+    // Yes the user can access the year report from the finance department
+  }
+})</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_token_management">Token Management</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_check_if_it_is_expired">Check if it is expired</h3>
+<div class="paragraph">
+<p>Tokens are usually fetched from the server and cached, in this case when used later they might have already expired
+and be invalid, you can verify if the token is still valid like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// internal validation against, expiration date
+var isExpired = user.expired()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This call is totally offline, it could still happen that the Oauth2 server invalidated your token but you get a non
+expired token result. The reason behind this is that the expiration is checked against the token expiration dates,
+not before date and such values.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_refresh_token">Refresh token</h3>
+<div class="paragraph">
+<p>There are times you know the token is about to expire and would like to avoid to redirect the user again to the login
+screen. In this case you can refresh the token. To refresh a token you need to have already a user and call:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.refresh({ res -&gt;
+  if (res.succeeded()) {
+    // the refresh call succeeded
+  } else {
+    // the token was not refreshed, a best practise would be
+    // to forcefully logout the user since this could be a
+    // symptom that you're logged out by the server and this
+    // token is not valid anymore.
+  }
+})</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_revoke_token">Revoke token</h3>
+<div class="paragraph">
+<p>Since tokens can be shared across various applications you might want to disallow the usage of the current token by
+any application. In order to do this one needs to revoke the token against the Oauth2 server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.revoke("access_token", { res -&gt;
+  if (res.succeeded()) {
+    // the refresh call succeeded
+  } else {
+    // the token was not refreshed, a best practise would be
+    // to forcefully logout the user since this could be a
+    // symptom that you're logged out by the server and this
+    // token is not valid anymore.
+  }
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is important to note that this call requires a token type. The reason is because some providers will return more
+than one token e.g.:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>id_token</p>
+</li>
+<li>
+<p>refresh_token</p>
+</li>
+<li>
+<p>access_token</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>So one needs to know what token to invalidate. It should be obvious that if you invalidate the <code>refresh_token</code> you&#8217;re
+still logged in but you won&#8217;t be able to refresh anymore, which means that once the token expires you need to redirect
+the user again to the login page.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_introspect">Introspect</h3>
+<div class="paragraph">
+<p>Introspect a token is similar to a expiration check, however one needs to note that this check is fully online. This
+means that the check happens on the OAuth2 server.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.introspect({ res -&gt;
+  if (res.succeeded()) {
+    // the introspection call succeeded
+  } else {
+    // the token failed the introspection. You should proceed
+    // to logout the user since this means that this token is
+    // not valid anymore.
+  }
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Important note is that even if the <code>expired()</code> call is <code>true</code> the return from the <code>introspect</code> call can still be an
+error. This is because the OAuth2 might have received a request to invalidate the token or a loggout in between.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_logging_out">Logging out</h3>
+<div class="paragraph">
+<p>Logging out is not a <code>Oauth2</code> feature but it is present on <code>OpenID Connect</code> and most providers do support some sort
+of logging out. This provider also covers this area if the configuration is enough to let it make the call. For the
+user this is as simple as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.logout({ res -&gt;
+  if (res.succeeded()) {
+    // the logout call succeeded
+  } else {
+    // the user might not have been logged out
+    // to know why:
+    println(res.cause())
+  }
+})</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -640,7 +894,7 @@ oauth2.decodeToken("jwt-token", { res -&gt;
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:36 CEST
               
               
             </div>

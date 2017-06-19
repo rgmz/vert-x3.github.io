@@ -174,6 +174,7 @@
 <li><a href="#_thymeleaf_template_engine">Thymeleaf template engine</a></li>
 <li><a href="#_apache_freemarker_template_engine">Apache FreeMarker template engine</a></li>
 <li><a href="#_pebble_template_engine">Pebble template engine</a></li>
+<li><a href="#_disabling_caching">Disabling caching</a></li>
 </ul>
 </li>
 <li><a href="#_error_handler">Error handler</a></li>
@@ -279,6 +280,7 @@
 <li><a href="#_thymeleaf_template_engine">Thymeleaf template engine</a></li>
 <li><a href="#_apache_freemarker_template_engine">Apache FreeMarker template engine</a></li>
 <li><a href="#_pebble_template_engine">Pebble template engine</a></li>
+<li><a href="#_disabling_caching">Disabling caching</a></li>
 </ul>
 </li>
 <li><a href="#_error_handler">Error handler</a></li>
@@ -477,7 +479,7 @@ over time.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-web-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -491,7 +493,7 @@ over time.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-web-scala_2.12:3.4.1'
+  compile 'io.vertx:vertx-web-scala_2.12:3.4.2'
 }</code></pre>
 </div>
 </div>
@@ -1427,6 +1429,31 @@ router.get().failureHandler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 })</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>It should be clear that reroute works on <code>paths</code>, so if you need to preserve and or add state across reroutes, one
+should use the <code>RoutingContext</code> object. For example you want to reroute to a new path with a extra parameter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.get("/final-target").handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+  // continue from here...
+})
+
+// THE WRONG WAY! (Will reroute to /final-target excluding the query string)
+router.get().handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+  ctx.reroute("/final-target?variable=value")
+})
+
+// THE CORRECT WAY!
+router.get().handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+  ctx.put("variable", "value").reroute("/final-target")
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Even though the wrong reroute path will warn you that the query string is ignored, the reroute will happen since the
+implementation will strip any query string or html fragment from the path.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -2331,10 +2358,10 @@ or from the classpath. The default static file directory is <code>webroot</code>
 </div>
 <div class="paragraph">
 <p>For example, if there was a request with path <code>/static/css/mystyles.css</code> the static serve will look for a file in the
-directory <code>webroot/static/css/mystyle.css</code>.</p>
+directory <code>webroot/css/mystyle.css</code>.</p>
 </div>
 <div class="paragraph">
-<p>It will also look for a file on the classpath called <code>webroot/static/css/mystyle.css</code>. This means you can package up all your
+<p>It will also look for a file on the classpath called <code>webroot/css/mystyle.css</code>. This means you can package up all your
 static resources into a jar file (or fatjar) and distribute them like that.</p>
 </div>
 <div class="paragraph">
@@ -2439,8 +2466,9 @@ fatjars in production where serving a file from the classpath every time can be 
 cached file will be served not the updated file.</p>
 </div>
 <div class="paragraph">
-<p>To disable file caching you can provide the system property <code>vertx.disableFileCaching</code> with the value <code>true</code>. E.g. you
-could set up a run configuration in your IDE to set this when runnning your main class.</p>
+<p>To disable file caching you can provide your vert.x options the property <code>fileResolverCachingEnabled</code> to true. For
+backwards compatibility it will also default that value to the system property <code>vertx.disableFileCaching</code>. E.g. you
+could set up a run configuration in your IDE to set this when running your main class.</p>
 </div>
 </div>
 </div>
@@ -2506,7 +2534,7 @@ each template engine.</p>
 <h3 id="_mvel_template_engine">MVEL template engine</h3>
 <div class="paragraph">
 <p>To use MVEL, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-mvel:3.4.1</code>. Create an instance of the MVEL template engine using:
+<code>io.vertx:vertx-web-templ-mvel:3.4.2</code>. Create an instance of the MVEL template engine using:
 <code>io.vertx.ext.web.templ.MVELTemplateEngine#create()</code></p>
 </div>
 <div class="paragraph">
@@ -2539,7 +2567,7 @@ MVEL templates.</p>
 <h3 id="_jade_template_engine">Jade template engine</h3>
 <div class="paragraph">
 <p>To use the Jade template engine, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-jade:3.4.1</code>. Create an instance of the Jade template engine using:
+<code>io.vertx:vertx-web-templ-jade:3.4.2</code>. Create an instance of the Jade template engine using:
 <code>io.vertx.ext.web.templ.JadeTemplateEngine#create()</code>.</p>
 </div>
 <div class="paragraph">
@@ -2572,7 +2600,7 @@ Jade templates.</p>
 <h3 id="_handlebars_template_engine">Handlebars template engine</h3>
 <div class="paragraph">
 <p>To use Handlebars, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-handlebars:3.4.1</code>. Create an instance of the Handlebars template engine
+<code>io.vertx:vertx-web-templ-handlebars:3.4.2</code>. Create an instance of the Handlebars template engine
 using: <code>io.vertx.ext.web.templ.HandlebarsTemplateEngine#create()</code>.</p>
 </div>
 <div class="paragraph">
@@ -2614,7 +2642,7 @@ handlebars templates.</p>
 <h3 id="_thymeleaf_template_engine">Thymeleaf template engine</h3>
 <div class="paragraph">
 <p>To use Thymeleaf, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-thymeleaf:3.4.1</code>. Create an instance of the Thymeleaf template engine
+<code>io.vertx:vertx-web-templ-thymeleaf:3.4.2</code>. Create an instance of the Thymeleaf template engine
 using: <code>io.vertx.ext.web.templ.ThymeleafTemplateEngine#create()</code>.</p>
 </div>
 <div class="paragraph">
@@ -2649,7 +2677,7 @@ Thymeleaf templates.</p>
 <h3 id="_apache_freemarker_template_engine">Apache FreeMarker template engine</h3>
 <div class="paragraph">
 <p>To use Apache FreeMarker, you need to add the following <em>dependency</em> to your project:
-<code>io.vertx:vertx-web-templ-freemarker:3.4.1</code>. Create an instance of the Apache FreeMarker template engine
+<code>io.vertx:vertx-web-templ-freemarker:3.4.2</code>. Create an instance of the Apache FreeMarker template engine
 using: <code>io.vertx.ext.web.templ.FreeMarkerTemplateEngine#create()</code>.</p>
 </div>
 <div class="paragraph">
@@ -2713,6 +2741,16 @@ including the request, response, session or context data.</p>
 <div class="paragraph">
 <p>Please consult the <a href="http://www.mitchellbosecke.com/pebble/home/">Pebble documentation</a> for how to write
 Pebble templates.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_disabling_caching">Disabling caching</h3>
+<div class="paragraph">
+<p>During development you might want to disable template caching so that the template gets reevaluated on each request.
+In order to do this you need to set the system property: <code>io.vertx.ext.web.TemplateEngine.disableCache</code> to <code>true</code>.</p>
+</div>
+<div class="paragraph">
+<p>By default it will be false. So caching is always enabled.</p>
 </div>
 </div>
 </div>
@@ -3070,7 +3108,7 @@ and receive messages:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>&lt;script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"&gt;&lt;/script&gt;
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"&gt;&lt;/script&gt;
 &lt;script src='vertx-eventbus.js'&gt;&lt;/script&gt;
 
 &lt;script&gt;
@@ -3089,15 +3127,15 @@ eb.onopen = function() {
 
 }
 
-&lt;/script&gt;</pre>
+&lt;/script&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>The first thing the example does is to create a instance of the event bus</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>var eb = new EventBus('http://localhost:8080/eventbus');</pre>
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">var eb = new EventBus('http://localhost:8080/eventbus');</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3106,6 +3144,32 @@ the prefix <code>eventbus</code> we will connect there.</p>
 </div>
 <div class="paragraph">
 <p>You can&#8217;t actually do anything with the connection until it is opened. When it is open the <code>onopen</code> handler will be called.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Neither SockJS nor the EventBus bridge support automatic reconnection.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When your server goes down, you must create another EventBus instance.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">function setupEventBus() {
+  var eb = new EventBus();
+  eb.onclose = function (e) {
+    setTimeout(setupEventBus, 1000); // Give the server some time to come back
+  };
+  // Handlers setup here...
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>You can retrieve the client library using a dependency manager:</p>
@@ -3122,7 +3186,7 @@ the prefix <code>eventbus</code> we will connect there.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-web-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
   &lt;classifier&gt;client&lt;/classifier&gt;
   &lt;type&gt;js&lt;/type&gt;
 &lt;/dependency&gt;</code></pre>
@@ -3137,12 +3201,24 @@ the prefix <code>eventbus</code> we will connect there.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-web-scala_2.12:3.4.1:client'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-web-scala_2.12:3.4.2:client'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The library is also available on <a href="https://www.npmjs.com/package/vertx3-eventbus-client">NPM</a> and on
-<a href="https://github.com/vert-x3/vertx-bus-bower">Bower</a></p>
+<p>The library is also available on:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.npmjs.com/package/vertx3-eventbus-client">NPM</a></p>
+</li>
+<li>
+<p><a href="https://github.com/vert-x3/vertx-bus-bower">Bower</a></p>
+</li>
+<li>
+<p><a href="https://cdnjs.com/libraries/vertx">cdnjs</a></p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>Notice that the API has changed between the 3.0.0 and 3.1.0 version. Please check the changelog. The previous client
@@ -3451,31 +3527,34 @@ sockJSHandler.bridge(options, (be: io.vertx.scala.ext.web.handler.sockjs.BridgeE
   be.complete(true)
 })
 
-router.route("/eventbus").handler(sockJSHandler)</code></pre>
+router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Here’s an example how to configure and handle SOCKET_IDLE bridge event type.
+<p>Here&#8217;s an example how to configure and handle SOCKET_IDLE bridge event type.
 Notice <code>setPingTimeout(5000)</code> which says that if ping message doesn&#8217;t arrive from client within 5 seconds
 then the SOCKET_IDLE bridge event would be triggered.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>// Initialize SockJS handler
-Router router = Router.router(vertx);
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var router = Router.router(vertx)
 
-SockJSHandler sockJSHandler = SockJSHandler.create(vertx);
-BridgeOptions options = new BridgeOptions().addInboundPermitted(inboundPermitted).setPingTimeout(5000);
+// Initialize SockJS handler
+var sockJSHandler = SockJSHandler.create(vertx)
+var options = BridgeOptions()
+  .setInboundPermitteds(Set(inboundPermitted))
+  .setPingTimeout(5000)
 
-sockJSHandler.bridge(options, be -&gt; {
-	if (be.type() == BridgeEventType.SOCKET_IDLE) {
-	    // Do some custom handling...
-	}
 
- be.complete(true);
-});
+sockJSHandler.bridge(options, (be: io.vertx.scala.ext.web.handler.sockjs.BridgeEvent) =&gt; {
+  if (be.type() == BridgeEventType.SOCKET_IDLE) {
+    // Do some custom handling...
+  }
 
-router.route("/eventbus").handler(sockJSHandler);</pre>
+  be.complete(true)
+})
+
+router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3483,7 +3562,7 @@ router.route("/eventbus").handler(sockJSHandler);</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>&lt;script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"&gt;&lt;/script&gt;
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"&gt;&lt;/script&gt;
 &lt;script src='vertx-eventbus.js'&gt;&lt;/script&gt;
 
 &lt;script&gt;
@@ -3501,7 +3580,7 @@ eb.onopen = function() {
  eb.send('some-address', {name: 'tim', age: 587});
 }
 
-&lt;/script&gt;</pre>
+&lt;/script&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3509,7 +3588,7 @@ eb.onopen = function() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>var eb = new EventBus('http://localhost:8080/eventbus', {"vertxbus_ping_interval": 300000});</pre>
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">var eb = new EventBus('http://localhost:8080/eventbus', {"vertxbus_ping_interval": 300000});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3545,7 +3624,7 @@ sockJSHandler.bridge(options, (be: io.vertx.scala.ext.web.handler.sockjs.BridgeE
   be.complete(true)
 })
 
-router.route("/eventbus").handler(sockJSHandler)</code></pre>
+router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -3802,7 +3881,7 @@ value <code>Bearer BASE64_ACCESS_TOKEN</code>.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:38 CEST
               
               
             </div>

@@ -109,6 +109,12 @@
 <li><a href="#_read_only_tokens">Read only tokens</a></li>
 </ul>
 </li>
+<li><a href="#_authn_authz_with_jwt">AuthN/AuthZ with JWT</a>
+<ul class="sectlevel2">
+<li><a href="#_authenticating_authn">Authenticating (AuthN)</a></li>
+<li><a href="#_authorizing_authz">Authorizing (AuthZ)</a></li>
+</ul>
+</li>
 </ul>
         </div>
       </div>
@@ -121,6 +127,12 @@
 <li><a href="#_the_jwt_keystore_file">The JWT keystore file</a></li>
 <li><a href="#_generate_a_new_keystore_file">Generate a new Keystore file</a></li>
 <li><a href="#_read_only_tokens">Read only tokens</a></li>
+</ul>
+</li>
+<li><a href="#_authn_authz_with_jwt">AuthN/AuthZ with JWT</a>
+<ul class="sectlevel2">
+<li><a href="#_authenticating_authn">Authenticating (AuthN)</a></li>
+<li><a href="#_authorizing_authz">Authorizing (AuthZ)</a></li>
 </ul>
 </li>
 </ul>
@@ -147,7 +159,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-auth-jwt-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -160,7 +172,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jwt-scala_2.12:3.4.1'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jwt-scala_2.12:3.4.2'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -299,8 +311,150 @@ case all you need to have is a public key im PEM format.</p>
 var provider = JWTAuth.create(vertx, config)</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authn_authz_with_jwt">AuthN/AuthZ with JWT</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;&lt;a href="http://tfox.org"&gt;Tim Fox&lt;/a&gt;&lt;a href="mailto:pmlopes@gmail.com"&gt;Paulo Lopes&lt;/a&gt;</p>
+<p>A common scenario when developing for example micro services is that you want you application to consume APIs. These
+api&#8217;s are not meant to be consumed by humans so we should remove all the interactive part of authenticating the
+consumer out of the picture.</p>
+</div>
+<div class="paragraph">
+<p>In this scenario one can use HTTP as the protocol to consume this API and the HTTP protocol already defines that there
+is a header <code>Authorization</code> that should be used for passing authorization information. In most cases you will see that
+tokens are sent as bearer tokens, i.e.: <code>Authorization: Bearer some+base64+string</code>.</p>
+</div>
+<div class="sect2">
+<h3 id="_authenticating_authn">Authenticating (AuthN)</h3>
+<div class="paragraph">
+<p>For this provider a user is authenticated if the token passes the signature checks and that the token is not expired.
+For this reason it is imperative that private keys are kept private and not copy pasted across project since it would
+be a security hole.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// This string is what you see after the string "Bearer" in the
+// HTTP Authorization header
+jwtAuth.authenticateFuture(new io.vertx.core.json.JsonObject().put("jwt", "BASE64-ENCODED-STRING")).onComplete{
+  case Success(result) =&gt; {
+    var theUser = result
+  }
+  case Failure(cause) =&gt; {
+    println(s"$cause")
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In a nutshell the provider is checking for several things:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>token signature is valid against internal private key</p>
+</li>
+<li>
+<p>fields: <code>exp</code>, <code>iat</code>, <code>nbf</code>, <code>audience</code>, <code>issuer</code> are valid according to the config</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If all these are valid then the token is considered good and a user object is returned.</p>
+</div>
+<div class="paragraph">
+<p>While the fields <code>exp</code>, <code>iat</code> and <code>nbf</code> are simple timestamp checks only <code>exp</code> can be configured to be ignored:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// This string is what you see after the string "Bearer" in the
+// HTTP Authorization header
+
+// In this case we are forcing the provider to ignore the `exp` field
+jwtAuth.authenticateFuture(new io.vertx.core.json.JsonObject().put("jwt", "BASE64-ENCODED-STRING").put("options", new io.vertx.core.json.JsonObject().put("ignoreExpiration", true))).onComplete{
+  case Success(result) =&gt; {
+    var theUser = result
+  }
+  case Failure(cause) =&gt; {
+    println(s"$cause")
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In order to verify the <code>aud</code> field one needs to pass the options like before:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// This string is what you see after the string "Bearer" in the
+// HTTP Authorization header
+
+// In this case we are forcing the provider to ignore the `exp` field
+jwtAuth.authenticateFuture(new io.vertx.core.json.JsonObject().put("jwt", "BASE64-ENCODED-STRING").put("options", new io.vertx.core.json.JsonObject().put("audience", new io.vertx.core.json.JsonArray().add("paulo@server.com")))).onComplete{
+  case Success(result) =&gt; {
+    var theUser = result
+  }
+  case Failure(cause) =&gt; {
+    println(s"$cause")
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And the same for the issuer:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// This string is what you see after the string "Bearer" in the
+// HTTP Authorization header
+
+// In this case we are forcing the provider to ignore the `exp` field
+jwtAuth.authenticateFuture(new io.vertx.core.json.JsonObject().put("jwt", "BASE64-ENCODED-STRING").put("options", new io.vertx.core.json.JsonObject().put("issuer", "mycorp.com"))).onComplete{
+  case Success(result) =&gt; {
+    var theUser = result
+  }
+  case Failure(cause) =&gt; {
+    println(s"$cause")
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_authorizing_authz">Authorizing (AuthZ)</h3>
+<div class="paragraph">
+<p>Once a token is parsed and is valid we can use it to perform authorization tasks. The most simple is to verify if a
+user has a specific authority. In this case one needs to to:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">user.isAuthorisedFuture("create-report").onComplete{
+  case Success(result) =&gt; println("Success")
+  case Failure(cause) =&gt; println("Failure")
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default the provider will lookup under the key <code>permissions</code> but like the other providers one can extend the
+concept to authorities to roles by using the <code>:</code> as a splitter, so <code>role:authority</code> can be used to lookup the token.</p>
+</div>
+<div class="paragraph">
+<p>Since JWT are quite free form and there is no standard on where to lookup for the claims the location can be
+configured to use something else than <code>permissions</code>, for example one can even lookup under a path like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var config = new io.vertx.core.json.JsonObject().put("public-key", "BASE64-ENCODED-PUBLIC_KEY").put("permissionsClaimKey", "realm_access/roles")
+
+var provider = JWTAuth.create(vertx, config)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So in this example we configure the JWT to work with Keycloak token format. In this case the claims will be checked
+under the path <code>realm_access/roles</code> rather than <code>permissions</code>.
+&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;&lt;a href="http://tfox.org"&gt;Tim Fox&lt;/a&gt;&lt;a href="mailto:pmlopes@gmail.com"&gt;Paulo Lopes&lt;/a&gt;</p>
 </div>
 </div>
 </div>
@@ -312,7 +466,7 @@ var provider = JWTAuth.create(vertx, config)</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:38 CEST
               
               
             </div>

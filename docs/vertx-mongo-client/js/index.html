@@ -116,6 +116,7 @@
 <li><a href="#_inserting_documents">Inserting documents</a></li>
 <li><a href="#_updating_documents">Updating documents</a></li>
 <li><a href="#_replacing_documents">Replacing documents</a></li>
+<li><a href="#_bulk_operations">Bulk operations</a></li>
 <li><a href="#_finding_documents">Finding documents</a></li>
 <li><a href="#_finding_a_single_document">Finding a single document</a></li>
 <li><a href="#_removing_documents">Removing documents</a></li>
@@ -148,6 +149,7 @@
 <li><a href="#_inserting_documents">Inserting documents</a></li>
 <li><a href="#_updating_documents">Updating documents</a></li>
 <li><a href="#_replacing_documents">Replacing documents</a></li>
+<li><a href="#_bulk_operations">Bulk operations</a></li>
 <li><a href="#_finding_documents">Finding documents</a></li>
 <li><a href="#_finding_a_single_document">Finding a single document</a></li>
 <li><a href="#_removing_documents">Removing documents</a></li>
@@ -211,7 +213,7 @@ as it natively handles JSON (BSON) documents.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-mongo-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -224,7 +226,7 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mongo-client:3.4.1'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mongo-client:3.4.2'</code></pre>
 </div>
 </div>
 </div>
@@ -576,6 +578,21 @@ mongoClient.replace("books", query, replace, function (res, res_err) {
 
 });</code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_bulk_operations">Bulk operations</h3>
+<div class="paragraph">
+<p>To execute multiple insert, update, replace, or delete operations at once, use <code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#bulkWrite">bulkWrite</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>You can pass a list of <code><a href="../dataobjects.html#BulkOperation">BulkOperations</a></code>, with each working similiar to the matching single operations.
+You can pass as many operations, even of the same type, as you wish.</p>
+</div>
+<div class="paragraph">
+<p>To specify if the bulk operation should be executed in order, and with what write option, use <code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#bulkWriteWithOptions">bulkWriteWithOptions</a></code>
+and pass an instance of <code><a href="../dataobjects.html#BulkWriteOptions">BulkWriteOptions</a></code>.
+For more explanation what ordered means, see <a href="https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/#execution-of-operations" class="bare">https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/#execution-of-operations</a></p>
 </div>
 </div>
 <div class="sect2">
@@ -1354,7 +1371,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:36 CEST
               
               
             </div>

@@ -175,9 +175,7 @@ this module has the tech preview status, this means the API can change between v
 <h2 id="_using_the_vert_x_kafka_client">Using the Vert.x Kafka client</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As component not yet officially released in the Vert.x stack, to use the Vert.x Kafka client current snapshot version,
-add the following repository under the <em>repositories</em> section and the following dependency to the <em>dependencies</em> section
-of your build descriptor:</p>
+<p>To use this component, add the following dependency to the dependencies section of your build descriptor:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -191,7 +189,7 @@ of your build descriptor:</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-kafka-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -204,7 +202,7 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-kafka-client:3.4.1</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-kafka-client:3.4.2</code></pre>
 </div>
 </div>
 </div>
@@ -213,7 +211,7 @@ of your build descriptor:</p>
 <h2 id="_creating_kafka_clients">Creating Kafka clients</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Creating consumers and sproducer is quite similar and on how it works using the native Kafka client library.</p>
+<p>Creating consumers and producers is quite similar and on how it works using the native Kafka client library.</p>
 </div>
 <div class="paragraph">
 <p>They need to be configured with a bunch of properties as described in the official
@@ -276,8 +274,8 @@ var producer = KafkaProducer.create(vertx, config);</code></pre>
 subscribing to a set of topics being part of a consumer group (specified by the properties on creation).</p>
 </div>
 <div class="paragraph">
-<p>You need to register an handler for handling incoming messages using the
-<code><a href="../../jsdoc/module-vertx-kafka-client-js_kafka_consumer-KafkaConsumer.html#handler">handler</a></code></p>
+<p>You also need to register a handler for handling incoming messages using the
+<code><a href="../../jsdoc/module-vertx-kafka-client-js_kafka_consumer-KafkaConsumer.html#handler">handler</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -298,7 +296,12 @@ consumer.subscribe("a-single-topic");</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>An handler can also be passed during subscription to be aware of the subscription result and being notified when the operation
+<p>The handler can be registered before or after the call to <code>subscribe()</code>; messages won&#8217;t be consumed until both
+methods have been called. This allows you to call <code>subscribe()</code>, then <code>seek()</code> and finally <code>handler()</code> in
+order to only consume messages starting from a particular offset, for example.</p>
+</div>
+<div class="paragraph">
+<p>A handler can also be passed during subscription to be aware of the subscription result and being notified when the operation
 is completed.</p>
 </div>
 <div class="listingblock">
@@ -453,6 +456,12 @@ consumer.assign(topicPartitions, function (done, done_err) {
   }
 });</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>As with <code>subscribe()</code>, the handler can be registered before or after the call to <code>assign()</code>;
+messages won&#8217;t be consumed until both methods have been called. This allows you to call
+<code>assign()</code>, then <code>seek()</code> and finally <code>handler()</code> in
+order to only consume messages starting from a particular offset, for example.</p>
 </div>
 <div class="paragraph">
 <p>Calling <code><a href="../../jsdoc/module-vertx-kafka-client-js_kafka_consumer-KafkaConsumer.html#assignment">assignment</a></code> provides
@@ -1034,7 +1043,7 @@ config["acks"] = "1";</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:38 CEST
               
               
             </div>

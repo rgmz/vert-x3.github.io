@@ -111,7 +111,11 @@
 </ul>
 </li>
 <li><a href="#_creating_your_own_auth_implementation">Creating your own auth implementation</a></li>
-<li><a href="#_pseudo_random_number_generator">Pseudo Random Number Generator</a></li>
+<li><a href="#_pseudo_random_number_generator">Pseudo Random Number Generator</a>
+<ul class="sectlevel2">
+<li><a href="#_sharing_pseudo_random_number_generator">Sharing Pseudo Random Number Generator</a></li>
+</ul>
+</li>
 </ul>
         </div>
       </div>
@@ -128,7 +132,11 @@
 </ul>
 </li>
 <li><a href="#_creating_your_own_auth_implementation">Creating your own auth implementation</a></li>
-<li><a href="#_pseudo_random_number_generator">Pseudo Random Number Generator</a></li>
+<li><a href="#_pseudo_random_number_generator">Pseudo Random Number Generator</a>
+<ul class="sectlevel2">
+<li><a href="#_sharing_pseudo_random_number_generator">Sharing Pseudo Random Number Generator</a></li>
+</ul>
+</li>
 </ul>
         </div>
         <div id="preamble">
@@ -155,7 +163,7 @@ your Vert.x applications and can be backed by different providers.</p>
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-auth-common&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -168,7 +176,7 @@ your Vert.x applications and can be backed by different providers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-common:3.4.1'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-common:3.4.2'</code></pre>
 </div>
 </div>
 </div>
@@ -326,7 +334,7 @@ to make your user implementation. This contains the caching logic so you don&#82
 <h2 id="_pseudo_random_number_generator">Pseudo Random Number Generator</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Since Secure Random from java can block during the aquisition of entropy from the system, we provide a simple wrapper
+<p>Since Secure Random from java can block during the acquisition of entropy from the system, we provide a simple wrapper
 around it that can be used without the danger of blocking the event loop.</p>
 </div>
 <div class="paragraph">
@@ -348,8 +356,29 @@ every 5 minutes with 64bits of new entropy. However this can all be configured u
 </div>
 <div class="paragraph">
 <p>Most users should not need to configure these values unless if you notice that the performance of your application is
-being affected by the PRNG algorithm.
-&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;&lt;a href="http://tfox.org"&gt;Tim Fox&lt;/a&gt;</p>
+being affected by the PRNG algorithm.</p>
+</div>
+<div class="sect2">
+<h3 id="_sharing_pseudo_random_number_generator">Sharing Pseudo Random Number Generator</h3>
+<div class="paragraph">
+<p>Since the Pseudo Random Number Generator objects are expensive in resources, they consume system entropy which is a
+scarce resource it can be wise to share the PRNG&#8217;s across all your handlers. In order to do this and to make this
+available to all languages supported by Vert.x you should look into the <code><a href="../../apidocs/io/vertx/ext/auth/VertxContextPRNG.html">VertxContextPRNG</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>This interface relaxes the lifecycle management of PRNG&#8217;s for the end user and ensures it can be reused across all
+your application, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">String token = VertxContextPRNG.current(vertx).nextString(32);
+// Generate a secure random integer
+int randomInt = VertxContextPRNG.current(vertx).nextInt();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;a href="mailto:julien@julienviet.com"&gt;Julien Viet&lt;/a&gt;&lt;a href="http://tfox.org"&gt;Tim Fox&lt;/a&gt;</p>
+</div>
 </div>
 </div>
 </div>
@@ -360,7 +389,7 @@ being affected by the PRNG algorithm.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:36 CEST
               
               
             </div>

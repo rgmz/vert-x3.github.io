@@ -1036,6 +1036,11 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Add a CRL value</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="decoderInitialBufferSize"></a><code>decoderInitialBufferSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">set to <code>initialBufferSizeHttpDecoder</code> the initial buffer of the HttpDecoder.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="defaultHost"></a><code>defaultHost</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the default host name to be used by this client in requests if none is provided when making the request.</p></td>
@@ -1054,6 +1059,12 @@
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="enabledSecureTransportProtocols"></a><code>enabledSecureTransportProtocols</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Add an enabled SSL/TLS protocols, appended to the ordered protocols.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="forceSni"></a><code>forceSni</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">By default, the server name is only sent for Fully Qualified Domain Name (FQDN), setting
+ this property to <code>true</code> forces the server name to be always sent.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="http2ClearTextUpgrade"></a><code>http2ClearTextUpgrade</code></p></td>
@@ -1352,9 +1363,9 @@
  pedantic loops that usually gives just little improvements
 </p><p class="tableblock"> While one can think that best value is always the maximum compression ratio,
  there's a trade-off to consider: the most compressed level requires the most
- computatinal work to compress/decompress data, e.g. more dictionary lookups and loops.
+ computational work to compress/decompress data, e.g. more dictionary lookups and loops.
 </p><p class="tableblock"> E.g. you have it set fairly high on a high-volume website, you may experience performance degradation
- and latency on resource serving due to CPU overload, and, however - as the comptational work is required also client side
+ and latency on resource serving due to CPU overload, and, however - as the computational work is required also client side
  while decompressing - setting an higher compression level can result in an overall higher page load time
  especially nowadays when many clients are handled mobile devices with a low CPU profile.
 </p><p class="tableblock"> see also: http://www.gzip.org/algorithm.txt</p></td>
@@ -1374,6 +1385,11 @@
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="crlValues"></a><code>crlValues</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of Buffer</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Add a CRL value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="decoderInitialBufferSize"></a><code>decoderInitialBufferSize</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the initial buffer size for the HTTP decoder</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="decompressionSupported"></a><code>decompressionSupported</code></p></td>
@@ -1504,6 +1520,11 @@
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sendBufferSize"></a><code>sendBufferSize</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the TCP send buffer size</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sni"></a><code>sni</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the server supports Server Name Indiciation</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="soLinger"></a><code>soLinger</code></p></td>
@@ -1970,6 +1991,11 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the TCP send buffer size</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sni"></a><code>sni</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether the server supports Server Name Indiciation</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="soLinger"></a><code>soLinger</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set whether SO_linger keep alive is enabled</p></td>
@@ -2263,11 +2289,11 @@
 <div class="sect1">
 <h2 id="PemKeyCertOptions">PemKeyCertOptions</h2>
 <div class="sectionbody">
- Key store options configuring a private key and its certificate based on
+ Key store options configuring a list of private key and its certificate based on
  <i>Privacy-enhanced Electronic Email</i> (PEM) files.
  <p>
 
- The key file must contain a <b>non encrypted</b> private key in <b>PKCS8</b> format wrapped in a PEM
+ A key file must contain a <b>non encrypted</b> private key in <b>PKCS8</b> format wrapped in a PEM
  block, for example:
  <p>
 
@@ -2279,7 +2305,7 @@
  -----END PRIVATE KEY-----
  </pre><p>
 
- The certificate file must contain an X.509 certificate wrapped in a PEM block, for example:
+ A certificate file must contain an X.509 certificate wrapped in a PEM block, for example:
  <p>
 
  <pre>
@@ -2290,7 +2316,7 @@
  -----END CERTIFICATE-----
  </pre>
 
- The key and certificate can either be loaded by Vert.x from the filesystem:
+ Keys and certificates can either be loaded by Vert.x from the filesystem:
  <p>
  <pre>
  HttpServerOptions options = new HttpServerOptions();
@@ -2303,6 +2329,15 @@
  Buffer key = vertx.fileSystem().readFileSync("/mykey.pem");
  Buffer cert = vertx.fileSystem().readFileSync("/mycert.pem");
  options.setPemKeyCertOptions(new PemKeyCertOptions().setKeyValue(key).setCertValue(cert));
+ </pre>
+
+ Several key/certificate pairs can be used:
+ <p>
+ <pre>
+ HttpServerOptions options = new HttpServerOptions();
+ options.setPemKeyCertOptions(new PemKeyCertOptions()
+    .addKeyPath("/mykey1.pem").addCertPath("/mycert1.pem")
+    .addKeyPath("/mykey2.pem").addCertPath("/mycert2.pem"));
  </pre>
 <hr>
 <table class="tableblock frame-topbot grid-all spread">
@@ -2320,22 +2355,42 @@
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="certPath"></a><code>certPath</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the path to the certificate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the path of the first certificate, replacing the previous certificates paths</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="certPaths"></a><code>certPaths</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set all the paths to the certificates files</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="certValue"></a><code>certValue</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Buffer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the certificate as a buffer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the first certificate as a buffer, replacing the previous certificates buffers</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="certValues"></a><code>certValues</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of Buffer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set all the certificates as a list of buffer</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keyPath"></a><code>keyPath</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the path to the key file</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the path of the first key file, replacing the keys paths</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keyPaths"></a><code>keyPaths</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set all the paths to the keys files</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keyValue"></a><code>keyValue</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Buffer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the key a a buffer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the first key a a buffer, replacing the previous keys buffers</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="keyValues"></a><code>keyValues</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of Buffer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set all the keys as a list of buffer</p></td>
 </tr>
 </tbody>
 </table>
@@ -2761,6 +2816,11 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the number of event loop threads to be used by the Vert.x instance.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="fileResolverCachingEnabled"></a><code>fileResolverCachingEnabled</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set wether the Vert.x file resolver uses caching for classpath resources.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="haEnabled"></a><code>haEnabled</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set whether HA will be enabled on the Vert.x instance.</p></td>
@@ -2816,7 +2876,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:36 CEST
               
               
             </div>

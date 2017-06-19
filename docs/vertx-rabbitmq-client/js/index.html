@@ -113,6 +113,7 @@
 <li><a href="#_operations">Operations</a>
 <ul class="sectlevel2">
 <li><a href="#_publish">Publish</a></li>
+<li><a href="#_publish_with_confirm">Publish with confirm</a></li>
 <li><a href="#_consume">Consume</a></li>
 <li><a href="#_get">Get</a></li>
 <li><a href="#_consume_messages_without_auto_ack">Consume messages without auto-ack</a></li>
@@ -137,6 +138,7 @@
 <li><a href="#_operations">Operations</a>
 <ul class="sectlevel2">
 <li><a href="#_publish">Publish</a></li>
+<li><a href="#_publish_with_confirm">Publish with confirm</a></li>
 <li><a href="#_consume">Consume</a></li>
 <li><a href="#_get">Get</a></li>
 <li><a href="#_consume_messages_without_auto_ack">Consume messages without auto-ack</a></li>
@@ -168,7 +170,7 @@
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-rabbitmq-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -181,7 +183,7 @@
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-rabbitmq-client:3.4.1'
+  compile 'io.vertx:vertx-rabbitmq-client:3.4.2'
 }</code></pre>
 </div>
 </div>
@@ -281,6 +283,39 @@ client.basicPublish("", "my.queue", message, function (pubResult, pubResult_err)
 </div>
 </div>
 <div class="sect2">
+<h3 id="_publish_with_confirm">Publish with confirm</h3>
+<div class="paragraph">
+<p>Publish a message to a queue and confirm the broker acknowledged it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var message = {
+  "body" : "Hello RabbitMQ, from Vert.x !"
+};
+
+// Put the channel in confirm mode. This can be done once at init.
+client.confirmSelect(function (confirmResult, confirmResult_err) {
+  if (confirmResult_err == null) {
+    client.basicPublish("", "my.queue", message, function (pubResult, pubResult_err) {
+      if (pubResult_err == null) {
+        // Check the message got confirmed by the broker.
+        client.waitForConfirms(function (waitResult, waitResult_err) {
+          if (waitResult_err == null) {
+            console.log("Message published !")} else {
+            waitResult_err.printStackTrace()}
+        });
+      } else {
+        pubResult_err.printStackTrace();
+      }
+    });
+  } else {
+    confirmResult_err.printStackTrace();
+  }
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_consume">Consume</h3>
 <div class="paragraph">
 <p>Consume messages from a queue</p>
@@ -365,7 +400,7 @@ client.basicConsume("my.queue", "my.address", false, function (consumeResult, co
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:36 CEST
               
               
             </div>

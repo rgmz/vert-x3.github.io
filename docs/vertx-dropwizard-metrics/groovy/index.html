@@ -139,6 +139,7 @@
 <li><a href="#dropwizard-registry">Accessing Dropwizard Registry</a></li>
 <li><a href="#_using_jolokia_and_hawtio">Using Jolokia and Hawtio</a></li>
 <li><a href="#_using_jolokia_and_jmx4perl_to_expose_metrics_to_nagios">Using Jolokia and JMX4Perl to expose metrics to Nagios</a></li>
+<li><a href="#_metrics_commands_via_telnet_or_ssh_in_vert_x_shell_service">Metrics commands via Telnet or SSH in Vert.x Shell service</a></li>
 </ul>
         </div>
       </div>
@@ -183,6 +184,7 @@
 <li><a href="#dropwizard-registry">Accessing Dropwizard Registry</a></li>
 <li><a href="#_using_jolokia_and_hawtio">Using Jolokia and Hawtio</a></li>
 <li><a href="#_using_jolokia_and_jmx4perl_to_expose_metrics_to_nagios">Using Jolokia and JMX4Perl to expose metrics to Nagios</a></li>
+<li><a href="#_metrics_commands_via_telnet_or_ssh_in_vert_x_shell_service">Metrics commands via Telnet or SSH in Vert.x Shell service</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -224,7 +226,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 <pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-dropwizard-metrics&lt;/artifactId&gt;
-  &lt;version&gt;3.4.1&lt;/version&gt;
+  &lt;version&gt;3.4.2&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -237,7 +239,7 @@ interface which is implemented by various Vert.x components like <code><a href="
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-dropwizard-metrics:3.4.1'</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-dropwizard-metrics:3.4.2'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -651,7 +653,7 @@ def metrics = metricsService.getMetricsSnapshot("vertx.eventbus.message")</code>
 <p><code>messages.received-remote</code> - A <a href="#throughput_meter">ThroughputMeter</a> representing the rate of which remote messages are being received</p>
 </li>
 <li>
-<p><code>messages.delivered</code> - A <a href="#throughpu_metert">[throughpu_metert]</a> representing the rate of which messages are being delivered to an handler</p>
+<p><code>messages.delivered</code> - A <a href="#throughput_meter">ThroughputMeter</a> representing the rate of which messages are being delivered to an handler</p>
 </li>
 <li>
 <p><code>messages.delivered-local</code> - A <a href="#throughput_meter">ThroughputMeter</a> representing the rate of which local messages are being delivered to an handler</p>
@@ -986,7 +988,7 @@ configured by <code><a href="../../apidocs/io/vertx/core/net/NetClientOptions.ht
 <div class="sect2">
 <h3 id="_pool_metrics">Pool metrics</h3>
 <div class="paragraph">
-<p>Base name: <code>vertx.pool.&lt;type&gt;.&lt;name&gt;</code> where <code>type</code> is the type of the pool (e.g <em>worker</em>, <em>datasource</em>) and
+<p>Base name: <code>vertx.pools.&lt;type&gt;.&lt;name&gt;</code> where <code>type</code> is the type of the pool (e.g <em>worker</em>, <em>datasource</em>) and
 <code>name</code> is the name of the pool (e.g <code>vert.x-worker-thread</code>).</p>
 </div>
 <div class="paragraph">
@@ -1264,6 +1266,34 @@ details about check configuration.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_metrics_commands_via_telnet_or_ssh_in_vert_x_shell_service">Metrics commands via Telnet or SSH in Vert.x Shell service</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To find out the available metrics commands you can use the <em>help</em> builtin command:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Available commands</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>metrics-ls: List the known metrics for the current Vert.x instance</p>
+</li>
+<li>
+<p>metrics-info: Show metrics info for the current Vert.x instance in JSON format</p>
+</li>
+<li>
+<p>metrics-histogram: Show histogram metrics table for the current Vert.x instance in real time</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
 
         
 
@@ -1271,7 +1301,7 @@ details about check configuration.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:36 CEST
               
               
             </div>

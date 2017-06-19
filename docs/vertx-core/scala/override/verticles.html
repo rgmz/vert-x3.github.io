@@ -154,7 +154,8 @@ class HelloWorldHttpVerticle extends ScalaVerticle {
 
  override def stop(): Unit = {
    println("Stopping")
- }</code></pre>
+ }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -200,8 +201,8 @@ vertx.deployVerticle(s"scala:${classOf[HelloWorldVerticle].getName}")</code></pr
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>val vertx = Vertx.vertx
-vertx.deployVerticle(ScalaVerticle.nameForVerticle[HelloWorldVerticle])</pre>
+<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">val vertx = Vertx.vertx
+vertx.deployVerticle(ScalaVerticle.nameForVerticle[HelloWorldVerticle])</code></pre>
 </div>
 </div>
 </div>
@@ -235,14 +236,15 @@ You use this if you want to do some verticle cleanup that takes some time.</p>
 <pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">import io.vertx.lang.scala.ScalaVerticle
 import scala.concurrent.{Future, Promise}
 
-public class HelloWorldVerticle extends ScalaVerticle {
- public void startFuture(): Future[Unit] = {
-  println "starting"
+class HelloWorldVerticle extends ScalaVerticle {
+
+ override def startFuture(): Future[Unit] = {
+  println("starting")
   val promise = Promise[Unit]()
   vertx.deployVerticleFuture("v.rb")
  }
 
- public void stopFuture(): Future[Unit] = {
+ override def stopFuture(): Future[Unit] = {
   println("stopping")
   Future.successful(())
  }
@@ -270,7 +272,7 @@ Vert.x will automatically undeploy any child verticles when the parent is undepl
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-03-15 15:54:14 CET
+                Last updated 2017-06-14 22:22:38 CEST
               
               
             </div>
