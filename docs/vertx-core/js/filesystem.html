@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -139,14 +138,14 @@ which is called when the operation completes or an error occurs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var fs = vertx.fileSystem();
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> fs = vertx.fileSystem();
 
-// Copy file from foo.txt to bar.txt
-fs.copy("foo.txt", "bar.txt", function (res, res_err) {
-  if (res_err == null) {
-    // Copied ok!
-  } else {
-    // Something went wrong
+<span class="comment">// Copy file from foo.txt to bar.txt</span>
+fs.copy(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo.txt</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar.txt</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// Copied ok!</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong</span>
   }
 });</code></pre>
 </div>
@@ -162,10 +161,10 @@ particular application before using them from an event loop, so as not to break 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var fs = vertx.fileSystem();
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> fs = vertx.fileSystem();
 
-// Copy file from foo.txt to bar.txt synchronously
-fs.copyBlocking("foo.txt", "bar.txt");</code></pre>
+<span class="comment">// Copy file from foo.txt to bar.txt synchronously</span>
+fs.copyBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo.txt</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar.txt</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -177,45 +176,45 @@ please consult the <code><a href="../../jsdoc/module-vertx-js_file_system-FileSy
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
-var Buffer = require("vertx-js/buffer");
-var vertx = Vertx.vertx();
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Vertx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> Buffer = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/buffer</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> vertx = Vertx.vertx();
 
-// Read a file
-vertx.fileSystem().readFile("target/classes/readme.txt", function (result, result_err) {
-  if (result_err == null) {
+<span class="comment">// Read a file</span>
+vertx.fileSystem().readFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/readme.txt</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (result, result_err) {
+  <span class="keyword">if</span> (result_err == <span class="predefined-constant">null</span>) {
     console.log(result);
-  } else {
-    console.error("Oh oh ..." + result_err);
+  } <span class="keyword">else</span> {
+    console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Oh oh ...</span><span class="delimiter">&quot;</span></span> + result_err);
   }
 });
 
-// Copy a file
-vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt", function (result, result_err) {
-  if (result_err == null) {
-    console.log("File copied");
-  } else {
-    console.error("Oh oh ..." + result_err);
+<span class="comment">// Copy a file</span>
+vertx.fileSystem().copy(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/readme.txt</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/readme2.txt</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (result, result_err) {
+  <span class="keyword">if</span> (result_err == <span class="predefined-constant">null</span>) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">File copied</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
+    console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Oh oh ...</span><span class="delimiter">&quot;</span></span> + result_err);
   }
 });
 
-// Write a file
-vertx.fileSystem().writeFile("target/classes/hello.txt", Buffer.buffer("Hello"), function (result, result_err) {
-  if (result_err == null) {
-    console.log("File written");
-  } else {
-    console.error("Oh oh ..." + result_err);
+<span class="comment">// Write a file</span>
+vertx.fileSystem().writeFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/hello.txt</span><span class="delimiter">&quot;</span></span>, Buffer.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>), <span class="keyword">function</span> (result, result_err) {
+  <span class="keyword">if</span> (result_err == <span class="predefined-constant">null</span>) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">File written</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
+    console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Oh oh ...</span><span class="delimiter">&quot;</span></span> + result_err);
   }
 });
 
-// Check existence and delete
-vertx.fileSystem().exists("target/classes/junk.txt", function (result, result_err) {
-  if (result_err == null &amp;&amp; result) {
-    vertx.fileSystem().delete("target/classes/junk.txt", function (r, r_err) {
-      console.log("File deleted");
+<span class="comment">// Check existence and delete</span>
+vertx.fileSystem().exists(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/junk.txt</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (result, result_err) {
+  <span class="keyword">if</span> (result_err == <span class="predefined-constant">null</span> &amp;&amp; result) {
+    vertx.fileSystem().<span class="keyword">delete</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/junk.txt</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (r, r_err) {
+      console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">File deleted</span><span class="delimiter">&quot;</span></span>);
     });
-  } else {
-    console.error("Oh oh ... - cannot delete the file: " + result_err);
+  } <span class="keyword">else</span> {
+    console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Oh oh ... - cannot delete the file: </span><span class="delimiter">&quot;</span></span> + result_err);
   }
 });</code></pre>
 </div>
@@ -230,13 +229,13 @@ vertx.fileSystem().exists("target/classes/junk.txt", function (result, result_er
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> options = {
 };
-fileSystem.open("myfile.txt", options, function (res, res_err) {
-  if (res_err == null) {
-    var file = res;
-  } else {
-    // Something went wrong!
+fileSystem.open(<span class="string"><span class="delimiter">&quot;</span><span class="content">myfile.txt</span><span class="delimiter">&quot;</span></span>, options, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> file = res;
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong!</span>
   }
 });</code></pre>
 </div>
@@ -276,26 +275,26 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
-var Buffer = require("vertx-js/buffer");
-var vertx = Vertx.vertx();
-vertx.fileSystem().open("target/classes/hello.txt", {
-}, function (result, result_err) {
-  if (result_err == null) {
-    var file = result;
-    var buff = Buffer.buffer("foo");
-    for (var i = 0;i &lt; 5;i++) {
-      file.write(buff, buff.length() * i, function (ar, ar_err) {
-        if (ar_err == null) {
-          console.log("Written ok!");
-          // etc
-        } else {
-          console.error("Failed to write: " + ar_err);
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Vertx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> Buffer = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/buffer</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> vertx = Vertx.vertx();
+vertx.fileSystem().open(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/hello.txt</span><span class="delimiter">&quot;</span></span>, {
+}, <span class="keyword">function</span> (result, result_err) {
+  <span class="keyword">if</span> (result_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> file = result;
+    <span class="keyword">var</span> buff = Buffer.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>);
+    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; <span class="integer">5</span>;i++) {
+      file.write(buff, buff.length() * i, <span class="keyword">function</span> (ar, ar_err) {
+        <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+          console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Written ok!</span><span class="delimiter">&quot;</span></span>);
+          <span class="comment">// etc</span>
+        } <span class="keyword">else</span> {
+          console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to write: </span><span class="delimiter">&quot;</span></span> + ar_err);
         }
       });
     }
-  } else {
-    console.error("Cannot open file " + result_err);
+  } <span class="keyword">else</span> {
+    console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Cannot open file </span><span class="delimiter">&quot;</span></span> + result_err);
   }
 });</code></pre>
 </div>
@@ -335,25 +334,25 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
-var Buffer = require("vertx-js/buffer");
-var vertx = Vertx.vertx();
-vertx.fileSystem().open("target/classes/les_miserables.txt", {
-}, function (result, result_err) {
-  if (result_err == null) {
-    var file = result;
-    var buff = Buffer.buffer(1000);
-    for (var i = 0;i &lt; 10;i++) {
-      file.read(buff, i * 100, i * 100, 100, function (ar, ar_err) {
-        if (ar_err == null) {
-          console.log("Read ok!");
-        } else {
-          console.error("Failed to write: " + ar_err);
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Vertx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> Buffer = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/buffer</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> vertx = Vertx.vertx();
+vertx.fileSystem().open(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/les_miserables.txt</span><span class="delimiter">&quot;</span></span>, {
+}, <span class="keyword">function</span> (result, result_err) {
+  <span class="keyword">if</span> (result_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> file = result;
+    <span class="keyword">var</span> buff = Buffer.buffer(<span class="integer">1000</span>);
+    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; <span class="integer">10</span>;i++) {
+      file.read(buff, i * <span class="integer">100</span>, i * <span class="integer">100</span>, <span class="integer">100</span>, <span class="keyword">function</span> (ar, ar_err) {
+        <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+          console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Read ok!</span><span class="delimiter">&quot;</span></span>);
+        } <span class="keyword">else</span> {
+          console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to write: </span><span class="delimiter">&quot;</span></span> + ar_err);
         }
       });
     }
-  } else {
-    console.error("Cannot open file " + result_err);
+  } <span class="keyword">else</span> {
+    console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Cannot open file </span><span class="delimiter">&quot;</span></span> + result_err);
   }
 });</code></pre>
 </div>
@@ -397,22 +396,22 @@ copy the content to another <code>AsyncFile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
-var Pump = require("vertx-js/pump");
-var vertx = Vertx.vertx();
-var output = vertx.fileSystem().openBlocking("target/classes/plagiary.txt", {
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Vertx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> Pump = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/pump</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> vertx = Vertx.vertx();
+<span class="keyword">var</span> output = vertx.fileSystem().openBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/plagiary.txt</span><span class="delimiter">&quot;</span></span>, {
 });
 
-vertx.fileSystem().open("target/classes/les_miserables.txt", {
-}, function (result, result_err) {
-  if (result_err == null) {
-    var file = result;
+vertx.fileSystem().open(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/les_miserables.txt</span><span class="delimiter">&quot;</span></span>, {
+}, <span class="keyword">function</span> (result, result_err) {
+  <span class="keyword">if</span> (result_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> file = result;
     Pump.pump(file, output).start();
-    file.endHandler(function (r) {
-      console.log("Copy done");
+    file.endHandler(<span class="keyword">function</span> (r) {
+      console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Copy done</span><span class="delimiter">&quot;</span></span>);
     });
-  } else {
-    console.error("Cannot open file " + result_err);
+  } <span class="keyword">else</span> {
+    console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Cannot open file </span><span class="delimiter">&quot;</span></span> + result_err);
   }
 });</code></pre>
 </div>

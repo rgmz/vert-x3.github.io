@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -460,7 +459,7 @@ over time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">shared import io.vertx.ceylon.web "3.3.2";</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml">shared import io.vertx.ceylon.web &quot;3.3.2&quot;;</code></pre>
 </div>
 </div>
 </div>
@@ -480,19 +479,19 @@ HTTP servers using Vert.x core, if you&#8217;re not already.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value server = vertx.createHttpServer();
+<pre class="CodeRay highlight"><code data-lang="java">value server = vertx.createHttpServer();
 
 server.requestHandler((HttpServerRequest request) {
 
-  // This handler gets called for each request that arrives on the server
+  <span class="comment">// This handler gets called for each request that arrives on the server</span>
   value response = request.response();
-  response.putHeader("content-type", "text/plain");
+  response.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/plain</span><span class="delimiter">&quot;</span></span>);
 
-  // Write to the response and end it
-  response.end("Hello World!");
+  <span class="comment">// Write to the response and end it</span>
+  response.end(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>);
 });
 
-server.listen(8080);</code></pre>
+server.listen(<span class="integer">8080</span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -533,7 +532,7 @@ request, and then, either end it or pass it to the next matching handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
 
 ...
 
@@ -545,10 +544,10 @@ router.route().handler((RoutingContext routingContext) {
 
   // This handler will be called for every request
   value response = routingContext.response();
-  response.putHeader("content-type", "text/plain");
+  response.putHeader(&quot;content-type&quot;, &quot;text/plain&quot;);
 
   // Write to the response and end it
-  response.end("Hello World from Vert.x-Web!");
+  response.end(&quot;Hello World from Vert.x-Web!&quot;);
 });
 
 server.requestHandler(router.accept).listen(8080);</code></pre>
@@ -600,7 +599,7 @@ You can do this some time later, if you want:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value route1 = router.route("/some/path/").handler((RoutingContext routingContext) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value route1 = router.route(&quot;/some/path/&quot;).handler((RoutingContext routingContext) {
 
   value response = routingContext.response();
   // enable chunked responses because we will be adding data as
@@ -608,25 +607,25 @@ You can do this some time later, if you want:</p>
   // only if several handlers do output.
   response.setChunked(true);
 
-  response.write("route1\n");
+  response.write(&quot;route1\n&quot;);
 
   // Call the next matching route after a 5 second delay
   routingContext.vertx().setTimer(5000, (Integer tid) =&gt; routingContext.next());
 });
 
-value route2 = router.route("/some/path/").handler((RoutingContext routingContext) {
+value route2 = router.route(&quot;/some/path/&quot;).handler((RoutingContext routingContext) {
 
   value response = routingContext.response();
-  response.write("route2\n");
+  response.write(&quot;route2\n&quot;);
 
   // Call the next matching route after a 5 second delay
   routingContext.vertx().setTimer(5000, (Integer tid) =&gt; routingContext.next());
 });
 
-value route3 = router.route("/some/path/").handler((RoutingContext routingContext) {
+value route3 = router.route(&quot;/some/path/&quot;).handler((RoutingContext routingContext) {
 
   value response = routingContext.response();
-  response.write("route3");
+  response.write(&quot;route3&quot;);
 
   // Now end the response
   routingContext.response().end();
@@ -662,7 +661,7 @@ Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">router.route().blockingHandler((RoutingContext routingContext) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">router.route().blockingHandler((RoutingContext routingContext) {
 
   // Do something that might take some time synchronously
   service.doSomethingThatBlocks();
@@ -694,7 +693,7 @@ so it will be called for paths <code>/some/path</code> and <code>/some/path//</c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value route = router.route().path("/some/path/");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value route = router.route().path(&quot;/some/path/&quot;);
 
 route.handler((RoutingContext routingContext) {
   // This handler will be called for the following request paths:
@@ -726,7 +725,7 @@ way is to use an asterisk <code>*</code> at the end of the path when declaring t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value route = router.route().path("/some/path/*");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value route = router.route().path(&quot;/some/path/*&quot;);
 
 route.handler((RoutingContext routingContext) {
   // This handler will be called for any path that starts with
@@ -747,7 +746,7 @@ route.handler((RoutingContext routingContext) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value route = router.route("/some/path/*");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value route = router.route(&quot;/some/path/*&quot;);
 
 route.handler((RoutingContext routingContext) {
   // This handler will be called same as previous example
@@ -768,17 +767,17 @@ route.handler((RoutingContext routingContext) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { post }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { post }
 
 ...
 
 
-value route = router.route(post, "/catalogue/products/:productype/:productid/");
+value route = router.route(post, &quot;/catalogue/products/:productype/:productid/&quot;);
 
 route.handler((RoutingContext routingContext) {
 
-  value productType = routingContext.request().getParam("producttype");
-  value productID = routingContext.request().getParam("productid");
+  value productType = routingContext.request().getParam(&quot;producttype&quot;);
+  value productID = routingContext.request().getParam(&quot;productid&quot;);
 
   // Do something with them...
 });</code></pre>
@@ -802,8 +801,8 @@ and <code>productType</code> will receive the value <code>tools</code> and produ
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Matches any path ending with 'foo'
-value route = router.route().pathRegex(".*foo");
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Matches any path ending with 'foo'
+value route = router.route().pathRegex(&quot;.*foo&quot;);
 
 route.handler((RoutingContext routingContext) {
 
@@ -824,7 +823,7 @@ route.handler((RoutingContext routingContext) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value route = router.routeWithRegex(".*foo");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value route = router.routeWithRegex(&quot;.*foo&quot;);
 
 route.handler((RoutingContext routingContext) {
 
@@ -843,15 +842,15 @@ route.handler((RoutingContext routingContext) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value route = router.routeWithRegex(".*foo");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value route = router.routeWithRegex(&quot;.*foo&quot;);
 
 // This regular expression matches paths that start with something like:
-// "/foo/bar" - where the "foo" is captured into param0 and the "bar" is captured into
+// &quot;/foo/bar&quot; - where the &quot;foo&quot; is captured into param0 and the &quot;bar&quot; is captured into
 // param1
-route.pathRegex("\\/([^\\/]+)\\/([^\\/]+)").handler((RoutingContext routingContext) {
+route.pathRegex(&quot;\\/([^\\/]+)\\/([^\\/]+)&quot;).handler((RoutingContext routingContext) {
 
-  value productType = routingContext.request().getParam("param0");
-  value productID = routingContext.request().getParam("param1");
+  value productType = routingContext.request().getParam(&quot;param0&quot;);
+  value productID = routingContext.request().getParam(&quot;param1&quot;);
 
   // Do something with them...
 });</code></pre>
@@ -877,7 +876,7 @@ and <code>productType</code> will receive the value <code>tools</code> and produ
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { post }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { post }
 
 ...
 
@@ -896,12 +895,12 @@ route.handler((RoutingContext routingContext) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { post }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { post }
 
 ...
 
 
-value route = router.route(post, "/some/path/");
+value route = router.route(post, &quot;/some/path/&quot;);
 
 route.handler((RoutingContext routingContext) {
 
@@ -917,20 +916,20 @@ method name. For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">router.get().handler((RoutingContext routingContext) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">router.get().handler((RoutingContext routingContext) {
 
   // Will be called for any GET request
 
 });
 
-router.get("/some/path/").handler((RoutingContext routingContext) {
+router.get(&quot;/some/path/&quot;).handler((RoutingContext routingContext) {
 
   // Will be called for any GET request to a path
   // starting with /some/path
 
 });
 
-router.getWithRegex(".*foo").handler((RoutingContext routingContext) {
+router.getWithRegex(&quot;.*foo&quot;).handler((RoutingContext routingContext) {
 
   // Will be called for any GET request to a path
   // ending with `foo`
@@ -946,7 +945,7 @@ multiple times:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { put, post }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { put, post }
 
 ...
 
@@ -981,7 +980,7 @@ matching route (if any) will be called. And so on.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value route1 = router.route("/some/path/").handler((RoutingContext routingContext) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value route1 = router.route(&quot;/some/path/&quot;).handler((RoutingContext routingContext) {
 
   value response = routingContext.response();
   // enable chunked responses because we will be adding data as
@@ -989,25 +988,25 @@ matching route (if any) will be called. And so on.</p>
   // only if several handlers do output.
   response.setChunked(true);
 
-  response.write("route1\n");
+  response.write(&quot;route1\n&quot;);
 
   // Now call the next matching route
   routingContext.next();
 });
 
-value route2 = router.route("/some/path/").handler((RoutingContext routingContext) {
+value route2 = router.route(&quot;/some/path/&quot;).handler((RoutingContext routingContext) {
 
   value response = routingContext.response();
-  response.write("route2\n");
+  response.write(&quot;route2\n&quot;);
 
   // Now call the next matching route
   routingContext.next();
 });
 
-value route3 = router.route("/some/path/").handler((RoutingContext routingContext) {
+value route3 = router.route(&quot;/some/path/&quot;).handler((RoutingContext routingContext) {
 
   value response = routingContext.response();
-  response.write("route3");
+  response.write(&quot;route3&quot;);
 
   // Now end the response
   routingContext.response().end();
@@ -1044,16 +1043,16 @@ want to ensure a route is evaluated before route number <code>0</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value route1 = router.route("/some/path/").handler((RoutingContext routingContext) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value route1 = router.route(&quot;/some/path/&quot;).handler((RoutingContext routingContext) {
 
   value response = routingContext.response();
-  response.write("route1\n");
+  response.write(&quot;route1\n&quot;);
 
   // Now call the next matching route
   routingContext.next();
 });
 
-value route2 = router.route("/some/path/").handler((RoutingContext routingContext) {
+value route2 = router.route(&quot;/some/path/&quot;).handler((RoutingContext routingContext) {
 
   value response = routingContext.response();
   // enable chunked responses because we will be adding data as
@@ -1061,16 +1060,16 @@ value route2 = router.route("/some/path/").handler((RoutingContext routingContex
   // only if several handlers do output.
   response.setChunked(true);
 
-  response.write("route2\n");
+  response.write(&quot;route2\n&quot;);
 
   // Now call the next matching route
   routingContext.next();
 });
 
-value route3 = router.route("/some/path/").handler((RoutingContext routingContext) {
+value route3 = router.route(&quot;/some/path/&quot;).handler((RoutingContext routingContext) {
 
   value response = routingContext.response();
-  response.write("route3");
+  response.write(&quot;route3&quot;);
 
   // Now end the response
   routingContext.response().end();
@@ -1116,8 +1115,8 @@ This will be matched against the value specified in <code><a href="../../ceylond
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Exact match
-router.route().consumes("text/html").handler((RoutingContext routingContext) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Exact match
+router.route().consumes(&quot;text/html&quot;).handler((RoutingContext routingContext) {
 
   // This handler will be called for any request with
   // content-type header set to `text/html`
@@ -1130,8 +1129,8 @@ router.route().consumes("text/html").handler((RoutingContext routingContext) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Multiple exact matches
-router.route().consumes("text/html").consumes("text/plain").handler((RoutingContext routingContext) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Multiple exact matches
+router.route().consumes(&quot;text/html&quot;).consumes(&quot;text/plain&quot;).handler((RoutingContext routingContext) {
 
   // This handler will be called for any request with
   // content-type header set to `text/html` or `text/plain`.
@@ -1144,8 +1143,8 @@ router.route().consumes("text/html").consumes("text/plain").handler((RoutingCont
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Sub-type wildcard match
-router.route().consumes("text/*").handler((RoutingContext routingContext) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Sub-type wildcard match
+router.route().consumes(&quot;text/*&quot;).handler((RoutingContext routingContext) {
 
   // This handler will be called for any request with top level type `text`
   // e.g. content-type header set to `text/html` or `text/plain` will both match
@@ -1158,8 +1157,8 @@ router.route().consumes("text/*").handler((RoutingContext routingContext) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Top level type wildcard match
-router.route().consumes("*/json").handler((RoutingContext routingContext) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Top level type wildcard match
+router.route().consumes(&quot;*/json&quot;).handler((RoutingContext routingContext) {
 
   // This handler will be called for any request with sub-type json
   // e.g. content-type header set to `text/json` or `application/json` will both match
@@ -1220,10 +1219,10 @@ following handler produces a response with MIME type <code>application/json</cod
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">router.route().produces("application/json").handler((RoutingContext routingContext) {
+<pre class="CodeRay highlight"><code data-lang="java">router.route().produces(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>).handler((RoutingContext routingContext) {
 
   value response = routingContext.response();
-  response.putHeader("content-type", "application/json");
+  response.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>);
   response.write(someJSON).end();
 
 });</code></pre>
@@ -1250,15 +1249,15 @@ was accepted.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// This route can produce two different MIME types
-router.route().produces("application/json").produces("text/html").handler((RoutingContext routingContext) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">// This route can produce two different MIME types
+router.route().produces(&quot;application/json&quot;).produces(&quot;text/html&quot;).handler((RoutingContext routingContext) {
 
   value response = routingContext.response();
 
   // Get the actual MIME type acceptable
   value acceptableContentType = routingContext.getAcceptableContentType();
 
-  response.putHeader("content-type", acceptableContentType);
+  response.putHeader(&quot;content-type&quot;, acceptableContentType);
   response.write(whatever).end();
 });</code></pre>
 </div>
@@ -1285,18 +1284,18 @@ acceptable but that has a higher <code>q</code> value.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { put }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { put }
 
 ...
 
 
-value route = router.route(put, "myapi/orders").consumes("application/json").produces("application/json");
+value route = router.route(put, &quot;myapi/orders&quot;).consumes(&quot;application/json&quot;).produces(&quot;application/json&quot;);
 
 route.handler((RoutingContext routingContext) {
 
-  // This would be match for any PUT method to paths starting with "myapi/orders" with a
-  // content-type of "application/json"
-  // and an accept header matching "application/json"
+  // This would be match for any PUT method to paths starting with &quot;myapi/orders&quot; with a
+  // content-type of &quot;application/json&quot;
+  // and an accept header matching &quot;application/json&quot;
 
 });</code></pre>
 </div>
@@ -1333,16 +1332,16 @@ want to share between handlers for the lifetime of the request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">router.get("/some/path").handler((RoutingContext routingContext) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">router.get(&quot;/some/path&quot;).handler((RoutingContext routingContext) {
 
-  routingContext.put("foo", "bar");
+  routingContext.put(&quot;foo&quot;, &quot;bar&quot;);
   routingContext.next();
 
 });
 
-router.get("/some/path/other").handler((RoutingContext routingContext) {
+router.get(&quot;/some/path/other&quot;).handler((RoutingContext routingContext) {
 
-  value bar = routingContext.get("foo");
+  value bar = routingContext.get(&quot;foo&quot;);
   // Do something with bar
   routingContext.response().end();
 
@@ -1362,19 +1361,19 @@ Router.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">router.get("/some/path").handler((RoutingContext routingContext) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">router.get(&quot;/some/path&quot;).handler((RoutingContext routingContext) {
 
-  routingContext.put("foo", "bar");
+  routingContext.put(&quot;foo&quot;, &quot;bar&quot;);
   routingContext.next();
 
 });
 
-router.get("/some/path/B").handler((RoutingContext routingContext) {
+router.get(&quot;/some/path/B&quot;).handler((RoutingContext routingContext) {
   routingContext.response().end();
 });
 
-router.get("/some/path").handler((RoutingContext routingContext) {
-  routingContext.reroute("/some/path/B");
+router.get(&quot;/some/path&quot;).handler((RoutingContext routingContext) {
+  routingContext.reroute(&quot;/some/path/B&quot;);
 });</code></pre>
 </div>
 </div>
@@ -1393,13 +1392,13 @@ for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">router.get("/my-pretty-notfound-handler").handler((RoutingContext ctx) {
-  ctx.response().setStatusCode(404).end("NOT FOUND fancy html here!!!");
+<pre class="CodeRay highlight"><code data-lang="ceylon">router.get(&quot;/my-pretty-notfound-handler&quot;).handler((RoutingContext ctx) {
+  ctx.response().setStatusCode(404).end(&quot;NOT FOUND fancy html here!!!&quot;);
 });
 
 router.get().failureHandler((RoutingContext ctx) {
   if (ctx.statusCode() == 404) {
-    ctx.reroute("/my-pretty-notfound-handler");
+    ctx.reroute(&quot;/my-pretty-notfound-handler&quot;);
   } else {
     ctx.next();
   };
@@ -1431,28 +1430,28 @@ router. The full implementation of the REST API is not shown.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web { router }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web { router }
 
 ...
 
 
 value restAPI = router.router(vertx);
 
-restAPI.get("/products/:productID").handler((RoutingContext rc) {
+restAPI.get(&quot;/products/:productID&quot;).handler((RoutingContext rc) {
 
   // TODO Handle the lookup of the product....
   rc.response().write(productJSON);
 
 });
 
-restAPI.put("/products/:productID").handler((RoutingContext rc) {
+restAPI.put(&quot;/products/:productID&quot;).handler((RoutingContext rc) {
 
   // TODO Add a new product...
   rc.response().end();
 
 });
 
-restAPI.delete("/products/:productID").handler((RoutingContext rc) {
+restAPI.delete(&quot;/products/:productID&quot;).handler((RoutingContext rc) {
 
   // TODO delete the product...
   rc.response().end();
@@ -1469,16 +1468,16 @@ would invoke the  API.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web { router }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web { router }
 
 ...
 
 value mainRouter = router.router(vertx);
 
 // Handle static resources
-mainRouter.route("/static/*").handler(myStaticHandler);
+mainRouter.route(&quot;/static/*&quot;).handler(myStaticHandler);
 
-mainRouter.route(".*\\.templ").handler(myTemplateHandler);</code></pre>
+mainRouter.route(&quot;.*\\.templ&quot;).handler(myTemplateHandler);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1486,7 +1485,7 @@ mainRouter.route(".*\\.templ").handler(myTemplateHandler);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">mainRouter.mountSubRouter("/productsAPI", restAPI);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">mainRouter.mountSubRouter(&quot;/productsAPI&quot;, restAPI);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1503,7 +1502,7 @@ locale for a client or the sorted list of preferred locales by quality.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value route = router.get("/localized").handler((RoutingContext rc) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value route = router.get(&quot;/localized&quot;).handler((RoutingContext rc) {
   // although it might seem strange by running a loop with a switch we
   // make sure that the locale order of preference is preserved when
   // replying in the users language.
@@ -1511,7 +1510,7 @@ locale for a client or the sorted list of preferred locales by quality.</p>
     return;
   };
   // we do not know the user language so lets just inform that back:
-  rc.response().end("Sorry we don't speak: ``rc.preferredLocale()``");
+  rc.response().end(&quot;Sorry we don't speak: ``rc.preferredLocale()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -1556,7 +1555,7 @@ to paths that start with <code>/somepath/</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value route = router.get("/somepath/*");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value route = router.get(&quot;/somepath/*&quot;);
 
 route.failureHandler((RoutingContext frc) {
 
@@ -1580,16 +1579,16 @@ to be retrieved so the failure handler can use that to generate a failure respon
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value route1 = router.get("/somepath/path1/");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value route1 = router.get(&quot;/somepath/path1/&quot;);
 
 route1.handler((RoutingContext routingContext) {
 
   // Let's say this throws a RuntimeException
-  throw Exception("something happened!");
+  throw Exception(&quot;something happened!&quot;);
 
 });
 
-value route2 = router.get("/somepath/path2");
+value route2 = router.get(&quot;/somepath/path2&quot;);
 
 route2.handler((RoutingContext routingContext) {
 
@@ -1601,7 +1600,7 @@ route2.handler((RoutingContext routingContext) {
 
 // Define a failure handler
 // This will get called for any failures in the above handlers
-value route3 = router.get("/somepath/*");
+value route3 = router.get(&quot;/somepath/*&quot;);
 
 route3.failureHandler((RoutingContext failureRoutingContext) {
 
@@ -1609,7 +1608,7 @@ route3.failureHandler((RoutingContext failureRoutingContext) {
 
   // Status code will be 500 for the RuntimeException or 403 for the other failure
   value response = failureRoutingContext.response();
-  response.setStatusCode(statusCode).end("Sorry! Not today");
+  response.setStatusCode(statusCode).end(&quot;Sorry! Not today&quot;);
 
 });</code></pre>
 </div>
@@ -1638,7 +1637,7 @@ to install handlers to consume the HTTP request body and this must be done befor
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { bodyHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { bodyHandler }
 
 ...
 
@@ -1694,14 +1693,14 @@ context with <code><a href="../../ceylondoc/vertx-web//RoutingContext.type.html#
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { bodyHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { bodyHandler }
 
 ...
 
 
 router.route().handler(bodyHandler.create());
 
-router.post("/some/path/uploads").handler((RoutingContext routingContext) {
+router.post(&quot;/some/path/uploads&quot;).handler((RoutingContext routingContext) {
 
   value uploads = routingContext.fileUploads();
   // Do something with uploads....
@@ -1727,7 +1726,7 @@ such as the name, file-name and size to be accessed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler }
 
 ...
 
@@ -1761,7 +1760,7 @@ value, domain, path and other normal cookie properties.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler }
 import io.vertx.ceylon.ext.web { cookie }
 
 ...
@@ -1770,15 +1769,15 @@ import io.vertx.ceylon.ext.web { cookie }
 // This cookie handler will be called for all routes
 router.route().handler(cookieHandler.create());
 
-router.route("some/path/").handler((RoutingContext routingContext) {
+router.route(&quot;some/path/&quot;).handler((RoutingContext routingContext) {
 
-  value someCookie = routingContext.getCookie("mycookie");
+  value someCookie = routingContext.getCookie(&quot;mycookie&quot;);
   value cookieValue = someCookie.getValue();
 
   // Do something with cookie...
 
   // Add a cookie - this will get written back in the response automatically
-  routingContext.addCookie(cookie.cookie("othercookie", "somevalue"));
+  routingContext.addCookie(cookie.cookie(&quot;othercookie&quot;, &quot;somevalue&quot;));
 });</code></pre>
 </div>
 </div>
@@ -1850,7 +1849,7 @@ requests might end up on a server which doesn&#8217;t know about your session.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.sstore { localSessionStore }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.sstore { localSessionStore }
 
 ...
 
@@ -1861,11 +1860,11 @@ value store1 = localSessionStore.create(vertx);
 // Create a local session store specifying the local shared map name to use
 // This might be useful if you have more than one application in the same
 // Vert.x instance and want to use different maps for different applications
-value store2 = localSessionStore.create(vertx, "myapp3.sessionmap");
+value store2 = localSessionStore.create(vertx, &quot;myapp3.sessionmap&quot;);
 
 // Create a local session store specifying the local shared map name to use and
 // setting the reaper interval for expired sessions to 10 seconds
-value store3 = localSessionStore.create(vertx, "myapp3.sessionmap", 10000);</code></pre>
+value store3 = localSessionStore.create(vertx, &quot;myapp3.sessionmap&quot;, 10000);</code></pre>
 </div>
 </div>
 </div>
@@ -1889,7 +1888,7 @@ requests from the same browser to different servers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
 import io.vertx.ceylon.ext.web.sstore { clusteredSessionStore }
 
 ...
@@ -1908,7 +1907,7 @@ vertx_.clusteredVertx(VertxOptions {
   // Create a clustered session store specifying the distributed map name to use
   // This might be useful if you have more than one application in the cluster
   // and want to use different maps for different applications
-  value store2 = clusteredSessionStore.create(vertx, "myclusteredapp3.sessionmap");
+  value store2 = clusteredSessionStore.create(vertx, &quot;myclusteredapp3.sessionmap&quot;);
 });</code></pre>
 </div>
 </div>
@@ -1929,7 +1928,7 @@ lookup the session. The cookie handler should be before the session handler when
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler, sessionHandler_ = sessionHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler, sessionHandler_ = sessionHandler }
 import io.vertx.ceylon.ext.web.sstore { clusteredSessionStore }
 import io.vertx.ceylon.ext.web { router_ = router }
 
@@ -1950,10 +1949,10 @@ value sessionHandler = sessionHandler_.create(store);
 router.route().handler(sessionHandler);
 
 // Now your application handlers
-router.route("/somepath/blah/").handler((RoutingContext routingContext) {
+router.route(&quot;/somepath/blah/&quot;).handler((RoutingContext routingContext) {
 
   value session = routingContext.session();
-  session.put("foo", "bar");
+  session.put(&quot;foo&quot;, &quot;bar&quot;);
   // etc
 
 });</code></pre>
@@ -1984,7 +1983,7 @@ a clustered session store they can be any basic type, or <code><a href="../../ce
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler }
 
 ...
 
@@ -1993,18 +1992,18 @@ router.route().handler(cookieHandler.create());
 router.route().handler(sessionHandler);
 
 // Now your application handlers
-router.route("/somepath/blah").handler((RoutingContext routingContext) {
+router.route(&quot;/somepath/blah&quot;).handler((RoutingContext routingContext) {
 
   value session = routingContext.session();
 
   // Put some data from the session
-  session.put("foo", "bar");
+  session.put(&quot;foo&quot;, &quot;bar&quot;);
 
   // Retrieve some data from a session
-  value age = session.get("age");
+  value age = session.get(&quot;age&quot;);
 
   // Remove some data from a session
-  value obj = session.remove("myobj");
+  value obj = session.remove(&quot;myobj&quot;);
 
 });</code></pre>
 </div>
@@ -2056,7 +2055,7 @@ please consult the auth documentation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler, sessionHandler, basicAuthHandler_ = basicAuthHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler, sessionHandler, basicAuthHandler_ = basicAuthHandler }
 import io.vertx.ceylon.ext.web.sstore { localSessionStore }
 
 ...
@@ -2077,7 +2076,7 @@ your auth handler is before your application handlers on those paths:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler, sessionHandler, userSessionHandler, basicAuthHandler_ = basicAuthHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler, sessionHandler, userSessionHandler, basicAuthHandler_ = basicAuthHandler }
 import io.vertx.ceylon.ext.web.sstore { localSessionStore }
 
 ...
@@ -2090,15 +2089,15 @@ router.route().handler(userSessionHandler.create(authProvider));
 value basicAuthHandler = basicAuthHandler_.create(authProvider);
 
 // All requests to paths starting with '/private/' will be protected
-router.route("/private/*").handler(basicAuthHandler);
+router.route(&quot;/private/*&quot;).handler(basicAuthHandler);
 
-router.route("/someotherpath").handler((RoutingContext routingContext) {
+router.route(&quot;/someotherpath&quot;).handler((RoutingContext routingContext) {
 
   // This will be public access - no login required
 
 });
 
-router.route("/private/somepath").handler((RoutingContext routingContext) {
+router.route(&quot;/private/somepath&quot;).handler((RoutingContext routingContext) {
 
   // This will require a login
 
@@ -2179,7 +2178,7 @@ To handle the login we provide a prebuilt handler <code><a href="../../ceylondoc
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler, sessionHandler, userSessionHandler, redirectAuthHandler_ = redirectAuthHandler, formLoginHandler, staticHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler, sessionHandler, userSessionHandler, redirectAuthHandler_ = redirectAuthHandler, formLoginHandler, staticHandler }
 import io.vertx.ceylon.ext.web.sstore { localSessionStore }
 
 ...
@@ -2192,19 +2191,19 @@ router.route().handler(userSessionHandler.create(authProvider));
 value redirectAuthHandler = redirectAuthHandler_.create(authProvider);
 
 // All requests to paths starting with '/private/' will be protected
-router.route("/private/*").handler(redirectAuthHandler);
+router.route(&quot;/private/*&quot;).handler(redirectAuthHandler);
 
 // Handle the actual login
-router.route("/login").handler(formLoginHandler.create(authProvider));
+router.route(&quot;/login&quot;).handler(formLoginHandler.create(authProvider));
 
 // Set a static server to serve static resources, e.g. the login page
 router.route().handler(staticHandler.create());
 
-router.route("/someotherpath").handler((RoutingContext routingContext) {
+router.route(&quot;/someotherpath&quot;).handler((RoutingContext routingContext) {
   // This will be public access - no login required
 });
 
-router.route("/private/somepath").handler((RoutingContext routingContext) {
+router.route(&quot;/private/somepath&quot;).handler((RoutingContext routingContext) {
 
   // This will require a login
 
@@ -2243,7 +2242,7 @@ transit which leads to session hijacking attacks.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.jwt { jwtAuth }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.jwt { jwtAuth }
 import io.vertx.ceylon.ext.web { router_ = router }
 
 ...
@@ -2253,19 +2252,19 @@ value router = router_.router(vertx);
 
 value authConfig = JsonObject {
   keyStore = JsonObject {
-    type = "jceks";
-    path = "keystore.jceks";
-    password = "secret";
+    type = &quot;jceks&quot;;
+    path = &quot;keystore.jceks&quot;;
+    password = &quot;secret&quot;;
   };
 };
 
 value authProvider = jwtAuth.create(vertx, authConfig);
 
-router.route("/login").handler((RoutingContext ctx) {
+router.route(&quot;/login&quot;).handler((RoutingContext ctx) {
   // this is an example, authentication should be done with another provider...
-  if ("paulo" == ctx.request().getParam("username") &amp;&amp; "secret" == ctx.request().getParam("password")) {
+  if (&quot;paulo&quot; == ctx.request().getParam(&quot;username&quot;) &amp;&amp; &quot;secret&quot; == ctx.request().getParam(&quot;password&quot;)) {
     ctx.response().end(authProvider.generateToken(JsonObject {
-      sub = "paulo";
+      sub = &quot;paulo&quot;;
     }, JWTOptions()));
   } else {
     ctx.fail(401);
@@ -2279,7 +2278,7 @@ router.route("/login").handler((RoutingContext ctx) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { jwtAuthHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { jwtAuthHandler }
 import io.vertx.ceylon.ext.auth.jwt { jwtAuth }
 import io.vertx.ceylon.ext.web { router_ = router }
 
@@ -2290,17 +2289,17 @@ value router = router_.router(vertx);
 
 value authConfig = JsonObject {
   keyStore = JsonObject {
-    type = "jceks";
-    path = "keystore.jceks";
-    password = "secret";
+    type = &quot;jceks&quot;;
+    path = &quot;keystore.jceks&quot;;
+    password = &quot;secret&quot;;
   };
 };
 
 value authProvider = jwtAuth.create(vertx, authConfig);
 
-router.route("/protected/*").handler(jwtAuthHandler.create(authProvider));
+router.route(&quot;/protected/*&quot;).handler(jwtAuthHandler.create(authProvider));
 
-router.route("/protected/somepage").handler((RoutingContext ctx) {
+router.route(&quot;/protected/somepage&quot;).handler((RoutingContext ctx) {
   // some handle code...
 });</code></pre>
 </div>
@@ -2312,24 +2311,24 @@ token, during the creation of the token just add data to the JsonObject paramete
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.jwt { jwtAuth }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.jwt { jwtAuth }
 
 ...
 
 
 value authConfig = JsonObject {
   keyStore = JsonObject {
-    type = "jceks";
-    path = "keystore.jceks";
-    password = "secret";
+    type = &quot;jceks&quot;;
+    path = &quot;keystore.jceks&quot;;
+    password = &quot;secret&quot;;
   };
 };
 
 value authProvider = jwtAuth.create(vertx, authConfig);
 
 authProvider.generateToken(JsonObject {
-  sub = "paulo";
-  someKey = "some value";
+  sub = &quot;paulo&quot;;
+  someKey = &quot;some value&quot;;
 }, JWTOptions());</code></pre>
 </div>
 </div>
@@ -2338,9 +2337,9 @@ authProvider.generateToken(JsonObject {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value handler = (RoutingContext rc) {
-  value theSubject = rc.user().principal()get("sub";
-  value someKey = rc.user().principal()get("someKey";
+<pre class="CodeRay highlight"><code data-lang="ceylon">value handler = (RoutingContext rc) {
+  value theSubject = rc.user().principal()get(&quot;sub&quot;;
+  value someKey = rc.user().principal()get(&quot;someKey&quot;;
 };</code></pre>
 </div>
 </div>
@@ -2361,22 +2360,22 @@ may support a role/permission based model but others might use another model.</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { redirectAuthHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { redirectAuthHandler }
 
 ...
 
 
 value listProductsAuthHandler = redirectAuthHandler.create(authProvider);
-listProductsAuthHandler.addAuthority("list_products");
+listProductsAuthHandler.addAuthority(&quot;list_products&quot;);
 
-// Need "list_products" authority to list products
-router.route("/listproducts/*").handler(listProductsAuthHandler);
+// Need &quot;list_products&quot; authority to list products
+router.route(&quot;/listproducts/*&quot;).handler(listProductsAuthHandler);
 
 value settingsAuthHandler = redirectAuthHandler.create(authProvider);
-settingsAuthHandler.addAuthority("role:admin");
+settingsAuthHandler.addAuthority(&quot;role:admin&quot;);
 
-// Only "admin" has access to /private/settings
-router.route("/private/settings/*").handler(settingsAuthHandler);</code></pre>
+// Only &quot;admin&quot; has access to /private/settings
+router.route(&quot;/private/settings/*&quot;).handler(settingsAuthHandler);</code></pre>
 </div>
 </div>
 </div>
@@ -2402,12 +2401,12 @@ or from the classpath. The default static file directory is <code>webroot</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { staticHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { staticHandler }
 
 ...
 
 
-router.route("/static/*").handler(staticHandler.create());</code></pre>
+router.route(&quot;/static/*&quot;).handler(staticHandler.create());</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2541,14 +2540,14 @@ allowing resources to be requested from one domain and served from another.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { corsHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { corsHandler }
 import io.vertx.ceylon.core.http { get }
 
 ...
 
 
-// Will only accept GET requests from origin "vertx.io"
-router.route().handler(corsHandler.create("vertx\\.io").allowedMethod(get));
+// Will only accept GET requests from origin &quot;vertx.io&quot;
+router.route().handler(corsHandler.create(&quot;vertx\\.io&quot;).allowedMethod(get));
 
 router.route().handler((RoutingContext routingContext) {
 
@@ -2679,22 +2678,22 @@ add it the context data in a handler before the template handler. For example:</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { templateHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { templateHandler }
 
 ...
 
 
 value handler = templateHandler.create(engine);
 
-router.get("/dynamic").handler((RoutingContext routingContext) {
+router.get(&quot;/dynamic&quot;).handler((RoutingContext routingContext) {
 
-  routingContext.put("request_path", routingContext.request().path());
-  routingContext.put("session_data", routingContext.session().data());
+  routingContext.put(&quot;request_path&quot;, routingContext.request().path());
+  routingContext.put(&quot;session_data&quot;, routingContext.session().data());
 
   routingContext.next();
 });
 
-router.get("/dynamic/").handler(handler);</code></pre>
+router.get(&quot;/dynamic/&quot;).handler(handler);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2831,12 +2830,12 @@ seconds:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { timeoutHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { timeoutHandler }
 
 ...
 
 
-router.route("/foo/").handler(timeoutHandler.create(5000));</code></pre>
+router.route(&quot;/foo/&quot;).handler(timeoutHandler.create(5000));</code></pre>
 </div>
 </div>
 </div>
@@ -2885,7 +2884,7 @@ an instance of <code><a href="../../ceylondoc/vertx-web//handler/sockjs/SockJSHa
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
 import io.vertx.ceylon.ext.web.handler.sockjs { sockJSHandler_ = sockJSHandler }
 
 ...
@@ -2899,7 +2898,7 @@ value options = SockJSHandlerOptions {
 
 value sockJSHandler = sockJSHandler_.create(vertx, options);
 
-router.route("/myapp/*").handler(sockJSHandler);</code></pre>
+router.route(&quot;/myapp/*&quot;).handler(sockJSHandler);</code></pre>
 </div>
 </div>
 </div>
@@ -2920,7 +2919,7 @@ a <code><a href="../../ceylondoc/vertx-core//http/WebSocket.type.html">WebSocket
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
 import io.vertx.ceylon.ext.web.handler.sockjs { sockJSHandler_ = sockJSHandler }
 
 ...
@@ -2940,7 +2939,7 @@ sockJSHandler.socketHandler((SockJSSocket sockJSSocket) {
   sockJSSocket.handler(sockJSSocket.write);
 });
 
-router.route("/myapp/*").handler(sockJSHandler);</code></pre>
+router.route(&quot;/myapp/*&quot;).handler(sockJSHandler);</code></pre>
 </div>
 </div>
 </div>
@@ -3064,7 +3063,7 @@ SockJS handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
 import io.vertx.ceylon.ext.web.handler.sockjs { sockJSHandler_ = sockJSHandler }
 
 ...
@@ -3076,7 +3075,7 @@ value sockJSHandler = sockJSHandler_.create(vertx);
 value options = BridgeOptions();
 sockJSHandler.bridge(options);
 
-router.route("/eventbus/*").handler(sockJSHandler);</code></pre>
+router.route(&quot;/eventbus/*&quot;).handler(sockJSHandler);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3134,13 +3133,13 @@ the prefix <code>eventbus</code> we will connect there.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;${maven.groupId}&lt;/groupId&gt;
-  &lt;artifactId&gt;${maven.artifactId}&lt;/artifactId&gt;
-  &lt;version&gt;${maven.version}&lt;/version&gt;
-  &lt;classifier&gt;client&lt;/classifier&gt;
-  &lt;type&gt;js&lt;/type&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>${maven.groupId}<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>${maven.artifactId}<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>${maven.version}<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;classifier&gt;</span>client<span class="tag">&lt;/classifier&gt;</span>
+  <span class="tag">&lt;type&gt;</span>js<span class="tag">&lt;/type&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -3152,7 +3151,7 @@ the prefix <code>eventbus</code> we will connect there.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile '${maven.groupId}:${maven.artifactId}:${maven.version}:client'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">${maven.groupId}:${maven.artifactId}:${maven.version}:client</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3245,7 +3244,7 @@ by looking at all the fields and values in the match object and checking they al
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
 import io.vertx.ceylon.ext.web.handler.sockjs { sockJSHandler_ = sockJSHandler }
 
 ...
@@ -3258,24 +3257,24 @@ value sockJSHandler = sockJSHandler_.create(vertx);
 
 // Let through any messages sent to 'demo.orderMgr' from the client
 value inboundPermitted1 = PermittedOptions {
-  address = "demo.orderMgr";
+  address = &quot;demo.orderMgr&quot;;
 };
 
 // Allow calls to the address 'demo.persistor' from the client as long as the messages
 // have an action field with value 'find' and a collection field with value
 // 'albums'
 value inboundPermitted2 = PermittedOptions {
-  address = "demo.persistor";
+  address = &quot;demo.persistor&quot;;
   match = JsonObject {
-    action = "find";
-    collection = "albums";
+    action = &quot;find&quot;;
+    collection = &quot;albums&quot;;
   };
 };
 
 // Allow through any message with a field `wibble` with value `foo`.
 value inboundPermitted3 = PermittedOptions {
   match = JsonObject {
-    wibble = "foo";
+    wibble = &quot;foo&quot;;
   };
 };
 
@@ -3283,12 +3282,12 @@ value inboundPermitted3 = PermittedOptions {
 
 // Let through any messages coming from address 'ticker.mystock'
 value outboundPermitted1 = PermittedOptions {
-  address = "ticker.mystock";
+  address = &quot;ticker.mystock&quot;;
 };
 
-// Let through any messages from addresses starting with "news." (e.g. news.europe, news.usa, etc)
+// Let through any messages from addresses starting with &quot;news.&quot; (e.g. news.europe, news.usa, etc)
 value outboundPermitted2 = PermittedOptions {
-  addressRegex = "news\\..+";
+  addressRegex = &quot;news\\..+&quot;;
 };
 
 // Let's define what we're going to allow from client -&gt; server
@@ -3299,7 +3298,7 @@ value options = BridgeOptions {
 
 sockJSHandler.bridge(options);
 
-router.route("/eventbus/*").handler(sockJSHandler);</code></pre>
+router.route(&quot;/eventbus/*&quot;).handler(sockJSHandler);</code></pre>
 </div>
 </div>
 </div>
@@ -3322,13 +3321,13 @@ required for the match.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Let through any messages sent to 'demo.orderService' from the client
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Let through any messages sent to 'demo.orderService' from the client
 value inboundPermitted = PermittedOptions {
-  address = "demo.orderService";
+  address = &quot;demo.orderService&quot;;
 };
 
-// But only if the user is logged in and has the authority "place_orders"
-inboundPermitted.requiredAuthority = "place_orders";
+// But only if the user is logged in and has the authority &quot;place_orders&quot;
+inboundPermitted.requiredAuthority = &quot;place_orders&quot;;
 
 value options = BridgeOptions {
   inboundPermitteds = {inboundPermitted };
@@ -3343,7 +3342,7 @@ value options = BridgeOptions {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler, sessionHandler, basicAuthHandler_ = basicAuthHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler, sessionHandler, basicAuthHandler_ = basicAuthHandler }
 import io.vertx.ceylon.ext.web.sstore { localSessionStore }
 import io.vertx.ceylon.ext.web { router_ = router }
 import io.vertx.ceylon.ext.web.handler.sockjs { sockJSHandler_ = sockJSHandler }
@@ -3355,11 +3354,11 @@ value router = router_.router(vertx);
 
 // Let through any messages sent to 'demo.orderService' from the client
 value inboundPermitted = PermittedOptions {
-  address = "demo.orderService";
+  address = &quot;demo.orderService&quot;;
 };
 
-// But only if the user is logged in and has the authority "place_orders"
-inboundPermitted.requiredAuthority = "place_orders";
+// But only if the user is logged in and has the authority &quot;place_orders&quot;
+inboundPermitted.requiredAuthority = &quot;place_orders&quot;;
 
 value sockJSHandler = sockJSHandler_.create(vertx);
 sockJSHandler.bridge(BridgeOptions {
@@ -3373,10 +3372,10 @@ router.route().handler(sessionHandler.create(localSessionStore.create(vertx)));
 
 value basicAuthHandler = basicAuthHandler_.create(authProvider);
 
-router.route("/eventbus/*").handler(basicAuthHandler);
+router.route(&quot;/eventbus/*&quot;).handler(basicAuthHandler);
 
 
-router.route("/eventbus/*").handler(sockJSHandler);</code></pre>
+router.route(&quot;/eventbus/*&quot;).handler(sockJSHandler);</code></pre>
 </div>
 </div>
 </div>
@@ -3455,7 +3454,7 @@ authorisation or metrics.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
 import io.vertx.ceylon.ext.web.handler.sockjs { sockJSHandler_ = sockJSHandler, publish, receive }
 
 ...
@@ -3465,7 +3464,7 @@ value router = router_.router(vertx);
 
 // Let through any messages sent to 'demo.orderMgr' from the client
 value inboundPermitted = PermittedOptions {
-  address = "demo.someService";
+  address = &quot;demo.someService&quot;;
 };
 
 value sockJSHandler = sockJSHandler_.create(vertx);
@@ -3475,7 +3474,7 @@ value options = BridgeOptions {
 
 sockJSHandler.bridge(options, (BridgeEvent be) {
   if (be.type() == publish || be.type() == receive) {
-    if (be.getRawMessage()get("body" == "armadillos") {
+    if (be.getRawMessage()get(&quot;body&quot; == &quot;armadillos&quot;) {
       // Reject it
       be.complete(false);
       return;
@@ -3484,7 +3483,7 @@ sockJSHandler.bridge(options, (BridgeEvent be) {
   be.complete(true);
 });
 
-router.route("/eventbus").handler(sockJSHandler);</code></pre>
+router.route(&quot;/eventbus&quot;).handler(sockJSHandler);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3493,7 +3492,7 @@ also add headers to the message, here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web { router_ = router }
 import io.vertx.ceylon.ext.web.handler.sockjs { sockJSHandler_ = sockJSHandler, publish, send }
 
 ...
@@ -3503,7 +3502,7 @@ value router = router_.router(vertx);
 
 // Let through any messages sent to 'demo.orderService' from the client
 value inboundPermitted = PermittedOptions {
-  address = "demo.orderService";
+  address = &quot;demo.orderService&quot;;
 };
 
 value sockJSHandler = sockJSHandler_.create(vertx);
@@ -3515,17 +3514,17 @@ sockJSHandler.bridge(options, (BridgeEvent be) {
   if (be.type() == publish || be.type() == send) {
     // Add some headers
     value headers = JsonObject {
-      header1 = "val";
-      header2 = "val2";
+      header1 = &quot;val&quot;;
+      header2 = &quot;val2&quot;;
     };
     value rawMessage = be.getRawMessage();
-    rawMessage.put("headers", headers);
+    rawMessage.put(&quot;headers&quot;, headers);
     be.setRawMessage(rawMessage);
   };
   be.complete(true);
 });
 
-router.route("/eventbus").handler(sockJSHandler);</code></pre>
+router.route(&quot;/eventbus&quot;).handler(sockJSHandler);</code></pre>
 </div>
 </div>
 </div>
@@ -3551,10 +3550,10 @@ header was present in the Form attributes under the same name as the header, e.g
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">---
-&lt;form action="/submit" method="POST"&gt;
-&lt;input type="hidden" name="X-XSRF-TOKEN" value="abracadabra"&gt;
-&lt;/form&gt;
+<pre class="CodeRay highlight"><code data-lang="html">---
+<span class="tag">&lt;form</span> <span class="attribute-name">action</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/submit</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">method</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">POST</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="tag">&lt;input</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">X-XSRF-TOKEN</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">abracadabra</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
 ---</code></pre>
 </div>
 </div>
@@ -3565,13 +3564,13 @@ or the header name they have chosen during the instantiation of the <code>CSRFHa
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler, csrfHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { cookieHandler, csrfHandler }
 
 ...
 
 
 router.route().handler(cookieHandler.create());
-router.route().handler(csrfHandler.create("abracadabra"));
+router.route().handler(csrfHandler.create(&quot;abracadabra&quot;));
 router.route().handler((RoutingContext rc) {
 
 });</code></pre>
@@ -3592,11 +3591,11 @@ example <code></strong>.vertx.io</code> or fully domain names as <code>www.vertx
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { virtualHostHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { virtualHostHandler }
 
 ...
 
-router.route().handler(virtualHostHandler.create("*.vertx.io", (RoutingContext routingContext) {
+router.route().handler(virtualHostHandler.create(&quot;*.vertx.io&quot;, (RoutingContext routingContext) {
   // do something if the request is for *.vertx.io
 }));</code></pre>
 </div>
@@ -3612,7 +3611,7 @@ authCode flow. An example of using it to protect some resource and authenticate 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { oAuth2AuthHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { oAuth2AuthHandler }
 import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
 
 ...
@@ -3620,29 +3619,29 @@ import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
 
 // create an OAuth2 provider, clientID and clientSecret should be requested to github
 value authProvider = oAuth2Auth.create(vertx, auth_code, OAuth2ClientOptions {
-  clientID = "CLIENT_ID";
-  clientSecret = "CLIENT_SECRET";
-  site = "https://github.com/login";
-  tokenPath = "/oauth/access_token";
-  authorizationPath = "/oauth/authorize";
+  clientID = &quot;CLIENT_ID&quot;;
+  clientSecret = &quot;CLIENT_SECRET&quot;;
+  site = &quot;https://github.com/login&quot;;
+  tokenPath = &quot;/oauth/access_token&quot;;
+  authorizationPath = &quot;/oauth/authorize&quot;;
 });
 
-// create a oauth2 handler on our domain: "http://localhost:8080"
-value oauth2 = oAuth2AuthHandler.create(authProvider, "http://localhost:8080");
+// create a oauth2 handler on our domain: &quot;http://localhost:8080&quot;
+value oauth2 = oAuth2AuthHandler.create(authProvider, &quot;http://localhost:8080&quot;);
 
 // setup the callback handler for receiving the GitHub callback
-oauth2.setupCallback(router.get("/callback"));
+oauth2.setupCallback(router.get(&quot;/callback&quot;));
 
 // protect everything under /protected
-router.route("/protected/*").handler(oauth2);
+router.route(&quot;/protected/*&quot;).handler(oauth2);
 // mount some handler under the protected zone
-router.route("/protected/somepage").handler((RoutingContext rc) {
-  rc.response().end("Welcome to the protected resource!");
+router.route(&quot;/protected/somepage&quot;).handler((RoutingContext rc) {
+  rc.response().end(&quot;Welcome to the protected resource!&quot;);
 });
 
 // welcome page
-router.get("/").handler((RoutingContext ctx) {
-  ctx.response().putHeader("content-type", "text/html").end("Hello&lt;br&gt;&lt;a href=\"/protected/somepage\"&gt;Protected by Github&lt;/a&gt;");
+router.get(&quot;/&quot;).handler((RoutingContext ctx) {
+  ctx.response().putHeader(&quot;content-type&quot;, &quot;text/html&quot;).end(&quot;Hello&lt;br&gt;&lt;a href=\&quot;/protected/somepage\&quot;&gt;Protected by Github&lt;/a&gt;&quot;);
 });</code></pre>
 </div>
 </div>
@@ -3663,7 +3662,7 @@ example, if you are planning to use Google Auth you implement it as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { oAuth2AuthHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { oAuth2AuthHandler }
 import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
 
 ...
@@ -3671,32 +3670,32 @@ import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
 
 // create an OAuth2 provider, clientID and clientSecret should be requested to Google
 value authProvider = oAuth2Auth.create(vertx, auth_code, OAuth2ClientOptions {
-  clientID = "CLIENT_ID";
-  clientSecret = "CLIENT_SECRET";
-  site = "https://accounts.google.com";
-  tokenPath = "https://www.googleapis.com/oauth2/v3/token";
-  authorizationPath = "/o/oauth2/auth";
+  clientID = &quot;CLIENT_ID&quot;;
+  clientSecret = &quot;CLIENT_SECRET&quot;;
+  site = &quot;https://accounts.google.com&quot;;
+  tokenPath = &quot;https://www.googleapis.com/oauth2/v3/token&quot;;
+  authorizationPath = &quot;/o/oauth2/auth&quot;;
 });
 
-// create a oauth2 handler on our domain: "http://localhost:8080"
-value oauth2 = oAuth2AuthHandler.create(authProvider, "http://localhost:8080");
+// create a oauth2 handler on our domain: &quot;http://localhost:8080&quot;
+value oauth2 = oAuth2AuthHandler.create(authProvider, &quot;http://localhost:8080&quot;);
 
 // these are the scopes
-oauth2.addAuthority("profile");
+oauth2.addAuthority(&quot;profile&quot;);
 
 // setup the callback handler for receiving the Google callback
-oauth2.setupCallback(router.get("/callback"));
+oauth2.setupCallback(router.get(&quot;/callback&quot;));
 
 // protect everything under /protected
-router.route("/protected/*").handler(oauth2);
+router.route(&quot;/protected/*&quot;).handler(oauth2);
 // mount some handler under the protected zone
-router.route("/protected/somepage").handler((RoutingContext rc) {
-  rc.response().end("Welcome to the protected resource!");
+router.route(&quot;/protected/somepage&quot;).handler((RoutingContext rc) {
+  rc.response().end(&quot;Welcome to the protected resource!&quot;);
 });
 
 // welcome page
-router.get("/").handler((RoutingContext ctx) {
-  ctx.response().putHeader("content-type", "text/html").end("Hello&lt;br&gt;&lt;a href=\"/protected/somepage\"&gt;Protected by Google&lt;/a&gt;");
+router.get(&quot;/&quot;).handler((RoutingContext ctx) {
+  ctx.response().putHeader(&quot;content-type&quot;, &quot;text/html&quot;).end(&quot;Hello&lt;br&gt;&lt;a href=\&quot;/protected/somepage\&quot;&gt;Protected by Google&lt;/a&gt;&quot;);
 });</code></pre>
 </div>
 </div>
@@ -3713,7 +3712,7 @@ current example you would need to register <code><a href="http://localhost:8080/
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { oAuth2AuthHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { oAuth2AuthHandler }
 import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
 
 ...
@@ -3721,32 +3720,32 @@ import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
 
 // create an OAuth2 provider, clientID and clientSecret should be requested to LinkedIn
 value authProvider = oAuth2Auth.create(vertx, auth_code, OAuth2ClientOptions {
-  clientID = "CLIENT_ID";
-  clientSecret = "CLIENT_SECRET";
-  site = "https://www.linkedin.com";
-  authorizationPath = "/uas/oauth2/authorization";
-  tokenPath = "/uas/oauth2/accessToken";
+  clientID = &quot;CLIENT_ID&quot;;
+  clientSecret = &quot;CLIENT_SECRET&quot;;
+  site = &quot;https://www.linkedin.com&quot;;
+  authorizationPath = &quot;/uas/oauth2/authorization&quot;;
+  tokenPath = &quot;/uas/oauth2/accessToken&quot;;
 });
 
-// create a oauth2 handler on our domain: "http://localhost:8080"
-value oauth2 = oAuth2AuthHandler.create(authProvider, "http://localhost:8080");
+// create a oauth2 handler on our domain: &quot;http://localhost:8080&quot;
+value oauth2 = oAuth2AuthHandler.create(authProvider, &quot;http://localhost:8080&quot;);
 
 // these are the scopes
-oauth2.addAuthority("r_basicprofile");
+oauth2.addAuthority(&quot;r_basicprofile&quot;);
 
 // setup the callback handler for receiving the LinkedIn callback
-oauth2.setupCallback(router.get("/callback"));
+oauth2.setupCallback(router.get(&quot;/callback&quot;));
 
 // protect everything under /protected
-router.route("/protected/*").handler(oauth2);
+router.route(&quot;/protected/*&quot;).handler(oauth2);
 // mount some handler under the protected zone
-router.route("/protected/somepage").handler((RoutingContext rc) {
-  rc.response().end("Welcome to the protected resource!");
+router.route(&quot;/protected/somepage&quot;).handler((RoutingContext rc) {
+  rc.response().end(&quot;Welcome to the protected resource!&quot;);
 });
 
 // welcome page
-router.get("/").handler((RoutingContext ctx) {
-  ctx.response().putHeader("content-type", "text/html").end("Hello&lt;br&gt;&lt;a href=\"/protected/somepage\"&gt;Protected by LinkedIn&lt;/a&gt;");
+router.get(&quot;/&quot;).handler((RoutingContext ctx) {
+  ctx.response().putHeader(&quot;content-type&quot;, &quot;text/html&quot;).end(&quot;Hello&lt;br&gt;&lt;a href=\&quot;/protected/somepage\&quot;&gt;Protected by LinkedIn&lt;/a&gt;&quot;);
 });</code></pre>
 </div>
 </div>
@@ -3784,7 +3783,7 @@ to specify grants. You can validate against these grants like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { oAuth2AuthHandler }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.web.handler { oAuth2AuthHandler }
 import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
 
 ...
@@ -3792,30 +3791,30 @@ import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
 // create an OAuth2 provider for keycloak
 value authProvider = oAuth2Auth.createKeycloak(vertx, auth_code, JsonObject());
 
-// create a oauth2 handler on our domain: "http://localhost:8000"
-value oauth2 = oAuth2AuthHandler.create(authProvider, "http://localhost:8000");
+// create a oauth2 handler on our domain: &quot;http://localhost:8000&quot;
+value oauth2 = oAuth2AuthHandler.create(authProvider, &quot;http://localhost:8000&quot;);
 
 // setup the callback handler for receiving the keycloak callback
-oauth2.setupCallback(router.get("/callback"));
+oauth2.setupCallback(router.get(&quot;/callback&quot;));
 
 // protect everything under /protected
-router.route("/protected/*").handler(oauth2);
+router.route(&quot;/protected/*&quot;).handler(oauth2);
 
 // mount some handler under the protected zone
-router.route("/protected/somepage").handler((RoutingContext rc) {
+router.route(&quot;/protected/somepage&quot;).handler((RoutingContext rc) {
   // you can now do authZ based on keycloak grants
-  rc.user().isAuthorised("account:manage-account", (Boolean|Throwable manageAccount) {
+  rc.user().isAuthorised(&quot;account:manage-account&quot;, (Boolean|Throwable manageAccount) {
     if (manageAccount) {
-      rc.response().end("Welcome to the protected resource and you can manage your account!");
+      rc.response().end(&quot;Welcome to the protected resource and you can manage your account!&quot;);
     } else {
-      rc.response().end("Welcome to the protected resource but you cannot manage your account!");
+      rc.response().end(&quot;Welcome to the protected resource but you cannot manage your account!&quot;);
     };
   });
 });
 
 // welcome page
-router.get("/").handler((RoutingContext ctx) {
-  ctx.response().putHeader("content-type", "text/html").end("Hello&lt;br&gt;&lt;a href=\"/protected/somepage\"&gt;Protected by keycloak&lt;/a&gt;");
+router.get(&quot;/&quot;).handler((RoutingContext ctx) {
+  ctx.response().putHeader(&quot;content-type&quot;, &quot;text/html&quot;).end(&quot;Hello&lt;br&gt;&lt;a href=\&quot;/protected/somepage\&quot;&gt;Protected by keycloak&lt;/a&gt;&quot;);
 });</code></pre>
 </div>
 </div>

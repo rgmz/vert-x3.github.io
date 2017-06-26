@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -132,24 +131,24 @@ and <code>TypedArgument</code> in the <code><a href="../../jsdoc/module-vertx-js
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CLI cli = CLI.create("copy")
-    .setSummary("A command line interface to copy files.")
-    .addOption(new TypedOption&lt;Boolean&gt;()
-        .setType(Boolean.class)
-        .setLongName("directory")
-        .setShortName("R")
-        .setDescription("enables directory support")
-        .setFlag(true))
-    .addArgument(new TypedArgument&lt;File&gt;()
-        .setType(File.class)
-        .setIndex(0)
-        .setDescription("The source")
-        .setArgName("source"))
-    .addArgument(new TypedArgument&lt;File&gt;()
-        .setType(File.class)
-        .setIndex(0)
-        .setDescription("The destination")
-        .setArgName("target"));</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">CLI cli = CLI.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">copy</span><span class="delimiter">&quot;</span></span>)
+    .setSummary(<span class="string"><span class="delimiter">&quot;</span><span class="content">A command line interface to copy files.</span><span class="delimiter">&quot;</span></span>)
+    .addOption(<span class="keyword">new</span> TypedOption&lt;<span class="predefined-type">Boolean</span>&gt;()
+        .setType(<span class="predefined-type">Boolean</span>.class)
+        .setLongName(<span class="string"><span class="delimiter">&quot;</span><span class="content">directory</span><span class="delimiter">&quot;</span></span>)
+        .setShortName(<span class="string"><span class="delimiter">&quot;</span><span class="content">R</span><span class="delimiter">&quot;</span></span>)
+        .setDescription(<span class="string"><span class="delimiter">&quot;</span><span class="content">enables directory support</span><span class="delimiter">&quot;</span></span>)
+        .setFlag(<span class="predefined-constant">true</span>))
+    .addArgument(<span class="keyword">new</span> TypedArgument&lt;<span class="predefined-type">File</span>&gt;()
+        .setType(<span class="predefined-type">File</span>.class)
+        .setIndex(<span class="integer">0</span>)
+        .setDescription(<span class="string"><span class="delimiter">&quot;</span><span class="content">The source</span><span class="delimiter">&quot;</span></span>)
+        .setArgName(<span class="string"><span class="delimiter">&quot;</span><span class="content">source</span><span class="delimiter">&quot;</span></span>))
+    .addArgument(<span class="keyword">new</span> TypedArgument&lt;<span class="predefined-type">File</span>&gt;()
+        .setType(<span class="predefined-type">File</span>.class)
+        .setIndex(<span class="integer">0</span>)
+        .setDescription(<span class="string"><span class="delimiter">&quot;</span><span class="content">The destination</span><span class="delimiter">&quot;</span></span>)
+        .setArgName(<span class="string"><span class="delimiter">&quot;</span><span class="content">target</span><span class="delimiter">&quot;</span></span>));</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -157,10 +156,10 @@ and <code>TypedArgument</code> in the <code><a href="../../jsdoc/module-vertx-js
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CommandLine commandLine = cli.parse(userCommandLineArguments);
-boolean flag = commandLine.getOptionValue("R");
-File source = commandLine.getArgumentValue("source");
-File target = commandLine.getArgumentValue("target");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">CommandLine commandLine = cli.parse(userCommandLineArguments);
+<span class="type">boolean</span> flag = commandLine.getOptionValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">R</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">File</span> source = commandLine.getArgumentValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">source</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">File</span> target = commandLine.getArgumentValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">target</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -186,11 +185,11 @@ this converter:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CLI cli = CLI.create("some-name")
-    .addOption(new TypedOption&lt;Person&gt;()
+<pre class="CodeRay highlight"><code data-lang="java">CLI cli = CLI.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-name</span><span class="delimiter">&quot;</span></span>)
+    .addOption(<span class="keyword">new</span> TypedOption&lt;Person&gt;()
         .setType(Person.class)
-        .setConverter(new PersonConverter())
-        .setLongName("person"));</code></pre>
+        .setConverter(<span class="keyword">new</span> PersonConverter())
+        .setLongName(<span class="string"><span class="delimiter">&quot;</span><span class="content">person</span><span class="delimiter">&quot;</span></span>));</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -208,28 +207,28 @@ methods:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">@Name("some-name")
-@Summary("some short summary.")
-@Description("some long description")
-public class AnnotatedCli {
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Name</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-name</span><span class="delimiter">&quot;</span></span>)
+<span class="annotation">@Summary</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">some short summary.</span><span class="delimiter">&quot;</span></span>)
+<span class="annotation">@Description</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">some long description</span><span class="delimiter">&quot;</span></span>)
+<span class="directive">public</span> <span class="type">class</span> <span class="class">AnnotatedCli</span> {
 
-  private boolean flag;
-  private String name;
-  private String arg;
+  <span class="directive">private</span> <span class="type">boolean</span> flag;
+  <span class="directive">private</span> <span class="predefined-type">String</span> name;
+  <span class="directive">private</span> <span class="predefined-type">String</span> arg;
 
- @Option(shortName = "f", flag = true)
- public void setFlag(boolean flag) {
-   this.flag = flag;
+ <span class="annotation">@Option</span>(shortName = <span class="string"><span class="delimiter">&quot;</span><span class="content">f</span><span class="delimiter">&quot;</span></span>, flag = <span class="predefined-constant">true</span>)
+ <span class="directive">public</span> <span class="type">void</span> setFlag(<span class="type">boolean</span> flag) {
+   <span class="local-variable">this</span>.flag = flag;
  }
 
- @Option(longName = "name")
- public void setName(String name) {
-   this.name = name;
+ <span class="annotation">@Option</span>(longName = <span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>)
+ <span class="directive">public</span> <span class="type">void</span> setName(<span class="predefined-type">String</span> name) {
+   <span class="local-variable">this</span>.name = name;
  }
 
- @Argument(index = 0)
- public void setArg(String arg) {
-  this.arg = arg;
+ <span class="annotation">@Argument</span>(index = <span class="integer">0</span>)
+ <span class="directive">public</span> <span class="type">void</span> setArg(<span class="predefined-type">String</span> arg) {
+  <span class="local-variable">this</span>.arg = arg;
  }
 }</code></pre>
 </div>
@@ -239,9 +238,9 @@ public class AnnotatedCli {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CLI cli = CLI.create(AnnotatedCli.class);
+<pre class="CodeRay highlight"><code data-lang="java">CLI cli = CLI.create(AnnotatedCli.class);
 CommandLine commandLine = cli.parse(userCommandLineArguments);
-AnnotatedCli instance = new AnnotatedCli();
+AnnotatedCli instance = <span class="keyword">new</span> AnnotatedCli();
 CLIConfigurator.inject(commandLine, instance);</code></pre>
 </div>
 </div>

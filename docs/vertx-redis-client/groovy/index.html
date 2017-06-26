@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -215,11 +214,11 @@ your network.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-redis-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-redis-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -231,7 +230,7 @@ your network.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-redis-client:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-redis-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -267,11 +266,11 @@ containing the following values:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = [
-  host:"127.0.0.1"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> config = [
+  <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.1</span><span class="delimiter">&quot;</span></span>
 ]
 
-def redis = RedisClient.create(vertx, config)</code></pre>
+<span class="keyword">def</span> redis = RedisClient.create(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -306,11 +305,11 @@ if one wants to get a value of a key it can be done as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def redis = RedisClient.create(vertx, [:])
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> redis = RedisClient.create(vertx, [:])
 
-redis.get("mykey", { res -&gt;
-  if (res.succeeded()) {
-    // so something...
+redis.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">mykey</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// so something...</span>
   }
 })</code></pre>
 </div>
@@ -332,21 +331,21 @@ it cannot be used for running other commands than the command to leave that mode
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// register a handler for the incoming message the naming the Redis module will use is base address + '.' + redis channel
-vertx.eventBus().consumer("io.vertx.redis.channel1", { received -&gt;
-  // do whatever you need to do with your message
-  def value = received.body().value
-  // the value is a JSON doc with the following properties
-  // channel - The channel to which this message was sent
-  // pattern - Pattern is present if you use psubscribe command and is the pattern that matched this message channel
-  // message - The message payload
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// register a handler for the incoming message the naming the Redis module will use is base address + '.' + redis channel</span>
+vertx.eventBus().consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.redis.channel1</span><span class="delimiter">&quot;</span></span>, { received -&gt;
+  <span class="comment">// do whatever you need to do with your message</span>
+  <span class="keyword">def</span> value = received.body().value
+  <span class="comment">// the value is a JSON doc with the following properties</span>
+  <span class="comment">// channel - The channel to which this message was sent</span>
+  <span class="comment">// pattern - Pattern is present if you use psubscribe command and is the pattern that matched this message channel</span>
+  <span class="comment">// message - The message payload</span>
 })
 
-def redis = RedisClient.create(vertx, [:])
+<span class="keyword">def</span> redis = RedisClient.create(vertx, [:])
 
-redis.subscribe("channel1", { res -&gt;
-  if (res.succeeded()) {
-    // so something...
+redis.subscribe(<span class="string"><span class="delimiter">&quot;</span><span class="content">channel1</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// so something...</span>
   }
 })</code></pre>
 </div>
@@ -356,11 +355,11 @@ redis.subscribe("channel1", { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def redis = RedisClient.create(vertx, [:])
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> redis = RedisClient.create(vertx, [:])
 
-redis.publish("channel1", "Hello World!", { res -&gt;
-  if (res.succeeded()) {
-    // so something...
+redis.publish(<span class="string"><span class="delimiter">&quot;</span><span class="content">channel1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// so something...</span>
   }
 })</code></pre>
 </div>
@@ -486,7 +485,7 @@ will always return a JsonArray, even for example for scripts such as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>return 10</code></pre>
+<pre class="CodeRay highlight"><code>return 10</code></pre>
 </div>
 </div>
 <div class="paragraph">

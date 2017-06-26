@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -184,11 +183,11 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-auth-oauth2&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-auth-oauth2<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -200,7 +199,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-oauth2:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-oauth2:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -280,40 +279,40 @@ specification).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var OAuth2Auth = require("vertx-auth-oauth2-js/o_auth2_auth");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> OAuth2Auth = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-auth-oauth2-js/o_auth2_auth</span><span class="delimiter">&quot;</span></span>);
 
-var oauth2 = OAuth2Auth.create(vertx, 'AUTH_CODE', {
-  "clientID" : "YOUR_CLIENT_ID",
-  "clientSecret" : "YOUR_CLIENT_SECRET",
-  "site" : "https://github.com/login",
-  "tokenPath" : "/oauth/access_token",
-  "authorizationPath" : "/oauth/authorize"
+<span class="keyword">var</span> oauth2 = OAuth2Auth.create(vertx, <span class="string"><span class="delimiter">'</span><span class="content">AUTH_CODE</span><span class="delimiter">'</span></span>, {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">clientID</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">YOUR_CLIENT_ID</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">clientSecret</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">YOUR_CLIENT_SECRET</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">site</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">https://github.com/login</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">tokenPath</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">/oauth/access_token</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">authorizationPath</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">/oauth/authorize</span><span class="delimiter">&quot;</span></span>
 });
 
-// when there is a need to access a protected resource or call a protected method,
-// call the authZ url for a challenge
+<span class="comment">// when there is a need to access a protected resource or call a protected method,</span>
+<span class="comment">// call the authZ url for a challenge</span>
 
-var authorization_uri = oauth2.authorizeURL({
-  "redirect_uri" : "http://localhost:8080/callback",
-  "scope" : "notifications",
-  "state" : "3(#0/!~"
+<span class="keyword">var</span> authorization_uri = oauth2.authorizeURL({
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">redirect_uri</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/callback</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">scope</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">notifications</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">state</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">3(#0/!~</span><span class="delimiter">&quot;</span></span>
 });
 
-// when working with web application use the above string as a redirect url
+<span class="comment">// when working with web application use the above string as a redirect url</span>
 
-// in this case GitHub will call you back in the callback uri one should now complete the handshake as:
+<span class="comment">// in this case GitHub will call you back in the callback uri one should now complete the handshake as:</span>
 
 
-var code = "xxxxxxxxxxxxxxxxxxxxxxxx";
+<span class="keyword">var</span> code = <span class="string"><span class="delimiter">&quot;</span><span class="content">xxxxxxxxxxxxxxxxxxxxxxxx</span><span class="delimiter">&quot;</span></span>;
 
 oauth2.getToken({
-  "code" : code,
-  "redirect_uri" : "http://localhost:8080/callback"
-}, function (res, res_err) {
-  if (res_err != null) {
-    // error, the code provided is not valid
-  } else {
-    // save the token and continue...
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">code</span><span class="delimiter">&quot;</span></span> : code,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">redirect_uri</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/callback</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err != <span class="predefined-constant">null</span>) {
+    <span class="comment">// error, the code provided is not valid</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// save the token and continue...</span>
   }
 });</code></pre>
 </div>
@@ -328,42 +327,42 @@ access token.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var OAuth2Auth = require("vertx-auth-oauth2-js/o_auth2_auth");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> OAuth2Auth = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-auth-oauth2-js/o_auth2_auth</span><span class="delimiter">&quot;</span></span>);
 
-// Set the client credentials and the OAuth2 server
-var credentials = {
-  "clientID" : "&lt;client-id&gt;",
-  "clientSecret" : "&lt;client-secret&gt;",
-  "site" : "https://api.oauth.com"
+<span class="comment">// Set the client credentials and the OAuth2 server</span>
+<span class="keyword">var</span> credentials = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">clientID</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;client-id&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">clientSecret</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;client-secret&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">site</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">https://api.oauth.com</span><span class="delimiter">&quot;</span></span>
 };
 
 
-// Initialize the OAuth2 Library
-var oauth2 = OAuth2Auth.create(vertx, 'AUTH_CODE', credentials);
+<span class="comment">// Initialize the OAuth2 Library</span>
+<span class="keyword">var</span> oauth2 = OAuth2Auth.create(vertx, <span class="string"><span class="delimiter">'</span><span class="content">AUTH_CODE</span><span class="delimiter">'</span></span>, credentials);
 
-// Authorization oauth2 URI
-var authorization_uri = oauth2.authorizeURL({
-  "redirect_uri" : "http://localhost:8080/callback",
-  "scope" : "&lt;scope&gt;",
-  "state" : "&lt;state&gt;"
+<span class="comment">// Authorization oauth2 URI</span>
+<span class="keyword">var</span> authorization_uri = oauth2.authorizeURL({
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">redirect_uri</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/callback</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">scope</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;scope&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">state</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;state&gt;</span><span class="delimiter">&quot;</span></span>
 });
 
-// Redirect example using Vert.x
-response.putHeader("Location", authorization_uri).setStatusCode(302).end();
+<span class="comment">// Redirect example using Vert.x</span>
+response.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Location</span><span class="delimiter">&quot;</span></span>, authorization_uri).setStatusCode(<span class="integer">302</span>).end();
 
-var tokenConfig = {
-  "code" : "&lt;code&gt;",
-  "redirect_uri" : "http://localhost:3000/callback"
+<span class="keyword">var</span> tokenConfig = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">code</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;code&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">redirect_uri</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:3000/callback</span><span class="delimiter">&quot;</span></span>
 };
 
-// Callbacks
-// Save the access token
-oauth2.getToken(tokenConfig, function (res, res_err) {
-  if (res_err != null) {
-    console.error("Access Token Error: " + res_err.getMessage());
-  } else {
-    // Get the access token object (the authorization code is given from the previous step).
-    var token = res;
+<span class="comment">// Callbacks</span>
+<span class="comment">// Save the access token</span>
+oauth2.getToken(tokenConfig, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err != <span class="predefined-constant">null</span>) {
+    console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Access Token Error: </span><span class="delimiter">&quot;</span></span> + res_err.getMessage());
+  } <span class="keyword">else</span> {
+    <span class="comment">// Get the access token object (the authorization code is given from the previous step).</span>
+    <span class="keyword">var</span> token = res;
   }
 });</code></pre>
 </div>
@@ -378,29 +377,29 @@ need a fast way to test your application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var OAuth2Auth = require("vertx-auth-oauth2-js/o_auth2_auth");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> OAuth2Auth = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-auth-oauth2-js/o_auth2_auth</span><span class="delimiter">&quot;</span></span>);
 
-// Initialize the OAuth2 Library
-var oauth2 = OAuth2Auth.create(vertx, 'PASSWORD');
+<span class="comment">// Initialize the OAuth2 Library</span>
+<span class="keyword">var</span> oauth2 = OAuth2Auth.create(vertx, <span class="string"><span class="delimiter">'</span><span class="content">PASSWORD</span><span class="delimiter">'</span></span>);
 
-var tokenConfig = {
-  "username" : "username",
-  "password" : "password"
+<span class="keyword">var</span> tokenConfig = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>
 };
 
-// Callbacks
-// Save the access token
-oauth2.getToken(tokenConfig, function (res, res_err) {
-  if (res_err != null) {
-    console.error("Access Token Error: " + res_err.getMessage());
-  } else {
-    // Get the access token object (the authorization code is given from the previous step).
-    var token = res;
+<span class="comment">// Callbacks</span>
+<span class="comment">// Save the access token</span>
+oauth2.getToken(tokenConfig, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err != <span class="predefined-constant">null</span>) {
+    console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Access Token Error: </span><span class="delimiter">&quot;</span></span> + res_err.getMessage());
+  } <span class="keyword">else</span> {
+    <span class="comment">// Get the access token object (the authorization code is given from the previous step).</span>
+    <span class="keyword">var</span> token = res;
 
-    oauth2.api('GET', "/users", {
-      "access_token" : token.principal().access_token
-    }, function (res2, res2_err) {
-      // the user object should be returned here...
+    oauth2.api(<span class="string"><span class="delimiter">'</span><span class="content">GET</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>, {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">access_token</span><span class="delimiter">&quot;</span></span> : token.principal().access_token
+    }, <span class="keyword">function</span> (res2, res2_err) {
+      <span class="comment">// the user object should be returned here...</span>
     });
   }
 });</code></pre>
@@ -414,30 +413,30 @@ oauth2.getToken(tokenConfig, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var OAuth2Auth = require("vertx-auth-oauth2-js/o_auth2_auth");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> OAuth2Auth = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-auth-oauth2-js/o_auth2_auth</span><span class="delimiter">&quot;</span></span>);
 
-// Set the client credentials and the OAuth2 server
-var credentials = {
-  "clientID" : "&lt;client-id&gt;",
-  "clientSecret" : "&lt;client-secret&gt;",
-  "site" : "https://api.oauth.com"
+<span class="comment">// Set the client credentials and the OAuth2 server</span>
+<span class="keyword">var</span> credentials = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">clientID</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;client-id&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">clientSecret</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;client-secret&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">site</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">https://api.oauth.com</span><span class="delimiter">&quot;</span></span>
 };
 
 
-// Initialize the OAuth2 Library
-var oauth2 = OAuth2Auth.create(vertx, 'CLIENT', credentials);
+<span class="comment">// Initialize the OAuth2 Library</span>
+<span class="keyword">var</span> oauth2 = OAuth2Auth.create(vertx, <span class="string"><span class="delimiter">'</span><span class="content">CLIENT</span><span class="delimiter">'</span></span>, credentials);
 
-var tokenConfig = {
+<span class="keyword">var</span> tokenConfig = {
 };
 
-// Callbacks
-// Save the access token
-oauth2.getToken(tokenConfig, function (res, res_err) {
-  if (res_err != null) {
-    console.error("Access Token Error: " + res_err.getMessage());
-  } else {
-    // Get the access token object (the authorization code is given from the previous step).
-    var token = res;
+<span class="comment">// Callbacks</span>
+<span class="comment">// Save the access token</span>
+oauth2.getToken(tokenConfig, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err != <span class="predefined-constant">null</span>) {
+    console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Access Token Error: </span><span class="delimiter">&quot;</span></span> + res_err.getMessage());
+  } <span class="keyword">else</span> {
+    <span class="comment">// Get the access token object (the authorization code is given from the previous step).</span>
+    <span class="keyword">var</span> token = res;
   }
 });</code></pre>
 </div>
@@ -452,14 +451,14 @@ to refresh the access token when it is expired.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Check if the token is expired. If expired it is refreshed.
-if (token.expired()) {
-  // Callbacks
-  token.refresh(function (res, res_err) {
-    if (res_err == null) {
-      // success
-    } else {
-      // error handling...
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Check if the token is expired. If expired it is refreshed.</span>
+<span class="keyword">if</span> (token.expired()) {
+  <span class="comment">// Callbacks</span>
+  token.refresh(<span class="keyword">function</span> (res, res_err) {
+    <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+      <span class="comment">// success</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// error handling...</span>
     }
   });
 }</code></pre>
@@ -470,13 +469,13 @@ if (token.expired()) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Revoke only the access token
-token.revoke("access_token", function (res, res_err) {
-  // Session ended. But the refresh_token is still valid.
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Revoke only the access token</span>
+token.revoke(<span class="string"><span class="delimiter">&quot;</span><span class="content">access_token</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
+  <span class="comment">// Session ended. But the refresh_token is still valid.</span>
 
-  // Revoke the refresh_token
-  token.revoke("refresh_token", function (res1, res1_err) {
-    console.log("token revoked.");
+  <span class="comment">// Revoke the refresh_token</span>
+  token.revoke(<span class="string"><span class="delimiter">&quot;</span><span class="content">refresh_token</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res1, res1_err) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">token revoked.</span><span class="delimiter">&quot;</span></span>);
   });
 });</code></pre>
 </div>
@@ -547,36 +546,36 @@ This information is quite valuable since it allows to do authorization at the AP
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var KeycloakAuth = require("vertx-auth-oauth2-js/keycloak_auth");
-// you would get this config from the keycloak admin console
-var keycloakJson = {
-  "realm" : "master",
-  "realm-public-key" : "MIIBIjANBgkqhk...wIDAQAB",
-  "auth-server-url" : "http://localhost:9000/auth",
-  "ssl-required" : "external",
-  "resource" : "frontend",
-  "credentials" : {
-    "secret" : "2fbf5e18-b923-4a83-9657-b4ebd5317f60"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> KeycloakAuth = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-auth-oauth2-js/keycloak_auth</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">// you would get this config from the keycloak admin console</span>
+<span class="keyword">var</span> keycloakJson = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">realm</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">master</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">realm-public-key</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">MIIBIjANBgkqhk...wIDAQAB</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">auth-server-url</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:9000/auth</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">ssl-required</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">external</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">resource</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">frontend</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">credentials</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">2fbf5e18-b923-4a83-9657-b4ebd5317f60</span><span class="delimiter">&quot;</span></span>
   }
 };
 
-// Initialize the OAuth2 Library
-var oauth2 = KeycloakAuth.create(vertx, 'PASSWORD', keycloakJson);
+<span class="comment">// Initialize the OAuth2 Library</span>
+<span class="keyword">var</span> oauth2 = KeycloakAuth.create(vertx, <span class="string"><span class="delimiter">'</span><span class="content">PASSWORD</span><span class="delimiter">'</span></span>, keycloakJson);
 
-// first get a token (authenticate)
+<span class="comment">// first get a token (authenticate)</span>
 oauth2.getToken({
-  "username" : "user",
-  "password" : "secret"
-}, function (res, res_err) {
-  if (res_err != null) {
-    // error handling...
-  } else {
-    var token = res;
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err != <span class="predefined-constant">null</span>) {
+    <span class="comment">// error handling...</span>
+  } <span class="keyword">else</span> {
+    <span class="keyword">var</span> token = res;
 
-    // now check for permissions
-    token.isAuthorised("account:manage-account", function (r, r_err) {
-      if (r) {
-        // this user is authorized to manage its account
+    <span class="comment">// now check for permissions</span>
+    token.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">account:manage-account</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (r, r_err) {
+      <span class="keyword">if</span> (r) {
+        <span class="comment">// this user is authorized to manage its account</span>
       }
     });
   }
@@ -589,13 +588,13 @@ data (e.g. <code>preferred_username</code>) from the Keycloak principal. For exa
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var KeycloakHelper = require("vertx-auth-oauth2-js/keycloak_helper");
-// you can get the decoded `id_token` from the Keycloak principal
-var idToken = KeycloakHelper.idToken(principal);
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> KeycloakHelper = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-auth-oauth2-js/keycloak_helper</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">// you can get the decoded `id_token` from the Keycloak principal</span>
+<span class="keyword">var</span> idToken = KeycloakHelper.idToken(principal);
 
-// you can also retrieve some properties directly from the Keycloak principal
-// e.g. `preferred_username`
-var username = KeycloakHelper.preferredUsername(principal);</code></pre>
+<span class="comment">// you can also retrieve some properties directly from the Keycloak principal</span>
+<span class="comment">// e.g. `preferred_username`</span>
+<span class="keyword">var</span> username = KeycloakHelper.preferredUsername(principal);</code></pre>
 </div>
 </div>
 </div>
@@ -621,18 +620,18 @@ the User level:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// OAuth2Auth level
-oauth2.introspectToken("opaque string", function (res, res_err) {
-  if (res_err == null) {
-    // token is valid!
-    var accessToken = res;
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// OAuth2Auth level</span>
+oauth2.introspectToken(<span class="string"><span class="delimiter">&quot;</span><span class="content">opaque string</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// token is valid!</span>
+    <span class="keyword">var</span> accessToken = res;
   }
 });
 
-// User level
-token.introspect(function (res, res_err) {
-  if (res_err == null) {
-    // Token is valid!
+<span class="comment">// User level</span>
+token.introspect(<span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// Token is valid!</span>
   }
 });</code></pre>
 </div>
@@ -649,11 +648,11 @@ this specific case one needs to use the token introspection if the provider supp
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// OAuth2Auth level
-oauth2.decodeToken("jwt-token", function (res, res_err) {
-  if (res_err == null) {
-    // token is valid!
-    var accessToken = res;
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// OAuth2Auth level</span>
+oauth2.decodeToken(<span class="string"><span class="delimiter">&quot;</span><span class="content">jwt-token</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// token is valid!</span>
+    <span class="keyword">var</span> accessToken = res;
   }
 });</code></pre>
 </div>
@@ -716,10 +715,10 @@ example you want to see if the user can <code>print</code> in the current applic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">user.isAuthorised("print", function (res, res_err) {
-  // in this case it is assumed that the role is the current application
-  if (res_err == null &amp;&amp; res) {
-    // Yes the user can print
+<pre class="CodeRay highlight"><code data-lang="js">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">print</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
+  <span class="comment">// in this case it is assumed that the role is the current application</span>
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span> &amp;&amp; res) {
+    <span class="comment">// Yes the user can print</span>
   }
 });</code></pre>
 </div>
@@ -729,11 +728,11 @@ example you want to see if the user can <code>print</code> in the current applic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">user.isAuthorised("realm:add-user", function (res, res_err) {
-  // the role is "realm"
-  // the authority is "add-user"
-  if (res_err == null &amp;&amp; res) {
-    // Yes the user can add users to the application
+<pre class="CodeRay highlight"><code data-lang="js">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">realm:add-user</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
+  <span class="comment">// the role is &quot;realm&quot;</span>
+  <span class="comment">// the authority is &quot;add-user&quot;</span>
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span> &amp;&amp; res) {
+    <span class="comment">// Yes the user can add users to the application</span>
   }
 });</code></pre>
 </div>
@@ -743,11 +742,11 @@ example you want to see if the user can <code>print</code> in the current applic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">user.isAuthorised("finance:year-report", function (res, res_err) {
-  // the role is "finance"
-  // the authority is "year-report"
-  if (res_err == null &amp;&amp; res) {
-    // Yes the user can access the year report from the finance department
+<pre class="CodeRay highlight"><code data-lang="js">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">finance:year-report</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
+  <span class="comment">// the role is &quot;finance&quot;</span>
+  <span class="comment">// the authority is &quot;year-report&quot;</span>
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span> &amp;&amp; res) {
+    <span class="comment">// Yes the user can access the year report from the finance department</span>
   }
 });</code></pre>
 </div>
@@ -766,8 +765,8 @@ and be invalid, you can verify if the token is still valid like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// internal validation against, expiration date
-var isExpired = user.expired();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// internal validation against, expiration date</span>
+<span class="keyword">var</span> isExpired = user.expired();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -784,14 +783,14 @@ screen. In this case you can refresh the token. To refresh a token you need to h
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">user.refresh(function (res, res_err) {
-  if (res_err == null) {
-    // the refresh call succeeded
-  } else {
-    // the token was not refreshed, a best practise would be
-    // to forcefully logout the user since this could be a
-    // symptom that you're logged out by the server and this
-    // token is not valid anymore.
+<pre class="CodeRay highlight"><code data-lang="js">user.refresh(<span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// the refresh call succeeded</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// the token was not refreshed, a best practise would be</span>
+    <span class="comment">// to forcefully logout the user since this could be a</span>
+    <span class="comment">// symptom that you're logged out by the server and this</span>
+    <span class="comment">// token is not valid anymore.</span>
   }
 });</code></pre>
 </div>
@@ -805,14 +804,14 @@ any application. In order to do this one needs to revoke the token against the O
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">user.revoke("access_token", function (res, res_err) {
-  if (res_err == null) {
-    // the refresh call succeeded
-  } else {
-    // the token was not refreshed, a best practise would be
-    // to forcefully logout the user since this could be a
-    // symptom that you're logged out by the server and this
-    // token is not valid anymore.
+<pre class="CodeRay highlight"><code data-lang="js">user.revoke(<span class="string"><span class="delimiter">&quot;</span><span class="content">access_token</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// the refresh call succeeded</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// the token was not refreshed, a best practise would be</span>
+    <span class="comment">// to forcefully logout the user since this could be a</span>
+    <span class="comment">// symptom that you're logged out by the server and this</span>
+    <span class="comment">// token is not valid anymore.</span>
   }
 });</code></pre>
 </div>
@@ -848,13 +847,13 @@ means that the check happens on the OAuth2 server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">user.introspect(function (res, res_err) {
-  if (res_err == null) {
-    // the introspection call succeeded
-  } else {
-    // the token failed the introspection. You should proceed
-    // to logout the user since this means that this token is
-    // not valid anymore.
+<pre class="CodeRay highlight"><code data-lang="js">user.introspect(<span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// the introspection call succeeded</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// the token failed the introspection. You should proceed</span>
+    <span class="comment">// to logout the user since this means that this token is</span>
+    <span class="comment">// not valid anymore.</span>
   }
 });</code></pre>
 </div>
@@ -873,12 +872,12 @@ user this is as simple as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">user.logout(function (res, res_err) {
-  if (res_err == null) {
-    // the logout call succeeded
-  } else {
-    // the user might not have been logged out
-    // to know why:
+<pre class="CodeRay highlight"><code data-lang="js">user.logout(<span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// the logout call succeeded</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// the user might not have been logged out</span>
+    <span class="comment">// to know why:</span>
     console.log(res_err);
   }
 });</code></pre>

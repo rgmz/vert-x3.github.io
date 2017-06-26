@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -187,7 +186,7 @@ HTTP/2 protocol.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServer server = vertx.createHttpServer();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">HttpServer server = vertx.createHttpServer();</code></pre>
 </div>
 </div>
 </div>
@@ -199,7 +198,7 @@ instance when creating it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerOptions options = new HttpServerOptions().setMaxWebsocketFrameSize(1000000);
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerOptions options = <span class="keyword">new</span> HttpServerOptions().setMaxWebsocketFrameSize(<span class="integer">1000000</span>);
 
 HttpServer server = vertx.createHttpServer(options);</code></pre>
 </div>
@@ -226,10 +225,10 @@ an HTTP/1.1 upgraded request or directly</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerOptions options = new HttpServerOptions()
-    .setUseAlpn(true)
-    .setSsl(true)
-    .setKeyStoreOptions(new JksOptions().setPath("/path/to/my/keystore"));
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerOptions options = <span class="keyword">new</span> HttpServerOptions()
+    .setUseAlpn(<span class="predefined-constant">true</span>)
+    .setSsl(<span class="predefined-constant">true</span>)
+    .setKeyStoreOptions(<span class="keyword">new</span> JksOptions().setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/my/keystore</span><span class="delimiter">&quot;</span></span>));
 
 HttpServer server = vertx.createHttpServer(options);</code></pre>
 </div>
@@ -294,7 +293,7 @@ Worker Verticles are not compatible with HTTP/2
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerOptions options = new HttpServerOptions().setLogActivity(true);
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerOptions options = <span class="keyword">new</span> HttpServerOptions().setLogActivity(<span class="predefined-constant">true</span>);
 
 HttpServer server = vertx.createHttpServer(options);</code></pre>
 </div>
@@ -314,7 +313,7 @@ alternatives.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServer server = vertx.createHttpServer();
+<pre class="CodeRay highlight"><code data-lang="java">HttpServer server = vertx.createHttpServer();
 server.listen();</code></pre>
 </div>
 </div>
@@ -323,8 +322,8 @@ server.listen();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServer server = vertx.createHttpServer();
-server.listen(8080, "myhost.com");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">HttpServer server = vertx.createHttpServer();
+server.listen(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myhost.com</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -340,12 +339,12 @@ For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServer server = vertx.createHttpServer();
-server.listen(8080, "myhost.com", res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Server is now listening!");
-  } else {
-    System.out.println("Failed to bind!");
+<pre class="CodeRay highlight"><code data-lang="java">HttpServer server = vertx.createHttpServer();
+server.listen(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myhost.com</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Server is now listening!</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to bind!</span><span class="delimiter">&quot;</span></span>);
   }
 });</code></pre>
 </div>
@@ -358,9 +357,9 @@ server.listen(8080, "myhost.com", res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServer server = vertx.createHttpServer();
+<pre class="CodeRay highlight"><code data-lang="java">HttpServer server = vertx.createHttpServer();
 server.requestHandler(request -&gt; {
-  // Handle the request in here
+  <span class="comment">// Handle the request in here</span>
 });</code></pre>
 </div>
 </div>
@@ -392,9 +391,9 @@ object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
-  request.response().end("Hello world");
-}).listen(8080);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
+  request.response().end(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello world</span><span class="delimiter">&quot;</span></span>);
+}).listen(<span class="integer">8080</span>);</code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -480,13 +479,13 @@ values for the same key - this is because HTTP allows multiple header values wit
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MultiMap headers = request.headers();
+<pre class="CodeRay highlight"><code data-lang="java">MultiMap headers = request.headers();
 
-// Get the User-Agent:
-System.out.println("User agent is " + headers.get("user-agent"));
+<span class="comment">// Get the User-Agent:</span>
+<span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">User agent is </span><span class="delimiter">&quot;</span></span> + headers.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">user-agent</span><span class="delimiter">&quot;</span></span>));
 
-// You can also do this and get the same result:
-System.out.println("User agent is " + headers.get("User-Agent"));</code></pre>
+<span class="comment">// You can also do this and get the same result:</span>
+<span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">User agent is </span><span class="delimiter">&quot;</span></span> + headers.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">User-Agent</span><span class="delimiter">&quot;</span></span>));</code></pre>
 </div>
 </div>
 </div>
@@ -567,8 +566,8 @@ this will get called every time a chunk of the request body arrives. Here&#8217;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.handler(buffer -&gt; {
-  System.out.println("I have received a chunk of the body of length " + buffer.length());
+<pre class="CodeRay highlight"><code data-lang="java">request.handler(buffer -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">I have received a chunk of the body of length </span><span class="delimiter">&quot;</span></span> + buffer.length());
 });</code></pre>
 </div>
 </div>
@@ -582,15 +581,15 @@ the aggregation yourself as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer totalBuffer = Buffer.buffer();
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> totalBuffer = <span class="predefined-type">Buffer</span>.buffer();
 
 request.handler(buffer -&gt; {
-  System.out.println("I have received a chunk of the body of length " + buffer.length());
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">I have received a chunk of the body of length </span><span class="delimiter">&quot;</span></span> + buffer.length());
   totalBuffer.appendBuffer(buffer);
 });
 
 request.endHandler(v -&gt; {
-  System.out.println("Full body received, length = " + totalBuffer.length());
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Full body received, length = </span><span class="delimiter">&quot;</span></span> + totalBuffer.length());
 });</code></pre>
 </div>
 </div>
@@ -600,8 +599,8 @@ for you. The body handler is called once when all the body has been received:</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.bodyHandler(totalBuffer -&gt; {
-  System.out.println("Full body received, length = " + totalBuffer.length());
+<pre class="CodeRay highlight"><code data-lang="java">request.bodyHandler(totalBuffer -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Full body received, length = </span><span class="delimiter">&quot;</span></span> + totalBuffer.length());
 });</code></pre>
 </div>
 </div>
@@ -639,10 +638,10 @@ once the entire body has been read:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">server.requestHandler(request -&gt; {
-  request.setExpectMultipart(true);
+<pre class="CodeRay highlight"><code data-lang="java">server.requestHandler(request -&gt; {
+  request.setExpectMultipart(<span class="predefined-constant">true</span>);
   request.endHandler(v -&gt; {
-    // The body has now been fully read, so retrieve the form attributes
+    <span class="comment">// The body has now been fully read, so retrieve the form attributes</span>
     MultiMap formAttributes = request.formAttributes();
   });
 });</code></pre>
@@ -667,10 +666,10 @@ upload that arrives on the server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">server.requestHandler(request -&gt; {
-  request.setExpectMultipart(true);
+<pre class="CodeRay highlight"><code data-lang="java">server.requestHandler(request -&gt; {
+  request.setExpectMultipart(<span class="predefined-constant">true</span>);
   request.uploadHandler(upload -&gt; {
-    System.out.println("Got a file upload " + upload.name());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Got a file upload </span><span class="delimiter">&quot;</span></span> + upload.name());
   });
 });</code></pre>
 </div>
@@ -681,9 +680,9 @@ exhaustion, instead, the upload data is received in chunks:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.uploadHandler(upload -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">request.uploadHandler(upload -&gt; {
   upload.handler(chunk -&gt; {
-    System.out.println("Received a chunk of the upload of length " + chunk.length());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received a chunk of the upload of length </span><span class="delimiter">&quot;</span></span> + chunk.length());
   });
 });</code></pre>
 </div>
@@ -698,8 +697,8 @@ detailed explanation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.uploadHandler(upload -&gt; {
-  upload.streamToFileSystem("myuploads_directory/" + upload.filename());
+<pre class="CodeRay highlight"><code data-lang="java">request.uploadHandler(upload -&gt; {
+  upload.streamToFileSystem(<span class="string"><span class="delimiter">&quot;</span><span class="content">myuploads_directory/</span><span class="delimiter">&quot;</span></span> + upload.filename());
 });</code></pre>
 </div>
 </div>
@@ -743,10 +742,10 @@ this will get called every time a custom frame arrives. Here&#8217;s an example:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.customFrameHandler(frame -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">request.customFrameHandler(frame -&gt; {
 
-  System.out.println("Received a frame type=" + frame.type() +
-      " payload" + frame.payload().toString());
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received a frame type=</span><span class="delimiter">&quot;</span></span> + frame.type() +
+      <span class="string"><span class="delimiter">&quot;</span><span class="content"> payload</span><span class="delimiter">&quot;</span></span> + frame.payload().toString());
 });</code></pre>
 </div>
 </div>
@@ -813,7 +812,7 @@ to the client
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerResponse response = request.response();
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerResponse response = request.response();
 response.write(buffer);</code></pre>
 </div>
 </div>
@@ -822,8 +821,8 @@ response.write(buffer);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerResponse response = request.response();
-response.write("hello world!");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerResponse response = request.response();
+response.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">hello world!</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -832,8 +831,8 @@ result written to the wire.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerResponse response = request.response();
-response.write("hello world!", "UTF-16");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerResponse response = request.response();
+response.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">hello world!</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">UTF-16</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -862,8 +861,8 @@ be too late otherwise. If you are using HTTP chunking you do not have to worry.<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerResponse response = request.response();
-response.write("hello world!");
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerResponse response = request.response();
+response.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">hello world!</span><span class="delimiter">&quot;</span></span>);
 response.end();</code></pre>
 </div>
 </div>
@@ -873,8 +872,8 @@ calling write with a string or buffer followed by calling end with no arguments.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerResponse response = request.response();
-response.end("hello world!");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerResponse response = request.response();
+response.end(<span class="string"><span class="delimiter">&quot;</span><span class="content">hello world!</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -902,10 +901,10 @@ closed after an idle time, then you configure <code><a href="../../apidocs/io/ve
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerResponse response = request.response();
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerResponse response = request.response();
 MultiMap headers = response.headers();
-headers.set("content-type", "text/html");
-headers.set("other-header", "wibble");</code></pre>
+headers.set(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/html</span><span class="delimiter">&quot;</span></span>);
+headers.set(<span class="string"><span class="delimiter">&quot;</span><span class="content">other-header</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -913,8 +912,8 @@ headers.set("other-header", "wibble");</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerResponse response = request.response();
-response.putHeader("content-type", "text/html").putHeader("other-header", "wibble");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerResponse response = request.response();
+response.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/html</span><span class="delimiter">&quot;</span></span>).putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">other-header</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -935,8 +934,8 @@ being streamed to a client and the total size is not known in advance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerResponse response = request.response();
-response.setChunked(true);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerResponse response = request.response();
+response.setChunked(<span class="predefined-constant">true</span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -964,10 +963,10 @@ chunked response has no effect for an HTTP/2 stream
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerResponse response = request.response();
-response.setChunked(true);
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerResponse response = request.response();
+response.setChunked(<span class="predefined-constant">true</span>);
 MultiMap trailers = response.trailers();
-trailers.set("X-wibble", "woobble").set("X-quux", "flooble");</code></pre>
+trailers.set(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-wibble</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">woobble</span><span class="delimiter">&quot;</span></span>).set(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-quux</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">flooble</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -975,9 +974,9 @@ trailers.set("X-wibble", "woobble").set("X-quux", "flooble");</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerResponse response = request.response();
-response.setChunked(true);
-response.putTrailer("X-wibble", "woobble").putTrailer("X-quux", "flooble");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerResponse response = request.response();
+response.setChunked(<span class="predefined-constant">true</span>);
+response.putTrailer(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-wibble</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">woobble</span><span class="delimiter">&quot;</span></span>).putTrailer(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-quux</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">flooble</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -1005,15 +1004,15 @@ files, but may be slower for small files.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
-  String file = "";
-  if (request.path().equals("/")) {
-    file = "index.html";
-  } else if (!request.path().contains("..")) {
+<pre class="CodeRay highlight"><code data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
+  <span class="predefined-type">String</span> file = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
+  <span class="keyword">if</span> (request.path().equals(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>)) {
+    file = <span class="string"><span class="delimiter">&quot;</span><span class="content">index.html</span><span class="delimiter">&quot;</span></span>;
+  } <span class="keyword">else</span> <span class="keyword">if</span> (!request.path().contains(<span class="string"><span class="delimiter">&quot;</span><span class="content">..</span><span class="delimiter">&quot;</span></span>)) {
     file = request.path();
   }
-  request.response().sendFile("web/" + file);
-}).listen(8080);</code></pre>
+  request.response().sendFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">web/</span><span class="delimiter">&quot;</span></span> + file);
+}).listen(<span class="integer">8080</span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1055,23 +1054,23 @@ Vert.x Web.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
-  long offset = 0;
-  try {
-    offset = Long.parseLong(request.getParam("start"));
-  } catch (NumberFormatException e) {
-    // error handling...
+<pre class="CodeRay highlight"><code data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
+  <span class="type">long</span> offset = <span class="integer">0</span>;
+  <span class="keyword">try</span> {
+    offset = <span class="predefined-type">Long</span>.parseLong(request.getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">start</span><span class="delimiter">&quot;</span></span>));
+  } <span class="keyword">catch</span> (<span class="exception">NumberFormatException</span> e) {
+    <span class="comment">// error handling...</span>
   }
 
-  long end = Long.MAX_VALUE;
-  try {
-    end = Long.parseLong(request.getParam("end"));
-  } catch (NumberFormatException e) {
-    // error handling...
+  <span class="type">long</span> end = <span class="predefined-type">Long</span>.MAX_VALUE;
+  <span class="keyword">try</span> {
+    end = <span class="predefined-type">Long</span>.parseLong(request.getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">end</span><span class="delimiter">&quot;</span></span>));
+  } <span class="keyword">catch</span> (<span class="exception">NumberFormatException</span> e) {
+    <span class="comment">// error handling...</span>
   }
 
-  request.response().sendFile("web/mybigfile.txt", offset, end);
-}).listen(8080);</code></pre>
+  request.response().sendFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">web/mybigfile.txt</span><span class="delimiter">&quot;</span></span>, offset, end);
+}).listen(<span class="integer">8080</span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1080,16 +1079,16 @@ case you can just do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
-  long offset = 0;
-  try {
-    offset = Long.parseLong(request.getParam("start"));
-  } catch (NumberFormatException e) {
-    // error handling...
+<pre class="CodeRay highlight"><code data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
+  <span class="type">long</span> offset = <span class="integer">0</span>;
+  <span class="keyword">try</span> {
+    offset = <span class="predefined-type">Long</span>.parseLong(request.getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">start</span><span class="delimiter">&quot;</span></span>));
+  } <span class="keyword">catch</span> (<span class="exception">NumberFormatException</span> e) {
+    <span class="comment">// error handling...</span>
   }
 
-  request.response().sendFile("web/mybigfile.txt", offset);
-}).listen(8080);</code></pre>
+  request.response().sendFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">web/mybigfile.txt</span><span class="delimiter">&quot;</span></span>, offset);
+}).listen(<span class="integer">8080</span>);</code></pre>
 </div>
 </div>
 </div>
@@ -1107,16 +1106,16 @@ at any one time:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
   HttpServerResponse response = request.response();
-  if (request.method() == HttpMethod.PUT) {
-    response.setChunked(true);
+  <span class="keyword">if</span> (request.method() == HttpMethod.PUT) {
+    response.setChunked(<span class="predefined-constant">true</span>);
     Pump.pump(request, response).start();
     request.endHandler(v -&gt; response.end());
-  } else {
-    response.setStatusCode(400).end();
+  } <span class="keyword">else</span> {
+    response.setStatusCode(<span class="integer">400</span>).end();
   }
-}).listen(8080);</code></pre>
+}).listen(<span class="integer">8080</span>);</code></pre>
 </div>
 </div>
 </div>
@@ -1132,11 +1131,11 @@ Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">int frameType = 40;
-int frameStatus = 10;
-Buffer payload = Buffer.buffer("some data");
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">int</span> frameType = <span class="integer">40</span>;
+<span class="type">int</span> frameStatus = <span class="integer">10</span>;
+<span class="predefined-type">Buffer</span> payload = <span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">some data</span><span class="delimiter">&quot;</span></span>);
 
-// Sending a frame to the client
+<span class="comment">// Sending a frame to the client</span>
 response.writeCustomFrame(frameType, frameStatus, payload);</code></pre>
 </div>
 </div>
@@ -1156,7 +1155,7 @@ a resource already present on the server, the server needs to accept the entire 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.response().reset();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">request.response().reset();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1164,7 +1163,7 @@ a resource already present on the server, the server needs to accept the entire 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.response().reset(8);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">request.response().reset(<span class="integer">8</span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1176,10 +1175,10 @@ a resource already present on the server, the server needs to accept the entire 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.response().exceptionHandler(err -&gt; {
-  if (err instanceof StreamResetException) {
+<pre class="CodeRay highlight"><code data-lang="java">request.response().exceptionHandler(err -&gt; {
+  <span class="keyword">if</span> (err <span class="keyword">instanceof</span> StreamResetException) {
     StreamResetException reset = (StreamResetException) err;
-    System.out.println("Stream reset " + reset.getCode());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Stream reset </span><span class="delimiter">&quot;</span></span> + reset.getCode());
   }
 });</code></pre>
 </div>
@@ -1195,27 +1194,27 @@ a resource already present on the server, the server needs to accept the entire 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServerResponse response = request.response();
+<pre class="CodeRay highlight"><code data-lang="java">HttpServerResponse response = request.response();
 
-// Push main.js to the client
-response.push(HttpMethod.GET, "/main.js", ar -&gt; {
+<span class="comment">// Push main.js to the client</span>
+response.push(HttpMethod.GET, <span class="string"><span class="delimiter">&quot;</span><span class="content">/main.js</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
 
-  if (ar.succeeded()) {
+  <span class="keyword">if</span> (ar.succeeded()) {
 
-    // The server is ready to push the response
+    <span class="comment">// The server is ready to push the response</span>
     HttpServerResponse pushedResponse = ar.result();
 
-    // Send main.js response
+    <span class="comment">// Send main.js response</span>
     pushedResponse.
-        putHeader("content-type", "application/json").
-        end("alert(\"Push response hello\")");
-  } else {
-    System.out.println("Could not push client resource " + ar.cause());
+        putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>).
+        end(<span class="string"><span class="delimiter">&quot;</span><span class="content">alert(</span><span class="char">\&quot;</span><span class="content">Push response hello</span><span class="char">\&quot;</span><span class="content">)</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Could not push client resource </span><span class="delimiter">&quot;</span></span> + ar.cause());
   }
 });
 
-// Send the requested resource
-response.sendFile("&lt;html&gt;&lt;head&gt;&lt;script src=\"/main.js\"&gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;");</code></pre>
+<span class="comment">// Send the requested resource</span>
+response.sendFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;html&gt;&lt;head&gt;&lt;script src=</span><span class="char">\&quot;</span><span class="content">/main.js</span><span class="char">\&quot;</span><span class="content">&gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1290,7 +1289,7 @@ but the parameter can be configured to address any case with <code><a href="../.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClient client = vertx.createHttpClient();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">HttpClient client = vertx.createHttpClient();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1298,7 +1297,7 @@ but the parameter can be configured to address any case with <code><a href="../.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientOptions options = new HttpClientOptions().setKeepAlive(false);
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientOptions options = <span class="keyword">new</span> HttpClientOptions().setKeepAlive(<span class="predefined-constant">false</span>);
 HttpClient client = vertx.createHttpClient(options);</code></pre>
 </div>
 </div>
@@ -1314,11 +1313,11 @@ must be set to <code><a href="../../apidocs/io/vertx/core/http/HttpVersion.html#
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientOptions options = new HttpClientOptions().
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientOptions options = <span class="keyword">new</span> HttpClientOptions().
     setProtocolVersion(HttpVersion.HTTP_2).
-    setSsl(true).
-    setUseAlpn(true).
-    setTrustAll(true);
+    setSsl(<span class="predefined-constant">true</span>).
+    setUseAlpn(<span class="predefined-constant">true</span>).
+    setTrustAll(<span class="predefined-constant">true</span>);
 
 HttpClient client = vertx.createHttpClient(options);</code></pre>
 </div>
@@ -1328,7 +1327,7 @@ HttpClient client = vertx.createHttpClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientOptions options = new HttpClientOptions().setProtocolVersion(HttpVersion.HTTP_2);
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientOptions options = <span class="keyword">new</span> HttpClientOptions().setProtocolVersion(HttpVersion.HTTP_2);
 
 HttpClient client = vertx.createHttpClient(options);</code></pre>
 </div>
@@ -1356,7 +1355,7 @@ values defined by the HTTP/2 RFC.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientOptions options = new HttpClientOptions().setLogActivity(true);
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientOptions options = <span class="keyword">new</span> HttpClientOptions().setLogActivity(<span class="predefined-constant">true</span>);
 HttpClient client = vertx.createHttpClient(options);</code></pre>
 </div>
 </div>
@@ -1375,11 +1374,11 @@ every time you make a request you can configure the client with a default host/p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientOptions options = new HttpClientOptions().setDefaultHost("wibble.com");
-// Can also set default port if you want...
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientOptions options = <span class="keyword">new</span> HttpClientOptions().setDefaultHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble.com</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">// Can also set default port if you want...</span>
 HttpClient client = vertx.createHttpClient(options);
-client.getNow("/some-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
+client.getNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
 });</code></pre>
 </div>
 </div>
@@ -1389,16 +1388,16 @@ simply specify the host/port when doing the request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClient client = vertx.createHttpClient();
+<pre class="CodeRay highlight"><code data-lang="java">HttpClient client = vertx.createHttpClient();
 
-// Specify both port and host name
-client.getNow(8080, "myserver.mycompany.com", "/some-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
+<span class="comment">// Specify both port and host name</span>
+client.getNow(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
 });
 
-// This time use the default port 80 but specify the host name
-client.getNow("foo.othercompany.com", "/other-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
+<span class="comment">// This time use the default port 80 but specify the host name</span>
+client.getNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo.othercompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/other-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
 });</code></pre>
 </div>
 </div>
@@ -1421,16 +1420,16 @@ called with the http response when it comes back.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClient client = vertx.createHttpClient();
+<pre class="CodeRay highlight"><code data-lang="java">HttpClient client = vertx.createHttpClient();
 
-// Send a GET request
-client.getNow("/some-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
+<span class="comment">// Send a GET request</span>
+client.getNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
 });
 
-// Send a GET request
-client.headNow("/other-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
+<span class="comment">// Send a GET request</span>
+client.headNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">/other-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
 });</code></pre>
 </div>
 </div>
@@ -1444,15 +1443,15 @@ the HTTP method at run-time:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClient client = vertx.createHttpClient();
+<pre class="CodeRay highlight"><code data-lang="java">HttpClient client = vertx.createHttpClient();
 
-client.request(HttpMethod.GET, "some-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
+client.request(HttpMethod.GET, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
 }).end();
 
-client.request(HttpMethod.POST, "foo-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
-}).end("some-data");</code></pre>
+client.request(HttpMethod.POST, <span class="string"><span class="delimiter">&quot;</span><span class="content">foo-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
+}).end(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-data</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -1476,31 +1475,31 @@ m</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClient client = vertx.createHttpClient();
+<pre class="CodeRay highlight"><code data-lang="java">HttpClient client = vertx.createHttpClient();
 
-HttpClientRequest request = client.post("some-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
+HttpClientRequest request = client.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
 });
 
-// Now do stuff with the request
-request.putHeader("content-length", "1000");
-request.putHeader("content-type", "text/plain");
+<span class="comment">// Now do stuff with the request</span>
+request.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-length</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">1000</span><span class="delimiter">&quot;</span></span>);
+request.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/plain</span><span class="delimiter">&quot;</span></span>);
 request.write(body);
 
-// Make sure the request is ended when you're done with it
+<span class="comment">// Make sure the request is ended when you're done with it</span>
 request.end();
 
-// Or fluently:
+<span class="comment">// Or fluently:</span>
 
-client.post("some-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
-}).putHeader("content-length", "1000").putHeader("content-type", "text/plain").write(body).end();
+client.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
+}).putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-length</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">1000</span><span class="delimiter">&quot;</span></span>).putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/plain</span><span class="delimiter">&quot;</span></span>).write(body).end();
 
-// Or event more simply:
+<span class="comment">// Or event more simply:</span>
 
-client.post("some-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
-}).putHeader("content-type", "text/plain").end(body);</code></pre>
+client.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
+}).putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/plain</span><span class="delimiter">&quot;</span></span>).end(body);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1508,14 +1507,14 @@ client.post("some-uri", response -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.write("some data");
+<pre class="CodeRay highlight"><code data-lang="java">request.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">some data</span><span class="delimiter">&quot;</span></span>);
 
-// Write string encoded in specific encoding
-request.write("some other data", "UTF-16");
+<span class="comment">// Write string encoded in specific encoding</span>
+request.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">some other data</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">UTF-16</span><span class="delimiter">&quot;</span></span>);
 
-// Write a buffer
-Buffer buffer = Buffer.buffer();
-buffer.appendInt(123).appendLong(245l);
+<span class="comment">// Write a buffer</span>
+<span class="predefined-type">Buffer</span> buffer = <span class="predefined-type">Buffer</span>.buffer();
+buffer.appendInt(<span class="integer">123</span>).appendLong(<span class="integer">245l</span>);
 request.write(buffer);</code></pre>
 </div>
 </div>
@@ -1525,10 +1524,10 @@ single call to the <code>end</code> function.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.end("some simple data");
+<pre class="CodeRay highlight"><code data-lang="java">request.end(<span class="string"><span class="delimiter">&quot;</span><span class="content">some simple data</span><span class="delimiter">&quot;</span></span>);
 
-// Write buffer and end the request (send it) in a single call
-Buffer buffer = Buffer.buffer().appendDouble(12.34d).appendLong(432l);
+<span class="comment">// Write buffer and end the request (send it) in a single call</span>
+<span class="predefined-type">Buffer</span> buffer = <span class="predefined-type">Buffer</span>.buffer().appendDouble(<span class="float">12.34d</span>).appendLong(<span class="integer">432l</span>);
 request.end(buffer);</code></pre>
 </div>
 </div>
@@ -1562,8 +1561,8 @@ up-front.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MultiMap headers = request.headers();
-headers.set("content-type", "application/json").set("other-header", "foo");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">MultiMap headers = request.headers();
+headers.set(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>).set(<span class="string"><span class="delimiter">&quot;</span><span class="content">other-header</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1575,7 +1574,7 @@ entries. Http headers allow more than one value for a specific key.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.putHeader("content-type", "application/json").putHeader("other-header", "foo");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">request.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>).putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">other-header</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1605,7 +1604,7 @@ as complete.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.end();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">request.end();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1614,10 +1613,10 @@ before calling <code>end</code> with no arguments</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.end("some-data");
+<pre class="CodeRay highlight"><code data-lang="java">request.end(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-data</span><span class="delimiter">&quot;</span></span>);
 
-// End it with a buffer
-Buffer buffer = Buffer.buffer().appendFloat(12.3f).appendInt(321);
+<span class="comment">// End it with a buffer</span>
+<span class="predefined-type">Buffer</span> buffer = <span class="predefined-type">Buffer</span>.buffer().appendFloat(<span class="float">12.3f</span>).appendInt(<span class="integer">321</span>);
 request.end(buffer);</code></pre>
 </div>
 </div>
@@ -1640,11 +1639,11 @@ no need to set the <code>Content-Length</code> of the request up-front.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.setChunked(true);
+<pre class="CodeRay highlight"><code data-lang="java">request.setChunked(<span class="predefined-constant">true</span>);
 
-// Write some chunks
-for (int i = 0; i &lt; 10; i++) {
-  request.write("this-is-chunk-" + i);
+<span class="comment">// Write some chunks</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="integer">0</span>; i &lt; <span class="integer">10</span>; i++) {
+  request.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">this-is-chunk-</span><span class="delimiter">&quot;</span></span> + i);
 }
 
 request.end();</code></pre>
@@ -1669,11 +1668,11 @@ request.end();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientRequest request = client.post("some-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientRequest request = client.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
 });
 request.exceptionHandler(e -&gt; {
-  System.out.println("Received exception: " + e.getMessage());
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received exception: </span><span class="delimiter">&quot;</span></span> + e.getMessage());
   e.printStackTrace();
 });</code></pre>
 </div>
@@ -1684,14 +1683,14 @@ request.exceptionHandler(e -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientRequest request = client.post("some-uri", response -&gt; {
-  if (response.statusCode() == 200) {
-    System.out.println("Everything fine");
-    return;
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientRequest request = client.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="keyword">if</span> (response.statusCode() == <span class="integer">200</span>) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Everything fine</span><span class="delimiter">&quot;</span></span>);
+    <span class="keyword">return</span>;
   }
-  if (response.statusCode() == 500) {
-    System.out.println("Unexpected behavior on the server side");
-    return;
+  <span class="keyword">if</span> (response.statusCode() == <span class="integer">500</span>) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Unexpected behavior on the server side</span><span class="delimiter">&quot;</span></span>);
+    <span class="keyword">return</span>;
   }
 });
 request.end();</code></pre>
@@ -1719,9 +1718,9 @@ not provide a handler when the request is created and set it later on the reques
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientRequest request = client.post("some-uri");
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientRequest request = client.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>);
 request.handler(response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
 });</code></pre>
 </div>
 </div>
@@ -1737,7 +1736,7 @@ you can pump to it from any <code><a href="../../apidocs/io/vertx/core/streams/R
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.setChunked(true);
+<pre class="CodeRay highlight"><code data-lang="java">request.setChunked(<span class="predefined-constant">true</span>);
 Pump pump = Pump.pump(file, request);
 file.endHandler(v -&gt; request.end());
 pump.start();</code></pre>
@@ -1755,11 +1754,11 @@ of frames to be sent and received.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">int frameType = 40;
-int frameStatus = 10;
-Buffer payload = Buffer.buffer("some data");
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">int</span> frameType = <span class="integer">40</span>;
+<span class="type">int</span> frameStatus = <span class="integer">10</span>;
+<span class="predefined-type">Buffer</span> payload = <span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">some data</span><span class="delimiter">&quot;</span></span>);
 
-// Sending a frame to the server
+<span class="comment">// Sending a frame to the server</span>
 request.writeCustomFrame(frameType, frameStatus, payload);</code></pre>
 </div>
 </div>
@@ -1775,7 +1774,7 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.reset();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">request.reset();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1783,7 +1782,7 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.reset(8);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">request.reset(<span class="integer">8</span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1795,10 +1794,10 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.exceptionHandler(err -&gt; {
-  if (err instanceof StreamResetException) {
+<pre class="CodeRay highlight"><code data-lang="java">request.exceptionHandler(err -&gt; {
+  <span class="keyword">if</span> (err <span class="keyword">instanceof</span> StreamResetException) {
     StreamResetException reset = (StreamResetException) err;
-    System.out.println("Stream reset " + reset.getCode());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Stream reset </span><span class="delimiter">&quot;</span></span> + reset.getCode());
   }
 });</code></pre>
 </div>
@@ -1817,12 +1816,12 @@ and <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html#stat
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client.getNow("some-uri", response -&gt; {
-  // the status code - e.g. 200 or 404
-  System.out.println("Status code is " + response.statusCode());
+<pre class="CodeRay highlight"><code data-lang="java">client.getNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="comment">// the status code - e.g. 200 or 404</span>
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Status code is </span><span class="delimiter">&quot;</span></span> + response.statusCode());
 
-  // the status message e.g. "OK" or "Not Found".
-  System.out.println("Status message is " + response.statusMessage());
+  <span class="comment">// the status message e.g. &quot;OK&quot; or &quot;Not Found&quot;.</span>
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Status message is </span><span class="delimiter">&quot;</span></span> + response.statusMessage());
 });</code></pre>
 </div>
 </div>
@@ -1843,8 +1842,8 @@ you can pump it to any <code><a href="../../apidocs/io/vertx/core/streams/WriteS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">String contentType = response.headers().get("content-type");
-String contentLength = response.headers().get("content-lengh");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> contentType = response.headers().get(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">String</span> contentLength = response.headers().get(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-lengh</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1870,10 +1869,10 @@ a <code><a href="../../apidocs/io/vertx/core/buffer/Buffer.html">Buffer</a></cod
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client.getNow("some-uri", response -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">client.getNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
 
   response.handler(buffer -&gt; {
-    System.out.println("Received a part of the response body: " + buffer);
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received a part of the response body: </span><span class="delimiter">&quot;</span></span> + buffer);
   });
 });</code></pre>
 </div>
@@ -1884,20 +1883,20 @@ either aggregate it yourself:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client.getNow("some-uri", response -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">client.getNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
 
-  // Create an empty buffer
-  Buffer totalBuffer = Buffer.buffer();
+  <span class="comment">// Create an empty buffer</span>
+  <span class="predefined-type">Buffer</span> totalBuffer = <span class="predefined-type">Buffer</span>.buffer();
 
   response.handler(buffer -&gt; {
-    System.out.println("Received a part of the response body: " + buffer.length());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received a part of the response body: </span><span class="delimiter">&quot;</span></span> + buffer.length());
 
     totalBuffer.appendBuffer(buffer);
   });
 
   response.endHandler(v -&gt; {
-    // Now all the body has been read
-    System.out.println("Total response body length is " + totalBuffer.length());
+    <span class="comment">// Now all the body has been read</span>
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Total response body length is </span><span class="delimiter">&quot;</span></span> + totalBuffer.length());
   });
 });</code></pre>
 </div>
@@ -1908,11 +1907,11 @@ is called with the entire body when the response has been fully read:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client.getNow("some-uri", response -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">client.getNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
 
   response.bodyHandler(totalBuffer -&gt; {
-    // Now all the body has been read
-    System.out.println("Total response body length is " + totalBuffer.length());
+    <span class="comment">// Now all the body has been read</span>
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Total response body length is </span><span class="delimiter">&quot;</span></span> + totalBuffer.length());
   });
 });</code></pre>
 </div>
@@ -1946,9 +1945,9 @@ and the response handler is passed the redirected response instead of the origin
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client.get("some-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
-}).setFollowRedirects(true).end();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">client.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
+}).setFollowRedirects(<span class="predefined-constant">true</span>).end();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1981,13 +1980,13 @@ following redirections caches the request body
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClient client = vertx.createHttpClient(
-    new HttpClientOptions()
-        .setMaxRedirects(32));
+<pre class="CodeRay highlight"><code data-lang="java">HttpClient client = vertx.createHttpClient(
+    <span class="keyword">new</span> HttpClientOptions()
+        .setMaxRedirects(<span class="integer">32</span>));
 
-client.get("some-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
-}).setFollowRedirects(true).end();</code></pre>
+client.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
+}).setFollowRedirects(<span class="predefined-constant">true</span>).end();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1998,20 +1997,20 @@ client.get("some-uri", response -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client.redirectHandler(response -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">client.redirectHandler(response -&gt; {
 
-  // Only follow 301 code
-  if (response.statusCode() == 301 &amp;&amp; response.getHeader("Location") != null) {
+  <span class="comment">// Only follow 301 code</span>
+  <span class="keyword">if</span> (response.statusCode() == <span class="integer">301</span> &amp;&amp; response.getHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Location</span><span class="delimiter">&quot;</span></span>) != <span class="predefined-constant">null</span>) {
 
-    // Compute the redirect URI
-    String absoluteURI = resolveURI(response.request().absoluteURI(), response.getHeader("Location"));
+    <span class="comment">// Compute the redirect URI</span>
+    <span class="predefined-type">String</span> absoluteURI = resolveURI(response.request().absoluteURI(), response.getHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Location</span><span class="delimiter">&quot;</span></span>));
 
-    // Create a new ready to use request that the client will use
-    return Future.succeededFuture(client.getAbs(absoluteURI));
+    <span class="comment">// Create a new ready to use request that the client will use</span>
+    <span class="keyword">return</span> <span class="predefined-type">Future</span>.succeededFuture(client.getAbs(absoluteURI));
   }
 
-  // We don't redirect
-  return null;
+  <span class="comment">// We don't redirect</span>
+  <span class="keyword">return</span> <span class="predefined-constant">null</span>;
 });</code></pre>
 </div>
 </div>
@@ -2089,16 +2088,16 @@ the rest of the request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientRequest request = client.put("some-uri", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientRequest request = client.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-uri</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
 });
 
-request.putHeader("Expect", "100-Continue");
+request.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Expect</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">100-Continue</span><span class="delimiter">&quot;</span></span>);
 
 request.continueHandler(v -&gt; {
-  // OK to send rest of body
-  request.write("Some data");
-  request.write("Some more data");
+  <span class="comment">// OK to send rest of body</span>
+  request.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">Some data</span><span class="delimiter">&quot;</span></span>);
+  request.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">Some more data</span><span class="delimiter">&quot;</span></span>);
   request.end();
 });</code></pre>
 </div>
@@ -2117,15 +2116,15 @@ to have the client continue sending the body:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">httpServer.requestHandler(request -&gt; {
-  if (request.getHeader("Expect").equalsIgnoreCase("100-Continue")) {
+<pre class="CodeRay highlight"><code data-lang="java">httpServer.requestHandler(request -&gt; {
+  <span class="keyword">if</span> (request.getHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Expect</span><span class="delimiter">&quot;</span></span>).equalsIgnoreCase(<span class="string"><span class="delimiter">&quot;</span><span class="content">100-Continue</span><span class="delimiter">&quot;</span></span>)) {
 
-    // Send a 100 continue response
+    <span class="comment">// Send a 100 continue response</span>
     request.response().writeContinue();
 
-    // The client should send the body when it receives the 100 response
+    <span class="comment">// The client should send the body when it receives the 100 response</span>
     request.bodyHandler(body -&gt; {
-      // Do something with body
+      <span class="comment">// Do something with body</span>
     });
 
     request.endHandler(v -&gt; {
@@ -2142,25 +2141,25 @@ cannot be a logical protocol constraint):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">httpServer.requestHandler(request -&gt; {
-  if (request.getHeader("Expect").equalsIgnoreCase("100-Continue")) {
+<pre class="CodeRay highlight"><code data-lang="java">httpServer.requestHandler(request -&gt; {
+  <span class="keyword">if</span> (request.getHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Expect</span><span class="delimiter">&quot;</span></span>).equalsIgnoreCase(<span class="string"><span class="delimiter">&quot;</span><span class="content">100-Continue</span><span class="delimiter">&quot;</span></span>)) {
 
-    //
-    boolean rejectAndClose = true;
-    if (rejectAndClose) {
+    <span class="comment">//</span>
+    <span class="type">boolean</span> rejectAndClose = <span class="predefined-constant">true</span>;
+    <span class="keyword">if</span> (rejectAndClose) {
 
-      // Reject with a failure code and close the connection
-      // this is probably best with persistent connection
+      <span class="comment">// Reject with a failure code and close the connection</span>
+      <span class="comment">// this is probably best with persistent connection</span>
       request.response()
-          .setStatusCode(405)
-          .putHeader("Connection", "close")
+          .setStatusCode(<span class="integer">405</span>)
+          .putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Connection</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">close</span><span class="delimiter">&quot;</span></span>)
           .end();
-    } else {
+    } <span class="keyword">else</span> {
 
-      // Reject with a failure code and ignore the body
-      // this may be appropriate if the body is small
+      <span class="comment">// Reject with a failure code and ignore the body</span>
+      <span class="comment">// this may be appropriate if the body is small</span>
       request.response()
-          .setStatusCode(405)
+          .setStatusCode(<span class="integer">405</span>)
           .end();
     }
   }
@@ -2178,23 +2177,23 @@ cannot be a logical protocol constraint):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientRequest request = client.get("/index.html", response -&gt; {
-  // Process index.html response
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientRequest request = client.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/index.html</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="comment">// Process index.html response</span>
 });
 
-// Set a push handler to be aware of any resource pushed by the server
+<span class="comment">// Set a push handler to be aware of any resource pushed by the server</span>
 request.pushHandler(pushedRequest -&gt; {
 
-  // A resource is pushed for this request
-  System.out.println("Server pushed " + pushedRequest.path());
+  <span class="comment">// A resource is pushed for this request</span>
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Server pushed </span><span class="delimiter">&quot;</span></span> + pushedRequest.path());
 
-  // Set an handler for the response
+  <span class="comment">// Set an handler for the response</span>
   pushedRequest.handler(pushedResponse -&gt; {
-    System.out.println("The response for the pushed request");
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">The response for the pushed request</span><span class="delimiter">&quot;</span></span>);
   });
 });
 
-// End the request
+<span class="comment">// End the request</span>
 request.end();</code></pre>
 </div>
 </div>
@@ -2203,11 +2202,11 @@ request.end();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.pushHandler(pushedRequest -&gt; {
-  if (pushedRequest.path().equals("/main.js")) {
+<pre class="CodeRay highlight"><code data-lang="java">request.pushHandler(pushedRequest -&gt; {
+  <span class="keyword">if</span> (pushedRequest.path().equals(<span class="string"><span class="delimiter">&quot;</span><span class="content">/main.js</span><span class="delimiter">&quot;</span></span>)) {
     pushedRequest.reset();
-  } else {
-    // Handle it
+  } <span class="keyword">else</span> {
+    <span class="comment">// Handle it</span>
   }
 });</code></pre>
 </div>
@@ -2229,10 +2228,10 @@ frame arrives. Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">response.customFrameHandler(frame -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">response.customFrameHandler(frame -&gt; {
 
-  System.out.println("Received a frame type=" + frame.type() +
-      " payload" + frame.payload().toString());
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received a frame type=</span><span class="delimiter">&quot;</span></span> + frame.type() +
+      <span class="string"><span class="delimiter">&quot;</span><span class="content"> payload</span><span class="delimiter">&quot;</span></span> + frame.payload().toString());
 });</code></pre>
 </div>
 </div>
@@ -2353,11 +2352,11 @@ can be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientOptions clientOptions = new HttpClientOptions().
-    setHttp2MultiplexingLimit(10).
-    setHttp2MaxPoolSize(3);
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientOptions clientOptions = <span class="keyword">new</span> HttpClientOptions().
+    setHttp2MultiplexingLimit(<span class="integer">10</span>).
+    setHttp2MaxPoolSize(<span class="integer">3</span>);
 
-// Uses up to 3 connections and up to 10 streams per connection
+<span class="comment">// Uses up to 3 connections and up to 10 streams per connection</span>
 HttpClient client = vertx.createHttpClient(clientOptions);</code></pre>
 </div>
 </div>
@@ -2396,7 +2395,7 @@ the other operations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpConnection connection = request.connection();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">HttpConnection connection = request.connection();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2404,10 +2403,10 @@ the other operations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpServer server = vertx.createHttpServer(http2Options);
+<pre class="CodeRay highlight"><code data-lang="java">HttpServer server = vertx.createHttpServer(http2Options);
 
 server.connectionHandler(connection -&gt; {
-  System.out.println("A client connected");
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">A client connected</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -2419,7 +2418,7 @@ server.connectionHandler(connection -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpConnection connection = request.connection();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">HttpConnection connection = request.connection();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2427,8 +2426,8 @@ server.connectionHandler(connection -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">request.connectionHandler(connection -&gt; {
-  System.out.println("Connected to the server");
+<pre class="CodeRay highlight"><code data-lang="java">request.connectionHandler(connection -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Connected to the server</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -2451,7 +2450,7 @@ are configured by <code><a href="../../apidocs/io/vertx/core/http/HttpClientOpti
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.updateSettings(new Http2Settings().setMaxConcurrentStreams(100));</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">connection.updateSettings(<span class="keyword">new</span> Http2Settings().setMaxConcurrentStreams(<span class="integer">100</span>));</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2460,9 +2459,9 @@ to be notified of the acknowledgment:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.updateSettings(new Http2Settings().setMaxConcurrentStreams(100), ar -&gt; {
-  if (ar.succeeded()) {
-    System.out.println("The settings update has been acknowledged ");
+<pre class="CodeRay highlight"><code data-lang="java">connection.updateSettings(<span class="keyword">new</span> Http2Settings().setMaxConcurrentStreams(<span class="integer">100</span>), ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">The settings update has been acknowledged </span><span class="delimiter">&quot;</span></span>);
   }
 });</code></pre>
 </div>
@@ -2473,8 +2472,8 @@ when the new remote settings are received:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.remoteSettingsHandler(settings -&gt; {
-  System.out.println("Received new settings");
+<pre class="CodeRay highlight"><code data-lang="java">connection.remoteSettingsHandler(settings -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received new settings</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -2500,12 +2499,12 @@ endpoint:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer data = Buffer.buffer();
-for (byte i = 0;i &lt; 8;i++) {
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> data = <span class="predefined-type">Buffer</span>.buffer();
+<span class="keyword">for</span> (<span class="type">byte</span> i = <span class="integer">0</span>;i &lt; <span class="integer">8</span>;i++) {
   data.appendByte(i);
 }
 connection.ping(data, pong -&gt; {
-  System.out.println("Remote side replied");
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Remote side replied</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -2515,8 +2514,8 @@ an handler can be set to be notified for each ping received:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.pingHandler(ping -&gt; {
-  System.out.println("Got pinged by remote side");
+<pre class="CodeRay highlight"><code data-lang="java">connection.pingHandler(ping -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Got pinged by remote side</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -2547,7 +2546,7 @@ waits some time (30 seconds by default) until all current streams closed and clo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.shutdown();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">connection.shutdown();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2561,7 +2560,7 @@ close:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.goAway(0);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">connection.goAway(<span class="integer">0</span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2569,8 +2568,8 @@ close:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.goAwayHandler(goAway -&gt; {
-  System.out.println("Received a go away frame");
+<pre class="CodeRay highlight"><code data-lang="java">connection.goAwayHandler(goAway -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received a go away frame</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -2580,10 +2579,10 @@ have been closed and the connection can be closed:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.goAway(0);
+<pre class="CodeRay highlight"><code data-lang="java">connection.goAway(<span class="integer">0</span>);
 connection.shutdownHandler(v -&gt; {
 
-  // All streams are closed, close the connection
+  <span class="comment">// All streams are closed, close the connection</span>
   connection.close();
 });</code></pre>
 </div>
@@ -2665,9 +2664,9 @@ round-robin strategy.</p>
 <div class="listingblock">
 <div class="title">io.vertx.examples.http.sharing.HttpServerVerticle</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
-  request.response().end("Hello from server " + this);
-}).listen(8080);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">vertx.createHttpServer().requestHandler(request -&gt; {
+  request.response().end(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from server </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>);
+}).listen(<span class="integer">8080</span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2683,10 +2682,10 @@ receiving a request it calls the server handlers following a round robin strateg
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.setPeriodic(100, (l) -&gt; {
-  vertx.createHttpClient().getNow(8080, "localhost", "/", resp -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">vertx.setPeriodic(<span class="integer">100</span>, (l) -&gt; {
+  vertx.createHttpClient().getNow(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>, resp -&gt; {
     resp.bodyHandler(body -&gt; {
-      System.out.println(body.toString("ISO-8859-1"));
+      <span class="predefined-type">System</span>.out.println(body.toString(<span class="string"><span class="delimiter">&quot;</span><span class="content">ISO-8859-1</span><span class="delimiter">&quot;</span></span>));
     });
   });
 });</code></pre>
@@ -2697,7 +2696,7 @@ receiving a request it calls the server handlers following a round robin strateg
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>Hello from i.v.e.h.s.HttpServerVerticle@1
+<pre class="CodeRay highlight"><code>Hello from i.v.e.h.s.HttpServerVerticle@1
 Hello from i.v.e.h.s.HttpServerVerticle@2
 Hello from i.v.e.h.s.HttpServerVerticle@1
 Hello from i.v.e.h.s.HttpServerVerticle@2
@@ -2725,12 +2724,12 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client.getNow(new RequestOptions()
-    .setHost("localhost")
-    .setPort(8080)
-    .setURI("/")
-    .setSsl(true), response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
+<pre class="CodeRay highlight"><code data-lang="java">client.getNow(<span class="keyword">new</span> RequestOptions()
+    .setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>)
+    .setPort(<span class="integer">8080</span>)
+    .setURI(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>)
+    .setSsl(<span class="predefined-constant">true</span>), response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
 });</code></pre>
 </div>
 </div>
@@ -2791,8 +2790,8 @@ on the server instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">server.websocketHandler(websocket -&gt; {
-  System.out.println("Connected!");
+<pre class="CodeRay highlight"><code data-lang="java">server.websocketHandler(websocket -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Connected!</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -2801,11 +2800,11 @@ on the server instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">server.websocketHandler(websocket -&gt; {
-  if (websocket.path().equals("/myapi")) {
+<pre class="CodeRay highlight"><code data-lang="java">server.websocketHandler(websocket -&gt; {
+  <span class="keyword">if</span> (websocket.path().equals(<span class="string"><span class="delimiter">&quot;</span><span class="content">/myapi</span><span class="delimiter">&quot;</span></span>)) {
     websocket.reject();
-  } else {
-    // Do something
+  } <span class="keyword">else</span> {
+    <span class="comment">// Do something</span>
   }
 });</code></pre>
 </div>
@@ -2819,15 +2818,15 @@ call <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#upgr
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">server.requestHandler(request -&gt; {
-  if (request.path().equals("/myapi")) {
+<pre class="CodeRay highlight"><code data-lang="java">server.requestHandler(request -&gt; {
+  <span class="keyword">if</span> (request.path().equals(<span class="string"><span class="delimiter">&quot;</span><span class="content">/myapi</span><span class="delimiter">&quot;</span></span>)) {
 
     ServerWebSocket websocket = request.upgrade();
-    // Do something
+    <span class="comment">// Do something</span>
 
-  } else {
-    // Reject
-    request.response().setStatusCode(400).end();
+  } <span class="keyword">else</span> {
+    <span class="comment">// Reject</span>
+    request.response().setStatusCode(<span class="integer">400</span>).end();
   }
 });</code></pre>
 </div>
@@ -2856,8 +2855,8 @@ providing a handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client.websocket("/some-uri", websocket -&gt; {
-  System.out.println("Connected!");
+<pre class="CodeRay highlight"><code data-lang="java">client.websocket(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>, websocket -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Connected!</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -2871,11 +2870,11 @@ providing a handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer buffer = Buffer.buffer().appendInt(123).appendFloat(1.23f);
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> buffer = <span class="predefined-type">Buffer</span>.buffer().appendInt(<span class="integer">123</span>).appendFloat(<span class="float">1.23f</span>);
 websocket.writeBinaryMessage(buffer);
 
-// Write a simple text message
-String message = "hello";
+<span class="comment">// Write a simple text message</span>
+<span class="predefined-type">String</span> message = <span class="string"><span class="delimiter">&quot;</span><span class="content">hello</span><span class="delimiter">&quot;</span></span>;
 websocket.writeTextMessage(message);</code></pre>
 </div>
 </div>
@@ -2906,14 +2905,14 @@ to the WebSocket using <code><a href="../../apidocs/io/vertx/core/http/WebSocket
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">WebSocketFrame frame1 = WebSocketFrame.binaryFrame(buffer1, false);
+<pre class="CodeRay highlight"><code data-lang="java">WebSocketFrame frame1 = WebSocketFrame.binaryFrame(buffer1, <span class="predefined-constant">false</span>);
 websocket.writeFrame(frame1);
 
-WebSocketFrame frame2 = WebSocketFrame.continuationFrame(buffer2, false);
+WebSocketFrame frame2 = WebSocketFrame.continuationFrame(buffer2, <span class="predefined-constant">false</span>);
 websocket.writeFrame(frame2);
 
-// Write the final frame
-WebSocketFrame frame3 = WebSocketFrame.continuationFrame(buffer2, true);
+<span class="comment">// Write the final frame</span>
+WebSocketFrame frame3 = WebSocketFrame.continuationFrame(buffer2, <span class="predefined-constant">true</span>);
 websocket.writeFrame(frame3);</code></pre>
 </div>
 </div>
@@ -2927,11 +2926,11 @@ and <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeFinalTex
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">websocket.writeFinalTextFrame("Geronimo!");
+<pre class="CodeRay highlight"><code data-lang="java">websocket.writeFinalTextFrame(<span class="string"><span class="delimiter">&quot;</span><span class="content">Geronimo!</span><span class="delimiter">&quot;</span></span>);
 
-// Send a websocket messages consisting of a single final binary frame:
+<span class="comment">// Send a websocket messages consisting of a single final binary frame:</span>
 
-Buffer buff = Buffer.buffer().appendInt(12).appendString("foo");
+<span class="predefined-type">Buffer</span> buff = <span class="predefined-type">Buffer</span>.buffer().appendInt(<span class="integer">12</span>).appendString(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>);
 
 websocket.writeFinalBinaryFrame(buff);</code></pre>
 </div>
@@ -2948,8 +2947,8 @@ for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">websocket.frameHandler(frame -&gt; {
-  System.out.println("Received a frame of size!");
+<pre class="CodeRay highlight"><code data-lang="java">websocket.frameHandler(frame -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received a frame of size!</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -2991,10 +2990,10 @@ HTTP/1.1 only.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientOptions options = new HttpClientOptions()
-    .setProxyOptions(new ProxyOptions().setType(ProxyType.HTTP)
-        .setHost("localhost").setPort(3128)
-        .setUsername("username").setPassword("secret"));
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientOptions options = <span class="keyword">new</span> HttpClientOptions()
+    .setProxyOptions(<span class="keyword">new</span> ProxyOptions().setType(ProxyType.HTTP)
+        .setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).setPort(<span class="integer">3128</span>)
+        .setUsername(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>).setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>));
 HttpClient client = vertx.createHttpClient(options);</code></pre>
 </div>
 </div>
@@ -3011,10 +3010,10 @@ the CONNECT method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientOptions options = new HttpClientOptions()
-    .setProxyOptions(new ProxyOptions().setType(ProxyType.SOCKS5)
-        .setHost("localhost").setPort(1080)
-        .setUsername("username").setPassword("secret"));
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientOptions options = <span class="keyword">new</span> HttpClientOptions()
+    .setProxyOptions(<span class="keyword">new</span> ProxyOptions().setType(ProxyType.SOCKS5)
+        .setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).setPort(<span class="integer">1080</span>)
+        .setUsername(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>).setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>));
 HttpClient client = vertx.createHttpClient(options);</code></pre>
 </div>
 </div>
@@ -3030,11 +3029,11 @@ that, which isn&#8217;t available in non-proxy getAbs requests.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpClientOptions options = new HttpClientOptions()
-    .setProxyOptions(new ProxyOptions().setType(ProxyType.HTTP));
+<pre class="CodeRay highlight"><code data-lang="java">HttpClientOptions options = <span class="keyword">new</span> HttpClientOptions()
+    .setProxyOptions(<span class="keyword">new</span> ProxyOptions().setType(ProxyType.HTTP));
 HttpClient client = vertx.createHttpClient(options);
-client.getAbs("ftp://ftp.gnu.org/gnu/", response -&gt; {
-  System.out.println("Received response with status code " + response.statusCode());
+client.getAbs(<span class="string"><span class="delimiter">&quot;</span><span class="content">ftp://ftp.gnu.org/gnu/</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code </span><span class="delimiter">&quot;</span></span> + response.statusCode());
 });</code></pre>
 </div>
 </div>

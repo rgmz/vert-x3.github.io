@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -206,11 +205,11 @@ be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-web-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-web-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -222,8 +221,8 @@ be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-web-client:3.4.2'
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+  compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-web-client:3.4.2</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -246,7 +245,7 @@ be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">WebClient client = WebClient.create(vertx);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">WebClient client = WebClient.create(vertx);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -254,9 +253,9 @@ be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">WebClientOptions options = new WebClientOptions()
-  .setUserAgent("My-App/1.2.3");
-options.setKeepAlive(false);
+<pre class="CodeRay highlight"><code data-lang="java">WebClientOptions options = <span class="keyword">new</span> WebClientOptions()
+  .setUserAgent(<span class="string"><span class="delimiter">&quot;</span><span class="content">My-App/1.2.3</span><span class="delimiter">&quot;</span></span>);
+options.setKeepAlive(<span class="predefined-constant">false</span>);
 WebClient client = WebClient.create(vertx, options);</code></pre>
 </div>
 </div>
@@ -268,7 +267,7 @@ WebClient client = WebClient.create(vertx, options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">WebClient client = WebClient.wrap(httpClient);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">WebClient client = WebClient.wrap(httpClient);</code></pre>
 </div>
 </div>
 </div>
@@ -284,33 +283,33 @@ and HEAD requests</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">WebClient client = WebClient.create(vertx);
+<pre class="CodeRay highlight"><code data-lang="java">WebClient client = WebClient.create(vertx);
 
-// Send a GET request
+<span class="comment">// Send a GET request</span>
 client
-  .get(8080, "myserver.mycompany.com", "/some-uri")
+  .get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .send(ar -&gt; {
-    if (ar.succeeded()) {
-      // Obtain response
-      HttpResponse&lt;Buffer&gt; response = ar.result();
+    <span class="keyword">if</span> (ar.succeeded()) {
+      <span class="comment">// Obtain response</span>
+      HttpResponse&lt;<span class="predefined-type">Buffer</span>&gt; response = ar.result();
 
-      System.out.println("Received response with status code" + response.statusCode());
-    } else {
-      System.out.println("Something went wrong " + ar.cause().getMessage());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code</span><span class="delimiter">&quot;</span></span> + response.statusCode());
+    } <span class="keyword">else</span> {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Something went wrong </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
     }
   });
 
-// Send a HEAD request
+<span class="comment">// Send a HEAD request</span>
 client
-  .head(8080, "myserver.mycompany.com", "/some-uri")
+  .head(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .send(ar -&gt; {
-    if (ar.succeeded()) {
-      // Obtain response
-      HttpResponse&lt;Buffer&gt; response = ar.result();
+    <span class="keyword">if</span> (ar.succeeded()) {
+      <span class="comment">// Obtain response</span>
+      HttpResponse&lt;<span class="predefined-type">Buffer</span>&gt; response = ar.result();
 
-      System.out.println("Received response with status code" + response.statusCode());
-    } else {
-      System.out.println("Something went wrong " + ar.cause().getMessage());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code</span><span class="delimiter">&quot;</span></span> + response.statusCode());
+    } <span class="keyword">else</span> {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Something went wrong </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
     }
   });</code></pre>
 </div>
@@ -320,9 +319,9 @@ client
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .get(8080, "myserver.mycompany.com", "/some-uri")
-  .addQueryParam("param", "param_value")
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
+  .addQueryParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">param</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">param_value</span><span class="delimiter">&quot;</span></span>)
   .send(ar -&gt; {});</code></pre>
 </div>
 </div>
@@ -331,13 +330,13 @@ client
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpRequest&lt;Buffer&gt; request = client.get(8080, "myserver.mycompany.com", "/some-uri?param1=param1_value&amp;param2=param2_value");
+<pre class="CodeRay highlight"><code data-lang="java">HttpRequest&lt;<span class="predefined-type">Buffer</span>&gt; request = client.get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri?param1=param1_value&amp;param2=param2_value</span><span class="delimiter">&quot;</span></span>);
 
-// Add param3
-request.addQueryParam("param3", "param3_value");
+<span class="comment">// Add param3</span>
+request.addQueryParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">param3</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">param3_value</span><span class="delimiter">&quot;</span></span>);
 
-// Overwrite param2
-request.setQueryParam("param2", "another_param2_value");</code></pre>
+<span class="comment">// Overwrite param2</span>
+request.setQueryParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">param2</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">another_param2_value</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -345,13 +344,13 @@ request.setQueryParam("param2", "another_param2_value");</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpRequest&lt;Buffer&gt; request = client.get(8080, "myserver.mycompany.com", "/some-uri");
+<pre class="CodeRay highlight"><code data-lang="java">HttpRequest&lt;<span class="predefined-type">Buffer</span>&gt; request = client.get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>);
 
-// Add param1
-request.addQueryParam("param1", "param1_value");
+<span class="comment">// Add param1</span>
+request.addQueryParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">param1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">param1_value</span><span class="delimiter">&quot;</span></span>);
 
-// Overwrite param1 and add param2
-request.uri("/some-uri?param1=param1_value&amp;param2=param2_value");</code></pre>
+<span class="comment">// Overwrite param1 and add param2</span>
+request.uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri?param1=param1_value&amp;param2=param2_value</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -366,11 +365,11 @@ that expects a body to send.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .post(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .post(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .sendBuffer(buffer, ar -&gt; {
-    if (ar.succeeded()) {
-      // Ok
+    <span class="keyword">if</span> (ar.succeeded()) {
+      <span class="comment">// Ok</span>
     }
   });</code></pre>
 </div>
@@ -383,8 +382,8 @@ for each request. For this purpose the web client can send <code>ReadStream&lt;B
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .post(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .post(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .sendStream(stream, resp -&gt; {});</code></pre>
 </div>
 </div>
@@ -397,19 +396,19 @@ the request will use chunked transfer encoding .</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">fs.open("content.txt", new OpenOptions(), fileRes -&gt; {
-  if (fileRes.succeeded()) {
-    ReadStream&lt;Buffer&gt; fileStream = fileRes.result();
+<pre class="CodeRay highlight"><code data-lang="java">fs.open(<span class="string"><span class="delimiter">&quot;</span><span class="content">content.txt</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> OpenOptions(), fileRes -&gt; {
+  <span class="keyword">if</span> (fileRes.succeeded()) {
+    ReadStream&lt;<span class="predefined-type">Buffer</span>&gt; fileStream = fileRes.result();
 
-    String fileLen = "1024";
+    <span class="predefined-type">String</span> fileLen = <span class="string"><span class="delimiter">&quot;</span><span class="content">1024</span><span class="delimiter">&quot;</span></span>;
 
-    // Send the file to the server using POST
+    <span class="comment">// Send the file to the server using POST</span>
     client
-      .post(8080, "myserver.mycompany.com", "/some-uri")
-      .putHeader("content-length", fileLen)
+      .post(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
+      .putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-length</span><span class="delimiter">&quot;</span></span>, fileLen)
       .sendStream(fileStream, ar -&gt; {
-        if (ar.succeeded()) {
-          // Ok
+        <span class="keyword">if</span> (ar.succeeded()) {
+          <span class="comment">// Ok</span>
         }
       });
   }
@@ -427,13 +426,13 @@ use the <code><a href="../../apidocs/io/vertx/ext/web/client/HttpRequest.html#se
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .post(8080, "myserver.mycompany.com", "/some-uri")
-  .sendJsonObject(new JsonObject()
-    .put("firstName", "Dale")
-    .put("lastName", "Cooper"), ar -&gt; {
-    if (ar.succeeded()) {
-      // Ok
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .post(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
+  .sendJsonObject(<span class="keyword">new</span> JsonObject()
+    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">firstName</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Dale</span><span class="delimiter">&quot;</span></span>)
+    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">lastName</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Cooper</span><span class="delimiter">&quot;</span></span>), ar -&gt; {
+    <span class="keyword">if</span> (ar.succeeded()) {
+      <span class="comment">// Ok</span>
     }
   });</code></pre>
 </div>
@@ -445,11 +444,11 @@ method</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .post(8080, "myserver.mycompany.com", "/some-uri")
-  .sendJson(new User("Dale", "Cooper"), ar -&gt; {
-    if (ar.succeeded()) {
-      // Ok
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .post(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
+  .sendJson(<span class="keyword">new</span> User(<span class="string"><span class="delimiter">&quot;</span><span class="content">Dale</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Cooper</span><span class="delimiter">&quot;</span></span>), ar -&gt; {
+    <span class="keyword">if</span> (ar.succeeded()) {
+      <span class="comment">// Ok</span>
     }
   });</code></pre>
 </div>
@@ -476,16 +475,16 @@ variant.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MultiMap form = MultiMap.caseInsensitiveMultiMap();
-form.set("firstName", "Dale");
-form.set("lastName", "Cooper");
+<pre class="CodeRay highlight"><code data-lang="java">MultiMap form = MultiMap.caseInsensitiveMultiMap();
+form.set(<span class="string"><span class="delimiter">&quot;</span><span class="content">firstName</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Dale</span><span class="delimiter">&quot;</span></span>);
+form.set(<span class="string"><span class="delimiter">&quot;</span><span class="content">lastName</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Cooper</span><span class="delimiter">&quot;</span></span>);
 
-// Submit the form as a form URL encoded body
+<span class="comment">// Submit the form as a form URL encoded body</span>
 client
-  .post(8080, "myserver.mycompany.com", "/some-uri")
+  .post(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .sendForm(form, ar -&gt; {
-    if (ar.succeeded()) {
-      // Ok
+    <span class="keyword">if</span> (ar.succeeded()) {
+      <span class="comment">// Ok</span>
     }
   });</code></pre>
 </div>
@@ -496,17 +495,17 @@ the <code>content-type</code> header to <code>multipart/form-data</code> instead
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MultiMap form = MultiMap.caseInsensitiveMultiMap();
-form.set("firstName", "Dale");
-form.set("lastName", "Cooper");
+<pre class="CodeRay highlight"><code data-lang="java">MultiMap form = MultiMap.caseInsensitiveMultiMap();
+form.set(<span class="string"><span class="delimiter">&quot;</span><span class="content">firstName</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Dale</span><span class="delimiter">&quot;</span></span>);
+form.set(<span class="string"><span class="delimiter">&quot;</span><span class="content">lastName</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Cooper</span><span class="delimiter">&quot;</span></span>);
 
-// Submit the form as a multipart form body
+<span class="comment">// Submit the form as a multipart form body</span>
 client
-  .post(8080, "myserver.mycompany.com", "/some-uri")
-  .putHeader("content-type", "multipart/form-data")
+  .post(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
+  .putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">multipart/form-data</span><span class="delimiter">&quot;</span></span>)
   .sendForm(form, ar -&gt; {
-    if (ar.succeeded()) {
-      // Ok
+    <span class="keyword">if</span> (ar.succeeded()) {
+      <span class="comment">// Ok</span>
     }
   });</code></pre>
 </div>
@@ -533,10 +532,10 @@ of the API.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpRequest&lt;Buffer&gt; request = client.get(8080, "myserver.mycompany.com", "/some-uri");
+<pre class="CodeRay highlight"><code data-lang="java">HttpRequest&lt;<span class="predefined-type">Buffer</span>&gt; request = client.get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>);
 MultiMap headers = request.headers();
-headers.set("content-type", "application/json");
-headers.set("other-header", "foo");</code></pre>
+headers.set(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>);
+headers.set(<span class="string"><span class="delimiter">&quot;</span><span class="content">other-header</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -548,9 +547,9 @@ setting and removing entries. Http headers allow more than one value for a speci
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpRequest&lt;Buffer&gt; request = client.get(8080, "myserver.mycompany.com", "/some-uri");
-request.putHeader("content-type", "application/json");
-request.putHeader("other-header", "foo");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">HttpRequest&lt;<span class="predefined-type">Buffer</span>&gt; request = client.get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>);
+request.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>);
+request.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">other-header</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -562,17 +561,17 @@ safely, making it very easy to configure and reuse <code><a href="../../apidocs/
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpRequest&lt;Buffer&gt; get = client.get(8080, "myserver.mycompany.com", "/some-uri");
+<pre class="CodeRay highlight"><code data-lang="java">HttpRequest&lt;<span class="predefined-type">Buffer</span>&gt; get = client.get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>);
 get.send(ar -&gt; {
-  if (ar.succeeded()) {
-    // Ok
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="comment">// Ok</span>
   }
 });
 
-// Same request again
+<span class="comment">// Same request again</span>
 get.send(ar -&gt; {
-  if (ar.succeeded()) {
-    // Ok
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="comment">// Ok</span>
   }
 });</code></pre>
 </div>
@@ -583,17 +582,17 @@ Therefore you should call the <code><a href="../../apidocs/io/vertx/ext/web/clie
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpRequest&lt;Buffer&gt; get = client.get(8080, "myserver.mycompany.com", "/some-uri");
+<pre class="CodeRay highlight"><code data-lang="java">HttpRequest&lt;<span class="predefined-type">Buffer</span>&gt; get = client.get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>);
 get.send(ar -&gt; {
-  if (ar.succeeded()) {
-    // Ok
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="comment">// Ok</span>
   }
 });
 
-// The "get" request instance remains unmodified
-get.copy().putHeader("a-header", "with-some-value").send(ar -&gt; {
-  if (ar.succeeded()) {
-    // Ok
+<span class="comment">// The &quot;get&quot; request instance remains unmodified</span>
+get.copy().putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">a-header</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">with-some-value</span><span class="delimiter">&quot;</span></span>).send(ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="comment">// Ok</span>
   }
 });</code></pre>
 </div>
@@ -606,14 +605,14 @@ get.copy().putHeader("a-header", "with-some-value").send(ar -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .get(8080, "myserver.mycompany.com", "/some-uri")
-  .timeout(5000)
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
+  .timeout(<span class="integer">5000</span>)
   .send(ar -&gt; {
-    if (ar.succeeded()) {
-      // Ok
-    } else {
-      // Might be a timeout when cause is java.util.concurrent.TimeoutException
+    <span class="keyword">if</span> (ar.succeeded()) {
+      <span class="comment">// Ok</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// Might be a timeout when cause is java.util.concurrent.TimeoutException</span>
     }
   });</code></pre>
 </div>
@@ -636,16 +635,16 @@ handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .get(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .send(ar -&gt; {
-    if (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.succeeded()) {
 
-      HttpResponse&lt;Buffer&gt; response = ar.result();
+      HttpResponse&lt;<span class="predefined-type">Buffer</span>&gt; response = ar.result();
 
-      System.out.println("Received response with status code" + response.statusCode());
-    } else {
-      System.out.println("Something went wrong " + ar.cause().getMessage());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code</span><span class="delimiter">&quot;</span></span> + response.statusCode());
+    } <span class="keyword">else</span> {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Something went wrong </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
     }
   });</code></pre>
 </div>
@@ -697,18 +696,18 @@ step in your response handlers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .get(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .as(BodyCodec.jsonObject())
   .send(ar -&gt; {
-    if (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.succeeded()) {
       HttpResponse&lt;JsonObject&gt; response = ar.result();
 
       JsonObject body = response.body();
 
-      System.out.println("Received response with status code" + response.statusCode() + " with body " + body);
-    } else {
-      System.out.println("Something went wrong " + ar.cause().getMessage());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code</span><span class="delimiter">&quot;</span></span> + response.statusCode() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> with body </span><span class="delimiter">&quot;</span></span> + body);
+    } <span class="keyword">else</span> {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Something went wrong </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
     }
   });</code></pre>
 </div>
@@ -718,19 +717,19 @@ step in your response handlers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .get(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .as(BodyCodec.json(User.class))
   .send(ar -&gt; {
-    if (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.succeeded()) {
       HttpResponse&lt;User&gt; response = ar.result();
 
       User user = response.body();
 
-      System.out.println("Received response with status code" + response.statusCode() + " with body " +
-        user.getFirstName() + " " + user.getLastName());
-    } else {
-      System.out.println("Something went wrong " + ar.cause().getMessage());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code</span><span class="delimiter">&quot;</span></span> + response.statusCode() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> with body </span><span class="delimiter">&quot;</span></span> +
+        user.getFirstName() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + user.getLastName());
+    } <span class="keyword">else</span> {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Something went wrong </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
     }
   });</code></pre>
 </div>
@@ -742,17 +741,17 @@ and signals the success or the failure of the operation in the async result resp
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .get(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .as(BodyCodec.pipe(writeStream))
   .send(ar -&gt; {
-    if (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.succeeded()) {
 
-      HttpResponse&lt;Void&gt; response = ar.result();
+      HttpResponse&lt;<span class="predefined-type">Void</span>&gt; response = ar.result();
 
-      System.out.println("Received response with status code" + response.statusCode());
-    } else {
-      System.out.println("Something went wrong " + ar.cause().getMessage());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code</span><span class="delimiter">&quot;</span></span> + response.statusCode());
+    } <span class="keyword">else</span> {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Something went wrong </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
     }
   });</code></pre>
 </div>
@@ -763,17 +762,17 @@ simply discards the entire response body</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .get(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .as(BodyCodec.none())
   .send(ar -&gt; {
-    if (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.succeeded()) {
 
-      HttpResponse&lt;Void&gt; response = ar.result();
+      HttpResponse&lt;<span class="predefined-type">Void</span>&gt; response = ar.result();
 
-      System.out.println("Received response with status code" + response.statusCode());
-    } else {
-      System.out.println("Something went wrong " + ar.cause().getMessage());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code</span><span class="delimiter">&quot;</span></span> + response.statusCode());
+    } <span class="keyword">else</span> {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Something went wrong </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
     }
   });</code></pre>
 </div>
@@ -784,19 +783,19 @@ that decode the response to a specific type</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .get(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .send(ar -&gt; {
-    if (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.succeeded()) {
 
-      HttpResponse&lt;Buffer&gt; response = ar.result();
+      HttpResponse&lt;<span class="predefined-type">Buffer</span>&gt; response = ar.result();
 
-      // Decode the body as a json object
+      <span class="comment">// Decode the body as a json object</span>
       JsonObject body = response.bodyAsJsonObject();
 
-      System.out.println("Received response with status code" + response.statusCode() + " with body " + body);
-    } else {
-      System.out.println("Something went wrong " + ar.cause().getMessage());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code</span><span class="delimiter">&quot;</span></span> + response.statusCode() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> with body </span><span class="delimiter">&quot;</span></span> + body);
+    } <span class="keyword">else</span> {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Something went wrong </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
     }
   });</code></pre>
 </div>
@@ -821,7 +820,7 @@ this is only valid for the response decoded as a buffer.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">WebClient client = WebClient.create(vertx, new WebClientOptions().setFollowRedirects(false));</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">WebClient client = WebClient.create(vertx, <span class="keyword">new</span> WebClientOptions().setFollowRedirects(<span class="predefined-constant">false</span>));</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -829,7 +828,7 @@ this is only valid for the response decoded as a buffer.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">WebClient client = WebClient.create(vertx, new WebClientOptions().setMaxRedirects(5));</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">WebClient client = WebClient.create(vertx, <span class="keyword">new</span> WebClientOptions().setMaxRedirects(<span class="integer">5</span>));</code></pre>
 </div>
 </div>
 </div>
@@ -846,17 +845,17 @@ this is only valid for the response decoded as a buffer.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .get(443, "myserver.mycompany.com", "/some-uri")
-  .ssl(true)
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .get(<span class="integer">443</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
+  .ssl(<span class="predefined-constant">true</span>)
   .send(ar -&gt; {
-    if (ar.succeeded()) {
-      // Obtain response
-      HttpResponse&lt;Buffer&gt; response = ar.result();
+    <span class="keyword">if</span> (ar.succeeded()) {
+      <span class="comment">// Obtain response</span>
+      HttpResponse&lt;<span class="predefined-type">Buffer</span>&gt; response = ar.result();
 
-      System.out.println("Received response with status code" + response.statusCode());
-    } else {
-      System.out.println("Something went wrong " + ar.cause().getMessage());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code</span><span class="delimiter">&quot;</span></span> + response.statusCode());
+    } <span class="keyword">else</span> {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Something went wrong </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
     }
   });</code></pre>
 </div>
@@ -866,16 +865,16 @@ this is only valid for the response decoded as a buffer.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">client
-  .getAbs("https://myserver.mycompany.com:4043/some-uri")
+<pre class="CodeRay highlight"><code data-lang="java">client
+  .getAbs(<span class="string"><span class="delimiter">&quot;</span><span class="content">https://myserver.mycompany.com:4043/some-uri</span><span class="delimiter">&quot;</span></span>)
   .send(ar -&gt; {
-    if (ar.succeeded()) {
-      // Obtain response
-      HttpResponse&lt;Buffer&gt; response = ar.result();
+    <span class="keyword">if</span> (ar.succeeded()) {
+      <span class="comment">// Obtain response</span>
+      HttpResponse&lt;<span class="predefined-type">Buffer</span>&gt; response = ar.result();
 
-      System.out.println("Received response with status code" + response.statusCode());
-    } else {
-      System.out.println("Something went wrong " + ar.cause().getMessage());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code</span><span class="delimiter">&quot;</span></span> + response.statusCode());
+    } <span class="keyword">else</span> {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Something went wrong </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
     }
   });</code></pre>
 </div>
@@ -892,22 +891,22 @@ makes the HTTP request upon subscription, as consequence, the <code>Single</code
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Single&lt;HttpResponse&lt;Buffer&gt;&gt; single = client
-  .get(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="java">Single&lt;HttpResponse&lt;<span class="predefined-type">Buffer</span>&gt;&gt; single = client
+  .get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .rxSend();
 
-// Send a request upon subscription of the Single
+<span class="comment">// Send a request upon subscription of the Single</span>
 single.subscribe(response -&gt; {
-  System.out.println("Received 1st response with status code" + response.statusCode());
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received 1st response with status code</span><span class="delimiter">&quot;</span></span> + response.statusCode());
 }, error -&gt; {
-  System.out.println("Something went wrong " + error.getMessage());
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Something went wrong </span><span class="delimiter">&quot;</span></span> + error.getMessage());
 });
 
-// Send another request
+<span class="comment">// Send another request</span>
 single.subscribe(response -&gt; {
-  System.out.println("Received 2nd response with status code" + response.statusCode());
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received 2nd response with status code</span><span class="delimiter">&quot;</span></span> + response.statusCode());
 }, error -&gt; {
-  System.out.println("Something went wrong " + error.getMessage());
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Something went wrong </span><span class="delimiter">&quot;</span></span> + error.getMessage());
 });</code></pre>
 </div>
 </div>
@@ -916,18 +915,18 @@ single.subscribe(response -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Single&lt;String&gt; url = client
-  .get(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="java">Single&lt;<span class="predefined-type">String</span>&gt; url = client
+  .get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .rxSend()
   .map(HttpResponse::bodyAsString);
 
-// Use the flatMap operator to make a request on the URL Single
+<span class="comment">// Use the flatMap operator to make a request on the URL Single</span>
 url
   .flatMap(u -&gt; client.getAbs(u).rxSend())
   .subscribe(response -&gt; {
-    System.out.println("Received response with status code" + response.statusCode());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received response with status code</span><span class="delimiter">&quot;</span></span> + response.statusCode());
   }, error -&gt; {
-    System.out.println("Something went wrong " + error.getMessage());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Something went wrong </span><span class="delimiter">&quot;</span></span> + error.getMessage());
   });</code></pre>
 </div>
 </div>
@@ -936,15 +935,15 @@ url
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Single&lt;HttpResponse&lt;JsonObject&gt;&gt; single = client
-  .get(8080, "myserver.mycompany.com", "/some-uri")
-  .putHeader("some-header", "header-value")
-  .addQueryParam("some-param", "param value")
+<pre class="CodeRay highlight"><code data-lang="java">Single&lt;HttpResponse&lt;JsonObject&gt;&gt; single = client
+  .get(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
+  .putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-header</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">header-value</span><span class="delimiter">&quot;</span></span>)
+  .addQueryParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-param</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">param value</span><span class="delimiter">&quot;</span></span>)
   .as(BodyCodec.jsonObject())
   .rxSend();
 single.subscribe(resp -&gt; {
-  System.out.println(resp.statusCode());
-  System.out.println(resp.body());
+  <span class="predefined-type">System</span>.out.println(resp.statusCode());
+  <span class="predefined-type">System</span>.out.println(resp.body());
 });</code></pre>
 </div>
 </div>
@@ -954,14 +953,14 @@ be preferred for sending bodies <code>Observable&lt;Buffer&gt;</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Observable&lt;Buffer&gt; body = getPayload();
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Observable</span>&lt;<span class="predefined-type">Buffer</span>&gt; body = getPayload();
 
-Single&lt;HttpResponse&lt;Buffer&gt;&gt; single = client
-  .post(8080, "myserver.mycompany.com", "/some-uri")
+Single&lt;HttpResponse&lt;<span class="predefined-type">Buffer</span>&gt;&gt; single = client
+  .post(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myserver.mycompany.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some-uri</span><span class="delimiter">&quot;</span></span>)
   .rxSendStream(body);
 single.subscribe(resp -&gt; {
-  System.out.println(resp.statusCode());
-  System.out.println(resp.body());
+  <span class="predefined-type">System</span>.out.println(resp.statusCode());
+  <span class="predefined-type">System</span>.out.println(resp.body());
 });</code></pre>
 </div>
 </div>

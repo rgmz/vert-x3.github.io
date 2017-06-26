@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -160,11 +159,11 @@ your Vert.x applications and can be backed by different providers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-auth-common&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-auth-common<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -176,7 +175,7 @@ your Vert.x applications and can be backed by different providers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-common:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-common:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -236,16 +235,16 @@ user and contains operations which allow the user to be authorised.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject authInfo = new JsonObject().put("username", "tim").put("password", "mypassword");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject authInfo = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">tim</span><span class="delimiter">&quot;</span></span>).put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">mypassword</span><span class="delimiter">&quot;</span></span>);
 
 authProvider.authenticate(authInfo, res -&gt; {
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
     User user = res.result();
 
-    System.out.println("User " + user.principal() + " is now authenticated");
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">User </span><span class="delimiter">&quot;</span></span> + user.principal() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> is now authenticated</span><span class="delimiter">&quot;</span></span>);
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -270,18 +269,18 @@ authProvider.authenticate(authInfo, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("printers:printer1234", res -&gt; {
-  if (res.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="java">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">printers:printer1234</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    boolean hasAuthority = res.result();
+    <span class="type">boolean</span> hasAuthority = res.result();
 
-    if (hasAuthority) {
-      System.out.println("User has the authority");
-    } else {
-      System.out.println("User does not have the authority");
+    <span class="keyword">if</span> (hasAuthority) {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">User has the authority</span><span class="delimiter">&quot;</span></span>);
+    } <span class="keyword">else</span> {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">User does not have the authority</span><span class="delimiter">&quot;</span></span>);
     }
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -371,9 +370,9 @@ your application, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">String token = VertxContextPRNG.current(vertx).nextString(32);
-// Generate a secure random integer
-int randomInt = VertxContextPRNG.current(vertx).nextInt();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> token = VertxContextPRNG.current(vertx).nextString(<span class="integer">32</span>);
+<span class="comment">// Generate a secure random integer</span>
+<span class="type">int</span> randomInt = VertxContextPRNG.current(vertx).nextInt();</code></pre>
 </div>
 </div>
 <div class="paragraph">

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -153,7 +152,7 @@ based programs using observable sequences for the JavaScript.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -171,11 +170,11 @@ based programs using observable sequences for the JavaScript.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;{maven-groupId}&lt;/groupId&gt;
-  &lt;artifactId&gt;{maven-artifactId}&lt;/artifactId&gt;
-  &lt;version&gt;{maven-version}&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>{maven-groupId}<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>{maven-artifactId}<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>{maven-version}<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -187,7 +186,7 @@ based programs using observable sequences for the JavaScript.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile {maven-groupId}:{maven-artifactId}:{maven-version}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile {maven-groupId}:{maven-artifactId}:{maven-version}</code></pre>
 </div>
 </div>
 </div>
@@ -201,13 +200,13 @@ A read stream can be adapted to an observable with the <code>Rx.Observable.fromR
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
-var fs = vertx.fileSystem();
-fs.open("/data.txt", {}, function(result, err) {
-  var file = result.result();
-  var observable = Rx.Observable.fromReadStream(file);
-  observable.forEach(function(data) {
-    console.log("Read data: " + data.toString("UTF-8"));
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> fs = vertx.fileSystem();
+fs.open(<span class="string"><span class="delimiter">&quot;</span><span class="content">/data.txt</span><span class="delimiter">&quot;</span></span>, {}, <span class="keyword">function</span>(result, err) {
+  <span class="keyword">var</span> file = result.result();
+  <span class="keyword">var</span> observable = Rx.Observable.fromReadStream(file);
+  observable.forEach(<span class="keyword">function</span>(data) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Read data: </span><span class="delimiter">&quot;</span></span> + data.toString(<span class="string"><span class="delimiter">&quot;</span><span class="content">UTF-8</span><span class="delimiter">&quot;</span></span>));
   });
 });</code></pre>
 </div>
@@ -222,14 +221,14 @@ fs.open("/data.txt", {}, function(result, err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
-var observable = Rx.observableHandler();
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> observable = Rx.observableHandler();
 observable.subscribe(
-    function(evt) {
-        // Got event
+    <span class="keyword">function</span>(evt) {
+        <span class="comment">// Got event</span>
     }
 );
-vertx.setTimer(1000, observable.toHandler());</code></pre>
+vertx.setTimer(<span class="integer">1000</span>, observable.toHandler());</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -237,18 +236,18 @@ vertx.setTimer(1000, observable.toHandler());</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
 
-// Create an observer via the Rx api
-var observer = Rx.Observer.create(
-    function(evt) {
-        // Got event
+<span class="comment">// Create an observer via the Rx api</span>
+<span class="keyword">var</span> observer = Rx.Observer.create(
+    <span class="keyword">function</span>(evt) {
+        <span class="comment">// Got event</span>
     }
 );
 
-// The rx.vertx extension augmented the observer with the toHandler method
-var handler = observer.toHandler();
-vertx.setTimer(1000, handler);</code></pre>
+<span class="comment">// The rx.vertx extension augmented the observer with the toHandler method</span>
+<span class="keyword">var</span> handler = observer.toHandler();
+vertx.setTimer(<span class="integer">1000</span>, handler);</code></pre>
 </div>
 </div>
 </div>
@@ -264,20 +263,20 @@ vertx.setTimer(1000, handler);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
 
-// Create an observable that is also an handler of async result
-var observable = Rx.observableFuture();
+<span class="comment">// Create an observable that is also an handler of async result</span>
+<span class="keyword">var</span> observable = Rx.observableFuture();
 observable.subscribe(
-    function(server) {
-        // Server is listening
+    <span class="keyword">function</span>(server) {
+        <span class="comment">// Server is listening</span>
     },
-    function(err) {
-        // Server could not start
+    <span class="keyword">function</span>(err) {
+        <span class="comment">// Server could not start</span>
     }
 );
 
-var server = vertx.createHttpServer({ "port":1234, "host":"localhost" });
+<span class="keyword">var</span> server = vertx.createHttpServer({ <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>:<span class="integer">1234</span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span> });
 server.listen(observable.toHandler());</code></pre>
 </div>
 </div>
@@ -286,17 +285,17 @@ server.listen(observable.toHandler());</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
 
-// Create an observer via the Rx api
-var observer = Rx.Observer.create(
-    function(evt) {
-        // Got event
+<span class="comment">// Create an observer via the Rx api</span>
+<span class="keyword">var</span> observer = Rx.Observer.create(
+    <span class="keyword">function</span>(evt) {
+        <span class="comment">// Got event</span>
     }
 );
 
-// The rx.vertx extension augmented the observer with the toHandler method
-var future = observer.toFuture();</code></pre>
+<span class="comment">// The rx.vertx extension augmented the observer with the toHandler method</span>
+<span class="keyword">var</span> future = observer.toFuture();</code></pre>
 </div>
 </div>
 </div>
@@ -323,22 +322,22 @@ vertx-js integration implements such functions providing an out of the box sched
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
 
-var eb = vertx.eventBus();
-var messageConsumer = eb.consumer("the-address");
+<span class="keyword">var</span> eb = vertx.eventBus();
+<span class="keyword">var</span> messageConsumer = eb.consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">the-address</span><span class="delimiter">&quot;</span></span>);
 
-// Create an observable from the message consumer
-var observable = Rx.Observable.fromReadStream(messageConsumer);
+<span class="comment">// Create an observable from the message consumer</span>
+<span class="keyword">var</span> observable = Rx.Observable.fromReadStream(messageConsumer);
 
-// Subscribe to the observable
-var subscription = observable.subscribe(
-    function(msg) {
-        // Got message
+<span class="comment">// Subscribe to the observable</span>
+<span class="keyword">var</span> subscription = observable.subscribe(
+    <span class="keyword">function</span>(msg) {
+        <span class="comment">// Got message</span>
     });
 
-// Unregisters the stream after 10 seconds
-vertx.setTimer(10000, function() {
+<span class="comment">// Unregisters the stream after 10 seconds</span>
+vertx.setTimer(<span class="integer">10000</span>, <span class="keyword">function</span>() {
     subscription.dispose();
 });</code></pre>
 </div>
@@ -349,14 +348,14 @@ vertx.setTimer(10000, function() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
 
-var eb = vertx.eventBus();
-var messageConsumer = eb.consumer("the-address");
-var bodyConsumer = messageConsumer.bodyStream();
+<span class="keyword">var</span> eb = vertx.eventBus();
+<span class="keyword">var</span> messageConsumer = eb.consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">the-address</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> bodyConsumer = messageConsumer.bodyStream();
 
-// Create an observable from the body consumer
-var observable = Rx.Observable.fromReadStream(bodyConsumer);</code></pre>
+<span class="comment">// Create an observable from the body consumer</span>
+<span class="keyword">var</span> observable = Rx.Observable.fromReadStream(bodyConsumer);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -364,18 +363,18 @@ var observable = Rx.Observable.fromReadStream(bodyConsumer);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
 
-var eb = vertx.eventBus();
-var consumer = eb.consumer("heat-sensor").bodyStream();
-var observable = Rx.Observable.fromReadStream(consumer);
+<span class="keyword">var</span> eb = vertx.eventBus();
+<span class="keyword">var</span> consumer = eb.consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">heat-sensor</span><span class="delimiter">&quot;</span></span>).bodyStream();
+<span class="keyword">var</span> observable = Rx.Observable.fromReadStream(consumer);
 
 observable.
-    bufferWithTime(500).
-    map(function (arr) { return arr.reduce(function (acc, x) { return acc + x; }, "") }).
+    bufferWithTime(<span class="integer">500</span>).
+    map(<span class="keyword">function</span> (arr) { <span class="keyword">return</span> arr.reduce(<span class="keyword">function</span> (acc, x) { <span class="keyword">return</span> acc + x; }, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>) }).
     subscribe(
-    function(heat) {
-        console.log("Current heat is " + heat);
+    <span class="keyword">function</span>(heat) {
+        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Current heat is </span><span class="delimiter">&quot;</span></span> + heat);
     });</code></pre>
 </div>
 </div>
@@ -387,10 +386,10 @@ observable.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
-var timer = Rx.Observable.fromReadStream(vertx.timerStream(1000));
-timer.subscribe(function(id) {
-    console.log("Callback after 1 second");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> timer = Rx.Observable.fromReadStream(vertx.timerStream(<span class="integer">1000</span>));
+timer.subscribe(<span class="keyword">function</span>(id) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Callback after 1 second</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -406,14 +405,14 @@ timer.subscribe(function(id) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
-var client = vertx.createHttpClient();
-var req = client.request("GET", 8080, "localhost", "/the_uri");
-var observable = Rx.Observable.fromReadStream(req);
-observable.subscribe(function(resp) {
-    // Process the response
-}, function(err) {
-    // Could not connect
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> client = vertx.createHttpClient();
+<span class="keyword">var</span> req = client.request(<span class="string"><span class="delimiter">&quot;</span><span class="content">GET</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/the_uri</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> observable = Rx.Observable.fromReadStream(req);
+observable.subscribe(<span class="keyword">function</span>(resp) {
+    <span class="comment">// Process the response</span>
+}, <span class="keyword">function</span>(err) {
+    <span class="comment">// Could not connect</span>
 });
 req.end();</code></pre>
 </div>
@@ -423,13 +422,13 @@ req.end();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
-var client = vertx.createHttpClient();
-var req = client.request("GET", 8080, "localhost", "/the_uri");
-Rx.Observable.fromReadStream(req).subscribe(function(resp) {
-    var observable = Rx.Observable.fromReadStream(resp);
-    observable.forEach(function(buffer) {
-        // Process buffer
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> client = vertx.createHttpClient();
+<span class="keyword">var</span> req = client.request(<span class="string"><span class="delimiter">&quot;</span><span class="content">GET</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/the_uri</span><span class="delimiter">&quot;</span></span>);
+Rx.Observable.fromReadStream(req).subscribe(<span class="keyword">function</span>(resp) {
+    <span class="keyword">var</span> observable = Rx.Observable.fromReadStream(resp);
+    observable.forEach(<span class="keyword">function</span>(buffer) {
+        <span class="comment">// Process buffer</span>
     });
 });
 req.end();</code></pre>
@@ -444,11 +443,11 @@ request:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
-var server = vertx.createHttpServer();
-var requests = Rx.Observable.fromReadStream(server.requestStream());
-requests.subscribe(function(request) {
-    // Process the request
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> server = vertx.createHttpServer();
+<span class="keyword">var</span> requests = Rx.Observable.fromReadStream(server.requestStream());
+requests.subscribe(<span class="keyword">function</span>(request) {
+    <span class="comment">// Process the request</span>
 });</code></pre>
 </div>
 </div>
@@ -457,7 +456,7 @@ requests.subscribe(function(request) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Unresolved directive in index.adoc - include::http_server_request_observable.js[tags=example]</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js">Unresolved directive <span class="keyword">in</span> index.adoc - include::http_server_request_observable.js[tags=example]</code></pre>
 </div>
 </div>
 </div>
@@ -468,14 +467,14 @@ requests.subscribe(function(request) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
-var client = vertx.createHttpClient();
-var stream = client.websocketStream(8080, "localhost", "/the_uri");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> client = vertx.createHttpClient();
+<span class="keyword">var</span> stream = client.websocketStream(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/the_uri</span><span class="delimiter">&quot;</span></span>);
 Rx.Observable.fromReadStream(stream).
-    subscribe(function (ws) {
-        var observable = Rx.Observable.fromReadStream(ws);
-        observable.forEach(function(buffer) {
-            // Process message
+    subscribe(<span class="keyword">function</span> (ws) {
+        <span class="keyword">var</span> observable = Rx.Observable.fromReadStream(ws);
+        observable.forEach(<span class="keyword">function</span>(buffer) {
+            <span class="comment">// Process message</span>
         });
 
     });</code></pre>
@@ -486,14 +485,14 @@ Rx.Observable.fromReadStream(stream).
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
-var client = vertx.createHttpClient();
-var stream = client.websocketStream(8080, "localhost", "/the_uri");
-var observable = Rx.Observable.fromReadStream(stream);
-observable.subscribe(function(ws) {
-    // Use the websocket
-}, function(err) {
-    // Could not connect
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> client = vertx.createHttpClient();
+<span class="keyword">var</span> stream = client.websocketStream(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/the_uri</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> observable = Rx.Observable.fromReadStream(stream);
+observable.subscribe(<span class="keyword">function</span>(ws) {
+    <span class="comment">// Use the websocket</span>
+}, <span class="keyword">function</span>(err) {
+    <span class="comment">// Could not connect</span>
 });</code></pre>
 </div>
 </div>
@@ -505,11 +504,11 @@ observable.subscribe(function(ws) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
-var server = vertx.createHttpServer();
-var sockets = Rx.Observable.fromReadStream(server.websocketStream());
-sockets.subscribe(function(ws) {
-    // Process the web socket
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> server = vertx.createHttpServer();
+<span class="keyword">var</span> sockets = Rx.Observable.fromReadStream(server.websocketStream());
+sockets.subscribe(<span class="keyword">function</span>(ws) {
+    <span class="comment">// Process the web socket</span>
 });</code></pre>
 </div>
 </div>
@@ -518,12 +517,12 @@ sockets.subscribe(function(ws) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Rx = require("rx.vertx");
-var server = vertx.createHttpServer();
-Rx.Observable.fromReadStream(server.websocketStream()).subscribe(function(ws) {
-    var observable = Rx.Observable.fromReadStream(ws);
-    observable.forEach(function(buffer) {
-       // Process message
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Rx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">rx.vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> server = vertx.createHttpServer();
+Rx.Observable.fromReadStream(server.websocketStream()).subscribe(<span class="keyword">function</span>(ws) {
+    <span class="keyword">var</span> observable = Rx.Observable.fromReadStream(ws);
+    observable.forEach(<span class="keyword">function</span>(buffer) {
+       <span class="comment">// Process message</span>
     });
 });</code></pre>
 </div>

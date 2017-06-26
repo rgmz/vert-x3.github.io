@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -182,11 +181,11 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-    &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-    &lt;artifactId&gt;vertx-mqtt-server&lt;/artifactId&gt;
-    &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>vertx-mqtt-server<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -198,7 +197,7 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-mqtt-server:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-mqtt-<span class="key">server</span>:<span class="float">3.4</span><span class="float">.2</span></code></pre>
 </div>
 </div>
 </div>
@@ -222,20 +221,20 @@ to check if the server is started properly or not.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var mqttServer = MqttServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var mqttServer = MqttServer.create(vertx)
 mqttServer.endpointHandler((endpoint: io.vertx.scala.mqtt.MqttEndpoint) =&gt; {
 
   // shows main connect info
-  println(s"MQTT client [${endpoint.clientIdentifier()}] request to connect, clean session = ${endpoint.isCleanSession()}")
+  println(s&quot;MQTT client [${endpoint.clientIdentifier()}] request to connect, clean session = ${endpoint.isCleanSession()}&quot;)
 
   if (endpoint.auth() != null) {
-    println(s"[username = ${endpoint.auth().userName()}, password = ${endpoint.auth().password()}]")
+    println(s&quot;[username = ${endpoint.auth().userName()}, password = ${endpoint.auth().password()}]&quot;)
   }
   if (endpoint.will() != null) {
-    println(s"[will topic = ${endpoint.will().willTopic()} msg = ${endpoint.will().willMessage()} QoS = ${endpoint.will().willQos()} isRetain = ${endpoint.will().isWillRetain()}]")
+    println(s&quot;[will topic = ${endpoint.will().willTopic()} msg = ${endpoint.will().willMessage()} QoS = ${endpoint.will().willQos()} isRetain = ${endpoint.will().isWillRetain()}]&quot;)
   }
 
-  println(s"[keep alive timeout = ${endpoint.keepAliveTimeSeconds()}]")
+  println(s&quot;[keep alive timeout = ${endpoint.keepAliveTimeSeconds()}]&quot;)
 
   // accept connection from the remote client
   endpoint.accept(false)
@@ -243,10 +242,10 @@ mqttServer.endpointHandler((endpoint: io.vertx.scala.mqtt.MqttEndpoint) =&gt; {
 }).listenFuture().onComplete{
   case Success(result) =&gt; {
 
-    println(s"MQTT server is listening on port ${result.actualPort()}")
+    println(s&quot;MQTT server is listening on port ${result.actualPort()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -258,10 +257,10 @@ this handler takes no parameters.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// handling disconnect message
+<pre class="CodeRay highlight"><code data-lang="scala">// handling disconnect message
 endpoint.disconnectHandler((v: java.lang.Void) =&gt; {
 
-  println("Received disconnect from client")
+  println(&quot;Received disconnect from client&quot;)
 })</code></pre>
 </div>
 </div>
@@ -283,11 +282,11 @@ The MQTT server is started passing the Vert.x instance as usual and the above MQ
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = MqttServerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = MqttServerOptions()
   .setPort(8883)
   .setKeyCertOptions(PemKeyCertOptions()
-    .setKeyPath("./src/test/resources/tls/server-key.pem")
-    .setCertPath("./src/test/resources/tls/server-cert.pem")
+    .setKeyPath(&quot;./src/test/resources/tls/server-key.pem&quot;)
+    .setCertPath(&quot;./src/test/resources/tls/server-cert.pem&quot;)
   )
   .setSsl(true)
 
@@ -296,16 +295,16 @@ var mqttServer = MqttServer.create(vertx, options)
 mqttServer.endpointHandler((endpoint: io.vertx.scala.mqtt.MqttEndpoint) =&gt; {
 
   // shows main connect info
-  println(s"MQTT client [${endpoint.clientIdentifier()}] request to connect, clean session = ${endpoint.isCleanSession()}")
+  println(s&quot;MQTT client [${endpoint.clientIdentifier()}] request to connect, clean session = ${endpoint.isCleanSession()}&quot;)
 
   if (endpoint.auth() != null) {
-    println(s"[username = ${endpoint.auth().userName()}, password = ${endpoint.auth().password()}]")
+    println(s&quot;[username = ${endpoint.auth().userName()}, password = ${endpoint.auth().password()}]&quot;)
   }
   if (endpoint.will() != null) {
-    println(s"[will topic = ${endpoint.will().willTopic()} msg = ${endpoint.will().willMessage()} QoS = ${endpoint.will().willQos()} isRetain = ${endpoint.will().isWillRetain()}]")
+    println(s&quot;[will topic = ${endpoint.will().willTopic()} msg = ${endpoint.will().willMessage()} QoS = ${endpoint.will().willQos()} isRetain = ${endpoint.will().isWillRetain()}]&quot;)
   }
 
-  println(s"[keep alive timeout = ${endpoint.keepAliveTimeSeconds()}]")
+  println(s&quot;[keep alive timeout = ${endpoint.keepAliveTimeSeconds()}]&quot;)
 
   // accept connection from the remote client
   endpoint.accept(false)
@@ -313,10 +312,10 @@ mqttServer.endpointHandler((endpoint: io.vertx.scala.mqtt.MqttEndpoint) =&gt; {
 }).listenFuture().onComplete{
   case Success(result) =&gt; {
 
-    println(s"MQTT server is listening on port ${result.actualPort()}")
+    println(s&quot;MQTT server is listening on port ${result.actualPort()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -338,12 +337,12 @@ for replying to the client with the related SUBACK message containing the grante
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// handling requests for subscriptions
+<pre class="CodeRay highlight"><code data-lang="scala">// handling requests for subscriptions
 endpoint.subscribeHandler((subscribe: io.vertx.scala.mqtt.messages.MqttSubscribeMessage) =&gt; {
 
   var grantedQosLevels = List()
   subscribe.topicSubscriptions().foreach(s =&gt; {
-    println(s"Subscription for ${s.topicName()} with QoS ${s.qualityOfService()}")
+    println(s&quot;Subscription for ${s.topicName()} with QoS ${s.qualityOfService()}&quot;)
     grantedQosLevels :::= List(s.qualityOfService())
   })
 
@@ -362,11 +361,11 @@ for replying to the client with the related UNSUBACK message.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// handling requests for unsubscriptions
+<pre class="CodeRay highlight"><code data-lang="scala">// handling requests for unsubscriptions
 endpoint.unsubscribeHandler((unsubscribe: io.vertx.scala.mqtt.messages.MqttUnsubscribeMessage) =&gt; {
 
   unsubscribe.topics().foreach(t =&gt; {
-    println(s"Unsubscription for ${t}")
+    println(s&quot;Unsubscription for ${t}&quot;)
   })
 
   // ack the subscriptions request
@@ -400,10 +399,10 @@ for sending the PUBCOMP message to the client.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// handling incoming published messages
+<pre class="CodeRay highlight"><code data-lang="scala">// handling incoming published messages
 endpoint.publishHandler((message: io.vertx.scala.mqtt.messages.MqttPublishMessage) =&gt; {
 
-  println(s"Just received message [${message.payload().toString(java.nio.charset.Charset.defaultCharset())}] with QoS [${message.qosLevel()}]")
+  println(s&quot;Just received message [${message.payload().toString(java.nio.charset.Charset.defaultCharset())}] with QoS [${message.qosLevel()}]&quot;)
 
   if (message.qosLevel() == MqttQoS.AT_LEAST_ONCE) {
     endpoint.publishAcknowledge(message.messageId())
@@ -443,13 +442,13 @@ for specifying the handler called when the final PUBCOMP message is received.</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// just as example, publish a message with QoS level 2
-endpoint.publish("my_topic", Buffer.buffer("Hello from the Vert.x MQTT server"), MqttQoS.EXACTLY_ONCE, false, false)
+<pre class="CodeRay highlight"><code data-lang="scala">// just as example, publish a message with QoS level 2
+endpoint.publish(&quot;my_topic&quot;, Buffer.buffer(&quot;Hello from the Vert.x MQTT server&quot;), MqttQoS.EXACTLY_ONCE, false, false)
 
 // specifing handlers for handling QoS 1 and 2
 endpoint.publishAcknowledgeHandler((messageId: java.lang.Integer) =&gt; {
 
-  println(s"Received ack for message = ${messageId}")
+  println(s&quot;Received ack for message = ${messageId}&quot;)
 
 }).publishReceivedHandler((messageId: java.lang.Integer) =&gt; {
 
@@ -457,7 +456,7 @@ endpoint.publishAcknowledgeHandler((messageId: java.lang.Integer) =&gt; {
 
 }).publishCompleteHandler((messageId: java.lang.Integer) =&gt; {
 
-  println(s"Received ack for message = ${messageId}")
+  println(s&quot;Received ack for message = ${messageId}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -478,10 +477,10 @@ by the server internally as described above.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// handling ping from client
+<pre class="CodeRay highlight"><code data-lang="scala">// handling ping from client
 endpoint.pingHandler((v: java.lang.Void) =&gt; {
 
-  println("Ping received from client")
+  println(&quot;Ping received from client&quot;)
 })</code></pre>
 </div>
 </div>
@@ -496,9 +495,9 @@ that will be called when the server is really closed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">mqttServer.closeFuture().onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+<pre class="CodeRay highlight"><code data-lang="scala">mqttServer.closeFuture().onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -521,14 +520,14 @@ more instances of the MQTT server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">for ( i &lt;- 0 until 10) {
+<pre class="CodeRay highlight"><code data-lang="scala">for ( i &lt;- 0 until 10) {
 
   var mqttServer = MqttServer.create(vertx)
   mqttServer.endpointHandler((endpoint: io.vertx.scala.mqtt.MqttEndpoint) =&gt; {
     // handling endpoint
   }).listenFuture().onComplete{
-    case Success(result) =&gt; println("Success")
-    case Failure(cause) =&gt; println("Failure")
+    case Success(result) =&gt; println(&quot;Success&quot;)
+    case Failure(cause) =&gt; println(&quot;Failure&quot;)
   }
 
 }</code></pre>
@@ -539,10 +538,10 @@ more instances of the MQTT server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = DeploymentOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = DeploymentOptions()
   .setInstances(10)
 
-vertx.deployVerticle("com.mycompany.MyVerticle", options)</code></pre>
+vertx.deployVerticle(&quot;com.mycompany.MyVerticle&quot;, options)</code></pre>
 </div>
 </div>
 <div class="paragraph">

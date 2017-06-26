@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -172,30 +171,30 @@ so you don&#8217;t have to worry about protecting that state by synchronising ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
 
 ...
 
 
 value sd = vertx.sharedData();
 
-value map1 = sd.getLocalMap("mymap1");
+value map1 = sd.getLocalMap(&quot;mymap1&quot;);
 
-map1.put("foo", "bar");
+map1.put(&quot;foo&quot;, &quot;bar&quot;);
 
-value map2 = sd.getLocalMap("mymap2");
+value map2 = sd.getLocalMap(&quot;mymap2&quot;);
 
-map2.put("eek", buffer.buffer().appendInt(123));
+map2.put(&quot;eek&quot;, buffer.buffer().appendInt(123));
 
 // Then... in another part of your application:
 
-map1 = sd.getLocalMap("mymap1");
+map1 = sd.getLocalMap(&quot;mymap1&quot;);
 
-value val = map1.get("foo");
+value val = map1.get(&quot;foo&quot;);
 
-map2 = sd.getLocalMap("mymap2");
+map2 = sd.getLocalMap(&quot;mymap2&quot;);
 
-value buff = map2.get("eek");</code></pre>
+value buff = map2.get(&quot;eek&quot;);</code></pre>
 </div>
 </div>
 </div>
@@ -218,9 +217,9 @@ application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value sd = vertx.sharedData();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value sd = vertx.sharedData();
 
-sd.getClusterWideMap("mymap", (AsyncMap&lt;String,String&gt;|Throwable res) {
+sd.getClusterWideMap(&quot;mymap&quot;, (AsyncMap&lt;String,String&gt;|Throwable res) {
   if (is AsyncMap&lt;String,String&gt; res) {
     value map = res;
   } else {
@@ -239,7 +238,7 @@ sd.getClusterWideMap("mymap", (AsyncMap&lt;String,String&gt;|Throwable res) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">map.put("foo", "bar", (Throwable? resPut) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">map.put(&quot;foo&quot;, &quot;bar&quot;, (Throwable? resPut) {
   if (!exists resPut) {
     // Successfully put the value
   } else {
@@ -259,7 +258,7 @@ sd.getClusterWideMap("mymap", (AsyncMap&lt;String,String&gt;|Throwable res) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">map.get("foo", (String|Throwable resGet) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">map.get(&quot;foo&quot;, (String|Throwable resGet) {
   if (is String resGet) {
     // Successfully got the value
     value val = resGet;
@@ -306,7 +305,7 @@ another caller can obtain it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getLock("mylock", (Lock|Throwable res) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">sd.getLock(&quot;mylock&quot;, (Lock|Throwable res) {
   if (is Lock res) {
     // Got the lock!
     value lock = res;
@@ -327,7 +326,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getLockWithTimeout("mylock", 10000, (Lock|Throwable res) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">sd.getLockWithTimeout(&quot;mylock&quot;, 10000, (Lock|Throwable res) {
   if (is Lock res) {
     // Got the lock!
     value lock = res;
@@ -352,7 +351,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">sd.getCounter("mycounter", (Counter|Throwable res) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">sd.getCounter(&quot;mycounter&quot;, (Counter|Throwable res) {
   if (is Counter res) {
     value counter = res;
   } else {

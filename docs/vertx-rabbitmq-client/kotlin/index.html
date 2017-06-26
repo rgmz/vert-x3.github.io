@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -167,11 +166,11 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-rabbitmq-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-rabbitmq-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -182,8 +181,8 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-rabbitmq-client:3.4.2'
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+  compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-rabbitmq-client:3.4.2</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -195,11 +194,11 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var config = json {
+<pre class="CodeRay highlight"><code data-lang="kotlin">var config = json {
   obj()
 }
 // full amqp uri
-config.put("uri", "amqp://xvjvsrrc:VbuL1atClKt7zVNQha0bnnScbNvGiqgb@moose.rmq.cloudamqp.com/xvjvsrrc")
+config.put(&quot;uri&quot;, &quot;amqp://xvjvsrrc:VbuL1atClKt7zVNQha0bnnScbNvGiqgb@moose.rmq.cloudamqp.com/xvjvsrrc&quot;)
 var client = RabbitMQClient.create(vertx, config)</code></pre>
 </div>
 </div>
@@ -208,22 +207,22 @@ var client = RabbitMQClient.create(vertx, config)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var config = json {
+<pre class="CodeRay highlight"><code data-lang="kotlin">var config = json {
   obj()
 }
 // Each parameter is optional
 // The default parameter with be used if the parameter is not set
-config.put("user", "user1")
-config.put("password", "password1")
-config.put("host", "localhost")
-config.put("port", 5672)
-config.put("virtualHost", "vhost1")
-config.put("connectionTimeout", 60)
-config.put("requestedHeartbeat", 60)
-config.put("handshakeTimeout", 60)
-config.put("requestedChannelMax", 5)
-config.put("networkRecoveryInterval", 5)
-config.put("automaticRecoveryEnabled", true)
+config.put(&quot;user&quot;, &quot;user1&quot;)
+config.put(&quot;password&quot;, &quot;password1&quot;)
+config.put(&quot;host&quot;, &quot;localhost&quot;)
+config.put(&quot;port&quot;, 5672)
+config.put(&quot;virtualHost&quot;, &quot;vhost1&quot;)
+config.put(&quot;connectionTimeout&quot;, 60)
+config.put(&quot;requestedHeartbeat&quot;, 60)
+config.put(&quot;handshakeTimeout&quot;, 60)
+config.put(&quot;requestedChannelMax&quot;, 5)
+config.put(&quot;networkRecoveryInterval&quot;, 5)
+config.put(&quot;automaticRecoveryEnabled&quot;, true)
 
 var client = RabbitMQClient.create(vertx, config)</code></pre>
 </div>
@@ -236,14 +235,14 @@ var client = RabbitMQClient.create(vertx, config)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var config = mutableMapOf&lt;String, Any?&gt;()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var config = mutableMapOf&lt;String, Any?&gt;()
 
-config["x-dead-letter-exchange"] = "my.deadletter.exchange"
-config["alternate-exchange"] = "my.alternate.exchange"
+config[&quot;x-dead-letter-exchange&quot;] = &quot;my.deadletter.exchange&quot;
+config[&quot;alternate-exchange&quot;] = &quot;my.alternate.exchange&quot;
 // ...
-client.exchangeDeclare("my.exchange", "fanout", true, false, config, { onResult -&gt;
+client.exchangeDeclare(&quot;my.exchange&quot;, &quot;fanout&quot;, true, false, config, { onResult -&gt;
   if (onResult.succeeded()) {
-    println("Exchange successfully declared with config")
+    println(&quot;Exchange successfully declared with config&quot;)
   } else {
     onResult.cause().printStackTrace()
   }
@@ -269,12 +268,12 @@ client.exchangeDeclare("my.exchange", "fanout", true, false, config, { onResult 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var message = json {
-  obj("body" to "Hello RabbitMQ, from Vert.x !")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var message = json {
+  obj(&quot;body&quot; to &quot;Hello RabbitMQ, from Vert.x !&quot;)
 }
-client.basicPublish("", "my.queue", message, { pubResult -&gt;
+client.basicPublish(&quot;&quot;, &quot;my.queue&quot;, message, { pubResult -&gt;
   if (pubResult.succeeded()) {
-    println("Message published !")
+    println(&quot;Message published !&quot;)
   } else {
     pubResult.cause().printStackTrace()
   }
@@ -289,19 +288,19 @@ client.basicPublish("", "my.queue", message, { pubResult -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var message = json {
-  obj("body" to "Hello RabbitMQ, from Vert.x !")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var message = json {
+  obj(&quot;body&quot; to &quot;Hello RabbitMQ, from Vert.x !&quot;)
 }
 
 // Put the channel in confirm mode. This can be done once at init.
 client.confirmSelect({ confirmResult -&gt;
   if (confirmResult.succeeded()) {
-    client.basicPublish("", "my.queue", message, { pubResult -&gt;
+    client.basicPublish(&quot;&quot;, &quot;my.queue&quot;, message, { pubResult -&gt;
       if (pubResult.succeeded()) {
         // Check the message got confirmed by the broker.
         client.waitForConfirms({ waitResult -&gt;
           if (waitResult.succeeded()) {
-            println("Message published !")} else {
+            println(&quot;Message published !&quot;)} else {
             waitResult.cause().printStackTrace()}
         })
       } else {
@@ -322,17 +321,17 @@ client.confirmSelect({ confirmResult -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Create the event bus handler which messages will be sent to
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Create the event bus handler which messages will be sent to
 // Create the event bus handler which messages will be sent to
-vertx.eventBus().consumer&lt;Any&gt;("my.address", { msg -&gt;
+vertx.eventBus().consumer&lt;Any&gt;(&quot;my.address&quot;, { msg -&gt;
   var json = msg.body()
-  println("Got message: ${json.getString("body")}")
+  println(&quot;Got message: ${json.getString(&quot;body&quot;)}&quot;)
 })
 
 // Setup the link between rabbitmq consumer and event bus address
-client.basicConsume("my.queue", "my.address", { consumeResult -&gt;
+client.basicConsume(&quot;my.queue&quot;, &quot;my.address&quot;, { consumeResult -&gt;
   if (consumeResult.succeeded()) {
-    println("RabbitMQ consumer created !")
+    println(&quot;RabbitMQ consumer created !&quot;)
   } else {
     consumeResult.cause().printStackTrace()
   }
@@ -347,10 +346,10 @@ client.basicConsume("my.queue", "my.address", { consumeResult -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">client.basicGet("my.queue", true, { getResult -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">client.basicGet(&quot;my.queue&quot;, true, { getResult -&gt;
   if (getResult.succeeded()) {
     var msg = getResult.result()
-    println("Got message: ${msg.getString("body")}")
+    println(&quot;Got message: ${msg.getString(&quot;body&quot;)}&quot;)
   } else {
     getResult.cause().printStackTrace()
   }
@@ -362,19 +361,19 @@ client.basicConsume("my.queue", "my.address", { consumeResult -&gt;
 <h3 id="_consume_messages_without_auto_ack">Consume messages without auto-ack</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Create the event bus handler which messages will be sent to
-vertx.eventBus().consumer&lt;Any&gt;("my.address", { msg -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Create the event bus handler which messages will be sent to
+vertx.eventBus().consumer&lt;Any&gt;(&quot;my.address&quot;, { msg -&gt;
   var json = msg.body()
-  println("Got message: ${json.getString("body")}")
+  println(&quot;Got message: ${json.getString(&quot;body&quot;)}&quot;)
   // ack
-  client.basicAck(json.getLong("deliveryTag"), false, { asyncResult -&gt;
+  client.basicAck(json.getLong(&quot;deliveryTag&quot;), false, { asyncResult -&gt;
   })
 })
 
 // Setup the link between rabbitmq consumer and event bus address
-client.basicConsume("my.queue", "my.address", false, { consumeResult -&gt;
+client.basicConsume(&quot;my.queue&quot;, &quot;my.address&quot;, false, { consumeResult -&gt;
   if (consumeResult.succeeded()) {
-    println("RabbitMQ consumer created !")
+    println(&quot;RabbitMQ consumer created !&quot;)
   } else {
     consumeResult.cause().printStackTrace()
   }

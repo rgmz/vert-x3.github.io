@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -198,11 +197,11 @@ this protocol using the <code>protobuffer</code> format.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-proto" data-lang="proto">syntax = "proto3";
+<pre class="CodeRay highlight"><code data-lang="proto">syntax = &quot;proto3&quot;;
 
 option java_multiple_files = true;
-option java_package = "examples";
-option java_outer_classname = "HelloWorldProto";
+option java_package = &quot;examples&quot;;
+option java_outer_classname = &quot;HelloWorldProto&quot;;
 package helloworld;
 
 // The greeting service definition.
@@ -239,36 +238,36 @@ or you can integrate it in your build.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml"> &lt;plugin&gt;
-  &lt;groupId&gt;org.xolstice.maven.plugins&lt;/groupId&gt;
-  &lt;artifactId&gt;protobuf-maven-plugin&lt;/artifactId&gt;
-  &lt;version&gt;0.5.0&lt;/version&gt;
-  &lt;configuration&gt;
-    &lt;protocArtifact&gt;com.google.protobuf:protoc:3.2.0:exe:${os.detected.classifier}&lt;/protocArtifact&gt;
-    &lt;pluginId&gt;grpc-java&lt;/pluginId&gt;
-    &lt;pluginArtifact&gt;io.vertx:protoc-gen-grpc-java:1.3.0:${os.detected.classifier}&lt;/pluginArtifact&gt;
-  &lt;/configuration&gt;
-  &lt;executions&gt;
-    &lt;execution&gt;
-      &lt;id&gt;compile&lt;/id&gt;
-      &lt;configuration&gt;
-        &lt;outputDirectory&gt;${project.basedir}/src/main/java&lt;/outputDirectory&gt;
-        &lt;clearOutputDirectory&gt;false&lt;/clearOutputDirectory&gt;
-      &lt;/configuration&gt;
-      &lt;goals&gt;
-        &lt;goal&gt;compile&lt;/goal&gt;
-        &lt;goal&gt;compile-custom&lt;/goal&gt;
-      &lt;/goals&gt;
-    &lt;/execution&gt;
-    &lt;execution&gt;
-      &lt;id&gt;test-compile&lt;/id&gt;
-      &lt;goals&gt;
-        &lt;goal&gt;test-compile&lt;/goal&gt;
-        &lt;goal&gt;test-compile-custom&lt;/goal&gt;
-      &lt;/goals&gt;
-    &lt;/execution&gt;
-  &lt;/executions&gt;
-&lt;/plugin&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"> <span class="tag">&lt;plugin&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>org.xolstice.maven.plugins<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>protobuf-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>0.5.0<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;configuration&gt;</span>
+    <span class="tag">&lt;protocArtifact&gt;</span>com.google.protobuf:protoc:3.2.0:exe:${os.detected.classifier}<span class="tag">&lt;/protocArtifact&gt;</span>
+    <span class="tag">&lt;pluginId&gt;</span>grpc-java<span class="tag">&lt;/pluginId&gt;</span>
+    <span class="tag">&lt;pluginArtifact&gt;</span>io.vertx:protoc-gen-grpc-java:1.3.0:${os.detected.classifier}<span class="tag">&lt;/pluginArtifact&gt;</span>
+  <span class="tag">&lt;/configuration&gt;</span>
+  <span class="tag">&lt;executions&gt;</span>
+    <span class="tag">&lt;execution&gt;</span>
+      <span class="tag">&lt;id&gt;</span>compile<span class="tag">&lt;/id&gt;</span>
+      <span class="tag">&lt;configuration&gt;</span>
+        <span class="tag">&lt;outputDirectory&gt;</span>${project.basedir}/src/main/java<span class="tag">&lt;/outputDirectory&gt;</span>
+        <span class="tag">&lt;clearOutputDirectory&gt;</span>false<span class="tag">&lt;/clearOutputDirectory&gt;</span>
+      <span class="tag">&lt;/configuration&gt;</span>
+      <span class="tag">&lt;goals&gt;</span>
+        <span class="tag">&lt;goal&gt;</span>compile<span class="tag">&lt;/goal&gt;</span>
+        <span class="tag">&lt;goal&gt;</span>compile-custom<span class="tag">&lt;/goal&gt;</span>
+      <span class="tag">&lt;/goals&gt;</span>
+    <span class="tag">&lt;/execution&gt;</span>
+    <span class="tag">&lt;execution&gt;</span>
+      <span class="tag">&lt;id&gt;</span>test-compile<span class="tag">&lt;/id&gt;</span>
+      <span class="tag">&lt;goals&gt;</span>
+        <span class="tag">&lt;goal&gt;</span>test-compile<span class="tag">&lt;/goal&gt;</span>
+        <span class="tag">&lt;goal&gt;</span>test-compile-custom<span class="tag">&lt;/goal&gt;</span>
+      <span class="tag">&lt;/goals&gt;</span>
+    <span class="tag">&lt;/execution&gt;</span>
+  <span class="tag">&lt;/executions&gt;</span>
+<span class="tag">&lt;/plugin&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -278,17 +277,17 @@ in the <code>build</code> section of your <code>pom.xml</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;build&gt;
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;build&gt;</span>
   ...
-  &lt;extensions&gt;
-    &lt;extension&gt;
-      &lt;groupId&gt;kr.motd.maven&lt;/groupId&gt;
-      &lt;artifactId&gt;os-maven-plugin&lt;/artifactId&gt;
-      &lt;version&gt;1.4.1.Final&lt;/version&gt;
-    &lt;/extension&gt;
-  &lt;/extensions&gt;
+  <span class="tag">&lt;extensions&gt;</span>
+    <span class="tag">&lt;extension&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>kr.motd.maven<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>os-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
+      <span class="tag">&lt;version&gt;</span>1.4.1.Final<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;/extension&gt;</span>
+  <span class="tag">&lt;/extensions&gt;</span>
   ...
-&lt;/build&gt;</code></pre>
+<span class="tag">&lt;/build&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -299,24 +298,24 @@ in the <code>build</code> section of your <code>pom.xml</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">...
-apply plugin: 'com.google.protobuf'
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+apply <span class="key">plugin</span>: <span class="string"><span class="delimiter">'</span><span class="content">com.google.protobuf</span><span class="delimiter">'</span></span>
 ...
 buildscript {
   ...
   dependencies {
-    // ASSUMES GRADLE 2.12 OR HIGHER. Use plugin version 0.7.5 with earlier gradle versions
-    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+    <span class="comment">// ASSUMES GRADLE 2.12 OR HIGHER. Use plugin version 0.7.5 with earlier gradle versions</span>
+    classpath <span class="string"><span class="delimiter">'</span><span class="content">com.google.protobuf:protobuf-gradle-plugin:0.8.0</span><span class="delimiter">'</span></span>
   }
 }
 ...
 protobuf {
   protoc {
-    artifact = 'com.google.protobuf:protoc:3.2.0'
+    artifact = <span class="string"><span class="delimiter">'</span><span class="content">com.google.protobuf:protoc:3.2.0</span><span class="delimiter">'</span></span>
   }
   plugins {
   grpc {
-    artifact = "io.vertx:protoc-gen-grpc-java:1.3.0"
+    artifact = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:protoc-gen-grpc-java:1.3.0</span><span class="delimiter">&quot;</span></span>
   }
 }
   generateProtoTasks {
@@ -340,9 +339,9 @@ described that our server should implement a <code>sayHello</code> method that r
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">GreeterGrpc.GreeterVertxImplBase service = new GreeterGrpc.GreeterVertxImplBase() {
-  @Override
-  public void sayHello(HelloRequest request, Future&lt;HelloReply&gt; future) {
+<pre class="CodeRay highlight"><code data-lang="java">GreeterGrpc.GreeterVertxImplBase service = <span class="keyword">new</span> GreeterGrpc.GreeterVertxImplBase() {
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="type">void</span> sayHello(HelloRequest request, <span class="predefined-type">Future</span>&lt;HelloReply&gt; future) {
     future.complete(HelloReply.newBuilder().setMessage(request.getName()).build());
   }
 };</code></pre>
@@ -354,12 +353,12 @@ quite simple all you need to add is:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">VertxServer rpcServer = VertxServerBuilder
-  .forAddress(vertx, "my.host", 8080)
+<pre class="CodeRay highlight"><code data-lang="java">VertxServer rpcServer = VertxServerBuilder
+  .forAddress(vertx, <span class="string"><span class="delimiter">&quot;</span><span class="content">my.host</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>)
   .addService(service)
   .build();
 
-// Start is asynchronous
+<span class="comment">// Start is asynchronous</span>
 rpcServer.start();</code></pre>
 </div>
 </div>
@@ -370,13 +369,13 @@ rpcServer.start();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">VertxServerBuilder builder = VertxServerBuilder.forPort(vertx, 8080)
+<pre class="CodeRay highlight"><code data-lang="java">VertxServerBuilder builder = VertxServerBuilder.forPort(vertx, <span class="integer">8080</span>)
     .useSsl(options -&gt; options
-        .setSsl(true)
-        .setUseAlpn(true)
-        .setKeyStoreOptions(new JksOptions()
-            .setPath("server-keystore.jks")
-            .setPassword("secret")));</code></pre>
+        .setSsl(<span class="predefined-constant">true</span>)
+        .setUseAlpn(<span class="predefined-constant">true</span>)
+        .setKeyStoreOptions(<span class="keyword">new</span> JksOptions()
+            .setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">server-keystore.jks</span><span class="delimiter">&quot;</span></span>)
+            .setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>)));</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -414,12 +413,12 @@ you do not need to re-compile it again.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ManagedChannel channel = VertxChannelBuilder
-  .forAddress(vertx, "localhost", 8080)
-  .usePlaintext(true)
+<pre class="CodeRay highlight"><code data-lang="java">ManagedChannel channel = VertxChannelBuilder
+  .forAddress(vertx, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>)
+  .usePlaintext(<span class="predefined-constant">true</span>)
   .build();
 
-// Get a stub to use for interacting with the remote service
+<span class="comment">// Get a stub to use for interacting with the remote service</span>
 GreeterGrpc.GreeterVertxStub stub = GreeterGrpc.newVertxStub(channel);</code></pre>
 </div>
 </div>
@@ -429,14 +428,14 @@ the correct method definition and parameter types:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HelloRequest request = HelloRequest.newBuilder().setName("Julien").build();
+<pre class="CodeRay highlight"><code data-lang="java">HelloRequest request = HelloRequest.newBuilder().setName(<span class="string"><span class="delimiter">&quot;</span><span class="content">Julien</span><span class="delimiter">&quot;</span></span>).build();
 
-// Call the remote service
+<span class="comment">// Call the remote service</span>
 stub.sayHello(request, ar -&gt; {
-  if (ar.succeeded()) {
-    System.out.println("Got the server response: " + ar.result().getMessage());
-  } else {
-    System.out.println("Coult not reach server " + ar.cause().getMessage());
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Got the server response: </span><span class="delimiter">&quot;</span></span> + ar.result().getMessage());
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Coult not reach server </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
   }
 });</code></pre>
 </div>
@@ -448,14 +447,14 @@ stub.sayHello(request, ar -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ManagedChannel channel = VertxChannelBuilder.
-    forAddress(vertx, "localhost", 8080)
+<pre class="CodeRay highlight"><code data-lang="java">ManagedChannel channel = VertxChannelBuilder.
+    forAddress(vertx, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>)
     .useSsl(options -&gt; options
-        .setSsl(true)
-        .setUseAlpn(true)
-        .setTrustStoreOptions(new JksOptions()
-            .setPath("client-truststore.jks")
-            .setPassword("secret")))
+        .setSsl(<span class="predefined-constant">true</span>)
+        .setUseAlpn(<span class="predefined-constant">true</span>)
+        .setTrustStoreOptions(<span class="keyword">new</span> JksOptions()
+            .setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">client-truststore.jks</span><span class="delimiter">&quot;</span></span>)
+            .setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>)))
     .build();</code></pre>
 </div>
 </div>

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -182,11 +181,11 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-    &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-    &lt;artifactId&gt;vertx-mqtt-server&lt;/artifactId&gt;
-    &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>vertx-mqtt-server<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -198,7 +197,7 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-mqtt-server:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-mqtt-<span class="key">server</span>:<span class="float">3.4</span><span class="float">.2</span></code></pre>
 </div>
 </div>
 </div>
@@ -222,20 +221,20 @@ to check if the server is started properly or not.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var mqttServer = MqttServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="kotlin">var mqttServer = MqttServer.create(vertx)
 mqttServer.endpointHandler({ endpoint -&gt;
 
   // shows main connect info
-  println("MQTT client [${endpoint.clientIdentifier()}] request to connect, clean session = ${endpoint.isCleanSession()}")
+  println(&quot;MQTT client [${endpoint.clientIdentifier()}] request to connect, clean session = ${endpoint.isCleanSession()}&quot;)
 
   if (endpoint.auth() != null) {
-    println("[username = ${endpoint.auth().userName()}, password = ${endpoint.auth().password()}]")
+    println(&quot;[username = ${endpoint.auth().userName()}, password = ${endpoint.auth().password()}]&quot;)
   }
   if (endpoint.will() != null) {
-    println("[will topic = ${endpoint.will().willTopic()} msg = ${endpoint.will().willMessage()} QoS = ${endpoint.will().willQos()} isRetain = ${endpoint.will().isWillRetain()}]")
+    println(&quot;[will topic = ${endpoint.will().willTopic()} msg = ${endpoint.will().willMessage()} QoS = ${endpoint.will().willQos()} isRetain = ${endpoint.will().isWillRetain()}]&quot;)
   }
 
-  println("[keep alive timeout = ${endpoint.keepAliveTimeSeconds()}]")
+  println(&quot;[keep alive timeout = ${endpoint.keepAliveTimeSeconds()}]&quot;)
 
   // accept connection from the remote client
   endpoint.accept(false)
@@ -244,10 +243,10 @@ mqttServer.endpointHandler({ endpoint -&gt;
 
   if (ar.succeeded()) {
 
-    println("MQTT server is listening on port ${ar.result().actualPort()}")
+    println(&quot;MQTT server is listening on port ${ar.result().actualPort()}&quot;)
   } else {
 
-    println("Error on starting the server")
+    println(&quot;Error on starting the server&quot;)
     ar.cause().printStackTrace()
   }
 })</code></pre>
@@ -260,10 +259,10 @@ this handler takes no parameters.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// handling disconnect message
+<pre class="CodeRay highlight"><code data-lang="kotlin">// handling disconnect message
 endpoint.disconnectHandler({ v -&gt;
 
-  println("Received disconnect from client")
+  println(&quot;Received disconnect from client&quot;)
 })</code></pre>
 </div>
 </div>
@@ -285,27 +284,27 @@ The MQTT server is started passing the Vert.x instance as usual and the above MQ
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = MqttServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = MqttServerOptions(
   port = 8883,
   keyCertOptions = PemKeyCertOptions(
-    keyPath = "./src/test/resources/tls/server-key.pem",
-    certPath = "./src/test/resources/tls/server-cert.pem"),
+    keyPath = &quot;./src/test/resources/tls/server-key.pem&quot;,
+    certPath = &quot;./src/test/resources/tls/server-cert.pem&quot;),
   ssl = true)
 
 var mqttServer = MqttServer.create(vertx, options)
 mqttServer.endpointHandler({ endpoint -&gt;
 
   // shows main connect info
-  println("MQTT client [${endpoint.clientIdentifier()}] request to connect, clean session = ${endpoint.isCleanSession()}")
+  println(&quot;MQTT client [${endpoint.clientIdentifier()}] request to connect, clean session = ${endpoint.isCleanSession()}&quot;)
 
   if (endpoint.auth() != null) {
-    println("[username = ${endpoint.auth().userName()}, password = ${endpoint.auth().password()}]")
+    println(&quot;[username = ${endpoint.auth().userName()}, password = ${endpoint.auth().password()}]&quot;)
   }
   if (endpoint.will() != null) {
-    println("[will topic = ${endpoint.will().willTopic()} msg = ${endpoint.will().willMessage()} QoS = ${endpoint.will().willQos()} isRetain = ${endpoint.will().isWillRetain()}]")
+    println(&quot;[will topic = ${endpoint.will().willTopic()} msg = ${endpoint.will().willMessage()} QoS = ${endpoint.will().willQos()} isRetain = ${endpoint.will().isWillRetain()}]&quot;)
   }
 
-  println("[keep alive timeout = ${endpoint.keepAliveTimeSeconds()}]")
+  println(&quot;[keep alive timeout = ${endpoint.keepAliveTimeSeconds()}]&quot;)
 
   // accept connection from the remote client
   endpoint.accept(false)
@@ -314,10 +313,10 @@ mqttServer.endpointHandler({ endpoint -&gt;
 
   if (ar.succeeded()) {
 
-    println("MQTT server is listening on port ${ar.result().actualPort()}")
+    println(&quot;MQTT server is listening on port ${ar.result().actualPort()}&quot;)
   } else {
 
-    println("Error on starting the server")
+    println(&quot;Error on starting the server&quot;)
     ar.cause().printStackTrace()
   }
 })</code></pre>
@@ -340,12 +339,12 @@ for replying to the client with the related SUBACK message containing the grante
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// handling requests for subscriptions
+<pre class="CodeRay highlight"><code data-lang="kotlin">// handling requests for subscriptions
 endpoint.subscribeHandler({ subscribe -&gt;
 
   var grantedQosLevels = mutableListOf&lt;Any?&gt;()
   for (s in subscribe.topicSubscriptions()) {
-    println("Subscription for ${s.topicName()} with QoS ${s.qualityOfService()}")
+    println(&quot;Subscription for ${s.topicName()} with QoS ${s.qualityOfService()}&quot;)
     grantedQosLevels.add(s.qualityOfService())
   }
   // ack the subscriptions request
@@ -363,11 +362,11 @@ for replying to the client with the related UNSUBACK message.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// handling requests for unsubscriptions
+<pre class="CodeRay highlight"><code data-lang="kotlin">// handling requests for unsubscriptions
 endpoint.unsubscribeHandler({ unsubscribe -&gt;
 
   for (t in unsubscribe.topics()) {
-    println("Unsubscription for ${t}")
+    println(&quot;Unsubscription for ${t}&quot;)
   }
   // ack the subscriptions request
   endpoint.unsubscribeAcknowledge(unsubscribe.messageId())
@@ -400,10 +399,10 @@ for sending the PUBCOMP message to the client.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// handling incoming published messages
+<pre class="CodeRay highlight"><code data-lang="kotlin">// handling incoming published messages
 endpoint.publishHandler({ message -&gt;
 
-  println("Just received message [${message.payload().toString(java.nio.charset.Charset.defaultCharset())}] with QoS [${message.qosLevel()}]")
+  println(&quot;Just received message [${message.payload().toString(java.nio.charset.Charset.defaultCharset())}] with QoS [${message.qosLevel()}]&quot;)
 
   if (message.qosLevel() == MqttQoS.AT_LEAST_ONCE) {
     endpoint.publishAcknowledge(message.messageId())
@@ -443,13 +442,13 @@ for specifying the handler called when the final PUBCOMP message is received.</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// just as example, publish a message with QoS level 2
-endpoint.publish("my_topic", Buffer.buffer("Hello from the Vert.x MQTT server"), MqttQoS.EXACTLY_ONCE, false, false)
+<pre class="CodeRay highlight"><code data-lang="kotlin">// just as example, publish a message with QoS level 2
+endpoint.publish(&quot;my_topic&quot;, Buffer.buffer(&quot;Hello from the Vert.x MQTT server&quot;), MqttQoS.EXACTLY_ONCE, false, false)
 
 // specifing handlers for handling QoS 1 and 2
 endpoint.publishAcknowledgeHandler({ messageId -&gt;
 
-  println("Received ack for message = ${messageId}")
+  println(&quot;Received ack for message = ${messageId}&quot;)
 
 }).publishReceivedHandler({ messageId -&gt;
 
@@ -457,7 +456,7 @@ endpoint.publishAcknowledgeHandler({ messageId -&gt;
 
 }).publishCompleteHandler({ messageId -&gt;
 
-  println("Received ack for message = ${messageId}")
+  println(&quot;Received ack for message = ${messageId}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -478,10 +477,10 @@ by the server internally as described above.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// handling ping from client
+<pre class="CodeRay highlight"><code data-lang="kotlin">// handling ping from client
 endpoint.pingHandler({ v -&gt;
 
-  println("Ping received from client")
+  println(&quot;Ping received from client&quot;)
 })</code></pre>
 </div>
 </div>
@@ -496,9 +495,9 @@ that will be called when the server is really closed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">mqttServer.close({ v -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">mqttServer.close({ v -&gt;
 
-  println("MQTT server closed")
+  println(&quot;MQTT server closed&quot;)
 })</code></pre>
 </div>
 </div>
@@ -521,7 +520,7 @@ more instances of the MQTT server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">for (i in 0 until 10) {
+<pre class="CodeRay highlight"><code data-lang="kotlin">for (i in 0 until 10) {
 
   var mqttServer = MqttServer.create(vertx)
   mqttServer.endpointHandler({ endpoint -&gt;
@@ -540,9 +539,9 @@ more instances of the MQTT server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = DeploymentOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = DeploymentOptions(
   instances = 10)
-vertx.deployVerticle("com.mycompany.MyVerticle", options)</code></pre>
+vertx.deployVerticle(&quot;com.mycompany.MyVerticle&quot;, options)</code></pre>
 </div>
 </div>
 <div class="paragraph">

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -210,11 +209,11 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-mongo-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-mongo-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -226,7 +225,7 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mongo-client:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mongo-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -251,9 +250,9 @@ to share the same pool so you don&#8217;t end up with multiple pools</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-mongo/mongo_client'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-mongo/mongo_client</span><span class="delimiter">'</span></span>
 
-client = VertxMongo::MongoClient.create_shared(vertx, config)</code></pre>
+client = <span class="constant">VertxMongo</span>::<span class="constant">MongoClient</span>.create_shared(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -271,9 +270,9 @@ will actually create the pool, and the specified config will be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-mongo/mongo_client'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-mongo/mongo_client</span><span class="delimiter">'</span></span>
 
-client = VertxMongo::MongoClient.create_shared(vertx, config, "MyPoolName")</code></pre>
+client = <span class="constant">VertxMongo</span>::<span class="constant">MongoClient</span>.create_shared(vertx, config, <span class="string"><span class="delimiter">&quot;</span><span class="content">MyPoolName</span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -303,9 +302,9 @@ However, it&#8217;s possible you want to create a client instance that doesn&#82
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-mongo/mongo_client'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-mongo/mongo_client</span><span class="delimiter">'</span></span>
 
-client = VertxMongo::MongoClient.create_non_shared(vertx, config)</code></pre>
+client = <span class="constant">VertxMongo</span>::<span class="constant">MongoClient</span>.create_non_shared(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -338,22 +337,22 @@ if it doesn&#8217;t already exist, otherwise it is updated.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Document has no id
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># Document has no id</span>
 
 document = {
-  'title' =&gt; "The Hobbit"
+  <span class="string"><span class="delimiter">'</span><span class="content">title</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 }
 
-mongoClient.save("books", document) { |res_err,res|
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
     id = res
-    puts "Saved book with id #{id}"
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Saved book with id </span><span class="inline"><span class="inline-delimiter">#{</span>id<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
 
-  else
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -363,22 +362,22 @@ mongoClient.save("books", document) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Document has an id already
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># Document has an id already</span>
 
 document = {
-  'title' =&gt; "The Hobbit",
-  '_id' =&gt; "123244"
+  <span class="string"><span class="delimiter">'</span><span class="content">title</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">_id</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">123244</span><span class="delimiter">&quot;</span></span>
 }
 
-mongoClient.save("books", document) { |res_err,res|
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
-    # ...
+    <span class="comment"># ...</span>
 
-  else
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -394,22 +393,22 @@ mongoClient.save("books", document) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Document has an id already
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># Document has an id already</span>
 
 document = {
-  'title' =&gt; "The Hobbit"
+  <span class="string"><span class="delimiter">'</span><span class="content">title</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 }
 
-mongoClient.insert("books", document) { |res_err,res|
+mongoClient.insert(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
     id = res
-    puts "Inserted book with id #{id}"
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Inserted book with id </span><span class="inline"><span class="inline-delimiter">#{</span>id<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
 
-  else
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -419,23 +418,23 @@ mongoClient.insert("books", document) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Document has an id already
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># Document has an id already</span>
 
 document = {
-  'title' =&gt; "The Hobbit",
-  '_id' =&gt; "123244"
+  <span class="string"><span class="delimiter">'</span><span class="content">title</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">_id</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">123244</span><span class="delimiter">&quot;</span></span>
 }
 
-mongoClient.insert("books", document) { |res_err,res|
+mongoClient.insert(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
-    #...
+    <span class="comment">#...</span>
 
-  else
+  <span class="keyword">else</span>
 
-    # Will fail if the book with that id already exists.
-  end
+    <span class="comment"># Will fail if the book with that id already exists.</span>
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -459,28 +458,28 @@ how the object is updated.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Match any documents with title=The Hobbit
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># Match any documents with title=The Hobbit</span>
 query = {
-  'title' =&gt; "The Hobbit"
+  <span class="string"><span class="delimiter">'</span><span class="content">title</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 }
 
-# Set the author field
+<span class="comment"># Set the author field</span>
 update = {
-  '$set' =&gt; {
-    'author' =&gt; "J. R. R. Tolkien"
+  <span class="string"><span class="delimiter">'</span><span class="content">$set</span><span class="delimiter">'</span></span> =&gt; {
+    <span class="string"><span class="delimiter">'</span><span class="content">author</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
   }
 }
 
-mongoClient.update("books", query, update) { |res_err,res|
+mongoClient.update(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, update) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
-    puts "Book updated !"
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Book updated !</span><span class="delimiter">&quot;</span></span>
 
-  else
+  <span class="keyword">else</span>
 
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -510,32 +509,32 @@ and pass in an instance of <code><a href="../dataobjects.html#UpdateOptions">Upd
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Match any documents with title=The Hobbit
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># Match any documents with title=The Hobbit</span>
 query = {
-  'title' =&gt; "The Hobbit"
+  <span class="string"><span class="delimiter">'</span><span class="content">title</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 }
 
-# Set the author field
+<span class="comment"># Set the author field</span>
 update = {
-  '$set' =&gt; {
-    'author' =&gt; "J. R. R. Tolkien"
+  <span class="string"><span class="delimiter">'</span><span class="content">$set</span><span class="delimiter">'</span></span> =&gt; {
+    <span class="string"><span class="delimiter">'</span><span class="content">author</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
   }
 }
 
 options = {
-  'multi' =&gt; true
+  <span class="string"><span class="delimiter">'</span><span class="content">multi</span><span class="delimiter">'</span></span> =&gt; <span class="predefined-constant">true</span>
 }
 
-mongoClient.update_with_options("books", query, update, options) { |res_err,res|
+mongoClient.update_with_options(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, update, options) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
-    puts "Book updated !"
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Book updated !</span><span class="delimiter">&quot;</span></span>
 
-  else
+  <span class="keyword">else</span>
 
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -555,26 +554,26 @@ Instead it replaces the entire document with the one provided.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">query = {
-  'title' =&gt; "The Hobbit"
+<pre class="CodeRay highlight"><code data-lang="ruby">query = {
+  <span class="string"><span class="delimiter">'</span><span class="content">title</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 }
 
 replace = {
-  'title' =&gt; "The Lord of the Rings",
-  'author' =&gt; "J. R. R. Tolkien"
+  <span class="string"><span class="delimiter">'</span><span class="content">title</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">The Lord of the Rings</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">author</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 }
 
-mongoClient.replace("books", query, replace) { |res_err,res|
+mongoClient.replace(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, replace) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
-    puts "Book replaced !"
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Book replaced !</span><span class="delimiter">&quot;</span></span>
 
-  else
+  <span class="keyword">else</span>
 
     res_err.print_stack_trace()
 
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -608,27 +607,27 @@ For more explanation what ordered means, see <a href="https://docs.mongodb.com/m
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'json'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">json</span><span class="delimiter">'</span></span>
 
-# empty query = match any
+<span class="comment"># empty query = match any</span>
 query = {
 }
 
-mongoClient.find("books", query) { |res_err,res|
+mongoClient.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
-    res.each do |json|
+    res.each <span class="keyword">do</span> |json|
 
-      puts JSON.generate(json)
+      puts <span class="constant">JSON</span>.generate(json)
 
-    end
+    <span class="keyword">end</span>
 
-  else
+  <span class="keyword">else</span>
 
     res_err.print_stack_trace()
 
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -638,28 +637,28 @@ mongoClient.find("books", query) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'json'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">json</span><span class="delimiter">'</span></span>
 
-# will match all Tolkien books
+<span class="comment"># will match all Tolkien books</span>
 query = {
-  'author' =&gt; "J. R. R. Tolkien"
+  <span class="string"><span class="delimiter">'</span><span class="content">author</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 }
 
-mongoClient.find("books", query) { |res_err,res|
+mongoClient.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
-    res.each do |json|
+    res.each <span class="keyword">do</span> |json|
 
-      puts JSON.generate(json)
+      puts <span class="constant">JSON</span>.generate(json)
 
-    end
+    <span class="keyword">end</span>
 
-  else
+  <span class="keyword">else</span>
 
     res_err.print_stack_trace()
 
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -751,21 +750,21 @@ mongoClient.find_batch("book", query) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">query = {
-  'author' =&gt; "J. R. R. Tolkien"
+<pre class="CodeRay highlight"><code data-lang="ruby">query = {
+  <span class="string"><span class="delimiter">'</span><span class="content">author</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 }
 
-mongoClient.remove("books", query) { |res_err,res|
+mongoClient.remove(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
-    puts "Never much liked Tolkien stuff!"
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Never much liked Tolkien stuff!</span><span class="delimiter">&quot;</span></span>
 
-  else
+  <span class="keyword">else</span>
 
     res_err.print_stack_trace()
 
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -789,21 +788,21 @@ mongoClient.remove("books", query) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">query = {
-  'author' =&gt; "J. R. R. Tolkien"
+<pre class="CodeRay highlight"><code data-lang="ruby">query = {
+  <span class="string"><span class="delimiter">'</span><span class="content">author</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 }
 
-mongoClient.count("books", query) { |res_err,res|
+mongoClient.count(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
     num = res
 
-  else
+  <span class="keyword">else</span>
 
     res_err.print_stack_trace()
 
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -818,17 +817,17 @@ mongoClient.count("books", query) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">mongoClient.get_collections() { |res_err,res|
+<pre class="CodeRay highlight"><code data-lang="ruby">mongoClient.get_collections() { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
     collections = res
 
-  else
+  <span class="keyword">else</span>
 
     res_err.print_stack_trace()
 
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -837,17 +836,17 @@ mongoClient.count("books", query) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">mongoClient.create_collection("mynewcollectionr") { |res_err,res|
+<pre class="CodeRay highlight"><code data-lang="ruby">mongoClient.create_collection(<span class="string"><span class="delimiter">&quot;</span><span class="content">mynewcollectionr</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
-    # Created ok!
+    <span class="comment"># Created ok!</span>
 
-  else
+  <span class="keyword">else</span>
 
     res_err.print_stack_trace()
 
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -868,17 +867,17 @@ Dropping a collection will delete all documents within it!
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">mongoClient.drop_collection("mynewcollectionr") { |res_err,res|
+<pre class="CodeRay highlight"><code data-lang="ruby">mongoClient.drop_collection(<span class="string"><span class="delimiter">&quot;</span><span class="content">mynewcollectionr</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
-    # Dropped ok!
+    <span class="comment"># Dropped ok!</span>
 
-  else
+  <span class="keyword">else</span>
 
     res_err.print_stack_trace()
 
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -900,19 +899,19 @@ of the entries in the JSON is the command name it must be specified as a paramet
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">command = {
-  'aggregate' =&gt; "collection_name",
-  'pipeline' =&gt; [
+<pre class="CodeRay highlight"><code data-lang="ruby">command = {
+  <span class="string"><span class="delimiter">'</span><span class="content">aggregate</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">collection_name</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">pipeline</span><span class="delimiter">'</span></span> =&gt; [
   ]
 }
 
-mongoClient.run_command("aggregate", command) { |res_err,res|
-  if (res_err == nil)
-    resArr = res['result']
-    # etc
-  else
+mongoClient.run_command(<span class="string"><span class="delimiter">&quot;</span><span class="content">aggregate</span><span class="delimiter">&quot;</span></span>, command) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    resArr = res[<span class="string"><span class="delimiter">'</span><span class="content">result</span><span class="delimiter">'</span></span>]
+    <span class="comment"># etc</span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -927,34 +926,34 @@ mongoClient.run_command("aggregate", command) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">document = {
-  'title' =&gt; "The Hobbit",
-  'publicationDate' =&gt; {
-    '$date' =&gt; "1937-09-21T00:00:00+00:00"
+<pre class="CodeRay highlight"><code data-lang="ruby">document = {
+  <span class="string"><span class="delimiter">'</span><span class="content">title</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">publicationDate</span><span class="delimiter">'</span></span> =&gt; {
+    <span class="string"><span class="delimiter">'</span><span class="content">$date</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">1937-09-21T00:00:00+00:00</span><span class="delimiter">&quot;</span></span>
   }
 }
 
-mongoService.save("publishedBooks", document) { |res_err,res|
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">publishedBooks</span><span class="delimiter">&quot;</span></span>, document) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
     id = res
 
-    mongoService.find_one("publishedBooks", {
-      '_id' =&gt; id
-    }, nil) { |res2_err,res2|
-      if (res2_err == nil)
+    mongoService.find_one(<span class="string"><span class="delimiter">&quot;</span><span class="content">publishedBooks</span><span class="delimiter">&quot;</span></span>, {
+      <span class="string"><span class="delimiter">'</span><span class="content">_id</span><span class="delimiter">'</span></span> =&gt; id
+    }, <span class="predefined-constant">nil</span>) { |res2_err,res2|
+      <span class="keyword">if</span> (res2_err == <span class="predefined-constant">nil</span>)
 
-        puts "To retrieve ISO-8601 date : #{res2['publicationDate']['$date']}"
+        puts <span class="string"><span class="delimiter">&quot;</span><span class="content">To retrieve ISO-8601 date : </span><span class="inline"><span class="inline-delimiter">#{</span>res2[<span class="string"><span class="delimiter">'</span><span class="content">publicationDate</span><span class="delimiter">'</span></span>][<span class="string"><span class="delimiter">'</span><span class="content">$date</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
 
-      else
+      <span class="keyword">else</span>
         res2_err.print_stack_trace()
-      end
+      <span class="keyword">end</span>
     }
 
-  else
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -964,29 +963,29 @@ mongoService.save("publishedBooks", document) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">byte[] binaryObject = new byte[40];
+<pre class="CodeRay highlight"><code data-lang="ruby">byte[] binaryObject = new byte[<span class="integer">40</span>];
 
-JsonObject document = new JsonObject()
-        .put("name", "Alan Turing")
-        .put("binaryStuff", new JsonObject().put("$binary", binaryObject));
+<span class="constant">JsonObject</span> document = new JsonObject()
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Alan Turing</span><span class="delimiter">&quot;</span></span>)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span>, new JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">$binary</span><span class="delimiter">&quot;</span></span>, binaryObject));
 
-mongoService.save("smartPeople", document, res -&gt; {
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    String id = res.result();
+    <span class="constant">String</span> id = res.result();
 
-    mongoService.findOne("smartPeople", new JsonObject().put("_id", id), null, res2 -&gt; {
-      if(res2.succeeded()) {
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, new JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span>, id), null, res2 -&gt; {
+      <span class="keyword">if</span>(res2.succeeded()) {
 
-        byte[] reconstitutedBinaryObject = res2.result().getJsonObject("binaryStuff").getBinary("$binary");
-        //This could now be de-serialized into an object in real life
-      } else {
+        byte[] reconstitutedBinaryObject = res2.result().getJsonObject(<span class="string"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span>).getBinary(<span class="string"><span class="delimiter">&quot;</span><span class="content">$binary</span><span class="delimiter">&quot;</span></span>);
+        <span class="regexp"><span class="delimiter">/</span><span class="delimiter">/</span></span><span class="constant">This</span> could now be de-serialized into an object <span class="keyword">in</span> real life
+      } <span class="keyword">else</span> {
         res2.cause().printStackTrace();
       }
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 
@@ -998,37 +997,37 @@ mongoService.save("smartPeople", document, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">#This could be a the byte contents of a pdf file, etc converted to base 64
-base64EncodedString = "a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ="
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment">#This could be a the byte contents of a pdf file, etc converted to base 64</span>
+base64EncodedString = <span class="string"><span class="delimiter">&quot;</span><span class="content">a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ=</span><span class="delimiter">&quot;</span></span>
 
 document = {
-  'name' =&gt; "Alan Turing",
-  'binaryStuff' =&gt; {
-    '$binary' =&gt; base64EncodedString
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">Alan Turing</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">binaryStuff</span><span class="delimiter">'</span></span> =&gt; {
+    <span class="string"><span class="delimiter">'</span><span class="content">$binary</span><span class="delimiter">'</span></span> =&gt; base64EncodedString
   }
 }
 
-mongoService.save("smartPeople", document) { |res_err,res|
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
     id = res
 
-    mongoService.find_one("smartPeople", {
-      '_id' =&gt; id
-    }, nil) { |res2_err,res2|
-      if (res2_err == nil)
+    mongoService.find_one(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, {
+      <span class="string"><span class="delimiter">'</span><span class="content">_id</span><span class="delimiter">'</span></span> =&gt; id
+    }, <span class="predefined-constant">nil</span>) { |res2_err,res2|
+      <span class="keyword">if</span> (res2_err == <span class="predefined-constant">nil</span>)
 
-        reconstitutedBase64EncodedString = res2['binaryStuff']['$binary']
-        #This could now converted back to bytes from the base 64 string
-      else
+        reconstitutedBase64EncodedString = res2[<span class="string"><span class="delimiter">'</span><span class="content">binaryStuff</span><span class="delimiter">'</span></span>][<span class="string"><span class="delimiter">'</span><span class="content">$binary</span><span class="delimiter">'</span></span>]
+        <span class="comment">#This could now converted back to bytes from the base 64 string</span>
+      <span class="keyword">else</span>
         res2_err.print_stack_trace()
-      end
+      <span class="keyword">end</span>
     }
 
-  else
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -1038,34 +1037,34 @@ mongoService.save("smartPeople", document) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">individualId = Java::OrgBsonTypes::ObjectId.new().to_hex_string()
+<pre class="CodeRay highlight"><code data-lang="ruby">individualId = <span class="constant">Java</span>::<span class="constant">OrgBsonTypes</span>::<span class="constant">ObjectId</span>.new().to_hex_string()
 
 document = {
-  'name' =&gt; "Stephen Hawking",
-  'individualId' =&gt; {
-    '$oid' =&gt; individualId
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">Stephen Hawking</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">individualId</span><span class="delimiter">'</span></span> =&gt; {
+    <span class="string"><span class="delimiter">'</span><span class="content">$oid</span><span class="delimiter">'</span></span> =&gt; individualId
   }
 }
 
-mongoService.save("smartPeople", document) { |res_err,res|
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
     id = res
 
-    mongoService.find_one("smartPeople", {
-      '_id' =&gt; id
-    }, nil) { |res2_err,res2|
-      if (res2_err == nil)
-        reconstitutedIndividualId = res2['individualId']['$oid']
-      else
+    mongoService.find_one(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, {
+      <span class="string"><span class="delimiter">'</span><span class="content">_id</span><span class="delimiter">'</span></span> =&gt; id
+    }, <span class="predefined-constant">nil</span>) { |res2_err,res2|
+      <span class="keyword">if</span> (res2_err == <span class="predefined-constant">nil</span>)
+        reconstitutedIndividualId = res2[<span class="string"><span class="delimiter">'</span><span class="content">individualId</span><span class="delimiter">'</span></span>][<span class="string"><span class="delimiter">'</span><span class="content">$oid</span><span class="delimiter">'</span></span>]
+      <span class="keyword">else</span>
         res2_err.print_stack_trace()
-      end
+      <span class="keyword">end</span>
     }
 
-  else
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -1075,21 +1074,21 @@ mongoService.save("smartPeople", document) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">document = {
-  'title' =&gt; "The Hobbit"
+<pre class="CodeRay highlight"><code data-lang="ruby">document = {
+  <span class="string"><span class="delimiter">'</span><span class="content">title</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 }
 
-mongoClient.save("books", document) { |res_err,res|
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
-    mongoClient.distinct("books", "title", Java::JavaLang::String::class.get_name()) { |res2_err,res2|
-      puts "Title is : #{res2[0]}"
+    mongoClient.distinct(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="constant">Java</span>::<span class="constant">JavaLang</span>::<span class="constant">String</span>::class.get_name()) { |res2_err,res2|
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Title is : </span><span class="inline"><span class="inline-delimiter">#{</span>res2[<span class="integer">0</span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
     }
 
-  else
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -1099,21 +1098,21 @@ mongoClient.save("books", document) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">document = {
-  'title' =&gt; "The Hobbit"
+<pre class="CodeRay highlight"><code data-lang="ruby">document = {
+  <span class="string"><span class="delimiter">'</span><span class="content">title</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 }
 
-mongoClient.save("books", document) { |res_err,res|
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
 
-    mongoClient.distinct_batch("books", "title", Java::JavaLang::String::class.get_name()) { |res2_err,res2|
-      puts "Title is : #{res2['title']}"
+    mongoClient.distinct_batch(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="constant">Java</span>::<span class="constant">JavaLang</span>::<span class="constant">String</span>::class.get_name()) { |res2_err,res2|
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Title is : </span><span class="inline"><span class="inline-delimiter">#{</span>res2[<span class="string"><span class="delimiter">'</span><span class="content">title</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
     }
 
-  else
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>

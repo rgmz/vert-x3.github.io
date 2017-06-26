@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -139,10 +138,10 @@ which is called when the operation completes or an error occurs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value fs = vertx.fileSystem();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value fs = vertx.fileSystem();
 
 // Copy file from foo.txt to bar.txt
-fs.copy("foo.txt", "bar.txt", (Throwable? res) {
+fs.copy(&quot;foo.txt&quot;, &quot;bar.txt&quot;, (Throwable? res) {
   if (!exists res) {
     // Copied ok!
   } else {
@@ -162,10 +161,10 @@ particular application before using them from an event loop, so as not to break 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value fs = vertx.fileSystem();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value fs = vertx.fileSystem();
 
 // Copy file from foo.txt to bar.txt synchronously
-fs.copyBlocking("foo.txt", "bar.txt");</code></pre>
+fs.copyBlocking(&quot;foo.txt&quot;, &quot;bar.txt&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -177,7 +176,7 @@ please consult the <code><a href="../../ceylondoc/vertx-core//file/FileSystem.ty
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
 import io.vertx.ceylon.core { vertx_ = vertx }
 
 ...
@@ -185,40 +184,40 @@ import io.vertx.ceylon.core { vertx_ = vertx }
 value vertx = vertx_.vertx();
 
 // Read a file
-vertx.fileSystem().readFile("target/classes/readme.txt", (Buffer|Throwable result) {
+vertx.fileSystem().readFile(&quot;target/classes/readme.txt&quot;, (Buffer|Throwable result) {
   if (is Buffer result) {
     print(result);
   } else {
-    print("Oh oh ...``result``");
+    print(&quot;Oh oh ...``result``&quot;);
   };
 });
 
 // Copy a file
-vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt", (Throwable? result) {
+vertx.fileSystem().copy(&quot;target/classes/readme.txt&quot;, &quot;target/classes/readme2.txt&quot;, (Throwable? result) {
   if (!exists result) {
-    print("File copied");
+    print(&quot;File copied&quot;);
   } else {
-    print("Oh oh ...``result``");
+    print(&quot;Oh oh ...``result``&quot;);
   };
 });
 
 // Write a file
-vertx.fileSystem().writeFile("target/classes/hello.txt", buffer.buffer("Hello"), (Throwable? result) {
+vertx.fileSystem().writeFile(&quot;target/classes/hello.txt&quot;, buffer.buffer(&quot;Hello&quot;), (Throwable? result) {
   if (!exists result) {
-    print("File written");
+    print(&quot;File written&quot;);
   } else {
-    print("Oh oh ...``result``");
+    print(&quot;Oh oh ...``result``&quot;);
   };
 });
 
 // Check existence and delete
-vertx.fileSystem().exists("target/classes/junk.txt", (Boolean|Throwable result) {
+vertx.fileSystem().exists(&quot;target/classes/junk.txt&quot;, (Boolean|Throwable result) {
   if (is Boolean result &amp;&amp; result) {
-    vertx.fileSystem().delete("target/classes/junk.txt", (Throwable? r) {
-      print("File deleted");
+    vertx.fileSystem().delete(&quot;target/classes/junk.txt&quot;, (Throwable? r) {
+      print(&quot;File deleted&quot;);
     });
   } else {
-    print("Oh oh ... - cannot delete the file: ``result``");
+    print(&quot;Oh oh ... - cannot delete the file: ``result``&quot;);
   };
 });</code></pre>
 </div>
@@ -233,8 +232,8 @@ vertx.fileSystem().exists("target/classes/junk.txt", (Boolean|Throwable result) 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = OpenOptions();
-fileSystem.open("myfile.txt", options, (AsyncFile|Throwable res) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = OpenOptions();
+fileSystem.open(&quot;myfile.txt&quot;, options, (AsyncFile|Throwable res) {
   if (is AsyncFile res) {
     value file = res;
   } else {
@@ -278,28 +277,28 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
 import io.vertx.ceylon.core { vertx_ = vertx }
 
 ...
 
 value vertx = vertx_.vertx();
-vertx.fileSystem().open("target/classes/hello.txt", OpenOptions(), (AsyncFile|Throwable result) {
+vertx.fileSystem().open(&quot;target/classes/hello.txt&quot;, OpenOptions(), (AsyncFile|Throwable result) {
   if (is AsyncFile result) {
     value file = result;
-    value buff = buffer.buffer("foo");
+    value buff = buffer.buffer(&quot;foo&quot;);
     for (i in 0:5) {
       file.write(buff, buff.length() * i, (Throwable? ar) {
         if (!exists ar) {
-          print("Written ok!");
+          print(&quot;Written ok!&quot;);
           // etc
         } else {
-          print("Failed to write: ``ar``");
+          print(&quot;Failed to write: ``ar``&quot;);
         };
       });
     };
   } else {
-    print("Cannot open file ``result``");
+    print(&quot;Cannot open file ``result``&quot;);
   };
 });</code></pre>
 </div>
@@ -339,27 +338,27 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
 import io.vertx.ceylon.core { vertx_ = vertx }
 
 ...
 
 value vertx = vertx_.vertx();
-vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), (AsyncFile|Throwable result) {
+vertx.fileSystem().open(&quot;target/classes/les_miserables.txt&quot;, OpenOptions(), (AsyncFile|Throwable result) {
   if (is AsyncFile result) {
     value file = result;
     value buff = buffer.buffer(1000);
     for (i in 0:10) {
       file.read(buff, i * 100, i * 100, 100, (Buffer|Throwable ar) {
         if (is Buffer ar) {
-          print("Read ok!");
+          print(&quot;Read ok!&quot;);
         } else {
-          print("Failed to write: ``ar``");
+          print(&quot;Failed to write: ``ar``&quot;);
         };
       });
     };
   } else {
-    print("Cannot open file ``result``");
+    print(&quot;Cannot open file ``result``&quot;);
   };
 });</code></pre>
 </div>
@@ -403,23 +402,23 @@ copy the content to another <code>AsyncFile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
 import io.vertx.ceylon.core.streams { pump }
 
 ...
 
 value vertx = vertx_.vertx();
-value output = vertx.fileSystem().openBlocking("target/classes/plagiary.txt", OpenOptions());
+value output = vertx.fileSystem().openBlocking(&quot;target/classes/plagiary.txt&quot;, OpenOptions());
 
-vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), (AsyncFile|Throwable result) {
+vertx.fileSystem().open(&quot;target/classes/les_miserables.txt&quot;, OpenOptions(), (AsyncFile|Throwable result) {
   if (is AsyncFile result) {
     value file = result;
     pump.pump(file, output).start();
     file.endHandler(() {
-      print("Copy done");
+      print(&quot;Copy done&quot;);
     });
   } else {
-    print("Cannot open file ``result``");
+    print(&quot;Cannot open file ``result``&quot;);
   };
 });</code></pre>
 </div>

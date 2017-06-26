@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -182,11 +181,11 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-    &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-    &lt;artifactId&gt;vertx-mqtt-server&lt;/artifactId&gt;
-    &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>vertx-mqtt-server<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -198,7 +197,7 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-mqtt-server:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-mqtt-<span class="key">server</span>:<span class="float">3.4</span><span class="float">.2</span></code></pre>
 </div>
 </div>
 </div>
@@ -222,36 +221,36 @@ to check if the server is started properly or not.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-mqtt-server/mqtt_server'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-mqtt-server/mqtt_server</span><span class="delimiter">'</span></span>
 
-mqttServer = VertxMqttServer::MqttServer.create(vertx)
+mqttServer = <span class="constant">VertxMqttServer</span>::<span class="constant">MqttServer</span>.create(vertx)
 mqttServer.endpoint_handler() { |endpoint|
 
-  # shows main connect info
-  puts "MQTT client [#{endpoint.client_identifier()}] request to connect, clean session = #{endpoint.clean_session?()}"
+  <span class="comment"># shows main connect info</span>
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT client [</span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.client_identifier()<span class="inline-delimiter">}</span></span><span class="content">] request to connect, clean session = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.clean_session?()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
 
-  if (endpoint.auth() != nil)
-    puts "[username = #{endpoint.auth().user_name()}, password = #{endpoint.auth().password()}]"
-  end
-  if (endpoint.will() != nil)
-    puts "[will topic = #{endpoint.will().will_topic()} msg = #{endpoint.will().will_message()} QoS = #{endpoint.will().will_qos()} isRetain = #{endpoint.will().will_retain?()}]"
-  end
+  <span class="keyword">if</span> (endpoint.auth() != <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">[username = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.auth().user_name()<span class="inline-delimiter">}</span></span><span class="content">, password = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.auth().password()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span>
+  <span class="keyword">if</span> (endpoint.will() != <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">[will topic = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.will().will_topic()<span class="inline-delimiter">}</span></span><span class="content"> msg = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.will().will_message()<span class="inline-delimiter">}</span></span><span class="content"> QoS = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.will().will_qos()<span class="inline-delimiter">}</span></span><span class="content"> isRetain = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.will().will_retain?()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span>
 
-  puts "[keep alive timeout = #{endpoint.keep_alive_time_seconds()}]"
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">[keep alive timeout = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.keep_alive_time_seconds()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>
 
-  # accept connection from the remote client
-  endpoint.accept(false)
+  <span class="comment"># accept connection from the remote client</span>
+  endpoint.accept(<span class="predefined-constant">false</span>)
 
 }.listen() { |ar_err,ar|
 
-  if (ar_err == nil)
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
 
-    puts "MQTT server is listening on port #{ar.actual_port()}"
-  else
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT server is listening on port </span><span class="inline"><span class="inline-delimiter">#{</span>ar.actual_port()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
 
-    puts "Error on starting the server"
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Error on starting the server</span><span class="delimiter">&quot;</span></span>
     ar_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -262,10 +261,10 @@ this handler takes no parameters.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># handling disconnect message
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># handling disconnect message</span>
 endpoint.disconnect_handler() { |v|
 
-  puts "Received disconnect from client"
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Received disconnect from client</span><span class="delimiter">&quot;</span></span>
 }</code></pre>
 </div>
 </div>
@@ -287,45 +286,45 @@ The MQTT server is started passing the Vert.x instance as usual and the above MQ
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-mqtt-server/mqtt_server'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-mqtt-server/mqtt_server</span><span class="delimiter">'</span></span>
 
 options = {
-  'port' =&gt; 8883,
-  'keyCertOptions' =&gt; {
-    'keyPath' =&gt; "./src/test/resources/tls/server-key.pem",
-    'certPath' =&gt; "./src/test/resources/tls/server-cert.pem"
+  <span class="string"><span class="delimiter">'</span><span class="content">port</span><span class="delimiter">'</span></span> =&gt; <span class="integer">8883</span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">keyCertOptions</span><span class="delimiter">'</span></span> =&gt; {
+    <span class="string"><span class="delimiter">'</span><span class="content">keyPath</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">./src/test/resources/tls/server-key.pem</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">'</span><span class="content">certPath</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">./src/test/resources/tls/server-cert.pem</span><span class="delimiter">&quot;</span></span>
   },
-  'ssl' =&gt; true
+  <span class="string"><span class="delimiter">'</span><span class="content">ssl</span><span class="delimiter">'</span></span> =&gt; <span class="predefined-constant">true</span>
 }
 
-mqttServer = VertxMqttServer::MqttServer.create(vertx, options)
+mqttServer = <span class="constant">VertxMqttServer</span>::<span class="constant">MqttServer</span>.create(vertx, options)
 mqttServer.endpoint_handler() { |endpoint|
 
-  # shows main connect info
-  puts "MQTT client [#{endpoint.client_identifier()}] request to connect, clean session = #{endpoint.clean_session?()}"
+  <span class="comment"># shows main connect info</span>
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT client [</span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.client_identifier()<span class="inline-delimiter">}</span></span><span class="content">] request to connect, clean session = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.clean_session?()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
 
-  if (endpoint.auth() != nil)
-    puts "[username = #{endpoint.auth().user_name()}, password = #{endpoint.auth().password()}]"
-  end
-  if (endpoint.will() != nil)
-    puts "[will topic = #{endpoint.will().will_topic()} msg = #{endpoint.will().will_message()} QoS = #{endpoint.will().will_qos()} isRetain = #{endpoint.will().will_retain?()}]"
-  end
+  <span class="keyword">if</span> (endpoint.auth() != <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">[username = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.auth().user_name()<span class="inline-delimiter">}</span></span><span class="content">, password = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.auth().password()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span>
+  <span class="keyword">if</span> (endpoint.will() != <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">[will topic = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.will().will_topic()<span class="inline-delimiter">}</span></span><span class="content"> msg = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.will().will_message()<span class="inline-delimiter">}</span></span><span class="content"> QoS = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.will().will_qos()<span class="inline-delimiter">}</span></span><span class="content"> isRetain = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.will().will_retain?()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span>
 
-  puts "[keep alive timeout = #{endpoint.keep_alive_time_seconds()}]"
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">[keep alive timeout = </span><span class="inline"><span class="inline-delimiter">#{</span>endpoint.keep_alive_time_seconds()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>
 
-  # accept connection from the remote client
-  endpoint.accept(false)
+  <span class="comment"># accept connection from the remote client</span>
+  endpoint.accept(<span class="predefined-constant">false</span>)
 
 }.listen() { |ar_err,ar|
 
-  if (ar_err == nil)
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
 
-    puts "MQTT server is listening on port #{ar.actual_port()}"
-  else
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT server is listening on port </span><span class="inline"><span class="inline-delimiter">#{</span>ar.actual_port()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
 
-    puts "Error on starting the server"
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Error on starting the server</span><span class="delimiter">&quot;</span></span>
     ar_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -346,15 +345,15 @@ for replying to the client with the related SUBACK message containing the grante
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># handling requests for subscriptions
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># handling requests for subscriptions</span>
 endpoint.subscribe_handler() { |subscribe|
 
-  grantedQosLevels = Array.new
-  subscribe.topic_subscriptions().each do |s|
-    puts "Subscription for #{s.topic_name()} with QoS #{s.quality_of_service()}"
+  grantedQosLevels = <span class="constant">Array</span>.new
+  subscribe.topic_subscriptions().each <span class="keyword">do</span> |s|
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Subscription for </span><span class="inline"><span class="inline-delimiter">#{</span>s.topic_name()<span class="inline-delimiter">}</span></span><span class="content"> with QoS </span><span class="inline"><span class="inline-delimiter">#{</span>s.quality_of_service()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
     grantedQosLevels.push(s.quality_of_service())
-  end
-  # ack the subscriptions request
+  <span class="keyword">end</span>
+  <span class="comment"># ack the subscriptions request</span>
   endpoint.subscribe_acknowledge(subscribe.message_id(), grantedQosLevels)
 
 }</code></pre>
@@ -369,13 +368,13 @@ for replying to the client with the related UNSUBACK message.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># handling requests for unsubscriptions
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># handling requests for unsubscriptions</span>
 endpoint.unsubscribe_handler() { |unsubscribe|
 
-  unsubscribe.topics().each do |t|
-    puts "Unsubscription for #{t}"
-  end
-  # ack the subscriptions request
+  unsubscribe.topics().each <span class="keyword">do</span> |t|
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Unsubscription for </span><span class="inline"><span class="inline-delimiter">#{</span>t<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span>
+  <span class="comment"># ack the subscriptions request</span>
   endpoint.unsubscribe_acknowledge(unsubscribe.message_id())
 }</code></pre>
 </div>
@@ -406,16 +405,16 @@ for sending the PUBCOMP message to the client.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># handling incoming published messages
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># handling incoming published messages</span>
 endpoint.publish_handler() { |message|
 
-  puts "Just received message [#{message.payload().to_string(Java::JavaNioCharset::Charset.default_charset())}] with QoS [#{message.qos_level()}]"
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Just received message [</span><span class="inline"><span class="inline-delimiter">#{</span>message.payload().to_string(<span class="constant">Java</span>::<span class="constant">JavaNioCharset</span>::<span class="constant">Charset</span>.default_charset())<span class="inline-delimiter">}</span></span><span class="content">] with QoS [</span><span class="inline"><span class="inline-delimiter">#{</span>message.qos_level()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>
 
-  if (message.qos_level() == :AT_LEAST_ONCE)
+  <span class="keyword">if</span> (message.qos_level() == <span class="symbol">:AT_LEAST_ONCE</span>)
     endpoint.publish_acknowledge(message.message_id())
-  elsif (message.qos_level() == :EXACTLY_ONCE)
+  <span class="keyword">elsif</span> (message.qos_level() == <span class="symbol">:EXACTLY_ONCE</span>)
     endpoint.publish_release(message.message_id())
-  end
+  <span class="keyword">end</span>
 
 }.publish_release_handler() { |messageId|
 
@@ -449,15 +448,15 @@ for specifying the handler called when the final PUBCOMP message is received.</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/buffer'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx/buffer</span><span class="delimiter">'</span></span>
 
-# just as example, publish a message with QoS level 2
-endpoint.publish("my_topic", Vertx::Buffer.buffer("Hello from the Vert.x MQTT server"), :EXACTLY_ONCE, false, false)
+<span class="comment"># just as example, publish a message with QoS level 2</span>
+endpoint.publish(<span class="string"><span class="delimiter">&quot;</span><span class="content">my_topic</span><span class="delimiter">&quot;</span></span>, <span class="constant">Vertx</span>::<span class="constant">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from the Vert.x MQTT server</span><span class="delimiter">&quot;</span></span>), <span class="symbol">:EXACTLY_ONCE</span>, <span class="predefined-constant">false</span>, <span class="predefined-constant">false</span>)
 
-# specifing handlers for handling QoS 1 and 2
+<span class="comment"># specifing handlers for handling QoS 1 and 2</span>
 endpoint.publish_acknowledge_handler() { |messageId|
 
-  puts "Received ack for message = #{messageId}"
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Received ack for message = </span><span class="inline"><span class="inline-delimiter">#{</span>messageId<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
 
 }.publish_received_handler() { |messageId|
 
@@ -465,7 +464,7 @@ endpoint.publish_acknowledge_handler() { |messageId|
 
 }.publish_complete_handler() { |messageId|
 
-  puts "Received ack for message = #{messageId}"
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Received ack for message = </span><span class="inline"><span class="inline-delimiter">#{</span>messageId<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
 }</code></pre>
 </div>
 </div>
@@ -486,10 +485,10 @@ by the server internally as described above.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># handling ping from client
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># handling ping from client</span>
 endpoint.ping_handler() { |v|
 
-  puts "Ping received from client"
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Ping received from client</span><span class="delimiter">&quot;</span></span>
 }</code></pre>
 </div>
 </div>
@@ -504,9 +503,9 @@ that will be called when the server is really closed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">mqttServer.close() { |v_err,v|
+<pre class="CodeRay highlight"><code data-lang="ruby">mqttServer.close() { |v_err,v|
 
-  puts "MQTT server closed"
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT server closed</span><span class="delimiter">&quot;</span></span>
 }</code></pre>
 </div>
 </div>
@@ -529,19 +528,19 @@ more instances of the MQTT server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-mqtt-server/mqtt_server'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-mqtt-server/mqtt_server</span><span class="delimiter">'</span></span>
 
-(0...10).each do |i|
+(<span class="integer">0</span>...<span class="integer">10</span>).each <span class="keyword">do</span> |i|
 
-  mqttServer = VertxMqttServer::MqttServer.create(vertx)
+  mqttServer = <span class="constant">VertxMqttServer</span>::<span class="constant">MqttServer</span>.create(vertx)
   mqttServer.endpoint_handler() { |endpoint|
-    # handling endpoint
+    <span class="comment"># handling endpoint</span>
   }.listen() { |ar_err,ar|
 
-    # handling start listening
+    <span class="comment"># handling start listening</span>
   }
 
-end</code></pre>
+<span class="keyword">end</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -549,10 +548,10 @@ end</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = {
-  'instances' =&gt; 10
+<pre class="CodeRay highlight"><code data-lang="ruby">options = {
+  <span class="string"><span class="delimiter">'</span><span class="content">instances</span><span class="delimiter">'</span></span> =&gt; <span class="integer">10</span>
 }
-vertx.deploy_verticle("com.mycompany.MyVerticle", options)</code></pre>
+vertx.deploy_verticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.mycompany.MyVerticle</span><span class="delimiter">&quot;</span></span>, options)</code></pre>
 </div>
 </div>
 <div class="paragraph">

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -173,11 +172,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-circuit-breaker&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-circuit-breaker<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -189,7 +188,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-circuit-breaker:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-circuit-breaker:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -215,21 +214,21 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CircuitBreaker = require("vertx-circuit-breaker-js/circuit_breaker");
-var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, {
-  "maxFailures" : 5,
-  "timeout" : 2000,
-  "fallbackOnFailure" : true,
-  "resetTimeout" : 10000
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> CircuitBreaker = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-circuit-breaker-js/circuit_breaker</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> breaker = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx, {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maxFailures</span><span class="delimiter">&quot;</span></span> : <span class="integer">5</span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">timeout</span><span class="delimiter">&quot;</span></span> : <span class="integer">2000</span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">fallbackOnFailure</span><span class="delimiter">&quot;</span></span> : <span class="predefined-constant">true</span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">resetTimeout</span><span class="delimiter">&quot;</span></span> : <span class="integer">10000</span>
 });
 
-breaker.execute(function (future) {
-  // some code executing with the breaker
-  // the code reports failures or success on the given future.
-  // if this future is marked as failed, the breaker increased the
-  // number of failures
-}).setHandler(function (ar, ar_err) {
-  // Get the operation result.
+breaker.execute(<span class="keyword">function</span> (future) {
+  <span class="comment">// some code executing with the breaker</span>
+  <span class="comment">// the code reports failures or success on the given future.</span>
+  <span class="comment">// if this future is marked as failed, the breaker increased the</span>
+  <span class="comment">// number of failures</span>
+}).setHandler(<span class="keyword">function</span> (ar, ar_err) {
+  <span class="comment">// Get the operation result.</span>
 });</code></pre>
 </div>
 </div>
@@ -240,24 +239,24 @@ output of a REST endpoint invocation:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CircuitBreaker = require("vertx-circuit-breaker-js/circuit_breaker");
-var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, {
-  "maxFailures" : 5,
-  "timeout" : 2000
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> CircuitBreaker = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-circuit-breaker-js/circuit_breaker</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> breaker = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx, {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maxFailures</span><span class="delimiter">&quot;</span></span> : <span class="integer">5</span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">timeout</span><span class="delimiter">&quot;</span></span> : <span class="integer">2000</span>
 });
 
-breaker.execute(function (future) {
-  vertx.createHttpClient().getNow(8080, "localhost", "/", function (response) {
-    if (response.statusCode() !== 200) {
-      future.fail("HTTP error");
-    } else {
-      response.exceptionHandler(future.fail).bodyHandler(function (buffer) {
+breaker.execute(<span class="keyword">function</span> (future) {
+  vertx.createHttpClient().getNow(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (response) {
+    <span class="keyword">if</span> (response.statusCode() !== <span class="integer">200</span>) {
+      future.fail(<span class="string"><span class="delimiter">&quot;</span><span class="content">HTTP error</span><span class="delimiter">&quot;</span></span>);
+    } <span class="keyword">else</span> {
+      response.exceptionHandler(future.fail).bodyHandler(<span class="keyword">function</span> (buffer) {
         future.complete(buffer.toString());
       });
     }
   });
-}).setHandler(function (ar, ar_err) {
-  // Do something with the result
+}).setHandler(<span class="keyword">function</span> (ar, ar_err) {
+  <span class="comment">// Do something with the result</span>
 });</code></pre>
 </div>
 </div>
@@ -279,27 +278,27 @@ breaker.execute(function (future) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CircuitBreaker = require("vertx-circuit-breaker-js/circuit_breaker");
-var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, {
-  "maxFailures" : 5,
-  "timeout" : 2000
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> CircuitBreaker = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-circuit-breaker-js/circuit_breaker</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> breaker = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx, {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maxFailures</span><span class="delimiter">&quot;</span></span> : <span class="integer">5</span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">timeout</span><span class="delimiter">&quot;</span></span> : <span class="integer">2000</span>
 });
 
-breaker.executeWithFallback(function (future) {
-  vertx.createHttpClient().getNow(8080, "localhost", "/", function (response) {
-    if (response.statusCode() !== 200) {
-      future.fail("HTTP error");
-    } else {
-      response.exceptionHandler(future.fail).bodyHandler(function (buffer) {
+breaker.executeWithFallback(<span class="keyword">function</span> (future) {
+  vertx.createHttpClient().getNow(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (response) {
+    <span class="keyword">if</span> (response.statusCode() !== <span class="integer">200</span>) {
+      future.fail(<span class="string"><span class="delimiter">&quot;</span><span class="content">HTTP error</span><span class="delimiter">&quot;</span></span>);
+    } <span class="keyword">else</span> {
+      response.exceptionHandler(future.fail).bodyHandler(<span class="keyword">function</span> (buffer) {
         future.complete(buffer.toString());
       });
     }
   });
-}, function (v) {
-  // Executed when the circuit is opened
-  return "Hello"
-}).setHandler(function (ar, ar_err) {
-  // Do something with the result
+}, <span class="keyword">function</span> (v) {
+  <span class="comment">// Executed when the circuit is opened</span>
+  <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>
+}).setHandler(<span class="keyword">function</span> (ar, ar_err) {
+  <span class="comment">// Do something with the result</span>
 });</code></pre>
 </div>
 </div>
@@ -314,21 +313,21 @@ set, the result is using the output of the fallback function. The fallback funct
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CircuitBreaker = require("vertx-circuit-breaker-js/circuit_breaker");
-var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, {
-  "maxFailures" : 5,
-  "timeout" : 2000
-}).fallback(function (v) {
-  // Executed when the circuit is opened.
-  return "hello"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> CircuitBreaker = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-circuit-breaker-js/circuit_breaker</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> breaker = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx, {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maxFailures</span><span class="delimiter">&quot;</span></span> : <span class="integer">5</span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">timeout</span><span class="delimiter">&quot;</span></span> : <span class="integer">2000</span>
+}).fallback(<span class="keyword">function</span> (v) {
+  <span class="comment">// Executed when the circuit is opened.</span>
+  <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">hello</span><span class="delimiter">&quot;</span></span>
 });
 
-breaker.execute(function (future) {
-  vertx.createHttpClient().getNow(8080, "localhost", "/", function (response) {
-    if (response.statusCode() !== 200) {
-      future.fail("HTTP error");
-    } else {
-      response.exceptionHandler(future.fail).bodyHandler(function (buffer) {
+breaker.execute(<span class="keyword">function</span> (future) {
+  vertx.createHttpClient().getNow(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (response) {
+    <span class="keyword">if</span> (response.statusCode() !== <span class="integer">200</span>) {
+      future.fail(<span class="string"><span class="delimiter">&quot;</span><span class="content">HTTP error</span><span class="delimiter">&quot;</span></span>);
+    } <span class="keyword">else</span> {
+      response.exceptionHandler(future.fail).bodyHandler(<span class="keyword">function</span> (buffer) {
         future.complete(buffer.toString());
       });
     }
@@ -353,22 +352,22 @@ retries left are skipped. Retries are only supported when the circuit is closed.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CircuitBreaker = require("vertx-circuit-breaker-js/circuit_breaker");
-var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, {
-  "maxFailures" : 5,
-  "timeout" : 2000
-}).openHandler(function (v) {
-  console.log("Circuit opened");
-}).closeHandler(function (v) {
-  console.log("Circuit closed");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> CircuitBreaker = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-circuit-breaker-js/circuit_breaker</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> breaker = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx, {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maxFailures</span><span class="delimiter">&quot;</span></span> : <span class="integer">5</span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">timeout</span><span class="delimiter">&quot;</span></span> : <span class="integer">2000</span>
+}).openHandler(<span class="keyword">function</span> (v) {
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Circuit opened</span><span class="delimiter">&quot;</span></span>);
+}).closeHandler(<span class="keyword">function</span> (v) {
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Circuit closed</span><span class="delimiter">&quot;</span></span>);
 });
 
-breaker.execute(function (future) {
-  vertx.createHttpClient().getNow(8080, "localhost", "/", function (response) {
-    if (response.statusCode() !== 200) {
-      future.fail("HTTP error");
-    } else {
-      // Do something with the response
+breaker.execute(<span class="keyword">function</span> (future) {
+  vertx.createHttpClient().getNow(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (response) {
+    <span class="keyword">if</span> (response.statusCode() !== <span class="integer">200</span>) {
+      future.fail(<span class="string"><span class="delimiter">&quot;</span><span class="content">HTTP error</span><span class="delimiter">&quot;</span></span>);
+    } <span class="keyword">else</span> {
+      <span class="comment">// Do something with the response</span>
       future.complete();
     }
   });
@@ -436,20 +435,20 @@ a SSE stream sending the metrics. This stream is provided by the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var CircuitBreaker = require("vertx-circuit-breaker-js/circuit_breaker");
-var Router = require("vertx-web-js/router");
-var HystrixMetricHandler = require("vertx-circuit-breaker-js/hystrix_metric_handler");
-// Create the circuit breaker as usual.
-var breaker = CircuitBreaker.create("my-circuit-breaker", vertx);
-var breaker2 = CircuitBreaker.create("my-second-circuit-breaker", vertx);
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> CircuitBreaker = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-circuit-breaker-js/circuit_breaker</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> Router = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-web-js/router</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> HystrixMetricHandler = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-circuit-breaker-js/hystrix_metric_handler</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">// Create the circuit breaker as usual.</span>
+<span class="keyword">var</span> breaker = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx);
+<span class="keyword">var</span> breaker2 = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-second-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx);
 
-// Create a Vert.x Web router
-var router = Router.router(vertx);
-// Register the metric handler
-router.get("/hystrix-metrics").handler(HystrixMetricHandler.create(vertx).handle);
+<span class="comment">// Create a Vert.x Web router</span>
+<span class="keyword">var</span> router = Router.router(vertx);
+<span class="comment">// Register the metric handler</span>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/hystrix-metrics</span><span class="delimiter">&quot;</span></span>).handler(HystrixMetricHandler.create(vertx).handle);
 
-// Create the HTTP server using the router to dispatch the requests
-vertx.createHttpServer().requestHandler(router.accept).listen(8080);</code></pre>
+<span class="comment">// Create the HTTP server using the router to dispatch the requests</span>
+vertx.createHttpServer().requestHandler(router.accept).listen(<span class="integer">8080</span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">

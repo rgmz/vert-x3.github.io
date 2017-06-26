@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -177,11 +176,11 @@ result as JSON.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-health-check&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-health-check<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -193,7 +192,7 @@ result as JSON.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-health-check:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-health-check:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -203,7 +202,7 @@ result as JSON.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="constant">Code</span> <span class="keyword">not</span> translatable</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -227,18 +226,18 @@ result as JSON.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-health-checks/health_check_handler'
-require 'vertx-health-checks/health_checks'
-require 'vertx-web/router'
-healthCheckHandler1 = VertxHealthChecks::HealthCheckHandler.create(vertx)
-healthCheckHandler2 = VertxHealthChecks::HealthCheckHandler.create_with_health_checks(VertxHealthChecks::HealthChecks.create(vertx))
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-health-checks/health_check_handler</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">vertx-health-checks/health_checks</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">vertx-web/router</span><span class="delimiter">'</span></span>
+healthCheckHandler1 = <span class="constant">VertxHealthChecks</span>::<span class="constant">HealthCheckHandler</span>.create(vertx)
+healthCheckHandler2 = <span class="constant">VertxHealthChecks</span>::<span class="constant">HealthCheckHandler</span>.create_with_health_checks(<span class="constant">VertxHealthChecks</span>::<span class="constant">HealthChecks</span>.create(vertx))
 
-router = VertxWeb::Router.router(vertx)
-# Populate the router with routes...
-# Register the health check handler
-router.get("/health*").handler(&amp;healthCheckHandler1.method(:handle))
-# Or
-router.get("/ping*").handler(&amp;healthCheckHandler2.method(:handle))</code></pre>
+router = <span class="constant">VertxWeb</span>::<span class="constant">Router</span>.router(vertx)
+<span class="comment"># Populate the router with routes...</span>
+<span class="comment"># Register the health check handler</span>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/health*</span><span class="delimiter">&quot;</span></span>).handler(&amp;healthCheckHandler1.method(<span class="symbol">:handle</span>))
+<span class="comment"># Or</span>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/ping*</span><span class="delimiter">&quot;</span></span>).handler(&amp;healthCheckHandler2.method(<span class="symbol">:handle</span>))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -249,7 +248,7 @@ anytime, even after the route registration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="constant">Code</span> <span class="keyword">not</span> translatable</code></pre>
 </div>
 </div>
 </div>
@@ -293,7 +292,7 @@ the check is considered as <em>KO</em>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="constant">Code</span> <span class="keyword">not</span> translatable</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -302,20 +301,20 @@ tree and the structure is mapped to HTTP urls (see below).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-health-checks/health_check_handler'
-healthCheckHandler = VertxHealthChecks::HealthCheckHandler.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-health-checks/health_check_handler</span><span class="delimiter">'</span></span>
+healthCheckHandler = <span class="constant">VertxHealthChecks</span>::<span class="constant">HealthCheckHandler</span>.create(vertx)
 
-# Register procedures
-# Procedure can be grouped. The group is deduced using a name with "/".
-# Groups can contains other group
-healthCheckHandler.register("a-group/my-procedure-name") { |future|
-  #....
+<span class="comment"># Register procedures</span>
+<span class="comment"># Procedure can be grouped. The group is deduced using a name with &quot;/&quot;.</span>
+<span class="comment"># Groups can contains other group</span>
+healthCheckHandler.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">a-group/my-procedure-name</span><span class="delimiter">&quot;</span></span>) { |future|
+  <span class="comment">#....</span>
 }
-healthCheckHandler.register("a-group/a-second-group/my-second-procedure-name") { |future|
-  #....
+healthCheckHandler.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">a-group/a-second-group/my-second-procedure-name</span><span class="delimiter">&quot;</span></span>) { |future|
+  <span class="comment">#....</span>
 }
 
-router.get("/health").handler(&amp;healthCheckHandler.method(:handle))</code></pre>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/health</span><span class="delimiter">&quot;</span></span>).handler(&amp;healthCheckHandler.method(<span class="symbol">:handle</span>))</code></pre>
 </div>
 </div>
 </div>
@@ -356,7 +355,7 @@ additional data, the data is also given:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>{
+<pre class="CodeRay highlight"><code>{
  "checks" : [
  {
    "id" : "A",
@@ -379,7 +378,7 @@ additional data, the data is also given:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>{
+<pre class="CodeRay highlight"><code>{
  "checks" : [
  {
    "id" : "my-group",
@@ -417,7 +416,7 @@ additional data, the data is also given:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="constant">Code</span> <span class="keyword">not</span> translatable</code></pre>
 </div>
 </div>
 </div>
@@ -428,7 +427,7 @@ additional data, the data is also given:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="constant">Code</span> <span class="keyword">not</span> translatable</code></pre>
 </div>
 </div>
 </div>
@@ -441,7 +440,7 @@ if it&#8217;s listening on a specific event address.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="constant">Code</span> <span class="keyword">not</span> translatable</code></pre>
 </div>
 </div>
 </div>
@@ -489,8 +488,8 @@ to expose the data differently. This section gives an example to expose the data
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">vertx.event_bus().consumer("health") { |message|
-  healthChecks.invoke(&amp;message.method(:reply))
+<pre class="CodeRay highlight"><code data-lang="ruby">vertx.event_bus().consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">health</span><span class="delimiter">&quot;</span></span>) { |message|
+  healthChecks.invoke(&amp;message.method(<span class="symbol">:reply</span>))
 }</code></pre>
 </div>
 </div>

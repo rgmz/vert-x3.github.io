@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -190,11 +189,11 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-consul-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-consul-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -206,7 +205,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-consul-client:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-consul-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -219,7 +218,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = ConsulClient.create(vertx)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = ConsulClient.create(vertx)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -227,11 +226,11 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
-  host:"consul.example.com"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> options = [
+  <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">consul.example.com</span><span class="delimiter">&quot;</span></span>
 ]
 
-def client = ConsulClient.create(vertx, options)</code></pre>
+<span class="keyword">def</span> client = ConsulClient.create(vertx, options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -299,9 +298,9 @@ the current state of the requested resource. The following configuration is used
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def opts = [
-  index:lastIndex,
-  wait:"1m"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> opts = [
+  <span class="key">index</span>:lastIndex,
+  <span class="key">wait</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">1m</span><span class="delimiter">&quot;</span></span>
 ]</code></pre>
 </div>
 </div>
@@ -336,11 +335,11 @@ The following endpoints are supported:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.getValue("key", { res -&gt;
-  if (res.succeeded()) {
-    println("retrieved value: ${res.result().value}")
-    println("modify index: ${res.result().modifyIndex}")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.getValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">retrieved value: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().value<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">modify index: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().modifyIndex<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -351,13 +350,13 @@ The following endpoints are supported:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.getValues("prefix", { res -&gt;
-  if (res.succeeded()) {
-    println("modify index: ${res.result().index}")
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.getValues(<span class="string"><span class="delimiter">&quot;</span><span class="content">prefix</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">modify index: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().index<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     res.result().list.each { kv -&gt;
-      println("retrieved value: ${kv.value}")
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">retrieved value: </span><span class="inline"><span class="inline-delimiter">${</span>kv.value<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     }
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -404,16 +403,16 @@ sense for their application</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def opts = [
-  index:modifyIndex,
-  wait:"1m"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> opts = [
+  <span class="key">index</span>:modifyIndex,
+  <span class="key">wait</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">1m</span><span class="delimiter">&quot;</span></span>
 ]
 
-consulClient.getValueWithOptions("key", opts, { res -&gt;
-  if (res.succeeded()) {
-    println("retrieved value: ${res.result().value}")
-    println("new modify index: ${res.result().modifyIndex}")
-  } else {
+consulClient.getValueWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, opts, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">retrieved value: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().value<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">new modify index: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().modifyIndex<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -424,11 +423,11 @@ consulClient.getValueWithOptions("key", opts, { res -&gt;
 <h3 id="_put_key_value_pair_to_store">Put key-value pair to store</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.putValue("key", "value", { res -&gt;
-  if (res.succeeded()) {
-    def opResult = res.result() ? "success" : "fail"
-    println("result of the operation: ${opResult}")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.putValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="keyword">def</span> opResult = res.result() ? <span class="string"><span class="delimiter">&quot;</span><span class="content">success</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">fail</span><span class="delimiter">&quot;</span></span>
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">result of the operation: </span><span class="inline"><span class="inline-delimiter">${</span>opResult<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -439,18 +438,18 @@ consulClient.getValueWithOptions("key", opts, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def opts = [
-  flags:42,
-  casIndex:modifyIndex,
-  acquireSession:"acquireSessionID",
-  releaseSession:"releaseSessionID"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> opts = [
+  <span class="key">flags</span>:<span class="integer">42</span>,
+  <span class="key">casIndex</span>:modifyIndex,
+  <span class="key">acquireSession</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">acquireSessionID</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">releaseSession</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">releaseSessionID</span><span class="delimiter">&quot;</span></span>
 ]
 
-consulClient.putValueWithOptions("key", "value", opts, { res -&gt;
-  if (res.succeeded()) {
-    def opResult = res.result() ? "success" : "fail"
-    println("result of the operation: ${opResult}")
-  } else {
+consulClient.putValueWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>, opts, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="keyword">def</span> opResult = res.result() ? <span class="string"><span class="delimiter">&quot;</span><span class="content">success</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">fail</span><span class="delimiter">&quot;</span></span>
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">result of the operation: </span><span class="inline"><span class="inline-delimiter">${</span>opResult<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -500,26 +499,26 @@ may be added in future versions of Consul to be mixed with key/value operations
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def request = [
-  operations:[
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> request = [
+  <span class="key">operations</span>:[
     [
-      key:"key1",
-      value:"value1",
-      type:"SET"
+      <span class="key">key</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">SET</span><span class="delimiter">&quot;</span></span>
     ],
     [
-      key:"key2",
-      value:"value2",
-      type:"SET"
+      <span class="key">key</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">SET</span><span class="delimiter">&quot;</span></span>
     ]
   ]
 ]
 
 consulClient.transaction(request, { res -&gt;
-  if (res.succeeded()) {
-    println("succeeded results: ${res.result().results.size()}")
-    println("errors: ${res.result().errors.size()}")
-  } else {
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">succeeded results: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().results.size()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">errors: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().errors.size()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -533,10 +532,10 @@ consulClient.transaction(request, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.deleteValue("key", { res -&gt;
-  if (res.succeeded()) {
-    println("complete")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.deleteValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">complete</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -547,10 +546,10 @@ consulClient.transaction(request, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.deleteValues("prefix", { res -&gt;
-  if (res.succeeded()) {
-    println("complete")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.deleteValues(<span class="string"><span class="delimiter">&quot;</span><span class="content">prefix</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">complete</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -574,15 +573,15 @@ and to potentially associate it with a health check.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def opts = [
-  name:"serviceName",
-  id:"serviceId",
-  tags:["tag1", "tag2"],
-  checkOptions:[
-    ttl:"10s"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> opts = [
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceName</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">id</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceId</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">tags</span>:[<span class="string"><span class="delimiter">&quot;</span><span class="content">tag1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">tag2</span><span class="delimiter">&quot;</span></span>],
+  <span class="key">checkOptions</span>:[
+    <span class="key">ttl</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">10s</span><span class="delimiter">&quot;</span></span>
   ],
-  address:"10.0.0.1",
-  port:8048
+  <span class="key">address</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">port</span>:<span class="integer">8048</span>
 ]</code></pre>
 </div>
 </div>
@@ -623,10 +622,10 @@ the address and port of a service can be discovered.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.registerService(opts, { res -&gt;
-  if (res.succeeded()) {
-    println("Service successfully registered")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.registerService(opts, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service successfully registered</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 
@@ -641,16 +640,16 @@ the address and port of a service can be discovered.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.catalogServiceNodes("serviceName", { res -&gt;
-  if (res.succeeded()) {
-    println("found ${res.result().list.size()} services")
-    println("consul state index: ${res.result().index}")
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.catalogServiceNodes(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceName</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="inline"><span class="inline-delimiter">${</span>res.result().list.size()<span class="inline-delimiter">}</span></span><span class="content"> services</span><span class="delimiter">&quot;</span></span>)
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">consul state index: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().index<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     res.result().list.each { service -&gt;
-      println("Service node: ${service.node}")
-      println("Service address: ${service.address}")
-      println("Service port: ${service.port}")
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service node: </span><span class="inline"><span class="inline-delimiter">${</span>service.node<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service address: </span><span class="inline"><span class="inline-delimiter">${</span>service.address<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service port: </span><span class="inline"><span class="inline-delimiter">${</span>service.port<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     }
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -662,16 +661,16 @@ The result can be filtered by check status.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.healthServiceNodes("serviceName", passingOnly, { res -&gt;
-  if (res.succeeded()) {
-    println("found ${res.result().list.size()} services")
-    println("consul state index: ${res.result().index}")
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.healthServiceNodes(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceName</span><span class="delimiter">&quot;</span></span>, passingOnly, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="inline"><span class="inline-delimiter">${</span>res.result().list.size()<span class="inline-delimiter">}</span></span><span class="content"> services</span><span class="delimiter">&quot;</span></span>)
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">consul state index: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().index<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     res.result().list.each { entry -&gt;
-      println("Service node: ${entry.node}")
-      println("Service address: ${entry.service.address}")
-      println("Service port: ${entry.service.port}")
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service node: </span><span class="inline"><span class="inline-delimiter">${</span>entry.node<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service address: </span><span class="inline"><span class="inline-delimiter">${</span>entry.service.address<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service port: </span><span class="inline"><span class="inline-delimiter">${</span>entry.service.port<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     }
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -682,11 +681,11 @@ The result can be filtered by check status.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def queryOpts = [
-  tag:"tag1",
-  near:"_agent",
-  blockingOptions:[
-    index:lastIndex
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> queryOpts = [
+  <span class="key">tag</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">tag1</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">near</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">_agent</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">blockingOptions</span>:[
+    <span class="key">index</span>:lastIndex
   ]
 ]</code></pre>
 </div>
@@ -714,10 +713,10 @@ based on the estimated round trip time from that node. Passing <code>near</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.healthServiceNodesWithOptions("serviceName", passingOnly, queryOpts, { res -&gt;
-  if (res.succeeded()) {
-    println("found ${res.result().list.size()} services")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.healthServiceNodesWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceName</span><span class="delimiter">&quot;</span></span>, passingOnly, queryOpts, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="inline"><span class="inline-delimiter">${</span>res.result().list.size()<span class="inline-delimiter">}</span></span><span class="content"> services</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 
@@ -732,10 +731,10 @@ based on the estimated round trip time from that node. Passing <code>near</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.deregisterService("serviceId", { res -&gt;
-  if (res.succeeded()) {
-    println("Service successfully deregistered")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.deregisterService(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceId</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service successfully deregistered</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -754,9 +753,9 @@ If not associated with a service, the check monitors the health of the entire no
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def opts = [
-  tcp:"localhost:4848",
-  interval:"1s"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> opts = [
+  <span class="key">tcp</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:4848</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">interval</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">1s</span><span class="delimiter">&quot;</span></span>
 ]</code></pre>
 </div>
 </div>
@@ -826,10 +825,10 @@ You cannot have duplicate ID entries per agent, so it may be necessary to provid
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.registerCheck(opts, { res -&gt;
-  if (res.succeeded()) {
-    println("check successfully registered")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.registerCheck(opts, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">check successfully registered</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -850,11 +849,11 @@ restart services, or perform any other orchestration action.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.fireEvent("eventName", { res -&gt;
-  if (res.succeeded()) {
-    println("Event sent")
-    println("id: ${res.result().id}")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.fireEvent(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventName</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Event sent</span><span class="delimiter">&quot;</span></span>)
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">id: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().id<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -886,16 +885,16 @@ The body contents are opaque to Consul and become the "payload" of the event</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def opts = [
-  tag:"tag",
-  payload:"message"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> opts = [
+  <span class="key">tag</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">tag</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">payload</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">message</span><span class="delimiter">&quot;</span></span>
 ]
 
-consulClient.fireEventWithOptions("eventName", opts, { res -&gt;
-  if (res.succeeded()) {
-    println("Event sent")
-    println("id: ${res.result().id}")
-  } else {
+consulClient.fireEventWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventName</span><span class="delimiter">&quot;</span></span>, opts, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Event sent</span><span class="delimiter">&quot;</span></span>)
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">id: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().id<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -908,15 +907,15 @@ the most recent entries. The current buffer size is 256, but this value could ch
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.listEvents({ res -&gt;
-  if (res.succeeded()) {
-    println("Consul index: ${res.result().index}")
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.listEvents({ res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Consul index: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().index<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     res.result().list.each { event -&gt;
-      println("Event id: ${event.id}")
-      println("Event name: ${event.name}")
-      println("Event payload: ${event.payload}")
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Event id: </span><span class="inline"><span class="inline-delimiter">${</span>event.id<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Event name: </span><span class="inline"><span class="inline-delimiter">${</span>event.name<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Event payload: </span><span class="inline"><span class="inline-delimiter">${</span>event.payload<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     }
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -927,20 +926,20 @@ the most recent entries. The current buffer size is 256, but this value could ch
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def opts = [
-  name:"eventName",
-  blockingOptions:[
-    index:lastIndex
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> opts = [
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">eventName</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">blockingOptions</span>:[
+    <span class="key">index</span>:lastIndex
   ]
 ]
 
 consulClient.listEventsWithOptions(opts, { res -&gt;
-  if (res.succeeded()) {
-    println("Consul index: ${res.result().index}")
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Consul index: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().index<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     res.result().list.each { event -&gt;
-      println("Event id: ${event.id}")
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Event id: </span><span class="inline"><span class="inline-delimiter">${</span>event.id<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     }
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -959,9 +958,9 @@ may be provided.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def opts = [
-  node:"nodeId",
-  behavior:"RELEASE"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> opts = [
+  <span class="key">node</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">nodeId</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">behavior</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">RELEASE</span><span class="delimiter">&quot;</span></span>
 ]</code></pre>
 </div>
 </div>
@@ -1006,11 +1005,11 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.createSessionWithOptions(opts, { res -&gt;
-  if (res.succeeded()) {
-    println("Session successfully created")
-    println("id: ${res.result()}")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.createSessionWithOptions(opts, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Session successfully created</span><span class="delimiter">&quot;</span></span>)
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">id: </span><span class="inline"><span class="inline-delimiter">${</span>res.result()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -1021,10 +1020,10 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.destroySession(sessionId, { res -&gt;
-  if (res.succeeded()) {
-    println("Session successfully destroyed")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.destroySession(sessionId, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Session successfully destroyed</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -1035,14 +1034,14 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.listNodeSessions("nodeId", { res -&gt;
-  if (res.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.listNodeSessions(<span class="string"><span class="delimiter">&quot;</span><span class="content">nodeId</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
     res.result().list.each { session -&gt;
-      println("Session id: ${session.id}")
-      println("Session node: ${session.node}")
-      println("Session create index: ${session.createIndex}")
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Session id: </span><span class="inline"><span class="inline-delimiter">${</span>session.id<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Session node: </span><span class="inline"><span class="inline-delimiter">${</span>session.node<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Session create index: </span><span class="inline"><span class="inline-delimiter">${</span>session.createIndex<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     }
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -1053,14 +1052,14 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def blockingOpts = [
-  index:lastIndex
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> blockingOpts = [
+  <span class="key">index</span>:lastIndex
 ]
 
 consulClient.listSessionsWithOptions(blockingOpts, { res -&gt;
-  if (res.succeeded()) {
-    println("Found ${res.result().list.size()} sessions")
-  } else {
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Found </span><span class="inline"><span class="inline-delimiter">${</span>res.result().list.size()<span class="inline-delimiter">}</span></span><span class="content"> sessions</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -1073,11 +1072,11 @@ consulClient.listSessionsWithOptions(blockingOpts, { res -&gt;
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consulClient.catalogNodes({ res -&gt;
-  if (res.succeeded()) {
-    println("found ${res.result().list.size()} nodes")
-    println("consul state index ${res.result().index}")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">consulClient.catalogNodes({ res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="inline"><span class="inline-delimiter">${</span>res.result().list.size()<span class="inline-delimiter">}</span></span><span class="content"> nodes</span><span class="delimiter">&quot;</span></span>)
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">consul state index </span><span class="inline"><span class="inline-delimiter">${</span>res.result().index<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -1088,17 +1087,17 @@ consulClient.listSessionsWithOptions(blockingOpts, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def opts = [
-  near:"_agent",
-  blockingOptions:[
-    index:lastIndex
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> opts = [
+  <span class="key">near</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">_agent</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">blockingOptions</span>:[
+    <span class="key">index</span>:lastIndex
   ]
 ]
 
 consulClient.catalogNodesWithOptions(opts, { res -&gt;
-  if (res.succeeded()) {
-    println("found ${res.result().list.size()} nodes")
-  } else {
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="inline"><span class="inline-delimiter">${</span>res.result().list.size()<span class="inline-delimiter">}</span></span><span class="content"> nodes</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -1116,10 +1115,10 @@ As an example, you could watch the status of health checks and notify when a che
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Watch.key("foo/bar", vertx).setHandler({ res -&gt;
-  if (res.succeeded()) {
-    println("value: ${res.result().value}")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">Watch.key(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo/bar</span><span class="delimiter">&quot;</span></span>, vertx).setHandler({ res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">value: </span><span class="inline"><span class="inline-delimiter">${</span>res.result().value<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 }).start()</code></pre>

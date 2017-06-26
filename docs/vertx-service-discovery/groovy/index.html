@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -288,11 +287,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-&lt;groupId&gt;io.vertx&lt;/groupId&gt;
-&lt;artifactId&gt;vertx-service-discovery&lt;/artifactId&gt;
-&lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+<span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+<span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery<span class="tag">&lt;/artifactId&gt;</span>
+<span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -304,7 +303,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -421,16 +420,16 @@ instance to use the discovery infrastructure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Use default configuration
-def discovery = ServiceDiscovery.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Use default configuration</span>
+<span class="keyword">def</span> discovery = ServiceDiscovery.create(vertx)
 
-// Customize the configuration
+<span class="comment">// Customize the configuration</span>
 discovery = ServiceDiscovery.create(vertx, [
-  announceAddress:"service-announce",
-  name:"my-name"
+  <span class="key">announceAddress</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">service-announce</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">my-name</span><span class="delimiter">&quot;</span></span>
 ])
 
-// Do something...
+<span class="comment">// Do something...</span>
 
 discovery.close()</code></pre>
 </div>
@@ -473,35 +472,35 @@ from the service types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Manual record creation
-def record = [
-  type:"eventbus-service-proxy",
-  location:[
-    endpoint:"the-service-address"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Manual record creation</span>
+<span class="keyword">def</span> record = [
+  <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-service-proxy</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">location</span>:[
+    <span class="key">endpoint</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">the-service-address</span><span class="delimiter">&quot;</span></span>
   ],
-  name:"my-service",
-  metadata:[
-    'some-label':"some-value"
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">my-service</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">metadata</span>:[
+    <span class="string"><span class="delimiter">'</span><span class="content">some-label</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
   ]
 ]
 
 discovery.publish(record, { ar -&gt;
-  if (ar.succeeded()) {
-    // publication succeeded
-    def publishedRecord = ar.result()
-  } else {
-    // publication failed
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="comment">// publication succeeded</span>
+    <span class="keyword">def</span> publishedRecord = ar.result()
+  } <span class="keyword">else</span> {
+    <span class="comment">// publication failed</span>
   }
 })
 
-// Record creation from a type
-record = HttpEndpoint.createRecord("some-rest-api", "localhost", 8080, "/api")
+<span class="comment">// Record creation from a type</span>
+record = HttpEndpoint.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-rest-api</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/api</span><span class="delimiter">&quot;</span></span>)
 discovery.publish(record, { ar -&gt;
-  if (ar.succeeded()) {
-    // publication succeeded
-    def publishedRecord = ar.result()
-  } else {
-    // publication failed
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="comment">// publication succeeded</span>
+    <span class="keyword">def</span> publishedRecord = ar.result()
+  } <span class="keyword">else</span> {
+    <span class="comment">// publication failed</span>
   }
 })</code></pre>
 </div>
@@ -519,11 +518,11 @@ discovery.publish(record, { ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">discovery.unpublish(record.registration, { ar -&gt;
-  if (ar.succeeded()) {
-    // Ok
-  } else {
-    // cannot un-publish the service, may have already been removed, or the record is not published
+<pre class="CodeRay highlight"><code data-lang="groovy">discovery.unpublish(record.registration, { ar -&gt;
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="comment">// Ok</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// cannot un-publish the service, may have already been removed, or the record is not published</span>
   }
 })</code></pre>
 </div>
@@ -577,86 +576,86 @@ records, you must return <em>true</em> regardless the record.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get any record
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Get any record</span>
 discovery.getRecord({ r -&gt;
-  true
+  <span class="predefined-constant">true</span>
 }, { ar -&gt;
-  if (ar.succeeded()) {
-    if (ar.result() != null) {
-      // we have a record
-    } else {
-      // the lookup succeeded, but no matching service
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.result() != <span class="predefined-constant">null</span>) {
+      <span class="comment">// we have a record</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// the lookup succeeded, but no matching service</span>
     }
-  } else {
-    // lookup failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 })
 
-discovery.getRecord(null, { ar -&gt;
-  if (ar.succeeded()) {
-    if (ar.result() != null) {
-      // we have a record
-    } else {
-      // the lookup succeeded, but no matching service
+discovery.getRecord(<span class="predefined-constant">null</span>, { ar -&gt;
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.result() != <span class="predefined-constant">null</span>) {
+      <span class="comment">// we have a record</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// the lookup succeeded, but no matching service</span>
     }
-  } else {
-    // lookup failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 })
 
 
-// Get a record by name
+<span class="comment">// Get a record by name</span>
 discovery.getRecord({ r -&gt;
-  r.name == "some-name"
+  r.name == <span class="string"><span class="delimiter">&quot;</span><span class="content">some-name</span><span class="delimiter">&quot;</span></span>
 }, { ar -&gt;
-  if (ar.succeeded()) {
-    if (ar.result() != null) {
-      // we have a record
-    } else {
-      // the lookup succeeded, but no matching service
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.result() != <span class="predefined-constant">null</span>) {
+      <span class="comment">// we have a record</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// the lookup succeeded, but no matching service</span>
     }
-  } else {
-    // lookup failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 })
 
 discovery.getRecord([
-  name:"some-service"
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-service</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded()) {
-    if (ar.result() != null) {
-      // we have a record
-    } else {
-      // the lookup succeeded, but no matching service
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.result() != <span class="predefined-constant">null</span>) {
+      <span class="comment">// we have a record</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// the lookup succeeded, but no matching service</span>
     }
-  } else {
-    // lookup failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 })
 
-// Get all records matching the filter
+<span class="comment">// Get all records matching the filter</span>
 discovery.getRecords({ r -&gt;
-  "some-value" == r.metadata.some-label
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span> == r.metadata.some-label
 }, { ar -&gt;
-  if (ar.succeeded()) {
-    def results = ar.result()
-    // If the list is not empty, we have matching record
-    // Else, the lookup succeeded, but no matching service
-  } else {
-    // lookup failed
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">def</span> results = ar.result()
+    <span class="comment">// If the list is not empty, we have matching record</span>
+    <span class="comment">// Else, the lookup succeeded, but no matching service</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 })
 
 
 discovery.getRecords([
-  'some-label':"some-value"
+  <span class="string"><span class="delimiter">'</span><span class="content">some-label</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded()) {
-    def results = ar.result()
-    // If the list is not empty, we have matching record
-    // Else, the lookup succeeded, but no matching service
-  } else {
-    // lookup failed
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">def</span> results = ar.result()
+    <span class="comment">// If the list is not empty, we have matching record</span>
+    <span class="comment">// Else, the lookup succeeded, but no matching service</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 })</code></pre>
 </div>
@@ -689,16 +688,16 @@ By default, record lookup does include only records with a <code>status</code> s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def reference1 = discovery.getReference(record1)
-def reference2 = discovery.getReference(record2)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> reference1 = discovery.getReference(record1)
+<span class="keyword">def</span> reference2 = discovery.getReference(record2)
 
-// Then, gets the service object, the returned type depends on the service type:
-// For http endpoint:
-def client = reference1.getAs(HttpClient.class)
-// For message source
-def consumer = reference2.getAs(MessageConsumer.class)
+<span class="comment">// Then, gets the service object, the returned type depends on the service type:</span>
+<span class="comment">// For http endpoint:</span>
+<span class="keyword">def</span> client = reference1.getAs(HttpClient.class)
+<span class="comment">// For message source</span>
+<span class="keyword">def</span> consumer = reference2.getAs(MessageConsumer.class)
 
-// When done with the service
+<span class="comment">// When done with the service</span>
 reference1.release()
 reference2.release()</code></pre>
 </div>
@@ -716,15 +715,15 @@ configuration, some require configuration (as data sources):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def reference = discovery.getReferenceWithConfiguration(record, conf)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> reference = discovery.getReferenceWithConfiguration(record, conf)
 
-// Then, gets the service object, the returned type depends on the service type:
-// For http endpoint:
-def client = reference.getAs(JDBCClient.class)
+<span class="comment">// Then, gets the service object, the returned type depends on the service type:</span>
+<span class="comment">// For http endpoint:</span>
+<span class="keyword">def</span> client = reference.getAs(JDBCClient.class)
 
-// Do something with the client...
+<span class="comment">// Do something with the client...</span>
 
-// When done with the service
+<span class="comment">// When done with the service</span>
 reference.release()</code></pre>
 </div>
 </div>
@@ -810,14 +809,14 @@ objects are <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html">Htt
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def record1 = HttpEndpoint.createRecord("some-http-service", "localhost", 8433, "/api")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> record1 = HttpEndpoint.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">8433</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/api</span><span class="delimiter">&quot;</span></span>)
 
 discovery.publish(record1, { ar -&gt;
-  // ...
+  <span class="comment">// ...</span>
 })
 
-def record2 = HttpEndpoint.createRecord("some-other-name", true, "localhost", 8433, "/api", [
-  'some-metadata':"some value"
+<span class="keyword">def</span> record2 = HttpEndpoint.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-other-name</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">8433</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/api</span><span class="delimiter">&quot;</span></span>, [
+  <span class="string"><span class="delimiter">'</span><span class="content">some-metadata</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some value</span><span class="delimiter">&quot;</span></span>
 ])</code></pre>
 </div>
 </div>
@@ -834,22 +833,22 @@ publication must be done by another entity having this info. Generally it&#8217;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get the record
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Get the record</span>
 discovery.getRecord([
-  name:"some-http-service"
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
-    def reference = discovery.getReference(ar.result())
-    // Retrieve the service object
-    def client = reference.getAs(HttpClient.class)
+  <span class="keyword">if</span> (ar.succeeded() &amp;&amp; ar.result() != <span class="predefined-constant">null</span>) {
+    <span class="comment">// Retrieve the service reference</span>
+    <span class="keyword">def</span> reference = discovery.getReference(ar.result())
+    <span class="comment">// Retrieve the service object</span>
+    <span class="keyword">def</span> client = reference.getAs(HttpClient.class)
 
-    // You need to path the complete path
-    client.getNow("/api/persons", { response -&gt;
+    <span class="comment">// You need to path the complete path</span>
+    client.getNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>, { response -&gt;
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // Dont' forget to release the service
+      <span class="comment">// Dont' forget to release the service</span>
       reference.release()
 
     })
@@ -864,18 +863,18 @@ method to combine lookup and service retrieval in one call:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">HttpEndpoint.getClient(discovery, [
-  name:"some-http-service"
+<pre class="CodeRay highlight"><code data-lang="groovy">HttpEndpoint.getClient(discovery, [
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded()) {
-    def client = ar.result()
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">def</span> client = ar.result()
 
-    // You need to path the complete path
-    client.getNow("/api/persons", { response -&gt;
+    <span class="comment">// You need to path the complete path</span>
+    client.getNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>, { response -&gt;
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // Dont' forget to release the service
+      <span class="comment">// Dont' forget to release the service</span>
       ServiceDiscovery.releaseServiceObject(discovery, client)
 
     })
@@ -894,22 +893,22 @@ tends to be easier to use. You can retrieve a <code><a href="../../apidocs/io/ve
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get the record
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Get the record</span>
 discovery.getRecord([
-  name:"some-http-service"
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
-    def reference = discovery.getReference(ar.result())
-    // Retrieve the service object
-    def client = reference.getAs(WebClient.class)
+  <span class="keyword">if</span> (ar.succeeded() &amp;&amp; ar.result() != <span class="predefined-constant">null</span>) {
+    <span class="comment">// Retrieve the service reference</span>
+    <span class="keyword">def</span> reference = discovery.getReference(ar.result())
+    <span class="comment">// Retrieve the service object</span>
+    <span class="keyword">def</span> client = reference.getAs(WebClient.class)
 
-    // You need to path the complete path
-    client.get("/api/persons").send({ response -&gt;
+    <span class="comment">// You need to path the complete path</span>
+    client.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>).send({ response -&gt;
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // Dont' forget to release the service
+      <span class="comment">// Dont' forget to release the service</span>
       reference.release()
 
     })
@@ -922,18 +921,18 @@ discovery.getRecord([
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">HttpEndpoint.getWebClient(discovery, [
-  name:"some-http-service"
+<pre class="CodeRay highlight"><code data-lang="groovy">HttpEndpoint.getWebClient(discovery, [
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded()) {
-    def client = ar.result()
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">def</span> client = ar.result()
 
-    // You need to path the complete path
-    client.get("/api/persons").send({ response -&gt;
+    <span class="comment">// You need to path the complete path</span>
+    client.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>).send({ response -&gt;
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // Dont' forget to release the service
+      <span class="comment">// Dont' forget to release the service</span>
       ServiceDiscovery.releaseServiceObject(discovery, client)
 
     })
@@ -960,12 +959,12 @@ methods from <code><a href="../../apidocs/io/vertx/servicediscovery/types/EventB
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def record = EventBusService.createRecord("some-eventbus-service", "address", "examples.MyService", [
-  'some-metadata':"some value"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> record = EventBusService.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-eventbus-service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">address</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">examples.MyService</span><span class="delimiter">&quot;</span></span>, [
+  <span class="string"><span class="delimiter">'</span><span class="content">some-metadata</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some value</span><span class="delimiter">&quot;</span></span>
 ])
 
 discovery.publish(record, { ar -&gt;
-  // ...
+  <span class="comment">// ...</span>
 })</code></pre>
 </div>
 </div>
@@ -981,13 +980,13 @@ discovery.publish(record, { ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">EventBusService.getServiceProxyWithJsonFilter(discovery, [
-'service.interface':"org.acme.MyService"
+<pre class="CodeRay highlight"><code data-lang="groovy">EventBusService.getServiceProxyWithJsonFilter(discovery, [
+<span class="string"><span class="delimiter">'</span><span class="content">service.interface</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">org.acme.MyService</span><span class="delimiter">&quot;</span></span>
 ], examples.MyService.class, { ar -&gt;
-if (ar.succeeded()) {
-def service = ar.result()
+<span class="keyword">if</span> (ar.succeeded()) {
+<span class="keyword">def</span> service = ar.result()
 
-// Dont' forget to release the service
+<span class="comment">// Dont' forget to release the service</span>
 ServiceDiscovery.releaseServiceObject(discovery, service)
 }
 })</code></pre>
@@ -1021,13 +1020,13 @@ ServiceDiscovery.releaseServiceObject(discovery, service)
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def record = MessageSource.createRecord("some-message-source-service", "some-address")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> record = MessageSource.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-message-source-service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-address</span><span class="delimiter">&quot;</span></span>)
 
 discovery.publish(record, { ar -&gt;
-  // ...
+  <span class="comment">// ...</span>
 })
 
-record = MessageSource.createRecord("some-other-message-source-service", "some-address", "examples.MyData")</code></pre>
+record = MessageSource.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-other-message-source-service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-address</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">examples.MyData</span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1045,20 +1044,20 @@ record = MessageSource.createRecord("some-other-message-source-service", "some-a
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get the record
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Get the record</span>
 discovery.getRecord([
-  name:"some-message-source-service"
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-message-source-service</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
-    def reference = discovery.getReference(ar.result())
-    // Retrieve the service object
-    def consumer = reference.getAs(MessageConsumer.class)
+  <span class="keyword">if</span> (ar.succeeded() &amp;&amp; ar.result() != <span class="predefined-constant">null</span>) {
+    <span class="comment">// Retrieve the service reference</span>
+    <span class="keyword">def</span> reference = discovery.getReference(ar.result())
+    <span class="comment">// Retrieve the service object</span>
+    <span class="keyword">def</span> consumer = reference.getAs(MessageConsumer.class)
 
-    // Attach a message handler on it
+    <span class="comment">// Attach a message handler on it</span>
     consumer.handler({ message -&gt;
-      // message handler
-      def payload = message.body()
+      <span class="comment">// message handler</span>
+      <span class="keyword">def</span> payload = message.body()
     })
   }
 })</code></pre>
@@ -1069,18 +1068,18 @@ discovery.getRecord([
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">MessageSource.getConsumer(discovery, [
-  name:"some-message-source-service"
+<pre class="CodeRay highlight"><code data-lang="groovy">MessageSource.getConsumer(discovery, [
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-message-source-service</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded()) {
-    def consumer = ar.result()
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">def</span> consumer = ar.result()
 
-    // Attach a message handler on it
+    <span class="comment">// Attach a message handler on it</span>
     consumer.handler({ message -&gt;
-      // message handler
-      def payload = message.body()
+      <span class="comment">// message handler</span>
+      <span class="keyword">def</span> payload = message.body()
     })
-    // ...
+    <span class="comment">// ...</span>
   }
 })</code></pre>
 </div>
@@ -1110,14 +1109,14 @@ using a JDBC driver. The client of a JDBC data source service is a <code><a href
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def record = JDBCDataSource.createRecord("some-data-source-service", [
-  url:"some jdbc url"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> record = JDBCDataSource.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>, [
+  <span class="key">url</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some jdbc url</span><span class="delimiter">&quot;</span></span>
 ], [
-  'some-metadata':"some-value"
+  <span class="string"><span class="delimiter">'</span><span class="content">some-metadata</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
 ])
 
 discovery.publish(record, { ar -&gt;
-  // ...
+  <span class="comment">// ...</span>
 })</code></pre>
 </div>
 </div>
@@ -1137,23 +1136,23 @@ the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get the record
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Get the record</span>
 discovery.getRecord([
-  name:"some-data-source-service"
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
-    def reference = discovery.getReferenceWithConfiguration(ar.result(), [
-      username:"clement",
-      password:"*****"
+  <span class="keyword">if</span> (ar.succeeded() &amp;&amp; ar.result() != <span class="predefined-constant">null</span>) {
+    <span class="comment">// Retrieve the service reference</span>
+    <span class="keyword">def</span> reference = discovery.getReferenceWithConfiguration(ar.result(), [
+      <span class="key">username</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>
     ])
 
-    // Retrieve the service object
-    def client = reference.getAs(JDBCClient.class)
+    <span class="comment">// Retrieve the service object</span>
+    <span class="keyword">def</span> client = reference.getAs(JDBCClient.class)
 
-    // ...
+    <span class="comment">// ...</span>
 
-    // when done
+    <span class="comment">// when done</span>
     reference.release()
   }
 })</code></pre>
@@ -1164,18 +1163,18 @@ discovery.getRecord([
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">JDBCDataSource.getJDBCClient(discovery, [
-  name:"some-data-source-service"
+<pre class="CodeRay highlight"><code data-lang="groovy">JDBCDataSource.getJDBCClient(discovery, [
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>
 ], [
-  username:"clement",
-  password:"*****"
+  <span class="key">username</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded()) {
-    def client = ar.result()
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">def</span> client = ar.result()
 
-    // ...
+    <span class="comment">// ...</span>
 
-    // Dont' forget to release the service
+    <span class="comment">// Dont' forget to release the service</span>
     ServiceDiscovery.releaseServiceObject(discovery, client)
 
   }
@@ -1207,14 +1206,14 @@ The client of a Redis data source service is a <code><a href="../../apidocs/io/v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def record = RedisDataSource.createRecord("some-redis-data-source-service", [
-  url:"localhost"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> record = RedisDataSource.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-redis-data-source-service</span><span class="delimiter">&quot;</span></span>, [
+  <span class="key">url</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>
 ], [
-  'some-metadata':"some-value"
+  <span class="string"><span class="delimiter">'</span><span class="content">some-metadata</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
 ])
 
 discovery.publish(record, { ar -&gt;
-  // ...
+  <span class="comment">// ...</span>
 })</code></pre>
 </div>
 </div>
@@ -1232,20 +1231,20 @@ the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get the record
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Get the record</span>
 discovery.getRecord([
-  name:"some-redis-data-source-service"
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-redis-data-source-service</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
-    def reference = discovery.getReference(ar.result())
+  <span class="keyword">if</span> (ar.succeeded() &amp;&amp; ar.result() != <span class="predefined-constant">null</span>) {
+    <span class="comment">// Retrieve the service reference</span>
+    <span class="keyword">def</span> reference = discovery.getReference(ar.result())
 
-    // Retrieve the service instance
-    def client = reference.getAs(RedisClient.class)
+    <span class="comment">// Retrieve the service instance</span>
+    <span class="keyword">def</span> client = reference.getAs(RedisClient.class)
 
-    // ...
+    <span class="comment">// ...</span>
 
-    // when done
+    <span class="comment">// when done</span>
     reference.release()
   }
 })</code></pre>
@@ -1256,15 +1255,15 @@ discovery.getRecord([
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">RedisDataSource.getRedisClient(discovery, [
-  name:"some-redis-data-source-service"
+<pre class="CodeRay highlight"><code data-lang="groovy">RedisDataSource.getRedisClient(discovery, [
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-redis-data-source-service</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded()) {
-    def client = ar.result()
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">def</span> client = ar.result()
 
-    // ...
+    <span class="comment">// ...</span>
 
-    // Dont' forget to release the service
+    <span class="comment">// Dont' forget to release the service</span>
     ServiceDiscovery.releaseServiceObject(discovery, client)
 
   }
@@ -1296,14 +1295,14 @@ The client of a Mongo data source service is a <code><a href="../../apidocs/io/v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def record = MongoDataSource.createRecord("some-data-source-service", [
-  connection_string:"some mongo connection"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> record = MongoDataSource.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>, [
+  <span class="key">connection_string</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some mongo connection</span><span class="delimiter">&quot;</span></span>
 ], [
-  'some-metadata':"some-value"
+  <span class="string"><span class="delimiter">'</span><span class="content">some-metadata</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
 ])
 
 discovery.publish(record, { ar -&gt;
-  // ...
+  <span class="comment">// ...</span>
 })</code></pre>
 </div>
 </div>
@@ -1321,23 +1320,23 @@ provided by the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Get the record
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Get the record</span>
 discovery.getRecord([
-  name:"some-data-source-service"
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
-    def reference = discovery.getReferenceWithConfiguration(ar.result(), [
-      username:"clement",
-      password:"*****"
+  <span class="keyword">if</span> (ar.succeeded() &amp;&amp; ar.result() != <span class="predefined-constant">null</span>) {
+    <span class="comment">// Retrieve the service reference</span>
+    <span class="keyword">def</span> reference = discovery.getReferenceWithConfiguration(ar.result(), [
+      <span class="key">username</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>
     ])
 
-    // Retrieve the service object
-    def client = reference.get()
+    <span class="comment">// Retrieve the service object</span>
+    <span class="keyword">def</span> client = reference.get()
 
-    // ...
+    <span class="comment">// ...</span>
 
-    // when done
+    <span class="comment">// when done</span>
     reference.release()
   }
 })</code></pre>
@@ -1348,18 +1347,18 @@ discovery.getRecord([
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">MongoDataSource.getMongoClient(discovery, [
-  name:"some-data-source-service"
+<pre class="CodeRay highlight"><code data-lang="groovy">MongoDataSource.getMongoClient(discovery, [
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>
 ], [
-  username:"clement",
-  password:"*****"
+  <span class="key">username</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>
 ], { ar -&gt;
-  if (ar.succeeded()) {
-    def client = ar.result()
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">def</span> client = ar.result()
 
-    // ...
+    <span class="comment">// ...</span>
 
-    // Dont' forget to release the service
+    <span class="comment">// Dont' forget to release the service</span>
     ServiceDiscovery.releaseServiceObject(discovery, client)
 
   }
@@ -1516,11 +1515,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-consul&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-consul<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1532,7 +1531,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-consul:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-consul:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1540,10 +1539,10 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">ServiceDiscovery.create(vertx).registerServiceImporter(new io.vertx.servicediscovery.consul.ConsulServiceImporter(), [
-  host:"localhost",
-  port:8500,
-  'scan-period':2000
+<pre class="CodeRay highlight"><code data-lang="groovy">ServiceDiscovery.create(vertx).registerServiceImporter(<span class="keyword">new</span> io.vertx.servicediscovery.consul.ConsulServiceImporter(), [
+  <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">port</span>:<span class="integer">8500</span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">scan-period</span><span class="delimiter">'</span></span>:<span class="integer">2000</span>
 ])</code></pre>
 </div>
 </div>
@@ -1593,11 +1592,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-kubernetes&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-kubernetes<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1609,7 +1608,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-kubernetes:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-kubernetes:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1702,11 +1701,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-docker-links&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-docker-links<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1718,7 +1717,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-docker-links:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-docker-links:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1726,7 +1725,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">ServiceDiscovery.create(vertx).registerServiceImporter(new io.vertx.servicediscovery.docker.DockerLinksServiceImporter(), [:])</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">ServiceDiscovery.create(vertx).registerServiceImporter(<span class="keyword">new</span> io.vertx.servicediscovery.docker.DockerLinksServiceImporter(), [:])</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1767,11 +1766,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-backend-redis&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-backend-redis<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1783,7 +1782,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-backend-redis:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-backend-redis:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1803,10 +1802,10 @@ the records are stored.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">ServiceDiscovery.create(vertx, [
-  backendConfiguration:[
-    host:"127.0.0.1",
-    key:"records"
+<pre class="CodeRay highlight"><code data-lang="groovy">ServiceDiscovery.create(vertx, [
+  <span class="key">backendConfiguration</span>:[
+    <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.1</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">key</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">records</span><span class="delimiter">&quot;</span></span>
   ]
 ])</code></pre>
 </div>

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -290,11 +289,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-&lt;groupId&gt;io.vertx&lt;/groupId&gt;
-&lt;artifactId&gt;vertx-service-discovery&lt;/artifactId&gt;
-&lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+<span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+<span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery<span class="tag">&lt;/artifactId&gt;</span>
+<span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -306,7 +305,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -423,15 +422,15 @@ instance to use the discovery infrastructure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ServiceDiscovery discovery = ServiceDiscovery.create(vertx);
+<pre class="CodeRay highlight"><code data-lang="java">ServiceDiscovery discovery = ServiceDiscovery.create(vertx);
 
-// Customize the configuration
+<span class="comment">// Customize the configuration</span>
 discovery = ServiceDiscovery.create(vertx,
-    new ServiceDiscoveryOptions()
-        .setAnnounceAddress("service-announce")
-        .setName("my-name"));
+    <span class="keyword">new</span> ServiceDiscoveryOptions()
+        .setAnnounceAddress(<span class="string"><span class="delimiter">&quot;</span><span class="content">service-announce</span><span class="delimiter">&quot;</span></span>)
+        .setName(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-name</span><span class="delimiter">&quot;</span></span>));
 
-// Do something...
+<span class="comment">// Do something...</span>
 
 discovery.close();</code></pre>
 </div>
@@ -474,29 +473,29 @@ from the service types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Record record = new Record()
-    .setType("eventbus-service-proxy")
-    .setLocation(new JsonObject().put("endpoint", "the-service-address"))
-    .setName("my-service")
-    .setMetadata(new JsonObject().put("some-label", "some-value"));
+<pre class="CodeRay highlight"><code data-lang="java">Record record = <span class="keyword">new</span> Record()
+    .setType(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-service-proxy</span><span class="delimiter">&quot;</span></span>)
+    .setLocation(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">endpoint</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">the-service-address</span><span class="delimiter">&quot;</span></span>))
+    .setName(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-service</span><span class="delimiter">&quot;</span></span>)
+    .setMetadata(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-label</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>));
 
 discovery.publish(record, ar -&gt; {
-  if (ar.succeeded()) {
-    // publication succeeded
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="comment">// publication succeeded</span>
     Record publishedRecord = ar.result();
-  } else {
-    // publication failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// publication failed</span>
   }
 });
 
-// Record creation from a type
-record = HttpEndpoint.createRecord("some-rest-api", "localhost", 8080, "/api");
+<span class="comment">// Record creation from a type</span>
+record = HttpEndpoint.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-rest-api</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/api</span><span class="delimiter">&quot;</span></span>);
 discovery.publish(record, ar -&gt; {
-  if (ar.succeeded()) {
-    // publication succeeded
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="comment">// publication succeeded</span>
     Record publishedRecord = ar.result();
-  } else {
-    // publication failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// publication failed</span>
   }
 });</code></pre>
 </div>
@@ -514,11 +513,11 @@ discovery.publish(record, ar -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">discovery.unpublish(record.getRegistration(), ar -&gt; {
-  if (ar.succeeded()) {
-    // Ok
-  } else {
-    // cannot un-publish the service, may have already been removed, or the record is not published
+<pre class="CodeRay highlight"><code data-lang="java">discovery.unpublish(record.getRegistration(), ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="comment">// Ok</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// cannot un-publish the service, may have already been removed, or the record is not published</span>
   }
 });</code></pre>
 </div>
@@ -572,75 +571,75 @@ records, you must return <em>true</em> regardless the record.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">discovery.getRecord(r -&gt; true, ar -&gt; {
-  if (ar.succeeded()) {
-    if (ar.result() != null) {
-      // we have a record
-    } else {
-      // the lookup succeeded, but no matching service
+<pre class="CodeRay highlight"><code data-lang="java">discovery.getRecord(r -&gt; <span class="predefined-constant">true</span>, ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.result() != <span class="predefined-constant">null</span>) {
+      <span class="comment">// we have a record</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// the lookup succeeded, but no matching service</span>
     }
-  } else {
-    // lookup failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 });
 
-discovery.getRecord((JsonObject) null, ar -&gt; {
-  if (ar.succeeded()) {
-    if (ar.result() != null) {
-      // we have a record
-    } else {
-      // the lookup succeeded, but no matching service
+discovery.getRecord((JsonObject) <span class="predefined-constant">null</span>, ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.result() != <span class="predefined-constant">null</span>) {
+      <span class="comment">// we have a record</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// the lookup succeeded, but no matching service</span>
     }
-  } else {
-    // lookup failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 });
 
 
-// Get a record by name
-discovery.getRecord(r -&gt; r.getName().equals("some-name"), ar -&gt; {
-  if (ar.succeeded()) {
-    if (ar.result() != null) {
-      // we have a record
-    } else {
-      // the lookup succeeded, but no matching service
+<span class="comment">// Get a record by name</span>
+discovery.getRecord(r -&gt; r.getName().equals(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-name</span><span class="delimiter">&quot;</span></span>), ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.result() != <span class="predefined-constant">null</span>) {
+      <span class="comment">// we have a record</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// the lookup succeeded, but no matching service</span>
     }
-  } else {
-    // lookup failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 });
 
-discovery.getRecord(new JsonObject().put("name", "some-service"), ar -&gt; {
-  if (ar.succeeded()) {
-    if (ar.result() != null) {
-      // we have a record
-    } else {
-      // the lookup succeeded, but no matching service
+discovery.getRecord(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-service</span><span class="delimiter">&quot;</span></span>), ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.result() != <span class="predefined-constant">null</span>) {
+      <span class="comment">// we have a record</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// the lookup succeeded, but no matching service</span>
     }
-  } else {
-    // lookup failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 });
 
-// Get all records matching the filter
-discovery.getRecords(r -&gt; "some-value".equals(r.getMetadata().getString("some-label")), ar -&gt; {
-  if (ar.succeeded()) {
-    List&lt;Record&gt; results = ar.result();
-    // If the list is not empty, we have matching record
-    // Else, the lookup succeeded, but no matching service
-  } else {
-    // lookup failed
+<span class="comment">// Get all records matching the filter</span>
+discovery.getRecords(r -&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>.equals(r.getMetadata().getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-label</span><span class="delimiter">&quot;</span></span>)), ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="predefined-type">List</span>&lt;Record&gt; results = ar.result();
+    <span class="comment">// If the list is not empty, we have matching record</span>
+    <span class="comment">// Else, the lookup succeeded, but no matching service</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 });
 
 
-discovery.getRecords(new JsonObject().put("some-label", "some-value"), ar -&gt; {
-  if (ar.succeeded()) {
-    List&lt;Record&gt; results = ar.result();
-    // If the list is not empty, we have matching record
-    // Else, the lookup succeeded, but no matching service
-  } else {
-    // lookup failed
+discovery.getRecords(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-label</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>), ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="predefined-type">List</span>&lt;Record&gt; results = ar.result();
+    <span class="comment">// If the list is not empty, we have matching record</span>
+    <span class="comment">// Else, the lookup succeeded, but no matching service</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 });</code></pre>
 </div>
@@ -673,16 +672,16 @@ By default, record lookup does include only records with a <code>status</code> s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ServiceReference reference1 = discovery.getReference(record1);
+<pre class="CodeRay highlight"><code data-lang="java">ServiceReference reference1 = discovery.getReference(record1);
 ServiceReference reference2 = discovery.getReference(record2);
 
-// Then, gets the service object, the returned type depends on the service type:
-// For http endpoint:
+<span class="comment">// Then, gets the service object, the returned type depends on the service type:</span>
+<span class="comment">// For http endpoint:</span>
 HttpClient client = reference1.getAs(HttpClient.class);
-// For message source
+<span class="comment">// For message source</span>
 MessageConsumer consumer = reference2.getAs(MessageConsumer.class);
 
-// When done with the service
+<span class="comment">// When done with the service</span>
 reference1.release();
 reference2.release();</code></pre>
 </div>
@@ -700,15 +699,15 @@ configuration, some require configuration (as data sources):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ServiceReference reference = discovery.getReferenceWithConfiguration(record, conf);
+<pre class="CodeRay highlight"><code data-lang="java">ServiceReference reference = discovery.getReferenceWithConfiguration(record, conf);
 
-// Then, gets the service object, the returned type depends on the service type:
-// For http endpoint:
+<span class="comment">// Then, gets the service object, the returned type depends on the service type:</span>
+<span class="comment">// For http endpoint:</span>
 JDBCClient client = reference.getAs(JDBCClient.class);
 
-// Do something with the client...
+<span class="comment">// Do something with the client...</span>
 
-// When done with the service
+<span class="comment">// When done with the service</span>
 reference.release();</code></pre>
 </div>
 </div>
@@ -831,24 +830,24 @@ objects are <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html">Htt
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Record record1 = HttpEndpoint.createRecord(
-  "some-http-service", // The service name
-  "localhost", // The host
-  8433, // the port
-  "/api" // the root of the service
+<pre class="CodeRay highlight"><code data-lang="java">Record record1 = HttpEndpoint.createRecord(
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The service name</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The host</span>
+  <span class="integer">8433</span>, <span class="comment">// the port</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">/api</span><span class="delimiter">&quot;</span></span> <span class="comment">// the root of the service</span>
 );
 
 discovery.publish(record1, ar -&gt; {
-  // ...
+  <span class="comment">// ...</span>
 });
 
 Record record2 = HttpEndpoint.createRecord(
-  "some-other-name", // the service name
-  true, // whether or not the service requires HTTPs
-  "localhost", // The host
-  8433, // the port
-  "/api", // the root of the service
-  new JsonObject().put("some-metadata", "some value")
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">some-other-name</span><span class="delimiter">&quot;</span></span>, <span class="comment">// the service name</span>
+  <span class="predefined-constant">true</span>, <span class="comment">// whether or not the service requires HTTPs</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The host</span>
+  <span class="integer">8433</span>, <span class="comment">// the port</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">/api</span><span class="delimiter">&quot;</span></span>, <span class="comment">// the root of the service</span>
+  <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-metadata</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some value</span><span class="delimiter">&quot;</span></span>)
 );</code></pre>
 </div>
 </div>
@@ -865,19 +864,19 @@ publication must be done by another entity having this info. Generally it&#8217;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">discovery.getRecord(new JsonObject().put("name", "some-http-service"), ar -&gt; {
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
+<pre class="CodeRay highlight"><code data-lang="java">discovery.getRecord(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>), ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded() &amp;&amp; ar.result() != <span class="predefined-constant">null</span>) {
+    <span class="comment">// Retrieve the service reference</span>
     ServiceReference reference = discovery.getReference(ar.result());
-    // Retrieve the service object
+    <span class="comment">// Retrieve the service object</span>
     HttpClient client = reference.getAs(HttpClient.class);
 
-    // You need to path the complete path
-    client.getNow("/api/persons", response -&gt; {
+    <span class="comment">// You need to path the complete path</span>
+    client.getNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>, response -&gt; {
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // Dont' forget to release the service
+      <span class="comment">// Dont' forget to release the service</span>
       reference.release();
 
     });
@@ -892,16 +891,16 @@ method to combine lookup and service retrieval in one call:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpEndpoint.getClient(discovery, new JsonObject().put("name", "some-http-service"), ar -&gt; {
-  if (ar.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="java">HttpEndpoint.getClient(discovery, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>), ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
     HttpClient client = ar.result();
 
-    // You need to path the complete path
-    client.getNow("/api/persons", response -&gt; {
+    <span class="comment">// You need to path the complete path</span>
+    client.getNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>, response -&gt; {
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // Dont' forget to release the service
+      <span class="comment">// Dont' forget to release the service</span>
       ServiceDiscovery.releaseServiceObject(discovery, client);
 
     });
@@ -920,20 +919,20 @@ tends to be easier to use. You can retrieve a <code><a href="../../apidocs/io/ve
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">discovery.getRecord(new JsonObject().put("name", "some-http-service"), ar -&gt; {
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
+<pre class="CodeRay highlight"><code data-lang="java">discovery.getRecord(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>), ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded() &amp;&amp; ar.result() != <span class="predefined-constant">null</span>) {
+    <span class="comment">// Retrieve the service reference</span>
     ServiceReference reference = discovery.getReference(ar.result());
-    // Retrieve the service object
+    <span class="comment">// Retrieve the service object</span>
     WebClient client = reference.getAs(WebClient.class);
 
-    // You need to path the complete path
-    client.get("/api/persons").send(
+    <span class="comment">// You need to path the complete path</span>
+    client.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>).send(
       response -&gt; {
 
-        // ...
+        <span class="comment">// ...</span>
 
-        // Dont' forget to release the service
+        <span class="comment">// Dont' forget to release the service</span>
         reference.release();
 
       });
@@ -946,17 +945,17 @@ tends to be easier to use. You can retrieve a <code><a href="../../apidocs/io/ve
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HttpEndpoint.getWebClient(discovery, new JsonObject().put("name", "some-http-service"), ar -&gt; {
-  if (ar.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="java">HttpEndpoint.getWebClient(discovery, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>), ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
     WebClient client = ar.result();
 
-    // You need to path the complete path
-    client.get("/api/persons")
+    <span class="comment">// You need to path the complete path</span>
+    client.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>)
       .send(response -&gt; {
 
-        // ...
+        <span class="comment">// ...</span>
 
-        // Dont' forget to release the service
+        <span class="comment">// Dont' forget to release the service</span>
         ServiceDiscovery.releaseServiceObject(discovery, client);
 
       });
@@ -983,16 +982,16 @@ methods from <code><a href="../../apidocs/io/vertx/servicediscovery/types/EventB
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Record record = EventBusService.createRecord(
-    "some-eventbus-service", // The service name
-    "address", // the service address,
-    "examples.MyService", // the service interface as string
-    new JsonObject()
-        .put("some-metadata", "some value")
+<pre class="CodeRay highlight"><code data-lang="java">Record record = EventBusService.createRecord(
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">some-eventbus-service</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The service name</span>
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">address</span><span class="delimiter">&quot;</span></span>, <span class="comment">// the service address,</span>
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">examples.MyService</span><span class="delimiter">&quot;</span></span>, <span class="comment">// the service interface as string</span>
+    <span class="keyword">new</span> JsonObject()
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-metadata</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some value</span><span class="delimiter">&quot;</span></span>)
 );
 
 discovery.publish(record, ar -&gt; {
-  // ...
+  <span class="comment">// ...</span>
 });</code></pre>
 </div>
 </div>
@@ -1001,14 +1000,14 @@ discovery.publish(record, ar -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Record record = EventBusService.createRecord(
-"some-eventbus-service", // The service name
-"address", // the service address,
-MyService.class // the service interface
+<pre class="CodeRay highlight"><code data-lang="java">Record record = EventBusService.createRecord(
+<span class="string"><span class="delimiter">&quot;</span><span class="content">some-eventbus-service</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The service name</span>
+<span class="string"><span class="delimiter">&quot;</span><span class="content">address</span><span class="delimiter">&quot;</span></span>, <span class="comment">// the service address,</span>
+MyService.class <span class="comment">// the service interface</span>
 );
 
 discovery.publish(record, ar -&gt; {
-// ...
+<span class="comment">// ...</span>
 });</code></pre>
 </div>
 </div>
@@ -1024,14 +1023,14 @@ discovery.publish(record, ar -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">discovery.getRecord(new JsonObject().put("name", "some-eventbus-service"), ar -&gt; {
-if (ar.succeeded() &amp;&amp; ar.result() != null) {
-// Retrieve the service reference
+<pre class="CodeRay highlight"><code data-lang="java">discovery.getRecord(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-eventbus-service</span><span class="delimiter">&quot;</span></span>), ar -&gt; {
+<span class="keyword">if</span> (ar.succeeded() &amp;&amp; ar.result() != <span class="predefined-constant">null</span>) {
+<span class="comment">// Retrieve the service reference</span>
 ServiceReference reference = discovery.getReference(ar.result());
-// Retrieve the service object
+<span class="comment">// Retrieve the service object</span>
 MyService service = reference.getAs(MyService.class);
 
-// Dont' forget to release the service
+<span class="comment">// Dont' forget to release the service</span>
 reference.release();
 }
 });</code></pre>
@@ -1042,11 +1041,11 @@ reference.release();
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">EventBusService.getProxy(discovery, MyService.class, ar -&gt; {
-if (ar.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="java">EventBusService.getProxy(discovery, MyService.class, ar -&gt; {
+<span class="keyword">if</span> (ar.succeeded()) {
 MyService service = ar.result();
 
-// Dont' forget to release the service
+<span class="comment">// Dont' forget to release the service</span>
 ServiceDiscovery.releaseServiceObject(discovery, service);
 }
 });</code></pre>
@@ -1080,19 +1079,19 @@ ServiceDiscovery.releaseServiceObject(discovery, service);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Record record = MessageSource.createRecord(
-    "some-message-source-service", // The service name
-    "some-address" // The event bus address
+<pre class="CodeRay highlight"><code data-lang="java">Record record = MessageSource.createRecord(
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">some-message-source-service</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The service name</span>
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">some-address</span><span class="delimiter">&quot;</span></span> <span class="comment">// The event bus address</span>
 );
 
 discovery.publish(record, ar -&gt; {
-  // ...
+  <span class="comment">// ...</span>
 });
 
 record = MessageSource.createRecord(
-    "some-other-message-source-service", // The service name
-    "some-address", // The event bus address
-    "examples.MyData" // The payload type
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">some-other-message-source-service</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The service name</span>
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">some-address</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The event bus address</span>
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">examples.MyData</span><span class="delimiter">&quot;</span></span> <span class="comment">// The payload type</span>
 );</code></pre>
 </div>
 </div>
@@ -1104,17 +1103,17 @@ record = MessageSource.createRecord(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Record record1 = MessageSource.createRecord(
-"some-message-source-service", // The service name
-"some-address", // The event bus address
-JsonObject.class // The message payload type
+<pre class="CodeRay highlight"><code data-lang="java">Record record1 = MessageSource.createRecord(
+<span class="string"><span class="delimiter">&quot;</span><span class="content">some-message-source-service</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The service name</span>
+<span class="string"><span class="delimiter">&quot;</span><span class="content">some-address</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The event bus address</span>
+JsonObject.class <span class="comment">// The message payload type</span>
 );
 
 Record record2 = MessageSource.createRecord(
-"some-other-message-source-service", // The service name
-"some-address", // The event bus address
-JsonObject.class, // The message payload type
-new JsonObject().put("some-metadata", "some value")
+<span class="string"><span class="delimiter">&quot;</span><span class="content">some-other-message-source-service</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The service name</span>
+<span class="string"><span class="delimiter">&quot;</span><span class="content">some-address</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The event bus address</span>
+JsonObject.class, <span class="comment">// The message payload type</span>
+<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-metadata</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some value</span><span class="delimiter">&quot;</span></span>)
 );</code></pre>
 </div>
 </div>
@@ -1130,16 +1129,16 @@ new JsonObject().put("some-metadata", "some value")
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">discovery.getRecord(new JsonObject().put("name", "some-message-source-service"), ar -&gt; {
-  if (ar.succeeded() &amp;&amp; ar.result() != null) {
-    // Retrieve the service reference
+<pre class="CodeRay highlight"><code data-lang="java">discovery.getRecord(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-message-source-service</span><span class="delimiter">&quot;</span></span>), ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded() &amp;&amp; ar.result() != <span class="predefined-constant">null</span>) {
+    <span class="comment">// Retrieve the service reference</span>
     ServiceReference reference = discovery.getReference(ar.result());
-    // Retrieve the service object
+    <span class="comment">// Retrieve the service object</span>
     MessageConsumer&lt;JsonObject&gt; consumer = reference.getAs(MessageConsumer.class);
 
-    // Attach a message handler on it
+    <span class="comment">// Attach a message handler on it</span>
     consumer.handler(message -&gt; {
-      // message handler
+      <span class="comment">// message handler</span>
       JsonObject payload = message.body();
     });
   }
@@ -1151,16 +1150,16 @@ new JsonObject().put("some-metadata", "some value")
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MessageSource.&lt;JsonObject&gt;getConsumer(discovery, new JsonObject().put("name", "some-message-source-service"), ar -&gt; {
-  if (ar.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="java">MessageSource.&lt;JsonObject&gt;getConsumer(discovery, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-message-source-service</span><span class="delimiter">&quot;</span></span>), ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
     MessageConsumer&lt;JsonObject&gt; consumer = ar.result();
 
-    // Attach a message handler on it
+    <span class="comment">// Attach a message handler on it</span>
     consumer.handler(message -&gt; {
-      // message handler
+      <span class="comment">// message handler</span>
       JsonObject payload = message.body();
     });
-    // ...
+    <span class="comment">// ...</span>
   }
 });</code></pre>
 </div>
@@ -1190,14 +1189,14 @@ using a JDBC driver. The client of a JDBC data source service is a <code><a href
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Record record = JDBCDataSource.createRecord(
-    "some-data-source-service", // The service name
-    new JsonObject().put("url", "some jdbc url"), // The location
-    new JsonObject().put("some-metadata", "some-value") // Some metadata
+<pre class="CodeRay highlight"><code data-lang="java">Record record = JDBCDataSource.createRecord(
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The service name</span>
+    <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">url</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some jdbc url</span><span class="delimiter">&quot;</span></span>), <span class="comment">// The location</span>
+    <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-metadata</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>) <span class="comment">// Some metadata</span>
 );
 
 discovery.publish(record, ar -&gt; {
-  // ...
+  <span class="comment">// ...</span>
 });</code></pre>
 </div>
 </div>
@@ -1217,21 +1216,21 @@ the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">discovery.getRecord(
-    new JsonObject().put("name", "some-data-source-service"),
+<pre class="CodeRay highlight"><code data-lang="java">discovery.getRecord(
+    <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>),
     ar -&gt; {
-      if (ar.succeeded() &amp;&amp; ar.result() != null) {
-        // Retrieve the service reference
+      <span class="keyword">if</span> (ar.succeeded() &amp;&amp; ar.result() != <span class="predefined-constant">null</span>) {
+        <span class="comment">// Retrieve the service reference</span>
         ServiceReference reference = discovery.getReferenceWithConfiguration(
-            ar.result(), // The record
-            new JsonObject().put("username", "clement").put("password", "*****")); // Some additional metadata
+            ar.result(), <span class="comment">// The record</span>
+            <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>).put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>)); <span class="comment">// Some additional metadata</span>
 
-        // Retrieve the service object
+        <span class="comment">// Retrieve the service object</span>
         JDBCClient client = reference.getAs(JDBCClient.class);
 
-        // ...
+        <span class="comment">// ...</span>
 
-        // when done
+        <span class="comment">// when done</span>
         reference.release();
       }
     });</code></pre>
@@ -1242,16 +1241,16 @@ the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JDBCDataSource.&lt;JsonObject&gt;getJDBCClient(discovery,
-    new JsonObject().put("name", "some-data-source-service"),
-    new JsonObject().put("username", "clement").put("password", "*****"), // Some additional metadata
+<pre class="CodeRay highlight"><code data-lang="java">JDBCDataSource.&lt;JsonObject&gt;getJDBCClient(discovery,
+    <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>),
+    <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>).put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>), <span class="comment">// Some additional metadata</span>
     ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         JDBCClient client = ar.result();
 
-        // ...
+        <span class="comment">// ...</span>
 
-        // Dont' forget to release the service
+        <span class="comment">// Dont' forget to release the service</span>
         ServiceDiscovery.releaseServiceObject(discovery, client);
 
       }
@@ -1283,14 +1282,14 @@ The client of a Redis data source service is a <code><a href="../../apidocs/io/v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Record record = RedisDataSource.createRecord(
-  "some-redis-data-source-service", // The service name
-  new JsonObject().put("url", "localhost"), // The location
-  new JsonObject().put("some-metadata", "some-value") // Some metadata
+<pre class="CodeRay highlight"><code data-lang="java">Record record = RedisDataSource.createRecord(
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">some-redis-data-source-service</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The service name</span>
+  <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">url</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>), <span class="comment">// The location</span>
+  <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-metadata</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>) <span class="comment">// Some metadata</span>
 );
 
 discovery.publish(record, ar -&gt; {
-  // ...
+  <span class="comment">// ...</span>
 });</code></pre>
 </div>
 </div>
@@ -1308,18 +1307,18 @@ the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">discovery.getRecord(
-  new JsonObject().put("name", "some-redis-data-source-service"), ar -&gt; {
-    if (ar.succeeded() &amp;&amp; ar.result() != null) {
-      // Retrieve the service reference
+<pre class="CodeRay highlight"><code data-lang="java">discovery.getRecord(
+  <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-redis-data-source-service</span><span class="delimiter">&quot;</span></span>), ar -&gt; {
+    <span class="keyword">if</span> (ar.succeeded() &amp;&amp; ar.result() != <span class="predefined-constant">null</span>) {
+      <span class="comment">// Retrieve the service reference</span>
       ServiceReference reference = discovery.getReference(ar.result());
 
-      // Retrieve the service instance
+      <span class="comment">// Retrieve the service instance</span>
       RedisClient client = reference.getAs(RedisClient.class);
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // when done
+      <span class="comment">// when done</span>
       reference.release();
     }
   });</code></pre>
@@ -1330,15 +1329,15 @@ the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">RedisDataSource.getRedisClient(discovery,
-  new JsonObject().put("name", "some-redis-data-source-service"),
+<pre class="CodeRay highlight"><code data-lang="java">RedisDataSource.getRedisClient(discovery,
+  <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-redis-data-source-service</span><span class="delimiter">&quot;</span></span>),
   ar -&gt; {
-    if (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.succeeded()) {
       RedisClient client = ar.result();
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // Dont' forget to release the service
+      <span class="comment">// Dont' forget to release the service</span>
       ServiceDiscovery.releaseServiceObject(discovery, client);
 
     }
@@ -1370,14 +1369,14 @@ The client of a Mongo data source service is a <code><a href="../../apidocs/io/v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Record record = MongoDataSource.createRecord(
-  "some-data-source-service", // The service name
-  new JsonObject().put("connection_string", "some mongo connection"), // The location
-  new JsonObject().put("some-metadata", "some-value") // Some metadata
+<pre class="CodeRay highlight"><code data-lang="java">Record record = MongoDataSource.createRecord(
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>, <span class="comment">// The service name</span>
+  <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">connection_string</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some mongo connection</span><span class="delimiter">&quot;</span></span>), <span class="comment">// The location</span>
+  <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-metadata</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>) <span class="comment">// Some metadata</span>
 );
 
 discovery.publish(record, ar -&gt; {
-  // ...
+  <span class="comment">// ...</span>
 });</code></pre>
 </div>
 </div>
@@ -1395,21 +1394,21 @@ provided by the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">discovery.getRecord(
-  new JsonObject().put("name", "some-data-source-service"),
+<pre class="CodeRay highlight"><code data-lang="java">discovery.getRecord(
+  <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>),
   ar -&gt; {
-    if (ar.succeeded() &amp;&amp; ar.result() != null) {
-      // Retrieve the service reference
+    <span class="keyword">if</span> (ar.succeeded() &amp;&amp; ar.result() != <span class="predefined-constant">null</span>) {
+      <span class="comment">// Retrieve the service reference</span>
       ServiceReference reference = discovery.getReferenceWithConfiguration(
-        ar.result(), // The record
-        new JsonObject().put("username", "clement").put("password", "*****")); // Some additional metadata
+        ar.result(), <span class="comment">// The record</span>
+        <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>).put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>)); <span class="comment">// Some additional metadata</span>
 
-      // Retrieve the service object
+      <span class="comment">// Retrieve the service object</span>
       MongoClient client = reference.get();
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // when done
+      <span class="comment">// when done</span>
       reference.release();
     }
   });</code></pre>
@@ -1420,16 +1419,16 @@ provided by the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MongoDataSource.&lt;JsonObject&gt;getMongoClient(discovery,
-  new JsonObject().put("name", "some-data-source-service"),
-  new JsonObject().put("username", "clement").put("password", "*****"), // Some additional metadata
+<pre class="CodeRay highlight"><code data-lang="java">MongoDataSource.&lt;JsonObject&gt;getMongoClient(discovery,
+  <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>),
+  <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>).put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>), <span class="comment">// Some additional metadata</span>
   ar -&gt; {
-    if (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.succeeded()) {
       MongoClient client = ar.result();
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // Dont' forget to release the service
+      <span class="comment">// Dont' forget to release the service</span>
       ServiceDiscovery.releaseServiceObject(discovery, client);
 
     }
@@ -1586,11 +1585,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-consul&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-consul<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1602,7 +1601,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-consul:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-consul:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1610,12 +1609,12 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ServiceDiscovery.create(vertx)
-    .registerServiceImporter(new ConsulServiceImporter(),
-        new JsonObject()
-            .put("host", "localhost")
-            .put("port", 8500)
-            .put("scan-period", 2000));</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">ServiceDiscovery.create(vertx)
+    .registerServiceImporter(<span class="keyword">new</span> ConsulServiceImporter(),
+        <span class="keyword">new</span> JsonObject()
+            .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>)
+            .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>, <span class="integer">8500</span>)
+            .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">scan-period</span><span class="delimiter">&quot;</span></span>, <span class="integer">2000</span>));</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1664,11 +1663,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-kubernetes&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-kubernetes<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1680,7 +1679,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-kubernetes:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-kubernetes:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1773,11 +1772,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-docker-links&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-docker-links<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1789,7 +1788,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-docker-links:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-docker-links:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1797,8 +1796,8 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ServiceDiscovery.create(vertx)
-    .registerServiceImporter(new DockerLinksServiceImporter(), new JsonObject());</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">ServiceDiscovery.create(vertx)
+    .registerServiceImporter(<span class="keyword">new</span> DockerLinksServiceImporter(), <span class="keyword">new</span> JsonObject());</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1839,11 +1838,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-backend-redis&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-backend-redis<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1855,7 +1854,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-backend-redis:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-backend-redis:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1875,11 +1874,11 @@ the records are stored.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ServiceDiscovery.create(vertx, new ServiceDiscoveryOptions()
+<pre class="CodeRay highlight"><code data-lang="java">ServiceDiscovery.create(vertx, <span class="keyword">new</span> ServiceDiscoveryOptions()
     .setBackendConfiguration(
-        new JsonObject()
-            .put("host", "127.0.0.1")
-            .put("key", "records")
+        <span class="keyword">new</span> JsonObject()
+            .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.1</span><span class="delimiter">&quot;</span></span>)
+            .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">records</span><span class="delimiter">&quot;</span></span>)
     ));</code></pre>
 </div>
 </div>

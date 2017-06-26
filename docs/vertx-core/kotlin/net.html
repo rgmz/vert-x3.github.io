@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -180,7 +179,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()</code></pre>
 </div>
 </div>
 </div>
@@ -192,7 +191,7 @@ instance when creating it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   port = 4321)
 var server = vertx.createNetServer(options)</code></pre>
 </div>
@@ -209,7 +208,7 @@ alternatives.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()
 server.listen()</code></pre>
 </div>
 </div>
@@ -218,8 +217,8 @@ server.listen()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()
-server.listen(1234, "localhost")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()
+server.listen(1234, &quot;localhost&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -236,12 +235,12 @@ For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()
-server.listen(1234, "localhost", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()
+server.listen(1234, &quot;localhost&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("Server is now listening!")
+    println(&quot;Server is now listening!&quot;)
   } else {
-    println("Failed to bind!")
+    println(&quot;Failed to bind!&quot;)
   }
 })</code></pre>
 </div>
@@ -257,12 +256,12 @@ server.listen(1234, "localhost", { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()
-server.listen(0, "localhost", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()
+server.listen(0, &quot;localhost&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("Server is now listening on actual port: ${server.actualPort()}")
+    println(&quot;Server is now listening on actual port: ${server.actualPort()}&quot;)
   } else {
-    println("Failed to bind!")
+    println(&quot;Failed to bind!&quot;)
   }
 })</code></pre>
 </div>
@@ -275,7 +274,7 @@ server.listen(0, "localhost", { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()
 server.connectHandler({ socket -&gt;
   // Handle the connection in here
 })</code></pre>
@@ -301,10 +300,10 @@ the socket.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()
 server.connectHandler({ socket -&gt;
   socket.handler({ buffer -&gt;
-    println("I received some bytes: ${buffer.length()}")
+    println(&quot;I received some bytes: ${buffer.length()}&quot;)
   })
 })</code></pre>
 </div>
@@ -317,15 +316,15 @@ server.connectHandler({ socket -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Write a buffer
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Write a buffer
 var buffer = Buffer.buffer().appendFloat(12.34f).appendInt(123)
 socket.write(buffer)
 
 // Write a string in UTF-8 encoding
-socket.write("some data")
+socket.write(&quot;some data&quot;)
 
 // Write a string using the specified encoding
-socket.write("some data", "UTF-16")</code></pre>
+socket.write(&quot;some data&quot;, &quot;UTF-16&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -340,8 +339,8 @@ on it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">socket.closeHandler({ v -&gt;
-  println("The socket has been closed")
+<pre class="CodeRay highlight"><code data-lang="kotlin">socket.closeHandler({ v -&gt;
+  println(&quot;The socket has been closed&quot;)
 })</code></pre>
 </div>
 </div>
@@ -389,7 +388,7 @@ classpath resolution or disabling it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">socket.sendFile("myfile.dat")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">socket.sendFile(&quot;myfile.dat&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -429,11 +428,11 @@ If you want to be notified when the actual close has completed then you can pass
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">server.close({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">server.close({ res -&gt;
   if (res.succeeded()) {
-    println("Server is now closed")
+    println(&quot;Server is now closed&quot;)
   } else {
-    println("close failed")
+    println(&quot;close failed&quot;)
   }
 })</code></pre>
 </div>
@@ -463,7 +462,7 @@ deployed then you will have at most one core utilised on your server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Create a few instances so we can utilise cores
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Create a few instances so we can utilise cores
 
 for (i in 0 until 10) {
   var server = vertx.createNetServer()
@@ -473,7 +472,7 @@ for (i in 0 until 10) {
       socket.write(buffer)
     })
   })
-  server.listen(1234, "localhost")
+  server.listen(1234, &quot;localhost&quot;)
 
 }</code></pre>
 </div>
@@ -492,9 +491,9 @@ on the command line:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = DeploymentOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = DeploymentOptions(
   instances = 10)
-vertx.deployVerticle("com.mycompany.MyVerticle", options)</code></pre>
+vertx.deployVerticle(&quot;com.mycompany.MyVerticle&quot;, options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -527,7 +526,7 @@ them in a round-robin fashion to any of the connect handlers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createNetClient()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createNetClient()</code></pre>
 </div>
 </div>
 </div>
@@ -539,7 +538,7 @@ instance when creating it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   connectTimeout = 10000)
 var client = vertx.createNetClient(options)</code></pre>
 </div>
@@ -554,15 +553,15 @@ specifying the port and host of the server and a handler that will be called wit
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   connectTimeout = 10000)
 var client = vertx.createNetClient(options)
-client.connect(4321, "localhost", { res -&gt;
+client.connect(4321, &quot;localhost&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("Connected!")
+    println(&quot;Connected!&quot;)
     var socket = res.result()
   } else {
-    println("Failed to connect: ${res.cause().getMessage()}")
+    println(&quot;Failed to connect: ${res.cause().getMessage()}&quot;)
   }
 })</code></pre>
 </div>
@@ -590,7 +589,7 @@ only apply to creating initial connections.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   reconnectAttempts = 10,
   reconnectInterval = 500)
 
@@ -608,7 +607,7 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   logActivity = true)
 
 var server = vertx.createNetServer(options)</code></pre>
@@ -619,7 +618,7 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   logActivity = true)
 
 var client = vertx.createNetClient(options)</code></pre>
@@ -683,11 +682,11 @@ utility which ships with the JDK.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   keyStoreOptions = JksOptions(
-    path = "/path/to/your/server-keystore.jks",
-    password = "password-of-your-keystore"))
+    path = &quot;/path/to/your/server-keystore.jks&quot;,
+    password = &quot;password-of-your-keystore&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -696,10 +695,10 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.jks")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-keystore.jks&quot;)
 var jksOptions = JksOptions(
   value = myKeyStoreAsABuffer,
-  password = "password-of-your-keystore")
+  password = &quot;password-of-your-keystore&quot;)
 var options = NetServerOptions(
   ssl = true,
   keyStoreOptions = jksOptions)
@@ -712,11 +711,11 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   pfxKeyCertOptions = PfxOptions(
-    path = "/path/to/your/server-keystore.pfx",
-    password = "password-of-your-keystore"))
+    path = &quot;/path/to/your/server-keystore.pfx&quot;,
+    password = &quot;password-of-your-keystore&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -725,10 +724,10 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.pfx")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-keystore.pfx&quot;)
 var pfxOptions = PfxOptions(
   value = myKeyStoreAsABuffer,
-  password = "password-of-your-keystore")
+  password = &quot;password-of-your-keystore&quot;)
 var options = NetServerOptions(
   ssl = true,
   pfxKeyCertOptions = pfxOptions)
@@ -740,11 +739,11 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   pemKeyCertOptions = PemKeyCertOptions(
-    keyPath = "/path/to/your/server-key.pem",
-    certPath = "/path/to/your/server-cert.pem"))
+    keyPath = &quot;/path/to/your/server-key.pem&quot;,
+    certPath = &quot;/path/to/your/server-cert.pem&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -753,8 +752,8 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-key.pem")
-var myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-cert.pem")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myKeyAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-key.pem&quot;)
+var myCertAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-cert.pem&quot;)
 var pemOptions = PemKeyCertOptions(
   keyValue = myKeyAsABuffer,
   certValue = myCertAsABuffer)
@@ -785,12 +784,12 @@ utility which ships with the JDK.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   clientAuth = ClientAuth.REQUIRED,
   trustStoreOptions = JksOptions(
-    path = "/path/to/your/truststore.jks",
-    password = "password-of-your-truststore"))
+    path = &quot;/path/to/your/truststore.jks&quot;,
+    password = &quot;password-of-your-truststore&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -799,13 +798,13 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.jks&quot;)
 var options = NetServerOptions(
   ssl = true,
   clientAuth = ClientAuth.REQUIRED,
   trustStoreOptions = JksOptions(
     value = myTrustStoreAsABuffer,
-    password = "password-of-your-truststore"))
+    password = &quot;password-of-your-truststore&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -815,12 +814,12 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   clientAuth = ClientAuth.REQUIRED,
   pfxTrustOptions = PfxOptions(
-    path = "/path/to/your/truststore.pfx",
-    password = "password-of-your-truststore"))
+    path = &quot;/path/to/your/truststore.pfx&quot;,
+    password = &quot;password-of-your-truststore&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -829,13 +828,13 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.pfx&quot;)
 var options = NetServerOptions(
   ssl = true,
   clientAuth = ClientAuth.REQUIRED,
   pfxTrustOptions = PfxOptions(
     value = myTrustStoreAsABuffer,
-    password = "password-of-your-truststore"))
+    password = &quot;password-of-your-truststore&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -844,11 +843,11 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   clientAuth = ClientAuth.REQUIRED,
   pemTrustOptions = PemTrustOptions(
-    certPaths = listOf("/path/to/your/server-ca.pem")))
+    certPaths = listOf(&quot;/path/to/your/server-ca.pem&quot;)))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -857,7 +856,7 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myCaAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-ca.pfx&quot;)
 var options = NetServerOptions(
   ssl = true,
   clientAuth = ClientAuth.REQUIRED,
@@ -885,7 +884,7 @@ be sure who you are connecting to. Use this with caution. Default value is false
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   trustAll = true)
 var client = vertx.createNetClient(options)</code></pre>
@@ -901,9 +900,9 @@ To enable host verification, set the algorithm to use on your client (only HTTPS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
-  hostnameVerificationAlgorithm = "HTTPS")
+  hostnameVerificationAlgorithm = &quot;HTTPS&quot;)
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -921,11 +920,11 @@ in the client trust store, the connection attempt will not succeed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   trustStoreOptions = JksOptions(
-    path = "/path/to/your/truststore.jks",
-    password = "password-of-your-truststore"))
+    path = &quot;/path/to/your/truststore.jks&quot;,
+    password = &quot;password-of-your-truststore&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -934,12 +933,12 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.jks&quot;)
 var options = NetClientOptions(
   ssl = true,
   trustStoreOptions = JksOptions(
     value = myTrustStoreAsABuffer,
-    password = "password-of-your-truststore"))
+    password = &quot;password-of-your-truststore&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -949,11 +948,11 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   pfxTrustOptions = PfxOptions(
-    path = "/path/to/your/truststore.pfx",
-    password = "password-of-your-truststore"))
+    path = &quot;/path/to/your/truststore.pfx&quot;,
+    password = &quot;password-of-your-truststore&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -962,12 +961,12 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.pfx&quot;)
 var options = NetClientOptions(
   ssl = true,
   pfxTrustOptions = PfxOptions(
     value = myTrustStoreAsABuffer,
-    password = "password-of-your-truststore"))
+    password = &quot;password-of-your-truststore&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -976,10 +975,10 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   pemTrustOptions = PemTrustOptions(
-    certPaths = listOf("/path/to/your/ca-cert.pem")))
+    certPaths = listOf(&quot;/path/to/your/ca-cert.pem&quot;)))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -988,7 +987,7 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/ca-cert.pem")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/ca-cert.pem&quot;)
 var options = NetClientOptions(
   ssl = true,
   pemTrustOptions = PemTrustOptions(
@@ -1011,11 +1010,11 @@ Again it&#8217;s just a regular Java key store. The client keystore location is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   keyStoreOptions = JksOptions(
-    path = "/path/to/your/client-keystore.jks",
-    password = "password-of-your-keystore"))
+    path = &quot;/path/to/your/client-keystore.jks&quot;,
+    password = &quot;password-of-your-keystore&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -1024,10 +1023,10 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.jks")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-keystore.jks&quot;)
 var jksOptions = JksOptions(
   value = myKeyStoreAsABuffer,
-  password = "password-of-your-keystore")
+  password = &quot;password-of-your-keystore&quot;)
 var options = NetClientOptions(
   ssl = true,
   keyStoreOptions = jksOptions)
@@ -1040,11 +1039,11 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   pfxKeyCertOptions = PfxOptions(
-    path = "/path/to/your/client-keystore.pfx",
-    password = "password-of-your-keystore"))
+    path = &quot;/path/to/your/client-keystore.pfx&quot;,
+    password = &quot;password-of-your-keystore&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -1053,10 +1052,10 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.pfx")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-keystore.pfx&quot;)
 var pfxOptions = PfxOptions(
   value = myKeyStoreAsABuffer,
-  password = "password-of-your-keystore")
+  password = &quot;password-of-your-keystore&quot;)
 var options = NetClientOptions(
   ssl = true,
   pfxKeyCertOptions = pfxOptions)
@@ -1068,11 +1067,11 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   pemKeyCertOptions = PemKeyCertOptions(
-    keyPath = "/path/to/your/client-key.pem",
-    certPath = "/path/to/your/client-cert.pem"))
+    keyPath = &quot;/path/to/your/client-key.pem&quot;,
+    certPath = &quot;/path/to/your/client-cert.pem&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -1081,8 +1080,8 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-key.pem")
-var myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-cert.pem")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myKeyAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-key.pem&quot;)
+var myCertAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-cert.pem&quot;)
 var pemOptions = PemKeyCertOptions(
   keyValue = myKeyAsABuffer,
   certValue = myCertAsABuffer)
@@ -1120,7 +1119,7 @@ give <code><a href="../../apidocs/io/vertx/core/net/KeyCertOptions.html">KeyCert
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var certificate = SelfSignedCertificate.create()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var certificate = SelfSignedCertificate.create()
 
 var serverOptions = NetServerOptions(
   ssl = true,
@@ -1128,8 +1127,8 @@ var serverOptions = NetServerOptions(
   trustOptions = certificate.trustOptions())
 
 var server = vertx.createNetServer(serverOptions).connectHandler({ socket -&gt;
-  socket.write("Hello!").end()
-}).listen(1234, "localhost")
+  socket.write(&quot;Hello!&quot;).end()
+}).listen(1234, &quot;localhost&quot;)
 
 var clientOptions = NetClientOptions(
   ssl = true,
@@ -1137,13 +1136,13 @@ var clientOptions = NetClientOptions(
   trustOptions = certificate.trustOptions())
 
 var client = vertx.createNetClient(clientOptions)
-client.connect(1234, "localhost", { ar -&gt;
+client.connect(1234, &quot;localhost&quot;, { ar -&gt;
   if (ar.succeeded()) {
     ar.result().handler({ buffer -&gt;
       println(buffer)
     })
   } else {
-    System.err.println("Woops: ${ar.cause().getMessage()}")
+    System.err.println(&quot;Woops: ${ar.cause().getMessage()}&quot;)
   }
 })</code></pre>
 </div>
@@ -1153,7 +1152,7 @@ client.connect(1234, "localhost", { ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var clientOptions = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var clientOptions = NetClientOptions(
   ssl = true,
   trustAll = true)</code></pre>
 </div>
@@ -1163,13 +1162,13 @@ client.connect(1234, "localhost", { ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var certificate = SelfSignedCertificate.create()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var certificate = SelfSignedCertificate.create()
 
 vertx.createHttpServer(HttpServerOptions(
   ssl = true,
   keyCertOptions = certificate.keyCertOptions(),
   trustOptions = certificate.trustOptions())).requestHandler({ req -&gt;
-  req.response().end("Hello!")
+  req.response().end(&quot;Hello!&quot;)
 }).listen(8080)</code></pre>
 </div>
 </div>
@@ -1183,10 +1182,10 @@ the crl list to use:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   trustStoreOptions = trustOptions,
-  crlPaths = listOf("/path/to/your/crl.pem"))
+  crlPaths = listOf(&quot;/path/to/your/crl.pem&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -1195,7 +1194,7 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myCrlAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/crl.pem")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myCrlAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/crl.pem&quot;)
 var options = NetClientOptions(
   ssl = true,
   trustStoreOptions = trustOptions,
@@ -1212,10 +1211,10 @@ configured with a suite of enabled ciphers:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   keyStoreOptions = keyStoreOptions,
-  enabledCipherSuites = listOf("ECDHE-RSA-AES128-GCM-SHA256", "ECDHE-ECDSA-AES128-GCM-SHA256", "ECDHE-RSA-AES256-GCM-SHA384", "CDHE-ECDSA-AES256-GCM-SHA384"))
+  enabledCipherSuites = listOf(&quot;ECDHE-RSA-AES128-GCM-SHA256&quot;, &quot;ECDHE-ECDSA-AES128-GCM-SHA256&quot;, &quot;ECDHE-RSA-AES256-GCM-SHA384&quot;, &quot;CDHE-ECDSA-AES256-GCM-SHA384&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -1231,10 +1230,10 @@ configured by explicitly adding enabled protocols:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   keyStoreOptions = keyStoreOptions,
-  enabledSecureTransportProtocols = listOf("TLSv1.1", "TLSv1.2"))
+  enabledSecureTransportProtocols = listOf(&quot;TLSv1.1&quot;, &quot;TLSv1.2&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -1263,7 +1262,7 @@ OpenSSL provides better performances and CPU usage than the JDK engine, as well 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Use JDK SSL engine
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Use JDK SSL engine
 var options = NetServerOptions(
   ssl = true,
   keyStoreOptions = keyStoreOptions)
@@ -1314,9 +1313,9 @@ configured the server with multiple key/certificate pairs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var keyCertOptions = JksOptions(
-  path = "keystore.jks",
-  password = "wibble")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var keyCertOptions = JksOptions(
+  path = &quot;keystore.jks&quot;,
+  password = &quot;wibble&quot;)
 
 var netServer = vertx.createNetServer(NetServerOptions(
   keyStoreOptions = keyCertOptions,
@@ -1329,9 +1328,9 @@ var netServer = vertx.createNetServer(NetServerOptions(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var keyCertOptions = PemKeyCertOptions(
-  keyPaths = listOf("default-key.pem", "host1-key.pem", "etc..."),
-  certPaths = listOf("default-cert.pem", "host2-key.pem", "etc..."))
+<pre class="CodeRay highlight"><code data-lang="kotlin">var keyCertOptions = PemKeyCertOptions(
+  keyPaths = listOf(&quot;default-key.pem&quot;, &quot;host1-key.pem&quot;, &quot;etc...&quot;),
+  certPaths = listOf(&quot;default-cert.pem&quot;, &quot;host2-key.pem&quot;, &quot;etc...&quot;))
 
 var netServer = vertx.createNetServer(NetServerOptions(
   pemKeyCertOptions = keyCertOptions,
@@ -1347,17 +1346,17 @@ var netServer = vertx.createNetServer(NetServerOptions(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createNetClient(NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createNetClient(NetClientOptions(
   trustStoreOptions = trustOptions,
   ssl = true))
 
 // Connect to 'localhost' and present 'server.name' server name
-client.connect(1234, "localhost", "server.name", { res -&gt;
+client.connect(1234, &quot;localhost&quot;, &quot;server.name&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("Connected!")
+    println(&quot;Connected!&quot;)
     var socket = res.result()
   } else {
-    println("Failed to connect: ${res.cause().getMessage()}")
+    println(&quot;Failed to connect: ${res.cause().getMessage()}&quot;)
   }
 })</code></pre>
 </div>
@@ -1475,13 +1474,13 @@ ALPN version for the JVM running it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   proxyOptions = ProxyOptions(
     type = ProxyType.SOCKS5,
-    host = "localhost",
+    host = &quot;localhost&quot;,
     port = 1080,
-    username = "username",
-    password = "secret"))
+    username = &quot;username&quot;,
+    password = &quot;secret&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>

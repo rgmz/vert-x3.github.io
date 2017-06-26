@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -186,11 +185,11 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-kafka-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-kafka-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -202,7 +201,7 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-kafka-client:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-kafka-<span class="key">client</span>:<span class="float">3.4</span><span class="float">.2</span></code></pre>
 </div>
 </div>
 </div>
@@ -225,14 +224,14 @@ static creation methods exposed by <code><a href="../../scaladocs/io/vertx/scala
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// creating the consumer using map config
+<pre class="CodeRay highlight"><code data-lang="scala">// creating the consumer using map config
 var config = Map()
-config + ("bootstrap.servers" -&gt; "localhost:9092")
-config + ("key.deserializer" -&gt; "org.apache.kafka.common.serialization.StringDeserializer")
-config + ("value.deserializer" -&gt; "org.apache.kafka.common.serialization.StringDeserializer")
-config + ("group.id" -&gt; "my_group")
-config + ("auto.offset.reset" -&gt; "earliest")
-config + ("enable.auto.commit" -&gt; "false")
+config + (&quot;bootstrap.servers&quot; -&gt; &quot;localhost:9092&quot;)
+config + (&quot;key.deserializer&quot; -&gt; &quot;org.apache.kafka.common.serialization.StringDeserializer&quot;)
+config + (&quot;value.deserializer&quot; -&gt; &quot;org.apache.kafka.common.serialization.StringDeserializer&quot;)
+config + (&quot;group.id&quot; -&gt; &quot;my_group&quot;)
+config + (&quot;auto.offset.reset&quot; -&gt; &quot;earliest&quot;)
+config + (&quot;enable.auto.commit&quot; -&gt; &quot;false&quot;)
 
 // use consumer for interacting with Apache Kafka
 var consumer = KafkaConsumer.create(vertx, config)</code></pre>
@@ -248,12 +247,12 @@ the deserializers to use for getting key and value from each received message.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// creating the producer using map and class types for key and value serializers/deserializers
+<pre class="CodeRay highlight"><code data-lang="scala">// creating the producer using map and class types for key and value serializers/deserializers
 var config = Map()
-config + ("bootstrap.servers" -&gt; "localhost:9092")
-config + ("key.serializer" -&gt; "org.apache.kafka.common.serialization.StringSerializer")
-config + ("value.serializer" -&gt; "org.apache.kafka.common.serialization.StringSerializer")
-config + ("acks" -&gt; "1")
+config + (&quot;bootstrap.servers&quot; -&gt; &quot;localhost:9092&quot;)
+config + (&quot;key.serializer&quot; -&gt; &quot;org.apache.kafka.common.serialization.StringSerializer&quot;)
+config + (&quot;value.serializer&quot; -&gt; &quot;org.apache.kafka.common.serialization.StringSerializer&quot;)
+config + (&quot;acks&quot; -&gt; &quot;1&quot;)
 
 // use producer for interacting with Apache Kafka
 var producer = KafkaProducer.create(vertx, config)</code></pre>
@@ -275,20 +274,20 @@ subscribing to a set of topics being part of a consumer group (specified by the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// register the handler for incoming messages
+<pre class="CodeRay highlight"><code data-lang="scala">// register the handler for incoming messages
 consumer.handler((record: io.vertx.scala.kafka.client.consumer.KafkaConsumerRecord&lt;java.lang.String,java.lang.String&gt;) =&gt; {
-  println(s"Processing key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}")
+  println(s&quot;Processing key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}&quot;)
 })
 
 // subscribe to several topics
 var topics = new java.util.HashSet()
-topics.add("topic1")
-topics.add("topic2")
-topics.add("topic3")
+topics.add(&quot;topic1&quot;)
+topics.add(&quot;topic2&quot;)
+topics.add(&quot;topic3&quot;)
 consumer.subscribe(topics)
 
 // or just subscribe to a single topic
-consumer.subscribe("a-single-topic")</code></pre>
+consumer.subscribe(&quot;a-single-topic&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -302,32 +301,32 @@ is completed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// register the handler for incoming messages
+<pre class="CodeRay highlight"><code data-lang="scala">// register the handler for incoming messages
 consumer.handler((record: io.vertx.scala.kafka.client.consumer.KafkaConsumerRecord&lt;java.lang.String,java.lang.String&gt;) =&gt; {
-  println(s"Processing key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}")
+  println(s&quot;Processing key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}&quot;)
 })
 
 // subscribe to several topics
 var topics = new java.util.HashSet()
-topics.add("topic1")
-topics.add("topic2")
-topics.add("topic3")
+topics.add(&quot;topic1&quot;)
+topics.add(&quot;topic2&quot;)
+topics.add(&quot;topic3&quot;)
 consumer.subscribeFuture(topics).onComplete{
   case Success(result) =&gt; {
-    println("subscribed")
+    println(&quot;subscribed&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }
 
 // or just subscribe to a single topic
-consumer.subscribeFuture("a-single-topic").onComplete{
+consumer.subscribeFuture(&quot;a-single-topic&quot;).onComplete{
   case Success(result) =&gt; {
-    println("subscribed")
+    println(&quot;subscribed&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -348,36 +347,36 @@ of the partitions revocations and assignments by the Kafka cluster using
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// register the handler for incoming messages
+<pre class="CodeRay highlight"><code data-lang="scala">// register the handler for incoming messages
 consumer.handler((record: io.vertx.scala.kafka.client.consumer.KafkaConsumerRecord&lt;java.lang.String,java.lang.String&gt;) =&gt; {
-  println(s"Processing key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}")
+  println(s&quot;Processing key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}&quot;)
 })
 
 // registering handlers for assigned and revoked partitions
 consumer.partitionsAssignedHandler((topicPartitions: java.util.Set&lt;io.vertx.scala.kafka.client.common.TopicPartition&gt;) =&gt; {
 
-  println("Partitions assigned")
+  println(&quot;Partitions assigned&quot;)
   topicPartitions.foreach(topicPartition =&gt; {
-    println(s"${todo-renderDataObjectMemberSelect} ${todo-renderDataObjectMemberSelect}")
+    println(s&quot;${todo-renderDataObjectMemberSelect} ${todo-renderDataObjectMemberSelect}&quot;)
   })
 
 })
 
 consumer.partitionsRevokedHandler((topicPartitions: java.util.Set&lt;io.vertx.scala.kafka.client.common.TopicPartition&gt;) =&gt; {
 
-  println("Partitions revoked")
+  println(&quot;Partitions revoked&quot;)
   topicPartitions.foreach(topicPartition =&gt; {
-    println(s"${todo-renderDataObjectMemberSelect} ${todo-renderDataObjectMemberSelect}")
+    println(s&quot;${todo-renderDataObjectMemberSelect} ${todo-renderDataObjectMemberSelect}&quot;)
   })
 
 })
 
 // subscribes to the topic
-consumer.subscribeFuture("test").onComplete{
+consumer.subscribeFuture(&quot;test&quot;).onComplete{
   case Success(result) =&gt; {
-    println("Consumer subscribed")
+    println(&quot;Consumer subscribed&quot;)
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -387,7 +386,7 @@ not get messages anymore using <code><a href="../../scaladocs/io/vertx/scala/kaf
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// consumer is already member of a consumer group
+<pre class="CodeRay highlight"><code data-lang="scala">// consumer is already member of a consumer group
 
 // unsubscribing request
 consumer.unsubscribe()</code></pre>
@@ -398,14 +397,14 @@ consumer.unsubscribe()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// consumer is already member of a consumer group
+<pre class="CodeRay highlight"><code data-lang="scala">// consumer is already member of a consumer group
 
 // unsubscribing request
 consumer.unsubscribeFuture().onComplete{
   case Success(result) =&gt; {
-    println("Consumer unsubscribed")
+    println(&quot;Consumer unsubscribed&quot;)
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -425,36 +424,36 @@ in order to ask for specific partitions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// register the handler for incoming messages
+<pre class="CodeRay highlight"><code data-lang="scala">// register the handler for incoming messages
 consumer.handler((record: io.vertx.scala.kafka.client.consumer.KafkaConsumerRecord&lt;java.lang.String,java.lang.String&gt;) =&gt; {
-  println(s"key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}")
+  println(s&quot;key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}&quot;)
 })
 
 //
 var topicPartitions = new java.util.HashSet()
 topicPartitions.add(TopicPartition()
-  .setTopic("test")
+  .setTopic(&quot;test&quot;)
   .setPartition(0)
 )
 
 // requesting to be assigned the specific partition
 consumer.assignFuture(topicPartitions).onComplete{
   case Success(result) =&gt; {
-    println("Partition assigned")
+    println(&quot;Partition assigned&quot;)
 
     // requesting the assigned partitions
     consumer.assignmentFuture().onComplete{
       case Success(result) =&gt; {
 
         result.foreach(topicPartition =&gt; {
-          println(s"${todo-renderDataObjectMemberSelect} ${todo-renderDataObjectMemberSelect}")
+          println(s&quot;${todo-renderDataObjectMemberSelect} ${todo-renderDataObjectMemberSelect}&quot;)
         })
 
       }
-      case Failure(cause) =&gt; println("Failure")
+      case Failure(cause) =&gt; println(&quot;Failure&quot;)
     }
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -479,8 +478,8 @@ partitions for a specified topic</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// asking partitions information about specific topic
-consumer.partitionsForFuture("test").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">// asking partitions information about specific topic
+consumer.partitionsForFuture(&quot;test&quot;).onComplete{
   case Success(result) =&gt; {
 
     result.foreach(partitionInfo =&gt; {
@@ -488,7 +487,7 @@ consumer.partitionsForFuture("test").onComplete{
     })
 
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -498,18 +497,18 @@ with related partitions</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// asking information about available topics and related partitions
+<pre class="CodeRay highlight"><code data-lang="scala">// asking information about available topics and related partitions
 consumer.listTopicsFuture().onComplete{
   case Success(result) =&gt; {
 
     var map = result
     map.foreach{
       case (topic: java.lang.String, partitions: java.util.List&lt;io.vertx.scala.kafka.client.common.PartitionInfo&gt;) =&gt; {
-      println(s"topic = ${topic}")
-      println(s"partitions = ${map(topic)}")
+      println(s&quot;topic = ${topic}&quot;)
+      println(s&quot;partitions = ${map(topic)}&quot;)
     }}
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -533,14 +532,14 @@ the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// consumer is processing read messages
+<pre class="CodeRay highlight"><code data-lang="scala">// consumer is processing read messages
 
 // committing offset of the last read message
 consumer.commitFuture().onComplete{
   case Success(result) =&gt; {
-    println("Last read message offset committed")
+    println(&quot;Last read message offset committed&quot;)
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -559,17 +558,17 @@ position</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var topicPartition = TopicPartition()
-  .setTopic("test")
+<pre class="CodeRay highlight"><code data-lang="scala">var topicPartition = TopicPartition()
+  .setTopic(&quot;test&quot;)
   .setPartition(0)
 
 
 // seek to a specific offset
 consumer.seekFuture(topicPartition, 10).onComplete{
   case Success(result) =&gt; {
-    println("Seeking done")
+    println(&quot;Seeking done&quot;)
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -578,17 +577,17 @@ consumer.seekFuture(topicPartition, 10).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var topicPartition = TopicPartition()
-  .setTopic("test")
+<pre class="CodeRay highlight"><code data-lang="scala">var topicPartition = TopicPartition()
+  .setTopic(&quot;test&quot;)
   .setPartition(0)
 
 
 // seek to the beginning of the partition
 consumer.seekToBeginningFuture(java.util.Collections.singleton(topicPartition)).onComplete{
   case Success(result) =&gt; {
-    println("Seeking done")
+    println(&quot;Seeking done&quot;)
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -597,17 +596,17 @@ consumer.seekToBeginningFuture(java.util.Collections.singleton(topicPartition)).
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var topicPartition = TopicPartition()
-  .setTopic("test")
+<pre class="CodeRay highlight"><code data-lang="scala">var topicPartition = TopicPartition()
+  .setTopic(&quot;test&quot;)
   .setPartition(0)
 
 
 // seek to the end of the partition
 consumer.seekToEndFuture(java.util.Collections.singleton(topicPartition)).onComplete{
   case Success(result) =&gt; {
-    println("Seeking done")
+    println(&quot;Seeking done&quot;)
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -623,9 +622,9 @@ it does not change the consumer&#8217;s offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var topicPartitions = new java.util.HashSet()
+<pre class="CodeRay highlight"><code data-lang="scala">var topicPartitions = new java.util.HashSet()
 var topicPartition = TopicPartition()
-  .setTopic("test")
+  .setTopic(&quot;test&quot;)
   .setPartition(0)
 
 topicPartitions.add(topicPartition)
@@ -635,19 +634,19 @@ consumer.beginningOffsetsFuture(topicPartitions).onComplete{
     var results = result
     results.foreach{
       case (topic: io.vertx.scala.kafka.client.common.TopicPartition, beginningOffset: java.lang.Long) =&gt; {
-      println(s"Beginning offset for topic=${todo-renderDataObjectMemberSelect}, partition=${todo-renderDataObjectMemberSelect}, beginningOffset=${beginningOffset}")
+      println(s&quot;Beginning offset for topic=${todo-renderDataObjectMemberSelect}, partition=${todo-renderDataObjectMemberSelect}, beginningOffset=${beginningOffset}&quot;)
     }}
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }
 
 // Convenience method for single-partition lookup
 consumer.beginningOffsetsFuture(topicPartition).onComplete{
   case Success(result) =&gt; {
     var beginningOffset = result
-    println(s"Beginning offset for topic=${todo-renderDataObjectMemberSelect}, partition=${todo-renderDataObjectMemberSelect}, beginningOffset=${beginningOffset}")
+    println(s&quot;Beginning offset for topic=${todo-renderDataObjectMemberSelect}, partition=${todo-renderDataObjectMemberSelect}, beginningOffset=${beginningOffset}&quot;)
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -658,9 +657,9 @@ it does not change the consumer&#8217;s offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var topicPartitions = new java.util.HashSet()
+<pre class="CodeRay highlight"><code data-lang="scala">var topicPartitions = new java.util.HashSet()
 var topicPartition = TopicPartition()
-  .setTopic("test")
+  .setTopic(&quot;test&quot;)
   .setPartition(0)
 
 topicPartitions.add(topicPartition)
@@ -670,19 +669,19 @@ consumer.endOffsetsFuture(topicPartitions).onComplete{
     var results = result
     results.foreach{
       case (topic: io.vertx.scala.kafka.client.common.TopicPartition, endOffset: java.lang.Long) =&gt; {
-      println(s"End offset for topic=${todo-renderDataObjectMemberSelect}, partition=${todo-renderDataObjectMemberSelect}, endOffset=${endOffset}")
+      println(s&quot;End offset for topic=${todo-renderDataObjectMemberSelect}, partition=${todo-renderDataObjectMemberSelect}, endOffset=${endOffset}&quot;)
     }}
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }
 
 // Convenience method for single-partition lookup
 consumer.endOffsetsFuture(topicPartition).onComplete{
   case Success(result) =&gt; {
     var endOffset = result
-    println(s"End offset for topic=${todo-renderDataObjectMemberSelect}, partition=${todo-renderDataObjectMemberSelect}, endOffset=${endOffset}")
+    println(s&quot;End offset for topic=${todo-renderDataObjectMemberSelect}, partition=${todo-renderDataObjectMemberSelect}, endOffset=${endOffset}&quot;)
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -693,7 +692,7 @@ with ingestion timestamp &gt;= given timestamp.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">Code not translatable</code></pre>
 </div>
 </div>
 </div>
@@ -712,14 +711,14 @@ to continue message processing.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var topicPartition = TopicPartition()
-  .setTopic("test")
+<pre class="CodeRay highlight"><code data-lang="scala">var topicPartition = TopicPartition()
+  .setTopic(&quot;test&quot;)
   .setPartition(0)
 
 
 // registering the handler for incoming messages
 consumer.handler((record: io.vertx.scala.kafka.client.consumer.KafkaConsumerRecord&lt;java.lang.String,java.lang.String&gt;) =&gt; {
-  println(s"key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}")
+  println(s&quot;key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}&quot;)
 
   // i.e. pause/resume on partition 0, after reading message up to offset 5
   if ((record.partition() == 0) &amp;&amp; (record.offset() == 5)) {
@@ -728,7 +727,7 @@ consumer.handler((record: io.vertx.scala.kafka.client.consumer.KafkaConsumerReco
     consumer.pauseFuture(topicPartition).onComplete{
       case Success(result) =&gt; {
 
-        println("Paused")
+        println(&quot;Paused&quot;)
 
         // resume read operation after a specific time
         vertx.setTimer(5000, (timeId: java.lang.Long) =&gt; {
@@ -737,7 +736,7 @@ consumer.handler((record: io.vertx.scala.kafka.client.consumer.KafkaConsumerReco
           consumer.resume(topicPartition)
         })
       }
-      case Failure(cause) =&gt; println("Failure")
+      case Failure(cause) =&gt; println(&quot;Failure&quot;)
     }
   }
 })</code></pre>
@@ -760,12 +759,12 @@ when the actual close has completed then you can pass in a handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">consumer.closeFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">consumer.closeFuture().onComplete{
   case Success(result) =&gt; {
-    println("Consumer is now closed")
+    println(&quot;Consumer is now closed&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -784,10 +783,10 @@ or partition, in this case the messages are sent in a round robin fashion across
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">for ( i &lt;- 0 until 5) {
+<pre class="CodeRay highlight"><code data-lang="scala">for ( i &lt;- 0 until 5) {
 
   // only topic and message value are specified, round robin on destination partitions
-  var record = KafkaProducerRecord.create("test", s"message_${i}")
+  var record = KafkaProducerRecord.create(&quot;test&quot;, s&quot;message_${i}&quot;)
 
   producer.write(record)
 }</code></pre>
@@ -798,18 +797,18 @@ or partition, in this case the messages are sent in a round robin fashion across
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">for ( i &lt;- 0 until 5) {
+<pre class="CodeRay highlight"><code data-lang="scala">for ( i &lt;- 0 until 5) {
 
   // only topic and message value are specified, round robin on destination partitions
-  var record = KafkaProducerRecord.create("test", s"message_${i}")
+  var record = KafkaProducerRecord.create(&quot;test&quot;, s&quot;message_${i}&quot;)
 
   producer.writeFuture(record).onComplete{
     case Success(result) =&gt; {
 
       var recordMetadata = result
-      println(s"Message ${record.value()} written on topic=${todo-renderDataObjectMemberSelect}, partition=${todo-renderDataObjectMemberSelect}, offset=${todo-renderDataObjectMemberSelect}")
+      println(s&quot;Message ${record.value()} written on topic=${todo-renderDataObjectMemberSelect}, partition=${todo-renderDataObjectMemberSelect}, offset=${todo-renderDataObjectMemberSelect}&quot;)
     }
-    case Failure(cause) =&gt; println("Failure")
+    case Failure(cause) =&gt; println(&quot;Failure&quot;)
   }
 }</code></pre>
 </div>
@@ -820,10 +819,10 @@ or its key</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">for ( i &lt;- 0 until 10) {
+<pre class="CodeRay highlight"><code data-lang="scala">for ( i &lt;- 0 until 10) {
 
   // a destination partition is specified
-  var record = KafkaProducerRecord.create("test", null, s"message_${i}", 0)
+  var record = KafkaProducerRecord.create(&quot;test&quot;, null, s&quot;message_${i}&quot;, 0)
 
   producer.write(record)
 }</code></pre>
@@ -835,13 +834,13 @@ messages with the same key are sent to the same partition and retain the order.<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">for ( i &lt;- 0 until 10) {
+<pre class="CodeRay highlight"><code data-lang="scala">for ( i &lt;- 0 until 10) {
 
   // i.e. defining different keys for odd and even messages
   var key = i % 2
 
   // a key is specified, all messages with same key will be sent to the same partition
-  var record = KafkaProducerRecord.create("test", java.lang.String.valueOf(key), s"message_${i}")
+  var record = KafkaProducerRecord.create(&quot;test&quot;, java.lang.String.valueOf(key), s&quot;message_${i}&quot;)
 
   producer.write(record)
 }</code></pre>
@@ -874,8 +873,8 @@ returns a producer that can be shared safely.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Create a shared producer identified by 'the-producer'
-var producer1 = KafkaProducer.createShared(vertx, "the-producer", config)
+<pre class="CodeRay highlight"><code data-lang="scala">// Create a shared producer identified by 'the-producer'
+var producer1 = KafkaProducer.createShared(vertx, &quot;the-producer&quot;, config)
 
 // Sometimes later you can close it
 producer1.close()</code></pre>
@@ -905,12 +904,12 @@ when the actual close has completed then you can pass in a handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">producer.closeFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">producer.closeFuture().onComplete{
   case Success(result) =&gt; {
-    println("Producer is now closed")
+    println(&quot;Producer is now closed&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -926,8 +925,8 @@ partitions for a specified topic:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// asking partitions information about specific topic
-producer.partitionsForFuture("test").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">// asking partitions information about specific topic
+producer.partitionsForFuture(&quot;test&quot;).onComplete{
   case Success(result) =&gt; {
 
     result.foreach(partitionInfo =&gt; {
@@ -935,7 +934,7 @@ producer.partitionsForFuture("test").onComplete{
     })
 
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -951,9 +950,9 @@ producer.partitionsForFuture("test").onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// setting handler for errors
+<pre class="CodeRay highlight"><code data-lang="scala">// setting handler for errors
 consumer.exceptionHandler((e: java.lang.Throwable) =&gt; {
-  println(s"Error = ${e.getMessage()}")
+  println(s&quot;Error = ${e.getMessage()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -980,32 +979,32 @@ and json array.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Creating a consumer able to deserialize to buffers
+<pre class="CodeRay highlight"><code data-lang="scala">// Creating a consumer able to deserialize to buffers
 var config = Map()
-config + ("bootstrap.servers" -&gt; "localhost:9092")
-config + ("key.deserializer" -&gt; "io.vertx.kafka.client.serialization.BufferDeserializer")
-config + ("value.deserializer" -&gt; "io.vertx.kafka.client.serialization.BufferDeserializer")
-config + ("group.id" -&gt; "my_group")
-config + ("auto.offset.reset" -&gt; "earliest")
-config + ("enable.auto.commit" -&gt; "false")
+config + (&quot;bootstrap.servers&quot; -&gt; &quot;localhost:9092&quot;)
+config + (&quot;key.deserializer&quot; -&gt; &quot;io.vertx.kafka.client.serialization.BufferDeserializer&quot;)
+config + (&quot;value.deserializer&quot; -&gt; &quot;io.vertx.kafka.client.serialization.BufferDeserializer&quot;)
+config + (&quot;group.id&quot; -&gt; &quot;my_group&quot;)
+config + (&quot;auto.offset.reset&quot; -&gt; &quot;earliest&quot;)
+config + (&quot;enable.auto.commit&quot; -&gt; &quot;false&quot;)
 
 // Creating a consumer able to deserialize to json object
 config = Map()
-config + ("bootstrap.servers" -&gt; "localhost:9092")
-config + ("key.deserializer" -&gt; "io.vertx.kafka.client.serialization.JsonObjectDeserializer")
-config + ("value.deserializer" -&gt; "io.vertx.kafka.client.serialization.JsonObjectDeserializer")
-config + ("group.id" -&gt; "my_group")
-config + ("auto.offset.reset" -&gt; "earliest")
-config + ("enable.auto.commit" -&gt; "false")
+config + (&quot;bootstrap.servers&quot; -&gt; &quot;localhost:9092&quot;)
+config + (&quot;key.deserializer&quot; -&gt; &quot;io.vertx.kafka.client.serialization.JsonObjectDeserializer&quot;)
+config + (&quot;value.deserializer&quot; -&gt; &quot;io.vertx.kafka.client.serialization.JsonObjectDeserializer&quot;)
+config + (&quot;group.id&quot; -&gt; &quot;my_group&quot;)
+config + (&quot;auto.offset.reset&quot; -&gt; &quot;earliest&quot;)
+config + (&quot;enable.auto.commit&quot; -&gt; &quot;false&quot;)
 
 // Creating a consumer able to deserialize to json array
 config = Map()
-config + ("bootstrap.servers" -&gt; "localhost:9092")
-config + ("key.deserializer" -&gt; "io.vertx.kafka.client.serialization.JsonArrayDeserializer")
-config + ("value.deserializer" -&gt; "io.vertx.kafka.client.serialization.JsonArrayDeserializer")
-config + ("group.id" -&gt; "my_group")
-config + ("auto.offset.reset" -&gt; "earliest")
-config + ("enable.auto.commit" -&gt; "false")</code></pre>
+config + (&quot;bootstrap.servers&quot; -&gt; &quot;localhost:9092&quot;)
+config + (&quot;key.deserializer&quot; -&gt; &quot;io.vertx.kafka.client.serialization.JsonArrayDeserializer&quot;)
+config + (&quot;value.deserializer&quot; -&gt; &quot;io.vertx.kafka.client.serialization.JsonArrayDeserializer&quot;)
+config + (&quot;group.id&quot; -&gt; &quot;my_group&quot;)
+config + (&quot;auto.offset.reset&quot; -&gt; &quot;earliest&quot;)
+config + (&quot;enable.auto.commit&quot; -&gt; &quot;false&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1013,26 +1012,26 @@ config + ("enable.auto.commit" -&gt; "false")</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Creating a producer able to serialize to buffers
+<pre class="CodeRay highlight"><code data-lang="scala">// Creating a producer able to serialize to buffers
 var config = Map()
-config + ("bootstrap.servers" -&gt; "localhost:9092")
-config + ("key.serializer" -&gt; "io.vertx.kafka.client.serialization.BufferSerializer")
-config + ("value.serializer" -&gt; "io.vertx.kafka.client.serialization.BufferSerializer")
-config + ("acks" -&gt; "1")
+config + (&quot;bootstrap.servers&quot; -&gt; &quot;localhost:9092&quot;)
+config + (&quot;key.serializer&quot; -&gt; &quot;io.vertx.kafka.client.serialization.BufferSerializer&quot;)
+config + (&quot;value.serializer&quot; -&gt; &quot;io.vertx.kafka.client.serialization.BufferSerializer&quot;)
+config + (&quot;acks&quot; -&gt; &quot;1&quot;)
 
 // Creating a producer able to serialize to json object
 config = Map()
-config + ("bootstrap.servers" -&gt; "localhost:9092")
-config + ("key.serializer" -&gt; "io.vertx.kafka.client.serialization.JsonObjectSerializer")
-config + ("value.serializer" -&gt; "io.vertx.kafka.client.serialization.JsonObjectSerializer")
-config + ("acks" -&gt; "1")
+config + (&quot;bootstrap.servers&quot; -&gt; &quot;localhost:9092&quot;)
+config + (&quot;key.serializer&quot; -&gt; &quot;io.vertx.kafka.client.serialization.JsonObjectSerializer&quot;)
+config + (&quot;value.serializer&quot; -&gt; &quot;io.vertx.kafka.client.serialization.JsonObjectSerializer&quot;)
+config + (&quot;acks&quot; -&gt; &quot;1&quot;)
 
 // Creating a producer able to serialize to json array
 config = Map()
-config + ("bootstrap.servers" -&gt; "localhost:9092")
-config + ("key.serializer" -&gt; "io.vertx.kafka.client.serialization.JsonArraySerializer")
-config + ("value.serializer" -&gt; "io.vertx.kafka.client.serialization.JsonArraySerializer")
-config + ("acks" -&gt; "1")</code></pre>
+config + (&quot;bootstrap.servers&quot; -&gt; &quot;localhost:9092&quot;)
+config + (&quot;key.serializer&quot; -&gt; &quot;io.vertx.kafka.client.serialization.JsonArraySerializer&quot;)
+config + (&quot;value.serializer&quot; -&gt; &quot;io.vertx.kafka.client.serialization.JsonArraySerializer&quot;)
+config + (&quot;acks&quot; -&gt; &quot;1&quot;)</code></pre>
 </div>
 </div>
 </div>

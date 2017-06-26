@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -139,15 +138,15 @@ which is called when the operation completes or an error occurs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var fs = vertx.fileSystem()
+<pre class="CodeRay highlight"><code data-lang="scala">var fs = vertx.fileSystem()
 
 // Copy file from foo.txt to bar.txt
-fs.copyFuture("foo.txt", "bar.txt").onComplete{
+fs.copyFuture(&quot;foo.txt&quot;, &quot;bar.txt&quot;).onComplete{
   case Success(result) =&gt; {
     // Copied ok!
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -163,10 +162,10 @@ particular application before using them from an event loop, so as not to break 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var fs = vertx.fileSystem()
+<pre class="CodeRay highlight"><code data-lang="scala">var fs = vertx.fileSystem()
 
 // Copy file from foo.txt to bar.txt synchronously
-fs.copyBlocking("foo.txt", "bar.txt")</code></pre>
+fs.copyBlocking(&quot;foo.txt&quot;, &quot;bar.txt&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -178,42 +177,42 @@ please consult the <code><a href="../../scaladocs/io/vertx/scala/core/file/FileS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var vertx = Vertx.vertx()
+<pre class="CodeRay highlight"><code data-lang="scala">var vertx = Vertx.vertx()
 
 // Read a file
-vertx.fileSystem().readFileFuture("target/classes/readme.txt").onComplete{
+vertx.fileSystem().readFileFuture(&quot;target/classes/readme.txt&quot;).onComplete{
   case Success(result) =&gt; {
     println(result)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }
 
 // Copy a file
-vertx.fileSystem().copyFuture("target/classes/readme.txt", "target/classes/readme2.txt").onComplete{
+vertx.fileSystem().copyFuture(&quot;target/classes/readme.txt&quot;, &quot;target/classes/readme2.txt&quot;).onComplete{
   case Success(result) =&gt; {
-    println("File copied")
+    println(&quot;File copied&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }
 
 // Write a file
-vertx.fileSystem().writeFileFuture("target/classes/hello.txt", Buffer.buffer("Hello")).onComplete{
+vertx.fileSystem().writeFileFuture(&quot;target/classes/hello.txt&quot;, Buffer.buffer(&quot;Hello&quot;)).onComplete{
   case Success(result) =&gt; {
-    println("File written")
+    println(&quot;File written&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }
 
 // Check existence and delete
-vertx.fileSystem().existsFuture("target/classes/junk.txt").onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+vertx.fileSystem().existsFuture(&quot;target/classes/junk.txt&quot;).onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -227,13 +226,13 @@ vertx.fileSystem().existsFuture("target/classes/junk.txt").onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = OpenOptions()
-fileSystem.openFuture("myfile.txt", options).onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">var options = OpenOptions()
+fileSystem.openFuture(&quot;myfile.txt&quot;, options).onComplete{
   case Success(result) =&gt; {
     var file = result
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -273,26 +272,26 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var vertx = Vertx.vertx()
-vertx.fileSystem().openFuture("target/classes/hello.txt", OpenOptions()).onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">var vertx = Vertx.vertx()
+vertx.fileSystem().openFuture(&quot;target/classes/hello.txt&quot;, OpenOptions()).onComplete{
   case Success(result) =&gt; {
     var file = result
-    var buff = Buffer.buffer("foo")
+    var buff = Buffer.buffer(&quot;foo&quot;)
     for ( i &lt;- 0 until 5) {
       file.writeFuture(buff, buff.length() * i).onComplete{
         case Success(result) =&gt; {
-          println("Written ok!")
+          println(&quot;Written ok!&quot;)
           // etc
         }
         case Failure(cause) =&gt; {
-          println(s"$cause")
+          println(s&quot;$cause&quot;)
         }
       }
     }
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -332,25 +331,25 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var vertx = Vertx.vertx()
-vertx.fileSystem().openFuture("target/classes/les_miserables.txt", OpenOptions()).onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">var vertx = Vertx.vertx()
+vertx.fileSystem().openFuture(&quot;target/classes/les_miserables.txt&quot;, OpenOptions()).onComplete{
   case Success(result) =&gt; {
     var file = result
     var buff = Buffer.buffer(1000)
     for ( i &lt;- 0 until 10) {
       file.readFuture(buff, i * 100, i * 100, 100).onComplete{
         case Success(result) =&gt; {
-          println("Read ok!")
+          println(&quot;Read ok!&quot;)
         }
         case Failure(cause) =&gt; {
-          println(s"$cause")
+          println(s&quot;$cause&quot;)
         }
       }
     }
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -394,19 +393,19 @@ copy the content to another <code>AsyncFile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var vertx = Vertx.vertx()
-var output = vertx.fileSystem().openBlocking("target/classes/plagiary.txt", OpenOptions())
+<pre class="CodeRay highlight"><code data-lang="scala">var vertx = Vertx.vertx()
+var output = vertx.fileSystem().openBlocking(&quot;target/classes/plagiary.txt&quot;, OpenOptions())
 
-vertx.fileSystem().openFuture("target/classes/les_miserables.txt", OpenOptions()).onComplete{
+vertx.fileSystem().openFuture(&quot;target/classes/les_miserables.txt&quot;, OpenOptions()).onComplete{
   case Success(result) =&gt; {
     var file = result
     Pump.pump(file, output).start()
     file.endHandler((r: java.lang.Void) =&gt; {
-      println("Copy done")
+      println(&quot;Copy done&quot;)
     })
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>

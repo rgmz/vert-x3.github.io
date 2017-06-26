@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -155,11 +154,11 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-infinispan&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-infinispan<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -211,15 +210,15 @@ when you are creating your Vert.x instance, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ClusterManager mgr = new InfinispanClusterManager();
+<pre class="CodeRay highlight"><code data-lang="java">ClusterManager mgr = <span class="keyword">new</span> InfinispanClusterManager();
 
-VertxOptions options = new VertxOptions().setClusterManager(mgr);
+VertxOptions options = <span class="keyword">new</span> VertxOptions().setClusterManager(mgr);
 
 Vertx.clusteredVertx(options, res -&gt; {
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     Vertx vertx = res.result();
-  } else {
-    // failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// failed!</span>
   }
 });</code></pre>
 </div>
@@ -241,7 +240,7 @@ example, if you are using the <em>launcher</em> class from Vert.x, the classpath
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell"># If infinispan.xml and/or jgroups.xml files are in the current directory:
+<pre class="CodeRay highlight"><code data-lang="shell"># If infinispan.xml and/or jgroups.xml files are in the current directory:
 java -jar my-app.jar -cp . -cluster
 
 # If infinispan.xml and/or jgroups.xml files are in the conf directory:
@@ -254,7 +253,7 @@ java -jar my-app.jar -cp conf -cluster</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell"># Use a cluster configuration located in an external file
+<pre class="CodeRay highlight"><code data-lang="shell"># Use a cluster configuration located in an external file
 java -Dvertx.infinispan.config=./config/my-infinispan.xml -jar ... -cluster
 
 # Or use a custom configuration from the classpath
@@ -301,15 +300,15 @@ Infinispan / JGroups documentations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ClusterManager mgr = new InfinispanClusterManager(cacheManager);
+<pre class="CodeRay highlight"><code data-lang="java">ClusterManager mgr = <span class="keyword">new</span> InfinispanClusterManager(cacheManager);
 
-VertxOptions options = new VertxOptions().setClusterManager(mgr);
+VertxOptions options = <span class="keyword">new</span> VertxOptions().setClusterManager(mgr);
 
 Vertx.clusteredVertx(options, res -&gt; {
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     Vertx vertx = res.result();
-  } else {
-    // failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// failed!</span>
   }
 });</code></pre>
 </div>
@@ -322,21 +321,21 @@ Vertx.clusteredVertx(options, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;cache-container default-cache="__vertx.distributed.cache"&gt;
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;cache-container</span> <span class="attribute-name">default-cache</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">__vertx.distributed.cache</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
 
-  &lt;replicated-cache name="__vertx.subs"&gt;
-    &lt;expiration interval="-1"/&gt;
-  &lt;/replicated-cache&gt;
+  <span class="tag">&lt;replicated-cache</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">__vertx.subs</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;expiration</span> <span class="attribute-name">interval</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">-1</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;/replicated-cache&gt;</span>
 
-  &lt;replicated-cache name="__vertx.haInfo"&gt;
-    &lt;expiration interval="-1"/&gt;
-  &lt;/replicated-cache&gt;
+  <span class="tag">&lt;replicated-cache</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">__vertx.haInfo</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;expiration</span> <span class="attribute-name">interval</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">-1</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;/replicated-cache&gt;</span>
 
-  &lt;distributed-cache name="__vertx.distributed.cache"&gt;
-    &lt;expiration interval="-1"/&gt;
-  &lt;/distributed-cache&gt;
+  <span class="tag">&lt;distributed-cache</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">__vertx.distributed.cache</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;expiration</span> <span class="attribute-name">interval</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">-1</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;/distributed-cache&gt;</span>
 
-&lt;/cache-container&gt;</code></pre>
+<span class="tag">&lt;/cache-container&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -353,21 +352,21 @@ With Maven it looks like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;org.infinispan&lt;/groupId&gt;
-  &lt;artifactId&gt;infinispan-cloud&lt;/artifactId&gt;
-  &lt;version&gt;9.0.0.Final&lt;/version&gt;
-  &lt;exclusions&gt;
-    &lt;exclusion&gt;
-      &lt;groupId&gt;org.jgroups&lt;/groupId&gt;                <b class="conum">(1)</b>
-      &lt;artifactId&gt;jgroups&lt;/artifactId&gt;
-    &lt;/exclusion&gt;
-    &lt;exclusion&gt;
-      &lt;artifactId&gt;undertow-core&lt;/artifactId&gt;        <b class="conum">(2)</b>
-      &lt;groupId&gt;io.undertow&lt;/groupId&gt;
-    &lt;/exclusion&gt;
-  &lt;/exclusions&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>org.infinispan<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>infinispan-cloud<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>9.0.0.Final<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;exclusions&gt;</span>
+    <span class="tag">&lt;exclusion&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>org.jgroups<span class="tag">&lt;/groupId&gt;</span>                <b class="conum">(1)</b>
+      <span class="tag">&lt;artifactId&gt;</span>jgroups<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/exclusion&gt;</span>
+    <span class="tag">&lt;exclusion&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>undertow-core<span class="tag">&lt;/artifactId&gt;</span>        <b class="conum">(2)</b>
+      <span class="tag">&lt;groupId&gt;</span>io.undertow<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;/exclusion&gt;</span>
+  <span class="tag">&lt;/exclusions&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -385,7 +384,7 @@ With Maven it looks like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">-Dvertx.jgroups.config=default-configs/default-jgroups-kubernetes.xml</code></pre>
+<pre class="CodeRay highlight"><code data-lang="shell">-Dvertx.jgroups.config=default-configs/default-jgroups-kubernetes.xml</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -396,7 +395,7 @@ With Maven it looks like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-Dockerfile" data-lang="Dockerfile">EXPOSE 8888</code></pre>
+<pre class="CodeRay highlight"><code data-lang="Dockerfile">EXPOSE 8888</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -404,7 +403,7 @@ With Maven it looks like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-Dockerfile" data-lang="Dockerfile">ENV OPENSHIFT_KUBE_PING_NAMESPACE my-openshift3-project</code></pre>
+<pre class="CodeRay highlight"><code data-lang="Dockerfile">ENV OPENSHIFT_KUBE_PING_NAMESPACE my-openshift3-project</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -412,7 +411,7 @@ With Maven it looks like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">-Djava.net.preferIPv4Stack=true</code></pre>
+<pre class="CodeRay highlight"><code data-lang="shell">-Djava.net.preferIPv4Stack=true</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -420,7 +419,7 @@ With Maven it looks like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default -n $(oc project -q)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="shell">oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default -n $(oc project -q)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -437,7 +436,7 @@ With Maven it looks like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">-Djava.net.preferIPv4Stack=true -Djgroups.tcp.address=NON_LOOPBACK</code></pre>
+<pre class="CodeRay highlight"><code data-lang="shell">-Djava.net.preferIPv4Stack=true -Djgroups.tcp.address=NON_LOOPBACK</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -470,12 +469,12 @@ element of the configuration. For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;TCP bind_addr="192.168.1.20"
-     ...
-     /&gt;
-&lt;MPING bind_addr="192.168.1.20"
-     ...
-     /&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;TCP</span> <span class="attribute-name">bind_addr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">192.168.1.20</span><span class="delimiter">&quot;</span></span>
+     <span class="attribute-name">...</span>
+     <span class="tag">/&gt;</span>
+<span class="tag">&lt;MPING</span> <span class="attribute-name">bind_addr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">192.168.1.20</span><span class="delimiter">&quot;</span></span>
+     <span class="attribute-name">...</span>
+     <span class="tag">/&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">

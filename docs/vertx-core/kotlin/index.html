@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -641,7 +640,7 @@ getting a reference to the event bus, setting timers, as well as many other thin
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var vertx = Vertx.vertx()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var vertx = Vertx.vertx()</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -664,7 +663,7 @@ require, for example, isolation between the event bus or different groups of ser
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var vertx = Vertx.vertx(VertxOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var vertx = Vertx.vertx(VertxOptions(
   workerPoolSize = 40))</code></pre>
 </div>
 </div>
@@ -697,7 +696,7 @@ group together. During that time, we don&#8217;t want to block the calling threa
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.response().putHeader("Content-Type", "text/plain").write("some text").end()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.response().putHeader(&quot;Content-Type&quot;, &quot;text/plain&quot;).write(&quot;some text&quot;).end()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -710,9 +709,9 @@ your code like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var response = request.response()
-response.putHeader("Content-Type", "text/plain")
-response.write("some text")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var response = request.response()
+response.putHeader(&quot;Content-Type&quot;, &quot;text/plain&quot;)
+response.write(&quot;some text&quot;)
 response.end()</code></pre>
 </div>
 </div>
@@ -753,9 +752,9 @@ would do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.setPeriodic(1000, { id -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.setPeriodic(1000, { id -&gt;
   // This handler will get called every second
-  println("timer fired!")
+  println(&quot;timer fired!&quot;)
 })</code></pre>
 </div>
 </div>
@@ -764,10 +763,10 @@ would do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Respond to each http request with "Hello World"
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Respond to each http request with &quot;Hello World&quot;
 server.requestHandler({ request -&gt;
   // This handler will be called every time an HTTP request is received at the server
-  request.response().end("hello world!")
+  request.response().end(&quot;hello world!&quot;)
 })</code></pre>
 </div>
 </div>
@@ -989,12 +988,12 @@ result handler to be called back asynchronous when the blocking code has been ex
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.executeBlocking&lt;Any&gt;({ future -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.executeBlocking&lt;Any&gt;({ future -&gt;
   // Call some blocking API that takes a significant amount of time to return
-  var result = someAPI.blockingMethod("hello")
+  var result = someAPI.blockingMethod(&quot;hello&quot;)
   future.complete(result)
 }, { res -&gt;
-  println("The result is: ${res.result()}")
+  println(&quot;The result is: ${res.result()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -1021,13 +1020,13 @@ on the worker pool.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var executor = vertx.createSharedWorkerExecutor("my-worker-pool")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var executor = vertx.createSharedWorkerExecutor(&quot;my-worker-pool&quot;)
 executor.executeBlocking&lt;Any&gt;({ future -&gt;
   // Call some blocking API that takes a significant amount of time to return
-  var result = someAPI.blockingMethod("hello")
+  var result = someAPI.blockingMethod(&quot;hello&quot;)
   future.complete(result)
 }, { res -&gt;
-  println("The result is: ${res.result()}")
+  println(&quot;The result is: ${res.result()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -1036,7 +1035,7 @@ executor.executeBlocking&lt;Any&gt;({ future -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">executor.close()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">executor.close()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1052,14 +1051,14 @@ is undeployed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">//
+<pre class="CodeRay highlight"><code data-lang="kotlin">//
 // 10 threads max
 var poolSize = 10
 
 // 2 minutes
 var maxExecuteTime = 120000
 
-var executor = vertx.createSharedWorkerExecutor("my-worker-pool", poolSize, maxExecuteTime)</code></pre>
+var executor = vertx.createSharedWorkerExecutor(&quot;my-worker-pool&quot;, poolSize, maxExecuteTime)</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1092,7 +1091,7 @@ supports concurrent composition (run several async operations in parallel) and s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var httpServerFuture = Future.future&lt;Any&gt;()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var httpServerFuture = Future.future&lt;Any&gt;()
 httpServer.listen(httpServerFuture.completer())
 
 var netServerFuture = Future.future&lt;Any&gt;()
@@ -1118,7 +1117,7 @@ with a success.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">CompositeFuture.all(listOf(future1, future2, future3))</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">CompositeFuture.all(listOf(future1, future2, future3))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1129,7 +1128,7 @@ all the futures are failed:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">CompositeFuture.any(future1, future2).setHandler({ ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">CompositeFuture.any(future1, future2).setHandler({ ar -&gt;
   if (ar.succeeded()) {
     // At least one is succeeded
   } else {
@@ -1143,7 +1142,7 @@ all the futures are failed:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">CompositeFuture.any(listOf(f1, f2, f3))</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">CompositeFuture.any(listOf(f1, f2, f3))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1154,7 +1153,7 @@ them is failed:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">CompositeFuture.join(future1, future2, future3).setHandler({ ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">CompositeFuture.join(future1, future2, future3).setHandler({ ar -&gt;
   if (ar.succeeded()) {
     // All succeeded
   } else {
@@ -1168,7 +1167,7 @@ them is failed:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">CompositeFuture.join(listOf(future1, future2, future3))</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">CompositeFuture.join(listOf(future1, future2, future3))</code></pre>
 </div>
 </div>
 </div>
@@ -1180,20 +1179,20 @@ for chaining futures (so sequential composition).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var fs = vertx.fileSystem()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var fs = vertx.fileSystem()
 var startFuture = Future.future&lt;Any&gt;()
 
 var fut1 = Future.future&lt;Any&gt;()
-fs.createFile("/foo", fut1.completer())
+fs.createFile(&quot;/foo&quot;, fut1.completer())
 
 fut1.compose&lt;Any&gt;({ v -&gt;
   // When the file is created (fut1), execute this:
   var fut2 = Future.future&lt;Any&gt;()
-  fs.writeFile("/foo", Buffer.buffer(), fut2.completer())
+  fs.writeFile(&quot;/foo&quot;, Buffer.buffer(), fut2.completer())
   return fut2
 }).compose({ v -&gt;
   // When the file is written (fut2), execute this:
-  fs.move("/foo", "/bar", startFuture.completer())
+  fs.move(&quot;/foo&quot;, &quot;/bar&quot;, startFuture.completer())
 }, startFuture)</code></pre>
 </div>
 </div>
@@ -1336,9 +1335,9 @@ directly while on an event loop.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = DeploymentOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = DeploymentOptions(
   worker = true)
-vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle", options)</code></pre>
+vertx.deployVerticle(&quot;com.mycompany.MyOrderProcessorVerticle&quot;, options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1387,7 +1386,7 @@ Deploying Verticle <strong>instances</strong> is Java only.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">var myVerticle = examples.CoreExamples.MyVerticle()
+<pre class="CodeRay highlight"><code data-lang="java">var myVerticle = examples.CoreExamples.MyVerticle()
 vertx.deployVerticle(myVerticle)</code></pre>
 </div>
 </div>
@@ -1410,14 +1409,14 @@ reasons such as loading services and getting verticles from Maven at run-time.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Deploy a Java verticle - the name is the fully qualified class name of the verticle class
-vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle")
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Deploy a Java verticle - the name is the fully qualified class name of the verticle class
+vertx.deployVerticle(&quot;com.mycompany.MyOrderProcessorVerticle&quot;)
 
 // Deploy a JavaScript verticle
-vertx.deployVerticle("verticles/myverticle.js")
+vertx.deployVerticle(&quot;verticles/myverticle.js&quot;)
 
 // Deploy a Ruby verticle verticle
-vertx.deployVerticle("verticles/my_verticle.rb")</code></pre>
+vertx.deployVerticle(&quot;verticles/my_verticle.rb&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -1471,11 +1470,11 @@ and <code><a href="../../apidocs/io/vertx/core/Vertx.html#unregisterVerticleFact
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.deployVerticle(&quot;com.mycompany.MyOrderProcessorVerticle&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("Deployment id is: ${res.result()}")
+    println(&quot;Deployment id is: ${res.result()}&quot;)
   } else {
-    println("Deployment failed!")
+    println(&quot;Deployment failed!&quot;)
   }
 })</code></pre>
 </div>
@@ -1497,11 +1496,11 @@ and <code><a href="../../apidocs/io/vertx/core/Vertx.html#unregisterVerticleFact
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.undeploy(deploymentID, { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.undeploy(deploymentID, { res -&gt;
   if (res.succeeded()) {
-    println("Undeployed ok")
+    println(&quot;Undeployed ok&quot;)
   } else {
-    println("Undeploy failed!")
+    println(&quot;Undeploy failed!&quot;)
   }
 })</code></pre>
 </div>
@@ -1515,9 +1514,9 @@ want to deploy:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = DeploymentOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = DeploymentOptions(
   instances = 16)
-vertx.deployVerticle("com.mycompany.MyOrderProcessorVerticle", options)</code></pre>
+vertx.deployVerticle(&quot;com.mycompany.MyOrderProcessorVerticle&quot;, options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1575,10 +1574,10 @@ other things.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = DeploymentOptions(
-  isolationGroup = "mygroup")
-options.isolatedClasses = listOf("com.mycompany.myverticle.*", "com.mycompany.somepkg.SomeClass", "org.somelibrary.*")
-vertx.deployVerticle("com.mycompany.myverticle.VerticleClass", options)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = DeploymentOptions(
+  isolationGroup = &quot;mygroup&quot;)
+options.isolatedClasses = listOf(&quot;com.mycompany.myverticle.*&quot;, &quot;com.mycompany.somepkg.SomeClass&quot;, &quot;org.somelibrary.*&quot;)
+vertx.deployVerticle(&quot;com.mycompany.myverticle.VerticleClass&quot;, options)</code></pre>
 </div>
 </div>
 </div>
@@ -1593,7 +1592,7 @@ a vert.x instance that dies abruptly, the verticle is redeployed on another vert
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run my-verticle.js -ha</code></pre>
+<pre class="CodeRay highlight"><code>vertx run my-verticle.js -ha</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1688,7 +1687,7 @@ worker context will be associated with the execution which will use a thread fro
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var context = vertx.getOrCreateContext()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var context = vertx.getOrCreateContext()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1697,15 +1696,15 @@ context is created. You can test the <em>type</em> of context you have retrieved
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var context = vertx.getOrCreateContext()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var context = vertx.getOrCreateContext()
 if (context.isEventLoopContext()) {
-  println("Context attached to Event Loop")
+  println(&quot;Context attached to Event Loop&quot;)
 } else if (context.isWorkerContext()) {
-  println("Context attached to Worker Thread")
+  println(&quot;Context attached to Worker Thread&quot;)
 } else if (context.isMultiThreadedWorkerContext()) {
-  println("Context attached to Worker Thread - multi threaded worker")
+  println(&quot;Context attached to Worker Thread - multi threaded worker&quot;)
 } else if (!Context.isOnVertxThread()) {
-  println("Context not attached to a thread managed by vert.x")
+  println(&quot;Context not attached to a thread managed by vert.x&quot;)
 }</code></pre>
 </div>
 </div>
@@ -1715,8 +1714,8 @@ you submit a task that will be eventually run in the same context, but later:</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.getOrCreateContext().runOnContext({ v -&gt;
-  println("This will be executed asynchronously in the same context")
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.getOrCreateContext().runOnContext({ v -&gt;
+  println(&quot;This will be executed asynchronously in the same context&quot;)
 })</code></pre>
 </div>
 </div>
@@ -1727,10 +1726,10 @@ store and retrieve data shared in the context. For instance, it lets you pass da
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var context = vertx.getOrCreateContext()
-context.put("data", "hello")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var context = vertx.getOrCreateContext()
+context.put(&quot;data&quot;, &quot;hello&quot;)
 context.runOnContext({ v -&gt;
-  var hello = context.get&lt;Any&gt;("data")
+  var hello = context.get&lt;Any&gt;(&quot;data&quot;)
 })</code></pre>
 </div>
 </div>
@@ -1760,11 +1759,11 @@ method. Check the <a href="#Passing configuration to a verticle">[Passing config
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var timerID = vertx.setTimer(1000, { id -&gt;
-  println("And one second later this is printed")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var timerID = vertx.setTimer(1000, { id -&gt;
+  println(&quot;And one second later this is printed&quot;)
 })
 
-println("First this is printed")</code></pre>
+println(&quot;First this is printed&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1795,11 +1794,11 @@ finished, you can set the next timer.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var timerID = vertx.setPeriodic(1000, { id -&gt;
-  println("And every second this is printed")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var timerID = vertx.setPeriodic(1000, { id -&gt;
+  println(&quot;And every second this is printed&quot;)
 })
 
-println("First this is printed")</code></pre>
+println(&quot;First this is printed&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -1810,7 +1809,7 @@ println("First this is printed")</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.cancelTimer(timerID)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.cancelTimer(timerID)</code></pre>
 </div>
 </div>
 </div>
@@ -1833,8 +1832,8 @@ worker verticle.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.deployVerticle("the-verticle", DeploymentOptions(
-  workerPoolName = "the-specific-pool"))</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.deployVerticle(&quot;the-verticle&quot;, DeploymentOptions(
+  workerPoolName = &quot;the-specific-pool&quot;))</code></pre>
 </div>
 </div>
 </div>
@@ -1983,7 +1982,7 @@ You do this by defining a <code><a href="../../apidocs/io/vertx/core/eventbus/Me
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var eb = vertx.eventBus()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var eb = vertx.eventBus()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1998,10 +1997,10 @@ Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var eb = vertx.eventBus()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var eb = vertx.eventBus()
 
-eb.consumer&lt;Any&gt;("news.uk.sport", { message -&gt;
-  println("I have received a message: ${message.body()}")
+eb.consumer&lt;Any&gt;(&quot;news.uk.sport&quot;, { message -&gt;
+  println(&quot;I have received a message: ${message.body()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -2020,11 +2019,11 @@ to return a MessageConsumer with no handler set, and then set the handler on tha
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var eb = vertx.eventBus()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var eb = vertx.eventBus()
 
-var consumer = eb.consumer&lt;Any&gt;("news.uk.sport")
+var consumer = eb.consumer&lt;Any&gt;(&quot;news.uk.sport&quot;)
 consumer.handler({ message -&gt;
-  println("I have received a message: ${message.body()}")
+  println(&quot;I have received a message: ${message.body()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -2038,11 +2037,11 @@ on the MessageConsumer object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consumer.completionHandler({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consumer.completionHandler({ res -&gt;
   if (res.succeeded()) {
-    println("The handler registration has reached all nodes")
+    println(&quot;The handler registration has reached all nodes&quot;)
   } else {
-    println("Registration failed!")
+    println(&quot;Registration failed!&quot;)
   }
 })</code></pre>
 </div>
@@ -2059,11 +2058,11 @@ be notified when this is complete use <code><a href="../../apidocs/io/vertx/core
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consumer.unregister({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consumer.unregister({ res -&gt;
   if (res.succeeded()) {
-    println("The handler un-registration has reached all nodes")
+    println(&quot;The handler un-registration has reached all nodes&quot;)
   } else {
-    println("Un-registration failed!")
+    println(&quot;Un-registration failed!&quot;)
   }
 })</code></pre>
 </div>
@@ -2077,7 +2076,7 @@ address to publish it to.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">eventBus.publish("news.uk.sport", "Yay! Someone kicked a ball")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">eventBus.publish(&quot;news.uk.sport&quot;, &quot;Yay! Someone kicked a ball&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2095,7 +2094,7 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">eventBus.send(&quot;news.uk.sport&quot;, &quot;Yay! Someone kicked a ball&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2143,10 +2142,10 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var consumer = eventBus.consumer&lt;Any&gt;("news.uk.sport")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var consumer = eventBus.consumer&lt;Any&gt;(&quot;news.uk.sport&quot;)
 consumer.handler({ message -&gt;
-  println("I have received a message: ${message.body()}")
-  message.reply("how interesting!")
+  println(&quot;I have received a message: ${message.body()}&quot;)
+  message.reply(&quot;how interesting!&quot;)
 })</code></pre>
 </div>
 </div>
@@ -2155,9 +2154,9 @@ consumer.handler({ message -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">eventBus.send&lt;Any&gt;("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">eventBus.send&lt;Any&gt;(&quot;news.uk.sport&quot;, &quot;Yay! Someone kicked a ball across a patch of grass&quot;, { ar -&gt;
   if (ar.succeeded()) {
-    println("Received reply: ${ar.result().body()}")
+    println(&quot;Received reply: ${ar.result().body()}&quot;)
   }
 })</code></pre>
 </div>
@@ -2238,14 +2237,14 @@ instance as clustered;</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = VertxOptions()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = VertxOptions()
 Vertx.clusteredVertx(options, { res -&gt;
   if (res.succeeded()) {
     var vertx = res.result()
     var eventBus = vertx.eventBus()
-    println("We now have a clustered event bus: ${eventBus}")
+    println(&quot;We now have a clustered event bus: ${eventBus}&quot;)
   } else {
-    println("Failed: ${res.cause()}")
+    println(&quot;Failed: ${res.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -2288,24 +2287,24 @@ the event bus acts as a server and client, the configuration is close to
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = VertxOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = VertxOptions(
   eventBusOptions = EventBusOptions(
     ssl = true,
     keyStoreOptions = JksOptions(
-      path = "keystore.jks",
-      password = "wibble"),
+      path = &quot;keystore.jks&quot;,
+      password = &quot;wibble&quot;),
     trustStoreOptions = JksOptions(
-      path = "keystore.jks",
-      password = "wibble"),
+      path = &quot;keystore.jks&quot;,
+      password = &quot;wibble&quot;),
     clientAuth = ClientAuth.REQUIRED))
 
 Vertx.clusteredVertx(options, { res -&gt;
   if (res.succeeded()) {
     var vertx = res.result()
     var eventBus = vertx.eventBus()
-    println("We now have a clustered event bus: ${eventBus}")
+    println(&quot;We now have a clustered event bus: ${eventBus}&quot;)
   } else {
-    println("Failed: ${res.cause()}")
+    println(&quot;Failed: ${res.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -2332,18 +2331,18 @@ clustered, the port and host, as you would do with <code><a href="../../apidocs/
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = VertxOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = VertxOptions(
   eventBusOptions = EventBusOptions(
-    clusterPublicHost = "whatever",
+    clusterPublicHost = &quot;whatever&quot;,
     clusterPublicPort = 1234))
 
 Vertx.clusteredVertx(options, { res -&gt;
   if (res.succeeded()) {
     var vertx = res.result()
     var eventBus = vertx.eventBus()
-    println("We now have a clustered event bus: ${eventBus}")
+    println(&quot;We now have a clustered event bus: ${eventBus}&quot;)
   } else {
-    println("Failed: ${res.cause()}")
+    println(&quot;Failed: ${res.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -2379,7 +2378,7 @@ necessary to accommodate any bytes written to it. You can perhaps think of a buf
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var buff = Buffer.buffer()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var buff = Buffer.buffer()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2387,7 +2386,7 @@ necessary to accommodate any bytes written to it. You can perhaps think of a buf
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var buff = Buffer.buffer("some string")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var buff = Buffer.buffer(&quot;some string&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2395,7 +2394,7 @@ necessary to accommodate any bytes written to it. You can perhaps think of a buf
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var buff = Buffer.buffer("some string", "UTF-16")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var buff = Buffer.buffer(&quot;some string&quot;, &quot;UTF-16&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2411,7 +2410,7 @@ more efficient than the buffer automatically resizing multiple times as data is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var buff = Buffer.buffer(10000)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var buff = Buffer.buffer(10000)</code></pre>
 </div>
 </div>
 </div>
@@ -2433,9 +2432,9 @@ Append methods exist for appending various different types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var buff = Buffer.buffer()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var buff = Buffer.buffer()
 
-buff.appendInt(123).appendString("hello\n")
+buff.appendInt(123).appendString(&quot;hello\n&quot;)
 
 socket.write(buff)</code></pre>
 </div>
@@ -2453,10 +2452,10 @@ represents the position in the buffer where to start writing the data.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var buff = Buffer.buffer()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var buff = Buffer.buffer()
 
 buff.setInt(1000, 123)
-buff.setString(0, "hello")</code></pre>
+buff.setString(0, &quot;hello&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -2469,10 +2468,10 @@ The first argument to these methods is an index in the buffer from where to get 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var buff = Buffer.buffer()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var buff = Buffer.buffer()
 var i = 0
 while (i &lt; buff.length()) {
-  println("int value at ${i} is ${buff.getInt(i)}")
+  println(&quot;int value at ${i} is ${buff.getInt(i)}&quot;)
 
   4}</code></pre>
 </div>
@@ -2490,7 +2489,7 @@ network protocol optimized to minimize bandwidth consumption.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var buff = Buffer.buffer(128)
+<pre class="CodeRay highlight"><code data-lang="kotlin">var buff = Buffer.buffer(128)
 var pos = 15
 buff.setUnsignedByte(pos, 200)
 println(buff.getUnsignedByte(pos))</code></pre>
@@ -2541,7 +2540,7 @@ Use <code><a href="../../apidocs/io/vertx/core/buffer/Buffer.html#slice--">slice
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()</code></pre>
 </div>
 </div>
 </div>
@@ -2553,7 +2552,7 @@ instance when creating it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   port = 4321)
 var server = vertx.createNetServer(options)</code></pre>
 </div>
@@ -2570,7 +2569,7 @@ alternatives.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()
 server.listen()</code></pre>
 </div>
 </div>
@@ -2579,8 +2578,8 @@ server.listen()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()
-server.listen(1234, "localhost")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()
+server.listen(1234, &quot;localhost&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2597,12 +2596,12 @@ For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()
-server.listen(1234, "localhost", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()
+server.listen(1234, &quot;localhost&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("Server is now listening!")
+    println(&quot;Server is now listening!&quot;)
   } else {
-    println("Failed to bind!")
+    println(&quot;Failed to bind!&quot;)
   }
 })</code></pre>
 </div>
@@ -2618,12 +2617,12 @@ server.listen(1234, "localhost", { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()
-server.listen(0, "localhost", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()
+server.listen(0, &quot;localhost&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("Server is now listening on actual port: ${server.actualPort()}")
+    println(&quot;Server is now listening on actual port: ${server.actualPort()}&quot;)
   } else {
-    println("Failed to bind!")
+    println(&quot;Failed to bind!&quot;)
   }
 })</code></pre>
 </div>
@@ -2636,7 +2635,7 @@ server.listen(0, "localhost", { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()
 server.connectHandler({ socket -&gt;
   // Handle the connection in here
 })</code></pre>
@@ -2662,10 +2661,10 @@ the socket.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer()
 server.connectHandler({ socket -&gt;
   socket.handler({ buffer -&gt;
-    println("I received some bytes: ${buffer.length()}")
+    println(&quot;I received some bytes: ${buffer.length()}&quot;)
   })
 })</code></pre>
 </div>
@@ -2678,15 +2677,15 @@ server.connectHandler({ socket -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Write a buffer
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Write a buffer
 var buffer = Buffer.buffer().appendFloat(12.34f).appendInt(123)
 socket.write(buffer)
 
 // Write a string in UTF-8 encoding
-socket.write("some data")
+socket.write(&quot;some data&quot;)
 
 // Write a string using the specified encoding
-socket.write("some data", "UTF-16")</code></pre>
+socket.write(&quot;some data&quot;, &quot;UTF-16&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2701,8 +2700,8 @@ on it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">socket.closeHandler({ v -&gt;
-  println("The socket has been closed")
+<pre class="CodeRay highlight"><code data-lang="kotlin">socket.closeHandler({ v -&gt;
+  println(&quot;The socket has been closed&quot;)
 })</code></pre>
 </div>
 </div>
@@ -2750,7 +2749,7 @@ classpath resolution or disabling it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">socket.sendFile("myfile.dat")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">socket.sendFile(&quot;myfile.dat&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -2790,11 +2789,11 @@ If you want to be notified when the actual close has completed then you can pass
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">server.close({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">server.close({ res -&gt;
   if (res.succeeded()) {
-    println("Server is now closed")
+    println(&quot;Server is now closed&quot;)
   } else {
-    println("close failed")
+    println(&quot;close failed&quot;)
   }
 })</code></pre>
 </div>
@@ -2824,7 +2823,7 @@ deployed then you will have at most one core utilised on your server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Create a few instances so we can utilise cores
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Create a few instances so we can utilise cores
 
 for (i in 0 until 10) {
   var server = vertx.createNetServer()
@@ -2834,7 +2833,7 @@ for (i in 0 until 10) {
       socket.write(buffer)
     })
   })
-  server.listen(1234, "localhost")
+  server.listen(1234, &quot;localhost&quot;)
 
 }</code></pre>
 </div>
@@ -2853,9 +2852,9 @@ on the command line:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = DeploymentOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = DeploymentOptions(
   instances = 10)
-vertx.deployVerticle("com.mycompany.MyVerticle", options)</code></pre>
+vertx.deployVerticle(&quot;com.mycompany.MyVerticle&quot;, options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2888,7 +2887,7 @@ them in a round-robin fashion to any of the connect handlers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createNetClient()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createNetClient()</code></pre>
 </div>
 </div>
 </div>
@@ -2900,7 +2899,7 @@ instance when creating it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   connectTimeout = 10000)
 var client = vertx.createNetClient(options)</code></pre>
 </div>
@@ -2915,15 +2914,15 @@ specifying the port and host of the server and a handler that will be called wit
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   connectTimeout = 10000)
 var client = vertx.createNetClient(options)
-client.connect(4321, "localhost", { res -&gt;
+client.connect(4321, &quot;localhost&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("Connected!")
+    println(&quot;Connected!&quot;)
     var socket = res.result()
   } else {
-    println("Failed to connect: ${res.cause().getMessage()}")
+    println(&quot;Failed to connect: ${res.cause().getMessage()}&quot;)
   }
 })</code></pre>
 </div>
@@ -2951,7 +2950,7 @@ only apply to creating initial connections.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   reconnectAttempts = 10,
   reconnectInterval = 500)
 
@@ -2969,7 +2968,7 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   logActivity = true)
 
 var server = vertx.createNetServer(options)</code></pre>
@@ -2980,7 +2979,7 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   logActivity = true)
 
 var client = vertx.createNetClient(options)</code></pre>
@@ -3044,11 +3043,11 @@ utility which ships with the JDK.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   keyStoreOptions = JksOptions(
-    path = "/path/to/your/server-keystore.jks",
-    password = "password-of-your-keystore"))
+    path = &quot;/path/to/your/server-keystore.jks&quot;,
+    password = &quot;password-of-your-keystore&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -3057,10 +3056,10 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.jks")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-keystore.jks&quot;)
 var jksOptions = JksOptions(
   value = myKeyStoreAsABuffer,
-  password = "password-of-your-keystore")
+  password = &quot;password-of-your-keystore&quot;)
 var options = NetServerOptions(
   ssl = true,
   keyStoreOptions = jksOptions)
@@ -3073,11 +3072,11 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   pfxKeyCertOptions = PfxOptions(
-    path = "/path/to/your/server-keystore.pfx",
-    password = "password-of-your-keystore"))
+    path = &quot;/path/to/your/server-keystore.pfx&quot;,
+    password = &quot;password-of-your-keystore&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -3086,10 +3085,10 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.pfx")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-keystore.pfx&quot;)
 var pfxOptions = PfxOptions(
   value = myKeyStoreAsABuffer,
-  password = "password-of-your-keystore")
+  password = &quot;password-of-your-keystore&quot;)
 var options = NetServerOptions(
   ssl = true,
   pfxKeyCertOptions = pfxOptions)
@@ -3101,11 +3100,11 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   pemKeyCertOptions = PemKeyCertOptions(
-    keyPath = "/path/to/your/server-key.pem",
-    certPath = "/path/to/your/server-cert.pem"))
+    keyPath = &quot;/path/to/your/server-key.pem&quot;,
+    certPath = &quot;/path/to/your/server-cert.pem&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -3114,8 +3113,8 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-key.pem")
-var myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-cert.pem")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myKeyAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-key.pem&quot;)
+var myCertAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-cert.pem&quot;)
 var pemOptions = PemKeyCertOptions(
   keyValue = myKeyAsABuffer,
   certValue = myCertAsABuffer)
@@ -3146,12 +3145,12 @@ utility which ships with the JDK.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   clientAuth = ClientAuth.REQUIRED,
   trustStoreOptions = JksOptions(
-    path = "/path/to/your/truststore.jks",
-    password = "password-of-your-truststore"))
+    path = &quot;/path/to/your/truststore.jks&quot;,
+    password = &quot;password-of-your-truststore&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -3160,13 +3159,13 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.jks&quot;)
 var options = NetServerOptions(
   ssl = true,
   clientAuth = ClientAuth.REQUIRED,
   trustStoreOptions = JksOptions(
     value = myTrustStoreAsABuffer,
-    password = "password-of-your-truststore"))
+    password = &quot;password-of-your-truststore&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -3176,12 +3175,12 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   clientAuth = ClientAuth.REQUIRED,
   pfxTrustOptions = PfxOptions(
-    path = "/path/to/your/truststore.pfx",
-    password = "password-of-your-truststore"))
+    path = &quot;/path/to/your/truststore.pfx&quot;,
+    password = &quot;password-of-your-truststore&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -3190,13 +3189,13 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.pfx&quot;)
 var options = NetServerOptions(
   ssl = true,
   clientAuth = ClientAuth.REQUIRED,
   pfxTrustOptions = PfxOptions(
     value = myTrustStoreAsABuffer,
-    password = "password-of-your-truststore"))
+    password = &quot;password-of-your-truststore&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -3205,11 +3204,11 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   clientAuth = ClientAuth.REQUIRED,
   pemTrustOptions = PemTrustOptions(
-    certPaths = listOf("/path/to/your/server-ca.pem")))
+    certPaths = listOf(&quot;/path/to/your/server-ca.pem&quot;)))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -3218,7 +3217,7 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myCaAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-ca.pfx&quot;)
 var options = NetServerOptions(
   ssl = true,
   clientAuth = ClientAuth.REQUIRED,
@@ -3246,7 +3245,7 @@ be sure who you are connecting to. Use this with caution. Default value is false
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   trustAll = true)
 var client = vertx.createNetClient(options)</code></pre>
@@ -3262,9 +3261,9 @@ To enable host verification, set the algorithm to use on your client (only HTTPS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
-  hostnameVerificationAlgorithm = "HTTPS")
+  hostnameVerificationAlgorithm = &quot;HTTPS&quot;)
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -3282,11 +3281,11 @@ in the client trust store, the connection attempt will not succeed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   trustStoreOptions = JksOptions(
-    path = "/path/to/your/truststore.jks",
-    password = "password-of-your-truststore"))
+    path = &quot;/path/to/your/truststore.jks&quot;,
+    password = &quot;password-of-your-truststore&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -3295,12 +3294,12 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.jks&quot;)
 var options = NetClientOptions(
   ssl = true,
   trustStoreOptions = JksOptions(
     value = myTrustStoreAsABuffer,
-    password = "password-of-your-truststore"))
+    password = &quot;password-of-your-truststore&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -3310,11 +3309,11 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   pfxTrustOptions = PfxOptions(
-    path = "/path/to/your/truststore.pfx",
-    password = "password-of-your-truststore"))
+    path = &quot;/path/to/your/truststore.pfx&quot;,
+    password = &quot;password-of-your-truststore&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -3323,12 +3322,12 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.pfx&quot;)
 var options = NetClientOptions(
   ssl = true,
   pfxTrustOptions = PfxOptions(
     value = myTrustStoreAsABuffer,
-    password = "password-of-your-truststore"))
+    password = &quot;password-of-your-truststore&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -3337,10 +3336,10 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   pemTrustOptions = PemTrustOptions(
-    certPaths = listOf("/path/to/your/ca-cert.pem")))
+    certPaths = listOf(&quot;/path/to/your/ca-cert.pem&quot;)))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -3349,7 +3348,7 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/ca-cert.pem")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/ca-cert.pem&quot;)
 var options = NetClientOptions(
   ssl = true,
   pemTrustOptions = PemTrustOptions(
@@ -3372,11 +3371,11 @@ Again it&#8217;s just a regular Java key store. The client keystore location is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   keyStoreOptions = JksOptions(
-    path = "/path/to/your/client-keystore.jks",
-    password = "password-of-your-keystore"))
+    path = &quot;/path/to/your/client-keystore.jks&quot;,
+    password = &quot;password-of-your-keystore&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -3385,10 +3384,10 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.jks")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-keystore.jks&quot;)
 var jksOptions = JksOptions(
   value = myKeyStoreAsABuffer,
-  password = "password-of-your-keystore")
+  password = &quot;password-of-your-keystore&quot;)
 var options = NetClientOptions(
   ssl = true,
   keyStoreOptions = jksOptions)
@@ -3401,11 +3400,11 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   pfxKeyCertOptions = PfxOptions(
-    path = "/path/to/your/client-keystore.pfx",
-    password = "password-of-your-keystore"))
+    path = &quot;/path/to/your/client-keystore.pfx&quot;,
+    password = &quot;password-of-your-keystore&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -3414,10 +3413,10 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.pfx")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-keystore.pfx&quot;)
 var pfxOptions = PfxOptions(
   value = myKeyStoreAsABuffer,
-  password = "password-of-your-keystore")
+  password = &quot;password-of-your-keystore&quot;)
 var options = NetClientOptions(
   ssl = true,
   pfxKeyCertOptions = pfxOptions)
@@ -3429,11 +3428,11 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   pemKeyCertOptions = PemKeyCertOptions(
-    keyPath = "/path/to/your/client-key.pem",
-    certPath = "/path/to/your/client-cert.pem"))
+    keyPath = &quot;/path/to/your/client-key.pem&quot;,
+    certPath = &quot;/path/to/your/client-cert.pem&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -3442,8 +3441,8 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-key.pem")
-var myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-cert.pem")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myKeyAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-key.pem&quot;)
+var myCertAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-cert.pem&quot;)
 var pemOptions = PemKeyCertOptions(
   keyValue = myKeyAsABuffer,
   certValue = myCertAsABuffer)
@@ -3481,7 +3480,7 @@ give <code><a href="../../apidocs/io/vertx/core/net/KeyCertOptions.html">KeyCert
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var certificate = SelfSignedCertificate.create()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var certificate = SelfSignedCertificate.create()
 
 var serverOptions = NetServerOptions(
   ssl = true,
@@ -3489,8 +3488,8 @@ var serverOptions = NetServerOptions(
   trustOptions = certificate.trustOptions())
 
 var server = vertx.createNetServer(serverOptions).connectHandler({ socket -&gt;
-  socket.write("Hello!").end()
-}).listen(1234, "localhost")
+  socket.write(&quot;Hello!&quot;).end()
+}).listen(1234, &quot;localhost&quot;)
 
 var clientOptions = NetClientOptions(
   ssl = true,
@@ -3498,13 +3497,13 @@ var clientOptions = NetClientOptions(
   trustOptions = certificate.trustOptions())
 
 var client = vertx.createNetClient(clientOptions)
-client.connect(1234, "localhost", { ar -&gt;
+client.connect(1234, &quot;localhost&quot;, { ar -&gt;
   if (ar.succeeded()) {
     ar.result().handler({ buffer -&gt;
       println(buffer)
     })
   } else {
-    System.err.println("Woops: ${ar.cause().getMessage()}")
+    System.err.println(&quot;Woops: ${ar.cause().getMessage()}&quot;)
   }
 })</code></pre>
 </div>
@@ -3514,7 +3513,7 @@ client.connect(1234, "localhost", { ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var clientOptions = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var clientOptions = NetClientOptions(
   ssl = true,
   trustAll = true)</code></pre>
 </div>
@@ -3524,13 +3523,13 @@ client.connect(1234, "localhost", { ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var certificate = SelfSignedCertificate.create()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var certificate = SelfSignedCertificate.create()
 
 vertx.createHttpServer(HttpServerOptions(
   ssl = true,
   keyCertOptions = certificate.keyCertOptions(),
   trustOptions = certificate.trustOptions())).requestHandler({ req -&gt;
-  req.response().end("Hello!")
+  req.response().end(&quot;Hello!&quot;)
 }).listen(8080)</code></pre>
 </div>
 </div>
@@ -3544,10 +3543,10 @@ the crl list to use:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   ssl = true,
   trustStoreOptions = trustOptions,
-  crlPaths = listOf("/path/to/your/crl.pem"))
+  crlPaths = listOf(&quot;/path/to/your/crl.pem&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -3556,7 +3555,7 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var myCrlAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/crl.pem")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var myCrlAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/crl.pem&quot;)
 var options = NetClientOptions(
   ssl = true,
   trustStoreOptions = trustOptions,
@@ -3573,10 +3572,10 @@ configured with a suite of enabled ciphers:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   keyStoreOptions = keyStoreOptions,
-  enabledCipherSuites = listOf("ECDHE-RSA-AES128-GCM-SHA256", "ECDHE-ECDSA-AES128-GCM-SHA256", "ECDHE-RSA-AES256-GCM-SHA384", "CDHE-ECDSA-AES256-GCM-SHA384"))
+  enabledCipherSuites = listOf(&quot;ECDHE-RSA-AES128-GCM-SHA256&quot;, &quot;ECDHE-ECDSA-AES128-GCM-SHA256&quot;, &quot;ECDHE-RSA-AES256-GCM-SHA384&quot;, &quot;CDHE-ECDSA-AES256-GCM-SHA384&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -3592,10 +3591,10 @@ configured by explicitly adding enabled protocols:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetServerOptions(
   ssl = true,
   keyStoreOptions = keyStoreOptions,
-  enabledSecureTransportProtocols = listOf("TLSv1.1", "TLSv1.2"))
+  enabledSecureTransportProtocols = listOf(&quot;TLSv1.1&quot;, &quot;TLSv1.2&quot;))
 var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
@@ -3624,7 +3623,7 @@ OpenSSL provides better performances and CPU usage than the JDK engine, as well 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Use JDK SSL engine
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Use JDK SSL engine
 var options = NetServerOptions(
   ssl = true,
   keyStoreOptions = keyStoreOptions)
@@ -3675,9 +3674,9 @@ configured the server with multiple key/certificate pairs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var keyCertOptions = JksOptions(
-  path = "keystore.jks",
-  password = "wibble")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var keyCertOptions = JksOptions(
+  path = &quot;keystore.jks&quot;,
+  password = &quot;wibble&quot;)
 
 var netServer = vertx.createNetServer(NetServerOptions(
   keyStoreOptions = keyCertOptions,
@@ -3690,9 +3689,9 @@ var netServer = vertx.createNetServer(NetServerOptions(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var keyCertOptions = PemKeyCertOptions(
-  keyPaths = listOf("default-key.pem", "host1-key.pem", "etc..."),
-  certPaths = listOf("default-cert.pem", "host2-key.pem", "etc..."))
+<pre class="CodeRay highlight"><code data-lang="kotlin">var keyCertOptions = PemKeyCertOptions(
+  keyPaths = listOf(&quot;default-key.pem&quot;, &quot;host1-key.pem&quot;, &quot;etc...&quot;),
+  certPaths = listOf(&quot;default-cert.pem&quot;, &quot;host2-key.pem&quot;, &quot;etc...&quot;))
 
 var netServer = vertx.createNetServer(NetServerOptions(
   pemKeyCertOptions = keyCertOptions,
@@ -3708,17 +3707,17 @@ var netServer = vertx.createNetServer(NetServerOptions(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createNetClient(NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createNetClient(NetClientOptions(
   trustStoreOptions = trustOptions,
   ssl = true))
 
 // Connect to 'localhost' and present 'server.name' server name
-client.connect(1234, "localhost", "server.name", { res -&gt;
+client.connect(1234, &quot;localhost&quot;, &quot;server.name&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("Connected!")
+    println(&quot;Connected!&quot;)
     var socket = res.result()
   } else {
-    println("Failed to connect: ${res.cause().getMessage()}")
+    println(&quot;Failed to connect: ${res.cause().getMessage()}&quot;)
   }
 })</code></pre>
 </div>
@@ -3836,13 +3835,13 @@ ALPN version for the JVM running it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = NetClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = NetClientOptions(
   proxyOptions = ProxyOptions(
     type = ProxyType.SOCKS5,
-    host = "localhost",
+    host = &quot;localhost&quot;,
     port = 1080,
-    username = "username",
-    password = "secret"))
+    username = &quot;username&quot;,
+    password = &quot;secret&quot;))
 var client = vertx.createNetClient(options)</code></pre>
 </div>
 </div>
@@ -3873,7 +3872,7 @@ HTTP/2 protocol.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createHttpServer()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createHttpServer()</code></pre>
 </div>
 </div>
 </div>
@@ -3885,7 +3884,7 @@ instance when creating it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = HttpServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = HttpServerOptions(
   maxWebsocketFrameSize = 1000000)
 
 var server = vertx.createHttpServer(options)</code></pre>
@@ -3913,11 +3912,11 @@ an HTTP/1.1 upgraded request or directly</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = HttpServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = HttpServerOptions(
   useAlpn = true,
   ssl = true,
   keyStoreOptions = JksOptions(
-    path = "/path/to/my/keystore"))
+    path = &quot;/path/to/my/keystore&quot;))
 
 var server = vertx.createHttpServer(options)</code></pre>
 </div>
@@ -3982,7 +3981,7 @@ Worker Verticles are not compatible with HTTP/2
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = HttpServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = HttpServerOptions(
   logActivity = true)
 
 var server = vertx.createHttpServer(options)</code></pre>
@@ -4003,7 +4002,7 @@ alternatives.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createHttpServer()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createHttpServer()
 server.listen()</code></pre>
 </div>
 </div>
@@ -4012,8 +4011,8 @@ server.listen()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createHttpServer()
-server.listen(8080, "myhost.com")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createHttpServer()
+server.listen(8080, &quot;myhost.com&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4029,12 +4028,12 @@ For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createHttpServer()
-server.listen(8080, "myhost.com", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createHttpServer()
+server.listen(8080, &quot;myhost.com&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("Server is now listening!")
+    println(&quot;Server is now listening!&quot;)
   } else {
-    println("Failed to bind!")
+    println(&quot;Failed to bind!&quot;)
   }
 })</code></pre>
 </div>
@@ -4047,7 +4046,7 @@ server.listen(8080, "myhost.com", { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createHttpServer()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createHttpServer()
 server.requestHandler({ request -&gt;
   // Handle the request in here
 })</code></pre>
@@ -4081,8 +4080,8 @@ object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.createHttpServer().requestHandler({ request -&gt;
-  request.response().end("Hello world")
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.createHttpServer().requestHandler({ request -&gt;
+  request.response().end(&quot;Hello world&quot;)
 }).listen(8080)</code></pre>
 </div>
 </div>
@@ -4169,13 +4168,13 @@ values for the same key - this is because HTTP allows multiple header values wit
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var headers = request.headers()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var headers = request.headers()
 
 // Get the User-Agent:
-println("User agent is ${headers.get("user-agent")}")
+println(&quot;User agent is ${headers.get(&quot;user-agent&quot;)}&quot;)
 
 // You can also do this and get the same result:
-println("User agent is ${headers.get("User-Agent")}")</code></pre>
+println(&quot;User agent is ${headers.get(&quot;User-Agent&quot;)}&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -4256,8 +4255,8 @@ this will get called every time a chunk of the request body arrives. Here&#8217;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.handler({ buffer -&gt;
-  println("I have received a chunk of the body of length ${buffer.length()}")
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.handler({ buffer -&gt;
+  println(&quot;I have received a chunk of the body of length ${buffer.length()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -4271,16 +4270,16 @@ the aggregation yourself as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Create an empty buffer
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Create an empty buffer
 var totalBuffer = Buffer.buffer()
 
 request.handler({ buffer -&gt;
-  println("I have received a chunk of the body of length ${buffer.length()}")
+  println(&quot;I have received a chunk of the body of length ${buffer.length()}&quot;)
   totalBuffer.appendBuffer(buffer)
 })
 
 request.endHandler({ v -&gt;
-  println("Full body received, length = ${totalBuffer.length()}")
+  println(&quot;Full body received, length = ${totalBuffer.length()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -4290,8 +4289,8 @@ for you. The body handler is called once when all the body has been received:</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.bodyHandler({ totalBuffer -&gt;
-  println("Full body received, length = ${totalBuffer.length()}")
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.bodyHandler({ totalBuffer -&gt;
+  println(&quot;Full body received, length = ${totalBuffer.length()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -4329,7 +4328,7 @@ once the entire body has been read:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">server.requestHandler({ request -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">server.requestHandler({ request -&gt;
   request.setExpectMultipart(true)
   request.endHandler({ v -&gt;
     // The body has now been fully read, so retrieve the form attributes
@@ -4357,10 +4356,10 @@ upload that arrives on the server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">server.requestHandler({ request -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">server.requestHandler({ request -&gt;
   request.setExpectMultipart(true)
   request.uploadHandler({ upload -&gt;
-    println("Got a file upload ${upload.name()}")
+    println(&quot;Got a file upload ${upload.name()}&quot;)
   })
 })</code></pre>
 </div>
@@ -4371,9 +4370,9 @@ exhaustion, instead, the upload data is received in chunks:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.uploadHandler({ upload -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.uploadHandler({ upload -&gt;
   upload.handler({ chunk -&gt;
-    println("Received a chunk of the upload of length ${chunk.length()}")
+    println(&quot;Received a chunk of the upload of length ${chunk.length()}&quot;)
   })
 })</code></pre>
 </div>
@@ -4388,8 +4387,8 @@ detailed explanation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.uploadHandler({ upload -&gt;
-  upload.streamToFileSystem("myuploads_directory/${upload.filename()}")
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.uploadHandler({ upload -&gt;
+  upload.streamToFileSystem(&quot;myuploads_directory/${upload.filename()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -4433,9 +4432,9 @@ this will get called every time a custom frame arrives. Here&#8217;s an example:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.customFrameHandler({ frame -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.customFrameHandler({ frame -&gt;
 
-  println("Received a frame type=${frame.type()} payload${frame.payload().toString()}")
+  println(&quot;Received a frame type=${frame.type()} payload${frame.payload().toString()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -4502,7 +4501,7 @@ to the client
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var response = request.response()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var response = request.response()
 response.write(buffer)</code></pre>
 </div>
 </div>
@@ -4511,8 +4510,8 @@ response.write(buffer)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var response = request.response()
-response.write("hello world!")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var response = request.response()
+response.write(&quot;hello world!&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4521,8 +4520,8 @@ result written to the wire.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var response = request.response()
-response.write("hello world!", "UTF-16")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var response = request.response()
+response.write(&quot;hello world!&quot;, &quot;UTF-16&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4551,8 +4550,8 @@ be too late otherwise. If you are using HTTP chunking you do not have to worry.<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var response = request.response()
-response.write("hello world!")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var response = request.response()
+response.write(&quot;hello world!&quot;)
 response.end()</code></pre>
 </div>
 </div>
@@ -4562,8 +4561,8 @@ calling write with a string or buffer followed by calling end with no arguments.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var response = request.response()
-response.end("hello world!")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var response = request.response()
+response.end(&quot;hello world!&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -4591,10 +4590,10 @@ closed after an idle time, then you configure <code><a href="../../apidocs/io/ve
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var response = request.response()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var response = request.response()
 var headers = response.headers()
-headers.set("content-type", "text/html")
-headers.set("other-header", "wibble")</code></pre>
+headers.set(&quot;content-type&quot;, &quot;text/html&quot;)
+headers.set(&quot;other-header&quot;, &quot;wibble&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4602,8 +4601,8 @@ headers.set("other-header", "wibble")</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var response = request.response()
-response.putHeader("content-type", "text/html").putHeader("other-header", "wibble")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var response = request.response()
+response.putHeader(&quot;content-type&quot;, &quot;text/html&quot;).putHeader(&quot;other-header&quot;, &quot;wibble&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4624,7 +4623,7 @@ being streamed to a client and the total size is not known in advance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var response = request.response()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var response = request.response()
 response.setChunked(true)</code></pre>
 </div>
 </div>
@@ -4653,10 +4652,10 @@ chunked response has no effect for an HTTP/2 stream
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var response = request.response()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var response = request.response()
 response.setChunked(true)
 var trailers = response.trailers()
-trailers.set("X-wibble", "woobble").set("X-quux", "flooble")</code></pre>
+trailers.set(&quot;X-wibble&quot;, &quot;woobble&quot;).set(&quot;X-quux&quot;, &quot;flooble&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4664,9 +4663,9 @@ trailers.set("X-wibble", "woobble").set("X-quux", "flooble")</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var response = request.response()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var response = request.response()
 response.setChunked(true)
-response.putTrailer("X-wibble", "woobble").putTrailer("X-quux", "flooble")</code></pre>
+response.putTrailer(&quot;X-wibble&quot;, &quot;woobble&quot;).putTrailer(&quot;X-quux&quot;, &quot;flooble&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -4694,14 +4693,14 @@ files, but may be slower for small files.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.createHttpServer().requestHandler({ request -&gt;
-  var file = ""
-  if (request.path() == "/") {
-    file = "index.html"
-  } else if (!request.path().contains("..")) {
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.createHttpServer().requestHandler({ request -&gt;
+  var file = &quot;&quot;
+  if (request.path() == &quot;/&quot;) {
+    file = &quot;index.html&quot;
+  } else if (!request.path().contains(&quot;..&quot;)) {
     file = request.path()
   }
-  request.response().sendFile("web/${file}")
+  request.response().sendFile(&quot;web/${file}&quot;)
 }).listen(8080)</code></pre>
 </div>
 </div>
@@ -4744,10 +4743,10 @@ Vert.x Web.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.createHttpServer().requestHandler({ request -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.createHttpServer().requestHandler({ request -&gt;
   var offset = 0
   try {
-    offset = java.lang.Long.parseLong(request.getParam("start"))
+    offset = java.lang.Long.parseLong(request.getParam(&quot;start&quot;))
   } catch(e: Exception) {
     // error handling...
   }
@@ -4755,13 +4754,13 @@ Vert.x Web.
 
   var end = java.lang.Long.MAX_VALUE
   try {
-    end = java.lang.Long.parseLong(request.getParam("end"))
+    end = java.lang.Long.parseLong(request.getParam(&quot;end&quot;))
   } catch(e: Exception) {
     // error handling...
   }
 
 
-  request.response().sendFile("web/mybigfile.txt", offset, end)
+  request.response().sendFile(&quot;web/mybigfile.txt&quot;, offset, end)
 }).listen(8080)</code></pre>
 </div>
 </div>
@@ -4771,16 +4770,16 @@ case you can just do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.createHttpServer().requestHandler({ request -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.createHttpServer().requestHandler({ request -&gt;
   var offset = 0
   try {
-    offset = java.lang.Long.parseLong(request.getParam("start"))
+    offset = java.lang.Long.parseLong(request.getParam(&quot;start&quot;))
   } catch(e: Exception) {
     // error handling...
   }
 
 
-  request.response().sendFile("web/mybigfile.txt", offset)
+  request.response().sendFile(&quot;web/mybigfile.txt&quot;, offset)
 }).listen(8080)</code></pre>
 </div>
 </div>
@@ -4799,7 +4798,7 @@ at any one time:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.createHttpServer().requestHandler({ request -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.createHttpServer().requestHandler({ request -&gt;
   var response = request.response()
   if (request.method() == HttpMethod.PUT) {
     response.setChunked(true)
@@ -4826,9 +4825,9 @@ Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var frameType = 40
+<pre class="CodeRay highlight"><code data-lang="kotlin">var frameType = 40
 var frameStatus = 10
-var payload = Buffer.buffer("some data")
+var payload = Buffer.buffer(&quot;some data&quot;)
 
 // Sending a frame to the client
 response.writeCustomFrame(frameType, frameStatus, payload)</code></pre>
@@ -4850,7 +4849,7 @@ a resource already present on the server, the server needs to accept the entire 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Reset the stream
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Reset the stream
 request.response().reset()</code></pre>
 </div>
 </div>
@@ -4859,7 +4858,7 @@ request.response().reset()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Cancel the stream
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Cancel the stream
 request.response().reset(8)</code></pre>
 </div>
 </div>
@@ -4872,10 +4871,10 @@ request.response().reset(8)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.response().exceptionHandler({ err -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.response().exceptionHandler({ err -&gt;
   if (err is io.vertx.core.http.StreamResetException) {
     var reset = err
-    println("Stream reset ${reset.getCode()}")
+    println(&quot;Stream reset ${reset.getCode()}&quot;)
   }
 })</code></pre>
 </div>
@@ -4891,10 +4890,10 @@ request.response().reset(8)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var response = request.response()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var response = request.response()
 
 // Push main.js to the client
-response.push(HttpMethod.GET, "/main.js", { ar -&gt;
+response.push(HttpMethod.GET, &quot;/main.js&quot;, { ar -&gt;
 
   if (ar.succeeded()) {
 
@@ -4902,14 +4901,14 @@ response.push(HttpMethod.GET, "/main.js", { ar -&gt;
     var pushedResponse = ar.result()
 
     // Send main.js response
-    pushedResponse.putHeader("content-type", "application/json").end("alert(\"Push response hello\")")
+    pushedResponse.putHeader(&quot;content-type&quot;, &quot;application/json&quot;).end(&quot;alert(\&quot;Push response hello\&quot;)&quot;)
   } else {
-    println("Could not push client resource ${ar.cause()}")
+    println(&quot;Could not push client resource ${ar.cause()}&quot;)
   }
 })
 
 // Send the requested resource
-response.sendFile("&lt;html&gt;&lt;head&gt;&lt;script src=\"/main.js\"&gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;")</code></pre>
+response.sendFile(&quot;&lt;html&gt;&lt;head&gt;&lt;script src=\&quot;/main.js\&quot;&gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4984,7 +4983,7 @@ but the parameter can be configured to address any case with <code><a href="../.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createHttpClient()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createHttpClient()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4992,7 +4991,7 @@ but the parameter can be configured to address any case with <code><a href="../.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = HttpClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = HttpClientOptions(
   keepAlive = false)
 var client = vertx.createHttpClient(options)</code></pre>
 </div>
@@ -5009,7 +5008,7 @@ must be set to <code><a href="../../apidocs/io/vertx/core/http/HttpVersion.html#
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = HttpClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = HttpClientOptions(
   protocolVersion = HttpVersion.HTTP_2,
   ssl = true,
   useAlpn = true,
@@ -5023,7 +5022,7 @@ var client = vertx.createHttpClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = HttpClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = HttpClientOptions(
   protocolVersion = HttpVersion.HTTP_2)
 
 var client = vertx.createHttpClient(options)</code></pre>
@@ -5052,7 +5051,7 @@ values defined by the HTTP/2 RFC.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = HttpClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = HttpClientOptions(
   logActivity = true)
 var client = vertx.createHttpClient(options)</code></pre>
 </div>
@@ -5072,13 +5071,13 @@ every time you make a request you can configure the client with a default host/p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Set the default host
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Set the default host
 var options = HttpClientOptions(
-  defaultHost = "wibble.com")
+  defaultHost = &quot;wibble.com&quot;)
 // Can also set default port if you want...
 var client = vertx.createHttpClient(options)
-client.getNow("/some-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+client.getNow(&quot;/some-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -5088,16 +5087,16 @@ simply specify the host/port when doing the request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createHttpClient()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createHttpClient()
 
 // Specify both port and host name
-client.getNow(8080, "myserver.mycompany.com", "/some-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+client.getNow(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 })
 
 // This time use the default port 80 but specify the host name
-client.getNow("foo.othercompany.com", "/other-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+client.getNow(&quot;foo.othercompany.com&quot;, &quot;/other-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -5120,16 +5119,16 @@ called with the http response when it comes back.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createHttpClient()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createHttpClient()
 
 // Send a GET request
-client.getNow("/some-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+client.getNow(&quot;/some-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 })
 
 // Send a GET request
-client.headNow("/other-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+client.headNow(&quot;/other-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -5143,15 +5142,15 @@ the HTTP method at run-time:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createHttpClient()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createHttpClient()
 
-client.request(HttpMethod.GET, "some-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+client.request(HttpMethod.GET, &quot;some-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 }).end()
 
-client.request(HttpMethod.POST, "foo-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
-}).end("some-data")</code></pre>
+client.request(HttpMethod.POST, &quot;foo-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
+}).end(&quot;some-data&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -5175,15 +5174,15 @@ m</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createHttpClient()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createHttpClient()
 
-var request = client.post("some-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+var request = client.post(&quot;some-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 })
 
 // Now do stuff with the request
-request.putHeader("content-length", "1000")
-request.putHeader("content-type", "text/plain")
+request.putHeader(&quot;content-length&quot;, &quot;1000&quot;)
+request.putHeader(&quot;content-type&quot;, &quot;text/plain&quot;)
 request.write(body)
 
 // Make sure the request is ended when you're done with it
@@ -5191,15 +5190,15 @@ request.end()
 
 // Or fluently:
 
-client.post("some-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
-}).putHeader("content-length", "1000").putHeader("content-type", "text/plain").write(body).end()
+client.post(&quot;some-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
+}).putHeader(&quot;content-length&quot;, &quot;1000&quot;).putHeader(&quot;content-type&quot;, &quot;text/plain&quot;).write(body).end()
 
 // Or event more simply:
 
-client.post("some-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
-}).putHeader("content-type", "text/plain").end(body)</code></pre>
+client.post(&quot;some-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
+}).putHeader(&quot;content-type&quot;, &quot;text/plain&quot;).end(body)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5207,11 +5206,11 @@ client.post("some-uri", { response -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Write string encoded in UTF-8
-request.write("some data")
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Write string encoded in UTF-8
+request.write(&quot;some data&quot;)
 
 // Write string encoded in specific encoding
-request.write("some other data", "UTF-16")
+request.write(&quot;some other data&quot;, &quot;UTF-16&quot;)
 
 // Write a buffer
 var buffer = Buffer.buffer()
@@ -5225,8 +5224,8 @@ single call to the <code>end</code> function.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Write string and end the request (send it) in a single call
-request.end("some simple data")
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Write string and end the request (send it) in a single call
+request.end(&quot;some simple data&quot;)
 
 // Write buffer and end the request (send it) in a single call
 var buffer = Buffer.buffer().appendDouble(12.34).appendLong(432L)
@@ -5263,10 +5262,10 @@ up-front.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Write some headers using the headers() multimap
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Write some headers using the headers() multimap
 
 var headers = request.headers()
-headers.set("content-type", "application/json").set("other-header", "foo")</code></pre>
+headers.set(&quot;content-type&quot;, &quot;application/json&quot;).set(&quot;other-header&quot;, &quot;foo&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5278,9 +5277,9 @@ entries. Http headers allow more than one value for a specific key.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Write some headers using the putHeader method
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Write some headers using the putHeader method
 
-request.putHeader("content-type", "application/json").putHeader("other-header", "foo")</code></pre>
+request.putHeader(&quot;content-type&quot;, &quot;application/json&quot;).putHeader(&quot;other-header&quot;, &quot;foo&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5310,7 +5309,7 @@ as complete.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.end()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.end()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5319,8 +5318,8 @@ before calling <code>end</code> with no arguments</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// End the request with a string
-request.end("some-data")
+<pre class="CodeRay highlight"><code data-lang="kotlin">// End the request with a string
+request.end(&quot;some-data&quot;)
 
 // End it with a buffer
 var buffer = Buffer.buffer().appendFloat(12.3f).appendInt(321)
@@ -5346,11 +5345,11 @@ no need to set the <code>Content-Length</code> of the request up-front.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.setChunked(true)
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.setChunked(true)
 
 // Write some chunks
 for (i in 0 until 10) {
-  request.write("this-is-chunk-${i}")
+  request.write(&quot;this-is-chunk-${i}&quot;)
 
 }
 
@@ -5377,11 +5376,11 @@ request.end()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var request = client.post("some-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var request = client.post(&quot;some-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 })
 request.exceptionHandler({ e -&gt;
-  println("Received exception: ${e.getMessage()}")
+  println(&quot;Received exception: ${e.getMessage()}&quot;)
   e.printStackTrace()
 })</code></pre>
 </div>
@@ -5392,13 +5391,13 @@ request.exceptionHandler({ e -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var request = client.post("some-uri", { response -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var request = client.post(&quot;some-uri&quot;, { response -&gt;
   if (response.statusCode() == 200) {
-    println("Everything fine")
+    println(&quot;Everything fine&quot;)
     return
   }
   if (response.statusCode() == 500) {
-    println("Unexpected behavior on the server side")
+    println(&quot;Unexpected behavior on the server side&quot;)
     return
   }
 })
@@ -5427,9 +5426,9 @@ not provide a handler when the request is created and set it later on the reques
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var request = client.post("some-uri")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var request = client.post(&quot;some-uri&quot;)
 request.handler({ response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -5445,7 +5444,7 @@ you can pump to it from any <code><a href="../../apidocs/io/vertx/core/streams/R
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.setChunked(true)
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.setChunked(true)
 var pump = Pump.pump(file, request)
 file.endHandler({ v -&gt;
   request.end()
@@ -5465,9 +5464,9 @@ of frames to be sent and received.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var frameType = 40
+<pre class="CodeRay highlight"><code data-lang="kotlin">var frameType = 40
 var frameStatus = 10
-var payload = Buffer.buffer("some data")
+var payload = Buffer.buffer(&quot;some data&quot;)
 
 // Sending a frame to the server
 request.writeCustomFrame(frameType, frameStatus, payload)</code></pre>
@@ -5485,7 +5484,7 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.reset()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.reset()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5493,7 +5492,7 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.reset(8)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.reset(8)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5505,10 +5504,10 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.exceptionHandler({ err -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.exceptionHandler({ err -&gt;
   if (err is io.vertx.core.http.StreamResetException) {
     var reset = err
-    println("Stream reset ${reset.getCode()}")
+    println(&quot;Stream reset ${reset.getCode()}&quot;)
   }
 })</code></pre>
 </div>
@@ -5527,12 +5526,12 @@ and <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html#stat
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">client.getNow("some-uri", { response -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">client.getNow(&quot;some-uri&quot;, { response -&gt;
   // the status code - e.g. 200 or 404
-  println("Status code is ${response.statusCode()}")
+  println(&quot;Status code is ${response.statusCode()}&quot;)
 
-  // the status message e.g. "OK" or "Not Found".
-  println("Status message is ${response.statusMessage()}")
+  // the status message e.g. &quot;OK&quot; or &quot;Not Found&quot;.
+  println(&quot;Status message is ${response.statusMessage()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -5553,8 +5552,8 @@ you can pump it to any <code><a href="../../apidocs/io/vertx/core/streams/WriteS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var contentType = response.headers().get("content-type")
-var contentLength = response.headers().get("content-lengh")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var contentType = response.headers().get(&quot;content-type&quot;)
+var contentLength = response.headers().get(&quot;content-lengh&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5580,10 +5579,10 @@ a <code><a href="../../apidocs/io/vertx/core/buffer/Buffer.html">Buffer</a></cod
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">client.getNow("some-uri", { response -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">client.getNow(&quot;some-uri&quot;, { response -&gt;
 
   response.handler({ buffer -&gt;
-    println("Received a part of the response body: ${buffer}")
+    println(&quot;Received a part of the response body: ${buffer}&quot;)
   })
 })</code></pre>
 </div>
@@ -5594,20 +5593,20 @@ either aggregate it yourself:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">client.getNow("some-uri", { response -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">client.getNow(&quot;some-uri&quot;, { response -&gt;
 
   // Create an empty buffer
   var totalBuffer = Buffer.buffer()
 
   response.handler({ buffer -&gt;
-    println("Received a part of the response body: ${buffer.length()}")
+    println(&quot;Received a part of the response body: ${buffer.length()}&quot;)
 
     totalBuffer.appendBuffer(buffer)
   })
 
   response.endHandler({ v -&gt;
     // Now all the body has been read
-    println("Total response body length is ${totalBuffer.length()}")
+    println(&quot;Total response body length is ${totalBuffer.length()}&quot;)
   })
 })</code></pre>
 </div>
@@ -5618,11 +5617,11 @@ is called with the entire body when the response has been fully read:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">client.getNow("some-uri", { response -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">client.getNow(&quot;some-uri&quot;, { response -&gt;
 
   response.bodyHandler({ totalBuffer -&gt;
     // Now all the body has been read
-    println("Total response body length is ${totalBuffer.length()}")
+    println(&quot;Total response body length is ${totalBuffer.length()}&quot;)
   })
 })</code></pre>
 </div>
@@ -5656,8 +5655,8 @@ and the response handler is passed the redirected response instead of the origin
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">client.get("some-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+<pre class="CodeRay highlight"><code data-lang="kotlin">client.get(&quot;some-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 }).setFollowRedirects(true).end()</code></pre>
 </div>
 </div>
@@ -5691,11 +5690,11 @@ following redirections caches the request body
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createHttpClient(HttpClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createHttpClient(HttpClientOptions(
   maxRedirects = 32))
 
-client.get("some-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+client.get(&quot;some-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 }).setFollowRedirects(true).end()</code></pre>
 </div>
 </div>
@@ -5707,13 +5706,13 @@ client.get("some-uri", { response -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">client.redirectHandler({ response -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">client.redirectHandler({ response -&gt;
 
   // Only follow 301 code
-  if (response.statusCode() == 301 &amp;&amp; response.getHeader("Location") != null) {
+  if (response.statusCode() == 301 &amp;&amp; response.getHeader(&quot;Location&quot;) != null) {
 
     // Compute the redirect URI
-    var absoluteURI = resolveURI(response.request().absoluteURI(), response.getHeader("Location"))
+    var absoluteURI = resolveURI(response.request().absoluteURI(), response.getHeader(&quot;Location&quot;))
 
     // Create a new ready to use request that the client will use
     return Future.succeededFuture(client.getAbs(absoluteURI))
@@ -5798,16 +5797,16 @@ the rest of the request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var request = client.put("some-uri", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var request = client.put(&quot;some-uri&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 })
 
-request.putHeader("Expect", "100-Continue")
+request.putHeader(&quot;Expect&quot;, &quot;100-Continue&quot;)
 
 request.continueHandler({ v -&gt;
   // OK to send rest of body
-  request.write("Some data")
-  request.write("Some more data")
+  request.write(&quot;Some data&quot;)
+  request.write(&quot;Some more data&quot;)
   request.end()
 })</code></pre>
 </div>
@@ -5826,8 +5825,8 @@ to have the client continue sending the body:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">httpServer.requestHandler({ request -&gt;
-  if (request.getHeader("Expect").equalsIgnoreCase("100-Continue")) {
+<pre class="CodeRay highlight"><code data-lang="kotlin">httpServer.requestHandler({ request -&gt;
+  if (request.getHeader(&quot;Expect&quot;).equalsIgnoreCase(&quot;100-Continue&quot;)) {
 
     // Send a 100 continue response
     request.response().writeContinue()
@@ -5851,8 +5850,8 @@ cannot be a logical protocol constraint):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">httpServer.requestHandler({ request -&gt;
-  if (request.getHeader("Expect").equalsIgnoreCase("100-Continue")) {
+<pre class="CodeRay highlight"><code data-lang="kotlin">httpServer.requestHandler({ request -&gt;
+  if (request.getHeader(&quot;Expect&quot;).equalsIgnoreCase(&quot;100-Continue&quot;)) {
 
     //
     var rejectAndClose = true
@@ -5860,7 +5859,7 @@ cannot be a logical protocol constraint):</p>
 
       // Reject with a failure code and close the connection
       // this is probably best with persistent connection
-      request.response().setStatusCode(405).putHeader("Connection", "close").end()
+      request.response().setStatusCode(405).putHeader(&quot;Connection&quot;, &quot;close&quot;).end()
     } else {
 
       // Reject with a failure code and ignore the body
@@ -5882,7 +5881,7 @@ cannot be a logical protocol constraint):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var request = client.get("/index.html", { response -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var request = client.get(&quot;/index.html&quot;, { response -&gt;
   // Process index.html response
 })
 
@@ -5890,11 +5889,11 @@ cannot be a logical protocol constraint):</p>
 request.pushHandler({ pushedRequest -&gt;
 
   // A resource is pushed for this request
-  println("Server pushed ${pushedRequest.path()}")
+  println(&quot;Server pushed ${pushedRequest.path()}&quot;)
 
   // Set an handler for the response
   pushedRequest.handler({ pushedResponse -&gt;
-    println("The response for the pushed request")
+    println(&quot;The response for the pushed request&quot;)
   })
 })
 
@@ -5907,8 +5906,8 @@ request.end()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.pushHandler({ pushedRequest -&gt;
-  if (pushedRequest.path() == "/main.js") {
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.pushHandler({ pushedRequest -&gt;
+  if (pushedRequest.path() == &quot;/main.js&quot;) {
     pushedRequest.reset()
   } else {
     // Handle it
@@ -5933,9 +5932,9 @@ frame arrives. Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">response.customFrameHandler({ frame -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">response.customFrameHandler({ frame -&gt;
 
-  println("Received a frame type=${frame.type()} payload${frame.payload().toString()}")
+  println(&quot;Received a frame type=${frame.type()} payload${frame.payload().toString()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -6056,7 +6055,7 @@ can be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var clientOptions = HttpClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var clientOptions = HttpClientOptions(
   http2MultiplexingLimit = 10,
   http2MaxPoolSize = 3)
 
@@ -6099,7 +6098,7 @@ the other operations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var connection = request.connection()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var connection = request.connection()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -6107,10 +6106,10 @@ the other operations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createHttpServer(http2Options)
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createHttpServer(http2Options)
 
 server.connectionHandler({ connection -&gt;
-  println("A client connected")
+  println(&quot;A client connected&quot;)
 })</code></pre>
 </div>
 </div>
@@ -6122,7 +6121,7 @@ server.connectionHandler({ connection -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var connection = request.connection()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var connection = request.connection()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -6130,8 +6129,8 @@ server.connectionHandler({ connection -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">request.connectionHandler({ connection -&gt;
-  println("Connected to the server")
+<pre class="CodeRay highlight"><code data-lang="kotlin">request.connectionHandler({ connection -&gt;
+  println(&quot;Connected to the server&quot;)
 })</code></pre>
 </div>
 </div>
@@ -6154,7 +6153,7 @@ are configured by <code><a href="../../apidocs/io/vertx/core/http/HttpClientOpti
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">connection.updateSettings(Http2Settings(
+<pre class="CodeRay highlight"><code data-lang="kotlin">connection.updateSettings(Http2Settings(
   maxConcurrentStreams = 100))</code></pre>
 </div>
 </div>
@@ -6164,10 +6163,10 @@ to be notified of the acknowledgment:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">connection.updateSettings(Http2Settings(
+<pre class="CodeRay highlight"><code data-lang="kotlin">connection.updateSettings(Http2Settings(
   maxConcurrentStreams = 100), { ar -&gt;
   if (ar.succeeded()) {
-    println("The settings update has been acknowledged ")
+    println(&quot;The settings update has been acknowledged &quot;)
   }
 })</code></pre>
 </div>
@@ -6178,8 +6177,8 @@ when the new remote settings are received:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">connection.remoteSettingsHandler({ settings -&gt;
-  println("Received new settings")
+<pre class="CodeRay highlight"><code data-lang="kotlin">connection.remoteSettingsHandler({ settings -&gt;
+  println(&quot;Received new settings&quot;)
 })</code></pre>
 </div>
 </div>
@@ -6205,14 +6204,14 @@ endpoint:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var data = Buffer.buffer()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var data = Buffer.buffer()
 for (i in 0 until 8) {
   data.appendByte(i)
 
 }
 
 connection.ping(data, { pong -&gt;
-  println("Remote side replied")
+  println(&quot;Remote side replied&quot;)
 })</code></pre>
 </div>
 </div>
@@ -6222,8 +6221,8 @@ an handler can be set to be notified for each ping received:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">connection.pingHandler({ ping -&gt;
-  println("Got pinged by remote side")
+<pre class="CodeRay highlight"><code data-lang="kotlin">connection.pingHandler({ ping -&gt;
+  println(&quot;Got pinged by remote side&quot;)
 })</code></pre>
 </div>
 </div>
@@ -6254,7 +6253,7 @@ waits some time (30 seconds by default) until all current streams closed and clo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">connection.shutdown()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">connection.shutdown()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -6268,7 +6267,7 @@ close:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">connection.goAway(0)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">connection.goAway(0)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -6276,8 +6275,8 @@ close:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">connection.goAwayHandler({ goAway -&gt;
-  println("Received a go away frame")
+<pre class="CodeRay highlight"><code data-lang="kotlin">connection.goAwayHandler({ goAway -&gt;
+  println(&quot;Received a go away frame&quot;)
 })</code></pre>
 </div>
 </div>
@@ -6287,7 +6286,7 @@ have been closed and the connection can be closed:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">connection.goAway(0)
+<pre class="CodeRay highlight"><code data-lang="kotlin">connection.goAway(0)
 connection.shutdownHandler({ v -&gt;
 
   // All streams are closed, close the connection
@@ -6372,8 +6371,8 @@ round-robin strategy.</p>
 <div class="listingblock">
 <div class="title">io.vertx.examples.http.sharing.HttpServerVerticle</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.createHttpServer().requestHandler({ request -&gt;
-  request.response().end("Hello from server ${this}")
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.createHttpServer().requestHandler({ request -&gt;
+  request.response().end(&quot;Hello from server ${this}&quot;)
 }).listen(8080)</code></pre>
 </div>
 </div>
@@ -6390,10 +6389,10 @@ receiving a request it calls the server handlers following a round robin strateg
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">vertx.setPeriodic(100, { l -&gt;
-  vertx.createHttpClient().getNow(8080, "localhost", "/", { resp -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">vertx.setPeriodic(100, { l -&gt;
+  vertx.createHttpClient().getNow(8080, &quot;localhost&quot;, &quot;/&quot;, { resp -&gt;
     resp.bodyHandler({ body -&gt;
-      println(body.toString("ISO-8859-1"))
+      println(body.toString(&quot;ISO-8859-1&quot;))
     })
   })
 })</code></pre>
@@ -6404,7 +6403,7 @@ receiving a request it calls the server handlers following a round robin strateg
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>Hello from i.v.e.h.s.HttpServerVerticle@1
+<pre class="CodeRay highlight"><code>Hello from i.v.e.h.s.HttpServerVerticle@1
 Hello from i.v.e.h.s.HttpServerVerticle@2
 Hello from i.v.e.h.s.HttpServerVerticle@1
 Hello from i.v.e.h.s.HttpServerVerticle@2
@@ -6432,12 +6431,12 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">client.getNow(RequestOptions(
-  host = "localhost",
+<pre class="CodeRay highlight"><code data-lang="kotlin">client.getNow(RequestOptions(
+  host = &quot;localhost&quot;,
   port = 8080,
-  uRI = "/",
+  uRI = &quot;/&quot;,
   ssl = true), { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -6498,8 +6497,8 @@ on the server instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">server.websocketHandler({ websocket -&gt;
-  println("Connected!")
+<pre class="CodeRay highlight"><code data-lang="kotlin">server.websocketHandler({ websocket -&gt;
+  println(&quot;Connected!&quot;)
 })</code></pre>
 </div>
 </div>
@@ -6508,8 +6507,8 @@ on the server instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">server.websocketHandler({ websocket -&gt;
-  if (websocket.path() == "/myapi") {
+<pre class="CodeRay highlight"><code data-lang="kotlin">server.websocketHandler({ websocket -&gt;
+  if (websocket.path() == &quot;/myapi&quot;) {
     websocket.reject()
   } else {
     // Do something
@@ -6526,8 +6525,8 @@ call <code><a href="../../apidocs/io/vertx/core/http/HttpServerRequest.html#upgr
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">server.requestHandler({ request -&gt;
-  if (request.path() == "/myapi") {
+<pre class="CodeRay highlight"><code data-lang="kotlin">server.requestHandler({ request -&gt;
+  if (request.path() == &quot;/myapi&quot;) {
 
     var websocket = request.upgrade()
     // Do something
@@ -6563,8 +6562,8 @@ providing a handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">client.websocket("/some-uri", { websocket -&gt;
-  println("Connected!")
+<pre class="CodeRay highlight"><code data-lang="kotlin">client.websocket(&quot;/some-uri&quot;, { websocket -&gt;
+  println(&quot;Connected!&quot;)
 })</code></pre>
 </div>
 </div>
@@ -6578,12 +6577,12 @@ providing a handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Write a simple binary message
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Write a simple binary message
 var buffer = Buffer.buffer().appendInt(123).appendFloat(1.23f)
 websocket.writeBinaryMessage(buffer)
 
 // Write a simple text message
-var message = "hello"
+var message = &quot;hello&quot;
 websocket.writeTextMessage(message)</code></pre>
 </div>
 </div>
@@ -6614,7 +6613,7 @@ to the WebSocket using <code><a href="../../apidocs/io/vertx/core/http/WebSocket
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var frame1 = WebSocketFrame.binaryFrame(buffer1, false)
+<pre class="CodeRay highlight"><code data-lang="kotlin">var frame1 = WebSocketFrame.binaryFrame(buffer1, false)
 websocket.writeFrame(frame1)
 
 var frame2 = WebSocketFrame.continuationFrame(buffer2, false)
@@ -6635,13 +6634,13 @@ and <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html#writeFinalTex
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Send a websocket messages consisting of a single final text frame:
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Send a websocket messages consisting of a single final text frame:
 
-websocket.writeFinalTextFrame("Geronimo!")
+websocket.writeFinalTextFrame(&quot;Geronimo!&quot;)
 
 // Send a websocket messages consisting of a single final binary frame:
 
-var buff = Buffer.buffer().appendInt(12).appendString("foo")
+var buff = Buffer.buffer().appendInt(12).appendString(&quot;foo&quot;)
 
 websocket.writeFinalBinaryFrame(buff)</code></pre>
 </div>
@@ -6658,8 +6657,8 @@ for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">websocket.frameHandler({ frame -&gt;
-  println("Received a frame of size!")
+<pre class="CodeRay highlight"><code data-lang="kotlin">websocket.frameHandler({ frame -&gt;
+  println(&quot;Received a frame of size!&quot;)
 })</code></pre>
 </div>
 </div>
@@ -6701,13 +6700,13 @@ HTTP/1.1 only.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = HttpClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = HttpClientOptions(
   proxyOptions = ProxyOptions(
     type = ProxyType.HTTP,
-    host = "localhost",
+    host = &quot;localhost&quot;,
     port = 3128,
-    username = "username",
-    password = "secret"))
+    username = &quot;username&quot;,
+    password = &quot;secret&quot;))
 var client = vertx.createHttpClient(options)</code></pre>
 </div>
 </div>
@@ -6724,13 +6723,13 @@ the CONNECT method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = HttpClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = HttpClientOptions(
   proxyOptions = ProxyOptions(
     type = ProxyType.SOCKS5,
-    host = "localhost",
+    host = &quot;localhost&quot;,
     port = 1080,
-    username = "username",
-    password = "secret"))
+    username = &quot;username&quot;,
+    password = &quot;secret&quot;))
 var client = vertx.createHttpClient(options)</code></pre>
 </div>
 </div>
@@ -6746,12 +6745,12 @@ that, which isn&#8217;t available in non-proxy getAbs requests.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = HttpClientOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = HttpClientOptions(
   proxyOptions = ProxyOptions(
     type = ProxyType.HTTP))
 var client = vertx.createHttpClient(options)
-client.getAbs("ftp://ftp.gnu.org/gnu/", { response -&gt;
-  println("Received response with status code ${response.statusCode()}")
+client.getAbs(&quot;ftp://ftp.gnu.org/gnu/&quot;, { response -&gt;
+  println(&quot;Received response with status code ${response.statusCode()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -6815,25 +6814,25 @@ so you don&#8217;t have to worry about protecting that state by synchronising ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var sd = vertx.sharedData()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var sd = vertx.sharedData()
 
-var map1 = sd.getLocalMap&lt;Any, Any&gt;("mymap1")
+var map1 = sd.getLocalMap&lt;Any, Any&gt;(&quot;mymap1&quot;)
 
-map1.put("foo", "bar")
+map1.put(&quot;foo&quot;, &quot;bar&quot;)
 
-var map2 = sd.getLocalMap&lt;Any, Any&gt;("mymap2")
+var map2 = sd.getLocalMap&lt;Any, Any&gt;(&quot;mymap2&quot;)
 
-map2.put("eek", Buffer.buffer().appendInt(123))
+map2.put(&quot;eek&quot;, Buffer.buffer().appendInt(123))
 
 // Then... in another part of your application:
 
-map1 = sd.getLocalMap&lt;Any, Any&gt;("mymap1")
+map1 = sd.getLocalMap&lt;Any, Any&gt;(&quot;mymap1&quot;)
 
-var val = map1.get("foo")
+var val = map1.get(&quot;foo&quot;)
 
-map2 = sd.getLocalMap&lt;Any, Any&gt;("mymap2")
+map2 = sd.getLocalMap&lt;Any, Any&gt;(&quot;mymap2&quot;)
 
-var buff = map2.get("eek")</code></pre>
+var buff = map2.get(&quot;eek&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -6856,9 +6855,9 @@ application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var sd = vertx.sharedData()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var sd = vertx.sharedData()
 
-sd.getClusterWideMap&lt;String, String&gt;("mymap", { res -&gt;
+sd.getClusterWideMap&lt;String, String&gt;(&quot;mymap&quot;, { res -&gt;
   if (res.succeeded()) {
     var map = res.result()
   } else {
@@ -6877,7 +6876,7 @@ sd.getClusterWideMap&lt;String, String&gt;("mymap", { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">map.put("foo", "bar", { resPut -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">map.put(&quot;foo&quot;, &quot;bar&quot;, { resPut -&gt;
   if (resPut.succeeded()) {
     // Successfully put the value
   } else {
@@ -6897,7 +6896,7 @@ sd.getClusterWideMap&lt;String, String&gt;("mymap", { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">map.get("foo", { resGet -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">map.get(&quot;foo&quot;, { resGet -&gt;
   if (resGet.succeeded()) {
     // Successfully got the value
     var val = resGet.result()
@@ -6944,7 +6943,7 @@ another caller can obtain it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">sd.getLock("mylock", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">sd.getLock(&quot;mylock&quot;, { res -&gt;
   if (res.succeeded()) {
     // Got the lock!
     var lock = res.result()
@@ -6967,7 +6966,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">sd.getLockWithTimeout("mylock", 10000, { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">sd.getLockWithTimeout(&quot;mylock&quot;, 10000, { res -&gt;
   if (res.succeeded()) {
     // Got the lock!
     var lock = res.result()
@@ -6992,7 +6991,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">sd.getCounter("mycounter", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">sd.getCounter(&quot;mycounter&quot;, { res -&gt;
   if (res.succeeded()) {
     var counter = res.result()
   } else {
@@ -7029,10 +7028,10 @@ which is called when the operation completes or an error occurs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var fs = vertx.fileSystem()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var fs = vertx.fileSystem()
 
 // Copy file from foo.txt to bar.txt
-fs.copy("foo.txt", "bar.txt", { res -&gt;
+fs.copy(&quot;foo.txt&quot;, &quot;bar.txt&quot;, { res -&gt;
   if (res.succeeded()) {
     // Copied ok!
   } else {
@@ -7052,10 +7051,10 @@ particular application before using them from an event loop, so as not to break 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var fs = vertx.fileSystem()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var fs = vertx.fileSystem()
 
 // Copy file from foo.txt to bar.txt synchronously
-fs.copyBlocking("foo.txt", "bar.txt")</code></pre>
+fs.copyBlocking(&quot;foo.txt&quot;, &quot;bar.txt&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -7067,43 +7066,43 @@ please consult the <code><a href="../../apidocs/io/vertx/core/file/FileSystem.ht
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var vertx = Vertx.vertx()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var vertx = Vertx.vertx()
 
 // Read a file
-vertx.fileSystem().readFile("target/classes/readme.txt", { result -&gt;
+vertx.fileSystem().readFile(&quot;target/classes/readme.txt&quot;, { result -&gt;
   if (result.succeeded()) {
     println(result.result())
   } else {
-    System.err.println("Oh oh ...${result.cause()}")
+    System.err.println(&quot;Oh oh ...${result.cause()}&quot;)
   }
 })
 
 // Copy a file
-vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt", { result -&gt;
+vertx.fileSystem().copy(&quot;target/classes/readme.txt&quot;, &quot;target/classes/readme2.txt&quot;, { result -&gt;
   if (result.succeeded()) {
-    println("File copied")
+    println(&quot;File copied&quot;)
   } else {
-    System.err.println("Oh oh ...${result.cause()}")
+    System.err.println(&quot;Oh oh ...${result.cause()}&quot;)
   }
 })
 
 // Write a file
-vertx.fileSystem().writeFile("target/classes/hello.txt", Buffer.buffer("Hello"), { result -&gt;
+vertx.fileSystem().writeFile(&quot;target/classes/hello.txt&quot;, Buffer.buffer(&quot;Hello&quot;), { result -&gt;
   if (result.succeeded()) {
-    println("File written")
+    println(&quot;File written&quot;)
   } else {
-    System.err.println("Oh oh ...${result.cause()}")
+    System.err.println(&quot;Oh oh ...${result.cause()}&quot;)
   }
 })
 
 // Check existence and delete
-vertx.fileSystem().exists("target/classes/junk.txt", { result -&gt;
+vertx.fileSystem().exists(&quot;target/classes/junk.txt&quot;, { result -&gt;
   if (result.succeeded() &amp;&amp; result.result()) {
-    vertx.fileSystem().delete("target/classes/junk.txt", { r -&gt;
-      println("File deleted")
+    vertx.fileSystem().delete(&quot;target/classes/junk.txt&quot;, { r -&gt;
+      println(&quot;File deleted&quot;)
     })
   } else {
-    System.err.println("Oh oh ... - cannot delete the file: ${result.cause()}")
+    System.err.println(&quot;Oh oh ... - cannot delete the file: ${result.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7118,8 +7117,8 @@ vertx.fileSystem().exists("target/classes/junk.txt", { result -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = OpenOptions()
-fileSystem.open("myfile.txt", options, { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = OpenOptions()
+fileSystem.open(&quot;myfile.txt&quot;, options, { res -&gt;
   if (res.succeeded()) {
     var file = res.result()
   } else {
@@ -7163,25 +7162,25 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var vertx = Vertx.vertx()
-vertx.fileSystem().open("target/classes/hello.txt", OpenOptions(), { result -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var vertx = Vertx.vertx()
+vertx.fileSystem().open(&quot;target/classes/hello.txt&quot;, OpenOptions(), { result -&gt;
   if (result.succeeded()) {
     var file = result.result()
-    var buff = Buffer.buffer("foo")
+    var buff = Buffer.buffer(&quot;foo&quot;)
     for (i in 0 until 5) {
       file.write(buff, buff.length() * i, { ar -&gt;
         if (ar.succeeded()) {
-          println("Written ok!")
+          println(&quot;Written ok!&quot;)
           // etc
         } else {
-          System.err.println("Failed to write: ${ar.cause()}")
+          System.err.println(&quot;Failed to write: ${ar.cause()}&quot;)
         }
       })
 
     }
 
   } else {
-    System.err.println("Cannot open file ${result.cause()}")
+    System.err.println(&quot;Cannot open file ${result.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7221,24 +7220,24 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var vertx = Vertx.vertx()
-vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), { result -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var vertx = Vertx.vertx()
+vertx.fileSystem().open(&quot;target/classes/les_miserables.txt&quot;, OpenOptions(), { result -&gt;
   if (result.succeeded()) {
     var file = result.result()
     var buff = Buffer.buffer(1000)
     for (i in 0 until 10) {
       file.read(buff, i * 100, i * 100, 100, { ar -&gt;
         if (ar.succeeded()) {
-          println("Read ok!")
+          println(&quot;Read ok!&quot;)
         } else {
-          System.err.println("Failed to write: ${ar.cause()}")
+          System.err.println(&quot;Failed to write: ${ar.cause()}&quot;)
         }
       })
 
     }
 
   } else {
-    System.err.println("Cannot open file ${result.cause()}")
+    System.err.println(&quot;Cannot open file ${result.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7282,18 +7281,18 @@ copy the content to another <code>AsyncFile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var vertx = Vertx.vertx()
-var output = vertx.fileSystem().openBlocking("target/classes/plagiary.txt", OpenOptions())
+<pre class="CodeRay highlight"><code data-lang="kotlin">var vertx = Vertx.vertx()
+var output = vertx.fileSystem().openBlocking(&quot;target/classes/plagiary.txt&quot;, OpenOptions())
 
-vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), { result -&gt;
+vertx.fileSystem().open(&quot;target/classes/les_miserables.txt&quot;, OpenOptions(), { result -&gt;
   if (result.succeeded()) {
     var file = result.result()
     Pump.pump(file, output).start()
     file.endHandler({ r -&gt;
-      println("Copy done")
+      println(&quot;Copy done&quot;)
     })
   } else {
-    System.err.println("Cannot open file ${result.cause()}")
+    System.err.println(&quot;Cannot open file ${result.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7401,7 +7400,7 @@ and receive.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -7423,15 +7422,15 @@ them in a persistent fashion.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-var buffer = Buffer.buffer("content")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+var buffer = Buffer.buffer(&quot;content&quot;)
 // Send a Buffer
-socket.send(buffer, 1234, "10.0.0.1", { asyncResult -&gt;
-  println("Send succeeded? ${asyncResult.succeeded()}")
+socket.send(buffer, 1234, &quot;10.0.0.1&quot;, { asyncResult -&gt;
+  println(&quot;Send succeeded? ${asyncResult.succeeded()}&quot;)
 })
 // Send a String
-socket.send("A string used as content", 1234, "10.0.0.1", { asyncResult -&gt;
-  println("Send succeeded? ${asyncResult.succeeded()}")
+socket.send(&quot;A string used as content&quot;, 1234, &quot;10.0.0.1&quot;, { asyncResult -&gt;
+  println(&quot;Send succeeded? ${asyncResult.succeeded()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -7467,14 +7466,14 @@ which the `<a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html">Da
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-socket.listen(1234, "0.0.0.0", { asyncResult -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+socket.listen(1234, &quot;0.0.0.0&quot;, { asyncResult -&gt;
   if (asyncResult.succeeded()) {
     socket.handler({ packet -&gt;
       // Do something with the packet
     })
   } else {
-    println("Listen failed${asyncResult.cause()}")
+    println(&quot;Listen failed${asyncResult.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7509,11 +7508,11 @@ to which you can send packets.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-var buffer = Buffer.buffer("content")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+var buffer = Buffer.buffer(&quot;content&quot;)
 // Send a Buffer to a multicast address
-socket.send(buffer, 1234, "230.0.0.1", { asyncResult -&gt;
-  println("Send succeeded? ${asyncResult.succeeded()}")
+socket.send(buffer, 1234, &quot;230.0.0.1&quot;, { asyncResult -&gt;
+  println(&quot;Send succeeded? ${asyncResult.succeeded()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -7552,19 +7551,19 @@ would do something like shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-socket.listen(1234, "0.0.0.0", { asyncResult -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+socket.listen(1234, &quot;0.0.0.0&quot;, { asyncResult -&gt;
   if (asyncResult.succeeded()) {
     socket.handler({ packet -&gt;
       // Do something with the packet
     })
 
     // join the multicast group
-    socket.listenMulticastGroup("230.0.0.1", { asyncResult2 -&gt;
-      println("Listen succeeded? ${asyncResult2.succeeded()}")
+    socket.listenMulticastGroup(&quot;230.0.0.1&quot;, { asyncResult2 -&gt;
+      println(&quot;Listen succeeded? ${asyncResult2.succeeded()}&quot;)
     })
   } else {
-    println("Listen failed${asyncResult.cause()}")
+    println(&quot;Listen failed${asyncResult.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7583,29 +7582,29 @@ socket.listen(1234, "0.0.0.0", { asyncResult -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-socket.listen(1234, "0.0.0.0", { asyncResult -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+socket.listen(1234, &quot;0.0.0.0&quot;, { asyncResult -&gt;
   if (asyncResult.succeeded()) {
     socket.handler({ packet -&gt;
       // Do something with the packet
     })
 
     // join the multicast group
-    socket.listenMulticastGroup("230.0.0.1", { asyncResult2 -&gt;
+    socket.listenMulticastGroup(&quot;230.0.0.1&quot;, { asyncResult2 -&gt;
       if (asyncResult2.succeeded()) {
         // will now receive packets for group
 
         // do some work
 
-        socket.unlistenMulticastGroup("230.0.0.1", { asyncResult3 -&gt;
-          println("Unlisten succeeded? ${asyncResult3.succeeded()}")
+        socket.unlistenMulticastGroup(&quot;230.0.0.1&quot;, { asyncResult3 -&gt;
+          println(&quot;Unlisten succeeded? ${asyncResult3.succeeded()}&quot;)
         })
       } else {
-        println("Listen failed${asyncResult2.cause()}")
+        println(&quot;Listen failed${asyncResult2.cause()}&quot;)
       }
     })
   } else {
-    println("Listen failed${asyncResult.cause()}")
+    println(&quot;Listen failed${asyncResult.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7629,13 +7628,13 @@ like shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
 
 // Some code
 
 // This would block packets which are send from 10.0.0.2
-socket.blockMulticastGroup("230.0.0.1", "10.0.0.2", { asyncResult -&gt;
-  println("block succeeded? ${asyncResult.succeeded()}")
+socket.blockMulticastGroup(&quot;230.0.0.1&quot;, &quot;10.0.0.2&quot;, { asyncResult -&gt;
+  println(&quot;block succeeded? ${asyncResult.succeeded()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -7714,7 +7713,7 @@ this Vert.x offers it&#8217;s own API for DNS resolution which is fully asynchro
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createDnsClient(53, "10.0.0.1")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -7733,12 +7732,12 @@ so it behaves the same way as you may be used from when using "nslookup" on your
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createDnsClient(53, "10.0.0.1")
-client.lookup("vertx.io", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+client.lookup(&quot;vertx.io&quot;, { ar -&gt;
   if (ar.succeeded()) {
     println(ar.result())
   } else {
-    println("Failed to resolve entry${ar.cause()}")
+    println(&quot;Failed to resolve entry${ar.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7755,12 +7754,12 @@ the same way as you may be used from when using "nslookup" on your operation sys
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createDnsClient(53, "10.0.0.1")
-client.lookup4("vertx.io", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+client.lookup4(&quot;vertx.io&quot;, { ar -&gt;
   if (ar.succeeded()) {
     println(ar.result())
   } else {
-    println("Failed to resolve entry${ar.cause()}")
+    println(&quot;Failed to resolve entry${ar.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7777,12 +7776,12 @@ same way as you may be used from when using "nslookup" on your operation system.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createDnsClient(53, "10.0.0.1")
-client.lookup6("vertx.io", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+client.lookup6(&quot;vertx.io&quot;, { ar -&gt;
   if (ar.succeeded()) {
     println(ar.result())
   } else {
-    println("Failed to resolve entry${ar.cause()}")
+    println(&quot;Failed to resolve entry${ar.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7799,15 +7798,15 @@ systems.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createDnsClient(53, "10.0.0.1")
-client.resolveA("vertx.io", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+client.resolveA(&quot;vertx.io&quot;, { ar -&gt;
   if (ar.succeeded()) {
     var records = ar.result()
     for (record in records) {
       println(record)
     }
   } else {
-    println("Failed to resolve entry${ar.cause()}")
+    println(&quot;Failed to resolve entry${ar.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7824,15 +7823,15 @@ operation systems.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createDnsClient(53, "10.0.0.1")
-client.resolveAAAA("vertx.io", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+client.resolveAAAA(&quot;vertx.io&quot;, { ar -&gt;
   if (ar.succeeded()) {
     var records = ar.result()
     for (record in records) {
       println(record)
     }
   } else {
-    println("Failed to resolve entry${ar.cause()}")
+    println(&quot;Failed to resolve entry${ar.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7849,15 +7848,15 @@ systems.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createDnsClient(53, "10.0.0.1")
-client.resolveCNAME("vertx.io", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+client.resolveCNAME(&quot;vertx.io&quot;, { ar -&gt;
   if (ar.succeeded()) {
     var records = ar.result()
     for (record in records) {
       println(record)
     }
   } else {
-    println("Failed to resolve entry${ar.cause()}")
+    println(&quot;Failed to resolve entry${ar.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7874,15 +7873,15 @@ emails for a given domain.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createDnsClient(53, "10.0.0.1")
-client.resolveMX("vertx.io", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+client.resolveMX(&quot;vertx.io&quot;, { ar -&gt;
   if (ar.succeeded()) {
     var records = ar.result()
     for (record in records) {
       println(record)
     }
   } else {
-    println("Failed to resolve entry${ar.cause()}")
+    println(&quot;Failed to resolve entry${ar.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7896,7 +7895,7 @@ means MX records with smaller priority coming first in the List.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">record.priority()
+<pre class="CodeRay highlight"><code data-lang="kotlin">record.priority()
 record.name()</code></pre>
 </div>
 </div>
@@ -7911,15 +7910,15 @@ record.name()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createDnsClient(53, "10.0.0.1")
-client.resolveTXT("vertx.io", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+client.resolveTXT(&quot;vertx.io&quot;, { ar -&gt;
   if (ar.succeeded()) {
     var records = ar.result()
     for (record in records) {
       println(record)
     }
   } else {
-    println("Failed to resolve entry${ar.cause()}")
+    println(&quot;Failed to resolve entry${ar.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7936,15 +7935,15 @@ for a given domain.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createDnsClient(53, "10.0.0.1")
-client.resolveNS("vertx.io", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+client.resolveNS(&quot;vertx.io&quot;, { ar -&gt;
   if (ar.succeeded()) {
     var records = ar.result()
     for (record in records) {
       println(record)
     }
   } else {
-    println("Failed to resolve entry${ar.cause()}")
+    println(&quot;Failed to resolve entry${ar.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7961,15 +7960,15 @@ hostname of services. Some protocols need this extra informations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createDnsClient(53, "10.0.0.1")
-client.resolveSRV("vertx.io", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+client.resolveSRV(&quot;vertx.io&quot;, { ar -&gt;
   if (ar.succeeded()) {
     var records = ar.result()
     for (record in records) {
       println(record)
     }
   } else {
-    println("Failed to resolve entry${ar.cause()}")
+    println(&quot;Failed to resolve entry${ar.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -7983,7 +7982,7 @@ with smaller priority coming first in the List.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">record.priority()
+<pre class="CodeRay highlight"><code data-lang="kotlin">record.priority()
 record.name()
 record.weight()
 record.port()
@@ -8006,13 +8005,13 @@ record.target()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createDnsClient(53, "10.0.0.1")
-client.resolvePTR("1.0.0.10.in-addr.arpa", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+client.resolvePTR(&quot;1.0.0.10.in-addr.arpa&quot;, { ar -&gt;
   if (ar.succeeded()) {
     var record = ar.result()
     println(record)
   } else {
-    println("Failed to resolve entry${ar.cause()}")
+    println(&quot;Failed to resolve entry${ar.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -8029,13 +8028,13 @@ just pass in the ipaddress and not a valid PTR query string.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = vertx.createDnsClient(53, "10.0.0.1")
-client.reverseLookup("10.0.0.1", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+client.reverseLookup(&quot;10.0.0.1&quot;, { ar -&gt;
   if (ar.succeeded()) {
     var record = ar.result()
     println(record)
   } else {
-    println("Failed to resolve entry${ar.cause()}")
+    println(&quot;Failed to resolve entry${ar.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -8086,9 +8085,9 @@ to the <code>NetSocket</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer(NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer(NetServerOptions(
   port = 1234,
-  host = "localhost"))
+  host = &quot;localhost&quot;))
 server.connectHandler({ sock -&gt;
   sock.handler({ buffer -&gt;
     // Write the data straight back
@@ -8109,9 +8108,9 @@ writing to it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer(NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer(NetServerOptions(
   port = 1234,
-  host = "localhost"))
+  host = &quot;localhost&quot;))
 server.connectHandler({ sock -&gt;
   sock.handler({ buffer -&gt;
     if (!sock.writeQueueFull()) {
@@ -8128,9 +8127,9 @@ really want to do is pause the <code>NetSocket</code> when the write queue is fu
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer(NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer(NetServerOptions(
   port = 1234,
-  host = "localhost"))
+  host = &quot;localhost&quot;))
 server.connectHandler({ sock -&gt;
   sock.handler({ buffer -&gt;
     sock.write(buffer)
@@ -8147,9 +8146,9 @@ it when the write queue has processed its backlog:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer(NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer(NetServerOptions(
   port = 1234,
-  host = "localhost"))
+  host = &quot;localhost&quot;))
 server.connectHandler({ sock -&gt;
   sock.handler({ buffer -&gt;
     sock.write(buffer)
@@ -8175,9 +8174,9 @@ You just feed it the <code>ReadStream</code> plus the <code>WriteStream</code> t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var server = vertx.createNetServer(NetServerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var server = vertx.createNetServer(NetServerOptions(
   port = 1234,
-  host = "localhost"))
+  host = &quot;localhost&quot;))
 server.connectHandler({ sock -&gt;
   Pump.pump(sock, sock).start()
 }).listen()</code></pre>
@@ -8312,7 +8311,7 @@ fixed size or separated records).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>buffer1:HELLO\nHOW ARE Y
+<pre class="CodeRay highlight"><code>buffer1:HELLO\nHOW ARE Y
 buffer2:OU?\nI AM
 buffer3: DOING OK
 buffer4:\n</code></pre>
@@ -8323,7 +8322,7 @@ buffer4:\n</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>buffer1:HELLO
+<pre class="CodeRay highlight"><code>buffer1:HELLO
 buffer2:HOW ARE YOU?
 buffer3:I AM DOING OK</code></pre>
 </div>
@@ -8333,14 +8332,14 @@ buffer3:I AM DOING OK</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var parser = RecordParser.newDelimited("\n", { h -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var parser = RecordParser.newDelimited(&quot;\n&quot;, { h -&gt;
   println(h.toString())
 })
 
-parser.handle(Buffer.buffer("HELLO\nHOW ARE Y"))
-parser.handle(Buffer.buffer("OU?\nI AM"))
-parser.handle(Buffer.buffer("DOING OK"))
-parser.handle(Buffer.buffer("\n"))</code></pre>
+parser.handle(Buffer.buffer(&quot;HELLO\nHOW ARE Y&quot;))
+parser.handle(Buffer.buffer(&quot;OU?\nI AM&quot;))
+parser.handle(Buffer.buffer(&quot;DOING OK&quot;))
+parser.handle(Buffer.buffer(&quot;\n&quot;))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8348,7 +8347,7 @@ parser.handle(Buffer.buffer("\n"))</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">RecordParser.newFixed(4, { h -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">RecordParser.newFixed(4, { h -&gt;
   println(h.toString())
 })</code></pre>
 </div>
@@ -8437,7 +8436,7 @@ or Eclipse Equinox. The bundle exports <code>io.vertx.core*</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>14|Active     |    1|Jackson-annotations (2.6.0)
+<pre class="CodeRay highlight"><code>14|Active     |    1|Jackson-annotations (2.6.0)
 15|Active     |    1|Jackson-core (2.6.2)
 16|Active     |    1|jackson-databind (2.6.2)
 18|Active     |    1|Netty/Buffer (4.0.31.Final)
@@ -8485,7 +8484,7 @@ the <code>run</code> <em>command</em>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run my-verticle.js                                 (1)
+<pre class="CodeRay highlight"><code>vertx run my-verticle.js                                 (1)
 vertx run my-verticle.groovy                             (2)
 vertx run my-verticle.rb                                 (3)
 
@@ -8527,7 +8526,7 @@ a compiled Groovy class, you prefix it with <code>groovy:</code> so that Vert.x 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run groovy:io.vertx.example.MyGroovyVerticle</code></pre>
+<pre class="CodeRay highlight"><code>vertx run groovy:io.vertx.example.MyGroovyVerticle</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8598,7 +8597,7 @@ __DEFAULT__`</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run server.js</code></pre>
+<pre class="CodeRay highlight"><code>vertx run server.js</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8606,7 +8605,7 @@ __DEFAULT__`</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run com.acme.MyVerticle -cp "classes:lib/myjar.jar" -instances 10</code></pre>
+<pre class="CodeRay highlight"><code>vertx run com.acme.MyVerticle -cp "classes:lib/myjar.jar" -instances 10</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8614,7 +8613,7 @@ __DEFAULT__`</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run MyVerticle.java -instances 10</code></pre>
+<pre class="CodeRay highlight"><code>vertx run MyVerticle.java -instances 10</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8622,7 +8621,7 @@ __DEFAULT__`</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run order_worker.rb -instances 20 -worker</code></pre>
+<pre class="CodeRay highlight"><code>vertx run order_worker.rb -instances 20 -worker</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8631,7 +8630,7 @@ on the network</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run handler.js -cluster
+<pre class="CodeRay highlight"><code>vertx run handler.js -cluster
 vertx run sender.js -cluster</code></pre>
 </div>
 </div>
@@ -8640,7 +8639,7 @@ vertx run sender.js -cluster</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run my_verticle.rb -conf my_verticle.conf</code></pre>
+<pre class="CodeRay highlight"><code>vertx run my_verticle.rb -conf my_verticle.conf</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8648,9 +8647,9 @@ vertx run sender.js -cluster</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-json" data-lang="json">{
- "name": "foo",
- "num_widgets": 46
+<pre class="CodeRay highlight"><code data-lang="json">{
+ <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>,
+ <span class="key"><span class="delimiter">&quot;</span><span class="content">num_widgets</span><span class="delimiter">&quot;</span></span>: <span class="integer">46</span>
 }</code></pre>
 </div>
 </div>
@@ -8664,7 +8663,7 @@ dies. To create a <em>bare</em> instance, launch:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx bare</code></pre>
+<pre class="CodeRay highlight"><code>vertx bare</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8679,7 +8678,7 @@ on the machine on which you execute the jar. Like any executable Java jar it can
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>java -jar my-application-fat.jar</code></pre>
+<pre class="CodeRay highlight"><code>java -jar my-application-fat.jar</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8709,7 +8708,7 @@ specify command line arguments, such as <code>-instances</code> in order to scal
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>java -jar my-verticle-fat.jar -cluster -conf myconf.json
+<pre class="CodeRay highlight"><code>java -jar my-verticle-fat.jar -cluster -conf myconf.json
 java -jar my-verticle-fat.jar -cluster -conf myconf.json -cp path/to/dir/conf/cluster_xml</code></pre>
 </div>
 </div>
@@ -8737,7 +8736,7 @@ examples of building applications as fatjars.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx version</code></pre>
+<pre class="CodeRay highlight"><code>vertx version</code></pre>
 </div>
 </div>
 </div>
@@ -8751,7 +8750,7 @@ examples of building applications as fatjars.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx bare
+<pre class="CodeRay highlight"><code>vertx bare
 # or
 java -jar my-verticle-fat.jar bare</code></pre>
 </div>
@@ -8761,7 +8760,7 @@ java -jar my-verticle-fat.jar bare</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>java -jar my-verticle-fat.jar start -Dvertx-id=my-app-name</code></pre>
+<pre class="CodeRay highlight"><code>java -jar my-verticle-fat.jar start -Dvertx-id=my-app-name</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8770,7 +8769,7 @@ options to the <code>start</code> command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>java -jar my-verticle-fat.jar start -Dvertx-id=my-app-name -cluster</code></pre>
+<pre class="CodeRay highlight"><code>java -jar my-verticle-fat.jar start -Dvertx-id=my-app-name -cluster</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8778,7 +8777,7 @@ options to the <code>start</code> command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>java -jar my-verticle-fat.jar stop my-app-name</code></pre>
+<pre class="CodeRay highlight"><code>java -jar my-verticle-fat.jar stop my-app-name</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8786,7 +8785,7 @@ options to the <code>start</code> command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>java -jar my-verticle-fat.jar list</code></pre>
+<pre class="CodeRay highlight"><code>java -jar my-verticle-fat.jar list</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8830,7 +8829,7 @@ examples:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run MyVerticle.groovy --redeploy="**/*.groovy" --launcher-class=io.vertx.core.Launcher
+<pre class="CodeRay highlight"><code>vertx run MyVerticle.groovy --redeploy="**/*.groovy" --launcher-class=io.vertx.core.Launcher
 vertx run MyVerticle.groovy --redeploy="**/*.groovy,**/*.rb"  --launcher-class=io.vertx.core.Launcher
 java io.vertx.core.Launcher run org.acme.MyVerticle --redeploy="**/*.class"  --launcher-class=io.vertx.core
 .Launcher -cp ...</code></pre>
@@ -8884,7 +8883,7 @@ created every time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>java -jar target/my-fat-jar.jar --redeploy="**/*.java" --on-redeploy="mvn package"
+<pre class="CodeRay highlight"><code>java -jar target/my-fat-jar.jar --redeploy="**/*.java" --on-redeploy="mvn package"
 java -jar build/libs/my-fat-jar.jar --redeploy="src/**/*.java" --on-redeploy='./gradlew shadowJar'</code></pre>
 </div>
 </div>
@@ -8896,7 +8895,7 @@ or <code>grunt</code> to update your resources. Don&#8217;t forget that passing 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>java -jar target/my-fat-jar.jar --redeploy="**/*.java" --on-redeploy="mvn package" --java-opts="-Dkey=val"
+<pre class="CodeRay highlight"><code>java -jar target/my-fat-jar.jar --redeploy="**/*.java" --on-redeploy="mvn package" --java-opts="-Dkey=val"
 java -jar build/libs/my-fat-jar.jar --redeploy="src/**/*.java" --on-redeploy='./gradlew shadowJar' --java-opts="-Dkey=val"</code></pre>
 </div>
 </div>
@@ -9027,14 +9026,14 @@ which you then use for logging, e.g.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Note -these classes are Java only
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Note -these classes are Java only
 
 // You would normally maintain one static instance of Logger per Java class:
 
 var logger = io.vertx.core.logging.LoggerFactory.getLogger(className)
 
-logger.info("something happened")
-logger.error("oops!", exception)</code></pre>
+logger.info(&quot;something happened&quot;)
+logger.error(&quot;oops!&quot;, exception)</code></pre>
 </div>
 </div>
 <div class="admonitionblock caution">
@@ -9079,7 +9078,7 @@ on <code>io.netty.util.internal.logging.InternalLoggerFactory</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Force logging to Log4j
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Force logging to Log4j</span>
 InternalLoggerFactory.setDefaultFactory(Log4JLoggerFactory.INSTANCE);</code></pre>
 </div>
 </div>
@@ -9154,9 +9153,9 @@ retrieved it will use Google&#8217;s public DNS servers <code>"8.8.8.8"</code> a
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var vertx = Vertx.vertx(VertxOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var vertx = Vertx.vertx(VertxOptions(
   addressResolverOptions = AddressResolverOptions(
-    servers = listOf("192.168.0.1", "192.168.0.2:40000"))))</code></pre>
+    servers = listOf(&quot;192.168.0.1&quot;, &quot;192.168.0.2:40000&quot;))))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9211,9 +9210,9 @@ all lookup to hit the first server of the list.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var vertx = Vertx.vertx(VertxOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var vertx = Vertx.vertx(VertxOptions(
   addressResolverOptions = AddressResolverOptions(
-    hostsPath = "/path/to/hosts")))</code></pre>
+    hostsPath = &quot;/path/to/hosts&quot;)))</code></pre>
 </div>
 </div>
 </div>
@@ -9225,9 +9224,9 @@ list can be provided:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var vertx = Vertx.vertx(VertxOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var vertx = Vertx.vertx(VertxOptions(
   addressResolverOptions = AddressResolverOptions(
-    searchDomains = listOf("foo.com", "bar.com"))))</code></pre>
+    searchDomains = listOf(&quot;foo.com&quot;, &quot;bar.com&quot;))))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9256,7 +9255,7 @@ redeployed automatically on another vert.x instance of the cluster. We call this
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run my-verticle.js -ha</code></pre>
+<pre class="CodeRay highlight"><code>vertx run my-verticle.js -ha</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9265,7 +9264,7 @@ Vert.x instance that you have already started, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run my-other-verticle.js -ha</code></pre>
+<pre class="CodeRay highlight"><code>vertx run my-other-verticle.js -ha</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9305,7 +9304,7 @@ will also failover for nodes in the cluster. To start a bare instance you simply
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run -ha</code></pre>
+<pre class="CodeRay highlight"><code>vertx run -ha</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9338,7 +9337,7 @@ you don&#8217;t specify a HA group the default group <code>__DEFAULT__</code> is
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run my-verticle.js -ha -hagroup my-group</code></pre>
+<pre class="CodeRay highlight"><code>vertx run my-verticle.js -ha -hagroup my-group</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9349,7 +9348,7 @@ you don&#8217;t specify a HA group the default group <code>__DEFAULT__</code> is
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run my-verticle.js -ha -hagroup g1</code></pre>
+<pre class="CodeRay highlight"><code>vertx run my-verticle.js -ha -hagroup g1</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9357,7 +9356,7 @@ you don&#8217;t specify a HA group the default group <code>__DEFAULT__</code> is
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run my-other-verticle.js -ha -hagroup g1</code></pre>
+<pre class="CodeRay highlight"><code>vertx run my-other-verticle.js -ha -hagroup g1</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9365,7 +9364,7 @@ you don&#8217;t specify a HA group the default group <code>__DEFAULT__</code> is
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run yet-another-verticle.js -ha -hagroup g2</code></pre>
+<pre class="CodeRay highlight"><code>vertx run yet-another-verticle.js -ha -hagroup g2</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9401,7 +9400,7 @@ quorum is re-attained. By doing this you can prevent against network partitions,
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run my-verticle.js -ha -quorum 3</code></pre>
+<pre class="CodeRay highlight"><code>vertx run my-verticle.js -ha -quorum 3</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9413,7 +9412,7 @@ in the cluster, not 3.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run my-other-verticle.js -ha -quorum 3</code></pre>
+<pre class="CodeRay highlight"><code>vertx run my-other-verticle.js -ha -quorum 3</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9425,7 +9424,7 @@ in the cluster, not 3.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run yet-another-verticle.js -ha -quorum 3</code></pre>
+<pre class="CodeRay highlight"><code>vertx run yet-another-verticle.js -ha -quorum 3</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9553,17 +9552,17 @@ describe options and arguments:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var cli = CLI.create("copy").setSummary("A command line interface to copy files.").addOption(Option(
-  longName = "directory",
-  shortName = "R",
-  description = "enables directory support",
+<pre class="CodeRay highlight"><code data-lang="kotlin">var cli = CLI.create(&quot;copy&quot;).setSummary(&quot;A command line interface to copy files.&quot;).addOption(Option(
+  longName = &quot;directory&quot;,
+  shortName = &quot;R&quot;,
+  description = &quot;enables directory support&quot;,
   flag = true)).addArgument(Argument(
   index = 0,
-  description = "The source",
-  argName = "source")).addArgument(Argument(
+  description = &quot;The source&quot;,
+  argName = &quot;source&quot;)).addArgument(Argument(
   index = 1,
-  description = "The destination",
-  argName = "target"))</code></pre>
+  description = &quot;The destination&quot;,
+  argName = &quot;target&quot;))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9586,18 +9585,18 @@ configure the option to receive several values using <code><a href="../../apidoc
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var cli = CLI.create("some-name").setSummary("A command line interface illustrating the options valuation.").addOption(Option(
-  longName = "flag",
-  shortName = "f",
+<pre class="CodeRay highlight"><code data-lang="kotlin">var cli = CLI.create(&quot;some-name&quot;).setSummary(&quot;A command line interface illustrating the options valuation.&quot;).addOption(Option(
+  longName = &quot;flag&quot;,
+  shortName = &quot;f&quot;,
   flag = true,
-  description = "a flag")).addOption(Option(
-  longName = "single",
-  shortName = "s",
-  description = "a single-valued option")).addOption(Option(
-  longName = "multiple",
-  shortName = "m",
+  description = &quot;a flag&quot;)).addOption(Option(
+  longName = &quot;single&quot;,
+  shortName = &quot;s&quot;,
+  description = &quot;a single-valued option&quot;)).addOption(Option(
+  longName = &quot;multiple&quot;,
+  shortName = &quot;m&quot;,
   multiValued = true,
-  description = "a multi-valued option"))</code></pre>
+  description = &quot;a multi-valued option&quot;))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9606,10 +9605,10 @@ the parsing:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var cli = CLI.create("some-name").addOption(Option(
-  longName = "mandatory",
+<pre class="CodeRay highlight"><code data-lang="kotlin">var cli = CLI.create(&quot;some-name&quot;).addOption(Option(
+  longName = &quot;mandatory&quot;,
   required = true,
-  description = "a mandatory option"))</code></pre>
+  description = &quot;a mandatory option&quot;))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9618,10 +9617,10 @@ the command line:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var cli = CLI.create("some-name").addOption(Option(
-  longName = "optional",
-  defaultValue = "hello",
-  description = "an optional option with a default value"))</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var cli = CLI.create(&quot;some-name&quot;).addOption(Option(
+  longName = &quot;optional&quot;,
+  defaultValue = &quot;hello&quot;,
+  description = &quot;an optional option with a default value&quot;))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9633,11 +9632,11 @@ not listed in the usage, but can still be used in the user command line (for pow
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var cli = CLI.create("some-name").addOption(Option(
-  longName = "color",
-  defaultValue = "green",
-  choices = listOf("blue", "red", "green"),
-  description = "a color"))</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var cli = CLI.create(&quot;some-name&quot;).addOption(Option(
+  longName = &quot;color&quot;,
+  defaultValue = &quot;green&quot;,
+  choices = listOf(&quot;blue&quot;, &quot;red&quot;, &quot;green&quot;),
+  description = &quot;a color&quot;))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9656,13 +9655,13 @@ index <code>0</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var cli = CLI.create("some-name").addArgument(Argument(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var cli = CLI.create(&quot;some-name&quot;).addArgument(Argument(
   index = 0,
-  description = "the first argument",
-  argName = "arg1")).addArgument(Argument(
+  description = &quot;the first argument&quot;,
+  argName = &quot;arg1&quot;)).addArgument(Argument(
   index = 1,
-  description = "the second argument",
-  argName = "arg2"))</code></pre>
+  description = &quot;the second argument&quot;,
+  argName = &quot;arg2&quot;))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9670,11 +9669,11 @@ index <code>0</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var cli = CLI.create("some-name").addArgument(Argument(
-  description = "the first argument",
-  argName = "arg1")).addArgument(Argument(
-  description = "the second argument",
-  argName = "arg2"))</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var cli = CLI.create(&quot;some-name&quot;).addArgument(Argument(
+  description = &quot;the first argument&quot;,
+  argName = &quot;arg1&quot;)).addArgument(Argument(
+  description = &quot;the second argument&quot;,
+  argName = &quot;arg2&quot;))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9711,17 +9710,17 @@ can be multi-valued.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var cli = CLI.create("copy").setSummary("A command line interface to copy files.").addOption(Option(
-  longName = "directory",
-  shortName = "R",
-  description = "enables directory support",
+<pre class="CodeRay highlight"><code data-lang="kotlin">var cli = CLI.create(&quot;copy&quot;).setSummary(&quot;A command line interface to copy files.&quot;).addOption(Option(
+  longName = &quot;directory&quot;,
+  shortName = &quot;R&quot;,
+  description = &quot;enables directory support&quot;,
   flag = true)).addArgument(Argument(
   index = 0,
-  description = "The source",
-  argName = "source")).addArgument(Argument(
+  description = &quot;The source&quot;,
+  argName = &quot;source&quot;)).addArgument(Argument(
   index = 0,
-  description = "The destination",
-  argName = "target"))
+  description = &quot;The destination&quot;,
+  argName = &quot;target&quot;))
 
 var builder = java.lang.StringBuilder()
 cli.usage(builder)</code></pre>
@@ -9732,7 +9731,7 @@ cli.usage(builder)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>Usage: copy [-R] source target
+<pre class="CodeRay highlight"><code>Usage: copy [-R] source target
 
 A command line interface to copy files.
 
@@ -9752,7 +9751,7 @@ each option and argument:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var commandLine = cli.parse(userCommandLineArguments)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var commandLine = cli.parse(userCommandLineArguments)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9776,9 +9775,9 @@ method:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var commandLine = cli.parse(userCommandLineArguments)
-var opt = commandLine.getOptionValue&lt;Any&gt;("my-option")
-var flag = commandLine.isFlagEnabled("my-flag")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var commandLine = cli.parse(userCommandLineArguments)
+var opt = commandLine.getOptionValue&lt;Any&gt;(&quot;my-option&quot;)
+var flag = commandLine.isFlagEnabled(&quot;my-flag&quot;)
 var arg0 = commandLine.getArgumentValue&lt;Any&gt;(0)</code></pre>
 </div>
 </div>
@@ -9788,15 +9787,15 @@ won&#8217;t failed, but give you the opportunity to check if the user asks for h
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var cli = CLI.create("test").addOption(Option(
-  longName = "help",
-  shortName = "h",
+<pre class="CodeRay highlight"><code data-lang="kotlin">var cli = CLI.create(&quot;test&quot;).addOption(Option(
+  longName = &quot;help&quot;,
+  shortName = &quot;h&quot;,
   flag = true,
   help = true)).addOption(Option(
-  longName = "mandatory",
+  longName = &quot;mandatory&quot;,
   required = true))
 
-var line = cli.parse(java.util.Collections.singletonList("-h"))
+var line = cli.parse(java.util.Collections.singletonList(&quot;-h&quot;))
 
 // The parsing does not fail and let you do:
 if (!line.isValid() &amp;&amp; line.isAskingForHelp()) {
@@ -9823,20 +9822,20 @@ utility. It executes a set of <em>commands</em> such as <em>run</em>, <em>bare</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">@Name("my-command")
-@Summary("A simple hello command.")
-public class MyCommand extends DefaultCommand {
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Name</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-command</span><span class="delimiter">&quot;</span></span>)
+<span class="annotation">@Summary</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">A simple hello command.</span><span class="delimiter">&quot;</span></span>)
+<span class="directive">public</span> <span class="type">class</span> <span class="class">MyCommand</span> <span class="directive">extends</span> DefaultCommand {
 
-  private String name;
+  <span class="directive">private</span> <span class="predefined-type">String</span> name;
 
-  @Option(longName = "name", required = true)
-  public void setName(String n) {
-    this.name = n;
+  <span class="annotation">@Option</span>(longName = <span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, required = <span class="predefined-constant">true</span>)
+  <span class="directive">public</span> <span class="type">void</span> setName(<span class="predefined-type">String</span> n) {
+    <span class="local-variable">this</span>.name = n;
   }
 
-  @Override
-  public void run() throws CLIException {
-    System.out.println("Hello " + name);
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="type">void</span> run() <span class="directive">throws</span> CLIException {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello </span><span class="delimiter">&quot;</span></span> + name);
   }
 }</code></pre>
 </div>
@@ -9846,9 +9845,9 @@ public class MyCommand extends DefaultCommand {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">public class HelloCommandFactory extends DefaultCommandFactory&lt;HelloCommand&gt; {
-  public HelloCommandFactory() {
-   super(HelloCommand.class);
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">HelloCommandFactory</span> <span class="directive">extends</span> DefaultCommandFactory&lt;HelloCommand&gt; {
+  <span class="directive">public</span> HelloCommandFactory() {
+   <span class="local-variable">super</span>(HelloCommand.class);
   }
 }</code></pre>
 </div>
@@ -9872,7 +9871,7 @@ directory of your vert.x distribution, and you would be able to execute:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx hello vert.x
+<pre class="CodeRay highlight"><code>vertx hello vert.x
 java -jar my-fat-jar.jar hello vert.x</code></pre>
 </div>
 </div>
@@ -9966,7 +9965,7 @@ application with:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run my.Verticle -Dvertx.cacheDirBase=/tmp/vertx-cache
+<pre class="CodeRay highlight"><code>vertx run my.Verticle -Dvertx.cacheDirBase=/tmp/vertx-cache
 # or
 java -jar my-fat.jar vertx.cacheDirBase=/tmp/vertx-cache</code></pre>
 </div>

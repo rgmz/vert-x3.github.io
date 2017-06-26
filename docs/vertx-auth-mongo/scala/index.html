@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -137,11 +136,11 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-auth-mongo-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-auth-mongo-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -153,7 +152,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-mongo-scala_2.12:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-mongo-scala_2.12:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -165,7 +164,7 @@ of those please consult the documentation for the MongoClient.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var client = MongoClient.createShared(vertx, mongoClientConfig)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = MongoClient.createShared(vertx, mongoClientConfig)
 var authProperties = new io.vertx.core.json.JsonObject()
 var authProvider = MongoAuth.create(client, authProperties)</code></pre>
 </div>
@@ -245,13 +244,13 @@ authentication info:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var authInfo = new io.vertx.core.json.JsonObject().put("username", "tim").put("password", "sausages")
+<pre class="CodeRay highlight"><code data-lang="scala">var authInfo = new io.vertx.core.json.JsonObject().put(&quot;username&quot;, &quot;tim&quot;).put(&quot;password&quot;, &quot;sausages&quot;)
 authProvider.authenticateFuture(authInfo).onComplete{
   case Success(result) =&gt; {
     var user = result
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -277,12 +276,12 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">user.isAuthorisedFuture("commit_code").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">user.isAuthorisedFuture(&quot;commit_code&quot;).onComplete{
   case Success(result) =&gt; {
     var hasPermission = result
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -292,12 +291,12 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">user.isAuthorisedFuture(s"${MongoAuth.ROLE_PREFIX}manager").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">user.isAuthorisedFuture(s&quot;${MongoAuth.ROLE_PREFIX}manager&quot;).onComplete{
   case Success(result) =&gt; {
     var hasRole = result
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>

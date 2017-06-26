@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -138,11 +137,11 @@ This implementation is packaged inside:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-&lt;groupId&gt;io.vertx&lt;/groupId&gt;
-&lt;artifactId&gt;vertx-zookeeper&lt;/artifactId&gt;
-&lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+<span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+<span class="tag">&lt;artifactId&gt;</span>vertx-zookeeper<span class="tag">&lt;/artifactId&gt;</span>
+<span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -214,13 +213,13 @@ when you are creating your Vert.x instance, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ClusterManager mgr = new ZookeeperClusterManager();
-VertxOptions options = new VertxOptions().setClusterManager(mgr);
+<pre class="CodeRay highlight"><code data-lang="java">ClusterManager mgr = <span class="keyword">new</span> ZookeeperClusterManager();
+VertxOptions options = <span class="keyword">new</span> VertxOptions().setClusterManager(mgr);
 Vertx.clusteredVertx(options, res -&gt; {
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     Vertx vertx = res.result();
-  } else {
-    // failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// failed!</span>
   }
 });</code></pre>
 </div>
@@ -243,7 +242,7 @@ example, if you are using the <em>launcher</em> class from Vert.x, the classpath
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code># If the zookeeper.json is in the current directory:
+<pre class="CodeRay highlight"><code># If the zookeeper.json is in the current directory:
 java -jar ... -cp . -cluster
 vertx run MyVerticle -cp . -cluster
 
@@ -257,7 +256,7 @@ location:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code># Use a cluster configuration located in an external file
+<pre class="CodeRay highlight"><code># Use a cluster configuration located in an external file
 java -Dvertx.zookeeper.config=./config/my-zookeeper-conf.json -jar ... -cluster
 
 # Or use a custom configuration from the classpath
@@ -277,22 +276,22 @@ from this system property fails, then loading falls back to either <code>zookeep
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject zkConfig = new JsonObject();
-zkConfig.put("zookeeperHosts", "127.0.0.1");
-zkConfig.put("rootPath", "io.vertx");
-zkConfig.put("retry", new JsonObject()
-    .put("initialSleepTime", 3000)
-    .put("maxTimes", 3));
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject zkConfig = <span class="keyword">new</span> JsonObject();
+zkConfig.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">zookeeperHosts</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.1</span><span class="delimiter">&quot;</span></span>);
+zkConfig.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">rootPath</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx</span><span class="delimiter">&quot;</span></span>);
+zkConfig.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">retry</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject()
+    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">initialSleepTime</span><span class="delimiter">&quot;</span></span>, <span class="integer">3000</span>)
+    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">maxTimes</span><span class="delimiter">&quot;</span></span>, <span class="integer">3</span>));
 
 
-ClusterManager mgr = new ZookeeperClusterManager(zkConfig);
-VertxOptions options = new VertxOptions().setClusterManager(mgr);
+ClusterManager mgr = <span class="keyword">new</span> ZookeeperClusterManager(zkConfig);
+VertxOptions options = <span class="keyword">new</span> VertxOptions().setClusterManager(mgr);
 
 Vertx.clusteredVertx(options, res -&gt; {
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     Vertx vertx = res.result();
-  } else {
-    // failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// failed!</span>
   }
 });</code></pre>
 </div>

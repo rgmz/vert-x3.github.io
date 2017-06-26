@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -215,11 +214,11 @@ your network.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-redis-client-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-redis-client-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -231,7 +230,7 @@ your network.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-redis-client-scala_2.12:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-redis-client-scala_2.12:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -267,8 +266,8 @@ containing the following values:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var config = RedisOptions()
-  .setHost("127.0.0.1")
+<pre class="CodeRay highlight"><code data-lang="scala">var config = RedisOptions()
+  .setHost(&quot;127.0.0.1&quot;)
 
 
 var redis = RedisClient.create(vertx, config)</code></pre>
@@ -306,13 +305,13 @@ if one wants to get a value of a key it can be done as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var redis = RedisClient.create(vertx, RedisOptions())
+<pre class="CodeRay highlight"><code data-lang="scala">var redis = RedisClient.create(vertx, RedisOptions())
 
-redis.getFuture("mykey").onComplete{
+redis.getFuture(&quot;mykey&quot;).onComplete{
   case Success(result) =&gt; {
     // so something...
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -333,10 +332,10 @@ it cannot be used for running other commands than the command to leave that mode
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// register a handler for the incoming message the naming the Redis module will use is base address + '.' + redis channel
-vertx.eventBus().consumer("io.vertx.redis.channel1", (received: io.vertx.scala.core.eventbus.Message&lt;io.vertx.scala.core.json.JsonObject&gt;) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">// register a handler for the incoming message the naming the Redis module will use is base address + '.' + redis channel
+vertx.eventBus().consumer(&quot;io.vertx.redis.channel1&quot;, (received: io.vertx.scala.core.eventbus.Message&lt;io.vertx.scala.core.json.JsonObject&gt;) =&gt; {
   // do whatever you need to do with your message
-  var value = received.body().getValue("value")
+  var value = received.body().getValue(&quot;value&quot;)
   // the value is a JSON doc with the following properties
   // channel - The channel to which this message was sent
   // pattern - Pattern is present if you use psubscribe command and is the pattern that matched this message channel
@@ -345,11 +344,11 @@ vertx.eventBus().consumer("io.vertx.redis.channel1", (received: io.vertx.scala.c
 
 var redis = RedisClient.create(vertx, RedisOptions())
 
-redis.subscribeFuture("channel1").onComplete{
+redis.subscribeFuture(&quot;channel1&quot;).onComplete{
   case Success(result) =&gt; {
     // so something...
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -358,13 +357,13 @@ redis.subscribeFuture("channel1").onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var redis = RedisClient.create(vertx, RedisOptions())
+<pre class="CodeRay highlight"><code data-lang="scala">var redis = RedisClient.create(vertx, RedisOptions())
 
-redis.publishFuture("channel1", "Hello World!").onComplete{
+redis.publishFuture(&quot;channel1&quot;, &quot;Hello World!&quot;).onComplete{
   case Success(result) =&gt; {
     // so something...
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -489,7 +488,7 @@ will always return a JsonArray, even for example for scripts such as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>return 10</code></pre>
+<pre class="CodeRay highlight"><code>return 10</code></pre>
 </div>
 </div>
 <div class="paragraph">

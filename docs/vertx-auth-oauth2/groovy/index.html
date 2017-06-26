@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -184,11 +183,11 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-auth-oauth2&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-auth-oauth2<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -200,7 +199,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-oauth2:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-oauth2:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -280,38 +279,38 @@ specification).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, [
-  clientID:"YOUR_CLIENT_ID",
-  clientSecret:"YOUR_CLIENT_SECRET",
-  site:"https://github.com/login",
-  tokenPath:"/oauth/access_token",
-  authorizationPath:"/oauth/authorize"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, [
+  <span class="key">clientID</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">YOUR_CLIENT_ID</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">clientSecret</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">YOUR_CLIENT_SECRET</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">site</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://github.com/login</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">tokenPath</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">/oauth/access_token</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">authorizationPath</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">/oauth/authorize</span><span class="delimiter">&quot;</span></span>
 ])
 
-// when there is a need to access a protected resource or call a protected method,
-// call the authZ url for a challenge
+<span class="comment">// when there is a need to access a protected resource or call a protected method,</span>
+<span class="comment">// call the authZ url for a challenge</span>
 
-def authorization_uri = oauth2.authorizeURL([
-  redirect_uri:"http://localhost:8080/callback",
-  scope:"notifications",
-  state:"3(#0/!~"
+<span class="keyword">def</span> authorization_uri = oauth2.authorizeURL([
+  <span class="key">redirect_uri</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/callback</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">scope</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">notifications</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">state</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">3(#0/!~</span><span class="delimiter">&quot;</span></span>
 ])
 
-// when working with web application use the above string as a redirect url
+<span class="comment">// when working with web application use the above string as a redirect url</span>
 
-// in this case GitHub will call you back in the callback uri one should now complete the handshake as:
+<span class="comment">// in this case GitHub will call you back in the callback uri one should now complete the handshake as:</span>
 
 
-def code = "xxxxxxxxxxxxxxxxxxxxxxxx"
+<span class="keyword">def</span> code = <span class="string"><span class="delimiter">&quot;</span><span class="content">xxxxxxxxxxxxxxxxxxxxxxxx</span><span class="delimiter">&quot;</span></span>
 
 oauth2.getToken([
-  code:code,
-  redirect_uri:"http://localhost:8080/callback"
+  <span class="key">code</span>:code,
+  <span class="key">redirect_uri</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/callback</span><span class="delimiter">&quot;</span></span>
 ], { res -&gt;
-  if (res.failed()) {
-    // error, the code provided is not valid
-  } else {
-    // save the token and continue...
+  <span class="keyword">if</span> (res.failed()) {
+    <span class="comment">// error, the code provided is not valid</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// save the token and continue...</span>
   }
 })</code></pre>
 </div>
@@ -326,40 +325,40 @@ access token.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Set the client credentials and the OAuth2 server
-def credentials = [
-  clientID:"&lt;client-id&gt;",
-  clientSecret:"&lt;client-secret&gt;",
-  site:"https://api.oauth.com"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Set the client credentials and the OAuth2 server</span>
+<span class="keyword">def</span> credentials = [
+  <span class="key">clientID</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;client-id&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">clientSecret</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;client-secret&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">site</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://api.oauth.com</span><span class="delimiter">&quot;</span></span>
 ]
 
 
-// Initialize the OAuth2 Library
-def oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, credentials)
+<span class="comment">// Initialize the OAuth2 Library</span>
+<span class="keyword">def</span> oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, credentials)
 
-// Authorization oauth2 URI
-def authorization_uri = oauth2.authorizeURL([
-  redirect_uri:"http://localhost:8080/callback",
-  scope:"&lt;scope&gt;",
-  state:"&lt;state&gt;"
+<span class="comment">// Authorization oauth2 URI</span>
+<span class="keyword">def</span> authorization_uri = oauth2.authorizeURL([
+  <span class="key">redirect_uri</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/callback</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">scope</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;scope&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">state</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;state&gt;</span><span class="delimiter">&quot;</span></span>
 ])
 
-// Redirect example using Vert.x
-response.putHeader("Location", authorization_uri).setStatusCode(302).end()
+<span class="comment">// Redirect example using Vert.x</span>
+response.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Location</span><span class="delimiter">&quot;</span></span>, authorization_uri).setStatusCode(<span class="integer">302</span>).end()
 
-def tokenConfig = [
-  code:"&lt;code&gt;",
-  redirect_uri:"http://localhost:3000/callback"
+<span class="keyword">def</span> tokenConfig = [
+  <span class="key">code</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;code&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">redirect_uri</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:3000/callback</span><span class="delimiter">&quot;</span></span>
 ]
 
-// Callbacks
-// Save the access token
+<span class="comment">// Callbacks</span>
+<span class="comment">// Save the access token</span>
 oauth2.getToken(tokenConfig, { res -&gt;
-  if (res.failed()) {
-    System.err.println("Access Token Error: ${res.cause().getMessage()}")
-  } else {
-    // Get the access token object (the authorization code is given from the previous step).
-    def token = res.result()
+  <span class="keyword">if</span> (res.failed()) {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Access Token Error: </span><span class="inline"><span class="inline-delimiter">${</span>res.cause().getMessage()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    <span class="comment">// Get the access token object (the authorization code is given from the previous step).</span>
+    <span class="keyword">def</span> token = res.result()
   }
 })</code></pre>
 </div>
@@ -374,27 +373,27 @@ need a fast way to test your application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Initialize the OAuth2 Library
-def oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.PASSWORD)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Initialize the OAuth2 Library</span>
+<span class="keyword">def</span> oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.PASSWORD)
 
-def tokenConfig = [
-  username:"username",
-  password:"password"
+<span class="keyword">def</span> tokenConfig = [
+  <span class="key">username</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>
 ]
 
-// Callbacks
-// Save the access token
+<span class="comment">// Callbacks</span>
+<span class="comment">// Save the access token</span>
 oauth2.getToken(tokenConfig, { res -&gt;
-  if (res.failed()) {
-    System.err.println("Access Token Error: ${res.cause().getMessage()}")
-  } else {
-    // Get the access token object (the authorization code is given from the previous step).
-    def token = res.result()
+  <span class="keyword">if</span> (res.failed()) {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Access Token Error: </span><span class="inline"><span class="inline-delimiter">${</span>res.cause().getMessage()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    <span class="comment">// Get the access token object (the authorization code is given from the previous step).</span>
+    <span class="keyword">def</span> token = res.result()
 
-    oauth2.api(HttpMethod.GET, "/users", [
-      access_token:token.principal().access_token
+    oauth2.api(HttpMethod.GET, <span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>, [
+      <span class="key">access_token</span>:token.principal().access_token
     ], { res2 -&gt;
-      // the user object should be returned here...
+      <span class="comment">// the user object should be returned here...</span>
     })
   }
 })</code></pre>
@@ -408,27 +407,27 @@ oauth2.getToken(tokenConfig, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Set the client credentials and the OAuth2 server
-def credentials = [
-  clientID:"&lt;client-id&gt;",
-  clientSecret:"&lt;client-secret&gt;",
-  site:"https://api.oauth.com"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Set the client credentials and the OAuth2 server</span>
+<span class="keyword">def</span> credentials = [
+  <span class="key">clientID</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;client-id&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">clientSecret</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;client-secret&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">site</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://api.oauth.com</span><span class="delimiter">&quot;</span></span>
 ]
 
 
-// Initialize the OAuth2 Library
-def oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.CLIENT, credentials)
+<span class="comment">// Initialize the OAuth2 Library</span>
+<span class="keyword">def</span> oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.CLIENT, credentials)
 
-def tokenConfig = [:]
+<span class="keyword">def</span> tokenConfig = [:]
 
-// Callbacks
-// Save the access token
+<span class="comment">// Callbacks</span>
+<span class="comment">// Save the access token</span>
 oauth2.getToken(tokenConfig, { res -&gt;
-  if (res.failed()) {
-    System.err.println("Access Token Error: ${res.cause().getMessage()}")
-  } else {
-    // Get the access token object (the authorization code is given from the previous step).
-    def token = res.result()
+  <span class="keyword">if</span> (res.failed()) {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Access Token Error: </span><span class="inline"><span class="inline-delimiter">${</span>res.cause().getMessage()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    <span class="comment">// Get the access token object (the authorization code is given from the previous step).</span>
+    <span class="keyword">def</span> token = res.result()
   }
 })</code></pre>
 </div>
@@ -443,14 +442,14 @@ to refresh the access token when it is expired.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Check if the token is expired. If expired it is refreshed.
-if (token.expired()) {
-  // Callbacks
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Check if the token is expired. If expired it is refreshed.</span>
+<span class="keyword">if</span> (token.expired()) {
+  <span class="comment">// Callbacks</span>
   token.refresh({ res -&gt;
-    if (res.succeeded()) {
-      // success
-    } else {
-      // error handling...
+    <span class="keyword">if</span> (res.succeeded()) {
+      <span class="comment">// success</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// error handling...</span>
     }
   })
 }</code></pre>
@@ -461,13 +460,13 @@ if (token.expired()) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Revoke only the access token
-token.revoke("access_token", { res -&gt;
-  // Session ended. But the refresh_token is still valid.
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Revoke only the access token</span>
+token.revoke(<span class="string"><span class="delimiter">&quot;</span><span class="content">access_token</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="comment">// Session ended. But the refresh_token is still valid.</span>
 
-  // Revoke the refresh_token
-  token.revoke("refresh_token", { res1 -&gt;
-    println("token revoked.")
+  <span class="comment">// Revoke the refresh_token</span>
+  token.revoke(<span class="string"><span class="delimiter">&quot;</span><span class="content">refresh_token</span><span class="delimiter">&quot;</span></span>, { res1 -&gt;
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">token revoked.</span><span class="delimiter">&quot;</span></span>)
   })
 })</code></pre>
 </div>
@@ -538,35 +537,35 @@ This information is quite valuable since it allows to do authorization at the AP
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// you would get this config from the keycloak admin console
-def keycloakJson = [
-  realm:"master",
-  'realm-public-key':"MIIBIjANBgkqhk...wIDAQAB",
-  'auth-server-url':"http://localhost:9000/auth",
-  'ssl-required':"external",
-  resource:"frontend",
-  credentials:[
-    secret:"2fbf5e18-b923-4a83-9657-b4ebd5317f60"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// you would get this config from the keycloak admin console</span>
+<span class="keyword">def</span> keycloakJson = [
+  <span class="key">realm</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">master</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">realm-public-key</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">MIIBIjANBgkqhk...wIDAQAB</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">auth-server-url</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:9000/auth</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">ssl-required</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">external</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">resource</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">frontend</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">credentials</span>:[
+    <span class="key">secret</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">2fbf5e18-b923-4a83-9657-b4ebd5317f60</span><span class="delimiter">&quot;</span></span>
   ]
 ]
 
-// Initialize the OAuth2 Library
-def oauth2 = KeycloakAuth.create(vertx, OAuth2FlowType.PASSWORD, keycloakJson)
+<span class="comment">// Initialize the OAuth2 Library</span>
+<span class="keyword">def</span> oauth2 = KeycloakAuth.create(vertx, OAuth2FlowType.PASSWORD, keycloakJson)
 
-// first get a token (authenticate)
+<span class="comment">// first get a token (authenticate)</span>
 oauth2.getToken([
-  username:"user",
-  password:"secret"
+  <span class="key">username</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>
 ], { res -&gt;
-  if (res.failed()) {
-    // error handling...
-  } else {
-    def token = res.result()
+  <span class="keyword">if</span> (res.failed()) {
+    <span class="comment">// error handling...</span>
+  } <span class="keyword">else</span> {
+    <span class="keyword">def</span> token = res.result()
 
-    // now check for permissions
-    token.isAuthorised("account:manage-account", { r -&gt;
-      if (r.result()) {
-        // this user is authorized to manage its account
+    <span class="comment">// now check for permissions</span>
+    token.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">account:manage-account</span><span class="delimiter">&quot;</span></span>, { r -&gt;
+      <span class="keyword">if</span> (r.result()) {
+        <span class="comment">// this user is authorized to manage its account</span>
       }
     })
   }
@@ -579,12 +578,12 @@ data (e.g. <code>preferred_username</code>) from the Keycloak principal. For exa
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// you can get the decoded `id_token` from the Keycloak principal
-def idToken = KeycloakHelper.idToken(principal)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// you can get the decoded `id_token` from the Keycloak principal</span>
+<span class="keyword">def</span> idToken = KeycloakHelper.idToken(principal)
 
-// you can also retrieve some properties directly from the Keycloak principal
-// e.g. `preferred_username`
-def username = KeycloakHelper.preferredUsername(principal)</code></pre>
+<span class="comment">// you can also retrieve some properties directly from the Keycloak principal</span>
+<span class="comment">// e.g. `preferred_username`</span>
+<span class="keyword">def</span> username = KeycloakHelper.preferredUsername(principal)</code></pre>
 </div>
 </div>
 </div>
@@ -610,18 +609,18 @@ the User level:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// OAuth2Auth level
-oauth2.introspectToken("opaque string", { res -&gt;
-  if (res.succeeded()) {
-    // token is valid!
-    def accessToken = res.result()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// OAuth2Auth level</span>
+oauth2.introspectToken(<span class="string"><span class="delimiter">&quot;</span><span class="content">opaque string</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// token is valid!</span>
+    <span class="keyword">def</span> accessToken = res.result()
   }
 })
 
-// User level
+<span class="comment">// User level</span>
 token.introspect({ res -&gt;
-  if (res.succeeded()) {
-    // Token is valid!
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// Token is valid!</span>
   }
 })</code></pre>
 </div>
@@ -638,11 +637,11 @@ this specific case one needs to use the token introspection if the provider supp
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// OAuth2Auth level
-oauth2.decodeToken("jwt-token", { res -&gt;
-  if (res.succeeded()) {
-    // token is valid!
-    def accessToken = res.result()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// OAuth2Auth level</span>
+oauth2.decodeToken(<span class="string"><span class="delimiter">&quot;</span><span class="content">jwt-token</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// token is valid!</span>
+    <span class="keyword">def</span> accessToken = res.result()
   }
 })</code></pre>
 </div>
@@ -705,10 +704,10 @@ example you want to see if the user can <code>print</code> in the current applic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">user.isAuthorised("print", { res -&gt;
-  // in this case it is assumed that the role is the current application
-  if (res.succeeded() &amp;&amp; res.result()) {
-    // Yes the user can print
+<pre class="CodeRay highlight"><code data-lang="groovy">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">print</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="comment">// in this case it is assumed that the role is the current application</span>
+  <span class="keyword">if</span> (res.succeeded() &amp;&amp; res.result()) {
+    <span class="comment">// Yes the user can print</span>
   }
 })</code></pre>
 </div>
@@ -718,11 +717,11 @@ example you want to see if the user can <code>print</code> in the current applic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">user.isAuthorised("realm:add-user", { res -&gt;
-  // the role is "realm"
-  // the authority is "add-user"
-  if (res.succeeded() &amp;&amp; res.result()) {
-    // Yes the user can add users to the application
+<pre class="CodeRay highlight"><code data-lang="groovy">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">realm:add-user</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="comment">// the role is &quot;realm&quot;</span>
+  <span class="comment">// the authority is &quot;add-user&quot;</span>
+  <span class="keyword">if</span> (res.succeeded() &amp;&amp; res.result()) {
+    <span class="comment">// Yes the user can add users to the application</span>
   }
 })</code></pre>
 </div>
@@ -732,11 +731,11 @@ example you want to see if the user can <code>print</code> in the current applic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">user.isAuthorised("finance:year-report", { res -&gt;
-  // the role is "finance"
-  // the authority is "year-report"
-  if (res.succeeded() &amp;&amp; res.result()) {
-    // Yes the user can access the year report from the finance department
+<pre class="CodeRay highlight"><code data-lang="groovy">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">finance:year-report</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="comment">// the role is &quot;finance&quot;</span>
+  <span class="comment">// the authority is &quot;year-report&quot;</span>
+  <span class="keyword">if</span> (res.succeeded() &amp;&amp; res.result()) {
+    <span class="comment">// Yes the user can access the year report from the finance department</span>
   }
 })</code></pre>
 </div>
@@ -755,8 +754,8 @@ and be invalid, you can verify if the token is still valid like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// internal validation against, expiration date
-def isExpired = user.expired()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// internal validation against, expiration date</span>
+<span class="keyword">def</span> isExpired = user.expired()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -773,14 +772,14 @@ screen. In this case you can refresh the token. To refresh a token you need to h
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">user.refresh({ res -&gt;
-  if (res.succeeded()) {
-    // the refresh call succeeded
-  } else {
-    // the token was not refreshed, a best practise would be
-    // to forcefully logout the user since this could be a
-    // symptom that you're logged out by the server and this
-    // token is not valid anymore.
+<pre class="CodeRay highlight"><code data-lang="groovy">user.refresh({ res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// the refresh call succeeded</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// the token was not refreshed, a best practise would be</span>
+    <span class="comment">// to forcefully logout the user since this could be a</span>
+    <span class="comment">// symptom that you're logged out by the server and this</span>
+    <span class="comment">// token is not valid anymore.</span>
   }
 })</code></pre>
 </div>
@@ -794,14 +793,14 @@ any application. In order to do this one needs to revoke the token against the O
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">user.revoke("access_token", { res -&gt;
-  if (res.succeeded()) {
-    // the refresh call succeeded
-  } else {
-    // the token was not refreshed, a best practise would be
-    // to forcefully logout the user since this could be a
-    // symptom that you're logged out by the server and this
-    // token is not valid anymore.
+<pre class="CodeRay highlight"><code data-lang="groovy">user.revoke(<span class="string"><span class="delimiter">&quot;</span><span class="content">access_token</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// the refresh call succeeded</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// the token was not refreshed, a best practise would be</span>
+    <span class="comment">// to forcefully logout the user since this could be a</span>
+    <span class="comment">// symptom that you're logged out by the server and this</span>
+    <span class="comment">// token is not valid anymore.</span>
   }
 })</code></pre>
 </div>
@@ -837,13 +836,13 @@ means that the check happens on the OAuth2 server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">user.introspect({ res -&gt;
-  if (res.succeeded()) {
-    // the introspection call succeeded
-  } else {
-    // the token failed the introspection. You should proceed
-    // to logout the user since this means that this token is
-    // not valid anymore.
+<pre class="CodeRay highlight"><code data-lang="groovy">user.introspect({ res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// the introspection call succeeded</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// the token failed the introspection. You should proceed</span>
+    <span class="comment">// to logout the user since this means that this token is</span>
+    <span class="comment">// not valid anymore.</span>
   }
 })</code></pre>
 </div>
@@ -862,12 +861,12 @@ user this is as simple as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">user.logout({ res -&gt;
-  if (res.succeeded()) {
-    // the logout call succeeded
-  } else {
-    // the user might not have been logged out
-    // to know why:
+<pre class="CodeRay highlight"><code data-lang="groovy">user.logout({ res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// the logout call succeeded</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// the user might not have been logged out</span>
+    <span class="comment">// to know why:</span>
     println(res.cause())
   }
 })</code></pre>

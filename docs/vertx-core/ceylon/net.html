@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -180,7 +179,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createNetServer();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value server = vertx.createNetServer();</code></pre>
 </div>
 </div>
 </div>
@@ -192,7 +191,7 @@ instance when creating it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetServerOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetServerOptions {
   port = 4321;
 };
 value server = vertx.createNetServer(options);</code></pre>
@@ -210,7 +209,7 @@ alternatives.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createNetServer();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value server = vertx.createNetServer();
 server.listen();</code></pre>
 </div>
 </div>
@@ -219,8 +218,8 @@ server.listen();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createNetServer();
-server.listen(1234, "localhost");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value server = vertx.createNetServer();
+server.listen(1234, &quot;localhost&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -237,12 +236,12 @@ For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createNetServer();
-server.listen(1234, "localhost", (NetServer|Throwable res) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value server = vertx.createNetServer();
+server.listen(1234, &quot;localhost&quot;, (NetServer|Throwable res) {
   if (is NetServer res) {
-    print("Server is now listening!");
+    print(&quot;Server is now listening!&quot;);
   } else {
-    print("Failed to bind!");
+    print(&quot;Failed to bind!&quot;);
   };
 });</code></pre>
 </div>
@@ -258,12 +257,12 @@ server.listen(1234, "localhost", (NetServer|Throwable res) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createNetServer();
-server.listen(0, "localhost", (NetServer|Throwable res) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value server = vertx.createNetServer();
+server.listen(0, &quot;localhost&quot;, (NetServer|Throwable res) {
   if (is NetServer res) {
-    print("Server is now listening on actual port: ``server.actualPort()``");
+    print(&quot;Server is now listening on actual port: ``server.actualPort()``&quot;);
   } else {
-    print("Failed to bind!");
+    print(&quot;Failed to bind!&quot;);
   };
 });</code></pre>
 </div>
@@ -281,7 +280,7 @@ server.listen(0, "localhost", (NetServer|Throwable res) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createNetServer();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value server = vertx.createNetServer();
 server.connectHandler((NetSocket socket) {
   // Handle the connection in here
 });</code></pre>
@@ -307,10 +306,10 @@ the socket.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createNetServer();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value server = vertx.createNetServer();
 server.connectHandler((NetSocket socket) {
   socket.handler((Buffer buffer) {
-    print("I received some bytes: ``buffer.length()``");
+    print(&quot;I received some bytes: ``buffer.length()``&quot;);
   });
 });</code></pre>
 </div>
@@ -323,7 +322,7 @@ server.connectHandler((NetSocket socket) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
 
 ...
 
@@ -333,10 +332,10 @@ value buffer = buffer_.buffer().appendFloat(12.34).appendInt(123);
 socket.write(buffer);
 
 // Write a string in UTF-8 encoding
-socket.write("some data");
+socket.write(&quot;some data&quot;);
 
 // Write a string using the specified encoding
-socket.write("some data", "UTF-16");</code></pre>
+socket.write(&quot;some data&quot;, &quot;UTF-16&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -356,8 +355,8 @@ on it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">socket.closeHandler(() {
-  print("The socket has been closed");
+<pre class="CodeRay highlight"><code data-lang="ceylon">socket.closeHandler(() {
+  print(&quot;The socket has been closed&quot;);
 });</code></pre>
 </div>
 </div>
@@ -405,7 +404,7 @@ classpath resolution or disabling it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">socket.sendFile("myfile.dat");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">socket.sendFile(&quot;myfile.dat&quot;);</code></pre>
 </div>
 </div>
 </div>
@@ -445,11 +444,11 @@ If you want to be notified when the actual close has completed then you can pass
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.close((Throwable? res) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">server.close((Throwable? res) {
   if (!exists res) {
-    print("Server is now closed");
+    print(&quot;Server is now closed&quot;);
   } else {
-    print("close failed");
+    print(&quot;close failed&quot;);
   };
 });</code></pre>
 </div>
@@ -479,7 +478,7 @@ deployed then you will have at most one core utilised on your server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Create a few instances so we can utilise cores
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Create a few instances so we can utilise cores
 
 for (i in 0:10) {
   value server = vertx.createNetServer();
@@ -489,7 +488,7 @@ for (i in 0:10) {
       socket.write(buffer);
     });
   });
-  server.listen(1234, "localhost");
+  server.listen(1234, &quot;localhost&quot;);
 };</code></pre>
 </div>
 </div>
@@ -507,10 +506,10 @@ on the command line:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = DeploymentOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = DeploymentOptions {
   instances = 10;
 };
-vertx.deployVerticle("com.mycompany.MyVerticle", options);</code></pre>
+vertx.deployVerticle(&quot;com.mycompany.MyVerticle&quot;, options);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -543,7 +542,7 @@ them in a round-robin fashion to any of the connect handlers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createNetClient();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value client = vertx.createNetClient();</code></pre>
 </div>
 </div>
 </div>
@@ -555,7 +554,7 @@ instance when creating it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetClientOptions {
   connectTimeout = 10000;
 };
 value client = vertx.createNetClient(options);</code></pre>
@@ -571,16 +570,16 @@ specifying the port and host of the server and a handler that will be called wit
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetClientOptions {
   connectTimeout = 10000;
 };
 value client = vertx.createNetClient(options);
-client.connect(4321, "localhost", (NetSocket|Throwable res) {
+client.connect(4321, &quot;localhost&quot;, (NetSocket|Throwable res) {
   if (is NetSocket res) {
-    print("Connected!");
+    print(&quot;Connected!&quot;);
     value socket = res;
   } else {
-    print("Failed to connect: ``res.getMessage()``");
+    print(&quot;Failed to connect: ``res.getMessage()``&quot;);
   };
 });</code></pre>
 </div>
@@ -608,7 +607,7 @@ only apply to creating initial connections.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetClientOptions {
   reconnectAttempts = 10;
   reconnectInterval = 500;
 };
@@ -627,7 +626,7 @@ value client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetServerOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetServerOptions {
   logActivity = true;
 };
 
@@ -639,7 +638,7 @@ value server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetClientOptions {
   logActivity = true;
 };
 
@@ -704,11 +703,11 @@ utility which ships with the JDK.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetServerOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetServerOptions {
   ssl = true;
   keyStoreOptions = JksOptions {
-    path = "/path/to/your/server-keystore.jks";
-    password = "password-of-your-keystore";
+    path = &quot;/path/to/your/server-keystore.jks&quot;;
+    password = &quot;password-of-your-keystore&quot;;
   };
 };
 value server = vertx.createNetServer(options);</code></pre>
@@ -719,10 +718,10 @@ value server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.jks");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-keystore.jks&quot;);
 value jksOptions = JksOptions {
   value = myKeyStoreAsABuffer;
-  password = "password-of-your-keystore";
+  password = &quot;password-of-your-keystore&quot;;
 };
 value options = NetServerOptions {
   ssl = true;
@@ -737,11 +736,11 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetServerOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetServerOptions {
   ssl = true;
   pfxKeyCertOptions = PfxOptions {
-    path = "/path/to/your/server-keystore.pfx";
-    password = "password-of-your-keystore";
+    path = &quot;/path/to/your/server-keystore.pfx&quot;;
+    password = &quot;password-of-your-keystore&quot;;
   };
 };
 value server = vertx.createNetServer(options);</code></pre>
@@ -752,10 +751,10 @@ value server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.pfx");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-keystore.pfx&quot;);
 value pfxOptions = PfxOptions {
   value = myKeyStoreAsABuffer;
-  password = "password-of-your-keystore";
+  password = &quot;password-of-your-keystore&quot;;
 };
 value options = NetServerOptions {
   ssl = true;
@@ -769,11 +768,11 @@ value server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetServerOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetServerOptions {
   ssl = true;
   pemKeyCertOptions = PemKeyCertOptions {
-    keyPath = "/path/to/your/server-key.pem";
-    certPath = "/path/to/your/server-cert.pem";
+    keyPath = &quot;/path/to/your/server-key.pem&quot;;
+    certPath = &quot;/path/to/your/server-cert.pem&quot;;
   };
 };
 value server = vertx.createNetServer(options);</code></pre>
@@ -784,8 +783,8 @@ value server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-key.pem");
-value myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-cert.pem");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value myKeyAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-key.pem&quot;);
+value myCertAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-cert.pem&quot;);
 value pemOptions = PemKeyCertOptions {
   keyValue = myKeyAsABuffer;
   certValue = myCertAsABuffer;
@@ -818,16 +817,16 @@ utility which ships with the JDK.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { required }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { required }
 
 ...
 
 value options = NetServerOptions {
   ssl = true;
-  clientAuth = "REQUIRED";
+  clientAuth = &quot;REQUIRED&quot;;
   trustStoreOptions = JksOptions {
-    path = "/path/to/your/truststore.jks";
-    password = "password-of-your-truststore";
+    path = &quot;/path/to/your/truststore.jks&quot;;
+    password = &quot;password-of-your-truststore&quot;;
   };
 };
 value server = vertx.createNetServer(options);</code></pre>
@@ -838,17 +837,17 @@ value server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { required }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { required }
 
 ...
 
-value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks");
+value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.jks&quot;);
 value options = NetServerOptions {
   ssl = true;
-  clientAuth = "REQUIRED";
+  clientAuth = &quot;REQUIRED&quot;;
   trustStoreOptions = JksOptions {
     value = myTrustStoreAsABuffer;
-    password = "password-of-your-truststore";
+    password = &quot;password-of-your-truststore&quot;;
   };
 };
 value server = vertx.createNetServer(options);</code></pre>
@@ -860,16 +859,16 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { required }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { required }
 
 ...
 
 value options = NetServerOptions {
   ssl = true;
-  clientAuth = "REQUIRED";
+  clientAuth = &quot;REQUIRED&quot;;
   pfxTrustOptions = PfxOptions {
-    path = "/path/to/your/truststore.pfx";
-    password = "password-of-your-truststore";
+    path = &quot;/path/to/your/truststore.pfx&quot;;
+    password = &quot;password-of-your-truststore&quot;;
   };
 };
 value server = vertx.createNetServer(options);</code></pre>
@@ -880,17 +879,17 @@ value server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { required }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { required }
 
 ...
 
-value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx");
+value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.pfx&quot;);
 value options = NetServerOptions {
   ssl = true;
-  clientAuth = "REQUIRED";
+  clientAuth = &quot;REQUIRED&quot;;
   pfxTrustOptions = PfxOptions {
     value = myTrustStoreAsABuffer;
-    password = "password-of-your-truststore";
+    password = &quot;password-of-your-truststore&quot;;
   };
 };
 value server = vertx.createNetServer(options);</code></pre>
@@ -901,15 +900,15 @@ value server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { required }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { required }
 
 ...
 
 value options = NetServerOptions {
   ssl = true;
-  clientAuth = "REQUIRED";
+  clientAuth = &quot;REQUIRED&quot;;
   pemTrustOptions = PemTrustOptions {
-    certPaths = {"/path/to/your/server-ca.pem" };
+    certPaths = {&quot;/path/to/your/server-ca.pem&quot; };
   };
 };
 value server = vertx.createNetServer(options);</code></pre>
@@ -920,14 +919,14 @@ value server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { required }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { required }
 
 ...
 
-value myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx");
+value myCaAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-ca.pfx&quot;);
 value options = NetServerOptions {
   ssl = true;
-  clientAuth = "REQUIRED";
+  clientAuth = &quot;REQUIRED&quot;;
   pemTrustOptions = PemTrustOptions {
     certValues = {myCaAsABuffer };
   };
@@ -954,7 +953,7 @@ be sure who you are connecting to. Use this with caution. Default value is false
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetClientOptions {
   ssl = true;
   trustAll = true;
 };
@@ -971,9 +970,9 @@ To enable host verification, set the algorithm to use on your client (only HTTPS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetClientOptions {
   ssl = true;
-  hostnameVerificationAlgorithm = "HTTPS";
+  hostnameVerificationAlgorithm = &quot;HTTPS&quot;;
 };
 value client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -992,11 +991,11 @@ in the client trust store, the connection attempt will not succeed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetClientOptions {
   ssl = true;
   trustStoreOptions = JksOptions {
-    path = "/path/to/your/truststore.jks";
-    password = "password-of-your-truststore";
+    path = &quot;/path/to/your/truststore.jks&quot;;
+    password = &quot;password-of-your-truststore&quot;;
   };
 };
 value client = vertx.createNetClient(options);</code></pre>
@@ -1007,12 +1006,12 @@ value client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.jks&quot;);
 value options = NetClientOptions {
   ssl = true;
   trustStoreOptions = JksOptions {
     value = myTrustStoreAsABuffer;
-    password = "password-of-your-truststore";
+    password = &quot;password-of-your-truststore&quot;;
   };
 };
 value client = vertx.createNetClient(options);</code></pre>
@@ -1024,11 +1023,11 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetClientOptions {
   ssl = true;
   pfxTrustOptions = PfxOptions {
-    path = "/path/to/your/truststore.pfx";
-    password = "password-of-your-truststore";
+    path = &quot;/path/to/your/truststore.pfx&quot;;
+    password = &quot;password-of-your-truststore&quot;;
   };
 };
 value client = vertx.createNetClient(options);</code></pre>
@@ -1039,12 +1038,12 @@ value client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.pfx&quot;);
 value options = NetClientOptions {
   ssl = true;
   pfxTrustOptions = PfxOptions {
     value = myTrustStoreAsABuffer;
-    password = "password-of-your-truststore";
+    password = &quot;password-of-your-truststore&quot;;
   };
 };
 value client = vertx.createNetClient(options);</code></pre>
@@ -1055,10 +1054,10 @@ value client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetClientOptions {
   ssl = true;
   pemTrustOptions = PemTrustOptions {
-    certPaths = {"/path/to/your/ca-cert.pem" };
+    certPaths = {&quot;/path/to/your/ca-cert.pem&quot; };
   };
 };
 value client = vertx.createNetClient(options);</code></pre>
@@ -1069,7 +1068,7 @@ value client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/ca-cert.pem");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/ca-cert.pem&quot;);
 value options = NetClientOptions {
   ssl = true;
   pemTrustOptions = PemTrustOptions {
@@ -1094,11 +1093,11 @@ Again it&#8217;s just a regular Java key store. The client keystore location is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetClientOptions {
   ssl = true;
   keyStoreOptions = JksOptions {
-    path = "/path/to/your/client-keystore.jks";
-    password = "password-of-your-keystore";
+    path = &quot;/path/to/your/client-keystore.jks&quot;;
+    password = &quot;password-of-your-keystore&quot;;
   };
 };
 value client = vertx.createNetClient(options);</code></pre>
@@ -1109,10 +1108,10 @@ value client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.jks");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-keystore.jks&quot;);
 value jksOptions = JksOptions {
   value = myKeyStoreAsABuffer;
-  password = "password-of-your-keystore";
+  password = &quot;password-of-your-keystore&quot;;
 };
 value options = NetClientOptions {
   ssl = true;
@@ -1127,11 +1126,11 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetClientOptions {
   ssl = true;
   pfxKeyCertOptions = PfxOptions {
-    path = "/path/to/your/client-keystore.pfx";
-    password = "password-of-your-keystore";
+    path = &quot;/path/to/your/client-keystore.pfx&quot;;
+    password = &quot;password-of-your-keystore&quot;;
   };
 };
 value client = vertx.createNetClient(options);</code></pre>
@@ -1142,10 +1141,10 @@ value client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.pfx");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-keystore.pfx&quot;);
 value pfxOptions = PfxOptions {
   value = myKeyStoreAsABuffer;
-  password = "password-of-your-keystore";
+  password = &quot;password-of-your-keystore&quot;;
 };
 value options = NetClientOptions {
   ssl = true;
@@ -1159,11 +1158,11 @@ value client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetClientOptions {
   ssl = true;
   pemKeyCertOptions = PemKeyCertOptions {
-    keyPath = "/path/to/your/client-key.pem";
-    certPath = "/path/to/your/client-cert.pem";
+    keyPath = &quot;/path/to/your/client-key.pem&quot;;
+    certPath = &quot;/path/to/your/client-cert.pem&quot;;
   };
 };
 value client = vertx.createNetClient(options);</code></pre>
@@ -1174,8 +1173,8 @@ value client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-key.pem");
-value myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-cert.pem");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value myKeyAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-key.pem&quot;);
+value myCertAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-cert.pem&quot;);
 value pemOptions = PemKeyCertOptions {
   keyValue = myKeyAsABuffer;
   certValue = myCertAsABuffer;
@@ -1215,7 +1214,7 @@ give <code>KeyCertOptions</code> and <code>TrustOptions</code> configurations:</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.net { selfSignedCertificate }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.net { selfSignedCertificate }
 
 ...
 
@@ -1227,7 +1226,7 @@ value serverOptions = NetServerOptions {
   trustOptions = certificate.trustOptions();
 };
 
-value server = vertx.createNetServer(serverOptions).connectHandler((NetSocket socket) =&gt; socket.write("Hello!").end()).listen(1234, "localhost");
+value server = vertx.createNetServer(serverOptions).connectHandler((NetSocket socket) =&gt; socket.write(&quot;Hello!&quot;).end()).listen(1234, &quot;localhost&quot;);
 
 value clientOptions = NetClientOptions {
   ssl = true;
@@ -1236,11 +1235,11 @@ value clientOptions = NetClientOptions {
 };
 
 value client = vertx.createNetClient(clientOptions);
-client.connect(1234, "localhost", (NetSocket|Throwable ar) {
+client.connect(1234, &quot;localhost&quot;, (NetSocket|Throwable ar) {
   if (is NetSocket ar) {
     ar.handler((Buffer buffer) =&gt; print(buffer));
   } else {
-    print("Woops: ``ar.getMessage()``");
+    print(&quot;Woops: ``ar.getMessage()``&quot;);
   };
 });</code></pre>
 </div>
@@ -1250,7 +1249,7 @@ client.connect(1234, "localhost", (NetSocket|Throwable ar) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value clientOptions = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value clientOptions = NetClientOptions {
   ssl = true;
   trustAll = true;
 };</code></pre>
@@ -1261,7 +1260,7 @@ client.connect(1234, "localhost", (NetSocket|Throwable ar) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.net { selfSignedCertificate }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.net { selfSignedCertificate }
 
 ...
 
@@ -1271,7 +1270,7 @@ vertx.createHttpServer(HttpServerOptions {
   ssl = true;
   keyCertOptions = certificate.keyCertOptions();
   trustOptions = certificate.trustOptions();
-}).requestHandler((HttpServerRequest req) =&gt; req.response().end("Hello!")).listen(8080);</code></pre>
+}).requestHandler((HttpServerRequest req) =&gt; req.response().end(&quot;Hello!&quot;)).listen(8080);</code></pre>
 </div>
 </div>
 </div>
@@ -1284,10 +1283,10 @@ the crl list to use:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetClientOptions {
   ssl = true;
   trustStoreOptions = trustOptions;
-  crlPaths = {"/path/to/your/crl.pem" };
+  crlPaths = {&quot;/path/to/your/crl.pem&quot; };
 };
 value client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -1297,7 +1296,7 @@ value client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value myCrlAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/crl.pem");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value myCrlAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/crl.pem&quot;);
 value options = NetClientOptions {
   ssl = true;
   trustStoreOptions = trustOptions;
@@ -1315,10 +1314,10 @@ configured with a suite of enabled ciphers:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetServerOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetServerOptions {
   ssl = true;
   keyStoreOptions = keyStoreOptions;
-  enabledCipherSuites = {"ECDHE-RSA-AES128-GCM-SHA256" , "ECDHE-ECDSA-AES128-GCM-SHA256" , "ECDHE-RSA-AES256-GCM-SHA384" , "CDHE-ECDSA-AES256-GCM-SHA384" };
+  enabledCipherSuites = {&quot;ECDHE-RSA-AES128-GCM-SHA256&quot; , &quot;ECDHE-ECDSA-AES128-GCM-SHA256&quot; , &quot;ECDHE-RSA-AES256-GCM-SHA384&quot; , &quot;CDHE-ECDSA-AES256-GCM-SHA384&quot; };
 };
 value server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -1335,10 +1334,10 @@ configured by explicitly adding enabled protocols:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = NetServerOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = NetServerOptions {
   ssl = true;
   keyStoreOptions = keyStoreOptions;
-  enabledSecureTransportProtocols = {"TLSv1.1" , "TLSv1.2" };
+  enabledSecureTransportProtocols = {&quot;TLSv1.1&quot; , &quot;TLSv1.2&quot; };
 };
 value server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -1368,7 +1367,7 @@ OpenSSL provides better performances and CPU usage than the JDK engine, as well 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Use JDK SSL engine
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Use JDK SSL engine
 value options = NetServerOptions {
   ssl = true;
   keyStoreOptions = keyStoreOptions;
@@ -1422,9 +1421,9 @@ configured the server with multiple key/certificate pairs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value keyCertOptions = JksOptions {
-  path = "keystore.jks";
-  password = "wibble";
+<pre class="CodeRay highlight"><code data-lang="ceylon">value keyCertOptions = JksOptions {
+  path = &quot;keystore.jks&quot;;
+  password = &quot;wibble&quot;;
 };
 
 value netServer = vertx.createNetServer(NetServerOptions {
@@ -1439,9 +1438,9 @@ value netServer = vertx.createNetServer(NetServerOptions {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value keyCertOptions = PemKeyCertOptions {
-  keyPaths = ArrayList { "default-key.pem",  "host1-key.pem",  "etc..." };
-  certPaths = ArrayList { "default-cert.pem",  "host2-key.pem",  "etc..." };
+<pre class="CodeRay highlight"><code data-lang="ceylon">value keyCertOptions = PemKeyCertOptions {
+  keyPaths = ArrayList { &quot;default-key.pem&quot;,  &quot;host1-key.pem&quot;,  &quot;etc...&quot; };
+  certPaths = ArrayList { &quot;default-cert.pem&quot;,  &quot;host2-key.pem&quot;,  &quot;etc...&quot; };
 };
 
 value netServer = vertx.createNetServer(NetServerOptions {
@@ -1459,18 +1458,18 @@ value netServer = vertx.createNetServer(NetServerOptions {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createNetClient(NetClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value client = vertx.createNetClient(NetClientOptions {
   trustStoreOptions = trustOptions;
   ssl = true;
 });
 
 // Connect to 'localhost' and present 'server.name' server name
-client.connect(1234, "localhost", "server.name", (NetSocket|Throwable res) {
+client.connect(1234, &quot;localhost&quot;, &quot;server.name&quot;, (NetSocket|Throwable res) {
   if (is NetSocket res) {
-    print("Connected!");
+    print(&quot;Connected!&quot;);
     value socket = res;
   } else {
-    print("Failed to connect: ``res.getMessage()``");
+    print(&quot;Failed to connect: ``res.getMessage()``&quot;);
   };
 });</code></pre>
 </div>
@@ -1588,17 +1587,17 @@ ALPN version for the JVM running it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.net { socks5 }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.net { socks5 }
 
 ...
 
 value options = NetClientOptions {
   proxyOptions = ProxyOptions {
-    type = "SOCKS5";
-    host = "localhost";
+    type = &quot;SOCKS5&quot;;
+    host = &quot;localhost&quot;;
     port = 1080;
-    username = "username";
-    password = "secret";
+    username = &quot;username&quot;;
+    password = &quot;secret&quot;;
   };
 };
 value client = vertx.createNetClient(options);</code></pre>

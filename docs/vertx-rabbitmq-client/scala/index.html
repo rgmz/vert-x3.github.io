@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -167,11 +166,11 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-rabbitmq-client-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-rabbitmq-client-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -182,8 +181,8 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-rabbitmq-client-scala_2.12:3.4.2'
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+  compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-rabbitmq-client-scala_2.12:3.4.2</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -195,9 +194,9 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var config = new io.vertx.core.json.JsonObject()
+<pre class="CodeRay highlight"><code data-lang="scala">var config = new io.vertx.core.json.JsonObject()
 // full amqp uri
-config.put("uri", "amqp://xvjvsrrc:VbuL1atClKt7zVNQha0bnnScbNvGiqgb@moose.rmq.cloudamqp.com/xvjvsrrc")
+config.put(&quot;uri&quot;, &quot;amqp://xvjvsrrc:VbuL1atClKt7zVNQha0bnnScbNvGiqgb@moose.rmq.cloudamqp.com/xvjvsrrc&quot;)
 var client = RabbitMQClient.create(vertx, config)</code></pre>
 </div>
 </div>
@@ -206,20 +205,20 @@ var client = RabbitMQClient.create(vertx, config)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var config = new io.vertx.core.json.JsonObject()
+<pre class="CodeRay highlight"><code data-lang="scala">var config = new io.vertx.core.json.JsonObject()
 // Each parameter is optional
 // The default parameter with be used if the parameter is not set
-config.put("user", "user1")
-config.put("password", "password1")
-config.put("host", "localhost")
-config.put("port", 5672)
-config.put("virtualHost", "vhost1")
-config.put("connectionTimeout", 60)
-config.put("requestedHeartbeat", 60)
-config.put("handshakeTimeout", 60)
-config.put("requestedChannelMax", 5)
-config.put("networkRecoveryInterval", 5)
-config.put("automaticRecoveryEnabled", true)
+config.put(&quot;user&quot;, &quot;user1&quot;)
+config.put(&quot;password&quot;, &quot;password1&quot;)
+config.put(&quot;host&quot;, &quot;localhost&quot;)
+config.put(&quot;port&quot;, 5672)
+config.put(&quot;virtualHost&quot;, &quot;vhost1&quot;)
+config.put(&quot;connectionTimeout&quot;, 60)
+config.put(&quot;requestedHeartbeat&quot;, 60)
+config.put(&quot;handshakeTimeout&quot;, 60)
+config.put(&quot;requestedChannelMax&quot;, 5)
+config.put(&quot;networkRecoveryInterval&quot;, 5)
+config.put(&quot;automaticRecoveryEnabled&quot;, true)
 
 var client = RabbitMQClient.create(vertx, config)</code></pre>
 </div>
@@ -232,17 +231,17 @@ var client = RabbitMQClient.create(vertx, config)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var config = Map()
+<pre class="CodeRay highlight"><code data-lang="scala">var config = Map()
 
-config + ("x-dead-letter-exchange" -&gt; "my.deadletter.exchange")
-config + ("alternate-exchange" -&gt; "my.alternate.exchange")
+config + (&quot;x-dead-letter-exchange&quot; -&gt; &quot;my.deadletter.exchange&quot;)
+config + (&quot;alternate-exchange&quot; -&gt; &quot;my.alternate.exchange&quot;)
 // ...
-client.exchangeDeclareFuture("my.exchange", "fanout", true, false, config).onComplete{
+client.exchangeDeclareFuture(&quot;my.exchange&quot;, &quot;fanout&quot;, true, false, config).onComplete{
   case Success(result) =&gt; {
-    println("Exchange successfully declared with config")
+    println(&quot;Exchange successfully declared with config&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -266,13 +265,13 @@ client.exchangeDeclareFuture("my.exchange", "fanout", true, false, config).onCom
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var message = new io.vertx.core.json.JsonObject().put("body", "Hello RabbitMQ, from Vert.x !")
-client.basicPublishFuture("", "my.queue", message).onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">var message = new io.vertx.core.json.JsonObject().put(&quot;body&quot;, &quot;Hello RabbitMQ, from Vert.x !&quot;)
+client.basicPublishFuture(&quot;&quot;, &quot;my.queue&quot;, message).onComplete{
   case Success(result) =&gt; {
-    println("Message published !")
+    println(&quot;Message published !&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -285,29 +284,29 @@ client.basicPublishFuture("", "my.queue", message).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var message = new io.vertx.core.json.JsonObject().put("body", "Hello RabbitMQ, from Vert.x !")
+<pre class="CodeRay highlight"><code data-lang="scala">var message = new io.vertx.core.json.JsonObject().put(&quot;body&quot;, &quot;Hello RabbitMQ, from Vert.x !&quot;)
 
 // Put the channel in confirm mode. This can be done once at init.
 client.confirmSelectFuture().onComplete{
   case Success(result) =&gt; {
-    client.basicPublishFuture("", "my.queue", message).onComplete{
+    client.basicPublishFuture(&quot;&quot;, &quot;my.queue&quot;, message).onComplete{
       case Success(result) =&gt; {
         // Check the message got confirmed by the broker.
         client.waitForConfirmsFuture().onComplete{
           case Success(result) =&gt; {
-            println("Message published !")}
+            println(&quot;Message published !&quot;)}
           case Failure(cause) =&gt; {
-            println(s"$cause")
+            println(s&quot;$cause&quot;)
           }
         }
       }
       case Failure(cause) =&gt; {
-        println(s"$cause")
+        println(s&quot;$cause&quot;)
       }
     }
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -320,20 +319,20 @@ client.confirmSelectFuture().onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Create the event bus handler which messages will be sent to
+<pre class="CodeRay highlight"><code data-lang="scala">// Create the event bus handler which messages will be sent to
 // Create the event bus handler which messages will be sent to
-vertx.eventBus().consumer("my.address", (msg: io.vertx.scala.core.eventbus.Message&lt;java.lang.Object&gt;) =&gt; {
+vertx.eventBus().consumer(&quot;my.address&quot;, (msg: io.vertx.scala.core.eventbus.Message&lt;java.lang.Object&gt;) =&gt; {
   var json = msg.body()
-  println(s"Got message: ${json.getValue("body")}")
+  println(s&quot;Got message: ${json.getValue(&quot;body&quot;)}&quot;)
 })
 
 // Setup the link between rabbitmq consumer and event bus address
-client.basicConsumeFuture("my.queue", "my.address").onComplete{
+client.basicConsumeFuture(&quot;my.queue&quot;, &quot;my.address&quot;).onComplete{
   case Success(result) =&gt; {
-    println("RabbitMQ consumer created !")
+    println(&quot;RabbitMQ consumer created !&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -346,13 +345,13 @@ client.basicConsumeFuture("my.queue", "my.address").onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">client.basicGetFuture("my.queue", true).onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">client.basicGetFuture(&quot;my.queue&quot;, true).onComplete{
   case Success(result) =&gt; {
     var msg = result
-    println(s"Got message: ${msg.getValue("body")}")
+    println(s&quot;Got message: ${msg.getValue(&quot;body&quot;)}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -362,24 +361,24 @@ client.basicConsumeFuture("my.queue", "my.address").onComplete{
 <h3 id="_consume_messages_without_auto_ack">Consume messages without auto-ack</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Create the event bus handler which messages will be sent to
-vertx.eventBus().consumer("my.address", (msg: io.vertx.scala.core.eventbus.Message&lt;java.lang.Object&gt;) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">// Create the event bus handler which messages will be sent to
+vertx.eventBus().consumer(&quot;my.address&quot;, (msg: io.vertx.scala.core.eventbus.Message&lt;java.lang.Object&gt;) =&gt; {
   var json = msg.body()
-  println(s"Got message: ${json.getValue("body")}")
+  println(s&quot;Got message: ${json.getValue(&quot;body&quot;)}&quot;)
   // ack
-  client.basicAckFuture(json.getValue("deliveryTag"), false).onComplete{
-    case Success(result) =&gt; println("Success")
-    case Failure(cause) =&gt; println("Failure")
+  client.basicAckFuture(json.getValue(&quot;deliveryTag&quot;), false).onComplete{
+    case Success(result) =&gt; println(&quot;Success&quot;)
+    case Failure(cause) =&gt; println(&quot;Failure&quot;)
   }
 })
 
 // Setup the link between rabbitmq consumer and event bus address
-client.basicConsumeFuture("my.queue", "my.address", false).onComplete{
+client.basicConsumeFuture(&quot;my.queue&quot;, &quot;my.address&quot;, false).onComplete{
   case Success(result) =&gt; {
-    println("RabbitMQ consumer created !")
+    println(&quot;RabbitMQ consumer created !&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>

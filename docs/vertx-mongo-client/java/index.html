@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -210,11 +209,11 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-mongo-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-mongo-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -226,7 +225,7 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mongo-client:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mongo-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -251,7 +250,7 @@ to share the same pool so you don&#8217;t end up with multiple pools</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MongoClient client = MongoClient.createShared(vertx, config);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">MongoClient client = MongoClient.createShared(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -269,7 +268,7 @@ will actually create the pool, and the specified config will be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MongoClient client = MongoClient.createShared(vertx, config, "MyPoolName");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">MongoClient client = MongoClient.createShared(vertx, config, <span class="string"><span class="delimiter">&quot;</span><span class="content">MyPoolName</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -299,7 +298,7 @@ However, it&#8217;s possible you want to create a client instance that doesn&#82
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MongoClient client = MongoClient.createNonShared(vertx, config);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">MongoClient client = MongoClient.createNonShared(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -332,16 +331,16 @@ if it doesn&#8217;t already exist, otherwise it is updated.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject document = new JsonObject().put("title", "The Hobbit");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject document = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>);
 
-mongoClient.save("books", document, res -&gt; {
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    String id = res.result();
-    System.out.println("Saved book with id " + id);
+    <span class="predefined-type">String</span> id = res.result();
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Saved book with id </span><span class="delimiter">&quot;</span></span> + id);
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 
@@ -353,15 +352,15 @@ mongoClient.save("books", document, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject document = new JsonObject().put("title", "The Hobbit").put("_id", "123244");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject document = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>).put(<span class="string"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">123244</span><span class="delimiter">&quot;</span></span>);
 
-mongoClient.save("books", document, res -&gt; {
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    // ...
+    <span class="comment">// ...</span>
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 
@@ -379,16 +378,16 @@ mongoClient.save("books", document, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject document = new JsonObject().put("title", "The Hobbit");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject document = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>);
 
-mongoClient.insert("books", document, res -&gt; {
+mongoClient.insert(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    String id = res.result();
-    System.out.println("Inserted book with id " + id);
+    <span class="predefined-type">String</span> id = res.result();
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Inserted book with id </span><span class="delimiter">&quot;</span></span> + id);
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 
@@ -400,17 +399,17 @@ mongoClient.insert("books", document, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject document = new JsonObject().put("title", "The Hobbit").put("_id", "123244");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject document = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>).put(<span class="string"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">123244</span><span class="delimiter">&quot;</span></span>);
 
-mongoClient.insert("books", document, res -&gt; {
+mongoClient.insert(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    //...
+    <span class="comment">//...</span>
 
-  } else {
+  } <span class="keyword">else</span> {
 
-    // Will fail if the book with that id already exists.
+    <span class="comment">// Will fail if the book with that id already exists.</span>
   }
 
 });</code></pre>
@@ -435,18 +434,18 @@ how the object is updated.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject query = new JsonObject().put("title", "The Hobbit");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject query = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>);
 
-// Set the author field
-JsonObject update = new JsonObject().put("$set", new JsonObject().put("author", "J. R. R. Tolkien"));
+<span class="comment">// Set the author field</span>
+JsonObject update = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">$set</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>));
 
-mongoClient.update("books", query, update, res -&gt; {
+mongoClient.update(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, update, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    System.out.println("Book updated !");
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Book updated !</span><span class="delimiter">&quot;</span></span>);
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace();
   }
@@ -479,20 +478,20 @@ and pass in an instance of <code><a href="../../apidocs/io/vertx/ext/mongo/Updat
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject query = new JsonObject().put("title", "The Hobbit");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject query = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>);
 
-// Set the author field
-JsonObject update = new JsonObject().put("$set", new JsonObject().put("author", "J. R. R. Tolkien"));
+<span class="comment">// Set the author field</span>
+JsonObject update = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">$set</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>));
 
-UpdateOptions options = new UpdateOptions().setMulti(true);
+UpdateOptions options = <span class="keyword">new</span> UpdateOptions().setMulti(<span class="predefined-constant">true</span>);
 
-mongoClient.updateWithOptions("books", query, update, options, res -&gt; {
+mongoClient.updateWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, update, options, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    System.out.println("Book updated !");
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Book updated !</span><span class="delimiter">&quot;</span></span>);
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace();
   }
@@ -515,17 +514,17 @@ Instead it replaces the entire document with the one provided.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject query = new JsonObject().put("title", "The Hobbit");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject query = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>);
 
-JsonObject replace = new JsonObject().put("title", "The Lord of the Rings").put("author", "J. R. R. Tolkien");
+JsonObject replace = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">The Lord of the Rings</span><span class="delimiter">&quot;</span></span>).put(<span class="string"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>);
 
-mongoClient.replace("books", query, replace, res -&gt; {
+mongoClient.replace(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, replace, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    System.out.println("Book replaced !");
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Book replaced !</span><span class="delimiter">&quot;</span></span>);
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace();
 
@@ -563,19 +562,19 @@ For more explanation what ordered means, see <a href="https://docs.mongodb.com/m
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject query = new JsonObject();
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject query = <span class="keyword">new</span> JsonObject();
 
-mongoClient.find("books", query, res -&gt; {
+mongoClient.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    for (JsonObject json : res.result()) {
+    <span class="keyword">for</span> (JsonObject json : res.result()) {
 
-      System.out.println(json.encodePrettily());
+      <span class="predefined-type">System</span>.out.println(json.encodePrettily());
 
     }
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace();
 
@@ -589,19 +588,19 @@ mongoClient.find("books", query, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject query = new JsonObject().put("author", "J. R. R. Tolkien");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject query = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>);
 
-mongoClient.find("books", query, res -&gt; {
+mongoClient.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    for (JsonObject json : res.result()) {
+    <span class="keyword">for</span> (JsonObject json : res.result()) {
 
-      System.out.println(json.encodePrettily());
+      <span class="predefined-type">System</span>.out.println(json.encodePrettily());
 
     }
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace();
 
@@ -692,15 +691,15 @@ mongoClient.findBatch("book", query, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject query = new JsonObject().put("author", "J. R. R. Tolkien");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject query = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>);
 
-mongoClient.remove("books", query, res -&gt; {
+mongoClient.remove(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    System.out.println("Never much liked Tolkien stuff!");
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Never much liked Tolkien stuff!</span><span class="delimiter">&quot;</span></span>);
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace();
 
@@ -728,15 +727,15 @@ mongoClient.remove("books", query, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject query = new JsonObject().put("author", "J. R. R. Tolkien");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject query = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>);
 
-mongoClient.count("books", query, res -&gt; {
+mongoClient.count(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    long num = res.result();
+    <span class="type">long</span> num = res.result();
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace();
 
@@ -755,13 +754,13 @@ mongoClient.count("books", query, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">mongoClient.getCollections(res -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">mongoClient.getCollections(res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    List&lt;String&gt; collections = res.result();
+    <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; collections = res.result();
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace();
 
@@ -774,13 +773,13 @@ mongoClient.count("books", query, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">mongoClient.createCollection("mynewcollectionr", res -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">mongoClient.createCollection(<span class="string"><span class="delimiter">&quot;</span><span class="content">mynewcollectionr</span><span class="delimiter">&quot;</span></span>, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    // Created ok!
+    <span class="comment">// Created ok!</span>
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace();
 
@@ -805,13 +804,13 @@ Dropping a collection will delete all documents within it!
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">mongoClient.dropCollection("mynewcollectionr", res -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">mongoClient.dropCollection(<span class="string"><span class="delimiter">&quot;</span><span class="content">mynewcollectionr</span><span class="delimiter">&quot;</span></span>, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    // Dropped ok!
+    <span class="comment">// Dropped ok!</span>
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace();
 
@@ -837,15 +836,15 @@ of the entries in the JSON is the command name it must be specified as a paramet
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject command = new JsonObject()
-  .put("aggregate", "collection_name")
-  .put("pipeline", new JsonArray());
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject command = <span class="keyword">new</span> JsonObject()
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">aggregate</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">collection_name</span><span class="delimiter">&quot;</span></span>)
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">pipeline</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonArray());
 
-mongoClient.runCommand("aggregate", command, res -&gt; {
-  if (res.succeeded()) {
-    JsonArray resArr = res.result().getJsonArray("result");
-    // etc
-  } else {
+mongoClient.runCommand(<span class="string"><span class="delimiter">&quot;</span><span class="content">aggregate</span><span class="delimiter">&quot;</span></span>, command, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    JsonArray resArr = res.result().getJsonArray(<span class="string"><span class="delimiter">&quot;</span><span class="content">result</span><span class="delimiter">&quot;</span></span>);
+    <span class="comment">// etc</span>
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -862,28 +861,28 @@ mongoClient.runCommand("aggregate", command, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject document = new JsonObject().put("title", "The Hobbit")
-  //ISO-8601 date
-  .put("publicationDate", new JsonObject().put("$date", "1937-09-21T00:00:00+00:00"));
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject document = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>)
+  <span class="comment">//ISO-8601 date</span>
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">publicationDate</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">$date</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">1937-09-21T00:00:00+00:00</span><span class="delimiter">&quot;</span></span>));
 
-mongoService.save("publishedBooks", document, res -&gt; {
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">publishedBooks</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    String id = res.result();
+    <span class="predefined-type">String</span> id = res.result();
 
-    mongoService.findOne("publishedBooks", new JsonObject().put("_id", id), null, res2 -&gt; {
-      if (res2.succeeded()) {
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">publishedBooks</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span>, id), <span class="predefined-constant">null</span>, res2 -&gt; {
+      <span class="keyword">if</span> (res2.succeeded()) {
 
-        System.out.println("To retrieve ISO-8601 date : "
-                + res2.result().getJsonObject("publicationDate").getString("$date"));
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">To retrieve ISO-8601 date : </span><span class="delimiter">&quot;</span></span>
+                + res2.result().getJsonObject(<span class="string"><span class="delimiter">&quot;</span><span class="content">publicationDate</span><span class="delimiter">&quot;</span></span>).getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">$date</span><span class="delimiter">&quot;</span></span>));
 
-      } else {
+      } <span class="keyword">else</span> {
         res2.cause().printStackTrace();
       }
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 
@@ -895,29 +894,29 @@ mongoService.save("publishedBooks", document, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">byte[] binaryObject = new byte[40];
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">byte</span><span class="type">[]</span> binaryObject = <span class="keyword">new</span> <span class="type">byte</span>[<span class="integer">40</span>];
 
-JsonObject document = new JsonObject()
-        .put("name", "Alan Turing")
-        .put("binaryStuff", new JsonObject().put("$binary", binaryObject));
+JsonObject document = <span class="keyword">new</span> JsonObject()
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Alan Turing</span><span class="delimiter">&quot;</span></span>)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">$binary</span><span class="delimiter">&quot;</span></span>, binaryObject));
 
-mongoService.save("smartPeople", document, res -&gt; {
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    String id = res.result();
+    <span class="predefined-type">String</span> id = res.result();
 
-    mongoService.findOne("smartPeople", new JsonObject().put("_id", id), null, res2 -&gt; {
-      if(res2.succeeded()) {
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span>, id), <span class="predefined-constant">null</span>, res2 -&gt; {
+      <span class="keyword">if</span>(res2.succeeded()) {
 
-        byte[] reconstitutedBinaryObject = res2.result().getJsonObject("binaryStuff").getBinary("$binary");
-        //This could now be de-serialized into an object in real life
-      } else {
+        <span class="type">byte</span><span class="type">[]</span> reconstitutedBinaryObject = res2.result().getJsonObject(<span class="string"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span>).getBinary(<span class="string"><span class="delimiter">&quot;</span><span class="content">$binary</span><span class="delimiter">&quot;</span></span>);
+        <span class="comment">//This could now be de-serialized into an object in real life</span>
+      } <span class="keyword">else</span> {
         res2.cause().printStackTrace();
       }
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 
@@ -929,29 +928,29 @@ mongoService.save("smartPeople", document, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">String base64EncodedString = "a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ=";
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> base64EncodedString = <span class="string"><span class="delimiter">&quot;</span><span class="content">a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ=</span><span class="delimiter">&quot;</span></span>;
 
-JsonObject document = new JsonObject()
-        .put("name", "Alan Turing")
-        .put("binaryStuff", new JsonObject().put("$binary", base64EncodedString));
+JsonObject document = <span class="keyword">new</span> JsonObject()
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Alan Turing</span><span class="delimiter">&quot;</span></span>)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">$binary</span><span class="delimiter">&quot;</span></span>, base64EncodedString));
 
-mongoService.save("smartPeople", document, res -&gt; {
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    String id = res.result();
+    <span class="predefined-type">String</span> id = res.result();
 
-    mongoService.findOne("smartPeople", new JsonObject().put("_id", id), null, res2 -&gt; {
-      if(res2.succeeded()) {
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span>, id), <span class="predefined-constant">null</span>, res2 -&gt; {
+      <span class="keyword">if</span>(res2.succeeded()) {
 
-        String reconstitutedBase64EncodedString = res2.result().getJsonObject("binaryStuff").getString("$binary");
-        //This could now converted back to bytes from the base 64 string
-      } else {
+        <span class="predefined-type">String</span> reconstitutedBase64EncodedString = res2.result().getJsonObject(<span class="string"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span>).getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">$binary</span><span class="delimiter">&quot;</span></span>);
+        <span class="comment">//This could now converted back to bytes from the base 64 string</span>
+      } <span class="keyword">else</span> {
         res2.cause().printStackTrace();
       }
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 
@@ -963,27 +962,27 @@ mongoService.save("smartPeople", document, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">String individualId = new ObjectId().toHexString();
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> individualId = <span class="keyword">new</span> ObjectId().toHexString();
 
-JsonObject document = new JsonObject()
-        .put("name", "Stephen Hawking")
-        .put("individualId", new JsonObject().put("$oid", individualId));
+JsonObject document = <span class="keyword">new</span> JsonObject()
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Stephen Hawking</span><span class="delimiter">&quot;</span></span>)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">individualId</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">$oid</span><span class="delimiter">&quot;</span></span>, individualId));
 
-mongoService.save("smartPeople", document, res -&gt; {
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    String id = res.result();
+    <span class="predefined-type">String</span> id = res.result();
 
-    mongoService.findOne("smartPeople", new JsonObject().put("_id", id), null, res2 -&gt; {
-      if(res2.succeeded()) {
-        String reconstitutedIndividualId = res2.result().getJsonObject("individualId").getString("$oid");
-      } else {
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span>, id), <span class="predefined-constant">null</span>, res2 -&gt; {
+      <span class="keyword">if</span>(res2.succeeded()) {
+        <span class="predefined-type">String</span> reconstitutedIndividualId = res2.result().getJsonObject(<span class="string"><span class="delimiter">&quot;</span><span class="content">individualId</span><span class="delimiter">&quot;</span></span>).getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">$oid</span><span class="delimiter">&quot;</span></span>);
+      } <span class="keyword">else</span> {
         res2.cause().printStackTrace();
       }
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 
@@ -995,17 +994,17 @@ mongoService.save("smartPeople", document, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject document = new JsonObject().put("title", "The Hobbit");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject document = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>);
 
-mongoClient.save("books", document, res -&gt; {
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    mongoClient.distinct("books", "title", String.class.getName(), res2 -&gt; {
-      System.out.println("Title is : " + res2.result().getJsonArray(0));
+    mongoClient.distinct(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">String</span>.class.getName(), res2 -&gt; {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Title is : </span><span class="delimiter">&quot;</span></span> + res2.result().getJsonArray(<span class="integer">0</span>));
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 
@@ -1017,17 +1016,17 @@ mongoClient.save("books", document, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject document = new JsonObject().put("title", "The Hobbit");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject document = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>);
 
-mongoClient.save("books", document, res -&gt; {
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    mongoClient.distinctBatch("books", "title", String.class.getName(), res2 -&gt; {
-      System.out.println("Title is : " + res2.result().getString("title"));
+    mongoClient.distinctBatch(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">String</span>.class.getName(), res2 -&gt; {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Title is : </span><span class="delimiter">&quot;</span></span> + res2.result().getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>));
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 

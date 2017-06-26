@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -156,7 +155,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">shared import io.vertx.ceylon.sql "3.3.2";</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml">shared import io.vertx.ceylon.sql &quot;3.3.2&quot;;</code></pre>
 </div>
 </div>
 </div>
@@ -182,11 +181,11 @@ execute in its own transaction.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.setAutoCommit(false, (Throwable? res) {
-  if (!exists res) {
-    // OK!
-  } else {
-    // Failed!
+<pre class="CodeRay highlight"><code data-lang="java">connection.setAutoCommit(<span class="predefined-constant">false</span>, (<span class="predefined-type">Throwable</span>? res) {
+  <span class="keyword">if</span> (!exists res) {
+    <span class="comment">// OK!</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   };
 });</code></pre>
 </div>
@@ -206,12 +205,12 @@ been run.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.query("SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE", (ResultSet|Throwable res) {
-  if (is ResultSet res) {
-    // Get the result set
+<pre class="CodeRay highlight"><code data-lang="java">connection.query(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE</span><span class="delimiter">&quot;</span></span>, (<span class="predefined-type">ResultSet</span>|<span class="predefined-type">Throwable</span> res) {
+  <span class="keyword">if</span> (is <span class="predefined-type">ResultSet</span> res) {
+    <span class="comment">// Get the result set</span>
     value resultSet = res;
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   };
 });</code></pre>
 </div>
@@ -228,16 +227,16 @@ available with <code><a href="../../ceylondoc/vertx-sql//ResultSet.type.html#get
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value columnNames = resultSet.columnNames;
+<pre class="CodeRay highlight"><code data-lang="java">value columnNames = resultSet.columnNames;
 
 value results = resultSet.results;
 
-for (row in results) {
+<span class="keyword">for</span> (row in results) {
 
-  value id = row[0];
-  value fName = row[1];
-  value lName = row[2];
-  value shoeSize = row[3];
+  value id = row[<span class="integer">0</span>];
+  value fName = row[<span class="integer">1</span>];
+  value lName = row[<span class="integer">2</span>];
+  value shoeSize = row[<span class="integer">3</span>];
 
 };</code></pre>
 </div>
@@ -252,14 +251,14 @@ column names - if that&#8217;s the case you should use <code><a href="../../ceyl
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value rows = resultSet.rows;
+<pre class="CodeRay highlight"><code data-lang="java">value rows = resultSet.rows;
 
-for (row in rows) {
+<span class="keyword">for</span> (row in rows) {
 
-  value id = rowget("ID";
-  value fName = rowget("FNAME";
-  value lName = rowget("LNAME";
-  value shoeSize = rowget("SHOE_SIZE";
+  value id = rowget(<span class="string"><span class="delimiter">&quot;</span><span class="content">ID</span><span class="delimiter">&quot;</span></span>;
+  value fName = rowget(<span class="string"><span class="delimiter">&quot;</span><span class="content">FNAME</span><span class="delimiter">&quot;</span></span>;
+  value lName = rowget(<span class="string"><span class="delimiter">&quot;</span><span class="content">LNAME</span><span class="delimiter">&quot;</span></span>;
+  value shoeSize = rowget(<span class="string"><span class="delimiter">&quot;</span><span class="content">SHOE_SIZE</span><span class="delimiter">&quot;</span></span>;
 
 };</code></pre>
 </div>
@@ -277,16 +276,16 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value query = "SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE WHERE LNAME=? AND SHOE_SIZE &gt; ?";
-value params = JsonArray {"Fox" , 9 };
+<pre class="CodeRay highlight"><code data-lang="java">value query = <span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE WHERE LNAME=? AND SHOE_SIZE &gt; ?</span><span class="delimiter">&quot;</span></span>;
+value params = JsonArray {<span class="string"><span class="delimiter">&quot;</span><span class="content">Fox</span><span class="delimiter">&quot;</span></span> , <span class="integer">9</span> };
 
-connection.queryWithParams(query, params, (ResultSet|Throwable res) {
+connection.queryWithParams(query, params, (<span class="predefined-type">ResultSet</span>|<span class="predefined-type">Throwable</span> res) {
 
-  if (is ResultSet res) {
-    // Get the result set
+  <span class="keyword">if</span> (is <span class="predefined-type">ResultSet</span> res) {
+    <span class="comment">// Get the result set</span>
     value resultSet = res;
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   };
 });</code></pre>
 </div>
@@ -310,15 +309,15 @@ if the update generated keys, they are available with <code><a href="../../ceylo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.update("INSERT INTO PEOPLE VALUES (null, 'john', 'smith', 9)", (UpdateResult|Throwable res) {
-  if (is UpdateResult res) {
+<pre class="CodeRay highlight"><code data-lang="java">connection.update(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO PEOPLE VALUES (null, 'john', 'smith', 9)</span><span class="delimiter">&quot;</span></span>, (UpdateResult|<span class="predefined-type">Throwable</span> res) {
+  <span class="keyword">if</span> (is UpdateResult res) {
 
     value result = res;
-    print("Updated no. of rows: ``result.updated``");
-    print("Generated keys: ``result.keys``");
+    print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Updated no. of rows: ``result.updated``</span><span class="delimiter">&quot;</span></span>);
+    print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Generated keys: ``result.keys``</span><span class="delimiter">&quot;</span></span>);
 
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   };
 });</code></pre>
 </div>
@@ -336,20 +335,20 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value update = "UPDATE PEOPLE SET SHOE_SIZE = 10 WHERE LNAME=?";
-value params = JsonArray {"Fox" };
+<pre class="CodeRay highlight"><code data-lang="java">value update = <span class="string"><span class="delimiter">&quot;</span><span class="content">UPDATE PEOPLE SET SHOE_SIZE = 10 WHERE LNAME=?</span><span class="delimiter">&quot;</span></span>;
+value params = JsonArray {<span class="string"><span class="delimiter">&quot;</span><span class="content">Fox</span><span class="delimiter">&quot;</span></span> };
 
-connection.updateWithParams(update, params, (UpdateResult|Throwable res) {
+connection.updateWithParams(update, params, (UpdateResult|<span class="predefined-type">Throwable</span> res) {
 
-  if (is UpdateResult res) {
+  <span class="keyword">if</span> (is UpdateResult res) {
 
     value updateResult = res;
 
-    print("No. of rows updated: ``updateResult.updated``");
+    print(<span class="string"><span class="delimiter">&quot;</span><span class="content">No. of rows updated: ``updateResult.updated``</span><span class="delimiter">&quot;</span></span>);
 
-  } else {
+  } <span class="keyword">else</span> {
 
-    // Failed!
+    <span class="comment">// Failed!</span>
 
   };
 });</code></pre>
@@ -377,20 +376,20 @@ argument then the output array must contain a null value as the first element.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Assume that there is a SQL function like this:
-//
-// create function one_hour_ago() returns timestamp
-//    return now() - 1 hour;
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Assume that there is a SQL function like this:</span>
+<span class="comment">//</span>
+<span class="comment">// create function one_hour_ago() returns timestamp</span>
+<span class="comment">//    return now() - 1 hour;</span>
 
-// note that you do not need to declare the output for functions
-value func = "{ call one_hour_ago() }";
+<span class="comment">// note that you do not need to declare the output for functions</span>
+value func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call one_hour_ago() }</span><span class="delimiter">&quot;</span></span>;
 
-connection.call(func, (ResultSet|Throwable res) {
+connection.call(func, (<span class="predefined-type">ResultSet</span>|<span class="predefined-type">Throwable</span> res) {
 
-  if (is ResultSet res) {
+  <span class="keyword">if</span> (is <span class="predefined-type">ResultSet</span> res) {
     value result = res;
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   };
 });</code></pre>
 </div>
@@ -401,20 +400,20 @@ not return anything the usage is as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Assume that there is a SQL procedure like this:
-//
-// create procedure new_customer(firstname varchar(50), lastname varchar(50))
-//   modifies sql data
-//   insert into customers values (default, firstname, lastname, current_timestamp);
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Assume that there is a SQL procedure like this:</span>
+<span class="comment">//</span>
+<span class="comment">// create procedure new_customer(firstname varchar(50), lastname varchar(50))</span>
+<span class="comment">//   modifies sql data</span>
+<span class="comment">//   insert into customers values (default, firstname, lastname, current_timestamp);</span>
 
-value func = "{ call new_customer(?, ?) }";
+value func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call new_customer(?, ?) }</span><span class="delimiter">&quot;</span></span>;
 
-connection.callWithParams(func, JsonArray {"John" , "Doe" }, null, (ResultSet|Throwable res) {
+connection.callWithParams(func, JsonArray {<span class="string"><span class="delimiter">&quot;</span><span class="content">John</span><span class="delimiter">&quot;</span></span> , <span class="string"><span class="delimiter">&quot;</span><span class="content">Doe</span><span class="delimiter">&quot;</span></span> }, <span class="predefined-constant">null</span>, (<span class="predefined-type">ResultSet</span>|<span class="predefined-type">Throwable</span> res) {
 
-  if (is ResultSet res) {
-    // Success!
-  } else {
-    // Failed!
+  <span class="keyword">if</span> (is <span class="predefined-type">ResultSet</span> res) {
+    <span class="comment">// Success!</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   };
 });</code></pre>
 </div>
@@ -424,20 +423,20 @@ connection.callWithParams(func, JsonArray {"John" , "Doe" }, null, (ResultSet|Th
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Assume that there is a SQL procedure like this:
-//
-// create procedure customer_lastname(IN firstname varchar(50), OUT lastname varchar(50))
-//   modifies sql data
-//   select lastname into lastname from customers where firstname = firstname;
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Assume that there is a SQL procedure like this:</span>
+<span class="comment">//</span>
+<span class="comment">// create procedure customer_lastname(IN firstname varchar(50), OUT lastname varchar(50))</span>
+<span class="comment">//   modifies sql data</span>
+<span class="comment">//   select lastname into lastname from customers where firstname = firstname;</span>
 
-value func = "{ call customer_lastname(?, ?) }";
+value func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call customer_lastname(?, ?) }</span><span class="delimiter">&quot;</span></span>;
 
-connection.callWithParams(func, JsonArray {"John" }, JsonArray {null , "VARCHAR" }, (ResultSet|Throwable res) {
+connection.callWithParams(func, JsonArray {<span class="string"><span class="delimiter">&quot;</span><span class="content">John</span><span class="delimiter">&quot;</span></span> }, JsonArray {<span class="predefined-constant">null</span> , <span class="string"><span class="delimiter">&quot;</span><span class="content">VARCHAR</span><span class="delimiter">&quot;</span></span> }, (<span class="predefined-type">ResultSet</span>|<span class="predefined-type">Throwable</span> res) {
 
-  if (is ResultSet res) {
+  <span class="keyword">if</span> (is <span class="predefined-type">ResultSet</span> res) {
     value result = res;
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   };
 });</code></pre>
 </div>
@@ -492,16 +491,16 @@ String describing the type you want to receive.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Batch values
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Batch values</span>
 value batch = renderNewList;
 renderListAdd;
 renderListAdd;
 
-connection.batch(batch, (List&lt;Integer&gt;|Throwable res) {
-  if (is List&lt;Integer&gt; res) {
+connection.batch(batch, (<span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt;|<span class="predefined-type">Throwable</span> res) {
+  <span class="keyword">if</span> (is <span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; res) {
     value result = res;
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   };
 });</code></pre>
 </div>
@@ -511,16 +510,16 @@ connection.batch(batch, (List&lt;Integer&gt;|Throwable res) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Batch values
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Batch values</span>
 value batch = renderNewList;
 renderListAdd;
 renderListAdd;
 
-connection.batchWithParams("INSERT INTO emp (name) VALUES (?)", batch, (List&lt;Integer&gt;|Throwable res) {
-  if (is List&lt;Integer&gt; res) {
+connection.batchWithParams(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (name) VALUES (?)</span><span class="delimiter">&quot;</span></span>, batch, (<span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt;|<span class="predefined-type">Throwable</span> res) {
+  <span class="keyword">if</span> (is <span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; res) {
     value result = res;
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   };
 });</code></pre>
 </div>
@@ -538,13 +537,13 @@ is complete</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value sql = "CREATE TABLE PEOPLE (ID int generated by default as identity (start with 1 increment by 1) not null,FNAME varchar(255), LNAME varchar(255), SHOE_SIZE int);";
+<pre class="CodeRay highlight"><code data-lang="java">value sql = <span class="string"><span class="delimiter">&quot;</span><span class="content">CREATE TABLE PEOPLE (ID int generated by default as identity (start with 1 increment by 1) not null,FNAME varchar(255), LNAME varchar(255), SHOE_SIZE int);</span><span class="delimiter">&quot;</span></span>;
 
-connection.execute(sql, (Throwable? execute) {
-  if (!exists execute) {
-    print("Table created !");
-  } else {
-    // Failed!
+connection.execute(sql, (<span class="predefined-type">Throwable</span>? execute) {
+  <span class="keyword">if</span> (!exists execute) {
+    print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Table created !</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   };
 });</code></pre>
 </div>
@@ -565,15 +564,15 @@ connection.execute(sql, (Throwable? execute) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Do stuff with connection - updates etc
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Do stuff with connection - updates etc</span>
 
-// Now commit
+<span class="comment">// Now commit</span>
 
-connection.commit((Throwable? res) {
-  if (!exists res) {
-    // Committed OK!
-  } else {
-    // Failed!
+connection.commit((<span class="predefined-type">Throwable</span>? res) {
+  <span class="keyword">if</span> (!exists res) {
+    <span class="comment">// Committed OK!</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   };
 });</code></pre>
 </div>

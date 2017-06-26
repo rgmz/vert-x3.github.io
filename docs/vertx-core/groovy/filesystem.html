@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -139,14 +138,14 @@ which is called when the operation completes or an error occurs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def fs = vertx.fileSystem()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> fs = vertx.fileSystem()
 
-// Copy file from foo.txt to bar.txt
-fs.copy("foo.txt", "bar.txt", { res -&gt;
-  if (res.succeeded()) {
-    // Copied ok!
-  } else {
-    // Something went wrong
+<span class="comment">// Copy file from foo.txt to bar.txt</span>
+fs.copy(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo.txt</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar.txt</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// Copied ok!</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong</span>
   }
 })</code></pre>
 </div>
@@ -162,10 +161,10 @@ particular application before using them from an event loop, so as not to break 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def fs = vertx.fileSystem()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> fs = vertx.fileSystem()
 
-// Copy file from foo.txt to bar.txt synchronously
-fs.copyBlocking("foo.txt", "bar.txt")</code></pre>
+<span class="comment">// Copy file from foo.txt to bar.txt synchronously</span>
+fs.copyBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo.txt</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar.txt</span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -177,43 +176,43 @@ please consult the <code><a href="../../apidocs/io/vertx/core/file/FileSystem.ht
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def vertx = Vertx.vertx()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> vertx = Vertx.vertx()
 
-// Read a file
-vertx.fileSystem().readFile("target/classes/readme.txt", { result -&gt;
-  if (result.succeeded()) {
+<span class="comment">// Read a file</span>
+vertx.fileSystem().readFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/readme.txt</span><span class="delimiter">&quot;</span></span>, { result -&gt;
+  <span class="keyword">if</span> (result.succeeded()) {
     println(result.result())
-  } else {
-    System.err.println("Oh oh ...${result.cause()}")
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Oh oh ...</span><span class="inline"><span class="inline-delimiter">${</span>result.cause()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })
 
-// Copy a file
-vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt", { result -&gt;
-  if (result.succeeded()) {
-    println("File copied")
-  } else {
-    System.err.println("Oh oh ...${result.cause()}")
+<span class="comment">// Copy a file</span>
+vertx.fileSystem().copy(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/readme.txt</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/readme2.txt</span><span class="delimiter">&quot;</span></span>, { result -&gt;
+  <span class="keyword">if</span> (result.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">File copied</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Oh oh ...</span><span class="inline"><span class="inline-delimiter">${</span>result.cause()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })
 
-// Write a file
-vertx.fileSystem().writeFile("target/classes/hello.txt", Buffer.buffer("Hello"), { result -&gt;
-  if (result.succeeded()) {
-    println("File written")
-  } else {
-    System.err.println("Oh oh ...${result.cause()}")
+<span class="comment">// Write a file</span>
+vertx.fileSystem().writeFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/hello.txt</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>), { result -&gt;
+  <span class="keyword">if</span> (result.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">File written</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Oh oh ...</span><span class="inline"><span class="inline-delimiter">${</span>result.cause()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })
 
-// Check existence and delete
-vertx.fileSystem().exists("target/classes/junk.txt", { result -&gt;
-  if (result.succeeded() &amp;&amp; result.result()) {
-    vertx.fileSystem().delete("target/classes/junk.txt", { r -&gt;
-      println("File deleted")
+<span class="comment">// Check existence and delete</span>
+vertx.fileSystem().exists(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/junk.txt</span><span class="delimiter">&quot;</span></span>, { result -&gt;
+  <span class="keyword">if</span> (result.succeeded() &amp;&amp; result.result()) {
+    vertx.fileSystem().delete(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/junk.txt</span><span class="delimiter">&quot;</span></span>, { r -&gt;
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">File deleted</span><span class="delimiter">&quot;</span></span>)
     })
-  } else {
-    System.err.println("Oh oh ... - cannot delete the file: ${result.cause()}")
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Oh oh ... - cannot delete the file: </span><span class="inline"><span class="inline-delimiter">${</span>result.cause()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -228,12 +227,12 @@ vertx.fileSystem().exists("target/classes/junk.txt", { result -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [:]
-fileSystem.open("myfile.txt", options, { res -&gt;
-  if (res.succeeded()) {
-    def file = res.result()
-  } else {
-    // Something went wrong!
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> options = [:]
+fileSystem.open(<span class="string"><span class="delimiter">&quot;</span><span class="content">myfile.txt</span><span class="delimiter">&quot;</span></span>, options, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="keyword">def</span> file = res.result()
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong!</span>
   }
 })</code></pre>
 </div>
@@ -273,23 +272,23 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def vertx = Vertx.vertx()
-vertx.fileSystem().open("target/classes/hello.txt", [:], { result -&gt;
-  if (result.succeeded()) {
-    def file = result.result()
-    def buff = Buffer.buffer("foo")
-    (0..&lt;5).each { i -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> vertx = Vertx.vertx()
+vertx.fileSystem().open(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/hello.txt</span><span class="delimiter">&quot;</span></span>, [:], { result -&gt;
+  <span class="keyword">if</span> (result.succeeded()) {
+    <span class="keyword">def</span> file = result.result()
+    <span class="keyword">def</span> buff = <span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)
+    (<span class="integer">0</span>..&lt;<span class="integer">5</span>).each { i -&gt;
       file.write(buff, buff.length() * i, { ar -&gt;
-        if (ar.succeeded()) {
-          println("Written ok!")
-          // etc
-        } else {
-          System.err.println("Failed to write: ${ar.cause()}")
+        <span class="keyword">if</span> (ar.succeeded()) {
+          println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Written ok!</span><span class="delimiter">&quot;</span></span>)
+          <span class="comment">// etc</span>
+        } <span class="keyword">else</span> {
+          <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to write: </span><span class="inline"><span class="inline-delimiter">${</span>ar.cause()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
         }
       })
     }
-  } else {
-    System.err.println("Cannot open file ${result.cause()}")
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Cannot open file </span><span class="inline"><span class="inline-delimiter">${</span>result.cause()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -329,22 +328,22 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def vertx = Vertx.vertx()
-vertx.fileSystem().open("target/classes/les_miserables.txt", [:], { result -&gt;
-  if (result.succeeded()) {
-    def file = result.result()
-    def buff = Buffer.buffer(1000)
-    (0..&lt;10).each { i -&gt;
-      file.read(buff, i * 100, i * 100, 100, { ar -&gt;
-        if (ar.succeeded()) {
-          println("Read ok!")
-        } else {
-          System.err.println("Failed to write: ${ar.cause()}")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> vertx = Vertx.vertx()
+vertx.fileSystem().open(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/les_miserables.txt</span><span class="delimiter">&quot;</span></span>, [:], { result -&gt;
+  <span class="keyword">if</span> (result.succeeded()) {
+    <span class="keyword">def</span> file = result.result()
+    <span class="keyword">def</span> buff = <span class="predefined-type">Buffer</span>.buffer(<span class="integer">1000</span>)
+    (<span class="integer">0</span>..&lt;<span class="integer">10</span>).each { i -&gt;
+      file.read(buff, i * <span class="integer">100</span>, i * <span class="integer">100</span>, <span class="integer">100</span>, { ar -&gt;
+        <span class="keyword">if</span> (ar.succeeded()) {
+          println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Read ok!</span><span class="delimiter">&quot;</span></span>)
+        } <span class="keyword">else</span> {
+          <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to write: </span><span class="inline"><span class="inline-delimiter">${</span>ar.cause()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
         }
       })
     }
-  } else {
-    System.err.println("Cannot open file ${result.cause()}")
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Cannot open file </span><span class="inline"><span class="inline-delimiter">${</span>result.cause()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -388,18 +387,18 @@ copy the content to another <code>AsyncFile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def vertx = Vertx.vertx()
-def output = vertx.fileSystem().openBlocking("target/classes/plagiary.txt", [:])
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> vertx = Vertx.vertx()
+<span class="keyword">def</span> output = vertx.fileSystem().openBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/plagiary.txt</span><span class="delimiter">&quot;</span></span>, [:])
 
-vertx.fileSystem().open("target/classes/les_miserables.txt", [:], { result -&gt;
-  if (result.succeeded()) {
-    def file = result.result()
+vertx.fileSystem().open(<span class="string"><span class="delimiter">&quot;</span><span class="content">target/classes/les_miserables.txt</span><span class="delimiter">&quot;</span></span>, [:], { result -&gt;
+  <span class="keyword">if</span> (result.succeeded()) {
+    <span class="keyword">def</span> file = result.result()
     Pump.pump(file, output).start()
     file.endHandler({ r -&gt;
-      println("Copy done")
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Copy done</span><span class="delimiter">&quot;</span></span>)
     })
-  } else {
-    System.err.println("Cannot open file ${result.cause()}")
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Cannot open file </span><span class="inline"><span class="inline-delimiter">${</span>result.cause()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>

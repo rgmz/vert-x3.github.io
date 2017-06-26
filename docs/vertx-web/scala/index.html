@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -476,11 +475,11 @@ over time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-web-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-web-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -492,8 +491,8 @@ over time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-web-scala_2.12:3.4.2'
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+  compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-web-scala_2.12:3.4.2</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -514,19 +513,19 @@ HTTP servers using Vert.x core, if you&#8217;re not already.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">var server = vertx.createHttpServer()
+<pre class="CodeRay highlight"><code data-lang="java">var server = vertx.createHttpServer()
 
 server.requestHandler((request: io.vertx.scala.core.http.HttpServerRequest) =&gt; {
 
-  // This handler gets called for each request that arrives on the server
+  <span class="comment">// This handler gets called for each request that arrives on the server</span>
   var response = request.response()
-  response.putHeader("content-type", "text/plain")
+  response.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/plain</span><span class="delimiter">&quot;</span></span>)
 
-  // Write to the response and end it
-  response.end("Hello World!")
+  <span class="comment">// Write to the response and end it</span>
+  response.end(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>)
 })
 
-server.listen(8080)</code></pre>
+server.listen(<span class="integer">8080</span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -567,7 +566,7 @@ request, and then, either end it or pass it to the next matching handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var server = vertx.createHttpServer()
+<pre class="CodeRay highlight"><code data-lang="scala">var server = vertx.createHttpServer()
 
 var router = Router.router(vertx)
 
@@ -575,10 +574,10 @@ router.route().handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =
 
   // This handler will be called for every request
   var response = routingContext.response()
-  response.putHeader("content-type", "text/plain")
+  response.putHeader(&quot;content-type&quot;, &quot;text/plain&quot;)
 
   // Write to the response and end it
-  response.end("Hello World from Vert.x-Web!")
+  response.end(&quot;Hello World from Vert.x-Web!&quot;)
 })
 
 server.requestHandler(router.accept _).listen(8080)</code></pre>
@@ -630,7 +629,7 @@ You can do this some time later, if you want:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route1 = router.route("/some/path/").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">var route1 = router.route(&quot;/some/path/&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var response = routingContext.response()
   // enable chunked responses because we will be adding data as
@@ -638,7 +637,7 @@ You can do this some time later, if you want:</p>
   // only if several handlers do output.
   response.setChunked(true)
 
-  response.write("route1\n")
+  response.write(&quot;route1\n&quot;)
 
   // Call the next matching route after a 5 second delay
   routingContext.vertx().setTimer(5000, (tid: java.lang.Long) =&gt; {
@@ -646,10 +645,10 @@ You can do this some time later, if you want:</p>
   })
 })
 
-var route2 = router.route("/some/path/").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+var route2 = router.route(&quot;/some/path/&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var response = routingContext.response()
-  response.write("route2\n")
+  response.write(&quot;route2\n&quot;)
 
   // Call the next matching route after a 5 second delay
   routingContext.vertx().setTimer(5000, (tid: java.lang.Long) =&gt; {
@@ -657,10 +656,10 @@ var route2 = router.route("/some/path/").handler((routingContext: io.vertx.scala
   })
 })
 
-var route3 = router.route("/some/path/").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+var route3 = router.route(&quot;/some/path/&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var response = routingContext.response()
-  response.write("route3")
+  response.write(&quot;route3&quot;)
 
   // Now end the response
   routingContext.response().end()
@@ -696,7 +695,7 @@ Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.route().blockingHandler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">router.route().blockingHandler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // Do something that might take some time synchronously
   service.doSomethingThatBlocks()
@@ -719,7 +718,7 @@ false using <code><a href="../../scaladocs/io/vertx/scala/ext/web/Route.html#blo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.post("/some/endpoint").handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">router.post(&quot;/some/endpoint&quot;).handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   ctx.request().setExpectMultipart(true)
   ctx.next()
 }).blockingHandler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
@@ -742,7 +741,7 @@ so it will be called for paths <code>/some/path</code> and <code>/some/path//</c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route = router.route().path("/some/path/")
+<pre class="CodeRay highlight"><code data-lang="scala">var route = router.route().path(&quot;/some/path/&quot;)
 
 route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   // This handler will be called for the following request paths:
@@ -774,7 +773,7 @@ way is to use an asterisk <code>*</code> at the end of the path when declaring t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route = router.route().path("/some/path/*")
+<pre class="CodeRay highlight"><code data-lang="scala">var route = router.route().path(&quot;/some/path/*&quot;)
 
 route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   // This handler will be called for any path that starts with
@@ -795,7 +794,7 @@ route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route = router.route("/some/path/*")
+<pre class="CodeRay highlight"><code data-lang="scala">var route = router.route(&quot;/some/path/*&quot;)
 
 route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   // This handler will be called same as previous example
@@ -816,12 +815,12 @@ route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route = router.route(HttpMethod.POST, "/catalogue/products/:producttype/:productid/")
+<pre class="CodeRay highlight"><code data-lang="scala">var route = router.route(HttpMethod.POST, &quot;/catalogue/products/:producttype/:productid/&quot;)
 
 route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
-  var productType = routingContext.request().getParam("producttype")
-  var productID = routingContext.request().getParam("productid")
+  var productType = routingContext.request().getParam(&quot;producttype&quot;)
+  var productID = routingContext.request().getParam(&quot;productid&quot;)
 
   // Do something with them...
 })</code></pre>
@@ -845,8 +844,8 @@ and <code>productType</code> will receive the value <code>tools</code> and produ
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Matches any path ending with 'foo'
-var route = router.route().pathRegex(".*foo")
+<pre class="CodeRay highlight"><code data-lang="scala">// Matches any path ending with 'foo'
+var route = router.route().pathRegex(&quot;.*foo&quot;)
 
 route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
@@ -867,7 +866,7 @@ route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route = router.routeWithRegex(".*foo")
+<pre class="CodeRay highlight"><code data-lang="scala">var route = router.routeWithRegex(&quot;.*foo&quot;)
 
 route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
@@ -886,15 +885,15 @@ route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route = router.routeWithRegex(".*foo")
+<pre class="CodeRay highlight"><code data-lang="scala">var route = router.routeWithRegex(&quot;.*foo&quot;)
 
 // This regular expression matches paths that start with something like:
-// "/foo/bar" - where the "foo" is captured into param0 and the "bar" is captured into
+// &quot;/foo/bar&quot; - where the &quot;foo&quot; is captured into param0 and the &quot;bar&quot; is captured into
 // param1
-route.pathRegex("\\/([^\\/]+)\\/([^\\/]+)").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+route.pathRegex(&quot;\\/([^\\/]+)\\/([^\\/]+)&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
-  var productType = routingContext.request().getParam("param0")
-  var productID = routingContext.request().getParam("param1")
+  var productType = routingContext.request().getParam(&quot;param0&quot;)
+  var productID = routingContext.request().getParam(&quot;param1&quot;)
 
   // Do something with them...
 })</code></pre>
@@ -920,7 +919,7 @@ and <code>productType</code> will receive the value <code>tools</code> and produ
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route = router.route().method(HttpMethod.POST)
+<pre class="CodeRay highlight"><code data-lang="scala">var route = router.route().method(HttpMethod.POST)
 
 route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
@@ -934,7 +933,7 @@ route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route = router.route(HttpMethod.POST, "/some/path/")
+<pre class="CodeRay highlight"><code data-lang="scala">var route = router.route(HttpMethod.POST, &quot;/some/path/&quot;)
 
 route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
@@ -950,20 +949,20 @@ method name. For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.get().handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">router.get().handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // Will be called for any GET request
 
 })
 
-router.get("/some/path/").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.get(&quot;/some/path/&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // Will be called for any GET request to a path
   // starting with /some/path
 
 })
 
-router.getWithRegex(".*foo").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.getWithRegex(&quot;.*foo&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // Will be called for any GET request to a path
   // ending with `foo`
@@ -979,7 +978,7 @@ multiple times:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route = router.route().method(HttpMethod.POST).method(HttpMethod.PUT)
+<pre class="CodeRay highlight"><code data-lang="scala">var route = router.route().method(HttpMethod.POST).method(HttpMethod.PUT)
 
 route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
@@ -1009,7 +1008,7 @@ matching route (if any) will be called. And so on.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route1 = router.route("/some/path/").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">var route1 = router.route(&quot;/some/path/&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var response = routingContext.response()
   // enable chunked responses because we will be adding data as
@@ -1017,25 +1016,25 @@ matching route (if any) will be called. And so on.</p>
   // only if several handlers do output.
   response.setChunked(true)
 
-  response.write("route1\n")
+  response.write(&quot;route1\n&quot;)
 
   // Now call the next matching route
   routingContext.next()
 })
 
-var route2 = router.route("/some/path/").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+var route2 = router.route(&quot;/some/path/&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var response = routingContext.response()
-  response.write("route2\n")
+  response.write(&quot;route2\n&quot;)
 
   // Now call the next matching route
   routingContext.next()
 })
 
-var route3 = router.route("/some/path/").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+var route3 = router.route(&quot;/some/path/&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var response = routingContext.response()
-  response.write("route3")
+  response.write(&quot;route3&quot;)
 
   // Now end the response
   routingContext.response().end()
@@ -1072,16 +1071,16 @@ want to ensure a route is evaluated before route number <code>0</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route1 = router.route("/some/path/").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">var route1 = router.route(&quot;/some/path/&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var response = routingContext.response()
-  response.write("route1\n")
+  response.write(&quot;route1\n&quot;)
 
   // Now call the next matching route
   routingContext.next()
 })
 
-var route2 = router.route("/some/path/").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+var route2 = router.route(&quot;/some/path/&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var response = routingContext.response()
   // enable chunked responses because we will be adding data as
@@ -1089,16 +1088,16 @@ var route2 = router.route("/some/path/").handler((routingContext: io.vertx.scala
   // only if several handlers do output.
   response.setChunked(true)
 
-  response.write("route2\n")
+  response.write(&quot;route2\n&quot;)
 
   // Now call the next matching route
   routingContext.next()
 })
 
-var route3 = router.route("/some/path/").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+var route3 = router.route(&quot;/some/path/&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var response = routingContext.response()
-  response.write("route3")
+  response.write(&quot;route3&quot;)
 
   // Now end the response
   routingContext.response().end()
@@ -1144,8 +1143,8 @@ This will be matched against the value specified in <code><a href="../../scalado
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Exact match
-router.route().consumes("text/html").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">// Exact match
+router.route().consumes(&quot;text/html&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // This handler will be called for any request with
   // content-type header set to `text/html`
@@ -1158,8 +1157,8 @@ router.route().consumes("text/html").handler((routingContext: io.vertx.scala.ext
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Multiple exact matches
-router.route().consumes("text/html").consumes("text/plain").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">// Multiple exact matches
+router.route().consumes(&quot;text/html&quot;).consumes(&quot;text/plain&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // This handler will be called for any request with
   // content-type header set to `text/html` or `text/plain`.
@@ -1172,8 +1171,8 @@ router.route().consumes("text/html").consumes("text/plain").handler((routingCont
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Sub-type wildcard match
-router.route().consumes("text/*").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">// Sub-type wildcard match
+router.route().consumes(&quot;text/*&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // This handler will be called for any request with top level type `text`
   // e.g. content-type header set to `text/html` or `text/plain` will both match
@@ -1186,8 +1185,8 @@ router.route().consumes("text/*").handler((routingContext: io.vertx.scala.ext.we
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Top level type wildcard match
-router.route().consumes("*/json").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">// Top level type wildcard match
+router.route().consumes(&quot;*/json&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // This handler will be called for any request with sub-type json
   // e.g. content-type header set to `text/json` or `application/json` will both match
@@ -1248,10 +1247,10 @@ following handler produces a response with MIME type <code>application/json</cod
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">router.route().produces("application/json").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">router.route().produces(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var response = routingContext.response()
-  response.putHeader("content-type", "application/json")
+  response.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
   response.write(someJSON).end()
 
 })</code></pre>
@@ -1278,15 +1277,15 @@ was accepted.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// This route can produce two different MIME types
-router.route().produces("application/json").produces("text/html").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">// This route can produce two different MIME types
+router.route().produces(&quot;application/json&quot;).produces(&quot;text/html&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var response = routingContext.response()
 
   // Get the actual MIME type acceptable
   var acceptableContentType = routingContext.getAcceptableContentType()
 
-  response.putHeader("content-type", acceptableContentType)
+  response.putHeader(&quot;content-type&quot;, acceptableContentType)
   response.write(whatever).end()
 })</code></pre>
 </div>
@@ -1313,13 +1312,13 @@ acceptable but that has a higher <code>q</code> value.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route = router.route(HttpMethod.PUT, "myapi/orders").consumes("application/json").produces("application/json")
+<pre class="CodeRay highlight"><code data-lang="scala">var route = router.route(HttpMethod.PUT, &quot;myapi/orders&quot;).consumes(&quot;application/json&quot;).produces(&quot;application/json&quot;)
 
 route.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
-  // This would be match for any PUT method to paths starting with "myapi/orders" with a
-  // content-type of "application/json"
-  // and an accept header matching "application/json"
+  // This would be match for any PUT method to paths starting with &quot;myapi/orders&quot; with a
+  // content-type of &quot;application/json&quot;
+  // and an accept header matching &quot;application/json&quot;
 
 })</code></pre>
 </div>
@@ -1356,16 +1355,16 @@ want to share between handlers for the lifetime of the request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.get("/some/path").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">router.get(&quot;/some/path&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
-  routingContext.put("foo", "bar")
+  routingContext.put(&quot;foo&quot;, &quot;bar&quot;)
   routingContext.next()
 
 })
 
-router.get("/some/path/other").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.get(&quot;/some/path/other&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
-  var bar = routingContext.get("foo")
+  var bar = routingContext.get(&quot;foo&quot;)
   // Do something with bar
   routingContext.response().end()
 
@@ -1385,19 +1384,19 @@ Router.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.get("/some/path").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">router.get(&quot;/some/path&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
-  routingContext.put("foo", "bar")
+  routingContext.put(&quot;foo&quot;, &quot;bar&quot;)
   routingContext.next()
 
 })
 
-router.get("/some/path/B").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.get(&quot;/some/path/B&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   routingContext.response().end()
 })
 
-router.get("/some/path").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
-  routingContext.reroute("/some/path/B")
+router.get(&quot;/some/path&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+  routingContext.reroute(&quot;/some/path/B&quot;)
 })</code></pre>
 </div>
 </div>
@@ -1416,13 +1415,13 @@ for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.get("/my-pretty-notfound-handler").handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
-  ctx.response().setStatusCode(404).end("NOT FOUND fancy html here!!!")
+<pre class="CodeRay highlight"><code data-lang="scala">router.get(&quot;/my-pretty-notfound-handler&quot;).handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+  ctx.response().setStatusCode(404).end(&quot;NOT FOUND fancy html here!!!&quot;)
 })
 
 router.get().failureHandler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   if (ctx.statusCode() == 404) {
-    ctx.reroute("/my-pretty-notfound-handler")
+    ctx.reroute(&quot;/my-pretty-notfound-handler&quot;)
   } else {
     ctx.next()
   }
@@ -1435,18 +1434,18 @@ should use the <code>RoutingContext</code> object. For example you want to rerou
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.get("/final-target").handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">router.get(&quot;/final-target&quot;).handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   // continue from here...
 })
 
 // THE WRONG WAY! (Will reroute to /final-target excluding the query string)
 router.get().handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
-  ctx.reroute("/final-target?variable=value")
+  ctx.reroute(&quot;/final-target?variable=value&quot;)
 })
 
 // THE CORRECT WAY!
 router.get().handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
-  ctx.put("variable", "value").reroute("/final-target")
+  ctx.put(&quot;variable&quot;, &quot;value&quot;).reroute(&quot;/final-target&quot;)
 })</code></pre>
 </div>
 </div>
@@ -1479,23 +1478,23 @@ router. The full implementation of the REST API is not shown.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var restAPI = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var restAPI = Router.router(vertx)
 
-restAPI.get("/products/:productID").handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+restAPI.get(&quot;/products/:productID&quot;).handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // TODO Handle the lookup of the product....
   rc.response().write(productJSON)
 
 })
 
-restAPI.put("/products/:productID").handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+restAPI.put(&quot;/products/:productID&quot;).handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // TODO Add a new product...
   rc.response().end()
 
 })
 
-restAPI.delete("/products/:productID").handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+restAPI.delete(&quot;/products/:productID&quot;).handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // TODO delete the product...
   rc.response().end()
@@ -1512,12 +1511,12 @@ would invoke the  API.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var mainRouter = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var mainRouter = Router.router(vertx)
 
 // Handle static resources
-mainRouter.route("/static/*").handler(myStaticHandler)
+mainRouter.route(&quot;/static/*&quot;).handler(myStaticHandler)
 
-mainRouter.route(".*\\.templ").handler(myTemplateHandler)</code></pre>
+mainRouter.route(&quot;.*\\.templ&quot;).handler(myTemplateHandler)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1525,7 +1524,7 @@ mainRouter.route(".*\\.templ").handler(myTemplateHandler)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">mainRouter.mountSubRouter("/productsAPI", restAPI)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">mainRouter.mountSubRouter(&quot;/productsAPI&quot;, restAPI)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1542,7 +1541,7 @@ locale for a client or the sorted list of preferred locales by quality.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route = router.get("/localized").handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">var route = router.get(&quot;/localized&quot;).handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   // although it might seem strange by running a loop with a switch we
   // make sure that the locale order of preference is preserved when
   // replying in the users language.
@@ -1551,7 +1550,7 @@ locale for a client or the sorted list of preferred locales by quality.</p>
   })
 
   // we do not know the user language so lets just inform that back:
-  rc.response().end(s"Sorry we don't speak: ${rc.preferredLocale()}")
+  rc.response().end(s&quot;Sorry we don't speak: ${rc.preferredLocale()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -1596,7 +1595,7 @@ to paths that start with <code>/somepath/</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route = router.get("/somepath/*")
+<pre class="CodeRay highlight"><code data-lang="scala">var route = router.get(&quot;/somepath/*&quot;)
 
 route.failureHandler((frc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
@@ -1620,16 +1619,16 @@ to be retrieved so the failure handler can use that to generate a failure respon
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var route1 = router.get("/somepath/path1/")
+<pre class="CodeRay highlight"><code data-lang="scala">var route1 = router.get(&quot;/somepath/path1/&quot;)
 
 route1.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // Let's say this throws a RuntimeException
-  throw new java.lang.RuntimeException("something happened!")
+  throw new java.lang.RuntimeException(&quot;something happened!&quot;)
 
 })
 
-var route2 = router.get("/somepath/path2")
+var route2 = router.get(&quot;/somepath/path2&quot;)
 
 route2.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
@@ -1641,7 +1640,7 @@ route2.handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
 // Define a failure handler
 // This will get called for any failures in the above handlers
-var route3 = router.get("/somepath/*")
+var route3 = router.get(&quot;/somepath/*&quot;)
 
 route3.failureHandler((failureRoutingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
@@ -1649,7 +1648,7 @@ route3.failureHandler((failureRoutingContext: io.vertx.scala.ext.web.RoutingCont
 
   // Status code will be 500 for the RuntimeException or 403 for the other failure
   var response = failureRoutingContext.response()
-  response.setStatusCode(statusCode).end("Sorry! Not today")
+  response.setStatusCode(statusCode).end(&quot;Sorry! Not today&quot;)
 
 })</code></pre>
 </div>
@@ -1678,7 +1677,7 @@ to install handlers to consume the HTTP request body and this must be done befor
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// This body handler will be called for all routes
+<pre class="CodeRay highlight"><code data-lang="scala">// This body handler will be called for all routes
 router.route().handler(BodyHandler.create())</code></pre>
 </div>
 </div>
@@ -1729,9 +1728,9 @@ context with <code><a href="../../scaladocs/io/vertx/scala/ext/web/RoutingContex
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.route().handler(BodyHandler.create())
+<pre class="CodeRay highlight"><code data-lang="scala">router.route().handler(BodyHandler.create())
 
-router.post("/some/path/uploads").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.post(&quot;/some/path/uploads&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var uploads = routingContext.fileUploads()
   // Do something with uploads....
@@ -1757,7 +1756,7 @@ such as the name, file-name and size to be accessed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// This cookie handler will be called for all routes
+<pre class="CodeRay highlight"><code data-lang="scala">// This cookie handler will be called for all routes
 router.route().handler(CookieHandler.create())</code></pre>
 </div>
 </div>
@@ -1786,18 +1785,18 @@ value, domain, path and other normal cookie properties.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// This cookie handler will be called for all routes
+<pre class="CodeRay highlight"><code data-lang="scala">// This cookie handler will be called for all routes
 router.route().handler(CookieHandler.create())
 
-router.route("some/path/").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.route(&quot;some/path/&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
-  var someCookie = routingContext.getCookie("mycookie")
+  var someCookie = routingContext.getCookie(&quot;mycookie&quot;)
   var cookieValue = someCookie.getValue()
 
   // Do something with cookie...
 
   // Add a cookie - this will get written back in the response automatically
-  routingContext.addCookie(Cookie.cookie("othercookie", "somevalue"))
+  routingContext.addCookie(Cookie.cookie(&quot;othercookie&quot;, &quot;somevalue&quot;))
 })</code></pre>
 </div>
 </div>
@@ -1895,17 +1894,17 @@ requests might end up on a server which doesn&#8217;t know about your session.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Create a local session store using defaults
+<pre class="CodeRay highlight"><code data-lang="scala">// Create a local session store using defaults
 var store1 = LocalSessionStore.create(vertx)
 
 // Create a local session store specifying the local shared map name to use
 // This might be useful if you have more than one application in the same
 // Vert.x instance and want to use different maps for different applications
-var store2 = LocalSessionStore.create(vertx, "myapp3.sessionmap")
+var store2 = LocalSessionStore.create(vertx, &quot;myapp3.sessionmap&quot;)
 
 // Create a local session store specifying the local shared map name to use and
 // setting the reaper interval for expired sessions to 10 seconds
-var store3 = LocalSessionStore.create(vertx, "myapp3.sessionmap", 10000)</code></pre>
+var store3 = LocalSessionStore.create(vertx, &quot;myapp3.sessionmap&quot;, 10000)</code></pre>
 </div>
 </div>
 </div>
@@ -1929,12 +1928,12 @@ requests from the same browser to different servers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// a clustered Vert.x
+<pre class="CodeRay highlight"><code data-lang="scala">// a clustered Vert.x
 Vertx.clusteredVertx(VertxOptions()
   .setClustered(true)
 , {
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 })</code></pre>
 </div>
 </div>
@@ -1955,7 +1954,7 @@ lookup the session. The cookie handler should be before the session handler when
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var router = Router.router(vertx)
 
 // We need a cookie handler first
 router.route().handler(CookieHandler.create())
@@ -1969,10 +1968,10 @@ var sessionHandler = SessionHandler.create(store)
 router.route().handler(sessionHandler)
 
 // Now your application handlers
-router.route("/somepath/blah/").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.route(&quot;/somepath/blah/&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var session = routingContext.session()
-  session.put("foo", "bar")
+  session.put(&quot;foo&quot;, &quot;bar&quot;)
   // etc
 
 })</code></pre>
@@ -2003,22 +2002,22 @@ a clustered session store they can be any basic type, or <code><a href="../../sc
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.route().handler(CookieHandler.create())
+<pre class="CodeRay highlight"><code data-lang="scala">router.route().handler(CookieHandler.create())
 router.route().handler(sessionHandler)
 
 // Now your application handlers
-router.route("/somepath/blah").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.route(&quot;/somepath/blah&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   var session = routingContext.session()
 
   // Put some data from the session
-  session.put("foo", "bar")
+  session.put(&quot;foo&quot;, &quot;bar&quot;)
 
   // Retrieve some data from a session
-  var age = session.get("age")
+  var age = session.get(&quot;age&quot;)
 
   // Remove some data from a session
-  var obj = session.remove("myobj")
+  var obj = session.remove(&quot;myobj&quot;)
 
 })</code></pre>
 </div>
@@ -2070,7 +2069,7 @@ please consult the auth documentation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.route().handler(CookieHandler.create())
+<pre class="CodeRay highlight"><code data-lang="scala">router.route().handler(CookieHandler.create())
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)))
 
 var basicAuthHandler = BasicAuthHandler.create(authProvider)</code></pre>
@@ -2085,22 +2084,22 @@ your auth handler is before your application handlers on those paths:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.route().handler(CookieHandler.create())
+<pre class="CodeRay highlight"><code data-lang="scala">router.route().handler(CookieHandler.create())
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)))
 router.route().handler(UserSessionHandler.create(authProvider))
 
 var basicAuthHandler = BasicAuthHandler.create(authProvider)
 
 // All requests to paths starting with '/private/' will be protected
-router.route("/private/*").handler(basicAuthHandler)
+router.route(&quot;/private/*&quot;).handler(basicAuthHandler)
 
-router.route("/someotherpath").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.route(&quot;/someotherpath&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // This will be public access - no login required
 
 })
 
-router.route("/private/somepath").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.route(&quot;/private/somepath&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // This will require a login
 
@@ -2181,27 +2180,27 @@ To handle the login we provide a prebuilt handler <code><a href="../../scaladocs
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.route().handler(CookieHandler.create())
+<pre class="CodeRay highlight"><code data-lang="scala">router.route().handler(CookieHandler.create())
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)))
 router.route().handler(UserSessionHandler.create(authProvider))
 
 var redirectAuthHandler = RedirectAuthHandler.create(authProvider)
 
 // All requests to paths starting with '/private/' will be protected
-router.route("/private/*").handler(redirectAuthHandler)
+router.route(&quot;/private/*&quot;).handler(redirectAuthHandler)
 
 // Handle the actual login
 // One of your pages must POST form login data
-router.post("/login").handler(FormLoginHandler.create(authProvider))
+router.post(&quot;/login&quot;).handler(FormLoginHandler.create(authProvider))
 
 // Set a static server to serve static resources, e.g. the login page
 router.route().handler(StaticHandler.create())
 
-router.route("/someotherpath").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.route(&quot;/someotherpath&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   // This will be public access - no login required
 })
 
-router.route("/private/somepath").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.route(&quot;/private/somepath&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
   // This will require a login
 
@@ -2240,16 +2239,16 @@ transit which leads to session hijacking attacks.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var router = Router.router(vertx)
 
-var authConfig = new io.vertx.core.json.JsonObject().put("keyStore", new io.vertx.core.json.JsonObject().put("type", "jceks").put("path", "keystore.jceks").put("password", "secret"))
+var authConfig = new io.vertx.core.json.JsonObject().put(&quot;keyStore&quot;, new io.vertx.core.json.JsonObject().put(&quot;type&quot;, &quot;jceks&quot;).put(&quot;path&quot;, &quot;keystore.jceks&quot;).put(&quot;password&quot;, &quot;secret&quot;))
 
 var authProvider = JWTAuth.create(vertx, authConfig)
 
-router.route("/login").handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.route(&quot;/login&quot;).handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   // this is an example, authentication should be done with another provider...
-  if ("paulo" == ctx.request().getParam("username") &amp;&amp; "secret" == ctx.request().getParam("password")) {
-    ctx.response().end(authProvider.generateToken(new io.vertx.core.json.JsonObject().put("sub", "paulo"), JWTOptions()))
+  if (&quot;paulo&quot; == ctx.request().getParam(&quot;username&quot;) &amp;&amp; &quot;secret&quot; == ctx.request().getParam(&quot;password&quot;)) {
+    ctx.response().end(authProvider.generateToken(new io.vertx.core.json.JsonObject().put(&quot;sub&quot;, &quot;paulo&quot;), JWTOptions()))
   } else {
     ctx.fail(401)
   }
@@ -2262,15 +2261,15 @@ router.route("/login").handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var router = Router.router(vertx)
 
-var authConfig = new io.vertx.core.json.JsonObject().put("keyStore", new io.vertx.core.json.JsonObject().put("type", "jceks").put("path", "keystore.jceks").put("password", "secret"))
+var authConfig = new io.vertx.core.json.JsonObject().put(&quot;keyStore&quot;, new io.vertx.core.json.JsonObject().put(&quot;type&quot;, &quot;jceks&quot;).put(&quot;path&quot;, &quot;keystore.jceks&quot;).put(&quot;password&quot;, &quot;secret&quot;))
 
 var authProvider = JWTAuth.create(vertx, authConfig)
 
-router.route("/protected/*").handler(JWTAuthHandler.create(authProvider))
+router.route(&quot;/protected/*&quot;).handler(JWTAuthHandler.create(authProvider))
 
-router.route("/protected/somepage").handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.route(&quot;/protected/somepage&quot;).handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   // some handle code...
 })</code></pre>
 </div>
@@ -2282,11 +2281,11 @@ token, during the creation of the token just add data to the JsonObject paramete
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var authConfig = new io.vertx.core.json.JsonObject().put("keyStore", new io.vertx.core.json.JsonObject().put("type", "jceks").put("path", "keystore.jceks").put("password", "secret"))
+<pre class="CodeRay highlight"><code data-lang="scala">var authConfig = new io.vertx.core.json.JsonObject().put(&quot;keyStore&quot;, new io.vertx.core.json.JsonObject().put(&quot;type&quot;, &quot;jceks&quot;).put(&quot;path&quot;, &quot;keystore.jceks&quot;).put(&quot;password&quot;, &quot;secret&quot;))
 
 var authProvider = JWTAuth.create(vertx, authConfig)
 
-authProvider.generateToken(new io.vertx.core.json.JsonObject().put("sub", "paulo").put("someKey", "some value"), JWTOptions())</code></pre>
+authProvider.generateToken(new io.vertx.core.json.JsonObject().put(&quot;sub&quot;, &quot;paulo&quot;).put(&quot;someKey&quot;, &quot;some value&quot;), JWTOptions())</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2294,9 +2293,9 @@ authProvider.generateToken(new io.vertx.core.json.JsonObject().put("sub", "paulo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var handler = (rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
-  var theSubject = rc.user().principal().getValue("sub")
-  var someKey = rc.user().principal().getValue("someKey")
+<pre class="CodeRay highlight"><code data-lang="scala">var handler = (rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+  var theSubject = rc.user().principal().getValue(&quot;sub&quot;)
+  var someKey = rc.user().principal().getValue(&quot;someKey&quot;)
 }</code></pre>
 </div>
 </div>
@@ -2317,17 +2316,17 @@ may support a role/permission based model but others might use another model.</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var listProductsAuthHandler = RedirectAuthHandler.create(authProvider)
-listProductsAuthHandler.addAuthority("list_products")
+<pre class="CodeRay highlight"><code data-lang="scala">var listProductsAuthHandler = RedirectAuthHandler.create(authProvider)
+listProductsAuthHandler.addAuthority(&quot;list_products&quot;)
 
-// Need "list_products" authority to list products
-router.route("/listproducts/*").handler(listProductsAuthHandler)
+// Need &quot;list_products&quot; authority to list products
+router.route(&quot;/listproducts/*&quot;).handler(listProductsAuthHandler)
 
 var settingsAuthHandler = RedirectAuthHandler.create(authProvider)
-settingsAuthHandler.addAuthority("role:admin")
+settingsAuthHandler.addAuthority(&quot;role:admin&quot;)
 
-// Only "admin" has access to /private/settings
-router.route("/private/settings/*").handler(settingsAuthHandler)</code></pre>
+// Only &quot;admin&quot; has access to /private/settings
+router.route(&quot;/private/settings/*&quot;).handler(settingsAuthHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -2353,7 +2352,7 @@ or from the classpath. The default static file directory is <code>webroot</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.route("/static/*").handler(StaticHandler.create())</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">router.route(&quot;/static/*&quot;).handler(StaticHandler.create())</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2488,8 +2487,8 @@ allowing resources to be requested from one domain and served from another.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Will only accept GET requests from origin "vertx.io"
-router.route().handler(CorsHandler.create("vertx\\.io").allowedMethod(HttpMethod.GET))
+<pre class="CodeRay highlight"><code data-lang="scala">// Will only accept GET requests from origin &quot;vertx.io&quot;
+router.route().handler(CorsHandler.create(&quot;vertx\\.io&quot;).allowedMethod(HttpMethod.GET))
 
 router.route().handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
@@ -2620,17 +2619,17 @@ add it the context data in a handler before the template handler. For example:</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var handler = TemplateHandler.create(engine)
+<pre class="CodeRay highlight"><code data-lang="scala">var handler = TemplateHandler.create(engine)
 
-router.get("/dynamic").handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+router.get(&quot;/dynamic&quot;).handler((routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
-  routingContext.put("request_path", routingContext.request().path())
-  routingContext.put("session_data", routingContext.session().data())
+  routingContext.put(&quot;request_path&quot;, routingContext.request().path())
+  routingContext.put(&quot;session_data&quot;, routingContext.session().data())
 
   routingContext.next()
 })
 
-router.get("/dynamic/").handler(handler)</code></pre>
+router.get(&quot;/dynamic/&quot;).handler(handler)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2812,7 +2811,7 @@ seconds:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.route("/foo/").handler(TimeoutHandler.create(5000))</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">router.route(&quot;/foo/&quot;).handler(TimeoutHandler.create(5000))</code></pre>
 </div>
 </div>
 </div>
@@ -2840,13 +2839,13 @@ Suppose we are building a RESTful web application. We need to set the content ty
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.get("/api/books").produces("application/json").handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">router.get(&quot;/api/books&quot;).produces(&quot;application/json&quot;).handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   findBooks({
     case Success(result) =&gt; {
-      rc.response().putHeader("Content-Type", "application/json").end(toJson(result))
+      rc.response().putHeader(&quot;Content-Type&quot;, &quot;application/json&quot;).end(toJson(result))
     }
     case Failure(cause) =&gt; {
-      println(s"$cause")
+      println(s&quot;$cause&quot;)
     }
   })
 })</code></pre>
@@ -2858,14 +2857,14 @@ To avoid this situation, add the <code>ResponseContentTypeHandler</code> to the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.route("/api/*").handler(ResponseContentTypeHandler.create())
-router.get("/api/books").produces("application/json").handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">router.route(&quot;/api/*&quot;).handler(ResponseContentTypeHandler.create())
+router.get(&quot;/api/books&quot;).produces(&quot;application/json&quot;).handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   findBooks({
     case Success(result) =&gt; {
       rc.response().end(toJson(result))
     }
     case Failure(cause) =&gt; {
-      println(s"$cause")
+      println(s&quot;$cause&quot;)
     }
   })
 })</code></pre>
@@ -2877,18 +2876,18 @@ As a consequence, you can easily share the same handler to produce data of diffe
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.route("/api/*").handler(ResponseContentTypeHandler.create())
-router.get("/api/books").produces("text/xml").produces("application/json").handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">router.route(&quot;/api/*&quot;).handler(ResponseContentTypeHandler.create())
+router.get(&quot;/api/books&quot;).produces(&quot;text/xml&quot;).produces(&quot;application/json&quot;).handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   findBooks({
     case Success(result) =&gt; {
-      if (rc.getAcceptableContentType() == "text/xml") {
+      if (rc.getAcceptableContentType() == &quot;text/xml&quot;) {
         rc.response().end(toXML(result))
       } else {
         rc.response().end(toJson(result))
       }
     }
     case Failure(cause) =&gt; {
-      println(s"$cause")
+      println(s&quot;$cause&quot;)
     }
   })
 })</code></pre>
@@ -2926,7 +2925,7 @@ an instance of <code><a href="../dataobjects.html#SockJSHandlerOptions">SockJSHa
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var router = Router.router(vertx)
 
 var options = SockJSHandlerOptions()
   .setHeartbeatInterval(2000)
@@ -2934,7 +2933,7 @@ var options = SockJSHandlerOptions()
 
 var sockJSHandler = SockJSHandler.create(vertx, options)
 
-router.route("/myapp/*").handler(sockJSHandler)</code></pre>
+router.route(&quot;/myapp/*&quot;).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -2955,7 +2954,7 @@ a <code><a href="../../scaladocs/io/vertx/scala/core/http/WebSocket.html">WebSoc
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var router = Router.router(vertx)
 
 var options = SockJSHandlerOptions()
   .setHeartbeatInterval(2000)
@@ -2969,7 +2968,7 @@ sockJSHandler.socketHandler((sockJSSocket: io.vertx.scala.ext.web.handler.sockjs
   sockJSSocket.handler(sockJSSocket.write _)
 })
 
-router.route("/myapp/*").handler(sockJSHandler)</code></pre>
+router.route(&quot;/myapp/*&quot;).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -3093,13 +3092,13 @@ SockJS handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var router = Router.router(vertx)
 
 var sockJSHandler = SockJSHandler.create(vertx)
 var options = BridgeOptions()
 sockJSHandler.bridge(options)
 
-router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
+router.route(&quot;/eventbus/*&quot;).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3108,26 +3107,26 @@ and receive messages:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"&gt;&lt;/script&gt;
-&lt;script src='vertx-eventbus.js'&gt;&lt;/script&gt;
+<pre class="CodeRay highlight"><code data-lang="html"><span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">'</span><span class="content">vertx-eventbus.js</span><span class="delimiter">'</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
 
-&lt;script&gt;
+<span class="tag">&lt;script&gt;</span>
+<span class="inline">
+<span class="keyword">var</span> eb = <span class="keyword">new</span> EventBus(<span class="string"><span class="delimiter">'</span><span class="content">http://localhost:8080/eventbus</span><span class="delimiter">'</span></span>);
 
-var eb = new EventBus('http://localhost:8080/eventbus');
+eb.<span class="function">onopen</span> = <span class="keyword">function</span>() {
 
-eb.onopen = function() {
-
-  // set a handler to receive a message
-  eb.registerHandler('some-address', function(error, message) {
-    console.log('received a message: ' + JSON.stringify(message));
+  <span class="comment">// set a handler to receive a message</span>
+  eb.registerHandler(<span class="string"><span class="delimiter">'</span><span class="content">some-address</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(error, message) {
+    console.log(<span class="string"><span class="delimiter">'</span><span class="content">received a message: </span><span class="delimiter">'</span></span> + JSON.stringify(message));
   });
 
-  // send a message
-  eb.send('some-address', {name: 'tim', age: 587});
+  <span class="comment">// send a message</span>
+  eb.send(<span class="string"><span class="delimiter">'</span><span class="content">some-address</span><span class="delimiter">'</span></span>, {<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">tim</span><span class="delimiter">'</span></span>, <span class="key">age</span>: <span class="integer">587</span>});
 
-}
+}</span>
 
-&lt;/script&gt;</code></pre>
+<span class="tag">&lt;/script&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3135,7 +3134,7 @@ eb.onopen = function() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">var eb = new EventBus('http://localhost:8080/eventbus');</code></pre>
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> eb = <span class="keyword">new</span> EventBus(<span class="string"><span class="delimiter">'</span><span class="content">http://localhost:8080/eventbus</span><span class="delimiter">'</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3162,12 +3161,12 @@ Neither SockJS nor the EventBus bridge support automatic reconnection.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">function setupEventBus() {
-  var eb = new EventBus();
-  eb.onclose = function (e) {
-    setTimeout(setupEventBus, 1000); // Give the server some time to come back
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">function</span> <span class="function">setupEventBus</span>() {
+  <span class="keyword">var</span> eb = <span class="keyword">new</span> EventBus();
+  eb.<span class="function">onclose</span> = <span class="keyword">function</span> (e) {
+    setTimeout(setupEventBus, <span class="integer">1000</span>); <span class="comment">// Give the server some time to come back</span>
   };
-  // Handlers setup here...
+  <span class="comment">// Handlers setup here...</span>
 }</code></pre>
 </div>
 </div>
@@ -3183,13 +3182,13 @@ Neither SockJS nor the EventBus bridge support automatic reconnection.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-web-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-  &lt;classifier&gt;client&lt;/classifier&gt;
-  &lt;type&gt;js&lt;/type&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-web-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;classifier&gt;</span>client<span class="tag">&lt;/classifier&gt;</span>
+  <span class="tag">&lt;type&gt;</span>js<span class="tag">&lt;/type&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -3201,7 +3200,7 @@ Neither SockJS nor the EventBus bridge support automatic reconnection.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-web-scala_2.12:3.4.2:client'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-web-scala_2.12:3.4.2:client</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3306,39 +3305,39 @@ by looking at all the fields and values in the match object and checking they al
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var router = Router.router(vertx)
 
 var sockJSHandler = SockJSHandler.create(vertx)
 
 
 // Let through any messages sent to 'demo.orderMgr' from the client
 var inboundPermitted1 = PermittedOptions()
-  .setAddress("demo.orderMgr")
+  .setAddress(&quot;demo.orderMgr&quot;)
 
 
 // Allow calls to the address 'demo.persistor' from the client as long as the messages
 // have an action field with value 'find' and a collection field with value
 // 'albums'
 var inboundPermitted2 = PermittedOptions()
-  .setAddress("demo.persistor")
-  .setMatch(new io.vertx.core.json.JsonObject().put("action", "find").put("collection", "albums"))
+  .setAddress(&quot;demo.persistor&quot;)
+  .setMatch(new io.vertx.core.json.JsonObject().put(&quot;action&quot;, &quot;find&quot;).put(&quot;collection&quot;, &quot;albums&quot;))
 
 
 // Allow through any message with a field `wibble` with value `foo`.
 var inboundPermitted3 = PermittedOptions()
-  .setMatch(new io.vertx.core.json.JsonObject().put("wibble", "foo"))
+  .setMatch(new io.vertx.core.json.JsonObject().put(&quot;wibble&quot;, &quot;foo&quot;))
 
 
 // First let's define what we're going to allow from server -&gt; client
 
 // Let through any messages coming from address 'ticker.mystock'
 var outboundPermitted1 = PermittedOptions()
-  .setAddress("ticker.mystock")
+  .setAddress(&quot;ticker.mystock&quot;)
 
 
-// Let through any messages from addresses starting with "news." (e.g. news.europe, news.usa, etc)
+// Let through any messages from addresses starting with &quot;news.&quot; (e.g. news.europe, news.usa, etc)
 var outboundPermitted2 = PermittedOptions()
-  .setAddressRegex("news\\..+")
+  .setAddressRegex(&quot;news\\..+&quot;)
 
 
 // Let's define what we're going to allow from client -&gt; server
@@ -3349,7 +3348,7 @@ var options = BridgeOptions()
 
 sockJSHandler.bridge(options)
 
-router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
+router.route(&quot;/eventbus/*&quot;).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -3372,13 +3371,13 @@ required for the match.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Let through any messages sent to 'demo.orderService' from the client
+<pre class="CodeRay highlight"><code data-lang="scala">// Let through any messages sent to 'demo.orderService' from the client
 var inboundPermitted = PermittedOptions()
-  .setAddress("demo.orderService")
+  .setAddress(&quot;demo.orderService&quot;)
 
 
-// But only if the user is logged in and has the authority "place_orders"
-inboundPermitted.setRequiredAuthority("place_orders")
+// But only if the user is logged in and has the authority &quot;place_orders&quot;
+inboundPermitted.setRequiredAuthority(&quot;place_orders&quot;)
 
 var options = BridgeOptions()
   .setInboundPermitteds(Set(inboundPermitted))</code></pre>
@@ -3392,15 +3391,15 @@ var options = BridgeOptions()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var router = Router.router(vertx)
 
 // Let through any messages sent to 'demo.orderService' from the client
 var inboundPermitted = PermittedOptions()
-  .setAddress("demo.orderService")
+  .setAddress(&quot;demo.orderService&quot;)
 
 
-// But only if the user is logged in and has the authority "place_orders"
-inboundPermitted.setRequiredAuthority("place_orders")
+// But only if the user is logged in and has the authority &quot;place_orders&quot;
+inboundPermitted.setRequiredAuthority(&quot;place_orders&quot;)
 
 var sockJSHandler = SockJSHandler.create(vertx)
 sockJSHandler.bridge(BridgeOptions()
@@ -3414,10 +3413,10 @@ router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)))
 
 var basicAuthHandler = BasicAuthHandler.create(authProvider)
 
-router.route("/eventbus/*").handler(basicAuthHandler)
+router.route(&quot;/eventbus/*&quot;).handler(basicAuthHandler)
 
 
-router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
+router.route(&quot;/eventbus/*&quot;).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -3504,11 +3503,11 @@ authorisation or metrics.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var router = Router.router(vertx)
 
 // Let through any messages sent to 'demo.orderMgr' from the client
 var inboundPermitted = PermittedOptions()
-  .setAddress("demo.someService")
+  .setAddress(&quot;demo.someService&quot;)
 
 
 var sockJSHandler = SockJSHandler.create(vertx)
@@ -3518,7 +3517,7 @@ var options = BridgeOptions()
 
 sockJSHandler.bridge(options, (be: io.vertx.scala.ext.web.handler.sockjs.BridgeEvent) =&gt; {
   if (be.type() == BridgeEventType.PUBLISH || be.type() == BridgeEventType.RECEIVE) {
-    if (be.getRawMessage().getValue("body") == "armadillos") {
+    if (be.getRawMessage().getValue(&quot;body&quot;) == &quot;armadillos&quot;) {
       // Reject it
       be.complete(false)
       return
@@ -3527,7 +3526,7 @@ sockJSHandler.bridge(options, (be: io.vertx.scala.ext.web.handler.sockjs.BridgeE
   be.complete(true)
 })
 
-router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
+router.route(&quot;/eventbus/*&quot;).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3537,7 +3536,7 @@ then the SOCKET_IDLE bridge event would be triggered.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var router = Router.router(vertx)
 
 // Initialize SockJS handler
 var sockJSHandler = SockJSHandler.create(vertx)
@@ -3554,7 +3553,7 @@ sockJSHandler.bridge(options, (be: io.vertx.scala.ext.web.handler.sockjs.BridgeE
   be.complete(true)
 })
 
-router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
+router.route(&quot;/eventbus/*&quot;).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3562,25 +3561,25 @@ router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"&gt;&lt;/script&gt;
-&lt;script src='vertx-eventbus.js'&gt;&lt;/script&gt;
+<pre class="CodeRay highlight"><code data-lang="html"><span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">'</span><span class="content">vertx-eventbus.js</span><span class="delimiter">'</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
 
-&lt;script&gt;
+<span class="tag">&lt;script&gt;</span>
+<span class="inline">
+<span class="keyword">var</span> eb = <span class="keyword">new</span> EventBus(<span class="string"><span class="delimiter">'</span><span class="content">http://localhost:8080/eventbus</span><span class="delimiter">'</span></span>, {<span class="key"><span class="delimiter">&quot;</span><span class="content">vertxbus_ping_interval</span><span class="delimiter">&quot;</span></span>: <span class="integer">300000</span>}); <span class="comment">// sends ping every 5 minutes.</span>
 
-var eb = new EventBus('http://localhost:8080/eventbus', {"vertxbus_ping_interval": 300000}); // sends ping every 5 minutes.
+eb.<span class="function">onopen</span> = <span class="keyword">function</span>() {
 
-eb.onopen = function() {
-
- // set a handler to receive a message
- eb.registerHandler('some-address', function(error, message) {
-   console.log('received a message: ' + JSON.stringify(message));
+ <span class="comment">// set a handler to receive a message</span>
+ eb.registerHandler(<span class="string"><span class="delimiter">'</span><span class="content">some-address</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(error, message) {
+   console.log(<span class="string"><span class="delimiter">'</span><span class="content">received a message: </span><span class="delimiter">'</span></span> + JSON.stringify(message));
  });
 
- // send a message
- eb.send('some-address', {name: 'tim', age: 587});
-}
+ <span class="comment">// send a message</span>
+ eb.send(<span class="string"><span class="delimiter">'</span><span class="content">some-address</span><span class="delimiter">'</span></span>, {<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">tim</span><span class="delimiter">'</span></span>, <span class="key">age</span>: <span class="integer">587</span>});
+}</span>
 
-&lt;/script&gt;</code></pre>
+<span class="tag">&lt;/script&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3588,7 +3587,7 @@ eb.onopen = function() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">var eb = new EventBus('http://localhost:8080/eventbus', {"vertxbus_ping_interval": 300000});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> eb = <span class="keyword">new</span> EventBus(<span class="string"><span class="delimiter">'</span><span class="content">http://localhost:8080/eventbus</span><span class="delimiter">'</span></span>, {<span class="key"><span class="delimiter">&quot;</span><span class="content">vertxbus_ping_interval</span><span class="delimiter">&quot;</span></span>: <span class="integer">300000</span>});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3601,11 +3600,11 @@ also add headers to the message, here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var router = Router.router(vertx)
 
 // Let through any messages sent to 'demo.orderService' from the client
 var inboundPermitted = PermittedOptions()
-  .setAddress("demo.orderService")
+  .setAddress(&quot;demo.orderService&quot;)
 
 
 var sockJSHandler = SockJSHandler.create(vertx)
@@ -3616,15 +3615,15 @@ var options = BridgeOptions()
 sockJSHandler.bridge(options, (be: io.vertx.scala.ext.web.handler.sockjs.BridgeEvent) =&gt; {
   if (be.type() == BridgeEventType.PUBLISH || be.type() == BridgeEventType.SEND) {
     // Add some headers
-    var headers = new io.vertx.core.json.JsonObject().put("header1", "val").put("header2", "val2")
+    var headers = new io.vertx.core.json.JsonObject().put(&quot;header1&quot;, &quot;val&quot;).put(&quot;header2&quot;, &quot;val2&quot;)
     var rawMessage = be.getRawMessage()
-    rawMessage.put("headers", headers)
+    rawMessage.put(&quot;headers&quot;, headers)
     be.setRawMessage(rawMessage)
   }
   be.complete(true)
 })
 
-router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
+router.route(&quot;/eventbus/*&quot;).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -3650,10 +3649,10 @@ header was present in the Form attributes under the same name as the header, e.g
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">---
-&lt;form action="/submit" method="POST"&gt;
-&lt;input type="hidden" name="X-XSRF-TOKEN" value="abracadabra"&gt;
-&lt;/form&gt;
+<pre class="CodeRay highlight"><code data-lang="html">---
+<span class="tag">&lt;form</span> <span class="attribute-name">action</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/submit</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">method</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">POST</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="tag">&lt;input</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">X-XSRF-TOKEN</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">abracadabra</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
 ---</code></pre>
 </div>
 </div>
@@ -3664,8 +3663,8 @@ or the header name they have chosen during the instantiation of the <code>CSRFHa
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.route().handler(CookieHandler.create())
-router.route().handler(CSRFHandler.create("abracadabra"))
+<pre class="CodeRay highlight"><code data-lang="scala">router.route().handler(CookieHandler.create())
+router.route().handler(CSRFHandler.create(&quot;abracadabra&quot;))
 router.route().handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
 
 })</code></pre>
@@ -3686,7 +3685,7 @@ example <code></strong>.vertx.io</code> or fully domain names as <code>www.vertx
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">router.route().handler(VirtualHostHandler.create("*.vertx.io", (routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">router.route().handler(VirtualHostHandler.create(&quot;*.vertx.io&quot;, (routingContext: io.vertx.scala.ext.web.RoutingContext) =&gt; {
   // do something if the request is for *.vertx.io
 }))</code></pre>
 </div>
@@ -3702,26 +3701,26 @@ authCode flow. An example of using it to protect some resource and authenticate 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// create an OAuth2 provider, clientID and clientSecret should be requested to github
-var authProvider = GithubAuth.create(vertx, "CLIENT_ID", "CLIENT_SECRET")
+<pre class="CodeRay highlight"><code data-lang="scala">// create an OAuth2 provider, clientID and clientSecret should be requested to github
+var authProvider = GithubAuth.create(vertx, &quot;CLIENT_ID&quot;, &quot;CLIENT_SECRET&quot;)
 
 // create a oauth2 handler on our running server
 // the second argument is the full url to the callback as you entered in your provider management console.
-var oauth2 = OAuth2AuthHandler.create(authProvider, "https://myserver.com/callback")
+var oauth2 = OAuth2AuthHandler.create(authProvider, &quot;https://myserver.com/callback&quot;)
 
 // setup the callback handler for receiving the GitHub callback
 oauth2.setupCallback(router.route())
 
 // protect everything under /protected
-router.route("/protected/*").handler(oauth2)
+router.route(&quot;/protected/*&quot;).handler(oauth2)
 // mount some handler under the protected zone
-router.route("/protected/somepage").handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
-  rc.response().end("Welcome to the protected resource!")
+router.route(&quot;/protected/somepage&quot;).handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+  rc.response().end(&quot;Welcome to the protected resource!&quot;)
 })
 
 // welcome page
-router.get("/").handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
-  ctx.response().putHeader("content-type", "text/html").end("Hello&lt;br&gt;&lt;a href=\"/protected/somepage\"&gt;Protected by Github&lt;/a&gt;")
+router.get(&quot;/&quot;).handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+  ctx.response().putHeader(&quot;content-type&quot;, &quot;text/html&quot;).end(&quot;Hello&lt;br&gt;&lt;a href=\&quot;/protected/somepage\&quot;&gt;Protected by Github&lt;/a&gt;&quot;)
 })</code></pre>
 </div>
 </div>
@@ -3797,34 +3796,34 @@ vertx-auth provides you with many out of the box implementations:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// create an OAuth2 provider, clientID and clientSecret should be requested to Google
+<pre class="CodeRay highlight"><code data-lang="scala">// create an OAuth2 provider, clientID and clientSecret should be requested to Google
 var authProvider = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, OAuth2ClientOptions()
-  .setClientID("CLIENT_ID")
-  .setClientSecret("CLIENT_SECRET")
-  .setSite("https://accounts.google.com")
-  .setTokenPath("https://www.googleapis.com/oauth2/v3/token")
-  .setAuthorizationPath("/o/oauth2/auth")
+  .setClientID(&quot;CLIENT_ID&quot;)
+  .setClientSecret(&quot;CLIENT_SECRET&quot;)
+  .setSite(&quot;https://accounts.google.com&quot;)
+  .setTokenPath(&quot;https://www.googleapis.com/oauth2/v3/token&quot;)
+  .setAuthorizationPath(&quot;/o/oauth2/auth&quot;)
 )
 
-// create a oauth2 handler on our domain: "http://localhost:8080"
-var oauth2 = OAuth2AuthHandler.create(authProvider, "http://localhost:8080")
+// create a oauth2 handler on our domain: &quot;http://localhost:8080&quot;
+var oauth2 = OAuth2AuthHandler.create(authProvider, &quot;http://localhost:8080&quot;)
 
 // these are the scopes
-oauth2.addAuthority("profile")
+oauth2.addAuthority(&quot;profile&quot;)
 
 // setup the callback handler for receiving the Google callback
-oauth2.setupCallback(router.get("/callback"))
+oauth2.setupCallback(router.get(&quot;/callback&quot;))
 
 // protect everything under /protected
-router.route("/protected/*").handler(oauth2)
+router.route(&quot;/protected/*&quot;).handler(oauth2)
 // mount some handler under the protected zone
-router.route("/protected/somepage").handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
-  rc.response().end("Welcome to the protected resource!")
+router.route(&quot;/protected/somepage&quot;).handler((rc: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+  rc.response().end(&quot;Welcome to the protected resource!&quot;)
 })
 
 // welcome page
-router.get("/").handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
-  ctx.response().putHeader("content-type", "text/html").end("Hello&lt;br&gt;&lt;a href=\"/protected/somepage\"&gt;Protected by Google&lt;/a&gt;")
+router.get(&quot;/&quot;).handler((ctx: io.vertx.scala.ext.web.RoutingContext) =&gt; {
+  ctx.response().putHeader(&quot;content-type&quot;, &quot;text/html&quot;).end(&quot;Hello&lt;br&gt;&lt;a href=\&quot;/protected/somepage\&quot;&gt;Protected by Google&lt;/a&gt;&quot;)
 })</code></pre>
 </div>
 </div>
@@ -3844,8 +3843,8 @@ mandatory for the default values, 80 for http, 443 for https.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// create a oauth2 handler pinned to myserver.com: "https://myserver.com:8447/callback"
-var oauth2 = OAuth2AuthHandler.create(provider, "https://myserver.com:8447/callback")
+<pre class="CodeRay highlight"><code data-lang="scala">// create a oauth2 handler pinned to myserver.com: &quot;https://myserver.com:8447/callback&quot;
+var oauth2 = OAuth2AuthHandler.create(provider, &quot;https://myserver.com:8447/callback&quot;)
 // now allow the handler to setup the callback url for you
 oauth2.setupCallback(router.route())</code></pre>
 </div>

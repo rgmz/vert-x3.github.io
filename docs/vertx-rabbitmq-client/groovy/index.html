@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -167,11 +166,11 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-rabbitmq-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-rabbitmq-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -182,8 +181,8 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-rabbitmq-client:3.4.2'
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+  compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-rabbitmq-client:3.4.2</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -195,10 +194,10 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = [:]
-// full amqp uri
-config.uri = "amqp://xvjvsrrc:VbuL1atClKt7zVNQha0bnnScbNvGiqgb@moose.rmq.cloudamqp.com/xvjvsrrc"
-def client = RabbitMQClient.create(vertx, config)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> config = [:]
+<span class="comment">// full amqp uri</span>
+config.uri = <span class="string"><span class="delimiter">&quot;</span><span class="content">amqp://xvjvsrrc:VbuL1atClKt7zVNQha0bnnScbNvGiqgb@moose.rmq.cloudamqp.com/xvjvsrrc</span><span class="delimiter">&quot;</span></span>
+<span class="keyword">def</span> client = RabbitMQClient.create(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -206,22 +205,22 @@ def client = RabbitMQClient.create(vertx, config)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = [:]
-// Each parameter is optional
-// The default parameter with be used if the parameter is not set
-config.user = "user1"
-config.password = "password1"
-config.host = "localhost"
-config.port = 5672
-config.virtualHost = "vhost1"
-config.connectionTimeout = 60
-config.requestedHeartbeat = 60
-config.handshakeTimeout = 60
-config.requestedChannelMax = 5
-config.networkRecoveryInterval = 5
-config.automaticRecoveryEnabled = true
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> config = [:]
+<span class="comment">// Each parameter is optional</span>
+<span class="comment">// The default parameter with be used if the parameter is not set</span>
+config.user = <span class="string"><span class="delimiter">&quot;</span><span class="content">user1</span><span class="delimiter">&quot;</span></span>
+config.password = <span class="string"><span class="delimiter">&quot;</span><span class="content">password1</span><span class="delimiter">&quot;</span></span>
+config.host = <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>
+config.port = <span class="integer">5672</span>
+config.virtualHost = <span class="string"><span class="delimiter">&quot;</span><span class="content">vhost1</span><span class="delimiter">&quot;</span></span>
+config.connectionTimeout = <span class="integer">60</span>
+config.requestedHeartbeat = <span class="integer">60</span>
+config.handshakeTimeout = <span class="integer">60</span>
+config.requestedChannelMax = <span class="integer">5</span>
+config.networkRecoveryInterval = <span class="integer">5</span>
+config.automaticRecoveryEnabled = <span class="predefined-constant">true</span>
 
-def client = RabbitMQClient.create(vertx, config)</code></pre>
+<span class="keyword">def</span> client = RabbitMQClient.create(vertx, config)</code></pre>
 </div>
 </div>
 </div>
@@ -232,15 +231,15 @@ def client = RabbitMQClient.create(vertx, config)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = [:]
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> config = [:]
 
-config["x-dead-letter-exchange"] = "my.deadletter.exchange"
-config["alternate-exchange"] = "my.alternate.exchange"
-// ...
-client.exchangeDeclare("my.exchange", "fanout", true, false, config, { onResult -&gt;
-  if (onResult.succeeded()) {
-    println("Exchange successfully declared with config")
-  } else {
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">x-dead-letter-exchange</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">my.deadletter.exchange</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">alternate-exchange</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">my.alternate.exchange</span><span class="delimiter">&quot;</span></span>
+<span class="comment">// ...</span>
+client.exchangeDeclare(<span class="string"><span class="delimiter">&quot;</span><span class="content">my.exchange</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">fanout</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>, <span class="predefined-constant">false</span>, config, { onResult -&gt;
+  <span class="keyword">if</span> (onResult.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Exchange successfully declared with config</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     onResult.cause().printStackTrace()
   }
 })</code></pre>
@@ -265,13 +264,13 @@ client.exchangeDeclare("my.exchange", "fanout", true, false, config, { onResult 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def message = [
-  body:"Hello RabbitMQ, from Vert.x !"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> message = [
+  <span class="key">body</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello RabbitMQ, from Vert.x !</span><span class="delimiter">&quot;</span></span>
 ]
-client.basicPublish("", "my.queue", message, { pubResult -&gt;
-  if (pubResult.succeeded()) {
-    println("Message published !")
-  } else {
+client.basicPublish(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">my.queue</span><span class="delimiter">&quot;</span></span>, message, { pubResult -&gt;
+  <span class="keyword">if</span> (pubResult.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Message published !</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     pubResult.cause().printStackTrace()
   }
 })</code></pre>
@@ -285,26 +284,26 @@ client.basicPublish("", "my.queue", message, { pubResult -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def message = [
-  body:"Hello RabbitMQ, from Vert.x !"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> message = [
+  <span class="key">body</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello RabbitMQ, from Vert.x !</span><span class="delimiter">&quot;</span></span>
 ]
 
-// Put the channel in confirm mode. This can be done once at init.
+<span class="comment">// Put the channel in confirm mode. This can be done once at init.</span>
 client.confirmSelect({ confirmResult -&gt;
-  if (confirmResult.succeeded()) {
-    client.basicPublish("", "my.queue", message, { pubResult -&gt;
-      if (pubResult.succeeded()) {
-        // Check the message got confirmed by the broker.
+  <span class="keyword">if</span> (confirmResult.succeeded()) {
+    client.basicPublish(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">my.queue</span><span class="delimiter">&quot;</span></span>, message, { pubResult -&gt;
+      <span class="keyword">if</span> (pubResult.succeeded()) {
+        <span class="comment">// Check the message got confirmed by the broker.</span>
         client.waitForConfirms({ waitResult -&gt;
-          if (waitResult.succeeded()) {
-            println("Message published !")} else {
+          <span class="keyword">if</span> (waitResult.succeeded()) {
+            println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Message published !</span><span class="delimiter">&quot;</span></span>)} <span class="keyword">else</span> {
             waitResult.cause().printStackTrace()}
         })
-      } else {
+      } <span class="keyword">else</span> {
         pubResult.cause().printStackTrace()
       }
     })
-  } else {
+  } <span class="keyword">else</span> {
     confirmResult.cause().printStackTrace()
   }
 })</code></pre>
@@ -318,18 +317,18 @@ client.confirmSelect({ confirmResult -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Create the event bus handler which messages will be sent to
-// Create the event bus handler which messages will be sent to
-vertx.eventBus().consumer("my.address", { msg -&gt;
-  def json = msg.body()
-  println("Got message: ${json.body}")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Create the event bus handler which messages will be sent to</span>
+<span class="comment">// Create the event bus handler which messages will be sent to</span>
+vertx.eventBus().consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">my.address</span><span class="delimiter">&quot;</span></span>, { msg -&gt;
+  <span class="keyword">def</span> json = msg.body()
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Got message: </span><span class="inline"><span class="inline-delimiter">${</span>json.body<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })
 
-// Setup the link between rabbitmq consumer and event bus address
-client.basicConsume("my.queue", "my.address", { consumeResult -&gt;
-  if (consumeResult.succeeded()) {
-    println("RabbitMQ consumer created !")
-  } else {
+<span class="comment">// Setup the link between rabbitmq consumer and event bus address</span>
+client.basicConsume(<span class="string"><span class="delimiter">&quot;</span><span class="content">my.queue</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">my.address</span><span class="delimiter">&quot;</span></span>, { consumeResult -&gt;
+  <span class="keyword">if</span> (consumeResult.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">RabbitMQ consumer created !</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     consumeResult.cause().printStackTrace()
   }
 })</code></pre>
@@ -343,11 +342,11 @@ client.basicConsume("my.queue", "my.address", { consumeResult -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">client.basicGet("my.queue", true, { getResult -&gt;
-  if (getResult.succeeded()) {
-    def msg = getResult.result()
-    println("Got message: ${msg.body}")
-  } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">client.basicGet(<span class="string"><span class="delimiter">&quot;</span><span class="content">my.queue</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>, { getResult -&gt;
+  <span class="keyword">if</span> (getResult.succeeded()) {
+    <span class="keyword">def</span> msg = getResult.result()
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Got message: </span><span class="inline"><span class="inline-delimiter">${</span>msg.body<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     getResult.cause().printStackTrace()
   }
 })</code></pre>
@@ -358,20 +357,20 @@ client.basicConsume("my.queue", "my.address", { consumeResult -&gt;
 <h3 id="_consume_messages_without_auto_ack">Consume messages without auto-ack</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Create the event bus handler which messages will be sent to
-vertx.eventBus().consumer("my.address", { msg -&gt;
-  def json = msg.body()
-  println("Got message: ${json.body}")
-  // ack
-  client.basicAck(json.deliveryTag, false, { asyncResult -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Create the event bus handler which messages will be sent to</span>
+vertx.eventBus().consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">my.address</span><span class="delimiter">&quot;</span></span>, { msg -&gt;
+  <span class="keyword">def</span> json = msg.body()
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Got message: </span><span class="inline"><span class="inline-delimiter">${</span>json.body<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  <span class="comment">// ack</span>
+  client.basicAck(json.deliveryTag, <span class="predefined-constant">false</span>, { asyncResult -&gt;
   })
 })
 
-// Setup the link between rabbitmq consumer and event bus address
-client.basicConsume("my.queue", "my.address", false, { consumeResult -&gt;
-  if (consumeResult.succeeded()) {
-    println("RabbitMQ consumer created !")
-  } else {
+<span class="comment">// Setup the link between rabbitmq consumer and event bus address</span>
+client.basicConsume(<span class="string"><span class="delimiter">&quot;</span><span class="content">my.queue</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">my.address</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">false</span>, { consumeResult -&gt;
+  <span class="keyword">if</span> (consumeResult.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">RabbitMQ consumer created !</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     consumeResult.cause().printStackTrace()
   }
 })</code></pre>

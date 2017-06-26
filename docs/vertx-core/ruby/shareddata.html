@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -172,27 +171,27 @@ so you don&#8217;t have to worry about protecting that state by synchronising ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/buffer'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx/buffer</span><span class="delimiter">'</span></span>
 
 sd = vertx.shared_data()
 
-map1 = sd.get_local_map("mymap1")
+map1 = sd.get_local_map(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap1</span><span class="delimiter">&quot;</span></span>)
 
-map1.put("foo", "bar")
+map1.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
 
-map2 = sd.get_local_map("mymap2")
+map2 = sd.get_local_map(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap2</span><span class="delimiter">&quot;</span></span>)
 
-map2.put("eek", Vertx::Buffer.buffer().append_int(123))
+map2.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">eek</span><span class="delimiter">&quot;</span></span>, <span class="constant">Vertx</span>::<span class="constant">Buffer</span>.buffer().append_int(<span class="integer">123</span>))
 
-# Then... in another part of your application:
+<span class="comment"># Then... in another part of your application:</span>
 
-map1 = sd.get_local_map("mymap1")
+map1 = sd.get_local_map(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap1</span><span class="delimiter">&quot;</span></span>)
 
-val = map1.get("foo")
+val = map1.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)
 
-map2 = sd.get_local_map("mymap2")
+map2 = sd.get_local_map(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap2</span><span class="delimiter">&quot;</span></span>)
 
-buff = map2.get("eek")</code></pre>
+buff = map2.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">eek</span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
 </div>
@@ -215,14 +214,14 @@ application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd = vertx.shared_data()
+<pre class="CodeRay highlight"><code data-lang="ruby">sd = vertx.shared_data()
 
-sd.get_cluster_wide_map("mymap") { |res_err,res|
-  if (res_err == nil)
+sd.get_cluster_wide_map(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
     map = res
-  else
-    # Something went wrong!
-  end
+  <span class="keyword">else</span>
+    <span class="comment"># Something went wrong!</span>
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -236,12 +235,12 @@ sd.get_cluster_wide_map("mymap") { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">map.put("foo", "bar") { |resPut_err,resPut|
-  if (resPut_err == nil)
-    # Successfully put the value
-  else
-    # Something went wrong!
-  end
+<pre class="CodeRay highlight"><code data-lang="ruby">map.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>) { |resPut_err,resPut|
+  <span class="keyword">if</span> (resPut_err == <span class="predefined-constant">nil</span>)
+    <span class="comment"># Successfully put the value</span>
+  <span class="keyword">else</span>
+    <span class="comment"># Something went wrong!</span>
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -256,13 +255,13 @@ sd.get_cluster_wide_map("mymap") { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">map.get("foo") { |resGet_err,resGet|
-  if (resGet_err == nil)
-    # Successfully got the value
+<pre class="CodeRay highlight"><code data-lang="ruby">map.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>) { |resGet_err,resGet|
+  <span class="keyword">if</span> (resGet_err == <span class="predefined-constant">nil</span>)
+    <span class="comment"># Successfully got the value</span>
     val = resGet
-  else
-    # Something went wrong!
-  end
+  <span class="keyword">else</span>
+    <span class="comment"># Something went wrong!</span>
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -303,20 +302,20 @@ another caller can obtain it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_lock("mylock") { |res_err,res|
-  if (res_err == nil)
-    # Got the lock!
+<pre class="CodeRay highlight"><code data-lang="ruby">sd.get_lock(<span class="string"><span class="delimiter">&quot;</span><span class="content">mylock</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    <span class="comment"># Got the lock!</span>
     lock = res
 
-    # 5 seconds later we release the lock so someone else can get it
+    <span class="comment"># 5 seconds later we release the lock so someone else can get it</span>
 
-    vertx.set_timer(5000) { |tid|
+    vertx.set_timer(<span class="integer">5000</span>) { |tid|
       lock.release()
     }
 
-  else
-    # Something went wrong
-  end
+  <span class="keyword">else</span>
+    <span class="comment"># Something went wrong</span>
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -326,14 +325,14 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_lock_with_timeout("mylock", 10000) { |res_err,res|
-  if (res_err == nil)
-    # Got the lock!
+<pre class="CodeRay highlight"><code data-lang="ruby">sd.get_lock_with_timeout(<span class="string"><span class="delimiter">&quot;</span><span class="content">mylock</span><span class="delimiter">&quot;</span></span>, <span class="integer">10000</span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    <span class="comment"># Got the lock!</span>
     lock = res
 
-  else
-    # Failed to get lock
-  end
+  <span class="keyword">else</span>
+    <span class="comment"># Failed to get lock</span>
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -351,12 +350,12 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">sd.get_counter("mycounter") { |res_err,res|
-  if (res_err == nil)
+<pre class="CodeRay highlight"><code data-lang="ruby">sd.get_counter(<span class="string"><span class="delimiter">&quot;</span><span class="content">mycounter</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
     counter = res
-  else
-    # Something went wrong!
-  end
+  <span class="keyword">else</span>
+    <span class="comment"># Something went wrong!</span>
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>

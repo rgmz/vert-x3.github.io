@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -270,7 +269,7 @@ You do this by defining a <code>codec</code> for the objects you want to send.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var eb = vertx.eventBus()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var eb = vertx.eventBus()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -285,10 +284,10 @@ Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var eb = vertx.eventBus()
+<pre class="CodeRay highlight"><code data-lang="scala">var eb = vertx.eventBus()
 
-eb.consumer("news.uk.sport", (message: io.vertx.scala.core.eventbus.Message&lt;java.lang.Object&gt;) =&gt; {
-  println(s"I have received a message: ${message.body()}")
+eb.consumer(&quot;news.uk.sport&quot;, (message: io.vertx.scala.core.eventbus.Message&lt;java.lang.Object&gt;) =&gt; {
+  println(s&quot;I have received a message: ${message.body()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -307,11 +306,11 @@ to return a MessageConsumer with no handler set, and then set the handler on tha
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var eb = vertx.eventBus()
+<pre class="CodeRay highlight"><code data-lang="scala">var eb = vertx.eventBus()
 
-var consumer = eb.consumer("news.uk.sport")
+var consumer = eb.consumer(&quot;news.uk.sport&quot;)
 consumer.handler((message: io.vertx.scala.core.eventbus.Message&lt;java.lang.String&gt;) =&gt; {
-  println(s"I have received a message: ${message.body()}")
+  println(s&quot;I have received a message: ${message.body()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -325,12 +324,12 @@ on the MessageConsumer object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">consumer.completionHandlerFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">consumer.completionHandlerFuture().onComplete{
   case Success(result) =&gt; {
-    println("The handler registration has reached all nodes")
+    println(&quot;The handler registration has reached all nodes&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -347,12 +346,12 @@ be notified when this is complete use <code><a href="../../scaladocs/io/vertx/sc
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">consumer.unregisterFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">consumer.unregisterFuture().onComplete{
   case Success(result) =&gt; {
-    println("The handler un-registration has reached all nodes")
+    println(&quot;The handler un-registration has reached all nodes&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -366,7 +365,7 @@ address to publish it to.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">eventBus.publish("news.uk.sport", "Yay! Someone kicked a ball")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">eventBus.publish(&quot;news.uk.sport&quot;, &quot;Yay! Someone kicked a ball&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -384,7 +383,7 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">eventBus.send(&quot;news.uk.sport&quot;, &quot;Yay! Someone kicked a ball&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -429,10 +428,10 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var consumer = eventBus.consumer("news.uk.sport")
+<pre class="CodeRay highlight"><code data-lang="scala">var consumer = eventBus.consumer(&quot;news.uk.sport&quot;)
 consumer.handler((message: io.vertx.scala.core.eventbus.Message&lt;java.lang.String&gt;) =&gt; {
-  println(s"I have received a message: ${message.body()}")
-  message.reply("how interesting!")
+  println(s&quot;I have received a message: ${message.body()}&quot;)
+  message.reply(&quot;how interesting!&quot;)
 })</code></pre>
 </div>
 </div>
@@ -441,11 +440,11 @@ consumer.handler((message: io.vertx.scala.core.eventbus.Message&lt;java.lang.Str
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">eventBus.sendFuture("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">eventBus.sendFuture(&quot;news.uk.sport&quot;, &quot;Yay! Someone kicked a ball across a patch of grass&quot;).onComplete{
   case Success(result) =&gt; {
-    println(s"Received reply: ${result.body()}")
+    println(s&quot;Received reply: ${result.body()}&quot;)
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -522,15 +521,15 @@ instance as clustered;</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = VertxOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = VertxOptions()
 Vertx.clusteredVertx(options, {
   case Success(result) =&gt; {
     var vertx = result
     var eventBus = vertx.eventBus()
-    println(s"We now have a clustered event bus: ${eventBus}")
+    println(s&quot;We now have a clustered event bus: ${eventBus}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 })</code></pre>
 </div>
@@ -573,16 +572,16 @@ the event bus acts as a server and client, the configuration is close to
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = VertxOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = VertxOptions()
   .setEventBusOptions(EventBusOptions()
     .setSsl(true)
     .setKeyStoreOptions(JksOptions()
-      .setPath("keystore.jks")
-      .setPassword("wibble")
+      .setPath(&quot;keystore.jks&quot;)
+      .setPassword(&quot;wibble&quot;)
     )
     .setTrustStoreOptions(JksOptions()
-      .setPath("keystore.jks")
-      .setPassword("wibble")
+      .setPath(&quot;keystore.jks&quot;)
+      .setPassword(&quot;wibble&quot;)
     )
     .setClientAuth(ClientAuth.REQUIRED)
   )
@@ -592,10 +591,10 @@ Vertx.clusteredVertx(options, {
   case Success(result) =&gt; {
     var vertx = result
     var eventBus = vertx.eventBus()
-    println(s"We now have a clustered event bus: ${eventBus}")
+    println(s&quot;We now have a clustered event bus: ${eventBus}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 })</code></pre>
 </div>
@@ -622,9 +621,9 @@ clustered, the port and host, as you would do with <code><a href="../dataobjects
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = VertxOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = VertxOptions()
   .setEventBusOptions(EventBusOptions()
-    .setClusterPublicHost("whatever")
+    .setClusterPublicHost(&quot;whatever&quot;)
     .setClusterPublicPort(1234)
   )
 
@@ -633,10 +632,10 @@ Vertx.clusteredVertx(options, {
   case Success(result) =&gt; {
     var vertx = result
     var eventBus = vertx.eventBus()
-    println(s"We now have a clustered event bus: ${eventBus}")
+    println(s&quot;We now have a clustered event bus: ${eventBus}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 })</code></pre>
 </div>

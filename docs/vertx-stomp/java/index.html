@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -203,11 +202,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-stomp&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-stomp<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -219,7 +218,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-stomp:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-stomp:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -234,7 +233,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx)
     .handler(StompServerHandler.create(vertx))
     .listen();</code></pre>
 </div>
@@ -248,9 +247,9 @@ method:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx)
     .handler(StompServerHandler.create(vertx))
-    .listen(1234, "0.0.0.0");</code></pre>
+    .listen(<span class="integer">1234</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">0.0.0.0</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -259,13 +258,13 @@ bridge. To be notified when the server is ready, use a handler as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx)
     .handler(StompServerHandler.create(vertx))
     .listen(ar -&gt; {
-      if (ar.failed()) {
-        System.out.println("Failing to start the STOMP server : " + ar.cause().getMessage());
-      } else {
-        System.out.println("Ready to receive STOMP frames");
+      <span class="keyword">if</span> (ar.failed()) {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failing to start the STOMP server : </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Ready to receive STOMP frames</span><span class="delimiter">&quot;</span></span>);
       }
     });</code></pre>
 </div>
@@ -278,7 +277,7 @@ bridge. To be notified when the server is ready, use a handler as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx, new StompServerOptions().setPort(1234).setHost("0.0.0.0"))
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx, <span class="keyword">new</span> StompServerOptions().setPort(<span class="integer">1234</span>).setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">0.0.0.0</span><span class="delimiter">&quot;</span></span>))
     .handler(StompServerHandler.create(vertx))
     .listen();</code></pre>
 </div>
@@ -291,11 +290,11 @@ bridge. To be notified when the server is ready, use a handler as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">server.close(ar -&gt; {
-  if (ar.succeeded()) {
-    System.out.println("The STOMP server has been closed");
-  } else {
-    System.out.println("The STOMP server failed to close : " + ar.cause().getMessage());
+<pre class="CodeRay highlight"><code data-lang="java">server.close(ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">The STOMP server has been closed</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">The STOMP server failed to close : </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
   }
 });</code></pre>
 </div>
@@ -314,7 +313,7 @@ the <code><a href="../../apidocs/io/vertx/ext/stomp/StompServerOptions.html">Sto
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx, netServer)
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx, netServer)
     .handler(StompServerHandler.create(vertx))
     .listen();</code></pre>
 </div>
@@ -362,8 +361,8 @@ the <code><a href="../../apidocs/io/vertx/ext/stomp/StompServerOptions.html">Sto
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx, new StompServerOptions().setHeartbeat(
-    new JsonObject().put("x", 1000).put("y", 1000)))
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx, <span class="keyword">new</span> StompServerOptions().setHeartbeat(
+    <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, <span class="integer">1000</span>).put(<span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, <span class="integer">1000</span>)))
     .handler(StompServerHandler.create(vertx))
     .listen();</code></pre>
 </div>
@@ -374,7 +373,7 @@ authentication requests:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx, new StompServerOptions().setSecured(true))
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx, <span class="keyword">new</span> StompServerOptions().setSecured(<span class="predefined-constant">true</span>))
     .handler(StompServerHandler.create(vertx).authProvider(provider))
     .listen();</code></pre>
 </div>
@@ -405,13 +404,13 @@ can configure the server to use queues, or mix both types:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx)
     .handler(StompServerHandler.create(vertx)
         .destinationFactory((v, name) -&gt; {
-          if (name.startsWith("/queue")) {
-            return Destination.queue(vertx, name);
-          } else {
-            return Destination.topic(vertx, name);
+          <span class="keyword">if</span> (name.startsWith(<span class="string"><span class="delimiter">&quot;</span><span class="content">/queue</span><span class="delimiter">&quot;</span></span>)) {
+            <span class="keyword">return</span> <span class="predefined-type">Destination</span>.queue(vertx, name);
+          } <span class="keyword">else</span> {
+            <span class="keyword">return</span> <span class="predefined-type">Destination</span>.topic(vertx, name);
           }
         }))
     .listen();</code></pre>
@@ -426,15 +425,15 @@ created when the first subscription on this destination is received.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx)
     .handler(StompServerHandler.create(vertx)
         .destinationFactory((v, name) -&gt; {
-          if (name.startsWith("/forbidden")) {
-            return null;
-          } else if (name.startsWith("/queue")) {
-            return Destination.queue(vertx, name);
-          } else {
-            return Destination.topic(vertx, name);
+          <span class="keyword">if</span> (name.startsWith(<span class="string"><span class="delimiter">&quot;</span><span class="content">/forbidden</span><span class="delimiter">&quot;</span></span>)) {
+            <span class="keyword">return</span> <span class="predefined-constant">null</span>;
+          } <span class="keyword">else</span> <span class="keyword">if</span> (name.startsWith(<span class="string"><span class="delimiter">&quot;</span><span class="content">/queue</span><span class="delimiter">&quot;</span></span>)) {
+            <span class="keyword">return</span> <span class="predefined-type">Destination</span>.queue(vertx, name);
+          } <span class="keyword">else</span> {
+            <span class="keyword">return</span> <span class="predefined-type">Destination</span>.topic(vertx, name);
           }
         }))
     .listen();</code></pre>
@@ -472,15 +471,15 @@ method in order to let the <code><a href="../../apidocs/io/vertx/ext/stomp/Stomp
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx)
     .handler(StompServerHandler.create(vertx)
         .onAckHandler(acknowledgement -&gt; {
-          // Action to execute when the frames (one in `client-individual` mode, several
-          // in `client` mode are acknowledged.
+          <span class="comment">// Action to execute when the frames (one in `client-individual` mode, several</span>
+          <span class="comment">// in `client` mode are acknowledged.</span>
         })
         .onNackHandler(acknowledgement -&gt; {
-          // Action to execute when the frames (1 in `client-individual` mode, several in
-          // `client` mode are not acknowledged.
+          <span class="comment">// Action to execute when the frames (1 in `client-individual` mode, several in</span>
+          <span class="comment">// `client` mode are not acknowledged.</span>
         }))
     .listen();</code></pre>
 </div>
@@ -495,19 +494,19 @@ Here are some examples:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx)
     .handler(StompServerHandler.create(vertx)
             .closeHandler(connection -&gt; {
-              // client connection closed
+              <span class="comment">// client connection closed</span>
             })
             .beginHandler(frame -&gt; {
-              // transaction starts
+              <span class="comment">// transaction starts</span>
             })
             .commitHandler(frame -&gt; {
-                  // transaction committed
+                  <span class="comment">// transaction committed</span>
                 }
             )
-        //...
+        <span class="comment">//...</span>
     ).listen();</code></pre>
 </div>
 </div>
@@ -531,13 +530,13 @@ at the default implementations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx)
     .connect(ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
 
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -549,13 +548,13 @@ configure the host and port as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
-    .connect(61613, "0.0.0.0", ar -&gt; {
-      if (ar.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx)
+    .connect(<span class="integer">61613</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">0.0.0.0</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
 
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -567,16 +566,16 @@ connections created with the client inherit of the error handler (but can have t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx)
     .errorFrameHandler(frame -&gt; {
-      // Received the ERROR frame
+      <span class="comment">// Received the ERROR frame</span>
     })
-    .connect(61613, "0.0.0.0", ar -&gt; {
-      if (ar.succeeded()) {
+    .connect(<span class="integer">61613</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">0.0.0.0</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
 
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -586,13 +585,13 @@ connections created with the client inherit of the error handler (but can have t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx, new StompClientOptions().setHost("localhost").setPort(1234))
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx, <span class="keyword">new</span> StompClientOptions().setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).setPort(<span class="integer">1234</span>))
     .connect(ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
 
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -605,13 +604,13 @@ connections created with the client inherit of the error handler (but can have t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx, new StompClientOptions().setHost("localhost").setPort(1234))
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx, <span class="keyword">new</span> StompClientOptions().setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).setPort(<span class="integer">1234</span>))
     .connect(ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
 
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });
 
@@ -624,14 +623,14 @@ use the <code><a href="../../apidocs/io/vertx/ext/stomp/StompClientConnection.ht
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx, new StompClientOptions().setHost("localhost").setPort(1234))
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx, <span class="keyword">new</span> StompClientOptions().setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).setPort(<span class="integer">1234</span>))
     .connect(ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
 
         connection.disconnect();
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -649,13 +648,13 @@ frames sent by the server. Notice that the server closes the connection with the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx, new StompClientOptions().setHost("localhost").setPort(1234))
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx, <span class="keyword">new</span> StompClientOptions().setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).setPort(<span class="integer">1234</span>))
     .connect(ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
-        connection.errorHandler(frame -&gt; System.out.println("ERROR frame received : " + frame));
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+        connection.errorHandler(frame -&gt; <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">ERROR frame received : </span><span class="delimiter">&quot;</span></span> + frame));
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -669,22 +668,22 @@ for instance tries to reconnect to the server:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx)
     .connect(ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
         connection.connectionDroppedHandler(con -&gt; {
-          // The connection has been lost
-          // You can reconnect or switch to another server.
+          <span class="comment">// The connection has been lost</span>
+          <span class="comment">// You can reconnect or switch to another server.</span>
         });
 
-        connection.send("/queue", Buffer.buffer("Hello"),
+        connection.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">/queue</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>),
             frame -&gt; {
-              System.out.println("Message processed by the server");
+              <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Message processed by the server</span><span class="delimiter">&quot;</span></span>);
             }
         );
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -702,13 +701,13 @@ you want to use in the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx)
     .connect(netClient, ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
-        connection.errorHandler(frame -&gt; System.out.println("ERROR frame received : " + frame));
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+        connection.errorHandler(frame -&gt; <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">ERROR frame received : </span><span class="delimiter">&quot;</span></span> + frame));
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -746,14 +745,14 @@ you want to use in the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx)
     .connect(ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
-        connection.subscribe("/queue",
-            frame -&gt; System.out.println("Just received a frame from /queue : " + frame));
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+        connection.subscribe(<span class="string"><span class="delimiter">&quot;</span><span class="content">/queue</span><span class="delimiter">&quot;</span></span>,
+            frame -&gt; <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Just received a frame from /queue : </span><span class="delimiter">&quot;</span></span> + frame));
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -763,18 +762,18 @@ you want to use in the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx)
     .connect(ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
-        connection.subscribe("/queue",
-            frame -&gt; System.out.println("Just received a frame from /queue : " + frame));
+        connection.subscribe(<span class="string"><span class="delimiter">&quot;</span><span class="content">/queue</span><span class="delimiter">&quot;</span></span>,
+            frame -&gt; <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Just received a frame from /queue : </span><span class="delimiter">&quot;</span></span> + frame));
 
-        // ....
+        <span class="comment">// ....</span>
 
-        connection.unsubscribe("/queue");
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+        connection.unsubscribe(<span class="string"><span class="delimiter">&quot;</span><span class="content">/queue</span><span class="delimiter">&quot;</span></span>);
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -787,17 +786,17 @@ you want to use in the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx)
     .connect(ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
-        Map&lt;String, String&gt; headers = new HashMap&lt;&gt;();
-        headers.put("header1", "value1");
-        connection.send("/queue", headers, Buffer.buffer("Hello"));
-        // No headers:
-        connection.send("/queue", Buffer.buffer("World"));
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+        <span class="predefined-type">Map</span>&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt; headers = <span class="keyword">new</span> <span class="predefined-type">HashMap</span>&lt;&gt;();
+        headers.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">header1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>);
+        connection.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">/queue</span><span class="delimiter">&quot;</span></span>, headers, <span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>));
+        <span class="comment">// No headers:</span>
+        connection.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">/queue</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">World</span><span class="delimiter">&quot;</span></span>));
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -813,17 +812,17 @@ you want to use in the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx)
     .connect(ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
-        connection.subscribe("/queue", frame -&gt; {
+        connection.subscribe(<span class="string"><span class="delimiter">&quot;</span><span class="content">/queue</span><span class="delimiter">&quot;</span></span>, frame -&gt; {
           connection.ack(frame.getAck());
-          // OR
+          <span class="comment">// OR</span>
           connection.nack(frame.getAck());
         });
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -837,21 +836,21 @@ only when the transaction is committed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx)
     .connect(ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
-        Map&lt;String, String&gt; headers = new HashMap&lt;&gt;();
-        headers.put("transaction", "my-transaction");
-        connection.beginTX("my-transaction");
-        connection.send("/queue", headers, Buffer.buffer("Hello"));
-        connection.send("/queue", headers, Buffer.buffer("World"));
-        connection.send("/queue", headers, Buffer.buffer("!!!"));
-        connection.commit("my-transaction");
-        // OR
-        connection.abort("my-transaction");
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+        <span class="predefined-type">Map</span>&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt; headers = <span class="keyword">new</span> <span class="predefined-type">HashMap</span>&lt;&gt;();
+        headers.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">transaction</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">my-transaction</span><span class="delimiter">&quot;</span></span>);
+        connection.beginTX(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-transaction</span><span class="delimiter">&quot;</span></span>);
+        connection.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">/queue</span><span class="delimiter">&quot;</span></span>, headers, <span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>));
+        connection.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">/queue</span><span class="delimiter">&quot;</span></span>, headers, <span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">World</span><span class="delimiter">&quot;</span></span>));
+        connection.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">/queue</span><span class="delimiter">&quot;</span></span>, headers, <span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">!!!</span><span class="delimiter">&quot;</span></span>));
+        connection.commit(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-transaction</span><span class="delimiter">&quot;</span></span>);
+        <span class="comment">// OR</span>
+        connection.abort(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-transaction</span><span class="delimiter">&quot;</span></span>);
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -864,18 +863,18 @@ only when the transaction is committed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompClient client = StompClient.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompClient client = StompClient.create(vertx)
     .connect(ar -&gt; {
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
         StompClientConnection connection = ar.result();
 
-        connection.send("/queue", Buffer.buffer("Hello"),
+        connection.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">/queue</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>),
             frame -&gt; {
-              System.out.println("Message processed by the server");
+              <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Message processed by the server</span><span class="delimiter">&quot;</span></span>);
             }
         );
-      } else {
-        System.out.println("Failed to connect to the STOMP server: " + ar.cause().toString());
+      } <span class="keyword">else</span> {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect to the STOMP server: </span><span class="delimiter">&quot;</span></span> + ar.cause().toString());
       }
     });</code></pre>
 </div>
@@ -897,11 +896,11 @@ addresses are event bus addresses that are transferred to STOMP.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx)
     .handler(StompServerHandler.create(vertx)
-        .bridge(new BridgeOptions()
-            .addInboundPermitted(new PermittedOptions().setAddress("/toBus"))
-            .addOutboundPermitted(new PermittedOptions().setAddress("/toStomp"))
+        .bridge(<span class="keyword">new</span> BridgeOptions()
+            .addInboundPermitted(<span class="keyword">new</span> PermittedOptions().setAddress(<span class="string"><span class="delimiter">&quot;</span><span class="content">/toBus</span><span class="delimiter">&quot;</span></span>))
+            .addOutboundPermitted(<span class="keyword">new</span> PermittedOptions().setAddress(<span class="string"><span class="delimiter">&quot;</span><span class="content">/toStomp</span><span class="delimiter">&quot;</span></span>))
         )
     )
     .listen();</code></pre>
@@ -913,12 +912,12 @@ delivery where only one STOMP client or Event Bus consumer is invoked:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx)
     .handler(StompServerHandler.create(vertx)
-            .bridge(new BridgeOptions()
-                    .addInboundPermitted(new PermittedOptions().setAddress("/toBus"))
-                    .addOutboundPermitted(new PermittedOptions().setAddress("/toStomp"))
-                    .setPointToPoint(true)
+            .bridge(<span class="keyword">new</span> BridgeOptions()
+                    .addInboundPermitted(<span class="keyword">new</span> PermittedOptions().setAddress(<span class="string"><span class="delimiter">&quot;</span><span class="content">/toBus</span><span class="delimiter">&quot;</span></span>))
+                    .addOutboundPermitted(<span class="keyword">new</span> PermittedOptions().setAddress(<span class="string"><span class="delimiter">&quot;</span><span class="content">/toStomp</span><span class="delimiter">&quot;</span></span>))
+                    .setPointToPoint(<span class="predefined-constant">true</span>)
             )
     )
     .listen();</code></pre>
@@ -931,13 +930,13 @@ message payload must meet. For instance, in the next examples, the payload must 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx)
     .handler(StompServerHandler.create(vertx)
-        .bridge(new BridgeOptions()
-            .addInboundPermitted(new PermittedOptions().setAddress("/toBus")
-                .setMatch(new JsonObject().put("foo", "bar")))
-            .addOutboundPermitted(new PermittedOptions().setAddress("/toStomp"))
-            .setPointToPoint(true)
+        .bridge(<span class="keyword">new</span> BridgeOptions()
+            .addInboundPermitted(<span class="keyword">new</span> PermittedOptions().setAddress(<span class="string"><span class="delimiter">&quot;</span><span class="content">/toBus</span><span class="delimiter">&quot;</span></span>)
+                .setMatch(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)))
+            .addOutboundPermitted(<span class="keyword">new</span> PermittedOptions().setAddress(<span class="string"><span class="delimiter">&quot;</span><span class="content">/toStomp</span><span class="delimiter">&quot;</span></span>))
+            .setPointToPoint(<span class="predefined-constant">true</span>)
         )
     )
     .listen();</code></pre>
@@ -978,17 +977,17 @@ HTML page, or as an npm module (<a href="https://www.npmjs.com/package/stompjs" 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx, new StompServerOptions()
-    .setPort(-1) // Disable the TCP port, optional
-    .setWebsocketBridge(true) // Enable the web socket support
-    .setWebsocketPath("/stomp")) // Configure the web socket path, /stomp by default
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx, <span class="keyword">new</span> StompServerOptions()
+    .setPort(-<span class="integer">1</span>) <span class="comment">// Disable the TCP port, optional</span>
+    .setWebsocketBridge(<span class="predefined-constant">true</span>) <span class="comment">// Enable the web socket support</span>
+    .setWebsocketPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/stomp</span><span class="delimiter">&quot;</span></span>)) <span class="comment">// Configure the web socket path, /stomp by default</span>
     .handler(StompServerHandler.create(vertx));
 
 HttpServer http = vertx.createHttpServer(
-    new HttpServerOptions().setWebsocketSubProtocols("v10.stomp, v11.stomp")
+    <span class="keyword">new</span> HttpServerOptions().setWebsocketSubProtocols(<span class="string"><span class="delimiter">&quot;</span><span class="content">v10.stomp, v11.stomp</span><span class="delimiter">&quot;</span></span>)
 )
     .websocketHandler(server.webSocketHandler())
-    .listen(8080);</code></pre>
+    .listen(<span class="integer">8080</span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1000,14 +999,14 @@ the server. Here is a simple example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">var url = "ws://localhost:8080/stomp";
-var client = Stomp.client(url);
-var callback = function(frame) {
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> url = <span class="string"><span class="delimiter">&quot;</span><span class="content">ws://localhost:8080/stomp</span><span class="delimiter">&quot;</span></span>;
+<span class="keyword">var</span> client = Stomp.client(url);
+<span class="keyword">var</span> <span class="function">callback</span> = <span class="keyword">function</span>(frame) {
    console.log(frame);
 };
 
-client.connect({}, function() {
- var subscription = client.subscribe("foo", callback);
+client.connect({}, <span class="keyword">function</span>() {
+ <span class="keyword">var</span> subscription = client.subscribe(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, callback);
 });</code></pre>
 </div>
 </div>
@@ -1024,13 +1023,13 @@ frames, and <em>illegal / unknown</em> frames:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx)
     .handler(StompServerHandler.create(vertx).receivedFrameHandler(sf -&gt; {
-      System.out.println(sf.frame());
+      <span class="predefined-type">System</span>.out.println(sf.frame());
     }))
     .listen();
 
-StompClient client = StompClient.create(vertx).receivedFrameHandler(frame -&gt; System.out.println(frame));</code></pre>
+StompClient client = StompClient.create(vertx).receivedFrameHandler(frame -&gt; <span class="predefined-type">System</span>.out.println(frame));</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1045,15 +1044,15 @@ in the headers using the <code><a href="../../apidocs/io/vertx/ext/stomp/Frame.h
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">StompServer server = StompServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="java">StompServer server = StompServer.create(vertx)
     .handler(StompServerHandler.create(vertx))
     .writingFrameHandler(sf -&gt; {
-      System.out.println(sf.frame());
+      <span class="predefined-type">System</span>.out.println(sf.frame());
     })
     .listen();
 
 StompClient client = StompClient.create(vertx).writingFrameHandler(frame -&gt; {
-  System.out.println(frame);
+  <span class="predefined-type">System</span>.out.println(frame);
 });</code></pre>
 </div>
 </div>

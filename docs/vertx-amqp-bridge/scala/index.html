@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -198,11 +197,11 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-amqp-bridge-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-amqp-bridge-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -214,7 +213,7 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-amqp-bridge-scala_2.12:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-amqp-bridge-scala_2<span class="float">.12</span>:<span class="float">3.4</span><span class="float">.2</span></code></pre>
 </div>
 </div>
 </div>
@@ -233,11 +232,11 @@ to configure various options such as for using SSL connections.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var bridge = AmqpBridge.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var bridge = AmqpBridge.create(vertx)
 // Start the bridge, then use the event loop thread to process things thereafter.
-bridge.startFuture("localhost", 5672).onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+bridge.startFuture(&quot;localhost&quot;, 5672).onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -252,11 +251,11 @@ messages.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var bridge = AmqpBridge.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var bridge = AmqpBridge.create(vertx)
 // Start the bridge, then use the event loop thread to process things thereafter.
-bridge.startFuture("localhost", 5672).onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+bridge.startFuture(&quot;localhost&quot;, 5672).onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -381,11 +380,11 @@ message could look something like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var applicationProperties = new io.vertx.core.json.JsonObject()
-applicationProperties.put("name", "value")
+<pre class="CodeRay highlight"><code data-lang="scala">var applicationProperties = new io.vertx.core.json.JsonObject()
+applicationProperties.put(&quot;name&quot;, &quot;value&quot;)
 
 var amqpMsgPayload = new io.vertx.core.json.JsonObject()
-amqpMsgPayload.put("application_properties", applicationProperties)
+amqpMsgPayload.put(&quot;application_properties&quot;, applicationProperties)
 
 producer.send(amqpMsgPayload)</code></pre>
 </div>
@@ -397,10 +396,10 @@ retrieving an application-property from a received message might look like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Check the application properties section was present before use, it may not be
-var appProps = amqpMsgPayload.getValue("application_properties")
+<pre class="CodeRay highlight"><code data-lang="scala">// Check the application properties section was present before use, it may not be
+var appProps = amqpMsgPayload.getValue(&quot;application_properties&quot;)
 if (appProps != null) {
-  var propValue = appProps.getValue("propertyName")
+  var propValue = appProps.getValue(&quot;propertyName&quot;)
 }</code></pre>
 </div>
 </div>
@@ -429,7 +428,7 @@ in tandem with the producer and attempt to send only what it knows can actually 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">producer.writeQueueFull()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">producer.writeQueueFull()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -438,7 +437,7 @@ receives more credit and is able to send messages immediately rather than buffer
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">producer.drainHandler((v: java.lang.Void) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">producer.drainHandler((v: java.lang.Void) =&gt; {
   // ...do stuff and send...
 })</code></pre>
 </div>
@@ -454,7 +453,7 @@ buffered message value before registering a handler, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">consumer.setMaxBufferedMessages(5)
+<pre class="CodeRay highlight"><code data-lang="scala">consumer.setMaxBufferedMessages(5)
 consumer.handler((msg: io.vertx.scala.core.eventbus.Message&lt;io.vertx.scala.core.json.JsonObject&gt;) =&gt; {
   // ...handle received messages...
 })</code></pre>
@@ -477,19 +476,19 @@ certificate:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var bridgeOptions = AmqpBridgeOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var bridgeOptions = AmqpBridgeOptions()
 bridgeOptions.setSsl(true)
 
 var trustOptions = PfxOptions()
-  .setPath("path/to/pkcs12.truststore")
-  .setPassword("password")
+  .setPath(&quot;path/to/pkcs12.truststore&quot;)
+  .setPassword(&quot;password&quot;)
 
 bridgeOptions.setPfxTrustOptions(trustOptions)
 
 var bridge = AmqpBridge.create(vertx, bridgeOptions)
-bridge.startFuture("localhost", 5672, "username", "password").onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+bridge.startFuture(&quot;localhost&quot;, 5672, &quot;username&quot;, &quot;password&quot;).onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -500,25 +499,25 @@ also a PKCS12 based key store containing an SSL key and certificate the server c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var bridgeOptions = AmqpBridgeOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var bridgeOptions = AmqpBridgeOptions()
 bridgeOptions.setSsl(true)
 
 var trustOptions = PfxOptions()
-  .setPath("path/to/pkcs12.truststore")
-  .setPassword("password")
+  .setPath(&quot;path/to/pkcs12.truststore&quot;)
+  .setPassword(&quot;password&quot;)
 
 bridgeOptions.setPfxTrustOptions(trustOptions)
 
 var keyCertOptions = PfxOptions()
-  .setPath("path/to/pkcs12.keystore")
-  .setPassword("password")
+  .setPath(&quot;path/to/pkcs12.keystore&quot;)
+  .setPassword(&quot;password&quot;)
 
 bridgeOptions.setPfxKeyCertOptions(keyCertOptions)
 
 var bridge = AmqpBridge.create(vertx, bridgeOptions)
-bridge.startFuture("localhost", 5672).onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+bridge.startFuture(&quot;localhost&quot;, 5672).onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -605,12 +604,12 @@ value to match it with the reply handler, and then invokes the handler with the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var amqpMsgPayload = new io.vertx.core.json.JsonObject()
-amqpMsgPayload.put("body", "myRequest")
+<pre class="CodeRay highlight"><code data-lang="scala">var amqpMsgPayload = new io.vertx.core.json.JsonObject()
+amqpMsgPayload.put(&quot;body&quot;, &quot;myRequest&quot;)
 
 producer.sendFuture(amqpMsgPayload).onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -683,12 +682,12 @@ original sending application .</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">consumer.handler((msg: io.vertx.scala.core.eventbus.Message&lt;io.vertx.scala.core.json.JsonObject&gt;) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">consumer.handler((msg: io.vertx.scala.core.eventbus.Message&lt;io.vertx.scala.core.json.JsonObject&gt;) =&gt; {
   // ...do something with received message...then reply...
   var replyAddress = msg.replyAddress()
   if (replyAddress != null) {
     var amqpReplyMessagePayload = new io.vertx.core.json.JsonObject()
-    amqpReplyMessagePayload.put("body", "myResponse")
+    amqpReplyMessagePayload.put(&quot;body&quot;, &quot;myResponse&quot;)
 
     msg.reply(amqpReplyMessagePayload)
   }

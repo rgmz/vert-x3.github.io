@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -184,11 +183,11 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-auth-oauth2&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-auth-oauth2<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -200,7 +199,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-oauth2:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-oauth2:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -280,21 +279,21 @@ specification).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, OAuth2ClientOptions(
-  clientID = "YOUR_CLIENT_ID",
-  clientSecret = "YOUR_CLIENT_SECRET",
-  site = "https://github.com/login",
-  tokenPath = "/oauth/access_token",
-  authorizationPath = "/oauth/authorize"))
+<pre class="CodeRay highlight"><code data-lang="kotlin">var oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, OAuth2ClientOptions(
+  clientID = &quot;YOUR_CLIENT_ID&quot;,
+  clientSecret = &quot;YOUR_CLIENT_SECRET&quot;,
+  site = &quot;https://github.com/login&quot;,
+  tokenPath = &quot;/oauth/access_token&quot;,
+  authorizationPath = &quot;/oauth/authorize&quot;))
 
 // when there is a need to access a protected resource or call a protected method,
 // call the authZ url for a challenge
 
 var authorization_uri = oauth2.authorizeURL(json {
   obj(
-    "redirect_uri" to "http://localhost:8080/callback",
-    "scope" to "notifications",
-    "state" to "3(#0/!~"
+    &quot;redirect_uri&quot; to &quot;http://localhost:8080/callback&quot;,
+    &quot;scope&quot; to &quot;notifications&quot;,
+    &quot;state&quot; to &quot;3(#0/!~&quot;
   )
 })
 
@@ -303,12 +302,12 @@ var authorization_uri = oauth2.authorizeURL(json {
 // in this case GitHub will call you back in the callback uri one should now complete the handshake as:
 
 
-var code = "xxxxxxxxxxxxxxxxxxxxxxxx"
+var code = &quot;xxxxxxxxxxxxxxxxxxxxxxxx&quot;
 
 oauth2.getToken(json {
   obj(
-    "code" to code,
-    "redirect_uri" to "http://localhost:8080/callback"
+    &quot;code&quot; to code,
+    &quot;redirect_uri&quot; to &quot;http://localhost:8080/callback&quot;
   )
 }, { res -&gt;
   if (res.failed()) {
@@ -329,11 +328,11 @@ access token.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Set the client credentials and the OAuth2 server
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Set the client credentials and the OAuth2 server
 var credentials = OAuth2ClientOptions(
-  clientID = "&lt;client-id&gt;",
-  clientSecret = "&lt;client-secret&gt;",
-  site = "https://api.oauth.com")
+  clientID = &quot;&lt;client-id&gt;&quot;,
+  clientSecret = &quot;&lt;client-secret&gt;&quot;,
+  site = &quot;https://api.oauth.com&quot;)
 
 
 // Initialize the OAuth2 Library
@@ -342,19 +341,19 @@ var oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, credentials)
 // Authorization oauth2 URI
 var authorization_uri = oauth2.authorizeURL(json {
   obj(
-    "redirect_uri" to "http://localhost:8080/callback",
-    "scope" to "&lt;scope&gt;",
-    "state" to "&lt;state&gt;"
+    &quot;redirect_uri&quot; to &quot;http://localhost:8080/callback&quot;,
+    &quot;scope&quot; to &quot;&lt;scope&gt;&quot;,
+    &quot;state&quot; to &quot;&lt;state&gt;&quot;
   )
 })
 
 // Redirect example using Vert.x
-response.putHeader("Location", authorization_uri).setStatusCode(302).end()
+response.putHeader(&quot;Location&quot;, authorization_uri).setStatusCode(302).end()
 
 var tokenConfig = json {
   obj(
-    "code" to "&lt;code&gt;",
-    "redirect_uri" to "http://localhost:3000/callback"
+    &quot;code&quot; to &quot;&lt;code&gt;&quot;,
+    &quot;redirect_uri&quot; to &quot;http://localhost:3000/callback&quot;
   )
 }
 
@@ -362,7 +361,7 @@ var tokenConfig = json {
 // Save the access token
 oauth2.getToken(tokenConfig, { res -&gt;
   if (res.failed()) {
-    System.err.println("Access Token Error: ${res.cause().getMessage()}")
+    System.err.println(&quot;Access Token Error: ${res.cause().getMessage()}&quot;)
   } else {
     // Get the access token object (the authorization code is given from the previous step).
     var token = res.result()
@@ -380,13 +379,13 @@ need a fast way to test your application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Initialize the OAuth2 Library
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Initialize the OAuth2 Library
 var oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.PASSWORD)
 
 var tokenConfig = json {
   obj(
-    "username" to "username",
-    "password" to "password"
+    &quot;username&quot; to &quot;username&quot;,
+    &quot;password&quot; to &quot;password&quot;
   )
 }
 
@@ -394,13 +393,13 @@ var tokenConfig = json {
 // Save the access token
 oauth2.getToken(tokenConfig, { res -&gt;
   if (res.failed()) {
-    System.err.println("Access Token Error: ${res.cause().getMessage()}")
+    System.err.println(&quot;Access Token Error: ${res.cause().getMessage()}&quot;)
   } else {
     // Get the access token object (the authorization code is given from the previous step).
     var token = res.result()
 
-    oauth2.api(HttpMethod.GET, "/users", json {
-      obj("access_token" to token.principal().getString("access_token"))
+    oauth2.api(HttpMethod.GET, &quot;/users&quot;, json {
+      obj(&quot;access_token&quot; to token.principal().getString(&quot;access_token&quot;))
     }, { res2 -&gt;
       // the user object should be returned here...
     })
@@ -416,11 +415,11 @@ oauth2.getToken(tokenConfig, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Set the client credentials and the OAuth2 server
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Set the client credentials and the OAuth2 server
 var credentials = OAuth2ClientOptions(
-  clientID = "&lt;client-id&gt;",
-  clientSecret = "&lt;client-secret&gt;",
-  site = "https://api.oauth.com")
+  clientID = &quot;&lt;client-id&gt;&quot;,
+  clientSecret = &quot;&lt;client-secret&gt;&quot;,
+  site = &quot;https://api.oauth.com&quot;)
 
 
 // Initialize the OAuth2 Library
@@ -434,7 +433,7 @@ var tokenConfig = json {
 // Save the access token
 oauth2.getToken(tokenConfig, { res -&gt;
   if (res.failed()) {
-    System.err.println("Access Token Error: ${res.cause().getMessage()}")
+    System.err.println(&quot;Access Token Error: ${res.cause().getMessage()}&quot;)
   } else {
     // Get the access token object (the authorization code is given from the previous step).
     var token = res.result()
@@ -452,7 +451,7 @@ to refresh the access token when it is expired.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Check if the token is expired. If expired it is refreshed.
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Check if the token is expired. If expired it is refreshed.
 if (token.expired()) {
   // Callbacks
   token.refresh({ res -&gt;
@@ -470,13 +469,13 @@ if (token.expired()) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Revoke only the access token
-token.revoke("access_token", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Revoke only the access token
+token.revoke(&quot;access_token&quot;, { res -&gt;
   // Session ended. But the refresh_token is still valid.
 
   // Revoke the refresh_token
-  token.revoke("refresh_token", { res1 -&gt;
-    println("token revoked.")
+  token.revoke(&quot;refresh_token&quot;, { res1 -&gt;
+    println(&quot;token revoked.&quot;)
   })
 })</code></pre>
 </div>
@@ -547,15 +546,15 @@ This information is quite valuable since it allows to do authorization at the AP
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// you would get this config from the keycloak admin console
+<pre class="CodeRay highlight"><code data-lang="kotlin">// you would get this config from the keycloak admin console
 var keycloakJson = json {
   obj(
-    "realm" to "master",
-    "realm-public-key" to "MIIBIjANBgkqhk...wIDAQAB",
-    "auth-server-url" to "http://localhost:9000/auth",
-    "ssl-required" to "external",
-    "resource" to "frontend",
-    "credentials" to obj("secret" to "2fbf5e18-b923-4a83-9657-b4ebd5317f60")
+    &quot;realm&quot; to &quot;master&quot;,
+    &quot;realm-public-key&quot; to &quot;MIIBIjANBgkqhk...wIDAQAB&quot;,
+    &quot;auth-server-url&quot; to &quot;http://localhost:9000/auth&quot;,
+    &quot;ssl-required&quot; to &quot;external&quot;,
+    &quot;resource&quot; to &quot;frontend&quot;,
+    &quot;credentials&quot; to obj(&quot;secret&quot; to &quot;2fbf5e18-b923-4a83-9657-b4ebd5317f60&quot;)
   )
 }
 
@@ -565,8 +564,8 @@ var oauth2 = KeycloakAuth.create(vertx, OAuth2FlowType.PASSWORD, keycloakJson)
 // first get a token (authenticate)
 oauth2.getToken(json {
   obj(
-    "username" to "user",
-    "password" to "secret"
+    &quot;username&quot; to &quot;user&quot;,
+    &quot;password&quot; to &quot;secret&quot;
   )
 }, { res -&gt;
   if (res.failed()) {
@@ -575,7 +574,7 @@ oauth2.getToken(json {
     var token = res.result()
 
     // now check for permissions
-    token.isAuthorised("account:manage-account", { r -&gt;
+    token.isAuthorised(&quot;account:manage-account&quot;, { r -&gt;
       if (r.result()) {
         // this user is authorized to manage its account
       }
@@ -590,7 +589,7 @@ data (e.g. <code>preferred_username</code>) from the Keycloak principal. For exa
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// you can get the decoded `id_token` from the Keycloak principal
+<pre class="CodeRay highlight"><code data-lang="kotlin">// you can get the decoded `id_token` from the Keycloak principal
 var idToken = KeycloakHelper.idToken(principal)
 
 // you can also retrieve some properties directly from the Keycloak principal
@@ -621,8 +620,8 @@ the User level:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// OAuth2Auth level
-oauth2.introspectToken("opaque string", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">// OAuth2Auth level
+oauth2.introspectToken(&quot;opaque string&quot;, { res -&gt;
   if (res.succeeded()) {
     // token is valid!
     var accessToken = res.result()
@@ -649,8 +648,8 @@ this specific case one needs to use the token introspection if the provider supp
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// OAuth2Auth level
-oauth2.decodeToken("jwt-token", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">// OAuth2Auth level
+oauth2.decodeToken(&quot;jwt-token&quot;, { res -&gt;
   if (res.succeeded()) {
     // token is valid!
     var accessToken = res.result()
@@ -716,7 +715,7 @@ example you want to see if the user can <code>print</code> in the current applic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.isAuthorised("print", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">user.isAuthorised(&quot;print&quot;, { res -&gt;
   // in this case it is assumed that the role is the current application
   if (res.succeeded() &amp;&amp; res.result()) {
     // Yes the user can print
@@ -729,9 +728,9 @@ example you want to see if the user can <code>print</code> in the current applic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.isAuthorised("realm:add-user", { res -&gt;
-  // the role is "realm"
-  // the authority is "add-user"
+<pre class="CodeRay highlight"><code data-lang="kotlin">user.isAuthorised(&quot;realm:add-user&quot;, { res -&gt;
+  // the role is &quot;realm&quot;
+  // the authority is &quot;add-user&quot;
   if (res.succeeded() &amp;&amp; res.result()) {
     // Yes the user can add users to the application
   }
@@ -743,9 +742,9 @@ example you want to see if the user can <code>print</code> in the current applic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.isAuthorised("finance:year-report", { res -&gt;
-  // the role is "finance"
-  // the authority is "year-report"
+<pre class="CodeRay highlight"><code data-lang="kotlin">user.isAuthorised(&quot;finance:year-report&quot;, { res -&gt;
+  // the role is &quot;finance&quot;
+  // the authority is &quot;year-report&quot;
   if (res.succeeded() &amp;&amp; res.result()) {
     // Yes the user can access the year report from the finance department
   }
@@ -766,7 +765,7 @@ and be invalid, you can verify if the token is still valid like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// internal validation against, expiration date
+<pre class="CodeRay highlight"><code data-lang="kotlin">// internal validation against, expiration date
 var isExpired = user.expired()</code></pre>
 </div>
 </div>
@@ -784,7 +783,7 @@ screen. In this case you can refresh the token. To refresh a token you need to h
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.refresh({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">user.refresh({ res -&gt;
   if (res.succeeded()) {
     // the refresh call succeeded
   } else {
@@ -805,7 +804,7 @@ any application. In order to do this one needs to revoke the token against the O
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.revoke("access_token", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">user.revoke(&quot;access_token&quot;, { res -&gt;
   if (res.succeeded()) {
     // the refresh call succeeded
   } else {
@@ -848,7 +847,7 @@ means that the check happens on the OAuth2 server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.introspect({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">user.introspect({ res -&gt;
   if (res.succeeded()) {
     // the introspection call succeeded
   } else {
@@ -873,7 +872,7 @@ user this is as simple as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.logout({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">user.logout({ res -&gt;
   if (res.succeeded()) {
     // the logout call succeeded
   } else {

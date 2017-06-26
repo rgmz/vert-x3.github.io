@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -153,11 +152,11 @@ Vert.x read or write stream.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-reactive-streams&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-reactive-streams<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -169,7 +168,7 @@ Vert.x read or write stream.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-reactive-streams:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-reactive-<span class="key">streams</span>:<span class="float">3.4</span><span class="float">.2</span></code></pre>
 </div>
 </div>
 </div>
@@ -191,12 +190,12 @@ stream to the body of a server side HTTP response. This will handle back pressur
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ReactiveReadStream&lt;Buffer&gt; rrs = ReactiveReadStream.readStream();
+<pre class="CodeRay highlight"><code data-lang="java">ReactiveReadStream&lt;<span class="predefined-type">Buffer</span>&gt; rrs = ReactiveReadStream.readStream();
 
-// Subscribe the read stream to the publisher
+<span class="comment">// Subscribe the read stream to the publisher</span>
 otherPublisher.subscribe(rrs);
 
-// Pump from the read stream to the http response
+<span class="comment">// Pump from the read stream to the http response</span>
 Pump pump = Pump.pump(rrs, response);
 
 pump.start();</code></pre>
@@ -224,12 +223,12 @@ a server side HTTP request to that subscriber. This will handle back pressure au
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ReactiveWriteStream&lt;Buffer&gt; rws = ReactiveWriteStream.writeStream(vertx);
+<pre class="CodeRay highlight"><code data-lang="java">ReactiveWriteStream&lt;<span class="predefined-type">Buffer</span>&gt; rws = ReactiveWriteStream.writeStream(vertx);
 
-// Subscribe the other subscriber to the write stream
+<span class="comment">// Subscribe the other subscriber to the write stream</span>
 rws.subscribe(otherSubscriber);
 
-// Pump the http request to the write stream
+<span class="comment">// Pump the http request to the write stream</span>
 Pump pump = Pump.pump(request, rws);
 
 pump.start();</code></pre>

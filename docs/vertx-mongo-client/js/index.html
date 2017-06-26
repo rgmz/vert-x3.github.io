@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -210,11 +209,11 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-mongo-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-mongo-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -226,7 +225,7 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mongo-client:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mongo-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -251,9 +250,9 @@ to share the same pool so you don&#8217;t end up with multiple pools</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var MongoClient = require("vertx-mongo-js/mongo_client");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MongoClient = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-mongo-js/mongo_client</span><span class="delimiter">&quot;</span></span>);
 
-var client = MongoClient.createShared(vertx, config);</code></pre>
+<span class="keyword">var</span> client = MongoClient.createShared(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -271,9 +270,9 @@ will actually create the pool, and the specified config will be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var MongoClient = require("vertx-mongo-js/mongo_client");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MongoClient = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-mongo-js/mongo_client</span><span class="delimiter">&quot;</span></span>);
 
-var client = MongoClient.createShared(vertx, config, "MyPoolName");</code></pre>
+<span class="keyword">var</span> client = MongoClient.createShared(vertx, config, <span class="string"><span class="delimiter">&quot;</span><span class="content">MyPoolName</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -303,9 +302,9 @@ However, it&#8217;s possible you want to create a client instance that doesn&#82
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var MongoClient = require("vertx-mongo-js/mongo_client");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MongoClient = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-mongo-js/mongo_client</span><span class="delimiter">&quot;</span></span>);
 
-var client = MongoClient.createNonShared(vertx, config);</code></pre>
+<span class="keyword">var</span> client = MongoClient.createNonShared(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -338,20 +337,20 @@ if it doesn&#8217;t already exist, otherwise it is updated.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Document has no id
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Document has no id</span>
 
-var document = {
-  "title" : "The Hobbit"
+<span class="keyword">var</span> document = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
 
-mongoClient.save("books", document, function (res, res_err) {
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    var id = res;
-    console.log("Saved book with id " + id);
+    <span class="keyword">var</span> id = res;
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Saved book with id </span><span class="delimiter">&quot;</span></span> + id);
 
-  } else {
+  } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
 
@@ -363,20 +362,20 @@ mongoClient.save("books", document, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Document has an id already
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Document has an id already</span>
 
-var document = {
-  "title" : "The Hobbit",
-  "_id" : "123244"
+<span class="keyword">var</span> document = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">123244</span><span class="delimiter">&quot;</span></span>
 };
 
-mongoClient.save("books", document, function (res, res_err) {
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    // ...
+    <span class="comment">// ...</span>
 
-  } else {
+  } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
 
@@ -394,20 +393,20 @@ mongoClient.save("books", document, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Document has an id already
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Document has an id already</span>
 
-var document = {
-  "title" : "The Hobbit"
+<span class="keyword">var</span> document = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
 
-mongoClient.insert("books", document, function (res, res_err) {
+mongoClient.insert(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    var id = res;
-    console.log("Inserted book with id " + id);
+    <span class="keyword">var</span> id = res;
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Inserted book with id </span><span class="delimiter">&quot;</span></span> + id);
 
-  } else {
+  } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
 
@@ -419,22 +418,22 @@ mongoClient.insert("books", document, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Document has an id already
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Document has an id already</span>
 
-var document = {
-  "title" : "The Hobbit",
-  "_id" : "123244"
+<span class="keyword">var</span> document = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">123244</span><span class="delimiter">&quot;</span></span>
 };
 
-mongoClient.insert("books", document, function (res, res_err) {
+mongoClient.insert(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    //...
+    <span class="comment">//...</span>
 
-  } else {
+  } <span class="keyword">else</span> {
 
-    // Will fail if the book with that id already exists.
+    <span class="comment">// Will fail if the book with that id already exists.</span>
   }
 
 });</code></pre>
@@ -459,25 +458,25 @@ how the object is updated.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Match any documents with title=The Hobbit
-var query = {
-  "title" : "The Hobbit"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Match any documents with title=The Hobbit</span>
+<span class="keyword">var</span> query = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
 
-// Set the author field
-var update = {
-  "$set" : {
-    "author" : "J. R. R. Tolkien"
+<span class="comment">// Set the author field</span>
+<span class="keyword">var</span> update = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">$set</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
   }
 };
 
-mongoClient.update("books", query, update, function (res, res_err) {
+mongoClient.update(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, update, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    console.log("Book updated !");
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Book updated !</span><span class="delimiter">&quot;</span></span>);
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res_err.printStackTrace();
   }
@@ -510,29 +509,29 @@ and pass in an instance of <code><a href="../dataobjects.html#UpdateOptions">Upd
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Match any documents with title=The Hobbit
-var query = {
-  "title" : "The Hobbit"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Match any documents with title=The Hobbit</span>
+<span class="keyword">var</span> query = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
 
-// Set the author field
-var update = {
-  "$set" : {
-    "author" : "J. R. R. Tolkien"
+<span class="comment">// Set the author field</span>
+<span class="keyword">var</span> update = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">$set</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
   }
 };
 
-var options = {
-  "multi" : true
+<span class="keyword">var</span> options = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">multi</span><span class="delimiter">&quot;</span></span> : <span class="predefined-constant">true</span>
 };
 
-mongoClient.updateWithOptions("books", query, update, options, function (res, res_err) {
+mongoClient.updateWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, update, options, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    console.log("Book updated !");
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Book updated !</span><span class="delimiter">&quot;</span></span>);
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res_err.printStackTrace();
   }
@@ -555,22 +554,22 @@ Instead it replaces the entire document with the one provided.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var query = {
-  "title" : "The Hobbit"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> query = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
 
-var replace = {
-  "title" : "The Lord of the Rings",
-  "author" : "J. R. R. Tolkien"
+<span class="keyword">var</span> replace = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Lord of the Rings</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 };
 
-mongoClient.replace("books", query, replace, function (res, res_err) {
+mongoClient.replace(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, replace, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    console.log("Book replaced !");
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Book replaced !</span><span class="delimiter">&quot;</span></span>);
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res_err.printStackTrace();
 
@@ -608,21 +607,21 @@ For more explanation what ordered means, see <a href="https://docs.mongodb.com/m
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// empty query = match any
-var query = {
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// empty query = match any</span>
+<span class="keyword">var</span> query = {
 };
 
-mongoClient.find("books", query, function (res, res_err) {
+mongoClient.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    Array.prototype.forEach.call(res, function(json) {
+    Array.prototype.forEach.call(res, <span class="keyword">function</span>(json) {
 
       console.log(JSON.stringify(json));
 
     });
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res_err.printStackTrace();
 
@@ -636,22 +635,22 @@ mongoClient.find("books", query, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// will match all Tolkien books
-var query = {
-  "author" : "J. R. R. Tolkien"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// will match all Tolkien books</span>
+<span class="keyword">var</span> query = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 };
 
-mongoClient.find("books", query, function (res, res_err) {
+mongoClient.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    Array.prototype.forEach.call(res, function(json) {
+    Array.prototype.forEach.call(res, <span class="keyword">function</span>(json) {
 
       console.log(JSON.stringify(json));
 
     });
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res_err.printStackTrace();
 
@@ -745,17 +744,17 @@ mongoClient.findBatch("book", query, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var query = {
-  "author" : "J. R. R. Tolkien"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> query = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 };
 
-mongoClient.remove("books", query, function (res, res_err) {
+mongoClient.remove(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    console.log("Never much liked Tolkien stuff!");
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Never much liked Tolkien stuff!</span><span class="delimiter">&quot;</span></span>);
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res_err.printStackTrace();
 
@@ -783,17 +782,17 @@ mongoClient.remove("books", query, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var query = {
-  "author" : "J. R. R. Tolkien"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> query = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 };
 
-mongoClient.count("books", query, function (res, res_err) {
+mongoClient.count(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    var num = res;
+    <span class="keyword">var</span> num = res;
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res_err.printStackTrace();
 
@@ -812,13 +811,13 @@ mongoClient.count("books", query, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">mongoClient.getCollections(function (res, res_err) {
+<pre class="CodeRay highlight"><code data-lang="js">mongoClient.getCollections(<span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    var collections = res;
+    <span class="keyword">var</span> collections = res;
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res_err.printStackTrace();
 
@@ -831,13 +830,13 @@ mongoClient.count("books", query, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">mongoClient.createCollection("mynewcollectionr", function (res, res_err) {
+<pre class="CodeRay highlight"><code data-lang="js">mongoClient.createCollection(<span class="string"><span class="delimiter">&quot;</span><span class="content">mynewcollectionr</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    // Created ok!
+    <span class="comment">// Created ok!</span>
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res_err.printStackTrace();
 
@@ -862,13 +861,13 @@ Dropping a collection will delete all documents within it!
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">mongoClient.dropCollection("mynewcollectionr", function (res, res_err) {
+<pre class="CodeRay highlight"><code data-lang="js">mongoClient.dropCollection(<span class="string"><span class="delimiter">&quot;</span><span class="content">mynewcollectionr</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    // Dropped ok!
+    <span class="comment">// Dropped ok!</span>
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res_err.printStackTrace();
 
@@ -894,17 +893,17 @@ of the entries in the JSON is the command name it must be specified as a paramet
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var command = {
-  "aggregate" : "collection_name",
-  "pipeline" : [
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> command = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">aggregate</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">collection_name</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">pipeline</span><span class="delimiter">&quot;</span></span> : [
   ]
 };
 
-mongoClient.runCommand("aggregate", command, function (res, res_err) {
-  if (res_err == null) {
-    var resArr = res.result;
-    // etc
-  } else {
+mongoClient.runCommand(<span class="string"><span class="delimiter">&quot;</span><span class="content">aggregate</span><span class="delimiter">&quot;</span></span>, command, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> resArr = res.result;
+    <span class="comment">// etc</span>
+  } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
 });</code></pre>
@@ -921,32 +920,32 @@ mongoClient.runCommand("aggregate", command, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var document = {
-  "title" : "The Hobbit",
-  "publicationDate" : {
-    "$date" : "1937-09-21T00:00:00+00:00"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> document = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">publicationDate</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">$date</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">1937-09-21T00:00:00+00:00</span><span class="delimiter">&quot;</span></span>
   }
 };
 
-mongoService.save("publishedBooks", document, function (res, res_err) {
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">publishedBooks</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    var id = res;
+    <span class="keyword">var</span> id = res;
 
-    mongoService.findOne("publishedBooks", {
-      "_id" : id
-    }, null, function (res2, res2_err) {
-      if (res2_err == null) {
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">publishedBooks</span><span class="delimiter">&quot;</span></span>, {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span> : id
+    }, <span class="predefined-constant">null</span>, <span class="keyword">function</span> (res2, res2_err) {
+      <span class="keyword">if</span> (res2_err == <span class="predefined-constant">null</span>) {
 
-        console.log("To retrieve ISO-8601 date : " + res2.publicationDate.$date);
+        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">To retrieve ISO-8601 date : </span><span class="delimiter">&quot;</span></span> + res2.publicationDate.<span class="predefined">$date</span>);
 
-      } else {
+      } <span class="keyword">else</span> {
         res2_err.printStackTrace();
       }
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
 
@@ -958,29 +957,29 @@ mongoService.save("publishedBooks", document, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">byte[] binaryObject = new byte[40];
+<pre class="CodeRay highlight"><code data-lang="js"><span class="reserved">byte</span>[] binaryObject = <span class="keyword">new</span> <span class="reserved">byte</span>[<span class="integer">40</span>];
 
-JsonObject document = new JsonObject()
-        .put("name", "Alan Turing")
-        .put("binaryStuff", new JsonObject().put("$binary", binaryObject));
+JsonObject document = <span class="keyword">new</span> JsonObject()
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Alan Turing</span><span class="delimiter">&quot;</span></span>)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">$binary</span><span class="delimiter">&quot;</span></span>, binaryObject));
 
-mongoService.save("smartPeople", document, res -&gt; {
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
     String id = res.result();
 
-    mongoService.findOne("smartPeople", new JsonObject().put("_id", id), null, res2 -&gt; {
-      if(res2.succeeded()) {
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span>, id), <span class="predefined-constant">null</span>, res2 -&gt; {
+      <span class="keyword">if</span>(res2.succeeded()) {
 
-        byte[] reconstitutedBinaryObject = res2.result().getJsonObject("binaryStuff").getBinary("$binary");
-        //This could now be de-serialized into an object in real life
-      } else {
+        <span class="reserved">byte</span>[] reconstitutedBinaryObject = res2.result().getJsonObject(<span class="string"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span>).getBinary(<span class="string"><span class="delimiter">&quot;</span><span class="content">$binary</span><span class="delimiter">&quot;</span></span>);
+        <span class="comment">//This could now be de-serialized into an object in real life</span>
+      } <span class="keyword">else</span> {
         res2.cause().printStackTrace();
       }
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 
@@ -992,35 +991,35 @@ mongoService.save("smartPeople", document, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">//This could be a the byte contents of a pdf file, etc converted to base 64
-var base64EncodedString = "a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ=";
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">//This could be a the byte contents of a pdf file, etc converted to base 64</span>
+<span class="keyword">var</span> base64EncodedString = <span class="string"><span class="delimiter">&quot;</span><span class="content">a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ=</span><span class="delimiter">&quot;</span></span>;
 
-var document = {
-  "name" : "Alan Turing",
-  "binaryStuff" : {
-    "$binary" : base64EncodedString
+<span class="keyword">var</span> document = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">Alan Turing</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">$binary</span><span class="delimiter">&quot;</span></span> : base64EncodedString
   }
 };
 
-mongoService.save("smartPeople", document, function (res, res_err) {
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    var id = res;
+    <span class="keyword">var</span> id = res;
 
-    mongoService.findOne("smartPeople", {
-      "_id" : id
-    }, null, function (res2, res2_err) {
-      if (res2_err == null) {
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span> : id
+    }, <span class="predefined-constant">null</span>, <span class="keyword">function</span> (res2, res2_err) {
+      <span class="keyword">if</span> (res2_err == <span class="predefined-constant">null</span>) {
 
-        var reconstitutedBase64EncodedString = res2.binaryStuff.$binary;
-        //This could now converted back to bytes from the base 64 string
-      } else {
+        <span class="keyword">var</span> reconstitutedBase64EncodedString = res2.binaryStuff.<span class="predefined">$binary</span>;
+        <span class="comment">//This could now converted back to bytes from the base 64 string</span>
+      } <span class="keyword">else</span> {
         res2_err.printStackTrace();
       }
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
 
@@ -1032,32 +1031,32 @@ mongoService.save("smartPeople", document, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var individualId = new (Java.type("org.bson.types.ObjectId"))().toHexString();
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> individualId = <span class="keyword">new</span> (Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">org.bson.types.ObjectId</span><span class="delimiter">&quot;</span></span>))().toHexString();
 
-var document = {
-  "name" : "Stephen Hawking",
-  "individualId" : {
-    "$oid" : individualId
+<span class="keyword">var</span> document = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">Stephen Hawking</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">individualId</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">$oid</span><span class="delimiter">&quot;</span></span> : individualId
   }
 };
 
-mongoService.save("smartPeople", document, function (res, res_err) {
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    var id = res;
+    <span class="keyword">var</span> id = res;
 
-    mongoService.findOne("smartPeople", {
-      "_id" : id
-    }, null, function (res2, res2_err) {
-      if (res2_err == null) {
-        var reconstitutedIndividualId = res2.individualId.$oid;
-      } else {
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span> : id
+    }, <span class="predefined-constant">null</span>, <span class="keyword">function</span> (res2, res2_err) {
+      <span class="keyword">if</span> (res2_err == <span class="predefined-constant">null</span>) {
+        <span class="keyword">var</span> reconstitutedIndividualId = res2.individualId.<span class="predefined">$oid</span>;
+      } <span class="keyword">else</span> {
         res2_err.printStackTrace();
       }
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
 
@@ -1069,19 +1068,19 @@ mongoService.save("smartPeople", document, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var document = {
-  "title" : "The Hobbit"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> document = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
 
-mongoClient.save("books", document, function (res, res_err) {
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    mongoClient.distinct("books", "title", Java.type("java.lang.String").class.getName(), function (res2, res2_err) {
-      console.log("Title is : " + res2[0]);
+    mongoClient.distinct(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">java.lang.String</span><span class="delimiter">&quot;</span></span>).<span class="reserved">class</span>.getName(), <span class="keyword">function</span> (res2, res2_err) {
+      console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Title is : </span><span class="delimiter">&quot;</span></span> + res2[<span class="integer">0</span>]);
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
 
@@ -1093,19 +1092,19 @@ mongoClient.save("books", document, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var document = {
-  "title" : "The Hobbit"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> document = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
 
-mongoClient.save("books", document, function (res, res_err) {
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
 
-  if (res_err == null) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
 
-    mongoClient.distinctBatch("books", "title", Java.type("java.lang.String").class.getName(), function (res2, res2_err) {
-      console.log("Title is : " + res2.title);
+    mongoClient.distinctBatch(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">java.lang.String</span><span class="delimiter">&quot;</span></span>).<span class="reserved">class</span>.getName(), <span class="keyword">function</span> (res2, res2_err) {
+      console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Title is : </span><span class="delimiter">&quot;</span></span> + res2.title);
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
 

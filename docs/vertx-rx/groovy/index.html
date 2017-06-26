@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -164,11 +163,11 @@ and RxJava will know how to invoke them.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;{maven-groupId}&lt;/groupId&gt;
-  &lt;artifactId&gt;{maven-artifactId}&lt;/artifactId&gt;
-  &lt;version&gt;{maven-version}&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>{maven-groupId}<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>{maven-artifactId}<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>{maven-version}<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -180,7 +179,7 @@ and RxJava will know how to invoke them.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile {maven-groupId}:{maven-artifactId}:{maven-version}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile {maven-groupId}:{maven-artifactId}:{maven-version}</code></pre>
 </div>
 </div>
 </div>
@@ -197,11 +196,11 @@ Groovy extension module that adds the <code>toObservable</code> method to the re
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def fs = vertx.fileSystem()
-fs.open("/data.txt", [:], { result -&gt;
-  def file = result.result()
-  def observable = file.toObservable()
-  observable.forEach({ data -&gt; println("Read data: ${data.toString("UTF-8")}") })
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> fs = vertx.fileSystem()
+fs.open(<span class="string"><span class="delimiter">&quot;</span><span class="content">/data.txt</span><span class="delimiter">&quot;</span></span>, [:], { result -&gt;
+  <span class="keyword">def</span> file = result.result()
+  <span class="keyword">def</span> observable = file.toObservable()
+  observable.forEach({ data -&gt; println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Read data: </span><span class="inline"><span class="inline-delimiter">${</span>data.toString(<span class="string"><span class="delimiter">&quot;</span><span class="content">UTF-8</span><span class="delimiter">&quot;</span></span>)<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>) })
 })</code></pre>
 </div>
 </div>
@@ -220,9 +219,9 @@ fs.open("/data.txt", [:], { result -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Observer&lt;Long&gt; observer = Observers.create({ item -&gt; println("Timer fired!") })
-Handler&lt;Long&gt; handler = observer.toHandler()
-vertx.setTimer(1000, handler)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Observer</span>&lt;<span class="predefined-type">Long</span>&gt; observer = Observers.create({ item -&gt; println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Timer fired!</span><span class="delimiter">&quot;</span></span>) })
+<span class="predefined-type">Handler</span>&lt;<span class="predefined-type">Long</span>&gt; handler = observer.toHandler()
+vertx.setTimer(<span class="integer">1000</span>, handler)</code></pre>
 </div>
 </div>
 </div>
@@ -238,9 +237,9 @@ vertx.setTimer(1000, handler)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Observer&lt;HttpServer&gt; observer = Observers.create({ server -&gt; println("Server started") })
-Handler&lt;AsyncResult&lt;HttpServer&gt;&gt; handler = observer.toFuture()
-vertx.createHttpServer([port:1234,host:"localhost"]).listen(handler)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Observer</span>&lt;HttpServer&gt; observer = Observers.create({ server -&gt; println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Server started</span><span class="delimiter">&quot;</span></span>) })
+<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;HttpServer&gt;&gt; handler = observer.toFuture()
+vertx.createHttpServer([<span class="key">port</span>:<span class="integer">1234</span>,<span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>]).listen(handler)</code></pre>
 </div>
 </div>
 </div>
@@ -259,7 +258,7 @@ the RxGroovy extension module adds to the <code>Vertx</code> class the <code>sch
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Observable&lt;Long&gt; timer = Observable.timer(100, 100, TimeUnit.MILLISECONDS, vertx.scheduler())</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Observable</span>&lt;<span class="predefined-type">Long</span>&gt; timer = <span class="predefined-type">Observable</span>.timer(<span class="integer">100</span>, <span class="integer">100</span>, <span class="predefined-type">TimeUnit</span>.MILLISECONDS, vertx.scheduler())</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -267,8 +266,8 @@ the RxGroovy extension module adds to the <code>Vertx</code> class the <code>sch
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Scheduler scheduler = vertx.blockingScheduler();
-Observable&lt;Integer&gt; obs = blockingObservable.observeOn(scheduler);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">Scheduler scheduler = vertx.blockingScheduler();
+<span class="predefined-type">Observable</span>&lt;<span class="predefined-type">Integer</span>&gt; obs = blockingObservable.observeOn(scheduler);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -277,7 +276,7 @@ scheduler for IO actions:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">RxJavaSchedulersHook hook = RxHelper.schedulerHook(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy">RxJavaSchedulersHook hook = RxHelper.schedulerHook(vertx)
 RxJavaPlugins.getInstance().registerSchedulersHook(hook)</code></pre>
 </div>
 </div>
@@ -292,12 +291,12 @@ transforms an <code>Observable&lt;Buffer&gt;</code> in json format into an objec
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def fileSystem = vertx.fileSystem()
-fileSystem.open("/data.txt", [:], { result -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> fileSystem = vertx.fileSystem()
+fileSystem.open(<span class="string"><span class="delimiter">&quot;</span><span class="content">/data.txt</span><span class="delimiter">&quot;</span></span>, [:], { result -&gt;
   AsyncFile file = result.result()
-  Observable&lt;Buffer&gt; observable = file.toObservable()
+  <span class="predefined-type">Observable</span>&lt;<span class="predefined-type">Buffer</span>&gt; observable = file.toObservable()
   observable.lift(RxHelper.unmarshaller(MyPojo.class)).subscribe({ mypojo -&gt;
-      // Process the object
+      <span class="comment">// Process the object</span>
   })
 })</code></pre>
 </div>
@@ -317,15 +316,15 @@ fileSystem.open("/data.txt", [:], { result -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">EventBus eb = vertx.eventBus()
-MessageConsumer&lt;String&gt; consumer = eb.&lt;String&gt;consumer("the-address")
-Observable&lt;Message&lt;String&gt;&gt; observable = consumer.toObservable()
+<pre class="CodeRay highlight"><code data-lang="groovy">EventBus eb = vertx.eventBus()
+MessageConsumer&lt;<span class="predefined-type">String</span>&gt; consumer = eb.&lt;<span class="predefined-type">String</span>&gt;consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">the-address</span><span class="delimiter">&quot;</span></span>)
+<span class="predefined-type">Observable</span>&lt;Message&lt;<span class="predefined-type">String</span>&gt;&gt; observable = consumer.toObservable()
 Subscription sub = observable.subscribe({ msg -&gt;
-  // Got message
+  <span class="comment">// Got message</span>
 });
 
-// Unregisters the stream after 10 seconds
-vertx.setTimer(10000, { id -&gt;
+<span class="comment">// Unregisters the stream after 10 seconds</span>
+vertx.setTimer(<span class="integer">10000</span>, { id -&gt;
   sub.unsubscribe()
 });</code></pre>
 </div>
@@ -336,9 +335,9 @@ The <code>Message#body()</code> gives access to a new stream of message bodies i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">EventBus eb = vertx.eventBus()
-MessageConsumer&lt;String&gt; consumer = eb.&lt;String&gt;consumer("the-address")
-Observable&lt;String&gt; observable = consumer.bodyStream().toObservable()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">EventBus eb = vertx.eventBus()
+MessageConsumer&lt;<span class="predefined-type">String</span>&gt; consumer = eb.&lt;<span class="predefined-type">String</span>&gt;consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">the-address</span><span class="delimiter">&quot;</span></span>)
+<span class="predefined-type">Observable</span>&lt;<span class="predefined-type">String</span>&gt; observable = consumer.bodyStream().toObservable()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -346,16 +345,16 @@ Observable&lt;String&gt; observable = consumer.bodyStream().toObservable()</code
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Observable&lt;Double&gt; observable = vertx.eventBus().
-&lt;Double&gt;consumer("heat-sensor").
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Observable</span>&lt;<span class="predefined-type">Double</span>&gt; observable = vertx.eventBus().
+&lt;<span class="predefined-type">Double</span>&gt;consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">heat-sensor</span><span class="delimiter">&quot;</span></span>).
     bodyStream().
     toObservable()
 
 observable.
-    buffer(1, TimeUnit.SECONDS).
+    buffer(<span class="integer">1</span>, <span class="predefined-type">TimeUnit</span>.SECONDS).
     map({ samples -&gt; samples.sum() }).
     subscribe({ heat -&gt;
-      vertx.eventBus().send("news-feed", "Current heat is " + heat)
+      vertx.eventBus().send(<span class="string"><span class="delimiter">&quot;</span><span class="content">news-feed</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Current heat is </span><span class="delimiter">&quot;</span></span> + heat)
     });</code></pre>
 </div>
 </div>
@@ -367,10 +366,10 @@ observable.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.timerStream(1000).
+<pre class="CodeRay highlight"><code data-lang="groovy">vertx.timerStream(<span class="integer">1000</span>).
     toObservable().
     subscribe({ id -&gt;
-          println("Callback after 1 second")
+          println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Callback after 1 second</span><span class="delimiter">&quot;</span></span>)
         }
     )</code></pre>
 </div>
@@ -380,10 +379,10 @@ observable.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.periodicStream(1000).
+<pre class="CodeRay highlight"><code data-lang="groovy">vertx.periodicStream(<span class="integer">1000</span>).
     toObservable().
     subscribe({ id -&gt;
-          println("Callback every second")
+          println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Callback every second</span><span class="delimiter">&quot;</span></span>)
         }
     )</code></pre>
 </div>
@@ -393,15 +392,15 @@ observable.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.periodicStream(1000).
+<pre class="CodeRay highlight"><code data-lang="groovy">vertx.periodicStream(<span class="integer">1000</span>).
     toObservable().
-    subscribe(new Subscriber&lt;Long&gt;() {
-      public void onNext(Long aLong) {
-        // Callback
+    subscribe(<span class="keyword">new</span> Subscriber&lt;<span class="predefined-type">Long</span>&gt;() {
+      <span class="directive">public</span> <span class="type">void</span> onNext(<span class="predefined-type">Long</span> aLong) {
+        <span class="comment">// Callback</span>
         unsubscribe()
       }
-      public void onError(Throwable e) {}
-      public void onCompleted() {}
+      <span class="directive">public</span> <span class="type">void</span> onError(<span class="predefined-type">Throwable</span> e) {}
+      <span class="directive">public</span> <span class="type">void</span> onCompleted() {}
     })</code></pre>
 </div>
 </div>
@@ -414,11 +413,11 @@ observable.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">HttpClientRequest request = client.request(HttpMethod.GET, 8080, "localhost", "/the_uri")
+<pre class="CodeRay highlight"><code data-lang="groovy">HttpClientRequest request = client.request(HttpMethod.GET, <span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/the_uri</span><span class="delimiter">&quot;</span></span>)
 request.toObservable().subscribe({ response -&gt;
-  // Process the response
+  <span class="comment">// Process the response</span>
 }, { error -&gt;
-  // Could not connect
+  <span class="comment">// Could not connect</span>
 })
 request.end()</code></pre>
 </div>
@@ -431,14 +430,14 @@ request.end()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">HttpClientRequest request = client.request(HttpMethod.GET, 8080, "localhost", "/the_uri")
+<pre class="CodeRay highlight"><code data-lang="groovy">HttpClientRequest request = client.request(HttpMethod.GET, <span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/the_uri</span><span class="delimiter">&quot;</span></span>)
 request.toObservable().
     subscribe(
         { response -&gt;
-          Observable&lt;Buffer&gt; observable = response.toObservable()
+          <span class="predefined-type">Observable</span>&lt;<span class="predefined-type">Buffer</span>&gt; observable = response.toObservable()
           observable.forEach(
               { buffer -&gt;
-                // Process buffer
+                <span class="comment">// Process buffer</span>
               })
         })</code></pre>
 </div>
@@ -448,11 +447,11 @@ request.toObservable().
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">request.toObservable().
+<pre class="CodeRay highlight"><code data-lang="groovy">request.toObservable().
     flatMap({resp -&gt; resp.&amp;toObservable}).
     forEach(
         { buffer -&gt;
-      // Process buffer
+      <span class="comment">// Process buffer</span>
     })</code></pre>
 </div>
 </div>
@@ -462,11 +461,11 @@ static method. This method creates an <code>Rx.Observable.Operator</code> unmars
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">request.toObservable().
+<pre class="CodeRay highlight"><code data-lang="groovy">request.toObservable().
     flatMap({ resp -&gt; resp.&amp;toObservable }).
     lift(RxHelper.unmarshaller(MyPojo.class)).
     forEach({ pojo -&gt;
-      // Process pojo
+      <span class="comment">// Process pojo</span>
     })</code></pre>
 </div>
 </div>
@@ -478,9 +477,9 @@ static method. This method creates an <code>Rx.Observable.Operator</code> unmars
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Observable&lt;HttpServerRequest&gt; requestObservable = server.requestStream().toObservable()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Observable</span>&lt;HttpServerRequest&gt; requestObservable = server.requestStream().toObservable()
 requestObservable.subscribe({ request -&gt;
-  // Process request
+  <span class="comment">// Process request</span>
 })</code></pre>
 </div>
 </div>
@@ -489,9 +488,9 @@ requestObservable.subscribe({ request -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Observable&lt;HttpServerRequest&gt; requestObservable = server.requestStream().toObservable()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Observable</span>&lt;HttpServerRequest&gt; requestObservable = server.requestStream().toObservable()
 requestObservable.subscribe({ request -&gt;
-  Observable&lt;Buffer&gt; observable = request.toObservable()
+  <span class="predefined-type">Observable</span>&lt;<span class="predefined-type">Buffer</span>&gt; observable = request.toObservable()
 });</code></pre>
 </div>
 </div>
@@ -500,9 +499,9 @@ requestObservable.subscribe({ request -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Observable&lt;HttpServerRequest&gt; requestObservable = server.requestStream().toObservable()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Observable</span>&lt;HttpServerRequest&gt; requestObservable = server.requestStream().toObservable()
 requestObservable.subscribe({ request -&gt;
-  Observable&lt;MyPojo&gt; observable = request.
+  <span class="predefined-type">Observable</span>&lt;MyPojo&gt; observable = request.
       toObservable().
       lift(RxHelper.unmarshaller(MyPojo.class))
 })</code></pre>
@@ -516,14 +515,14 @@ requestObservable.subscribe({ request -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">HttpClient client = vertx.createHttpClient()
-WebSocketStream stream = client.websocketStream(8080, "localhost", "/the_uri")
-Observable&lt;WebSocket&gt; socketObservable = stream.toObservable()
+<pre class="CodeRay highlight"><code data-lang="groovy">HttpClient client = vertx.createHttpClient()
+WebSocketStream stream = client.websocketStream(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/the_uri</span><span class="delimiter">&quot;</span></span>)
+<span class="predefined-type">Observable</span>&lt;WebSocket&gt; socketObservable = stream.toObservable()
 socketObservable.subscribe(
     { ws -&gt;
-      // Use the websocket
+      <span class="comment">// Use the websocket</span>
     }, { error -&gt;
-  // Could not connect
+  <span class="comment">// Could not connect</span>
 })</code></pre>
 </div>
 </div>
@@ -532,11 +531,11 @@ socketObservable.subscribe(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">socketObservable.subscribe(
+<pre class="CodeRay highlight"><code data-lang="groovy">socketObservable.subscribe(
     { socket -&gt;
-      Observable&lt;Buffer&gt; dataObs = socket.toObservable()
+      <span class="predefined-type">Observable</span>&lt;<span class="predefined-type">Buffer</span>&gt; dataObs = socket.toObservable()
       dataObs.subscribe({ buffer -&gt;
-        println("Got message ${buffer.toString("UTF-8")}")
+        println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Got message </span><span class="inline"><span class="inline-delimiter">${</span>buffer.toString(<span class="string"><span class="delimiter">&quot;</span><span class="content">UTF-8</span><span class="delimiter">&quot;</span></span>)<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
       })
     })</code></pre>
 </div>
@@ -549,11 +548,11 @@ socketObservable.subscribe(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Observable&lt;ServerWebSocket&gt; socketObservable = server.websocketStream().toObservable()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Observable</span>&lt;ServerWebSocket&gt; socketObservable = server.websocketStream().toObservable()
 socketObservable.subscribe(
-    { socket -&gt; println("Web socket connect") },
-    { failure -&gt; println("Should never be called") },
-    { println("Subscription ended or server closed") }
+    { socket -&gt; println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Web socket connect</span><span class="delimiter">&quot;</span></span>) },
+    { failure -&gt; println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Should never be called</span><span class="delimiter">&quot;</span></span>) },
+    { println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Subscription ended or server closed</span><span class="delimiter">&quot;</span></span>) }
 )</code></pre>
 </div>
 </div>
@@ -562,11 +561,11 @@ socketObservable.subscribe(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Observable&lt;ServerWebSocket&gt; socketObservable = server.websocketStream().toObservable()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Observable</span>&lt;ServerWebSocket&gt; socketObservable = server.websocketStream().toObservable()
 socketObservable.subscribe({ socket -&gt;
-  Observable&lt;Buffer&gt; dataObs = socket.toObservable()
+  <span class="predefined-type">Observable</span>&lt;<span class="predefined-type">Buffer</span>&gt; dataObs = socket.toObservable()
   dataObs.subscribe({ buffer -&gt;
-    println("Got message ${buffer.toString("UTF-8")}")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Got message </span><span class="inline"><span class="inline-delimiter">${</span>buffer.toString(<span class="string"><span class="delimiter">&quot;</span><span class="content">UTF-8</span><span class="delimiter">&quot;</span></span>)<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   })
 })</code></pre>
 </div>

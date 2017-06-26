@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -184,11 +183,11 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-auth-oauth2-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-auth-oauth2-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -200,7 +199,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-oauth2-scala_2.12:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-oauth2-scala_2.12:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -280,32 +279,32 @@ specification).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, OAuth2ClientOptions()
-  .setClientID("YOUR_CLIENT_ID")
-  .setClientSecret("YOUR_CLIENT_SECRET")
-  .setSite("https://github.com/login")
-  .setTokenPath("/oauth/access_token")
-  .setAuthorizationPath("/oauth/authorize")
+<pre class="CodeRay highlight"><code data-lang="scala">var oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, OAuth2ClientOptions()
+  .setClientID(&quot;YOUR_CLIENT_ID&quot;)
+  .setClientSecret(&quot;YOUR_CLIENT_SECRET&quot;)
+  .setSite(&quot;https://github.com/login&quot;)
+  .setTokenPath(&quot;/oauth/access_token&quot;)
+  .setAuthorizationPath(&quot;/oauth/authorize&quot;)
 )
 
 // when there is a need to access a protected resource or call a protected method,
 // call the authZ url for a challenge
 
-var authorization_uri = oauth2.authorizeURL(new io.vertx.core.json.JsonObject().put("redirect_uri", "http://localhost:8080/callback").put("scope", "notifications").put("state", "3(#0/!~"))
+var authorization_uri = oauth2.authorizeURL(new io.vertx.core.json.JsonObject().put(&quot;redirect_uri&quot;, &quot;http://localhost:8080/callback&quot;).put(&quot;scope&quot;, &quot;notifications&quot;).put(&quot;state&quot;, &quot;3(#0/!~&quot;))
 
 // when working with web application use the above string as a redirect url
 
 // in this case GitHub will call you back in the callback uri one should now complete the handshake as:
 
 
-var code = "xxxxxxxxxxxxxxxxxxxxxxxx"
+var code = &quot;xxxxxxxxxxxxxxxxxxxxxxxx&quot;
 
-oauth2.getTokenFuture(new io.vertx.core.json.JsonObject().put("code", code).put("redirect_uri", "http://localhost:8080/callback")).onComplete{
+oauth2.getTokenFuture(new io.vertx.core.json.JsonObject().put(&quot;code&quot;, code).put(&quot;redirect_uri&quot;, &quot;http://localhost:8080/callback&quot;)).onComplete{
   case Success(result) =&gt; {
     // error, the code provided is not valid
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -320,11 +319,11 @@ access token.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Set the client credentials and the OAuth2 server
+<pre class="CodeRay highlight"><code data-lang="scala">// Set the client credentials and the OAuth2 server
 var credentials = OAuth2ClientOptions()
-  .setClientID("&lt;client-id&gt;")
-  .setClientSecret("&lt;client-secret&gt;")
-  .setSite("https://api.oauth.com")
+  .setClientID(&quot;&lt;client-id&gt;&quot;)
+  .setClientSecret(&quot;&lt;client-secret&gt;&quot;)
+  .setSite(&quot;https://api.oauth.com&quot;)
 
 
 
@@ -332,21 +331,21 @@ var credentials = OAuth2ClientOptions()
 var oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, credentials)
 
 // Authorization oauth2 URI
-var authorization_uri = oauth2.authorizeURL(new io.vertx.core.json.JsonObject().put("redirect_uri", "http://localhost:8080/callback").put("scope", "&lt;scope&gt;").put("state", "&lt;state&gt;"))
+var authorization_uri = oauth2.authorizeURL(new io.vertx.core.json.JsonObject().put(&quot;redirect_uri&quot;, &quot;http://localhost:8080/callback&quot;).put(&quot;scope&quot;, &quot;&lt;scope&gt;&quot;).put(&quot;state&quot;, &quot;&lt;state&gt;&quot;))
 
 // Redirect example using Vert.x
-response.putHeader("Location", authorization_uri).setStatusCode(302).end()
+response.putHeader(&quot;Location&quot;, authorization_uri).setStatusCode(302).end()
 
-var tokenConfig = new io.vertx.core.json.JsonObject().put("code", "&lt;code&gt;").put("redirect_uri", "http://localhost:3000/callback")
+var tokenConfig = new io.vertx.core.json.JsonObject().put(&quot;code&quot;, &quot;&lt;code&gt;&quot;).put(&quot;redirect_uri&quot;, &quot;http://localhost:3000/callback&quot;)
 
 // Callbacks
 // Save the access token
 oauth2.getTokenFuture(tokenConfig).onComplete{
   case Success(result) =&gt; {
-    System.err.println(s"Access Token Error: ${res.cause().getMessage()}")
+    System.err.println(s&quot;Access Token Error: ${res.cause().getMessage()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -361,19 +360,19 @@ need a fast way to test your application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Initialize the OAuth2 Library
+<pre class="CodeRay highlight"><code data-lang="scala">// Initialize the OAuth2 Library
 var oauth2 = OAuth2Auth.create(vertx, OAuth2FlowType.PASSWORD)
 
-var tokenConfig = new io.vertx.core.json.JsonObject().put("username", "username").put("password", "password")
+var tokenConfig = new io.vertx.core.json.JsonObject().put(&quot;username&quot;, &quot;username&quot;).put(&quot;password&quot;, &quot;password&quot;)
 
 // Callbacks
 // Save the access token
 oauth2.getTokenFuture(tokenConfig).onComplete{
   case Success(result) =&gt; {
-    System.err.println(s"Access Token Error: ${res.cause().getMessage()}")
+    System.err.println(s&quot;Access Token Error: ${res.cause().getMessage()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -386,11 +385,11 @@ oauth2.getTokenFuture(tokenConfig).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Set the client credentials and the OAuth2 server
+<pre class="CodeRay highlight"><code data-lang="scala">// Set the client credentials and the OAuth2 server
 var credentials = OAuth2ClientOptions()
-  .setClientID("&lt;client-id&gt;")
-  .setClientSecret("&lt;client-secret&gt;")
-  .setSite("https://api.oauth.com")
+  .setClientID(&quot;&lt;client-id&gt;&quot;)
+  .setClientSecret(&quot;&lt;client-secret&gt;&quot;)
+  .setSite(&quot;https://api.oauth.com&quot;)
 
 
 
@@ -403,10 +402,10 @@ var tokenConfig = new io.vertx.core.json.JsonObject()
 // Save the access token
 oauth2.getTokenFuture(tokenConfig).onComplete{
   case Success(result) =&gt; {
-    System.err.println(s"Access Token Error: ${res.cause().getMessage()}")
+    System.err.println(s&quot;Access Token Error: ${res.cause().getMessage()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -421,7 +420,7 @@ to refresh the access token when it is expired.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Check if the token is expired. If expired it is refreshed.
+<pre class="CodeRay highlight"><code data-lang="scala">// Check if the token is expired. If expired it is refreshed.
 if (token.expired()) {
   // Callbacks
   token.refreshFuture().onComplete{
@@ -429,7 +428,7 @@ if (token.expired()) {
       // success
     }
     case Failure(cause) =&gt; {
-      println(s"$cause")
+      println(s&quot;$cause&quot;)
     }
   }
 }</code></pre>
@@ -440,10 +439,10 @@ if (token.expired()) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Revoke only the access token
-token.revokeFuture("access_token").onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+<pre class="CodeRay highlight"><code data-lang="scala">// Revoke only the access token
+token.revokeFuture(&quot;access_token&quot;).onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -513,19 +512,19 @@ This information is quite valuable since it allows to do authorization at the AP
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// you would get this config from the keycloak admin console
-var keycloakJson = new io.vertx.core.json.JsonObject().put("realm", "master").put("realm-public-key", "MIIBIjANBgkqhk...wIDAQAB").put("auth-server-url", "http://localhost:9000/auth").put("ssl-required", "external").put("resource", "frontend").put("credentials", new io.vertx.core.json.JsonObject().put("secret", "2fbf5e18-b923-4a83-9657-b4ebd5317f60"))
+<pre class="CodeRay highlight"><code data-lang="scala">// you would get this config from the keycloak admin console
+var keycloakJson = new io.vertx.core.json.JsonObject().put(&quot;realm&quot;, &quot;master&quot;).put(&quot;realm-public-key&quot;, &quot;MIIBIjANBgkqhk...wIDAQAB&quot;).put(&quot;auth-server-url&quot;, &quot;http://localhost:9000/auth&quot;).put(&quot;ssl-required&quot;, &quot;external&quot;).put(&quot;resource&quot;, &quot;frontend&quot;).put(&quot;credentials&quot;, new io.vertx.core.json.JsonObject().put(&quot;secret&quot;, &quot;2fbf5e18-b923-4a83-9657-b4ebd5317f60&quot;))
 
 // Initialize the OAuth2 Library
 var oauth2 = KeycloakAuth.create(vertx, OAuth2FlowType.PASSWORD, keycloakJson)
 
 // first get a token (authenticate)
-oauth2.getTokenFuture(new io.vertx.core.json.JsonObject().put("username", "user").put("password", "secret")).onComplete{
+oauth2.getTokenFuture(new io.vertx.core.json.JsonObject().put(&quot;username&quot;, &quot;user&quot;).put(&quot;password&quot;, &quot;secret&quot;)).onComplete{
   case Success(result) =&gt; {
     // error handling...
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -536,7 +535,7 @@ data (e.g. <code>preferred_username</code>) from the Keycloak principal. For exa
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// you can get the decoded `id_token` from the Keycloak principal
+<pre class="CodeRay highlight"><code data-lang="scala">// you can get the decoded `id_token` from the Keycloak principal
 var idToken = KeycloakHelper.idToken(principal)
 
 // you can also retrieve some properties directly from the Keycloak principal
@@ -567,13 +566,13 @@ the User level:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// OAuth2Auth level
-oauth2.introspectTokenFuture("opaque string").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">// OAuth2Auth level
+oauth2.introspectTokenFuture(&quot;opaque string&quot;).onComplete{
   case Success(result) =&gt; {
     // token is valid!
     var accessToken = result
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }
 
 // User level
@@ -581,7 +580,7 @@ token.introspectFuture().onComplete{
   case Success(result) =&gt; {
     // Token is valid!
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -597,13 +596,13 @@ this specific case one needs to use the token introspection if the provider supp
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// OAuth2Auth level
-oauth2.decodeTokenFuture("jwt-token").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">// OAuth2Auth level
+oauth2.decodeTokenFuture(&quot;jwt-token&quot;).onComplete{
   case Success(result) =&gt; {
     // token is valid!
     var accessToken = result
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -665,9 +664,9 @@ example you want to see if the user can <code>print</code> in the current applic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">user.isAuthorisedFuture("print").onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+<pre class="CodeRay highlight"><code data-lang="scala">user.isAuthorisedFuture(&quot;print&quot;).onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -676,9 +675,9 @@ example you want to see if the user can <code>print</code> in the current applic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">user.isAuthorisedFuture("realm:add-user").onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+<pre class="CodeRay highlight"><code data-lang="scala">user.isAuthorisedFuture(&quot;realm:add-user&quot;).onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -687,9 +686,9 @@ example you want to see if the user can <code>print</code> in the current applic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">user.isAuthorisedFuture("finance:year-report").onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+<pre class="CodeRay highlight"><code data-lang="scala">user.isAuthorisedFuture(&quot;finance:year-report&quot;).onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -707,7 +706,7 @@ and be invalid, you can verify if the token is still valid like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// internal validation against, expiration date
+<pre class="CodeRay highlight"><code data-lang="scala">// internal validation against, expiration date
 var isExpired = user.expired()</code></pre>
 </div>
 </div>
@@ -725,12 +724,12 @@ screen. In this case you can refresh the token. To refresh a token you need to h
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">user.refreshFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">user.refreshFuture().onComplete{
   case Success(result) =&gt; {
     // the refresh call succeeded
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -744,12 +743,12 @@ any application. In order to do this one needs to revoke the token against the O
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">user.revokeFuture("access_token").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">user.revokeFuture(&quot;access_token&quot;).onComplete{
   case Success(result) =&gt; {
     // the refresh call succeeded
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -785,12 +784,12 @@ means that the check happens on the OAuth2 server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">user.introspectFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">user.introspectFuture().onComplete{
   case Success(result) =&gt; {
     // the introspection call succeeded
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -809,12 +808,12 @@ user this is as simple as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">user.logoutFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">user.logoutFuture().onComplete{
   case Success(result) =&gt; {
     // the logout call succeeded
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>

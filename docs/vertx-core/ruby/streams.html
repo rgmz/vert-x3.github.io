@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -165,13 +164,13 @@ to the <code>NetSocket</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_net_server({
-  'port' =&gt; 1234,
-  'host' =&gt; "localhost"
+<pre class="CodeRay highlight"><code data-lang="ruby">server = vertx.create_net_server({
+  <span class="string"><span class="delimiter">'</span><span class="content">port</span><span class="delimiter">'</span></span> =&gt; <span class="integer">1234</span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">host</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>
 })
 server.connect_handler() { |sock|
   sock.handler() { |buffer|
-    # Write the data straight back
+    <span class="comment"># Write the data straight back</span>
     sock.write(buffer)
   }
 }.listen()</code></pre>
@@ -189,15 +188,15 @@ writing to it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_net_server({
-  'port' =&gt; 1234,
-  'host' =&gt; "localhost"
+<pre class="CodeRay highlight"><code data-lang="ruby">server = vertx.create_net_server({
+  <span class="string"><span class="delimiter">'</span><span class="content">port</span><span class="delimiter">'</span></span> =&gt; <span class="integer">1234</span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">host</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>
 })
 server.connect_handler() { |sock|
   sock.handler() { |buffer|
-    if (!sock.write_queue_full?())
+    <span class="keyword">if</span> (!sock.write_queue_full?())
       sock.write(buffer)
-    end
+    <span class="keyword">end</span>
   }
 
 }.listen()</code></pre>
@@ -209,16 +208,16 @@ really want to do is pause the <code>NetSocket</code> when the write queue is fu
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_net_server({
-  'port' =&gt; 1234,
-  'host' =&gt; "localhost"
+<pre class="CodeRay highlight"><code data-lang="ruby">server = vertx.create_net_server({
+  <span class="string"><span class="delimiter">'</span><span class="content">port</span><span class="delimiter">'</span></span> =&gt; <span class="integer">1234</span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">host</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>
 })
 server.connect_handler() { |sock|
   sock.handler() { |buffer|
     sock.write(buffer)
-    if (sock.write_queue_full?())
+    <span class="keyword">if</span> (sock.write_queue_full?())
       sock.pause()
-    end
+    <span class="keyword">end</span>
   }
 }.listen()</code></pre>
 </div>
@@ -229,19 +228,19 @@ it when the write queue has processed its backlog:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">server = vertx.create_net_server({
-  'port' =&gt; 1234,
-  'host' =&gt; "localhost"
+<pre class="CodeRay highlight"><code data-lang="ruby">server = vertx.create_net_server({
+  <span class="string"><span class="delimiter">'</span><span class="content">port</span><span class="delimiter">'</span></span> =&gt; <span class="integer">1234</span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">host</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>
 })
 server.connect_handler() { |sock|
   sock.handler() { |buffer|
     sock.write(buffer)
-    if (sock.write_queue_full?())
+    <span class="keyword">if</span> (sock.write_queue_full?())
       sock.pause()
       sock.drain_handler() { |done|
         sock.resume()
       }
-    end
+    <span class="keyword">end</span>
   }
 }.listen()</code></pre>
 </div>
@@ -258,13 +257,13 @@ You just feed it the <code>ReadStream</code> plus the <code>WriteStream</code> t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/pump'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx/pump</span><span class="delimiter">'</span></span>
 server = vertx.create_net_server({
-  'port' =&gt; 1234,
-  'host' =&gt; "localhost"
+  <span class="string"><span class="delimiter">'</span><span class="content">port</span><span class="delimiter">'</span></span> =&gt; <span class="integer">1234</span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">host</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>
 })
 server.connect_handler() { |sock|
-  Vertx::Pump.pump(sock, sock).start()
+  <span class="constant">Vertx</span>::<span class="constant">Pump</span>.pump(sock, sock).start()
 }.listen()</code></pre>
 </div>
 </div>

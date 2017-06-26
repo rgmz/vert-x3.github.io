@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -172,7 +171,7 @@ and receive.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -194,17 +193,17 @@ them in a persistent fashion.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-var buffer = Buffer.buffer("content")
+<pre class="CodeRay highlight"><code data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+var buffer = Buffer.buffer(&quot;content&quot;)
 // Send a Buffer
-socket.sendFuture(buffer, 1234, "10.0.0.1").onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+socket.sendFuture(buffer, 1234, &quot;10.0.0.1&quot;).onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }
 // Send a String
-socket.sendFuture("A string used as content", 1234, "10.0.0.1").onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+socket.sendFuture(&quot;A string used as content&quot;, 1234, &quot;10.0.0.1&quot;).onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -240,15 +239,15 @@ which the `<a href="../../scaladocs/io/vertx/scala/core/datagram/DatagramSocket.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-socket.listenFuture(1234, "0.0.0.0").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+socket.listenFuture(1234, &quot;0.0.0.0&quot;).onComplete{
   case Success(result) =&gt; {
     socket.handler((packet: io.vertx.scala.core.datagram.DatagramPacket) =&gt; {
       // Do something with the packet
     })
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -283,12 +282,12 @@ to which you can send packets.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-var buffer = Buffer.buffer("content")
+<pre class="CodeRay highlight"><code data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+var buffer = Buffer.buffer(&quot;content&quot;)
 // Send a Buffer to a multicast address
-socket.sendFuture(buffer, 1234, "230.0.0.1").onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+socket.sendFuture(buffer, 1234, &quot;230.0.0.1&quot;).onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -327,21 +326,21 @@ would do something like shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-socket.listenFuture(1234, "0.0.0.0").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+socket.listenFuture(1234, &quot;0.0.0.0&quot;).onComplete{
   case Success(result) =&gt; {
     socket.handler((packet: io.vertx.scala.core.datagram.DatagramPacket) =&gt; {
       // Do something with the packet
     })
 
     // join the multicast group
-    socket.listenMulticastGroupFuture("230.0.0.1").onComplete{
-      case Success(result) =&gt; println("Success")
-      case Failure(cause) =&gt; println("Failure")
+    socket.listenMulticastGroupFuture(&quot;230.0.0.1&quot;).onComplete{
+      case Success(result) =&gt; println(&quot;Success&quot;)
+      case Failure(cause) =&gt; println(&quot;Failure&quot;)
     }
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -360,32 +359,32 @@ socket.listenFuture(1234, "0.0.0.0").onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-socket.listenFuture(1234, "0.0.0.0").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+socket.listenFuture(1234, &quot;0.0.0.0&quot;).onComplete{
   case Success(result) =&gt; {
     socket.handler((packet: io.vertx.scala.core.datagram.DatagramPacket) =&gt; {
       // Do something with the packet
     })
 
     // join the multicast group
-    socket.listenMulticastGroupFuture("230.0.0.1").onComplete{
+    socket.listenMulticastGroupFuture(&quot;230.0.0.1&quot;).onComplete{
       case Success(result) =&gt; {
         // will now receive packets for group
 
         // do some work
 
-        socket.unlistenMulticastGroupFuture("230.0.0.1").onComplete{
-          case Success(result) =&gt; println("Success")
-          case Failure(cause) =&gt; println("Failure")
+        socket.unlistenMulticastGroupFuture(&quot;230.0.0.1&quot;).onComplete{
+          case Success(result) =&gt; println(&quot;Success&quot;)
+          case Failure(cause) =&gt; println(&quot;Failure&quot;)
         }
       }
       case Failure(cause) =&gt; {
-        println(s"$cause")
+        println(s&quot;$cause&quot;)
       }
     }
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -409,14 +408,14 @@ like shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+<pre class="CodeRay highlight"><code data-lang="scala">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
 
 // Some code
 
 // This would block packets which are send from 10.0.0.2
-socket.blockMulticastGroupFuture("230.0.0.1", "10.0.0.2").onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+socket.blockMulticastGroupFuture(&quot;230.0.0.1&quot;, &quot;10.0.0.2&quot;).onComplete{
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>

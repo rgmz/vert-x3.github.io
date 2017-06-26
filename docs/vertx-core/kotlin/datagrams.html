@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -172,7 +171,7 @@ and receive.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -194,15 +193,15 @@ them in a persistent fashion.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-var buffer = Buffer.buffer("content")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+var buffer = Buffer.buffer(&quot;content&quot;)
 // Send a Buffer
-socket.send(buffer, 1234, "10.0.0.1", { asyncResult -&gt;
-  println("Send succeeded? ${asyncResult.succeeded()}")
+socket.send(buffer, 1234, &quot;10.0.0.1&quot;, { asyncResult -&gt;
+  println(&quot;Send succeeded? ${asyncResult.succeeded()}&quot;)
 })
 // Send a String
-socket.send("A string used as content", 1234, "10.0.0.1", { asyncResult -&gt;
-  println("Send succeeded? ${asyncResult.succeeded()}")
+socket.send(&quot;A string used as content&quot;, 1234, &quot;10.0.0.1&quot;, { asyncResult -&gt;
+  println(&quot;Send succeeded? ${asyncResult.succeeded()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -238,14 +237,14 @@ which the `<a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html">Da
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-socket.listen(1234, "0.0.0.0", { asyncResult -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+socket.listen(1234, &quot;0.0.0.0&quot;, { asyncResult -&gt;
   if (asyncResult.succeeded()) {
     socket.handler({ packet -&gt;
       // Do something with the packet
     })
   } else {
-    println("Listen failed${asyncResult.cause()}")
+    println(&quot;Listen failed${asyncResult.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -280,11 +279,11 @@ to which you can send packets.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-var buffer = Buffer.buffer("content")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+var buffer = Buffer.buffer(&quot;content&quot;)
 // Send a Buffer to a multicast address
-socket.send(buffer, 1234, "230.0.0.1", { asyncResult -&gt;
-  println("Send succeeded? ${asyncResult.succeeded()}")
+socket.send(buffer, 1234, &quot;230.0.0.1&quot;, { asyncResult -&gt;
+  println(&quot;Send succeeded? ${asyncResult.succeeded()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -323,19 +322,19 @@ would do something like shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-socket.listen(1234, "0.0.0.0", { asyncResult -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+socket.listen(1234, &quot;0.0.0.0&quot;, { asyncResult -&gt;
   if (asyncResult.succeeded()) {
     socket.handler({ packet -&gt;
       // Do something with the packet
     })
 
     // join the multicast group
-    socket.listenMulticastGroup("230.0.0.1", { asyncResult2 -&gt;
-      println("Listen succeeded? ${asyncResult2.succeeded()}")
+    socket.listenMulticastGroup(&quot;230.0.0.1&quot;, { asyncResult2 -&gt;
+      println(&quot;Listen succeeded? ${asyncResult2.succeeded()}&quot;)
     })
   } else {
-    println("Listen failed${asyncResult.cause()}")
+    println(&quot;Listen failed${asyncResult.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -354,29 +353,29 @@ socket.listen(1234, "0.0.0.0", { asyncResult -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
-socket.listen(1234, "0.0.0.0", { asyncResult -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+socket.listen(1234, &quot;0.0.0.0&quot;, { asyncResult -&gt;
   if (asyncResult.succeeded()) {
     socket.handler({ packet -&gt;
       // Do something with the packet
     })
 
     // join the multicast group
-    socket.listenMulticastGroup("230.0.0.1", { asyncResult2 -&gt;
+    socket.listenMulticastGroup(&quot;230.0.0.1&quot;, { asyncResult2 -&gt;
       if (asyncResult2.succeeded()) {
         // will now receive packets for group
 
         // do some work
 
-        socket.unlistenMulticastGroup("230.0.0.1", { asyncResult3 -&gt;
-          println("Unlisten succeeded? ${asyncResult3.succeeded()}")
+        socket.unlistenMulticastGroup(&quot;230.0.0.1&quot;, { asyncResult3 -&gt;
+          println(&quot;Unlisten succeeded? ${asyncResult3.succeeded()}&quot;)
         })
       } else {
-        println("Listen failed${asyncResult2.cause()}")
+        println(&quot;Listen failed${asyncResult2.cause()}&quot;)
       }
     })
   } else {
-    println("Listen failed${asyncResult.cause()}")
+    println(&quot;Listen failed${asyncResult.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -400,13 +399,13 @@ like shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
+<pre class="CodeRay highlight"><code data-lang="kotlin">var socket = vertx.createDatagramSocket(DatagramSocketOptions())
 
 // Some code
 
 // This would block packets which are send from 10.0.0.2
-socket.blockMulticastGroup("230.0.0.1", "10.0.0.2", { asyncResult -&gt;
-  println("block succeeded? ${asyncResult.succeeded()}")
+socket.blockMulticastGroup(&quot;230.0.0.1&quot;, &quot;10.0.0.2&quot;, { asyncResult -&gt;
+  println(&quot;block succeeded? ${asyncResult.succeeded()}&quot;)
 })</code></pre>
 </div>
 </div>

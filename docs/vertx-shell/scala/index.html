@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -204,7 +203,7 @@ or deployed as a service.</p>
 <div class="listingblock">
 <div class="title">Starting a shell service available via Telnet</div>
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run -conf '{"telnetOptions":{"port":5000}}' maven:io.vertx:vertx-shell-scala_2.12:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code>vertx run -conf '{"telnetOptions":{"port":5000}}' maven:io.vertx:vertx-shell-scala_2.12:3.4.2</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -213,7 +212,7 @@ or deployed as a service.</p>
 <div class="listingblock">
 <div class="title">Starting a shell service available via SSH</div>
 <div class="content">
-<pre class="prettyprint highlight"><code># create a key pair for the SSH server
+<pre class="CodeRay highlight"><code># create a key pair for the SSH server
 keytool -genkey -keyalg RSA -keystore ssh.jks -keysize 2048 -validity 1095 -dname CN=localhost -keypass secret -storepass secret
 # create the auth config
 echo user.admin=password &gt; auth.properties
@@ -227,7 +226,7 @@ vertx run -conf '{"sshOptions":{"port":4000,"keyPairOptions":{"path":"ssh.jks","
 <div class="listingblock">
 <div class="title">Starting a shell service available via HTTP</div>
 <div class="content">
-<pre class="prettyprint highlight"><code># create a certificate for the HTTP server
+<pre class="CodeRay highlight"><code># create a certificate for the HTTP server
 keytool -genkey -keyalg RSA -keystore keystore.jks -keysize 2048 -validity 1095 -dname CN=localhost -keypass secret -storepass secret
 # create the auth config
 echo user.admin=password &gt; auth.properties
@@ -239,8 +238,8 @@ vertx run -conf '{"httpOptions":{"port":8080,"ssl":true,"keyStoreOptions":{"path
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", DeploymentOptions()
-  .setConfig(new io.vertx.core.json.JsonObject().put("telnetOptions", new io.vertx.core.json.JsonObject().put("host", "localhost").put("port", 4000)))
+<pre class="CodeRay highlight"><code data-lang="scala">vertx.deployVerticle(&quot;maven:{maven-groupId}:{maven-artifactId}:{maven-version}&quot;, DeploymentOptions()
+  .setConfig(new io.vertx.core.json.JsonObject().put(&quot;telnetOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;host&quot;, &quot;localhost&quot;).put(&quot;port&quot;, 4000)))
 )</code></pre>
 </div>
 </div>
@@ -249,8 +248,8 @@ vertx run -conf '{"httpOptions":{"port":8080,"ssl":true,"keyStoreOptions":{"path
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", DeploymentOptions()
-  .setConfig(new io.vertx.core.json.JsonObject().put("sshOptions", new io.vertx.core.json.JsonObject().put("host", "localhost").put("port", 5000).put("keyPairOptions", new io.vertx.core.json.JsonObject().put("path", "src/test/resources/ssh.jks").put("password", "wibble")).put("authOptions", new io.vertx.core.json.JsonObject().put("provider", "shiro").put("config", new io.vertx.core.json.JsonObject().put("properties_path", "file:/path/to/my/auth.properties")))))
+<pre class="CodeRay highlight"><code data-lang="scala">vertx.deployVerticle(&quot;maven:{maven-groupId}:{maven-artifactId}:{maven-version}&quot;, DeploymentOptions()
+  .setConfig(new io.vertx.core.json.JsonObject().put(&quot;sshOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;host&quot;, &quot;localhost&quot;).put(&quot;port&quot;, 5000).put(&quot;keyPairOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;path&quot;, &quot;src/test/resources/ssh.jks&quot;).put(&quot;password&quot;, &quot;wibble&quot;)).put(&quot;authOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;provider&quot;, &quot;shiro&quot;).put(&quot;config&quot;, new io.vertx.core.json.JsonObject().put(&quot;properties_path&quot;, &quot;file:/path/to/my/auth.properties&quot;)))))
 )</code></pre>
 </div>
 </div>
@@ -259,8 +258,8 @@ vertx run -conf '{"httpOptions":{"port":8080,"ssl":true,"keyStoreOptions":{"path
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", DeploymentOptions()
-  .setConfig(new io.vertx.core.json.JsonObject().put("httpOptions", new io.vertx.core.json.JsonObject().put("host", "localhost").put("port", 8080).put("ssl", true).put("keyPairOptions", new io.vertx.core.json.JsonObject().put("path", "src/test/resources/server-keystore.jks").put("password", "wibble")).put("authOptions", new io.vertx.core.json.JsonObject().put("provider", "shiro").put("config", new io.vertx.core.json.JsonObject().put("properties_path", "file:/path/to/my/auth.properties")))))
+<pre class="CodeRay highlight"><code data-lang="scala">vertx.deployVerticle(&quot;maven:{maven-groupId}:{maven-artifactId}:{maven-version}&quot;, DeploymentOptions()
+  .setConfig(new io.vertx.core.json.JsonObject().put(&quot;httpOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;host&quot;, &quot;localhost&quot;).put(&quot;port&quot;, 8080).put(&quot;ssl&quot;, true).put(&quot;keyPairOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;path&quot;, &quot;src/test/resources/server-keystore.jks&quot;).put(&quot;password&quot;, &quot;wibble&quot;)).put(&quot;authOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;provider&quot;, &quot;shiro&quot;).put(&quot;config&quot;, new io.vertx.core.json.JsonObject().put(&quot;properties_path&quot;, &quot;file:/path/to/my/auth.properties&quot;)))))
 )</code></pre>
 </div>
 </div>
@@ -288,17 +287,17 @@ or <code>maven:io.vertx:vertx-shell-scala_2.12:3.4.2</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
   .setSSHOptions(SSHTermOptions()
-    .setHost("localhost")
+    .setHost(&quot;localhost&quot;)
     .setPort(5000)
     .setKeyPairOptions(JksOptions()
-      .setPath("server-keystore.jks")
-      .setPassword("wibble")
+      .setPath(&quot;server-keystore.jks&quot;)
+      .setPassword(&quot;wibble&quot;)
     )
     .setAuthOptions(ShiroAuthOptions()
       .setType(ShiroAuthRealmType.PROPERTIES)
-      .setConfig(new io.vertx.core.json.JsonObject().put("properties_path", "file:/path/to/my/auth.properties"))
+      .setConfig(new io.vertx.core.json.JsonObject().put(&quot;properties_path&quot;, &quot;file:/path/to/my/auth.properties&quot;))
     )
   )
 )
@@ -310,9 +309,9 @@ service.start()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
   .setTelnetOptions(TelnetTermOptions()
-    .setHost("localhost")
+    .setHost(&quot;localhost&quot;)
     .setPort(4000)
   )
 )
@@ -340,9 +339,9 @@ Telnet does not provide any authentication nor encryption at all.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
   .setHttpOptions(HttpTermOptions()
-    .setHost("localhost")
+    .setHost(&quot;localhost&quot;)
     .setPort(8080)
   )
 )
@@ -463,24 +462,24 @@ or LDAP, see Vert.x Auth for more info:</p>
 <div class="listingblock">
 <div class="title">Deploying the Shell Service on SSH with Mongo authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", DeploymentOptions()
-  .setConfig(new io.vertx.core.json.JsonObject().put("sshOptions", new io.vertx.core.json.JsonObject().put("host", "localhost").put("port", 5000).put("keyPairOptions", new io.vertx.core.json.JsonObject().put("path", "src/test/resources/ssh.jks").put("password", "wibble")).put("authOptions", new io.vertx.core.json.JsonObject().put("provider", "mongo").put("config", new io.vertx.core.json.JsonObject().put("connection_string", "mongodb://localhost:27018")))))
+<pre class="CodeRay highlight"><code data-lang="scala">vertx.deployVerticle(&quot;maven:{maven-groupId}:{maven-artifactId}:{maven-version}&quot;, DeploymentOptions()
+  .setConfig(new io.vertx.core.json.JsonObject().put(&quot;sshOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;host&quot;, &quot;localhost&quot;).put(&quot;port&quot;, 5000).put(&quot;keyPairOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;path&quot;, &quot;src/test/resources/ssh.jks&quot;).put(&quot;password&quot;, &quot;wibble&quot;)).put(&quot;authOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;provider&quot;, &quot;mongo&quot;).put(&quot;config&quot;, new io.vertx.core.json.JsonObject().put(&quot;connection_string&quot;, &quot;mongodb://localhost:27018&quot;)))))
 )</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Running the Shell Service on SSH with Mongo authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
   .setSSHOptions(SSHTermOptions()
-    .setHost("localhost")
+    .setHost(&quot;localhost&quot;)
     .setPort(5000)
     .setKeyPairOptions(JksOptions()
-      .setPath("server-keystore.jks")
-      .setPassword("wibble")
+      .setPath(&quot;server-keystore.jks&quot;)
+      .setPassword(&quot;wibble&quot;)
     )
     .setAuthOptions(MongoAuthOptions()
-      .setConfig(new io.vertx.core.json.JsonObject().put("connection_string", "mongodb://localhost:27018"))
+      .setConfig(new io.vertx.core.json.JsonObject().put(&quot;connection_string&quot;, &quot;mongodb://localhost:27018&quot;))
     )
   )
 )
@@ -490,24 +489,24 @@ service.start()</code></pre>
 <div class="listingblock">
 <div class="title">Deploying the Shell Service on SSH with JDBC authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", DeploymentOptions()
-  .setConfig(new io.vertx.core.json.JsonObject().put("sshOptions", new io.vertx.core.json.JsonObject().put("host", "localhost").put("port", 5000).put("keyPairOptions", new io.vertx.core.json.JsonObject().put("path", "src/test/resources/ssh.jks").put("password", "wibble")).put("authOptions", new io.vertx.core.json.JsonObject().put("provider", "jdbc").put("config", new io.vertx.core.json.JsonObject().put("url", "jdbc:hsqldb:mem:test?shutdown=true").put("driver_class", "org.hsqldb.jdbcDriver")))))
+<pre class="CodeRay highlight"><code data-lang="scala">vertx.deployVerticle(&quot;maven:{maven-groupId}:{maven-artifactId}:{maven-version}&quot;, DeploymentOptions()
+  .setConfig(new io.vertx.core.json.JsonObject().put(&quot;sshOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;host&quot;, &quot;localhost&quot;).put(&quot;port&quot;, 5000).put(&quot;keyPairOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;path&quot;, &quot;src/test/resources/ssh.jks&quot;).put(&quot;password&quot;, &quot;wibble&quot;)).put(&quot;authOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;provider&quot;, &quot;jdbc&quot;).put(&quot;config&quot;, new io.vertx.core.json.JsonObject().put(&quot;url&quot;, &quot;jdbc:hsqldb:mem:test?shutdown=true&quot;).put(&quot;driver_class&quot;, &quot;org.hsqldb.jdbcDriver&quot;)))))
 )</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Running the Shell Service on SSH with JDBC authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
   .setSSHOptions(SSHTermOptions()
-    .setHost("localhost")
+    .setHost(&quot;localhost&quot;)
     .setPort(5000)
     .setKeyPairOptions(JksOptions()
-      .setPath("server-keystore.jks")
-      .setPassword("wibble")
+      .setPath(&quot;server-keystore.jks&quot;)
+      .setPassword(&quot;wibble&quot;)
     )
     .setAuthOptions(JDBCAuthOptions()
-      .setConfig(new io.vertx.core.json.JsonObject().put("url", "jdbc:hsqldb:mem:test?shutdown=true").put("driver_class", "org.hsqldb.jdbcDriver"))
+      .setConfig(new io.vertx.core.json.JsonObject().put(&quot;url&quot;, &quot;jdbc:hsqldb:mem:test?shutdown=true&quot;).put(&quot;driver_class&quot;, &quot;org.hsqldb.jdbcDriver&quot;))
     )
   )
 )
@@ -542,20 +541,20 @@ extends the <code><a href="../../vertx-core/dataobjects.html#HttpServerOptions">
 <div class="listingblock">
 <div class="title">Deploying the Shell Service on HTTP with Mongo authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", DeploymentOptions()
-  .setConfig(new io.vertx.core.json.JsonObject().put("httpOptions", new io.vertx.core.json.JsonObject().put("host", "localhost").put("port", 8080).put("ssl", true).put("keyPairOptions", new io.vertx.core.json.JsonObject().put("path", "src/test/resources/server-keystore.jks").put("password", "wibble")).put("authOptions", new io.vertx.core.json.JsonObject().put("provider", "mongo").put("config", new io.vertx.core.json.JsonObject().put("connection_string", "mongodb://localhost:27018")))))
+<pre class="CodeRay highlight"><code data-lang="scala">vertx.deployVerticle(&quot;maven:{maven-groupId}:{maven-artifactId}:{maven-version}&quot;, DeploymentOptions()
+  .setConfig(new io.vertx.core.json.JsonObject().put(&quot;httpOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;host&quot;, &quot;localhost&quot;).put(&quot;port&quot;, 8080).put(&quot;ssl&quot;, true).put(&quot;keyPairOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;path&quot;, &quot;src/test/resources/server-keystore.jks&quot;).put(&quot;password&quot;, &quot;wibble&quot;)).put(&quot;authOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;provider&quot;, &quot;mongo&quot;).put(&quot;config&quot;, new io.vertx.core.json.JsonObject().put(&quot;connection_string&quot;, &quot;mongodb://localhost:27018&quot;)))))
 )</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Running the Shell Service on HTTP with Mongo authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
   .setHttpOptions(HttpTermOptions()
-    .setHost("localhost")
+    .setHost(&quot;localhost&quot;)
     .setPort(8080)
     .setAuthOptions(MongoAuthOptions()
-      .setConfig(new io.vertx.core.json.JsonObject().put("connection_string", "mongodb://localhost:27018"))
+      .setConfig(new io.vertx.core.json.JsonObject().put(&quot;connection_string&quot;, &quot;mongodb://localhost:27018&quot;))
     )
   )
 )
@@ -565,20 +564,20 @@ service.start()</code></pre>
 <div class="listingblock">
 <div class="title">Deploying the Shell Service on HTTP with JDBC authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", DeploymentOptions()
-  .setConfig(new io.vertx.core.json.JsonObject().put("httpOptions", new io.vertx.core.json.JsonObject().put("host", "localhost").put("port", 8080).put("ssl", true).put("keyPairOptions", new io.vertx.core.json.JsonObject().put("path", "src/test/resources/server-keystore.jks").put("password", "wibble")).put("authOptions", new io.vertx.core.json.JsonObject().put("provider", "jdbc").put("config", new io.vertx.core.json.JsonObject().put("url", "jdbc:hsqldb:mem:test?shutdown=true").put("driver_class", "org.hsqldb.jdbcDriver")))))
+<pre class="CodeRay highlight"><code data-lang="scala">vertx.deployVerticle(&quot;maven:{maven-groupId}:{maven-artifactId}:{maven-version}&quot;, DeploymentOptions()
+  .setConfig(new io.vertx.core.json.JsonObject().put(&quot;httpOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;host&quot;, &quot;localhost&quot;).put(&quot;port&quot;, 8080).put(&quot;ssl&quot;, true).put(&quot;keyPairOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;path&quot;, &quot;src/test/resources/server-keystore.jks&quot;).put(&quot;password&quot;, &quot;wibble&quot;)).put(&quot;authOptions&quot;, new io.vertx.core.json.JsonObject().put(&quot;provider&quot;, &quot;jdbc&quot;).put(&quot;config&quot;, new io.vertx.core.json.JsonObject().put(&quot;url&quot;, &quot;jdbc:hsqldb:mem:test?shutdown=true&quot;).put(&quot;driver_class&quot;, &quot;org.hsqldb.jdbcDriver&quot;)))))
 )</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Running the Shell Service on HTTP with JDBC authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var service = ShellService.create(vertx, ShellServiceOptions()
   .setHttpOptions(HttpTermOptions()
-    .setHost("localhost")
+    .setHost(&quot;localhost&quot;)
     .setPort(8080)
     .setAuthOptions(JDBCAuthOptions()
-      .setConfig(new io.vertx.core.json.JsonObject().put("url", "jdbc:hsqldb:mem:test?shutdown=true").put("driver_class", "org.hsqldb.jdbcDriver"))
+      .setConfig(new io.vertx.core.json.JsonObject().put(&quot;url&quot;, &quot;jdbc:hsqldb:mem:test?shutdown=true&quot;).put(&quot;driver_class&quot;, &quot;org.hsqldb.jdbcDriver&quot;))
     )
   )
 )
@@ -837,11 +836,11 @@ method:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var builder = CommandBuilder.command("my-command")
+<pre class="CodeRay highlight"><code data-lang="scala">var builder = CommandBuilder.command(&quot;my-command&quot;)
 builder.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
 
   // Write a message to the console
-  process.write("Hello World")
+  process.write(&quot;Hello World&quot;)
 
   // End the process
   process.end()
@@ -883,11 +882,11 @@ registry. Keep this in mind if you maintain state in a command.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
 
   process.args().foreach(arg =&gt; {
     // Print each argument on the console
-    process.write(s"Argument ${arg}")
+    process.write(s&quot;Argument ${arg}&quot;)
   })
 
 
@@ -914,11 +913,11 @@ write command line argument parsing:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var cli = CLI.create("my-command").addArgument(Argument()
-  .setArgName("my-arg")
+<pre class="CodeRay highlight"><code data-lang="scala">var cli = CLI.create(&quot;my-command&quot;).addArgument(Argument()
+  .setArgName(&quot;my-arg&quot;)
 ).addOption(Option()
-  .setShortName("m")
-  .setLongName("my-option")
+  .setShortName(&quot;m&quot;)
+  .setLongName(&quot;my-option&quot;)
 )
 var command = CommandBuilder.command(cli)
 command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
@@ -926,8 +925,8 @@ command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess
   var commandLine = process.commandLine()
 
   var argValue = commandLine.getArgumentValue(0)
-  var optValue = commandLine.getOptionValue("my-option")
-  process.write(s"The argument is ${argValue} and the option is ${optValue}")
+  var optValue = commandLine.getOptionValue(&quot;my-option&quot;)
+  process.write(s&quot;The argument is ${argValue} and the option is ${optValue}&quot;)
 
   process.end()
 })</code></pre>
@@ -939,12 +938,12 @@ when the option is activated:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var cli = CLI.create("my-command").addArgument(Argument()
-  .setArgName("my-arg")
+<pre class="CodeRay highlight"><code data-lang="scala">var cli = CLI.create(&quot;my-command&quot;).addArgument(Argument()
+  .setArgName(&quot;my-arg&quot;)
 ).addOption(Option()
-  .setArgName("help")
-  .setShortName("h")
-  .setLongName("help")
+  .setArgName(&quot;help&quot;)
+  .setShortName(&quot;h&quot;)
+  .setLongName(&quot;help&quot;)
 )
 var command = CommandBuilder.command(cli)
 command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
@@ -968,8 +967,8 @@ receives data, e.g the user uses his keyboard:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">tty.stdinHandler((data: java.lang.String) =&gt; {
-  println(s"Received ${data}")
+<pre class="CodeRay highlight"><code data-lang="scala">tty.stdinHandler((data: java.lang.String) =&gt; {
+  println(s&quot;Received ${data}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -978,7 +977,7 @@ receives data, e.g the user uses his keyboard:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">tty.write("Hello World")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">tty.write(&quot;Hello World&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -990,7 +989,7 @@ receives data, e.g the user uses his keyboard:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">tty.write(s"Current terminal size: (${tty.width()}, ${tty.height()})")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">tty.write(s&quot;Current terminal size: (${tty.width()}, ${tty.height()})&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -1003,8 +1002,8 @@ is called, the new terminal size can be obtained with <code><a href="../../scala
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">tty.resizehandler((v: java.lang.Void) =&gt; {
-  println(s"terminal resized : ${tty.width()} ${tty.height()}")
+<pre class="CodeRay highlight"><code data-lang="scala">tty.resizehandler((v: java.lang.Void) =&gt; {
+  println(s&quot;terminal resized : ${tty.width()} ${tty.height()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -1017,7 +1016,7 @@ returns the current terminal type, it can be null if the terminal has not advert
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">println(s"terminal type : ${tty.type()}")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">println(s&quot;terminal type : ${tty.type()}&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -1030,12 +1029,12 @@ used in commands to scope data. A command can get the session with <code><a href
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
 
   var session = process.session()
 
-  if (session.get("my_key") == null) {
-    session.put("my key", "my value")
+  if (session.get(&quot;my_key&quot;) == null) {
+    session.put(&quot;my key&quot;, &quot;my value&quot;)
   }
 
   process.end()
@@ -1051,7 +1050,7 @@ in the invocation of the command handler or any time later:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
   var vertx = process.vertx()
 
   // Set a timer
@@ -1078,12 +1077,12 @@ be used for interrupting commands <em>blocking</em> the CLI and gracefully endin
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
   var vertx = process.vertx()
 
   // Every second print a message on the console
   var periodicId = vertx.setPeriodic(1000, (id: java.lang.Long) =&gt; {
-    process.write("tick\n")
+    process.write(&quot;tick\n&quot;)
   })
 
   // When user press Ctrl+C: cancel the timer and end the process
@@ -1137,16 +1136,16 @@ is resumed, usually when the user types <em>fg</em>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
 
   // Command is suspended
   process.suspendHandler((v: java.lang.Void) =&gt; {
-    println("Suspended")
+    println(&quot;Suspended&quot;)
   })
 
   // Command is resumed
   process.resumeHandler((v: java.lang.Void) =&gt; {
-    println("Resumed")
+    println(&quot;Resumed&quot;)
   })
 })</code></pre>
 </div>
@@ -1161,11 +1160,11 @@ the command is <em>terminated</em>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
+<pre class="CodeRay highlight"><code data-lang="scala">command.processHandler((process: io.vertx.scala.ext.shell.command.CommandProcess) =&gt; {
 
   // Command terminates
   process.endHandler((v: java.lang.Void) =&gt; {
-    println("Terminated")
+    println(&quot;Terminated&quot;)
   })
 })</code></pre>
 </div>
@@ -1218,10 +1217,10 @@ steps:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var server = ShellServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var server = ShellServer.create(vertx)
 
 var shellRouter = Router.router(vertx)
-router.mountSubRouter("/shell", shellRouter)
+router.mountSubRouter(&quot;/shell&quot;, shellRouter)
 var httpTermServer = TermServer.createHttpTermServer(vertx, router)
 
 var sshTermServer = TermServer.createSSHTermServer(vertx)
@@ -1264,7 +1263,7 @@ server.listen()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Create a shell ession
+<pre class="CodeRay highlight"><code data-lang="scala">// Create a shell ession
 var shell = shellServer.createShell()</code></pre>
 </div>
 </div>
@@ -1273,22 +1272,22 @@ var shell = shellServer.createShell()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Create a shell
+<pre class="CodeRay highlight"><code data-lang="scala">// Create a shell
 var shell = shellServer.createShell()
 
 // Create a job fo the command
-var job = shell.createJob("my-command 1234")
+var job = shell.createJob(&quot;my-command 1234&quot;)
 
 // Create a pseudo terminal
 var pty = Pty.create()
 pty.stdoutHandler((data: java.lang.String) =&gt; {
-  println(s"Command wrote ${data}")
+  println(s&quot;Command wrote ${data}&quot;)
 })
 
 // Run the command
 job.setTty(pty.slave())
 job.statusUpdateHandler((status: io.vertx.scala.ext.shell.system.ExecStatus) =&gt; {
-  println(s"Command terminated with status ${status}")
+  println(s&quot;Command terminated with status ${status}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -1336,9 +1335,9 @@ terminal.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var server = TermServer.createSSHTermServer(vertx, SSHTermOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var server = TermServer.createSSHTermServer(vertx, SSHTermOptions()
   .setPort(5000)
-  .setHost("localhost")
+  .setHost(&quot;localhost&quot;)
 )
 server.termHandler((term: io.vertx.scala.ext.shell.term.Term) =&gt; {
   term.stdinHandler((line: java.lang.String) =&gt; {
@@ -1357,9 +1356,9 @@ how to use the tty.</p>
 <h3 id="_telnet_term">Telnet term</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var server = TermServer.createTelnetTermServer(vertx, TelnetTermOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var server = TermServer.createTelnetTermServer(vertx, TelnetTermOptions()
   .setPort(5000)
-  .setHost("localhost")
+  .setHost(&quot;localhost&quot;)
 )
 server.termHandler((term: io.vertx.scala.ext.shell.term.Term) =&gt; {
   term.stdinHandler((line: java.lang.String) =&gt; {
@@ -1378,9 +1377,9 @@ on top of Vert.x Web using the SockJS protocol.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var server = TermServer.createHttpTermServer(vertx, HttpTermOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var server = TermServer.createHttpTermServer(vertx, HttpTermOptions()
   .setPort(5000)
-  .setHost("localhost")
+  .setHost(&quot;localhost&quot;)
 )
 server.termHandler((term: io.vertx.scala.ext.shell.term.Term) =&gt; {
   term.stdinHandler((line: java.lang.String) =&gt; {
@@ -1398,9 +1397,9 @@ server.listen()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var server = TermServer.createHttpTermServer(vertx, router, HttpTermOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var server = TermServer.createHttpTermServer(vertx, router, HttpTermOptions()
   .setPort(5000)
-  .setHost("localhost")
+  .setHost(&quot;localhost&quot;)
 )
 server.termHandler((term: io.vertx.scala.ext.shell.term.Term) =&gt; {
   term.stdinHandler((line: java.lang.String) =&gt; {
@@ -1437,11 +1436,11 @@ server.listen()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">window.addEventListener('load', function () {
-  var url = 'http://localhost/shell';
-  new VertxTerm(url, {
-    cols: 80,
-    rows: 24
+<pre class="CodeRay highlight"><code data-lang="javascript">window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">load</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> url = <span class="string"><span class="delimiter">'</span><span class="content">http://localhost/shell</span><span class="delimiter">'</span></span>;
+  <span class="keyword">new</span> VertxTerm(url, {
+    <span class="key">cols</span>: <span class="integer">80</span>,
+    <span class="key">rows</span>: <span class="integer">24</span>
    });
  });</code></pre>
 </div>
@@ -1451,11 +1450,11 @@ server.listen()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">window.addEventListener('load', function () {
-  var url = 'ws://localhost/shell/websocket';
-  new VertxTerm(url, {
-    cols: 80,
-    rows: 24
+<pre class="CodeRay highlight"><code data-lang="javascript">window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">load</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> url = <span class="string"><span class="delimiter">'</span><span class="content">ws://localhost/shell/websocket</span><span class="delimiter">'</span></span>;
+  <span class="keyword">new</span> VertxTerm(url, {
+    <span class="key">cols</span>: <span class="integer">80</span>,
+    <span class="key">rows</span>: <span class="integer">24</span>
    });
  });</code></pre>
 </div>
@@ -1481,10 +1480,10 @@ jar under the <code>io.vertx.ext.shell</code> packages.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">public class CustomCommands implements CommandResolverFactory {
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">CustomCommands</span> <span class="directive">implements</span> CommandResolverFactory {
 
-  public void resolver(Vertx vertx, Handler&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolverHandler) {
-    resolverHandler.handler(() -&gt; Arrays.asList(myCommand1, myCommand2));
+  <span class="directive">public</span> <span class="type">void</span> resolver(Vertx vertx, <span class="predefined-type">Handler</span>&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolverHandler) {
+    resolverHandler.handler(() -&gt; <span class="predefined-type">Arrays</span>.asList(myCommand1, myCommand2));
   }
 }</code></pre>
 </div>
@@ -1499,7 +1498,7 @@ are resolved.</p>
 <div class="listingblock">
 <div class="title">The service provider file <code>META-INF/services/io.vertx.ext.shell.spi.CommandResolverFactory</code></div>
 <div class="content">
-<pre class="prettyprint highlight"><code>my.CustomCommands</code></pre>
+<pre class="CodeRay highlight"><code>my.CustomCommands</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1519,22 +1518,22 @@ don&#8217;t use this mechanism.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">public class CommandPackExample implements CommandResolverFactory {
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">CommandPackExample</span> <span class="directive">implements</span> CommandResolverFactory {
 
-  @Override
-  public void resolver(Vertx vertx, Handler&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolveHandler) {
-    List&lt;Command&gt; commands = new ArrayList&lt;&gt;();
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="type">void</span> resolver(Vertx vertx, <span class="predefined-type">Handler</span>&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolveHandler) {
+    <span class="predefined-type">List</span>&lt;Command&gt; commands = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;();
 
-    // Add commands
+    <span class="comment">// Add commands</span>
     commands.add(Command.create(vertx, JavaCommandExample.class));
 
-    // Add another command
-    commands.add(CommandBuilder.command("another-command").processHandler(process -&gt; {
-      // Handle process
+    <span class="comment">// Add another command</span>
+    commands.add(CommandBuilder.command(<span class="string"><span class="delimiter">&quot;</span><span class="content">another-command</span><span class="delimiter">&quot;</span></span>).processHandler(process -&gt; {
+      <span class="comment">// Handle process</span>
     }).build(vertx));
 
-    // Resolve with the commands
-    resolveHandler.handle(Future.succeededFuture(() -&gt; commands));
+    <span class="comment">// Resolve with the commands</span>
+    resolveHandler.handle(<span class="predefined-type">Future</span>.succeededFuture(() -&gt; commands));
   }
 }</code></pre>
 </div>
@@ -1545,7 +1544,7 @@ don&#8217;t use this mechanism.</p>
 <div class="listingblock">
 <div class="title"><code>META-INF/services/io.vertx.ext.shell.spi.CommandResolverFactory</code> descriptor</div>
 <div class="content">
-<pre class="prettyprint highlight"><code>examples.pack.CommandPackExample</code></pre>
+<pre class="CodeRay highlight"><code>examples.pack.CommandPackExample</code></pre>
 </div>
 </div>
 </div>

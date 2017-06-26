@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -157,11 +156,11 @@ connection pooling to keep connections open to be reused.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-mail-client-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-mail-client-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -173,7 +172,7 @@ connection pooling to keep connections open to be reused.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mail-client-scala_2.12:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mail-client-scala_2.12:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -198,8 +197,8 @@ if it is shared, the same connection pool will be used for all clients using the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var config = MailConfig()
-var mailClient = MailClient.createShared(vertx, config, "exampleclient")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var config = MailConfig()
+var mailClient = MailClient.createShared(vertx, config, &quot;exampleclient&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -216,7 +215,7 @@ same identifier).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var config = MailConfig()
+<pre class="CodeRay highlight"><code data-lang="scala">var config = MailConfig()
 var mailClient = MailClient.createNonShared(vertx, config)</code></pre>
 </div>
 </div>
@@ -225,12 +224,12 @@ var mailClient = MailClient.createNonShared(vertx, config)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var config = MailConfig()
-config.setHostname("mail.example.com")
+<pre class="CodeRay highlight"><code data-lang="scala">var config = MailConfig()
+config.setHostname(&quot;mail.example.com&quot;)
 config.setPort(587)
 config.setStarttls(StartTLSOptions.REQUIRED)
-config.setUsername("user")
-config.setPassword("password")
+config.setUsername(&quot;user&quot;)
+config.setPassword(&quot;password&quot;)
 var mailClient = MailClient.createNonShared(vertx, config)</code></pre>
 </div>
 </div>
@@ -258,12 +257,12 @@ quoted-printable) headers/messages</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var message = MailMessage()
-message.setFrom("user@example.com (Example User)")
-message.setTo("recipient@example.org")
-message.setCc("Another User &lt;another@example.net&gt;")
-message.setText("this is the plain message text")
-message.setHtml("this is html text &lt;a href=\"http://vertx.io\"&gt;vertx.io&lt;/a&gt;")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var message = MailMessage()
+message.setFrom(&quot;user@example.com (Example User)&quot;)
+message.setTo(&quot;recipient@example.org&quot;)
+message.setCc(&quot;Another User &lt;another@example.net&gt;&quot;)
+message.setText(&quot;this is the plain message text&quot;)
+message.setHtml(&quot;this is html text &lt;a href=\&quot;http://vertx.io\&quot;&gt;vertx.io&lt;/a&gt;&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -272,9 +271,9 @@ this supports base64 attachments.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var attachment = MailAttachment()
-attachment.setContentType("text/plain")
-attachment.setData(Buffer.buffer("attachment file"))
+<pre class="CodeRay highlight"><code data-lang="scala">var attachment = MailAttachment()
+attachment.setContentType(&quot;text/plain&quot;)
+attachment.setData(Buffer.buffer(&quot;attachment file&quot;))
 
 message.setAttachment(attachment)</code></pre>
 </div>
@@ -290,11 +289,11 @@ A valid example for a Content-ID value is "&lt;<a href="mailto:filename%201.jpg@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var attachment = MailAttachment()
-attachment.setContentType("image/jpeg")
-attachment.setData(Buffer.buffer("image data"))
-attachment.setDisposition("inline")
-attachment.setContentId("&lt;image1@example.com&gt;")
+<pre class="CodeRay highlight"><code data-lang="scala">var attachment = MailAttachment()
+attachment.setContentType(&quot;image/jpeg&quot;)
+attachment.setData(Buffer.buffer(&quot;image data&quot;))
+attachment.setDisposition(&quot;inline&quot;)
+attachment.setContentId(&quot;&lt;image1@example.com&gt;&quot;)
 
 message.setInlineAttachment(attachment)</code></pre>
 </div>
@@ -308,12 +307,12 @@ the send operation is finished or it failed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">mailClient.sendMailFuture(message).onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">mailClient.sendMailFuture(message).onComplete{
   case Success(result) =&gt; {
     println(result)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>

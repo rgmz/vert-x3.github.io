@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -150,13 +149,13 @@ It might return an error, e.g. if the number of requested replicas is greater th
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var adminUtils = AdminUtils.create(Vertx.vertx(), "localhost:2181", true)
+<pre class="CodeRay highlight"><code data-lang="scala">var adminUtils = AdminUtils.create(Vertx.vertx(), &quot;localhost:2181&quot;, true)
 // Create topic 'myNewTopic' with 2 partition and 1 replicas
-adminUtils.createTopicFuture("myNewTopic", 2, 1).onComplete{
+adminUtils.createTopicFuture(&quot;myNewTopic&quot;, 2, 1).onComplete{
   case Success(result) =&gt; {
-    println("Creation of topic myNewTopic successful!")}
+    println(&quot;Creation of topic myNewTopic successful!&quot;)}
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -171,13 +170,13 @@ It might return an error, e.g. if the topic does not exist.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var adminUtils = AdminUtils.create(Vertx.vertx(), "localhost:2181", true)
+<pre class="CodeRay highlight"><code data-lang="scala">var adminUtils = AdminUtils.create(Vertx.vertx(), &quot;localhost:2181&quot;, true)
 // Delete topic 'myNewTopic'
-adminUtils.deleteTopicFuture("myNewTopic").onComplete{
+adminUtils.deleteTopicFuture(&quot;myNewTopic&quot;).onComplete{
   case Success(result) =&gt; {
-    println("Deletion of topic myNewTopic successful!")}
+    println(&quot;Deletion of topic myNewTopic successful!&quot;)}
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -194,16 +193,16 @@ It might return an error, e.g. if the topic does not exist.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var adminUtils = AdminUtils.create(Vertx.vertx(), "localhost:2181", true)
+<pre class="CodeRay highlight"><code data-lang="scala">var adminUtils = AdminUtils.create(Vertx.vertx(), &quot;localhost:2181&quot;, true)
 // Set retention to 1000 ms and max size of the topic partition to 1 kiByte
 var properties = Map()
-properties + ("delete.retention.ms" -&gt; "1000")
-properties + ("retention.bytes" -&gt; "1024")
-adminUtils.changeTopicConfigFuture("myNewTopic", properties).onComplete{
+properties + (&quot;delete.retention.ms&quot; -&gt; &quot;1000&quot;)
+properties + (&quot;retention.bytes&quot; -&gt; &quot;1024&quot;)
+adminUtils.changeTopicConfigFuture(&quot;myNewTopic&quot;, properties).onComplete{
   case Success(result) =&gt; {
-    println("Configuration change of topic myNewTopic successful!")}
+    println(&quot;Configuration change of topic myNewTopic successful!&quot;)}
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }
 }</code></pre>
@@ -219,13 +218,13 @@ It might return an error, e.g. if the topic does not exist.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var adminUtils = AdminUtils.create(Vertx.vertx(), "localhost:2181", true)
-adminUtils.topicExistsFuture("myNewTopic").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">var adminUtils = AdminUtils.create(Vertx.vertx(), &quot;localhost:2181&quot;, true)
+adminUtils.topicExistsFuture(&quot;myNewTopic&quot;).onComplete{
   case Success(result) =&gt; {
-    println(s"Topic myNewTopic exists: ${result}")
+    println(s&quot;Topic myNewTopic exists: ${result}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>

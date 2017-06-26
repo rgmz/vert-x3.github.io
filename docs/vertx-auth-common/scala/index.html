@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -160,11 +159,11 @@ your Vert.x applications and can be backed by different providers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-auth-common-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-auth-common-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -176,7 +175,7 @@ your Vert.x applications and can be backed by different providers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-common-scala_2.12:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-common-scala_2.12:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -236,18 +235,18 @@ user and contains operations which allow the user to be authorised.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var authInfo = new io.vertx.core.json.JsonObject().put("username", "tim").put("password", "mypassword")
+<pre class="CodeRay highlight"><code data-lang="scala">var authInfo = new io.vertx.core.json.JsonObject().put(&quot;username&quot;, &quot;tim&quot;).put(&quot;password&quot;, &quot;mypassword&quot;)
 
 authProvider.authenticateFuture(authInfo).onComplete{
   case Success(result) =&gt; {
 
     var user = result
 
-    println(s"User ${user.principal()} is now authenticated")
+    println(s&quot;User ${user.principal()} is now authenticated&quot;)
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -271,20 +270,20 @@ authProvider.authenticateFuture(authInfo).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">user.isAuthorisedFuture("printers:printer1234").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">user.isAuthorisedFuture(&quot;printers:printer1234&quot;).onComplete{
   case Success(result) =&gt; {
 
     var hasAuthority = result
 
     if (hasAuthority) {
-      println("User has the authority")
+      println(&quot;User has the authority&quot;)
     } else {
-      println("User does not have the authority")
+      println(&quot;User does not have the authority&quot;)
     }
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -373,7 +372,7 @@ your application, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Generate a secure token of 32 bytes as a base64 string
+<pre class="CodeRay highlight"><code data-lang="scala">// Generate a secure token of 32 bytes as a base64 string
 var token = VertxContextPRNG.current(vertx).nextString(32)
 // Generate a secure random integer
 var randomInt = VertxContextPRNG.current(vertx).nextInt()</code></pre>

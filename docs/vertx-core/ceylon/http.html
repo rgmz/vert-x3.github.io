@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -187,7 +186,7 @@ HTTP/2 protocol.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createHttpServer();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value server = vertx.createHttpServer();</code></pre>
 </div>
 </div>
 </div>
@@ -199,7 +198,7 @@ instance when creating it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = HttpServerOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = HttpServerOptions {
   maxWebsocketFrameSize = 1000000;
 };
 
@@ -228,11 +227,11 @@ an HTTP/1.1 upgraded request or directly</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = HttpServerOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = HttpServerOptions {
   useAlpn = true;
   ssl = true;
   keyStoreOptions = JksOptions {
-    path = "/path/to/my/keystore";
+    path = &quot;/path/to/my/keystore&quot;;
   };
 };
 
@@ -299,7 +298,7 @@ Worker Verticles are not compatible with HTTP/2
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = HttpServerOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = HttpServerOptions {
   logActivity = true;
 };
 
@@ -321,7 +320,7 @@ alternatives.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createHttpServer();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value server = vertx.createHttpServer();
 server.listen();</code></pre>
 </div>
 </div>
@@ -330,8 +329,8 @@ server.listen();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createHttpServer();
-server.listen(8080, "myhost.com");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value server = vertx.createHttpServer();
+server.listen(8080, &quot;myhost.com&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -347,12 +346,12 @@ For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createHttpServer();
-server.listen(8080, "myhost.com", (HttpServer|Throwable res) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value server = vertx.createHttpServer();
+server.listen(8080, &quot;myhost.com&quot;, (HttpServer|Throwable res) {
   if (is HttpServer res) {
-    print("Server is now listening!");
+    print(&quot;Server is now listening!&quot;);
   } else {
-    print("Failed to bind!");
+    print(&quot;Failed to bind!&quot;);
   };
 });</code></pre>
 </div>
@@ -365,7 +364,7 @@ server.listen(8080, "myhost.com", (HttpServer|Throwable res) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createHttpServer();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value server = vertx.createHttpServer();
 server.requestHandler((HttpServerRequest request) {
   // Handle the request in here
 });</code></pre>
@@ -399,8 +398,8 @@ object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
-  request.response().end("Hello world");
+<pre class="CodeRay highlight"><code data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
+  request.response().end(&quot;Hello world&quot;);
 }).listen(8080);</code></pre>
 </div>
 </div>
@@ -487,13 +486,13 @@ values for the same key - this is because HTTP allows multiple header values wit
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value headers = request.headers();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value headers = request.headers();
 
 // Get the User-Agent:
-print("User agent is ``headers.get("user-agent")``");
+print(&quot;User agent is ``headers.get(&quot;user-agent&quot;)``&quot;);
 
 // You can also do this and get the same result:
-print("User agent is ``headers.get("User-Agent")``");</code></pre>
+print(&quot;User agent is ``headers.get(&quot;User-Agent&quot;)``&quot;);</code></pre>
 </div>
 </div>
 </div>
@@ -574,8 +573,8 @@ this will get called every time a chunk of the request body arrives. Here&#8217;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.handler((Buffer buffer) {
-  print("I have received a chunk of the body of length ``buffer.length()``");
+<pre class="CodeRay highlight"><code data-lang="ceylon">request.handler((Buffer buffer) {
+  print(&quot;I have received a chunk of the body of length ``buffer.length()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -589,7 +588,7 @@ the aggregation yourself as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
 
 ...
 
@@ -598,12 +597,12 @@ the aggregation yourself as follows:</p>
 value totalBuffer = buffer.buffer();
 
 request.handler((Buffer buffer) {
-  print("I have received a chunk of the body of length ``buffer.length()``");
+  print(&quot;I have received a chunk of the body of length ``buffer.length()``&quot;);
   totalBuffer.appendBuffer(buffer);
 });
 
 request.endHandler(() {
-  print("Full body received, length = ``totalBuffer.length()``");
+  print(&quot;Full body received, length = ``totalBuffer.length()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -618,8 +617,8 @@ for you. The body handler is called once when all the body has been received:</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.bodyHandler((Buffer totalBuffer) {
-  print("Full body received, length = ``totalBuffer.length()``");
+<pre class="CodeRay highlight"><code data-lang="ceylon">request.bodyHandler((Buffer totalBuffer) {
+  print(&quot;Full body received, length = ``totalBuffer.length()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -657,7 +656,7 @@ once the entire body has been read:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.requestHandler((HttpServerRequest request) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">server.requestHandler((HttpServerRequest request) {
   request.setExpectMultipart(true);
   request.endHandler(() {
     // The body has now been fully read, so retrieve the form attributes
@@ -685,10 +684,10 @@ upload that arrives on the server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.requestHandler((HttpServerRequest request) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">server.requestHandler((HttpServerRequest request) {
   request.setExpectMultipart(true);
   request.uploadHandler((HttpServerFileUpload upload) {
-    print("Got a file upload ``upload.name()``");
+    print(&quot;Got a file upload ``upload.name()``&quot;);
   });
 });</code></pre>
 </div>
@@ -699,9 +698,9 @@ exhaustion, instead, the upload data is received in chunks:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.uploadHandler((HttpServerFileUpload upload) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">request.uploadHandler((HttpServerFileUpload upload) {
   upload.handler((Buffer chunk) {
-    print("Received a chunk of the upload of length ``chunk.length()``");
+    print(&quot;Received a chunk of the upload of length ``chunk.length()``&quot;);
   });
 });</code></pre>
 </div>
@@ -716,8 +715,8 @@ detailed explanation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.uploadHandler((HttpServerFileUpload upload) {
-  upload.streamToFileSystem("myuploads_directory/``upload.filename()``");
+<pre class="CodeRay highlight"><code data-lang="ceylon">request.uploadHandler((HttpServerFileUpload upload) {
+  upload.streamToFileSystem(&quot;myuploads_directory/``upload.filename()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -761,9 +760,9 @@ this will get called every time a custom frame arrives. Here&#8217;s an example:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.customFrameHandler((HttpFrame frame) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">request.customFrameHandler((HttpFrame frame) {
 
-  print("Received a frame type=``frame.type()`` payload``frame.payload().toString()``");
+  print(&quot;Received a frame type=``frame.type()`` payload``frame.payload().toString()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -830,7 +829,7 @@ to the client
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value response = request.response();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value response = request.response();
 response.write(buffer);</code></pre>
 </div>
 </div>
@@ -839,8 +838,8 @@ response.write(buffer);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value response = request.response();
-response.write("hello world!");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value response = request.response();
+response.write(&quot;hello world!&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -849,8 +848,8 @@ result written to the wire.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value response = request.response();
-response.write("hello world!", "UTF-16");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value response = request.response();
+response.write(&quot;hello world!&quot;, &quot;UTF-16&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -879,8 +878,8 @@ be too late otherwise. If you are using HTTP chunking you do not have to worry.<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value response = request.response();
-response.write("hello world!");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value response = request.response();
+response.write(&quot;hello world!&quot;);
 response.end();</code></pre>
 </div>
 </div>
@@ -890,8 +889,8 @@ calling write with a string or buffer followed by calling end with no arguments.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value response = request.response();
-response.end("hello world!");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value response = request.response();
+response.end(&quot;hello world!&quot;);</code></pre>
 </div>
 </div>
 </div>
@@ -919,10 +918,10 @@ closed after an idle time, then you configure <code><a href="../../ceylondoc/ver
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value response = request.response();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value response = request.response();
 value headers = response.headers();
-headers.set("content-type", "text/html");
-headers.set("other-header", "wibble");</code></pre>
+headers.set(&quot;content-type&quot;, &quot;text/html&quot;);
+headers.set(&quot;other-header&quot;, &quot;wibble&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -930,8 +929,8 @@ headers.set("other-header", "wibble");</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value response = request.response();
-response.putHeader("content-type", "text/html").putHeader("other-header", "wibble");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value response = request.response();
+response.putHeader(&quot;content-type&quot;, &quot;text/html&quot;).putHeader(&quot;other-header&quot;, &quot;wibble&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -952,7 +951,7 @@ being streamed to a client and the total size is not known in advance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value response = request.response();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value response = request.response();
 response.setChunked(true);</code></pre>
 </div>
 </div>
@@ -981,10 +980,10 @@ chunked response has no effect for an HTTP/2 stream
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value response = request.response();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value response = request.response();
 response.setChunked(true);
 value trailers = response.trailers();
-trailers.set("X-wibble", "woobble").set("X-quux", "flooble");</code></pre>
+trailers.set(&quot;X-wibble&quot;, &quot;woobble&quot;).set(&quot;X-quux&quot;, &quot;flooble&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -992,9 +991,9 @@ trailers.set("X-wibble", "woobble").set("X-quux", "flooble");</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value response = request.response();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value response = request.response();
 response.setChunked(true);
-response.putTrailer("X-wibble", "woobble").putTrailer("X-quux", "flooble");</code></pre>
+response.putTrailer(&quot;X-wibble&quot;, &quot;woobble&quot;).putTrailer(&quot;X-quux&quot;, &quot;flooble&quot;);</code></pre>
 </div>
 </div>
 </div>
@@ -1022,14 +1021,14 @@ files, but may be slower for small files.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
-  value file = "";
-  if (request.path() == "/") {
-    file = "index.html";
-  } else if (!request.path().contains("..")) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
+  value file = &quot;&quot;;
+  if (request.path() == &quot;/&quot;) {
+    file = &quot;index.html&quot;;
+  } else if (!request.path().contains(&quot;..&quot;)) {
     file = request.path();
   };
-  request.response().sendFile("web/``file``");
+  request.response().sendFile(&quot;web/``file``&quot;);
 }).listen(8080);</code></pre>
 </div>
 </div>
@@ -1072,22 +1071,22 @@ Vert.x Web.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
   value offset = 0;
   try {
-    offset = Long.parseLong(request.getParam("start"));
+    offset = Long.parseLong(request.getParam(&quot;start&quot;));
   } catch(Exception e) {
     // error handling...
   }
 
   value end = Long.MAX_VALUE;
   try {
-    end = Long.parseLong(request.getParam("end"));
+    end = Long.parseLong(request.getParam(&quot;end&quot;));
   } catch(Exception e) {
     // error handling...
   }
 
-  request.response().sendFile("web/mybigfile.txt", offset, end);
+  request.response().sendFile(&quot;web/mybigfile.txt&quot;, offset, end);
 }).listen(8080);</code></pre>
 </div>
 </div>
@@ -1097,15 +1096,15 @@ case you can just do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
   value offset = 0;
   try {
-    offset = Long.parseLong(request.getParam("start"));
+    offset = Long.parseLong(request.getParam(&quot;start&quot;));
   } catch(Exception e) {
     // error handling...
   }
 
-  request.response().sendFile("web/mybigfile.txt", offset);
+  request.response().sendFile(&quot;web/mybigfile.txt&quot;, offset);
 }).listen(8080);</code></pre>
 </div>
 </div>
@@ -1124,7 +1123,7 @@ at any one time:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { put }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { put }
 import io.vertx.ceylon.core.streams { pump }
 
 ...
@@ -1154,14 +1153,14 @@ Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
 
 ...
 
 
 value frameType = 40;
 value frameStatus = 10;
-value payload = buffer.buffer("some data");
+value payload = buffer.buffer(&quot;some data&quot;);
 
 // Sending a frame to the client
 response.writeCustomFrame(frameType, frameStatus, payload);</code></pre>
@@ -1183,7 +1182,7 @@ a resource already present on the server, the server needs to accept the entire 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Reset the stream
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Reset the stream
 request.response().reset();</code></pre>
 </div>
 </div>
@@ -1192,7 +1191,7 @@ request.response().reset();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Cancel the stream
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Cancel the stream
 request.response().reset(8);</code></pre>
 </div>
 </div>
@@ -1205,7 +1204,7 @@ request.response().reset(8);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">Code not translatable : class io.vertx.codetrans.lang.ceylon.CeylonWriter has not implemented renderInstanceOf</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">Code not translatable : class io.vertx.codetrans.lang.ceylon.CeylonWriter has not implemented renderInstanceOf</code></pre>
 </div>
 </div>
 </div>
@@ -1219,7 +1218,7 @@ request.response().reset(8);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { get }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { get }
 
 ...
 
@@ -1227,7 +1226,7 @@ request.response().reset(8);</code></pre>
 value response = request.response();
 
 // Push main.js to the client
-response.push(get, "/main.js", (HttpServerResponse|Throwable ar) {
+response.push(get, &quot;/main.js&quot;, (HttpServerResponse|Throwable ar) {
 
   if (is HttpServerResponse ar) {
 
@@ -1235,14 +1234,14 @@ response.push(get, "/main.js", (HttpServerResponse|Throwable ar) {
     value pushedResponse = ar;
 
     // Send main.js response
-    pushedResponse.putHeader("content-type", "application/json").end("alert(\"Push response hello\")");
+    pushedResponse.putHeader(&quot;content-type&quot;, &quot;application/json&quot;).end(&quot;alert(\&quot;Push response hello\&quot;)&quot;);
   } else {
-    print("Could not push client resource ``ar``");
+    print(&quot;Could not push client resource ``ar``&quot;);
   };
 });
 
 // Send the requested resource
-response.sendFile("&lt;html&gt;&lt;head&gt;&lt;script src=\"/main.js\"&gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;");</code></pre>
+response.sendFile(&quot;&lt;html&gt;&lt;head&gt;&lt;script src=\&quot;/main.js\&quot;&gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1317,7 +1316,7 @@ but the parameter can be configured to address any case with <code><a href="../.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createHttpClient();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value client = vertx.createHttpClient();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1325,7 +1324,7 @@ but the parameter can be configured to address any case with <code><a href="../.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = HttpClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = HttpClientOptions {
   keepAlive = false;
 };
 value client = vertx.createHttpClient(options);</code></pre>
@@ -1343,13 +1342,13 @@ must be set to <code><a href="todo">HTTP_2</a></code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { http_2 }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { http_2 }
 
 ...
 
 
 value options = HttpClientOptions {
-  protocolVersion = "HTTP_2";
+  protocolVersion = &quot;HTTP_2&quot;;
   ssl = true;
   useAlpn = true;
   trustAll = true;
@@ -1363,13 +1362,13 @@ value client = vertx.createHttpClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { http_2 }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { http_2 }
 
 ...
 
 
 value options = HttpClientOptions {
-  protocolVersion = "HTTP_2";
+  protocolVersion = &quot;HTTP_2&quot;;
 };
 
 value client = vertx.createHttpClient(options);</code></pre>
@@ -1398,7 +1397,7 @@ values defined by the HTTP/2 RFC.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value options = HttpClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value options = HttpClientOptions {
   logActivity = true;
 };
 value client = vertx.createHttpClient(options);</code></pre>
@@ -1419,14 +1418,14 @@ every time you make a request you can configure the client with a default host/p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Set the default host
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Set the default host
 value options = HttpClientOptions {
-  defaultHost = "wibble.com";
+  defaultHost = &quot;wibble.com&quot;;
 };
 // Can also set default port if you want...
 value client = vertx.createHttpClient(options);
-client.getNow("/some-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+client.getNow(&quot;/some-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -1436,16 +1435,16 @@ simply specify the host/port when doing the request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createHttpClient();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value client = vertx.createHttpClient();
 
 // Specify both port and host name
-client.getNow(8080, "myserver.mycompany.com", "/some-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+client.getNow(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 });
 
 // This time use the default port 80 but specify the host name
-client.getNow("foo.othercompany.com", "/other-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+client.getNow(&quot;foo.othercompany.com&quot;, &quot;/other-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -1468,16 +1467,16 @@ called with the http response when it comes back.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createHttpClient();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value client = vertx.createHttpClient();
 
 // Send a GET request
-client.getNow("/some-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+client.getNow(&quot;/some-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 });
 
 // Send a GET request
-client.headNow("/other-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+client.headNow(&quot;/other-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -1491,19 +1490,19 @@ the HTTP method at run-time:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { get, post }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { get, post }
 
 ...
 
 value client = vertx.createHttpClient();
 
-client.request(get, "some-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+client.request(get, &quot;some-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 }).end();
 
-client.request(post, "foo-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
-}).end("some-data");</code></pre>
+client.request(post, &quot;foo-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
+}).end(&quot;some-data&quot;);</code></pre>
 </div>
 </div>
 </div>
@@ -1527,15 +1526,15 @@ m</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createHttpClient();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value client = vertx.createHttpClient();
 
-value request = client.post("some-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+value request = client.post(&quot;some-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 });
 
 // Now do stuff with the request
-request.putHeader("content-length", "1000");
-request.putHeader("content-type", "text/plain");
+request.putHeader(&quot;content-length&quot;, &quot;1000&quot;);
+request.putHeader(&quot;content-type&quot;, &quot;text/plain&quot;);
 request.write(body);
 
 // Make sure the request is ended when you're done with it
@@ -1543,15 +1542,15 @@ request.end();
 
 // Or fluently:
 
-client.post("some-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
-}).putHeader("content-length", "1000").putHeader("content-type", "text/plain").write(body).end();
+client.post(&quot;some-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
+}).putHeader(&quot;content-length&quot;, &quot;1000&quot;).putHeader(&quot;content-type&quot;, &quot;text/plain&quot;).write(body).end();
 
 // Or event more simply:
 
-client.post("some-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
-}).putHeader("content-type", "text/plain").end(body);</code></pre>
+client.post(&quot;some-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
+}).putHeader(&quot;content-type&quot;, &quot;text/plain&quot;).end(body);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1559,16 +1558,16 @@ client.post("some-uri", (HttpClientResponse response) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
 
 ...
 
 
 // Write string encoded in UTF-8
-request.write("some data");
+request.write(&quot;some data&quot;);
 
 // Write string encoded in specific encoding
-request.write("some other data", "UTF-16");
+request.write(&quot;some other data&quot;, &quot;UTF-16&quot;);
 
 // Write a buffer
 value buffer = buffer_.buffer();
@@ -1582,13 +1581,13 @@ single call to the <code>end</code> function.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
 
 ...
 
 
 // Write string and end the request (send it) in a single call
-request.end("some simple data");
+request.end(&quot;some simple data&quot;);
 
 // Write buffer and end the request (send it) in a single call
 value buffer = buffer_.buffer().appendDouble(12.34).appendLong(432);
@@ -1625,10 +1624,10 @@ up-front.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Write some headers using the headers() multimap
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Write some headers using the headers() multimap
 
 value headers = request.headers();
-headers.set("content-type", "application/json").set("other-header", "foo");</code></pre>
+headers.set(&quot;content-type&quot;, &quot;application/json&quot;).set(&quot;other-header&quot;, &quot;foo&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1640,9 +1639,9 @@ entries. Http headers allow more than one value for a specific key.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Write some headers using the putHeader method
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Write some headers using the putHeader method
 
-request.putHeader("content-type", "application/json").putHeader("other-header", "foo");</code></pre>
+request.putHeader(&quot;content-type&quot;, &quot;application/json&quot;).putHeader(&quot;other-header&quot;, &quot;foo&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1672,7 +1671,7 @@ as complete.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.end();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">request.end();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1681,12 +1680,12 @@ before calling <code>end</code> with no arguments</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
 
 ...
 
 // End the request with a string
-request.end("some-data");
+request.end(&quot;some-data&quot;);
 
 // End it with a buffer
 value buffer = buffer_.buffer().appendFloat(12.3).appendInt(321);
@@ -1712,11 +1711,11 @@ no need to set the <code>Content-Length</code> of the request up-front.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.setChunked(true);
+<pre class="CodeRay highlight"><code data-lang="ceylon">request.setChunked(true);
 
 // Write some chunks
 for (i in 0:10) {
-  request.write("this-is-chunk-``i``");
+  request.write(&quot;this-is-chunk-``i``&quot;);
 };
 
 request.end();</code></pre>
@@ -1741,11 +1740,11 @@ request.end();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value request = client.post("some-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value request = client.post(&quot;some-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 });
 request.exceptionHandler((Throwable e) {
-  print("Received exception: ``e.getMessage()``");
+  print(&quot;Received exception: ``e.getMessage()``&quot;);
   e.printStackTrace();
 });</code></pre>
 </div>
@@ -1756,13 +1755,13 @@ request.exceptionHandler((Throwable e) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value request = client.post("some-uri", (HttpClientResponse response) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value request = client.post(&quot;some-uri&quot;, (HttpClientResponse response) {
   if (response.statusCode() == 200) {
-    print("Everything fine");
+    print(&quot;Everything fine&quot;);
     return;
   };
   if (response.statusCode() == 500) {
-    print("Unexpected behavior on the server side");
+    print(&quot;Unexpected behavior on the server side&quot;);
     return;
   };
 });
@@ -1791,9 +1790,9 @@ not provide a handler when the request is created and set it later on the reques
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value request = client.post("some-uri");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value request = client.post(&quot;some-uri&quot;);
 request.handler((HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -1809,7 +1808,7 @@ you can pump to it from any <code><a href="../../ceylondoc/vertx-core//streams/R
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.streams { pump_ = pump }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.streams { pump_ = pump }
 
 ...
 
@@ -1832,14 +1831,14 @@ of frames to be sent and received.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
 
 ...
 
 
 value frameType = 40;
 value frameStatus = 10;
-value payload = buffer.buffer("some data");
+value payload = buffer.buffer(&quot;some data&quot;);
 
 // Sending a frame to the server
 request.writeCustomFrame(frameType, frameStatus, payload);</code></pre>
@@ -1857,7 +1856,7 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.reset();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">request.reset();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1865,7 +1864,7 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.reset(8);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">request.reset(8);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1877,7 +1876,7 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">Code not translatable : class io.vertx.codetrans.lang.ceylon.CeylonWriter has not implemented renderInstanceOf</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">Code not translatable : class io.vertx.codetrans.lang.ceylon.CeylonWriter has not implemented renderInstanceOf</code></pre>
 </div>
 </div>
 </div>
@@ -1894,12 +1893,12 @@ and <code><a href="../../ceylondoc/vertx-core//http/HttpClientResponse.type.html
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.getNow("some-uri", (HttpClientResponse response) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">client.getNow(&quot;some-uri&quot;, (HttpClientResponse response) {
   // the status code - e.g. 200 or 404
-  print("Status code is ``response.statusCode()``");
+  print(&quot;Status code is ``response.statusCode()``&quot;);
 
-  // the status message e.g. "OK" or "Not Found".
-  print("Status message is ``response.statusMessage()``");
+  // the status message e.g. &quot;OK&quot; or &quot;Not Found&quot;.
+  print(&quot;Status message is ``response.statusMessage()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -1920,8 +1919,8 @@ you can pump it to any <code><a href="../../ceylondoc/vertx-core//streams/WriteS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value contentType = response.headers().get("content-type");
-value contentLength = response.headers().get("content-lengh");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value contentType = response.headers().get(&quot;content-type&quot;);
+value contentLength = response.headers().get(&quot;content-lengh&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1947,10 +1946,10 @@ a <code><a href="../../ceylondoc/vertx-core//buffer/Buffer.type.html">Buffer</a>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.getNow("some-uri", (HttpClientResponse response) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">client.getNow(&quot;some-uri&quot;, (HttpClientResponse response) {
 
   response.handler((Buffer buffer) {
-    print("Received a part of the response body: ``buffer``");
+    print(&quot;Received a part of the response body: ``buffer``&quot;);
   });
 });</code></pre>
 </div>
@@ -1961,25 +1960,25 @@ either aggregate it yourself:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
 
 ...
 
 
-client.getNow("some-uri", (HttpClientResponse response) {
+client.getNow(&quot;some-uri&quot;, (HttpClientResponse response) {
 
   // Create an empty buffer
   value totalBuffer = buffer.buffer();
 
   response.handler((Buffer buffer) {
-    print("Received a part of the response body: ``buffer.length()``");
+    print(&quot;Received a part of the response body: ``buffer.length()``&quot;);
 
     totalBuffer.appendBuffer(buffer);
   });
 
   response.endHandler(() {
     // Now all the body has been read
-    print("Total response body length is ``totalBuffer.length()``");
+    print(&quot;Total response body length is ``totalBuffer.length()``&quot;);
   });
 });</code></pre>
 </div>
@@ -1990,11 +1989,11 @@ is called with the entire body when the response has been fully read:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.getNow("some-uri", (HttpClientResponse response) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">client.getNow(&quot;some-uri&quot;, (HttpClientResponse response) {
 
   response.bodyHandler((Buffer totalBuffer) {
     // Now all the body has been read
-    print("Total response body length is ``totalBuffer.length()``");
+    print(&quot;Total response body length is ``totalBuffer.length()``&quot;);
   });
 });</code></pre>
 </div>
@@ -2028,8 +2027,8 @@ and the response handler is passed the redirected response instead of the origin
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.get("some-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+<pre class="CodeRay highlight"><code data-lang="ceylon">client.get(&quot;some-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 }).setFollowRedirects(true).end();</code></pre>
 </div>
 </div>
@@ -2063,12 +2062,12 @@ following redirections caches the request body
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value client = vertx.createHttpClient(HttpClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value client = vertx.createHttpClient(HttpClientOptions {
   maxRedirects = 32;
 });
 
-client.get("some-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+client.get(&quot;some-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 }).setFollowRedirects(true).end();</code></pre>
 </div>
 </div>
@@ -2080,7 +2079,7 @@ client.get("some-uri", (HttpClientResponse response) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { future }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core { future }
 
 ...
 
@@ -2088,10 +2087,10 @@ client.get("some-uri", (HttpClientResponse response) {
 client.redirectHandler((HttpClientResponse response) {
 
   // Only follow 301 code
-  if (response.statusCode() == 301 &amp;&amp; response.getHeader("Location") != null) {
+  if (response.statusCode() == 301 &amp;&amp; response.getHeader(&quot;Location&quot;) != null) {
 
     // Compute the redirect URI
-    value absoluteURI = this.resolveURI(response.request().absoluteURI(), response.getHeader("Location"));
+    value absoluteURI = this.resolveURI(response.request().absoluteURI(), response.getHeader(&quot;Location&quot;));
 
     // Create a new ready to use request that the client will use
     return future.succeededFuture(client.getAbs(absoluteURI));
@@ -2181,16 +2180,16 @@ the rest of the request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value request = client.put("some-uri", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value request = client.put(&quot;some-uri&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 });
 
-request.putHeader("Expect", "100-Continue");
+request.putHeader(&quot;Expect&quot;, &quot;100-Continue&quot;);
 
 request.continueHandler(() {
   // OK to send rest of body
-  request.write("Some data");
-  request.write("Some more data");
+  request.write(&quot;Some data&quot;);
+  request.write(&quot;Some more data&quot;);
   request.end();
 });</code></pre>
 </div>
@@ -2209,8 +2208,8 @@ to have the client continue sending the body:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">httpServer.requestHandler((HttpServerRequest request) {
-  if (request.getHeader("Expect").equalsIgnoreCase("100-Continue")) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">httpServer.requestHandler((HttpServerRequest request) {
+  if (request.getHeader(&quot;Expect&quot;).equalsIgnoreCase(&quot;100-Continue&quot;)) {
 
     // Send a 100 continue response
     request.response().writeContinue();
@@ -2234,8 +2233,8 @@ cannot be a logical protocol constraint):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">httpServer.requestHandler((HttpServerRequest request) {
-  if (request.getHeader("Expect").equalsIgnoreCase("100-Continue")) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">httpServer.requestHandler((HttpServerRequest request) {
+  if (request.getHeader(&quot;Expect&quot;).equalsIgnoreCase(&quot;100-Continue&quot;)) {
 
     //
     value rejectAndClose = true;
@@ -2243,7 +2242,7 @@ cannot be a logical protocol constraint):</p>
 
       // Reject with a failure code and close the connection
       // this is probably best with persistent connection
-      request.response().setStatusCode(405).putHeader("Connection", "close").end();
+      request.response().setStatusCode(405).putHeader(&quot;Connection&quot;, &quot;close&quot;).end();
     } else {
 
       // Reject with a failure code and ignore the body
@@ -2265,7 +2264,7 @@ cannot be a logical protocol constraint):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value request = client.get("/index.html", (HttpClientResponse response) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value request = client.get(&quot;/index.html&quot;, (HttpClientResponse response) {
   // Process index.html response
 });
 
@@ -2273,11 +2272,11 @@ cannot be a logical protocol constraint):</p>
 request.pushHandler((HttpClientRequest pushedRequest) {
 
   // A resource is pushed for this request
-  print("Server pushed ``pushedRequest.path()``");
+  print(&quot;Server pushed ``pushedRequest.path()``&quot;);
 
   // Set an handler for the response
   pushedRequest.handler((HttpClientResponse pushedResponse) {
-    print("The response for the pushed request");
+    print(&quot;The response for the pushed request&quot;);
   });
 });
 
@@ -2290,8 +2289,8 @@ request.end();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.pushHandler((HttpClientRequest pushedRequest) {
-  if (pushedRequest.path() == "/main.js") {
+<pre class="CodeRay highlight"><code data-lang="ceylon">request.pushHandler((HttpClientRequest pushedRequest) {
+  if (pushedRequest.path() == &quot;/main.js&quot;) {
     pushedRequest.reset();
   } else {
     // Handle it
@@ -2316,9 +2315,9 @@ frame arrives. Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">response.customFrameHandler((HttpFrame frame) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">response.customFrameHandler((HttpFrame frame) {
 
-  print("Received a frame type=``frame.type()`` payload``frame.payload().toString()``");
+  print(&quot;Received a frame type=``frame.type()`` payload``frame.payload().toString()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -2439,7 +2438,7 @@ can be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value clientOptions = HttpClientOptions {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value clientOptions = HttpClientOptions {
   http2MultiplexingLimit = 10;
   http2MaxPoolSize = 3;
 };
@@ -2483,7 +2482,7 @@ the other operations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value connection = request.connection();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value connection = request.connection();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2491,10 +2490,10 @@ the other operations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value server = vertx.createHttpServer(http2Options);
+<pre class="CodeRay highlight"><code data-lang="ceylon">value server = vertx.createHttpServer(http2Options);
 
 server.connectionHandler((HttpConnection connection) {
-  print("A client connected");
+  print(&quot;A client connected&quot;);
 });</code></pre>
 </div>
 </div>
@@ -2506,7 +2505,7 @@ server.connectionHandler((HttpConnection connection) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value connection = request.connection();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value connection = request.connection();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2514,8 +2513,8 @@ server.connectionHandler((HttpConnection connection) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">request.connectionHandler((HttpConnection connection) {
-  print("Connected to the server");
+<pre class="CodeRay highlight"><code data-lang="ceylon">request.connectionHandler((HttpConnection connection) {
+  print(&quot;Connected to the server&quot;);
 });</code></pre>
 </div>
 </div>
@@ -2538,7 +2537,7 @@ are configured by <code><a href="../../ceylondoc/vertx-core//http/HttpClientOpti
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.updateSettings(Http2Settings {
+<pre class="CodeRay highlight"><code data-lang="ceylon">connection.updateSettings(Http2Settings {
   maxConcurrentStreams = 100;
 });</code></pre>
 </div>
@@ -2549,11 +2548,11 @@ to be notified of the acknowledgment:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.updateSettings(Http2Settings {
+<pre class="CodeRay highlight"><code data-lang="ceylon">connection.updateSettings(Http2Settings {
   maxConcurrentStreams = 100;
 }, (Throwable? ar) {
   if (!exists ar) {
-    print("The settings update has been acknowledged ");
+    print(&quot;The settings update has been acknowledged &quot;);
   };
 });</code></pre>
 </div>
@@ -2564,8 +2563,8 @@ when the new remote settings are received:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.remoteSettingsHandler((Http2Settings settings) {
-  print("Received new settings");
+<pre class="CodeRay highlight"><code data-lang="ceylon">connection.remoteSettingsHandler((Http2Settings settings) {
+  print(&quot;Received new settings&quot;);
 });</code></pre>
 </div>
 </div>
@@ -2591,7 +2590,7 @@ endpoint:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
 
 ...
 
@@ -2600,7 +2599,7 @@ for (i in 0:8) {
   data.appendByte(i);
 };
 connection.ping(data, (Buffer|Throwable pong) {
-  print("Remote side replied");
+  print(&quot;Remote side replied&quot;);
 });</code></pre>
 </div>
 </div>
@@ -2610,8 +2609,8 @@ an handler can be set to be notified for each ping received:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.pingHandler((Buffer ping) {
-  print("Got pinged by remote side");
+<pre class="CodeRay highlight"><code data-lang="ceylon">connection.pingHandler((Buffer ping) {
+  print(&quot;Got pinged by remote side&quot;);
 });</code></pre>
 </div>
 </div>
@@ -2642,7 +2641,7 @@ waits some time (30 seconds by default) until all current streams closed and clo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.shutdown();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">connection.shutdown();</code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -2661,7 +2660,7 @@ close:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.goAway(0);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">connection.goAway(0);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2669,8 +2668,8 @@ close:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.goAwayHandler((GoAway goAway) {
-  print("Received a go away frame");
+<pre class="CodeRay highlight"><code data-lang="ceylon">connection.goAwayHandler((GoAway goAway) {
+  print(&quot;Received a go away frame&quot;);
 });</code></pre>
 </div>
 </div>
@@ -2685,7 +2684,7 @@ have been closed and the connection can be closed:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">connection.goAway(0);
+<pre class="CodeRay highlight"><code data-lang="ceylon">connection.goAway(0);
 connection.shutdownHandler(() {
 
   // All streams are closed, close the connection
@@ -2770,8 +2769,8 @@ round-robin strategy.</p>
 <div class="listingblock">
 <div class="title">io.vertx.examples.http.sharing.HttpServerVerticle</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
-  request.response().end("Hello from server ``this``");
+<pre class="CodeRay highlight"><code data-lang="ceylon">vertx.createHttpServer().requestHandler((HttpServerRequest request) {
+  request.response().end(&quot;Hello from server ``this``&quot;);
 }).listen(8080);</code></pre>
 </div>
 </div>
@@ -2788,10 +2787,10 @@ receiving a request it calls the server handlers following a round robin strateg
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">vertx.setPeriodic(100, (Integer l) {
-  vertx.createHttpClient().getNow(8080, "localhost", "/", (HttpClientResponse resp) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">vertx.setPeriodic(100, (Integer l) {
+  vertx.createHttpClient().getNow(8080, &quot;localhost&quot;, &quot;/&quot;, (HttpClientResponse resp) {
     resp.bodyHandler((Buffer body) {
-      print(body.toString("ISO-8859-1"));
+      print(body.toString(&quot;ISO-8859-1&quot;));
     });
   });
 });</code></pre>
@@ -2802,7 +2801,7 @@ receiving a request it calls the server handlers following a round robin strateg
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>Hello from i.v.e.h.s.HttpServerVerticle@1
+<pre class="CodeRay highlight"><code>Hello from i.v.e.h.s.HttpServerVerticle@1
 Hello from i.v.e.h.s.HttpServerVerticle@2
 Hello from i.v.e.h.s.HttpServerVerticle@1
 Hello from i.v.e.h.s.HttpServerVerticle@2
@@ -2830,13 +2829,13 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.getNow(RequestOptions {
-  host = "localhost";
+<pre class="CodeRay highlight"><code data-lang="ceylon">client.getNow(RequestOptions {
+  host = &quot;localhost&quot;;
   port = 8080;
-  uRI = "/";
+  uRI = &quot;/&quot;;
   ssl = true;
 }, (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -2897,8 +2896,8 @@ on the server instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.websocketHandler((ServerWebSocket websocket) {
-  print("Connected!");
+<pre class="CodeRay highlight"><code data-lang="ceylon">server.websocketHandler((ServerWebSocket websocket) {
+  print(&quot;Connected!&quot;);
 });</code></pre>
 </div>
 </div>
@@ -2907,8 +2906,8 @@ on the server instance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.websocketHandler((ServerWebSocket websocket) {
-  if (websocket.path() == "/myapi") {
+<pre class="CodeRay highlight"><code data-lang="ceylon">server.websocketHandler((ServerWebSocket websocket) {
+  if (websocket.path() == &quot;/myapi&quot;) {
     websocket.reject();
   } else {
     // Do something
@@ -2925,8 +2924,8 @@ call <code><a href="../../ceylondoc/vertx-core//http/HttpServerRequest.type.html
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">server.requestHandler((HttpServerRequest request) {
-  if (request.path() == "/myapi") {
+<pre class="CodeRay highlight"><code data-lang="ceylon">server.requestHandler((HttpServerRequest request) {
+  if (request.path() == &quot;/myapi&quot;) {
 
     value websocket = request.upgrade();
     // Do something
@@ -2962,8 +2961,8 @@ providing a handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">client.websocket("/some-uri", (WebSocket websocket) {
-  print("Connected!");
+<pre class="CodeRay highlight"><code data-lang="ceylon">client.websocket(&quot;/some-uri&quot;, (WebSocket websocket) {
+  print(&quot;Connected!&quot;);
 });</code></pre>
 </div>
 </div>
@@ -2977,7 +2976,7 @@ providing a handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
 
 ...
 
@@ -2986,7 +2985,7 @@ value buffer = buffer_.buffer().appendInt(123).appendFloat(1.23);
 websocket.writeBinaryMessage(buffer);
 
 // Write a simple text message
-value message = "hello";
+value message = &quot;hello&quot;;
 websocket.writeTextMessage(message);</code></pre>
 </div>
 </div>
@@ -3017,7 +3016,7 @@ to the WebSocket using <code><a href="../../ceylondoc/vertx-core//http/WebSocket
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.http { webSocketFrame }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.http { webSocketFrame }
 
 ...
 
@@ -3043,18 +3042,18 @@ and <code><a href="../../ceylondoc/vertx-core//http/WebSocket.type.html#writeFin
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer }
 
 ...
 
 
 // Send a websocket messages consisting of a single final text frame:
 
-websocket.writeFinalTextFrame("Geronimo!");
+websocket.writeFinalTextFrame(&quot;Geronimo!&quot;);
 
 // Send a websocket messages consisting of a single final binary frame:
 
-value buff = buffer.buffer().appendInt(12).appendString("foo");
+value buff = buffer.buffer().appendInt(12).appendString(&quot;foo&quot;);
 
 websocket.writeFinalBinaryFrame(buff);</code></pre>
 </div>
@@ -3071,8 +3070,8 @@ for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">websocket.frameHandler((WebSocketFrame frame) {
-  print("Received a frame of size!");
+<pre class="CodeRay highlight"><code data-lang="ceylon">websocket.frameHandler((WebSocketFrame frame) {
+  print(&quot;Received a frame of size!&quot;);
 });</code></pre>
 </div>
 </div>
@@ -3114,18 +3113,18 @@ HTTP/1.1 only.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.net { http }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.net { http }
 
 ...
 
 
 value options = HttpClientOptions {
   proxyOptions = ProxyOptions {
-    type = "HTTP";
-    host = "localhost";
+    type = &quot;HTTP&quot;;
+    host = &quot;localhost&quot;;
     port = 3128;
-    username = "username";
-    password = "secret";
+    username = &quot;username&quot;;
+    password = &quot;secret&quot;;
   };
 };
 value client = vertx.createHttpClient(options);</code></pre>
@@ -3144,18 +3143,18 @@ the CONNECT method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.net { socks5 }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.net { socks5 }
 
 ...
 
 
 value options = HttpClientOptions {
   proxyOptions = ProxyOptions {
-    type = "SOCKS5";
-    host = "localhost";
+    type = &quot;SOCKS5&quot;;
+    host = &quot;localhost&quot;;
     port = 1080;
-    username = "username";
-    password = "secret";
+    username = &quot;username&quot;;
+    password = &quot;secret&quot;;
   };
 };
 value client = vertx.createHttpClient(options);</code></pre>
@@ -3173,19 +3172,19 @@ that, which isn&#8217;t available in non-proxy getAbs requests.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.net { http }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.net { http }
 
 ...
 
 
 value options = HttpClientOptions {
   proxyOptions = ProxyOptions {
-    type = "HTTP";
+    type = &quot;HTTP&quot;;
   };
 };
 value client = vertx.createHttpClient(options);
-client.getAbs("ftp://ftp.gnu.org/gnu/", (HttpClientResponse response) {
-  print("Received response with status code ``response.statusCode()``");
+client.getAbs(&quot;ftp://ftp.gnu.org/gnu/&quot;, (HttpClientResponse response) {
+  print(&quot;Received response with status code ``response.statusCode()``&quot;);
 });</code></pre>
 </div>
 </div>

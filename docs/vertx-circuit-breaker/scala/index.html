@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -173,11 +172,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-circuit-breaker-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-circuit-breaker-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -189,7 +188,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-circuit-breaker-scala_2.12:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-circuit-breaker-scala_2.12:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -215,7 +214,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, CircuitBreakerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var breaker = CircuitBreaker.create(&quot;my-circuit-breaker&quot;, vertx, CircuitBreakerOptions()
   .setMaxFailures(5)
   .setTimeout(2000)
   .setFallbackOnFailure(true)
@@ -228,8 +227,8 @@ breaker.execute((future: io.vertx.scala.core.Future&lt;java.lang.Object&gt;) =&g
   // if this future is marked as failed, the breaker increased the
   // number of failures
 }).setHandlerFuture().onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -240,15 +239,15 @@ output of a REST endpoint invocation:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, CircuitBreakerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var breaker = CircuitBreaker.create(&quot;my-circuit-breaker&quot;, vertx, CircuitBreakerOptions()
   .setMaxFailures(5)
   .setTimeout(2000)
 )
 
 breaker.execute((future: io.vertx.scala.core.Future&lt;java.lang.String&gt;) =&gt; {
-  vertx.createHttpClient().getNow(8080, "localhost", "/", (response: io.vertx.scala.core.http.HttpClientResponse) =&gt; {
+  vertx.createHttpClient().getNow(8080, &quot;localhost&quot;, &quot;/&quot;, (response: io.vertx.scala.core.http.HttpClientResponse) =&gt; {
     if (response.statusCode() != 200) {
-      future.fail("HTTP error")
+      future.fail(&quot;HTTP error&quot;)
     } else {
       response.exceptionHandler(future.fail _).bodyHandler((buffer: io.vertx.scala.core.buffer.Buffer) =&gt; {
         future.complete(buffer.toString())
@@ -256,8 +255,8 @@ breaker.execute((future: io.vertx.scala.core.Future&lt;java.lang.String&gt;) =&g
     }
   })
 }).setHandlerFuture().onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -279,15 +278,15 @@ breaker.execute((future: io.vertx.scala.core.Future&lt;java.lang.String&gt;) =&g
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, CircuitBreakerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var breaker = CircuitBreaker.create(&quot;my-circuit-breaker&quot;, vertx, CircuitBreakerOptions()
   .setMaxFailures(5)
   .setTimeout(2000)
 )
 
 breaker.executeWithFallback((future: io.vertx.scala.core.Future&lt;java.lang.String&gt;) =&gt; {
-  vertx.createHttpClient().getNow(8080, "localhost", "/", (response: io.vertx.scala.core.http.HttpClientResponse) =&gt; {
+  vertx.createHttpClient().getNow(8080, &quot;localhost&quot;, &quot;/&quot;, (response: io.vertx.scala.core.http.HttpClientResponse) =&gt; {
     if (response.statusCode() != 200) {
-      future.fail("HTTP error")
+      future.fail(&quot;HTTP error&quot;)
     } else {
       response.exceptionHandler(future.fail _).bodyHandler((buffer: io.vertx.scala.core.buffer.Buffer) =&gt; {
         future.complete(buffer.toString())
@@ -296,10 +295,10 @@ breaker.executeWithFallback((future: io.vertx.scala.core.Future&lt;java.lang.Str
   })
 }, (v: java.lang.Throwable) =&gt; {
   // Executed when the circuit is opened
-  "Hello"
+  &quot;Hello&quot;
 }).setHandlerFuture().onComplete{
-  case Success(result) =&gt; println("Success")
-  case Failure(cause) =&gt; println("Failure")
+  case Success(result) =&gt; println(&quot;Success&quot;)
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -314,18 +313,18 @@ set, the result is using the output of the fallback function. The fallback funct
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, CircuitBreakerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var breaker = CircuitBreaker.create(&quot;my-circuit-breaker&quot;, vertx, CircuitBreakerOptions()
   .setMaxFailures(5)
   .setTimeout(2000)
 ).fallback((v: java.lang.Throwable) =&gt; {
   // Executed when the circuit is opened.
-  "hello"
+  &quot;hello&quot;
 })
 
 breaker.execute((future: io.vertx.scala.core.Future&lt;java.lang.Object&gt;) =&gt; {
-  vertx.createHttpClient().getNow(8080, "localhost", "/", (response: io.vertx.scala.core.http.HttpClientResponse) =&gt; {
+  vertx.createHttpClient().getNow(8080, &quot;localhost&quot;, &quot;/&quot;, (response: io.vertx.scala.core.http.HttpClientResponse) =&gt; {
     if (response.statusCode() != 200) {
-      future.fail("HTTP error")
+      future.fail(&quot;HTTP error&quot;)
     } else {
       response.exceptionHandler(future.fail _).bodyHandler((buffer: io.vertx.scala.core.buffer.Buffer) =&gt; {
         future.complete(buffer.toString())
@@ -352,19 +351,19 @@ retries left are skipped. Retries are only supported when the circuit is closed.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, CircuitBreakerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var breaker = CircuitBreaker.create(&quot;my-circuit-breaker&quot;, vertx, CircuitBreakerOptions()
   .setMaxFailures(5)
   .setTimeout(2000)
 ).openHandler((v: java.lang.Void) =&gt; {
-  println("Circuit opened")
+  println(&quot;Circuit opened&quot;)
 }).closeHandler((v: java.lang.Void) =&gt; {
-  println("Circuit closed")
+  println(&quot;Circuit closed&quot;)
 })
 
 breaker.execute((future: io.vertx.scala.core.Future&lt;java.lang.Object&gt;) =&gt; {
-  vertx.createHttpClient().getNow(8080, "localhost", "/", (response: io.vertx.scala.core.http.HttpClientResponse) =&gt; {
+  vertx.createHttpClient().getNow(8080, &quot;localhost&quot;, &quot;/&quot;, (response: io.vertx.scala.core.http.HttpClientResponse) =&gt; {
     if (response.statusCode() != 200) {
-      future.fail("HTTP error")
+      future.fail(&quot;HTTP error&quot;)
     } else {
       // Do something with the response
       future.complete()
@@ -434,14 +433,14 @@ a SSE stream sending the metrics. This stream is provided by the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Create the circuit breaker as usual.
-var breaker = CircuitBreaker.create("my-circuit-breaker", vertx)
-var breaker2 = CircuitBreaker.create("my-second-circuit-breaker", vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">// Create the circuit breaker as usual.
+var breaker = CircuitBreaker.create(&quot;my-circuit-breaker&quot;, vertx)
+var breaker2 = CircuitBreaker.create(&quot;my-second-circuit-breaker&quot;, vertx)
 
 // Create a Vert.x Web router
 var router = Router.router(vertx)
 // Register the metric handler
-router.get("/hystrix-metrics").handler(HystrixMetricHandler.create(vertx))
+router.get(&quot;/hystrix-metrics&quot;).handler(HystrixMetricHandler.create(vertx))
 
 // Create the HTTP server using the router to dispatch the requests
 vertx.createHttpServer().requestHandler(router.accept _).listen(8080)</code></pre>

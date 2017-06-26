@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -288,11 +287,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-&lt;groupId&gt;io.vertx&lt;/groupId&gt;
-&lt;artifactId&gt;vertx-service-discovery&lt;/artifactId&gt;
-&lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+<span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+<span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery<span class="tag">&lt;/artifactId&gt;</span>
+<span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -304,7 +303,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -421,17 +420,17 @@ instance to use the discovery infrastructure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ServiceDiscovery = require("vertx-service-discovery-js/service_discovery");
-// Use default configuration
-var discovery = ServiceDiscovery.create(vertx);
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> ServiceDiscovery = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/service_discovery</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">// Use default configuration</span>
+<span class="keyword">var</span> discovery = ServiceDiscovery.create(vertx);
 
-// Customize the configuration
+<span class="comment">// Customize the configuration</span>
 discovery = ServiceDiscovery.create(vertx, {
-  "announceAddress" : "service-announce",
-  "name" : "my-name"
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">announceAddress</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">service-announce</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">my-name</span><span class="delimiter">&quot;</span></span>
 });
 
-// Do something...
+<span class="comment">// Do something...</span>
 
 discovery.close();</code></pre>
 </div>
@@ -474,36 +473,36 @@ from the service types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var HttpEndpoint = require("vertx-service-discovery-js/http_endpoint");
-// Manual record creation
-var record = {
-  "type" : "eventbus-service-proxy",
-  "location" : {
-    "endpoint" : "the-service-address"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> HttpEndpoint = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/http_endpoint</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">// Manual record creation</span>
+<span class="keyword">var</span> record = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-service-proxy</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">location</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">endpoint</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">the-service-address</span><span class="delimiter">&quot;</span></span>
   },
-  "name" : "my-service",
-  "metadata" : {
-    "some-label" : "some-value"
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">my-service</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">metadata</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">some-label</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
   }
 };
 
-discovery.publish(record, function (ar, ar_err) {
-  if (ar_err == null) {
-    // publication succeeded
-    var publishedRecord = ar;
-  } else {
-    // publication failed
+discovery.publish(record, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// publication succeeded</span>
+    <span class="keyword">var</span> publishedRecord = ar;
+  } <span class="keyword">else</span> {
+    <span class="comment">// publication failed</span>
   }
 });
 
-// Record creation from a type
-record = HttpEndpoint.createRecord("some-rest-api", "localhost", 8080, "/api");
-discovery.publish(record, function (ar, ar_err) {
-  if (ar_err == null) {
-    // publication succeeded
-    var publishedRecord = ar;
-  } else {
-    // publication failed
+<span class="comment">// Record creation from a type</span>
+record = HttpEndpoint.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-rest-api</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/api</span><span class="delimiter">&quot;</span></span>);
+discovery.publish(record, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// publication succeeded</span>
+    <span class="keyword">var</span> publishedRecord = ar;
+  } <span class="keyword">else</span> {
+    <span class="comment">// publication failed</span>
   }
 });</code></pre>
 </div>
@@ -521,11 +520,11 @@ discovery.publish(record, function (ar, ar_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">discovery.unpublish(record.registration, function (ar, ar_err) {
-  if (ar_err == null) {
-    // Ok
-  } else {
-    // cannot un-publish the service, may have already been removed, or the record is not published
+<pre class="CodeRay highlight"><code data-lang="js">discovery.unpublish(record.registration, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// Ok</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// cannot un-publish the service, may have already been removed, or the record is not published</span>
   }
 });</code></pre>
 </div>
@@ -579,86 +578,86 @@ records, you must return <em>true</em> regardless the record.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Get any record
-discovery.getRecord(function (r) {
-  true;
-}, function (ar, ar_err) {
-  if (ar_err == null) {
-    if ((ar !== null &amp;&amp; ar !== undefined)) {
-      // we have a record
-    } else {
-      // the lookup succeeded, but no matching service
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Get any record</span>
+discovery.getRecord(<span class="keyword">function</span> (r) {
+  <span class="predefined-constant">true</span>;
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">if</span> ((ar !== <span class="predefined-constant">null</span> &amp;&amp; ar !== <span class="predefined-constant">undefined</span>)) {
+      <span class="comment">// we have a record</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// the lookup succeeded, but no matching service</span>
     }
-  } else {
-    // lookup failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 });
 
-discovery.getRecord(null, function (ar, ar_err) {
-  if (ar_err == null) {
-    if ((ar !== null &amp;&amp; ar !== undefined)) {
-      // we have a record
-    } else {
-      // the lookup succeeded, but no matching service
+discovery.getRecord(<span class="predefined-constant">null</span>, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">if</span> ((ar !== <span class="predefined-constant">null</span> &amp;&amp; ar !== <span class="predefined-constant">undefined</span>)) {
+      <span class="comment">// we have a record</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// the lookup succeeded, but no matching service</span>
     }
-  } else {
-    // lookup failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 });
 
 
-// Get a record by name
-discovery.getRecord(function (r) {
-  r.name == "some-name";
-}, function (ar, ar_err) {
-  if (ar_err == null) {
-    if ((ar !== null &amp;&amp; ar !== undefined)) {
-      // we have a record
-    } else {
-      // the lookup succeeded, but no matching service
+<span class="comment">// Get a record by name</span>
+discovery.getRecord(<span class="keyword">function</span> (r) {
+  r.name == <span class="string"><span class="delimiter">&quot;</span><span class="content">some-name</span><span class="delimiter">&quot;</span></span>;
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">if</span> ((ar !== <span class="predefined-constant">null</span> &amp;&amp; ar !== <span class="predefined-constant">undefined</span>)) {
+      <span class="comment">// we have a record</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// the lookup succeeded, but no matching service</span>
     }
-  } else {
-    // lookup failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 });
 
 discovery.getRecord({
-  "name" : "some-service"
-}, function (ar, ar_err) {
-  if (ar_err == null) {
-    if ((ar !== null &amp;&amp; ar !== undefined)) {
-      // we have a record
-    } else {
-      // the lookup succeeded, but no matching service
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-service</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">if</span> ((ar !== <span class="predefined-constant">null</span> &amp;&amp; ar !== <span class="predefined-constant">undefined</span>)) {
+      <span class="comment">// we have a record</span>
+    } <span class="keyword">else</span> {
+      <span class="comment">// the lookup succeeded, but no matching service</span>
     }
-  } else {
-    // lookup failed
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 });
 
-// Get all records matching the filter
-discovery.getRecords(function (r) {
-  "some-value" == r.metadata.some-label;
-}, function (ar, ar_err) {
-  if (ar_err == null) {
-    var results = ar;
-    // If the list is not empty, we have matching record
-    // Else, the lookup succeeded, but no matching service
-  } else {
-    // lookup failed
+<span class="comment">// Get all records matching the filter</span>
+discovery.getRecords(<span class="keyword">function</span> (r) {
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span> == r.metadata.some-label;
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> results = ar;
+    <span class="comment">// If the list is not empty, we have matching record</span>
+    <span class="comment">// Else, the lookup succeeded, but no matching service</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 });
 
 
 discovery.getRecords({
-  "some-label" : "some-value"
-}, function (ar, ar_err) {
-  if (ar_err == null) {
-    var results = ar;
-    // If the list is not empty, we have matching record
-    // Else, the lookup succeeded, but no matching service
-  } else {
-    // lookup failed
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">some-label</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> results = ar;
+    <span class="comment">// If the list is not empty, we have matching record</span>
+    <span class="comment">// Else, the lookup succeeded, but no matching service</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// lookup failed</span>
   }
 });</code></pre>
 </div>
@@ -691,18 +690,18 @@ By default, record lookup does include only records with a <code>status</code> s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var HttpClient = require("vertx-js/http_client");
-var MessageConsumer = require("vertx-js/message_consumer");
-var reference1 = discovery.getReference(record1);
-var reference2 = discovery.getReference(record2);
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> HttpClient = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/http_client</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> MessageConsumer = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/message_consumer</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> reference1 = discovery.getReference(record1);
+<span class="keyword">var</span> reference2 = discovery.getReference(record2);
 
-// Then, gets the service object, the returned type depends on the service type:
-// For http endpoint:
-var client = reference1.getAs(HttpClient.class);
-// For message source
-var consumer = reference2.getAs(MessageConsumer.class);
+<span class="comment">// Then, gets the service object, the returned type depends on the service type:</span>
+<span class="comment">// For http endpoint:</span>
+<span class="keyword">var</span> client = reference1.getAs(HttpClient.<span class="reserved">class</span>);
+<span class="comment">// For message source</span>
+<span class="keyword">var</span> consumer = reference2.getAs(MessageConsumer.<span class="reserved">class</span>);
 
-// When done with the service
+<span class="comment">// When done with the service</span>
 reference1.release();
 reference2.release();</code></pre>
 </div>
@@ -720,16 +719,16 @@ configuration, some require configuration (as data sources):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var JDBCClient = require("vertx-jdbc-js/jdbc_client");
-var reference = discovery.getReferenceWithConfiguration(record, conf);
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> JDBCClient = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-jdbc-js/jdbc_client</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> reference = discovery.getReferenceWithConfiguration(record, conf);
 
-// Then, gets the service object, the returned type depends on the service type:
-// For http endpoint:
-var client = reference.getAs(JDBCClient.class);
+<span class="comment">// Then, gets the service object, the returned type depends on the service type:</span>
+<span class="comment">// For http endpoint:</span>
+<span class="keyword">var</span> client = reference.getAs(JDBCClient.<span class="reserved">class</span>);
 
-// Do something with the client...
+<span class="comment">// Do something with the client...</span>
 
-// When done with the service
+<span class="comment">// When done with the service</span>
 reference.release();</code></pre>
 </div>
 </div>
@@ -815,15 +814,15 @@ objects are <code><a href="../../jsdoc/module-vertx-js_http_client-HttpClient.ht
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var HttpEndpoint = require("vertx-service-discovery-js/http_endpoint");
-var record1 = HttpEndpoint.createRecord("some-http-service", "localhost", 8433, "/api");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> HttpEndpoint = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/http_endpoint</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> record1 = HttpEndpoint.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">8433</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/api</span><span class="delimiter">&quot;</span></span>);
 
-discovery.publish(record1, function (ar, ar_err) {
-  // ...
+discovery.publish(record1, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="comment">// ...</span>
 });
 
-var record2 = HttpEndpoint.createRecord("some-other-name", true, "localhost", 8433, "/api", {
-  "some-metadata" : "some value"
+<span class="keyword">var</span> record2 = HttpEndpoint.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-other-name</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">8433</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/api</span><span class="delimiter">&quot;</span></span>, {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">some-metadata</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some value</span><span class="delimiter">&quot;</span></span>
 });</code></pre>
 </div>
 </div>
@@ -840,23 +839,23 @@ publication must be done by another entity having this info. Generally it&#8217;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var HttpClient = require("vertx-js/http_client");
-// Get the record
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> HttpClient = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/http_client</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">// Get the record</span>
 discovery.getRecord({
-  "name" : "some-http-service"
-}, function (ar, ar_err) {
-  if (ar_err == null &amp;&amp; (ar !== null &amp;&amp; ar !== undefined)) {
-    // Retrieve the service reference
-    var reference = discovery.getReference(ar);
-    // Retrieve the service object
-    var client = reference.getAs(HttpClient.class);
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span> &amp;&amp; (ar !== <span class="predefined-constant">null</span> &amp;&amp; ar !== <span class="predefined-constant">undefined</span>)) {
+    <span class="comment">// Retrieve the service reference</span>
+    <span class="keyword">var</span> reference = discovery.getReference(ar);
+    <span class="comment">// Retrieve the service object</span>
+    <span class="keyword">var</span> client = reference.getAs(HttpClient.<span class="reserved">class</span>);
 
-    // You need to path the complete path
-    client.getNow("/api/persons", function (response) {
+    <span class="comment">// You need to path the complete path</span>
+    client.getNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (response) {
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // Dont' forget to release the service
+      <span class="comment">// Dont' forget to release the service</span>
       reference.release();
 
     });
@@ -871,20 +870,20 @@ method to combine lookup and service retrieval in one call:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ServiceDiscovery = require("vertx-service-discovery-js/service_discovery");
-var HttpEndpoint = require("vertx-service-discovery-js/http_endpoint");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> ServiceDiscovery = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/service_discovery</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> HttpEndpoint = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/http_endpoint</span><span class="delimiter">&quot;</span></span>);
 HttpEndpoint.getClient(discovery, {
-  "name" : "some-http-service"
-}, function (ar, ar_err) {
-  if (ar_err == null) {
-    var client = ar;
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> client = ar;
 
-    // You need to path the complete path
-    client.getNow("/api/persons", function (response) {
+    <span class="comment">// You need to path the complete path</span>
+    client.getNow(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (response) {
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // Dont' forget to release the service
+      <span class="comment">// Dont' forget to release the service</span>
       ServiceDiscovery.releaseServiceObject(discovery, client);
 
     });
@@ -903,23 +902,23 @@ tends to be easier to use. You can retrieve a <code><a href="../../jsdoc/module-
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var WebClient = require("vertx-web-client-js/web_client");
-// Get the record
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> WebClient = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-web-client-js/web_client</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">// Get the record</span>
 discovery.getRecord({
-  "name" : "some-http-service"
-}, function (ar, ar_err) {
-  if (ar_err == null &amp;&amp; (ar !== null &amp;&amp; ar !== undefined)) {
-    // Retrieve the service reference
-    var reference = discovery.getReference(ar);
-    // Retrieve the service object
-    var client = reference.getAs(WebClient.class);
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span> &amp;&amp; (ar !== <span class="predefined-constant">null</span> &amp;&amp; ar !== <span class="predefined-constant">undefined</span>)) {
+    <span class="comment">// Retrieve the service reference</span>
+    <span class="keyword">var</span> reference = discovery.getReference(ar);
+    <span class="comment">// Retrieve the service object</span>
+    <span class="keyword">var</span> client = reference.getAs(WebClient.<span class="reserved">class</span>);
 
-    // You need to path the complete path
-    client.get("/api/persons").send(function (response, response_err) {
+    <span class="comment">// You need to path the complete path</span>
+    client.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>).send(<span class="keyword">function</span> (response, response_err) {
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // Dont' forget to release the service
+      <span class="comment">// Dont' forget to release the service</span>
       reference.release();
 
     });
@@ -932,20 +931,20 @@ discovery.getRecord({
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ServiceDiscovery = require("vertx-service-discovery-js/service_discovery");
-var HttpEndpoint = require("vertx-service-discovery-js/http_endpoint");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> ServiceDiscovery = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/service_discovery</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> HttpEndpoint = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/http_endpoint</span><span class="delimiter">&quot;</span></span>);
 HttpEndpoint.getWebClient(discovery, {
-  "name" : "some-http-service"
-}, function (ar, ar_err) {
-  if (ar_err == null) {
-    var client = ar;
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> client = ar;
 
-    // You need to path the complete path
-    client.get("/api/persons").send(function (response, response_err) {
+    <span class="comment">// You need to path the complete path</span>
+    client.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>).send(<span class="keyword">function</span> (response, response_err) {
 
-      // ...
+      <span class="comment">// ...</span>
 
-      // Dont' forget to release the service
+      <span class="comment">// Dont' forget to release the service</span>
       ServiceDiscovery.releaseServiceObject(discovery, client);
 
     });
@@ -972,13 +971,13 @@ methods from <code><a href="../../jsdoc/module-vertx-service-discovery-js_event_
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var EventBusService = require("vertx-service-discovery-js/event_bus_service");
-var record = EventBusService.createRecord("some-eventbus-service", "address", "examples.MyService", {
-  "some-metadata" : "some value"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> EventBusService = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/event_bus_service</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> record = EventBusService.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-eventbus-service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">address</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">examples.MyService</span><span class="delimiter">&quot;</span></span>, {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">some-metadata</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some value</span><span class="delimiter">&quot;</span></span>
 });
 
-discovery.publish(record, function (ar, ar_err) {
-  // ...
+discovery.publish(record, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="comment">// ...</span>
 });</code></pre>
 </div>
 </div>
@@ -994,17 +993,17 @@ discovery.publish(record, function (ar, ar_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ServiceDiscovery = require("vertx-service-discovery-js/service_discovery");
-var EventBusService = require("vertx-service-discovery-js/event_bus_service");
-var MyService = require("org-acme-js/MyService");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> ServiceDiscovery = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/service_discovery</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> EventBusService = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/event_bus_service</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> MyService = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">org-acme-js/MyService</span><span class="delimiter">&quot;</span></span>);
 EventBusService.getServiceProxyWithJsonFilter(discovery,
-{ "service.interface" : "org.acme.MyService"},
+{ <span class="key"><span class="delimiter">&quot;</span><span class="content">service.interface</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">org.acme.MyService</span><span class="delimiter">&quot;</span></span>},
 MyService,
-function (ar, ar_err) {
-if (ar_err == null) {
-var service = ar;
+<span class="keyword">function</span> (ar, ar_err) {
+<span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+<span class="keyword">var</span> service = ar;
 
-// Dont' forget to release the service
+<span class="comment">// Dont' forget to release the service</span>
 ServiceDiscovery.releaseServiceObject(discovery, service);
 }
 });</code></pre>
@@ -1038,14 +1037,14 @@ ServiceDiscovery.releaseServiceObject(discovery, service);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var MessageSource = require("vertx-service-discovery-js/message_source");
-var record = MessageSource.createRecord("some-message-source-service", "some-address");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MessageSource = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/message_source</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> record = MessageSource.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-message-source-service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-address</span><span class="delimiter">&quot;</span></span>);
 
-discovery.publish(record, function (ar, ar_err) {
-  // ...
+discovery.publish(record, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="comment">// ...</span>
 });
 
-record = MessageSource.createRecord("some-other-message-source-service", "some-address", "examples.MyData");</code></pre>
+record = MessageSource.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-other-message-source-service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-address</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">examples.MyData</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1063,21 +1062,21 @@ record = MessageSource.createRecord("some-other-message-source-service", "some-a
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var MessageConsumer = require("vertx-js/message_consumer");
-// Get the record
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MessageConsumer = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/message_consumer</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">// Get the record</span>
 discovery.getRecord({
-  "name" : "some-message-source-service"
-}, function (ar, ar_err) {
-  if (ar_err == null &amp;&amp; (ar !== null &amp;&amp; ar !== undefined)) {
-    // Retrieve the service reference
-    var reference = discovery.getReference(ar);
-    // Retrieve the service object
-    var consumer = reference.getAs(MessageConsumer.class);
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-message-source-service</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span> &amp;&amp; (ar !== <span class="predefined-constant">null</span> &amp;&amp; ar !== <span class="predefined-constant">undefined</span>)) {
+    <span class="comment">// Retrieve the service reference</span>
+    <span class="keyword">var</span> reference = discovery.getReference(ar);
+    <span class="comment">// Retrieve the service object</span>
+    <span class="keyword">var</span> consumer = reference.getAs(MessageConsumer.<span class="reserved">class</span>);
 
-    // Attach a message handler on it
-    consumer.handler(function (message) {
-      // message handler
-      var payload = message.body();
+    <span class="comment">// Attach a message handler on it</span>
+    consumer.handler(<span class="keyword">function</span> (message) {
+      <span class="comment">// message handler</span>
+      <span class="keyword">var</span> payload = message.body();
     });
   }
 });</code></pre>
@@ -1088,19 +1087,19 @@ discovery.getRecord({
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var MessageSource = require("vertx-service-discovery-js/message_source");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MessageSource = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/message_source</span><span class="delimiter">&quot;</span></span>);
 MessageSource.getConsumer(discovery, {
-  "name" : "some-message-source-service"
-}, function (ar, ar_err) {
-  if (ar_err == null) {
-    var consumer = ar;
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-message-source-service</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> consumer = ar;
 
-    // Attach a message handler on it
-    consumer.handler(function (message) {
-      // message handler
-      var payload = message.body();
+    <span class="comment">// Attach a message handler on it</span>
+    consumer.handler(<span class="keyword">function</span> (message) {
+      <span class="comment">// message handler</span>
+      <span class="keyword">var</span> payload = message.body();
     });
-    // ...
+    <span class="comment">// ...</span>
   }
 });</code></pre>
 </div>
@@ -1130,15 +1129,15 @@ using a JDBC driver. The client of a JDBC data source service is a <code><a href
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var JDBCDataSource = require("vertx-service-discovery-js/jdbc_data_source");
-var record = JDBCDataSource.createRecord("some-data-source-service", {
-  "url" : "some jdbc url"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> JDBCDataSource = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/jdbc_data_source</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> record = JDBCDataSource.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>, {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">url</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some jdbc url</span><span class="delimiter">&quot;</span></span>
 }, {
-  "some-metadata" : "some-value"
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">some-metadata</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
 });
 
-discovery.publish(record, function (ar, ar_err) {
-  // ...
+discovery.publish(record, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="comment">// ...</span>
 });</code></pre>
 </div>
 </div>
@@ -1158,24 +1157,24 @@ the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var JDBCClient = require("vertx-jdbc-js/jdbc_client");
-// Get the record
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> JDBCClient = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-jdbc-js/jdbc_client</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">// Get the record</span>
 discovery.getRecord({
-  "name" : "some-data-source-service"
-}, function (ar, ar_err) {
-  if (ar_err == null &amp;&amp; (ar !== null &amp;&amp; ar !== undefined)) {
-    // Retrieve the service reference
-    var reference = discovery.getReferenceWithConfiguration(ar, {
-      "username" : "clement",
-      "password" : "*****"
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span> &amp;&amp; (ar !== <span class="predefined-constant">null</span> &amp;&amp; ar !== <span class="predefined-constant">undefined</span>)) {
+    <span class="comment">// Retrieve the service reference</span>
+    <span class="keyword">var</span> reference = discovery.getReferenceWithConfiguration(ar, {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>
     });
 
-    // Retrieve the service object
-    var client = reference.getAs(JDBCClient.class);
+    <span class="comment">// Retrieve the service object</span>
+    <span class="keyword">var</span> client = reference.getAs(JDBCClient.<span class="reserved">class</span>);
 
-    // ...
+    <span class="comment">// ...</span>
 
-    // when done
+    <span class="comment">// when done</span>
     reference.release();
   }
 });</code></pre>
@@ -1186,20 +1185,20 @@ discovery.getRecord({
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ServiceDiscovery = require("vertx-service-discovery-js/service_discovery");
-var JDBCDataSource = require("vertx-service-discovery-js/jdbc_data_source");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> ServiceDiscovery = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/service_discovery</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> JDBCDataSource = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/jdbc_data_source</span><span class="delimiter">&quot;</span></span>);
 JDBCDataSource.getJDBCClient(discovery, {
-  "name" : "some-data-source-service"
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>
 }, {
-  "username" : "clement",
-  "password" : "*****"
-}, function (ar, ar_err) {
-  if (ar_err == null) {
-    var client = ar;
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> client = ar;
 
-    // ...
+    <span class="comment">// ...</span>
 
-    // Dont' forget to release the service
+    <span class="comment">// Dont' forget to release the service</span>
     ServiceDiscovery.releaseServiceObject(discovery, client);
 
   }
@@ -1231,15 +1230,15 @@ The client of a Redis data source service is a <code><a href="../../jsdoc/module
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var RedisDataSource = require("vertx-service-discovery-js/redis_data_source");
-var record = RedisDataSource.createRecord("some-redis-data-source-service", {
-  "url" : "localhost"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> RedisDataSource = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/redis_data_source</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> record = RedisDataSource.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-redis-data-source-service</span><span class="delimiter">&quot;</span></span>, {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">url</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>
 }, {
-  "some-metadata" : "some-value"
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">some-metadata</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
 });
 
-discovery.publish(record, function (ar, ar_err) {
-  // ...
+discovery.publish(record, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="comment">// ...</span>
 });</code></pre>
 </div>
 </div>
@@ -1257,21 +1256,21 @@ the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var RedisClient = require("vertx-redis-js/redis_client");
-// Get the record
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> RedisClient = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-redis-js/redis_client</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">// Get the record</span>
 discovery.getRecord({
-  "name" : "some-redis-data-source-service"
-}, function (ar, ar_err) {
-  if (ar_err == null &amp;&amp; (ar !== null &amp;&amp; ar !== undefined)) {
-    // Retrieve the service reference
-    var reference = discovery.getReference(ar);
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-redis-data-source-service</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span> &amp;&amp; (ar !== <span class="predefined-constant">null</span> &amp;&amp; ar !== <span class="predefined-constant">undefined</span>)) {
+    <span class="comment">// Retrieve the service reference</span>
+    <span class="keyword">var</span> reference = discovery.getReference(ar);
 
-    // Retrieve the service instance
-    var client = reference.getAs(RedisClient.class);
+    <span class="comment">// Retrieve the service instance</span>
+    <span class="keyword">var</span> client = reference.getAs(RedisClient.<span class="reserved">class</span>);
 
-    // ...
+    <span class="comment">// ...</span>
 
-    // when done
+    <span class="comment">// when done</span>
     reference.release();
   }
 });</code></pre>
@@ -1282,17 +1281,17 @@ discovery.getRecord({
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ServiceDiscovery = require("vertx-service-discovery-js/service_discovery");
-var RedisDataSource = require("vertx-service-discovery-js/redis_data_source");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> ServiceDiscovery = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/service_discovery</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> RedisDataSource = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/redis_data_source</span><span class="delimiter">&quot;</span></span>);
 RedisDataSource.getRedisClient(discovery, {
-  "name" : "some-redis-data-source-service"
-}, function (ar, ar_err) {
-  if (ar_err == null) {
-    var client = ar;
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-redis-data-source-service</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> client = ar;
 
-    // ...
+    <span class="comment">// ...</span>
 
-    // Dont' forget to release the service
+    <span class="comment">// Dont' forget to release the service</span>
     ServiceDiscovery.releaseServiceObject(discovery, client);
 
   }
@@ -1324,15 +1323,15 @@ The client of a Mongo data source service is a <code><a href="../../jsdoc/module
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var MongoDataSource = require("vertx-service-discovery-js/mongo_data_source");
-var record = MongoDataSource.createRecord("some-data-source-service", {
-  "connection_string" : "some mongo connection"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MongoDataSource = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/mongo_data_source</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> record = MongoDataSource.createRecord(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>, {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">connection_string</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some mongo connection</span><span class="delimiter">&quot;</span></span>
 }, {
-  "some-metadata" : "some-value"
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">some-metadata</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
 });
 
-discovery.publish(record, function (ar, ar_err) {
-  // ...
+discovery.publish(record, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="comment">// ...</span>
 });</code></pre>
 </div>
 </div>
@@ -1350,23 +1349,23 @@ provided by the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// Get the record
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Get the record</span>
 discovery.getRecord({
-  "name" : "some-data-source-service"
-}, function (ar, ar_err) {
-  if (ar_err == null &amp;&amp; (ar !== null &amp;&amp; ar !== undefined)) {
-    // Retrieve the service reference
-    var reference = discovery.getReferenceWithConfiguration(ar, {
-      "username" : "clement",
-      "password" : "*****"
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span> &amp;&amp; (ar !== <span class="predefined-constant">null</span> &amp;&amp; ar !== <span class="predefined-constant">undefined</span>)) {
+    <span class="comment">// Retrieve the service reference</span>
+    <span class="keyword">var</span> reference = discovery.getReferenceWithConfiguration(ar, {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>
     });
 
-    // Retrieve the service object
-    var client = reference.get();
+    <span class="comment">// Retrieve the service object</span>
+    <span class="keyword">var</span> client = reference.get();
 
-    // ...
+    <span class="comment">// ...</span>
 
-    // when done
+    <span class="comment">// when done</span>
     reference.release();
   }
 });</code></pre>
@@ -1377,20 +1376,20 @@ discovery.getRecord({
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ServiceDiscovery = require("vertx-service-discovery-js/service_discovery");
-var MongoDataSource = require("vertx-service-discovery-js/mongo_data_source");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> ServiceDiscovery = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/service_discovery</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> MongoDataSource = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/mongo_data_source</span><span class="delimiter">&quot;</span></span>);
 MongoDataSource.getMongoClient(discovery, {
-  "name" : "some-data-source-service"
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>
 }, {
-  "username" : "clement",
-  "password" : "*****"
-}, function (ar, ar_err) {
-  if (ar_err == null) {
-    var client = ar;
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>
+}, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> client = ar;
 
-    // ...
+    <span class="comment">// ...</span>
 
-    // Dont' forget to release the service
+    <span class="comment">// Dont' forget to release the service</span>
     ServiceDiscovery.releaseServiceObject(discovery, client);
 
   }
@@ -1547,11 +1546,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-consul&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-consul<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1563,7 +1562,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-consul:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-consul:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1571,11 +1570,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ServiceDiscovery = require("vertx-service-discovery-js/service_discovery");
-ServiceDiscovery.create(vertx).registerServiceImporter(new (Java.type("io.vertx.servicediscovery.consul.ConsulServiceImporter"))(), {
-  "host" : "localhost",
-  "port" : 8500,
-  "scan-period" : 2000
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> ServiceDiscovery = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/service_discovery</span><span class="delimiter">&quot;</span></span>);
+ServiceDiscovery.create(vertx).registerServiceImporter(<span class="keyword">new</span> (Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.servicediscovery.consul.ConsulServiceImporter</span><span class="delimiter">&quot;</span></span>))(), {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span> : <span class="integer">8500</span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">scan-period</span><span class="delimiter">&quot;</span></span> : <span class="integer">2000</span>
 });</code></pre>
 </div>
 </div>
@@ -1625,11 +1624,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-kubernetes&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-kubernetes<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1641,7 +1640,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-kubernetes:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-kubernetes:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1734,11 +1733,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-docker-links&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-docker-links<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1750,7 +1749,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-docker-links:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-docker-links:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1758,8 +1757,8 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ServiceDiscovery = require("vertx-service-discovery-js/service_discovery");
-ServiceDiscovery.create(vertx).registerServiceImporter(new (Java.type("io.vertx.servicediscovery.docker.DockerLinksServiceImporter"))(), {
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> ServiceDiscovery = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/service_discovery</span><span class="delimiter">&quot;</span></span>);
+ServiceDiscovery.create(vertx).registerServiceImporter(<span class="keyword">new</span> (Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.servicediscovery.docker.DockerLinksServiceImporter</span><span class="delimiter">&quot;</span></span>))(), {
 });</code></pre>
 </div>
 </div>
@@ -1801,11 +1800,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-backend-redis&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-backend-redis<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1817,7 +1816,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-backend-redis:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-backend-redis:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1837,11 +1836,11 @@ the records are stored.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var ServiceDiscovery = require("vertx-service-discovery-js/service_discovery");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> ServiceDiscovery = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-service-discovery-js/service_discovery</span><span class="delimiter">&quot;</span></span>);
 ServiceDiscovery.create(vertx, {
-  "backendConfiguration" : {
-    "host" : "127.0.0.1",
-    "key" : "records"
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">backendConfiguration</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.1</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">records</span><span class="delimiter">&quot;</span></span>
   }
 });</code></pre>
 </div>

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -172,7 +171,7 @@ and receive.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -194,19 +193,19 @@ them in a persistent fashion.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
 
 ...
 
 value socket = vertx.createDatagramSocket(DatagramSocketOptions());
-value buffer = buffer_.buffer("content");
+value buffer = buffer_.buffer(&quot;content&quot;);
 // Send a Buffer
-socket.send(buffer, 1234, "10.0.0.1", (DatagramSocket|Throwable asyncResult) {
-  print("Send succeeded? ``is DatagramSocket asyncResult``");
+socket.send(buffer, 1234, &quot;10.0.0.1&quot;, (DatagramSocket|Throwable asyncResult) {
+  print(&quot;Send succeeded? ``is DatagramSocket asyncResult``&quot;);
 });
 // Send a String
-socket.send("A string used as content", 1234, "10.0.0.1", (DatagramSocket|Throwable asyncResult) {
-  print("Send succeeded? ``is DatagramSocket asyncResult``");
+socket.send(&quot;A string used as content&quot;, 1234, &quot;10.0.0.1&quot;, (DatagramSocket|Throwable asyncResult) {
+  print(&quot;Send succeeded? ``is DatagramSocket asyncResult``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -242,14 +241,14 @@ which the `<a href="../../ceylondoc/vertx-core//datagram/DatagramSocket.type.htm
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());
-socket.listen(1234, "0.0.0.0", (DatagramSocket|Throwable asyncResult) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());
+socket.listen(1234, &quot;0.0.0.0&quot;, (DatagramSocket|Throwable asyncResult) {
   if (is DatagramSocket asyncResult) {
     socket.handler((DatagramPacket packet) {
       // Do something with the packet
     });
   } else {
-    print("Listen failed``asyncResult``");
+    print(&quot;Listen failed``asyncResult``&quot;);
   };
 });</code></pre>
 </div>
@@ -284,15 +283,15 @@ to which you can send packets.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core.buffer { buffer_ = buffer }
 
 ...
 
 value socket = vertx.createDatagramSocket(DatagramSocketOptions());
-value buffer = buffer_.buffer("content");
+value buffer = buffer_.buffer(&quot;content&quot;);
 // Send a Buffer to a multicast address
-socket.send(buffer, 1234, "230.0.0.1", (DatagramSocket|Throwable asyncResult) {
-  print("Send succeeded? ``is DatagramSocket asyncResult``");
+socket.send(buffer, 1234, &quot;230.0.0.1&quot;, (DatagramSocket|Throwable asyncResult) {
+  print(&quot;Send succeeded? ``is DatagramSocket asyncResult``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -331,19 +330,19 @@ would do something like shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());
-socket.listen(1234, "0.0.0.0", (DatagramSocket|Throwable asyncResult) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());
+socket.listen(1234, &quot;0.0.0.0&quot;, (DatagramSocket|Throwable asyncResult) {
   if (is DatagramSocket asyncResult) {
     socket.handler((DatagramPacket packet) {
       // Do something with the packet
     });
 
     // join the multicast group
-    socket.listenMulticastGroup("230.0.0.1", (DatagramSocket|Throwable asyncResult2) {
-      print("Listen succeeded? ``is DatagramSocket asyncResult2``");
+    socket.listenMulticastGroup(&quot;230.0.0.1&quot;, (DatagramSocket|Throwable asyncResult2) {
+      print(&quot;Listen succeeded? ``is DatagramSocket asyncResult2``&quot;);
     });
   } else {
-    print("Listen failed``asyncResult``");
+    print(&quot;Listen failed``asyncResult``&quot;);
   };
 });</code></pre>
 </div>
@@ -362,29 +361,29 @@ socket.listen(1234, "0.0.0.0", (DatagramSocket|Throwable asyncResult) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());
-socket.listen(1234, "0.0.0.0", (DatagramSocket|Throwable asyncResult) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());
+socket.listen(1234, &quot;0.0.0.0&quot;, (DatagramSocket|Throwable asyncResult) {
   if (is DatagramSocket asyncResult) {
     socket.handler((DatagramPacket packet) {
       // Do something with the packet
     });
 
     // join the multicast group
-    socket.listenMulticastGroup("230.0.0.1", (DatagramSocket|Throwable asyncResult2) {
+    socket.listenMulticastGroup(&quot;230.0.0.1&quot;, (DatagramSocket|Throwable asyncResult2) {
       if (is DatagramSocket asyncResult2) {
         // will now receive packets for group
 
         // do some work
 
-        socket.unlistenMulticastGroup("230.0.0.1", (DatagramSocket|Throwable asyncResult3) {
-          print("Unlisten succeeded? ``is DatagramSocket asyncResult3``");
+        socket.unlistenMulticastGroup(&quot;230.0.0.1&quot;, (DatagramSocket|Throwable asyncResult3) {
+          print(&quot;Unlisten succeeded? ``is DatagramSocket asyncResult3``&quot;);
         });
       } else {
-        print("Listen failed``asyncResult2``");
+        print(&quot;Listen failed``asyncResult2``&quot;);
       };
     });
   } else {
-    print("Listen failed``asyncResult``");
+    print(&quot;Listen failed``asyncResult``&quot;);
   };
 });</code></pre>
 </div>
@@ -408,13 +407,13 @@ like shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());
+<pre class="CodeRay highlight"><code data-lang="ceylon">value socket = vertx.createDatagramSocket(DatagramSocketOptions());
 
 // Some code
 
 // This would block packets which are send from 10.0.0.2
-socket.blockMulticastGroup("230.0.0.1", "10.0.0.2", (DatagramSocket|Throwable asyncResult) {
-  print("block succeeded? ``is DatagramSocket asyncResult``");
+socket.blockMulticastGroup(&quot;230.0.0.1&quot;, &quot;10.0.0.2&quot;, (DatagramSocket|Throwable asyncResult) {
+  print(&quot;block succeeded? ``is DatagramSocket asyncResult``&quot;);
 });</code></pre>
 </div>
 </div>

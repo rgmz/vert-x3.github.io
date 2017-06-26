@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -190,11 +189,11 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-consul-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-consul-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -206,7 +205,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-consul-client:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-consul-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -219,7 +218,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ConsulClient client = ConsulClient.create(vertx);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">ConsulClient client = ConsulClient.create(vertx);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -227,8 +226,8 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ConsulClientOptions options = new ConsulClientOptions()
-  .setHost("consul.example.com");
+<pre class="CodeRay highlight"><code data-lang="java">ConsulClientOptions options = <span class="keyword">new</span> ConsulClientOptions()
+  .setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">consul.example.com</span><span class="delimiter">&quot;</span></span>);
 
 ConsulClient client = ConsulClient.create(vertx, options);</code></pre>
 </div>
@@ -298,9 +297,9 @@ the current state of the requested resource. The following configuration is used
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">BlockingQueryOptions opts = new BlockingQueryOptions()
+<pre class="CodeRay highlight"><code data-lang="java">BlockingQueryOptions opts = <span class="keyword">new</span> BlockingQueryOptions()
   .setIndex(lastIndex)
-  .setWait("1m");</code></pre>
+  .setWait(<span class="string"><span class="delimiter">&quot;</span><span class="content">1m</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -334,11 +333,11 @@ The following endpoints are supported:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.getValue("key", res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("retrieved value: " + res.result().getValue());
-    System.out.println("modify index: " + res.result().getModifyIndex());
-  } else {
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.getValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">retrieved value: </span><span class="delimiter">&quot;</span></span> + res.result().getValue());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">modify index: </span><span class="delimiter">&quot;</span></span> + res.result().getModifyIndex());
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -349,13 +348,13 @@ The following endpoints are supported:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.getValues("prefix", res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("modify index: " + res.result().getIndex());
-    for (KeyValue kv : res.result().getList()) {
-      System.out.println("retrieved value: " + kv.getValue());
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.getValues(<span class="string"><span class="delimiter">&quot;</span><span class="content">prefix</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">modify index: </span><span class="delimiter">&quot;</span></span> + res.result().getIndex());
+    <span class="keyword">for</span> (KeyValue kv : res.result().getList()) {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">retrieved value: </span><span class="delimiter">&quot;</span></span> + kv.getValue());
     }
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -402,15 +401,15 @@ sense for their application</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">BlockingQueryOptions opts = new BlockingQueryOptions()
+<pre class="CodeRay highlight"><code data-lang="java">BlockingQueryOptions opts = <span class="keyword">new</span> BlockingQueryOptions()
   .setIndex(modifyIndex)
-  .setWait("1m");
+  .setWait(<span class="string"><span class="delimiter">&quot;</span><span class="content">1m</span><span class="delimiter">&quot;</span></span>);
 
-consulClient.getValueWithOptions("key", opts, res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("retrieved value: " + res.result().getValue());
-    System.out.println("new modify index: " + res.result().getModifyIndex());
-  } else {
+consulClient.getValueWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, opts, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">retrieved value: </span><span class="delimiter">&quot;</span></span> + res.result().getValue());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">new modify index: </span><span class="delimiter">&quot;</span></span> + res.result().getModifyIndex());
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -421,11 +420,11 @@ consulClient.getValueWithOptions("key", opts, res -&gt; {
 <h3 id="_put_key_value_pair_to_store">Put key-value pair to store</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.putValue("key", "value", res -&gt; {
-  if (res.succeeded()) {
-    String opResult = res.result() ? "success" : "fail";
-    System.out.println("result of the operation: " + opResult);
-  } else {
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.putValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">String</span> opResult = res.result() ? <span class="string"><span class="delimiter">&quot;</span><span class="content">success</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">fail</span><span class="delimiter">&quot;</span></span>;
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">result of the operation: </span><span class="delimiter">&quot;</span></span> + opResult);
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -436,17 +435,17 @@ consulClient.getValueWithOptions("key", opts, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">KeyValueOptions opts = new KeyValueOptions()
-  .setFlags(42)
+<pre class="CodeRay highlight"><code data-lang="java">KeyValueOptions opts = <span class="keyword">new</span> KeyValueOptions()
+  .setFlags(<span class="integer">42</span>)
   .setCasIndex(modifyIndex)
-  .setAcquireSession("acquireSessionID")
-  .setReleaseSession("releaseSessionID");
+  .setAcquireSession(<span class="string"><span class="delimiter">&quot;</span><span class="content">acquireSessionID</span><span class="delimiter">&quot;</span></span>)
+  .setReleaseSession(<span class="string"><span class="delimiter">&quot;</span><span class="content">releaseSessionID</span><span class="delimiter">&quot;</span></span>);
 
-consulClient.putValueWithOptions("key", "value", opts, res -&gt; {
-  if (res.succeeded()) {
-    String opResult = res.result() ? "success" : "fail";
-    System.out.println("result of the operation: " + opResult);
-  } else {
+consulClient.putValueWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>, opts, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">String</span> opResult = res.result() ? <span class="string"><span class="delimiter">&quot;</span><span class="content">success</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">fail</span><span class="delimiter">&quot;</span></span>;
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">result of the operation: </span><span class="delimiter">&quot;</span></span> + opResult);
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -496,15 +495,15 @@ may be added in future versions of Consul to be mixed with key/value operations
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">TxnRequest request = new TxnRequest()
-  .addOperation(new TxnKVOperation().setKey("key1").setValue("value1").setType(TxnKVVerb.SET))
-  .addOperation(new TxnKVOperation().setKey("key2").setValue("value2").setType(TxnKVVerb.SET));
+<pre class="CodeRay highlight"><code data-lang="java">TxnRequest request = <span class="keyword">new</span> TxnRequest()
+  .addOperation(<span class="keyword">new</span> TxnKVOperation().setKey(<span class="string"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>).setValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>).setType(TxnKVVerb.SET))
+  .addOperation(<span class="keyword">new</span> TxnKVOperation().setKey(<span class="string"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>).setValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>).setType(TxnKVVerb.SET));
 
 consulClient.transaction(request, res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("succeeded results: " + res.result().getResults().size());
-    System.out.println("errors: " + res.result().getErrors().size());
-  } else {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">succeeded results: </span><span class="delimiter">&quot;</span></span> + res.result().getResults().size());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">errors: </span><span class="delimiter">&quot;</span></span> + res.result().getErrors().size());
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -518,10 +517,10 @@ consulClient.transaction(request, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.deleteValue("key", res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("complete");
-  } else {
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.deleteValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">complete</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -532,10 +531,10 @@ consulClient.transaction(request, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.deleteValues("prefix", res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("complete");
-  } else {
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.deleteValues(<span class="string"><span class="delimiter">&quot;</span><span class="content">prefix</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">complete</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -559,13 +558,13 @@ and to potentially associate it with a health check.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ServiceOptions opts = new ServiceOptions()
-  .setName("serviceName")
-  .setId("serviceId")
-  .setTags(Arrays.asList("tag1", "tag2"))
-  .setCheckOptions(new CheckOptions().setTtl("10s"))
-  .setAddress("10.0.0.1")
-  .setPort(8048);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">ServiceOptions opts = <span class="keyword">new</span> ServiceOptions()
+  .setName(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceName</span><span class="delimiter">&quot;</span></span>)
+  .setId(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceId</span><span class="delimiter">&quot;</span></span>)
+  .setTags(<span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">tag1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">tag2</span><span class="delimiter">&quot;</span></span>))
+  .setCheckOptions(<span class="keyword">new</span> CheckOptions().setTtl(<span class="string"><span class="delimiter">&quot;</span><span class="content">10s</span><span class="delimiter">&quot;</span></span>))
+  .setAddress(<span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+  .setPort(<span class="integer">8048</span>);</code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -605,10 +604,10 @@ the address and port of a service can be discovered.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.registerService(opts, res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Service successfully registered");
-  } else {
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.registerService(opts, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service successfully registered</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 
@@ -623,16 +622,16 @@ the address and port of a service can be discovered.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.catalogServiceNodes("serviceName", res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("found " + res.result().getList().size() + " services");
-    System.out.println("consul state index: " + res.result().getIndex());
-    for (Service service : res.result().getList()) {
-      System.out.println("Service node: " + service.getNode());
-      System.out.println("Service address: " + service.getAddress());
-      System.out.println("Service port: " + service.getPort());
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.catalogServiceNodes(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceName</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="delimiter">&quot;</span></span> + res.result().getList().size() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> services</span><span class="delimiter">&quot;</span></span>);
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">consul state index: </span><span class="delimiter">&quot;</span></span> + res.result().getIndex());
+    <span class="keyword">for</span> (Service service : res.result().getList()) {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service node: </span><span class="delimiter">&quot;</span></span> + service.getNode());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service address: </span><span class="delimiter">&quot;</span></span> + service.getAddress());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service port: </span><span class="delimiter">&quot;</span></span> + service.getPort());
     }
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -644,16 +643,16 @@ The result can be filtered by check status.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.healthServiceNodes("serviceName", passingOnly, res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("found " + res.result().getList().size() + " services");
-    System.out.println("consul state index: " + res.result().getIndex());
-    for (ServiceEntry entry : res.result().getList()) {
-      System.out.println("Service node: " + entry.getNode());
-      System.out.println("Service address: " + entry.getService().getAddress());
-      System.out.println("Service port: " + entry.getService().getPort());
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.healthServiceNodes(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceName</span><span class="delimiter">&quot;</span></span>, passingOnly, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="delimiter">&quot;</span></span> + res.result().getList().size() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> services</span><span class="delimiter">&quot;</span></span>);
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">consul state index: </span><span class="delimiter">&quot;</span></span> + res.result().getIndex());
+    <span class="keyword">for</span> (ServiceEntry entry : res.result().getList()) {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service node: </span><span class="delimiter">&quot;</span></span> + entry.getNode());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service address: </span><span class="delimiter">&quot;</span></span> + entry.getService().getAddress());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service port: </span><span class="delimiter">&quot;</span></span> + entry.getService().getPort());
     }
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -664,10 +663,10 @@ The result can be filtered by check status.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ServiceQueryOptions queryOpts = new ServiceQueryOptions()
-  .setTag("tag1")
-  .setNear("_agent")
-  .setBlockingOptions(new BlockingQueryOptions().setIndex(lastIndex));</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">ServiceQueryOptions queryOpts = <span class="keyword">new</span> ServiceQueryOptions()
+  .setTag(<span class="string"><span class="delimiter">&quot;</span><span class="content">tag1</span><span class="delimiter">&quot;</span></span>)
+  .setNear(<span class="string"><span class="delimiter">&quot;</span><span class="content">_agent</span><span class="delimiter">&quot;</span></span>)
+  .setBlockingOptions(<span class="keyword">new</span> BlockingQueryOptions().setIndex(lastIndex));</code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -693,10 +692,10 @@ based on the estimated round trip time from that node. Passing <code>near</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.healthServiceNodesWithOptions("serviceName", passingOnly, queryOpts, res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("found " + res.result().getList().size() + " services");
-  } else {
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.healthServiceNodesWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceName</span><span class="delimiter">&quot;</span></span>, passingOnly, queryOpts, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="delimiter">&quot;</span></span> + res.result().getList().size() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> services</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 
@@ -711,10 +710,10 @@ based on the estimated round trip time from that node. Passing <code>near</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.deregisterService("serviceId", res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Service successfully deregistered");
-  } else {
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.deregisterService(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceId</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Service successfully deregistered</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -733,9 +732,9 @@ If not associated with a service, the check monitors the health of the entire no
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CheckOptions opts = new CheckOptions()
-  .setTcp("localhost:4848")
-  .setInterval("1s");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">CheckOptions opts = <span class="keyword">new</span> CheckOptions()
+  .setTcp(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:4848</span><span class="delimiter">&quot;</span></span>)
+  .setInterval(<span class="string"><span class="delimiter">&quot;</span><span class="content">1s</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -804,10 +803,10 @@ You cannot have duplicate ID entries per agent, so it may be necessary to provid
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.registerCheck(opts, res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("check successfully registered");
-  } else {
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.registerCheck(opts, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">check successfully registered</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -828,11 +827,11 @@ restart services, or perform any other orchestration action.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.fireEvent("eventName", res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Event sent");
-    System.out.println("id: " + res.result().getId());
-  } else {
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.fireEvent(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventName</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Event sent</span><span class="delimiter">&quot;</span></span>);
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">id: </span><span class="delimiter">&quot;</span></span> + res.result().getId());
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -864,15 +863,15 @@ The body contents are opaque to Consul and become the "payload" of the event</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">EventOptions opts = new EventOptions()
-  .setTag("tag")
-  .setPayload("message");
+<pre class="CodeRay highlight"><code data-lang="java">EventOptions opts = <span class="keyword">new</span> EventOptions()
+  .setTag(<span class="string"><span class="delimiter">&quot;</span><span class="content">tag</span><span class="delimiter">&quot;</span></span>)
+  .setPayload(<span class="string"><span class="delimiter">&quot;</span><span class="content">message</span><span class="delimiter">&quot;</span></span>);
 
-consulClient.fireEventWithOptions("eventName", opts, res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Event sent");
-    System.out.println("id: " + res.result().getId());
-  } else {
+consulClient.fireEventWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventName</span><span class="delimiter">&quot;</span></span>, opts, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Event sent</span><span class="delimiter">&quot;</span></span>);
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">id: </span><span class="delimiter">&quot;</span></span> + res.result().getId());
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -885,15 +884,15 @@ the most recent entries. The current buffer size is 256, but this value could ch
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.listEvents(res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Consul index: " + res.result().getIndex());
-    for(Event event: res.result().getList()) {
-      System.out.println("Event id: " + event.getId());
-      System.out.println("Event name: " + event.getName());
-      System.out.println("Event payload: " + event.getPayload());
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.listEvents(res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Consul index: </span><span class="delimiter">&quot;</span></span> + res.result().getIndex());
+    <span class="keyword">for</span>(<span class="predefined-type">Event</span> event: res.result().getList()) {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Event id: </span><span class="delimiter">&quot;</span></span> + event.getId());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Event name: </span><span class="delimiter">&quot;</span></span> + event.getName());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Event payload: </span><span class="delimiter">&quot;</span></span> + event.getPayload());
     }
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -904,17 +903,17 @@ the most recent entries. The current buffer size is 256, but this value could ch
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">EventListOptions opts = new EventListOptions()
-  .setName("eventName")
-  .setBlockingOptions(new BlockingQueryOptions().setIndex(lastIndex));
+<pre class="CodeRay highlight"><code data-lang="java">EventListOptions opts = <span class="keyword">new</span> EventListOptions()
+  .setName(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventName</span><span class="delimiter">&quot;</span></span>)
+  .setBlockingOptions(<span class="keyword">new</span> BlockingQueryOptions().setIndex(lastIndex));
 
 consulClient.listEventsWithOptions(opts, res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Consul index: " + res.result().getIndex());
-    for(Event event: res.result().getList()) {
-      System.out.println("Event id: " + event.getId());
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Consul index: </span><span class="delimiter">&quot;</span></span> + res.result().getIndex());
+    <span class="keyword">for</span>(<span class="predefined-type">Event</span> event: res.result().getList()) {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Event id: </span><span class="delimiter">&quot;</span></span> + event.getId());
     }
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -933,8 +932,8 @@ may be provided.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">SessionOptions opts = new SessionOptions()
-  .setNode("nodeId")
+<pre class="CodeRay highlight"><code data-lang="java">SessionOptions opts = <span class="keyword">new</span> SessionOptions()
+  .setNode(<span class="string"><span class="delimiter">&quot;</span><span class="content">nodeId</span><span class="delimiter">&quot;</span></span>)
   .setBehavior(SessionBehavior.RELEASE);</code></pre>
 </div>
 </div>
@@ -979,11 +978,11 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.createSessionWithOptions(opts, res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Session successfully created");
-    System.out.println("id: " + res.result());
-  } else {
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.createSessionWithOptions(opts, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Session successfully created</span><span class="delimiter">&quot;</span></span>);
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">id: </span><span class="delimiter">&quot;</span></span> + res.result());
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -994,10 +993,10 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.destroySession(sessionId, res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Session successfully destroyed");
-  } else {
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.destroySession(sessionId, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Session successfully destroyed</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -1008,14 +1007,14 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.listNodeSessions("nodeId", res -&gt; {
-  if (res.succeeded()) {
-    for(Session session: res.result().getList()) {
-      System.out.println("Session id: " + session.getId());
-      System.out.println("Session node: " + session.getNode());
-      System.out.println("Session create index: " + session.getCreateIndex());
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.listNodeSessions(<span class="string"><span class="delimiter">&quot;</span><span class="content">nodeId</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="keyword">for</span>(Session session: res.result().getList()) {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Session id: </span><span class="delimiter">&quot;</span></span> + session.getId());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Session node: </span><span class="delimiter">&quot;</span></span> + session.getNode());
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Session create index: </span><span class="delimiter">&quot;</span></span> + session.getCreateIndex());
     }
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -1026,13 +1025,13 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">BlockingQueryOptions blockingOpts = new BlockingQueryOptions()
+<pre class="CodeRay highlight"><code data-lang="java">BlockingQueryOptions blockingOpts = <span class="keyword">new</span> BlockingQueryOptions()
   .setIndex(lastIndex);
 
 consulClient.listSessionsWithOptions(blockingOpts, res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Found " + res.result().getList().size() + " sessions");
-  } else {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Found </span><span class="delimiter">&quot;</span></span> + res.result().getList().size() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> sessions</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -1045,11 +1044,11 @@ consulClient.listSessionsWithOptions(blockingOpts, res -&gt; {
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consulClient.catalogNodes(res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("found " + res.result().getList().size() + " nodes");
-    System.out.println("consul state index " + res.result().getIndex());
-  } else {
+<pre class="CodeRay highlight"><code data-lang="java">consulClient.catalogNodes(res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="delimiter">&quot;</span></span> + res.result().getList().size() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> nodes</span><span class="delimiter">&quot;</span></span>);
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">consul state index </span><span class="delimiter">&quot;</span></span> + res.result().getIndex());
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -1060,14 +1059,14 @@ consulClient.listSessionsWithOptions(blockingOpts, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NodeQueryOptions opts = new NodeQueryOptions()
-  .setNear("_agent")
-  .setBlockingOptions(new BlockingQueryOptions().setIndex(lastIndex));
+<pre class="CodeRay highlight"><code data-lang="java">NodeQueryOptions opts = <span class="keyword">new</span> NodeQueryOptions()
+  .setNear(<span class="string"><span class="delimiter">&quot;</span><span class="content">_agent</span><span class="delimiter">&quot;</span></span>)
+  .setBlockingOptions(<span class="keyword">new</span> BlockingQueryOptions().setIndex(lastIndex));
 
 consulClient.catalogNodesWithOptions(opts, res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("found " + res.result().getList().size() + " nodes");
-  } else {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="delimiter">&quot;</span></span> + res.result().getList().size() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> nodes</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 });</code></pre>
@@ -1085,11 +1084,11 @@ As an example, you could watch the status of health checks and notify when a che
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Watch.key("foo/bar", vertx)
+<pre class="CodeRay highlight"><code data-lang="java">Watch.key(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo/bar</span><span class="delimiter">&quot;</span></span>, vertx)
   .setHandler(res -&gt; {
-    if (res.succeeded()) {
-      System.out.println("value: " + res.result().getValue());
-    } else {
+    <span class="keyword">if</span> (res.succeeded()) {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">value: </span><span class="delimiter">&quot;</span></span> + res.result().getValue());
+    } <span class="keyword">else</span> {
       res.cause().printStackTrace();
     }
   })

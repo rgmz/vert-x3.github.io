@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -144,16 +143,16 @@ Vert.x manual for Java.</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">import io.vertx.lang.scala.ScalaVerticle;
+<pre class="CodeRay highlight"><code data-lang="scala">import io.vertx.lang.scala.ScalaVerticle;
 
 class HelloWorldHttpVerticle extends ScalaVerticle {
 
  override def start(): Unit = {
-   println("Starting")
+   println(&quot;Starting&quot;)
  }
 
  override def stop(): Unit = {
-   println("Stopping")
+   println(&quot;Stopping&quot;)
  }
 }</code></pre>
 </div>
@@ -177,12 +176,12 @@ and when the method has completed the verticle will be considered stopped.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">import io.vertx.lang.scala.ScalaVerticle;
+<pre class="CodeRay highlight"><code data-lang="scala">import io.vertx.lang.scala.ScalaVerticle;
 
 public class HelloWorldVerticle extends ScalaVerticle {
 
    override def start(): Unit = {
-     vertx.deployVerticle("another_verticle.js")
+     vertx.deployVerticle(&quot;another_verticle.js&quot;)
    }
 }</code></pre>
 </div>
@@ -192,8 +191,8 @@ public class HelloWorldVerticle extends ScalaVerticle {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">val vertx = Vertx.vertx
-vertx.deployVerticle(s"scala:${classOf[HelloWorldVerticle].getName}")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">val vertx = Vertx.vertx
+vertx.deployVerticle(s&quot;scala:${classOf[HelloWorldVerticle].getName}&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -201,7 +200,7 @@ vertx.deployVerticle(s"scala:${classOf[HelloWorldVerticle].getName}")</code></pr
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">val vertx = Vertx.vertx
+<pre class="CodeRay highlight"><code data-lang="scala">val vertx = Vertx.vertx
 vertx.deployVerticle(ScalaVerticle.nameForVerticle[HelloWorldVerticle])</code></pre>
 </div>
 </div>
@@ -233,19 +232,19 @@ You use this if you want to do some verticle cleanup that takes some time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">import io.vertx.lang.scala.ScalaVerticle
+<pre class="CodeRay highlight"><code data-lang="scala">import io.vertx.lang.scala.ScalaVerticle
 import scala.concurrent.{Future, Promise}
 
 class HelloWorldVerticle extends ScalaVerticle {
 
  override def startFuture(): Future[Unit] = {
-  println("starting")
+  println(&quot;starting&quot;)
   val promise = Promise[Unit]()
-  vertx.deployVerticleFuture("v.rb")
+  vertx.deployVerticleFuture(&quot;v.rb&quot;)
  }
 
  override def stopFuture(): Future[Unit] = {
-  println("stopping")
+  println(&quot;stopping&quot;)
   Future.successful(())
  }
 }</code></pre>

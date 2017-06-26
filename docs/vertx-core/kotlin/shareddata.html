@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -172,25 +171,25 @@ so you don&#8217;t have to worry about protecting that state by synchronising ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var sd = vertx.sharedData()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var sd = vertx.sharedData()
 
-var map1 = sd.getLocalMap&lt;Any, Any&gt;("mymap1")
+var map1 = sd.getLocalMap&lt;Any, Any&gt;(&quot;mymap1&quot;)
 
-map1.put("foo", "bar")
+map1.put(&quot;foo&quot;, &quot;bar&quot;)
 
-var map2 = sd.getLocalMap&lt;Any, Any&gt;("mymap2")
+var map2 = sd.getLocalMap&lt;Any, Any&gt;(&quot;mymap2&quot;)
 
-map2.put("eek", Buffer.buffer().appendInt(123))
+map2.put(&quot;eek&quot;, Buffer.buffer().appendInt(123))
 
 // Then... in another part of your application:
 
-map1 = sd.getLocalMap&lt;Any, Any&gt;("mymap1")
+map1 = sd.getLocalMap&lt;Any, Any&gt;(&quot;mymap1&quot;)
 
-var val = map1.get("foo")
+var val = map1.get(&quot;foo&quot;)
 
-map2 = sd.getLocalMap&lt;Any, Any&gt;("mymap2")
+map2 = sd.getLocalMap&lt;Any, Any&gt;(&quot;mymap2&quot;)
 
-var buff = map2.get("eek")</code></pre>
+var buff = map2.get(&quot;eek&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -213,9 +212,9 @@ application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var sd = vertx.sharedData()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var sd = vertx.sharedData()
 
-sd.getClusterWideMap&lt;String, String&gt;("mymap", { res -&gt;
+sd.getClusterWideMap&lt;String, String&gt;(&quot;mymap&quot;, { res -&gt;
   if (res.succeeded()) {
     var map = res.result()
   } else {
@@ -234,7 +233,7 @@ sd.getClusterWideMap&lt;String, String&gt;("mymap", { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">map.put("foo", "bar", { resPut -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">map.put(&quot;foo&quot;, &quot;bar&quot;, { resPut -&gt;
   if (resPut.succeeded()) {
     // Successfully put the value
   } else {
@@ -254,7 +253,7 @@ sd.getClusterWideMap&lt;String, String&gt;("mymap", { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">map.get("foo", { resGet -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">map.get(&quot;foo&quot;, { resGet -&gt;
   if (resGet.succeeded()) {
     // Successfully got the value
     var val = resGet.result()
@@ -301,7 +300,7 @@ another caller can obtain it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">sd.getLock("mylock", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">sd.getLock(&quot;mylock&quot;, { res -&gt;
   if (res.succeeded()) {
     // Got the lock!
     var lock = res.result()
@@ -324,7 +323,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">sd.getLockWithTimeout("mylock", 10000, { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">sd.getLockWithTimeout(&quot;mylock&quot;, 10000, { res -&gt;
   if (res.succeeded()) {
     // Got the lock!
     var lock = res.result()
@@ -349,7 +348,7 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">sd.getCounter("mycounter", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">sd.getCounter(&quot;mycounter&quot;, { res -&gt;
   if (res.succeeded()) {
     var counter = res.result()
   } else {

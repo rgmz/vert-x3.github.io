@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -181,19 +180,19 @@ can be used to inspect the cause in more detail.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">DnsClient client = vertx.createDnsClient(53, "10.0.0.1");
-client.lookup("nonexisting.vert.xio", ar -&gt; {
-  if (ar.succeeded()) {
-    String record = ar.result();
-    System.out.println(record);
-  } else {
-    Throwable cause = ar.cause();
-    if (cause instanceof DnsException) {
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>);
+client.lookup(<span class="string"><span class="delimiter">&quot;</span><span class="content">nonexisting.vert.xio</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="predefined-type">String</span> record = ar.result();
+    <span class="predefined-type">System</span>.out.println(record);
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">Throwable</span> cause = ar.cause();
+    <span class="keyword">if</span> (cause <span class="keyword">instanceof</span> DnsException) {
       DnsException exception = (DnsException) cause;
       DnsResponseCode code = exception.code();
-      // ...
-    } else {
-      System.out.println("Failed to resolve entry" + ar.cause());
+      <span class="comment">// ...</span>
+    } <span class="keyword">else</span> {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to resolve entry</span><span class="delimiter">&quot;</span></span> + ar.cause());
     }
   }
 });</code></pre>

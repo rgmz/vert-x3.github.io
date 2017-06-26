@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -172,27 +171,27 @@ so you don&#8217;t have to worry about protecting that state by synchronising ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Buffer = require("vertx-js/buffer");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Buffer = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/buffer</span><span class="delimiter">&quot;</span></span>);
 
-var sd = vertx.sharedData();
+<span class="keyword">var</span> sd = vertx.sharedData();
 
-var map1 = sd.getLocalMap("mymap1");
+<span class="keyword">var</span> map1 = sd.getLocalMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap1</span><span class="delimiter">&quot;</span></span>);
 
-map1.put("foo", "bar");
+map1.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>);
 
-var map2 = sd.getLocalMap("mymap2");
+<span class="keyword">var</span> map2 = sd.getLocalMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap2</span><span class="delimiter">&quot;</span></span>);
 
-map2.put("eek", Buffer.buffer().appendInt(123));
+map2.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">eek</span><span class="delimiter">&quot;</span></span>, Buffer.buffer().appendInt(<span class="integer">123</span>));
 
-// Then... in another part of your application:
+<span class="comment">// Then... in another part of your application:</span>
 
-map1 = sd.getLocalMap("mymap1");
+map1 = sd.getLocalMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap1</span><span class="delimiter">&quot;</span></span>);
 
-var val = map1.get("foo");
+<span class="keyword">var</span> val = map1.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>);
 
-map2 = sd.getLocalMap("mymap2");
+map2 = sd.getLocalMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap2</span><span class="delimiter">&quot;</span></span>);
 
-var buff = map2.get("eek");</code></pre>
+<span class="keyword">var</span> buff = map2.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">eek</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -215,13 +214,13 @@ application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var sd = vertx.sharedData();
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> sd = vertx.sharedData();
 
-sd.getClusterWideMap("mymap", function (res, res_err) {
-  if (res_err == null) {
-    var map = res;
-  } else {
-    // Something went wrong!
+sd.getClusterWideMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> map = res;
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong!</span>
   }
 });</code></pre>
 </div>
@@ -236,11 +235,11 @@ sd.getClusterWideMap("mymap", function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">map.put("foo", "bar", function (resPut, resPut_err) {
-  if (resPut_err == null) {
-    // Successfully put the value
-  } else {
-    // Something went wrong!
+<pre class="CodeRay highlight"><code data-lang="js">map.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (resPut, resPut_err) {
+  <span class="keyword">if</span> (resPut_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// Successfully put the value</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong!</span>
   }
 });</code></pre>
 </div>
@@ -256,12 +255,12 @@ sd.getClusterWideMap("mymap", function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">map.get("foo", function (resGet, resGet_err) {
-  if (resGet_err == null) {
-    // Successfully got the value
-    var val = resGet;
-  } else {
-    // Something went wrong!
+<pre class="CodeRay highlight"><code data-lang="js">map.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (resGet, resGet_err) {
+  <span class="keyword">if</span> (resGet_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// Successfully got the value</span>
+    <span class="keyword">var</span> val = resGet;
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong!</span>
   }
 });</code></pre>
 </div>
@@ -303,19 +302,19 @@ another caller can obtain it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">sd.getLock("mylock", function (res, res_err) {
-  if (res_err == null) {
-    // Got the lock!
-    var lock = res;
+<pre class="CodeRay highlight"><code data-lang="js">sd.getLock(<span class="string"><span class="delimiter">&quot;</span><span class="content">mylock</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// Got the lock!</span>
+    <span class="keyword">var</span> lock = res;
 
-    // 5 seconds later we release the lock so someone else can get it
+    <span class="comment">// 5 seconds later we release the lock so someone else can get it</span>
 
-    vertx.setTimer(5000, function (tid) {
+    vertx.setTimer(<span class="integer">5000</span>, <span class="keyword">function</span> (tid) {
       lock.release();
     });
 
-  } else {
-    // Something went wrong
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong</span>
   }
 });</code></pre>
 </div>
@@ -326,13 +325,13 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">sd.getLockWithTimeout("mylock", 10000, function (res, res_err) {
-  if (res_err == null) {
-    // Got the lock!
-    var lock = res;
+<pre class="CodeRay highlight"><code data-lang="js">sd.getLockWithTimeout(<span class="string"><span class="delimiter">&quot;</span><span class="content">mylock</span><span class="delimiter">&quot;</span></span>, <span class="integer">10000</span>, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="comment">// Got the lock!</span>
+    <span class="keyword">var</span> lock = res;
 
-  } else {
-    // Failed to get lock
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed to get lock</span>
   }
 });</code></pre>
 </div>
@@ -351,11 +350,11 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">sd.getCounter("mycounter", function (res, res_err) {
-  if (res_err == null) {
-    var counter = res;
-  } else {
-    // Something went wrong!
+<pre class="CodeRay highlight"><code data-lang="js">sd.getCounter(<span class="string"><span class="delimiter">&quot;</span><span class="content">mycounter</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> counter = res;
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong!</span>
   }
 });</code></pre>
 </div>

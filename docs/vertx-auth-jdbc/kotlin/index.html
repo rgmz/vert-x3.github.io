@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -139,11 +138,11 @@ add the following dependency to the <em>dependencies</em> section of your build 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-auth-jdbc&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-auth-jdbc<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -155,7 +154,7 @@ add the following dependency to the <em>dependencies</em> section of your build 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jdbc:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-jdbc:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -167,7 +166,7 @@ of those please consult the documentation for the JDBC client.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var jdbcClient = JDBCClient.createShared(vertx, jdbcClientConfig)
+<pre class="CodeRay highlight"><code data-lang="kotlin">var jdbcClient = JDBCClient.createShared(vertx, jdbcClientConfig)
 
 var authProvider = JDBCAuth.create(vertx, jdbcClient)</code></pre>
 </div>
@@ -191,31 +190,31 @@ concatenated with a salt. It also assumes the salt is stored in the table too.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-sql" data-lang="sql">--
--- Take this script with a grain of salt and adapt it to your RDBMS
---
-CREATE TABLE `user` (
-  `username` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `password_salt` VARCHAR(255) NOT NULL
+<pre class="CodeRay highlight"><code data-lang="sql"><span class="comment">--
+-- Take this script with a grain of salt and adapt it to your RDBMS</span>
+<span class="comment">--
+CREATE TABLE `user` (</span>
+  <span class="string"><span class="delimiter">`</span><span class="content">username</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">password</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">password_salt</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>
 );
 
-CREATE TABLE `user_roles` (
-  `username` VARCHAR(255) NOT NULL,
-  `role` VARCHAR(255) NOT NULL
+<span class="class">CREATE</span> <span class="type">TABLE</span> <span class="string"><span class="delimiter">`</span><span class="content">user_roles</span><span class="delimiter">`</span></span> (
+  <span class="string"><span class="delimiter">`</span><span class="content">username</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">role</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>
 );
 
-CREATE TABLE `roles_perms` (
-  `role` VARCHAR(255) NOT NULL,
-  `perm` VARCHAR(255) NOT NULL
+<span class="class">CREATE</span> <span class="type">TABLE</span> <span class="string"><span class="delimiter">`</span><span class="content">roles_perms</span><span class="delimiter">`</span></span> (
+  <span class="string"><span class="delimiter">`</span><span class="content">role</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">perm</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>
 );
 
-ALTER TABLE user ADD CONSTRAINT `pk_username` PRIMARY KEY (username);
-ALTER TABLE user_roles ADD CONSTRAINT `pk_user_roles` PRIMARY KEY (username, role);
-ALTER TABLE roles_perms ADD CONSTRAINT `pk_roles_perms` PRIMARY KEY (role);
+<span class="class">ALTER</span> <span class="type">TABLE</span> user <span class="class">ADD</span> <span class="type">CONSTRAINT</span> <span class="string"><span class="delimiter">`</span><span class="content">pk_username</span><span class="delimiter">`</span></span> <span class="directive">PRIMARY</span> <span class="type">KEY</span> (username);
+<span class="class">ALTER</span> <span class="type">TABLE</span> user_roles <span class="class">ADD</span> <span class="type">CONSTRAINT</span> <span class="string"><span class="delimiter">`</span><span class="content">pk_user_roles</span><span class="delimiter">`</span></span> <span class="directive">PRIMARY</span> <span class="type">KEY</span> (username, role);
+<span class="class">ALTER</span> <span class="type">TABLE</span> roles_perms <span class="class">ADD</span> <span class="type">CONSTRAINT</span> <span class="string"><span class="delimiter">`</span><span class="content">pk_roles_perms</span><span class="delimiter">`</span></span> <span class="directive">PRIMARY</span> <span class="type">KEY</span> (role);
 
-ALTER TABLE user_roles ADD CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES user(username);
-ALTER TABLE user_roles ADD CONSTRAINT fk_roles FOREIGN KEY (role) REFERENCES roles_perms(role);</code></pre>
+<span class="class">ALTER</span> <span class="type">TABLE</span> user_roles <span class="class">ADD</span> <span class="type">CONSTRAINT</span> fk_username <span class="directive">FOREIGN</span> <span class="type">KEY</span> (username) <span class="keyword">REFERENCES</span> user(username);
+<span class="class">ALTER</span> <span class="type">TABLE</span> user_roles <span class="class">ADD</span> <span class="type">CONSTRAINT</span> fk_roles <span class="directive">FOREIGN</span> <span class="type">KEY</span> (role) <span class="keyword">REFERENCES</span> roles_perms(role);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -261,11 +260,11 @@ to hash new password before storing it to the database. Doing it is a 3 step tas
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var salt = auth.generateSalt()
-var hash = auth.computeHash("sausages", salt)
+<pre class="CodeRay highlight"><code data-lang="kotlin">var salt = auth.generateSalt()
+var hash = auth.computeHash(&quot;sausages&quot;, salt)
 // save to the database
-conn.updateWithParams("INSERT INTO user VALUES (?, ?, ?)", json {
-  array("tim", hash, salt)
+conn.updateWithParams(&quot;INSERT INTO user VALUES (?, ?, ?)&quot;, json {
+  array(&quot;tim&quot;, hash, salt)
 }, { res -&gt;
   if (res.succeeded()) {
     // success!
@@ -295,8 +294,8 @@ want to refresh the nonces now and then so you should add and never remove entri
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">auth.setNonces(json {
-  array("random_hash_1", "random_hash_1")
+<pre class="CodeRay highlight"><code data-lang="kotlin">auth.setNonces(json {
+  array(&quot;random_hash_1&quot;, &quot;random_hash_1&quot;)
 })</code></pre>
 </div>
 </div>
@@ -319,16 +318,16 @@ nonce (by it&#8217;s index) you want to use. If you look at the previous example
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">auth.setNonces(json {
-  array("random_hash_1", "random_hash_1")
+<pre class="CodeRay highlight"><code data-lang="kotlin">auth.setNonces(json {
+  array(&quot;random_hash_1&quot;, &quot;random_hash_1&quot;)
 })
 
 var salt = auth.generateSalt()
 // we will pick the second nonce
-var hash = auth.computeHash("sausages", salt, 1)
+var hash = auth.computeHash(&quot;sausages&quot;, salt, 1)
 // save to the database
-conn.updateWithParams("INSERT INTO user VALUES (?, ?, ?)", json {
-  array("tim", hash, salt)
+conn.updateWithParams(&quot;INSERT INTO user VALUES (?, ?, ?)&quot;, json {
+  array(&quot;tim&quot;, hash, salt)
 }, { res -&gt;
   if (res.succeeded()) {
     // success!
@@ -347,10 +346,10 @@ authentication info:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var authInfo = json {
+<pre class="CodeRay highlight"><code data-lang="kotlin">var authInfo = json {
   obj(
-    "username" to "tim",
-    "password" to "sausages"
+    &quot;username&quot; to &quot;tim&quot;,
+    &quot;password&quot; to &quot;sausages&quot;
   )
 }
 
@@ -379,7 +378,7 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.isAuthorised("commit_code", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">user.isAuthorised(&quot;commit_code&quot;, { res -&gt;
   if (res.succeeded()) {
     var hasPermission = res.result()
   } else {
@@ -393,7 +392,7 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.isAuthorised("role:manager", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">user.isAuthorised(&quot;role:manager&quot;, { res -&gt;
   if (res.succeeded()) {
     var hasRole = res.result()
   } else {

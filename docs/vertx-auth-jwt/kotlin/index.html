@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -156,11 +155,11 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-auth-jwt&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-auth-jwt<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -172,7 +171,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jwt:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-jwt:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -225,11 +224,11 @@ in a JSON object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">var config = json {
-  obj("keyStore" to obj(
-      "path" to "keystore.jceks",
-      "type" to "jceks",
-      "password" to "secret"
+<pre class="CodeRay highlight"><code data-lang="java">var config = json {
+  obj(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyStore</span><span class="delimiter">&quot;</span></span> to obj(
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span> to <span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jceks</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span> to <span class="string"><span class="delimiter">&quot;</span><span class="content">jceks</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span> to <span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>
     ))
 }
 
@@ -243,23 +242,23 @@ do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">var config = json {
-  obj("keyStore" to obj(
-      "path" to "keystore.jceks",
-      "type" to "jceks",
-      "password" to "secret"
+<pre class="CodeRay highlight"><code data-lang="java">var config = json {
+  obj(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyStore</span><span class="delimiter">&quot;</span></span> to obj(
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span> to <span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jceks</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span> to <span class="string"><span class="delimiter">&quot;</span><span class="content">jceks</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span> to <span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>
     ))
 }
 
 var provider = JWTAuth.create(vertx, config)
 
-// on the verify endpoint once you verify the identity of the user by its username/password
-if ("paulo" == username &amp;&amp; "super_secret" == password) {
+<span class="comment">// on the verify endpoint once you verify the identity of the user by its username/password</span>
+<span class="keyword">if</span> (<span class="string"><span class="delimiter">&quot;</span><span class="content">paulo</span><span class="delimiter">&quot;</span></span> == username &amp;&amp; <span class="string"><span class="delimiter">&quot;</span><span class="content">super_secret</span><span class="delimiter">&quot;</span></span> == password) {
   var token = provider.generateToken(json {
-    obj("sub" to "paulo")
+    obj(<span class="string"><span class="delimiter">&quot;</span><span class="content">sub</span><span class="delimiter">&quot;</span></span> to <span class="string"><span class="delimiter">&quot;</span><span class="content">paulo</span><span class="delimiter">&quot;</span></span>)
   }, JWTOptions())
-  // now for any request to protected resources you should pass this string in the HTTP header Authorization as:
-  // Authorization: Bearer &lt;token&gt;
+  <span class="comment">// now for any request to protected resources you should pass this string in the HTTP header Authorization as:</span>
+  <span class="comment">// Authorization: Bearer &lt;token&gt;</span>
 }</code></pre>
 </div>
 </div>
@@ -321,8 +320,8 @@ case all you need to have is a public key im PEM format.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var config = json {
-  obj("public-key" to "BASE64-ENCODED-PUBLIC_KEY")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var config = json {
+  obj(&quot;public-key&quot; to &quot;BASE64-ENCODED-PUBLIC_KEY&quot;)
 }
 var provider = JWTAuth.create(vertx, config)</code></pre>
 </div>
@@ -352,10 +351,10 @@ be a security hole.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// This string is what you see after the string "Bearer" in the
+<pre class="CodeRay highlight"><code data-lang="kotlin">// This string is what you see after the string &quot;Bearer&quot; in the
 // HTTP Authorization header
 jwtAuth.authenticate(json {
-  obj("jwt" to "BASE64-ENCODED-STRING")
+  obj(&quot;jwt&quot; to &quot;BASE64-ENCODED-STRING&quot;)
 }, { res -&gt;
   if (res.succeeded()) {
     var theUser = res.result()
@@ -386,14 +385,14 @@ jwtAuth.authenticate(json {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// This string is what you see after the string "Bearer" in the
+<pre class="CodeRay highlight"><code data-lang="kotlin">// This string is what you see after the string &quot;Bearer&quot; in the
 // HTTP Authorization header
 
 // In this case we are forcing the provider to ignore the `exp` field
 jwtAuth.authenticate(json {
   obj(
-    "jwt" to "BASE64-ENCODED-STRING",
-    "options" to obj("ignoreExpiration" to true)
+    &quot;jwt&quot; to &quot;BASE64-ENCODED-STRING&quot;,
+    &quot;options&quot; to obj(&quot;ignoreExpiration&quot; to true)
   )
 }, { res -&gt;
   if (res.succeeded()) {
@@ -409,14 +408,14 @@ jwtAuth.authenticate(json {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// This string is what you see after the string "Bearer" in the
+<pre class="CodeRay highlight"><code data-lang="kotlin">// This string is what you see after the string &quot;Bearer&quot; in the
 // HTTP Authorization header
 
 // In this case we are forcing the provider to ignore the `exp` field
 jwtAuth.authenticate(json {
   obj(
-    "jwt" to "BASE64-ENCODED-STRING",
-    "options" to obj("audience" to array("paulo@server.com"))
+    &quot;jwt&quot; to &quot;BASE64-ENCODED-STRING&quot;,
+    &quot;options&quot; to obj(&quot;audience&quot; to array(&quot;paulo@server.com&quot;))
   )
 }, { res -&gt;
   if (res.succeeded()) {
@@ -432,14 +431,14 @@ jwtAuth.authenticate(json {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// This string is what you see after the string "Bearer" in the
+<pre class="CodeRay highlight"><code data-lang="kotlin">// This string is what you see after the string &quot;Bearer&quot; in the
 // HTTP Authorization header
 
 // In this case we are forcing the provider to ignore the `exp` field
 jwtAuth.authenticate(json {
   obj(
-    "jwt" to "BASE64-ENCODED-STRING",
-    "options" to obj("issuer" to "mycorp.com")
+    &quot;jwt&quot; to &quot;BASE64-ENCODED-STRING&quot;,
+    &quot;options&quot; to obj(&quot;issuer&quot; to &quot;mycorp.com&quot;)
   )
 }, { res -&gt;
   if (res.succeeded()) {
@@ -459,7 +458,7 @@ user has a specific authority. In this case one needs to to:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">user.isAuthorised("create-report", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">user.isAuthorised(&quot;create-report&quot;, { res -&gt;
   if (res.succeeded() &amp;&amp; res.result()) {
     // Yes the user can create reports
   }
@@ -476,10 +475,10 @@ configured to use something else than <code>permissions</code>, for example one 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var config = json {
+<pre class="CodeRay highlight"><code data-lang="kotlin">var config = json {
   obj(
-    "public-key" to "BASE64-ENCODED-PUBLIC_KEY",
-    "permissionsClaimKey" to "realm_access/roles"
+    &quot;public-key&quot; to &quot;BASE64-ENCODED-PUBLIC_KEY&quot;,
+    &quot;permissionsClaimKey&quot; to &quot;realm_access/roles&quot;
   )
 }
 

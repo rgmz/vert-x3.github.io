@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -204,7 +203,7 @@ or deployed as a service.</p>
 <div class="listingblock">
 <div class="title">Starting a shell service available via Telnet</div>
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run -conf '{"telnetOptions":{"port":5000}}' maven:io.vertx:vertx-shell:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code>vertx run -conf '{"telnetOptions":{"port":5000}}' maven:io.vertx:vertx-shell:3.4.2</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -213,7 +212,7 @@ or deployed as a service.</p>
 <div class="listingblock">
 <div class="title">Starting a shell service available via SSH</div>
 <div class="content">
-<pre class="prettyprint highlight"><code># create a key pair for the SSH server
+<pre class="CodeRay highlight"><code># create a key pair for the SSH server
 keytool -genkey -keyalg RSA -keystore ssh.jks -keysize 2048 -validity 1095 -dname CN=localhost -keypass secret -storepass secret
 # create the auth config
 echo user.admin=password &gt; auth.properties
@@ -227,7 +226,7 @@ vertx run -conf '{"sshOptions":{"port":4000,"keyPairOptions":{"path":"ssh.jks","
 <div class="listingblock">
 <div class="title">Starting a shell service available via HTTP</div>
 <div class="content">
-<pre class="prettyprint highlight"><code># create a certificate for the HTTP server
+<pre class="CodeRay highlight"><code># create a certificate for the HTTP server
 keytool -genkey -keyalg RSA -keystore keystore.jks -keysize 2048 -validity 1095 -dname CN=localhost -keypass secret -storepass secret
 # create the auth config
 echo user.admin=password &gt; auth.properties
@@ -239,12 +238,12 @@ vertx run -conf '{"httpOptions":{"port":8080,"ssl":true,"keyStoreOptions":{"path
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}",
-    new DeploymentOptions().setConfig(
-        new JsonObject().put("telnetOptions",
-            new JsonObject().
-                put("host", "localhost").
-                put("port", 4000))
+<pre class="CodeRay highlight"><code data-lang="java">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>,
+    <span class="keyword">new</span> DeploymentOptions().setConfig(
+        <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">telnetOptions</span><span class="delimiter">&quot;</span></span>,
+            <span class="keyword">new</span> JsonObject().
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>, <span class="integer">4000</span>))
     )
 );</code></pre>
 </div>
@@ -254,18 +253,18 @@ vertx run -conf '{"httpOptions":{"port":8080,"ssl":true,"keyStoreOptions":{"path
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}",
-    new DeploymentOptions().setConfig(new JsonObject().
-            put("sshOptions", new JsonObject().
-                put("host", "localhost").
-                put("port", 5000).
-                put("keyPairOptions", new JsonObject().
-                    put("path", "src/test/resources/ssh.jks").
-                    put("password", "wibble")).
-                put("authOptions", new JsonObject().
-                    put("provider", "shiro").
-                    put("config", new JsonObject().
-                        put("properties_path", "file:/path/to/my/auth.properties"))))
+<pre class="CodeRay highlight"><code data-lang="java">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>,
+    <span class="keyword">new</span> DeploymentOptions().setConfig(<span class="keyword">new</span> JsonObject().
+            put(<span class="string"><span class="delimiter">&quot;</span><span class="content">sshOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>, <span class="integer">5000</span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyPairOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">src/test/resources/ssh.jks</span><span class="delimiter">&quot;</span></span>).
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>)).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">authOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">provider</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">shiro</span><span class="delimiter">&quot;</span></span>).
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">config</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                        put(<span class="string"><span class="delimiter">&quot;</span><span class="content">properties_path</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">file:/path/to/my/auth.properties</span><span class="delimiter">&quot;</span></span>))))
     )
 );</code></pre>
 </div>
@@ -275,19 +274,19 @@ vertx run -conf '{"httpOptions":{"port":8080,"ssl":true,"keyStoreOptions":{"path
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}",
-    new DeploymentOptions().setConfig(new JsonObject().
-            put("httpOptions", new JsonObject().
-                put("host", "localhost").
-                put("port", 8080).
-                put("ssl", true).
-                put("keyPairOptions", new JsonObject().
-                    put("path", "src/test/resources/server-keystore.jks").
-                    put("password", "wibble")).
-                put("authOptions", new JsonObject().
-                    put("provider", "shiro").
-                    put("config", new JsonObject().
-                        put("properties_path", "file:/path/to/my/auth.properties"))))
+<pre class="CodeRay highlight"><code data-lang="java">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>,
+    <span class="keyword">new</span> DeploymentOptions().setConfig(<span class="keyword">new</span> JsonObject().
+            put(<span class="string"><span class="delimiter">&quot;</span><span class="content">httpOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">ssl</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyPairOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">src/test/resources/server-keystore.jks</span><span class="delimiter">&quot;</span></span>).
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>)).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">authOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">provider</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">shiro</span><span class="delimiter">&quot;</span></span>).
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">config</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                        put(<span class="string"><span class="delimiter">&quot;</span><span class="content">properties_path</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">file:/path/to/my/auth.properties</span><span class="delimiter">&quot;</span></span>))))
     )
 );</code></pre>
 </div>
@@ -316,19 +315,19 @@ or <code>maven:io.vertx:vertx-shell:3.4.2</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ShellService service = ShellService.create(vertx,
-    new ShellServiceOptions().setSSHOptions(
-        new SSHTermOptions().
-            setHost("localhost").
-            setPort(5000).
-            setKeyPairOptions(new JksOptions().
-                    setPath("server-keystore.jks").
-                    setPassword("wibble")
+<pre class="CodeRay highlight"><code data-lang="java">ShellService service = ShellService.create(vertx,
+    <span class="keyword">new</span> ShellServiceOptions().setSSHOptions(
+        <span class="keyword">new</span> SSHTermOptions().
+            setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+            setPort(<span class="integer">5000</span>).
+            setKeyPairOptions(<span class="keyword">new</span> JksOptions().
+                    setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">server-keystore.jks</span><span class="delimiter">&quot;</span></span>).
+                    setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>)
             ).
-            setAuthOptions(new ShiroAuthOptions().
+            setAuthOptions(<span class="keyword">new</span> ShiroAuthOptions().
                     setType(ShiroAuthRealmType.PROPERTIES).
-                    setConfig(new JsonObject().
-                        put("properties_path", "file:/path/to/my/auth.properties"))
+                    setConfig(<span class="keyword">new</span> JsonObject().
+                        put(<span class="string"><span class="delimiter">&quot;</span><span class="content">properties_path</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">file:/path/to/my/auth.properties</span><span class="delimiter">&quot;</span></span>))
             )
     )
 );
@@ -340,11 +339,11 @@ service.start();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ShellService service = ShellService.create(vertx,
-    new ShellServiceOptions().setTelnetOptions(
-        new TelnetTermOptions().
-            setHost("localhost").
-            setPort(4000)
+<pre class="CodeRay highlight"><code data-lang="java">ShellService service = ShellService.create(vertx,
+    <span class="keyword">new</span> ShellServiceOptions().setTelnetOptions(
+        <span class="keyword">new</span> TelnetTermOptions().
+            setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+            setPort(<span class="integer">4000</span>)
     )
 );
 service.start();</code></pre>
@@ -371,11 +370,11 @@ Telnet does not provide any authentication nor encryption at all.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ShellService service = ShellService.create(vertx,
-    new ShellServiceOptions().setHttpOptions(
-        new HttpTermOptions().
-            setHost("localhost").
-            setPort(8080)
+<pre class="CodeRay highlight"><code data-lang="java">ShellService service = ShellService.create(vertx,
+    <span class="keyword">new</span> ShellServiceOptions().setHttpOptions(
+        <span class="keyword">new</span> HttpTermOptions().
+            setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+            setPort(<span class="integer">8080</span>)
     )
 );
 service.start();</code></pre>
@@ -495,18 +494,18 @@ or LDAP, see Vert.x Auth for more info:</p>
 <div class="listingblock">
 <div class="title">Deploying the Shell Service on SSH with Mongo authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}",
-    new DeploymentOptions().setConfig(new JsonObject().
-            put("sshOptions", new JsonObject().
-                put("host", "localhost").
-                put("port", 5000).
-                put("keyPairOptions", new JsonObject().
-                    put("path", "src/test/resources/ssh.jks").
-                    put("password", "wibble")).
-                put("authOptions", new JsonObject().
-                    put("provider", "mongo").
-                    put("config", new JsonObject().
-                        put("connection_string", "mongodb://localhost:27018"))))
+<pre class="CodeRay highlight"><code data-lang="java">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>,
+    <span class="keyword">new</span> DeploymentOptions().setConfig(<span class="keyword">new</span> JsonObject().
+            put(<span class="string"><span class="delimiter">&quot;</span><span class="content">sshOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>, <span class="integer">5000</span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyPairOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">src/test/resources/ssh.jks</span><span class="delimiter">&quot;</span></span>).
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>)).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">authOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">provider</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">mongo</span><span class="delimiter">&quot;</span></span>).
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">config</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                        put(<span class="string"><span class="delimiter">&quot;</span><span class="content">connection_string</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">mongodb://localhost:27018</span><span class="delimiter">&quot;</span></span>))))
     )
 );</code></pre>
 </div>
@@ -514,17 +513,17 @@ or LDAP, see Vert.x Auth for more info:</p>
 <div class="listingblock">
 <div class="title">Running the Shell Service on SSH with Mongo authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ShellService service = ShellService.create(vertx,
-    new ShellServiceOptions().setSSHOptions(
-        new SSHTermOptions().
-            setHost("localhost").
-            setPort(5000).
-            setKeyPairOptions(new JksOptions().
-                    setPath("server-keystore.jks").
-                    setPassword("wibble")
+<pre class="CodeRay highlight"><code data-lang="java">ShellService service = ShellService.create(vertx,
+    <span class="keyword">new</span> ShellServiceOptions().setSSHOptions(
+        <span class="keyword">new</span> SSHTermOptions().
+            setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+            setPort(<span class="integer">5000</span>).
+            setKeyPairOptions(<span class="keyword">new</span> JksOptions().
+                    setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">server-keystore.jks</span><span class="delimiter">&quot;</span></span>).
+                    setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>)
             ).
-            setAuthOptions(new MongoAuthOptions().setConfig(new JsonObject().
-                    put("connection_string", "mongodb://localhost:27018"))
+            setAuthOptions(<span class="keyword">new</span> MongoAuthOptions().setConfig(<span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">connection_string</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">mongodb://localhost:27018</span><span class="delimiter">&quot;</span></span>))
             )
     )
 );
@@ -534,19 +533,19 @@ service.start();</code></pre>
 <div class="listingblock">
 <div class="title">Deploying the Shell Service on SSH with JDBC authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}",
-    new DeploymentOptions().setConfig(new JsonObject().
-            put("sshOptions", new JsonObject().
-                put("host", "localhost").
-                put("port", 5000).
-                put("keyPairOptions", new JsonObject().
-                    put("path", "src/test/resources/ssh.jks").
-                    put("password", "wibble")).
-                put("authOptions", new JsonObject().
-                    put("provider", "jdbc").
-                    put("config", new JsonObject()
-                        .put("url", "jdbc:hsqldb:mem:test?shutdown=true")
-                        .put("driver_class", "org.hsqldb.jdbcDriver"))))
+<pre class="CodeRay highlight"><code data-lang="java">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>,
+    <span class="keyword">new</span> DeploymentOptions().setConfig(<span class="keyword">new</span> JsonObject().
+            put(<span class="string"><span class="delimiter">&quot;</span><span class="content">sshOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>, <span class="integer">5000</span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyPairOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">src/test/resources/ssh.jks</span><span class="delimiter">&quot;</span></span>).
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>)).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">authOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">provider</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc</span><span class="delimiter">&quot;</span></span>).
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">config</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject()
+                        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">url</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc:hsqldb:mem:test?shutdown=true</span><span class="delimiter">&quot;</span></span>)
+                        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">driver_class</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">org.hsqldb.jdbcDriver</span><span class="delimiter">&quot;</span></span>))))
     )
 );</code></pre>
 </div>
@@ -554,18 +553,18 @@ service.start();</code></pre>
 <div class="listingblock">
 <div class="title">Running the Shell Service on SSH with JDBC authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ShellService service = ShellService.create(vertx,
-    new ShellServiceOptions().setSSHOptions(
-        new SSHTermOptions().
-            setHost("localhost").
-            setPort(5000).
-            setKeyPairOptions(new JksOptions().
-                    setPath("server-keystore.jks").
-                    setPassword("wibble")
+<pre class="CodeRay highlight"><code data-lang="java">ShellService service = ShellService.create(vertx,
+    <span class="keyword">new</span> ShellServiceOptions().setSSHOptions(
+        <span class="keyword">new</span> SSHTermOptions().
+            setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+            setPort(<span class="integer">5000</span>).
+            setKeyPairOptions(<span class="keyword">new</span> JksOptions().
+                    setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">server-keystore.jks</span><span class="delimiter">&quot;</span></span>).
+                    setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>)
             ).
-            setAuthOptions(new JDBCAuthOptions().setConfig(new JsonObject()
-                    .put("url", "jdbc:hsqldb:mem:test?shutdown=true")
-                    .put("driver_class", "org.hsqldb.jdbcDriver"))
+            setAuthOptions(<span class="keyword">new</span> JDBCAuthOptions().setConfig(<span class="keyword">new</span> JsonObject()
+                    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">url</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc:hsqldb:mem:test?shutdown=true</span><span class="delimiter">&quot;</span></span>)
+                    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">driver_class</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">org.hsqldb.jdbcDriver</span><span class="delimiter">&quot;</span></span>))
             )
     )
 );
@@ -600,19 +599,19 @@ extends the <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.ht
 <div class="listingblock">
 <div class="title">Deploying the Shell Service on HTTP with Mongo authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}",
-    new DeploymentOptions().setConfig(new JsonObject().
-            put("httpOptions", new JsonObject().
-                put("host", "localhost").
-                put("port", 8080).
-                put("ssl", true).
-                put("keyPairOptions", new JsonObject().
-                    put("path", "src/test/resources/server-keystore.jks").
-                    put("password", "wibble")).
-                put("authOptions", new JsonObject().
-                    put("provider", "mongo").
-                    put("config", new JsonObject().
-                        put("connection_string", "mongodb://localhost:27018"))))
+<pre class="CodeRay highlight"><code data-lang="java">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>,
+    <span class="keyword">new</span> DeploymentOptions().setConfig(<span class="keyword">new</span> JsonObject().
+            put(<span class="string"><span class="delimiter">&quot;</span><span class="content">httpOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">ssl</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyPairOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">src/test/resources/server-keystore.jks</span><span class="delimiter">&quot;</span></span>).
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>)).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">authOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">provider</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">mongo</span><span class="delimiter">&quot;</span></span>).
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">config</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                        put(<span class="string"><span class="delimiter">&quot;</span><span class="content">connection_string</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">mongodb://localhost:27018</span><span class="delimiter">&quot;</span></span>))))
     )
 );</code></pre>
 </div>
@@ -620,13 +619,13 @@ extends the <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.ht
 <div class="listingblock">
 <div class="title">Running the Shell Service on HTTP with Mongo authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ShellService service = ShellService.create(vertx,
-    new ShellServiceOptions().setHttpOptions(
-        new HttpTermOptions().
-            setHost("localhost").
-            setPort(8080).
-            setAuthOptions(new MongoAuthOptions().setConfig(new JsonObject().
-                    put("connection_string", "mongodb://localhost:27018"))
+<pre class="CodeRay highlight"><code data-lang="java">ShellService service = ShellService.create(vertx,
+    <span class="keyword">new</span> ShellServiceOptions().setHttpOptions(
+        <span class="keyword">new</span> HttpTermOptions().
+            setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+            setPort(<span class="integer">8080</span>).
+            setAuthOptions(<span class="keyword">new</span> MongoAuthOptions().setConfig(<span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">connection_string</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">mongodb://localhost:27018</span><span class="delimiter">&quot;</span></span>))
             )
     )
 );
@@ -636,20 +635,20 @@ service.start();</code></pre>
 <div class="listingblock">
 <div class="title">Deploying the Shell Service on HTTP with JDBC authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}",
-    new DeploymentOptions().setConfig(new JsonObject().
-            put("httpOptions", new JsonObject().
-                put("host", "localhost").
-                put("port", 8080).
-                put("ssl", true).
-                put("keyPairOptions", new JsonObject().
-                    put("path", "src/test/resources/server-keystore.jks").
-                    put("password", "wibble")).
-                put("authOptions", new JsonObject().
-                    put("provider", "jdbc").
-                    put("config", new JsonObject()
-                        .put("url", "jdbc:hsqldb:mem:test?shutdown=true")
-                        .put("driver_class", "org.hsqldb.jdbcDriver"))))
+<pre class="CodeRay highlight"><code data-lang="java">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>,
+    <span class="keyword">new</span> DeploymentOptions().setConfig(<span class="keyword">new</span> JsonObject().
+            put(<span class="string"><span class="delimiter">&quot;</span><span class="content">httpOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">ssl</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyPairOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">src/test/resources/server-keystore.jks</span><span class="delimiter">&quot;</span></span>).
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>)).
+                put(<span class="string"><span class="delimiter">&quot;</span><span class="content">authOptions</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">provider</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc</span><span class="delimiter">&quot;</span></span>).
+                    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">config</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject()
+                        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">url</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc:hsqldb:mem:test?shutdown=true</span><span class="delimiter">&quot;</span></span>)
+                        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">driver_class</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">org.hsqldb.jdbcDriver</span><span class="delimiter">&quot;</span></span>))))
     )
 );</code></pre>
 </div>
@@ -657,14 +656,14 @@ service.start();</code></pre>
 <div class="listingblock">
 <div class="title">Running the Shell Service on HTTP with JDBC authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ShellService service = ShellService.create(vertx,
-    new ShellServiceOptions().setHttpOptions(
-        new HttpTermOptions().
-            setHost("localhost").
-            setPort(8080).
-            setAuthOptions(new JDBCAuthOptions().setConfig(new JsonObject()
-                    .put("url", "jdbc:hsqldb:mem:test?shutdown=true")
-                    .put("driver_class", "org.hsqldb.jdbcDriver"))
+<pre class="CodeRay highlight"><code data-lang="java">ShellService service = ShellService.create(vertx,
+    <span class="keyword">new</span> ShellServiceOptions().setHttpOptions(
+        <span class="keyword">new</span> HttpTermOptions().
+            setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).
+            setPort(<span class="integer">8080</span>).
+            setAuthOptions(<span class="keyword">new</span> JDBCAuthOptions().setConfig(<span class="keyword">new</span> JsonObject()
+                    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">url</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc:hsqldb:mem:test?shutdown=true</span><span class="delimiter">&quot;</span></span>)
+                    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">driver_class</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">org.hsqldb.jdbcDriver</span><span class="delimiter">&quot;</span></span>))
             )
     )
 );
@@ -923,17 +922,17 @@ method:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CommandBuilder builder = CommandBuilder.command("my-command");
+<pre class="CodeRay highlight"><code data-lang="java">CommandBuilder builder = CommandBuilder.command(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-command</span><span class="delimiter">&quot;</span></span>);
 builder.processHandler(process -&gt; {
 
-  // Write a message to the console
-  process.write("Hello World");
+  <span class="comment">// Write a message to the console</span>
+  process.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World</span><span class="delimiter">&quot;</span></span>);
 
-  // End the process
+  <span class="comment">// End the process</span>
   process.end();
 });
 
-// Register the command
+<span class="comment">// Register the command</span>
 CommandRegistry registry = CommandRegistry.getShared(vertx);
 registry.registerCommand(builder.build(vertx));</code></pre>
 </div>
@@ -969,11 +968,11 @@ registry. Keep this in mind if you maintain state in a command.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">command.processHandler(process -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">command.processHandler(process -&gt; {
 
-  for (String arg : process.args()) {
-    // Print each argument on the console
-    process.write("Argument " + arg);
+  <span class="keyword">for</span> (<span class="predefined-type">String</span> arg : process.args()) {
+    <span class="comment">// Print each argument on the console</span>
+    process.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">Argument </span><span class="delimiter">&quot;</span></span> + arg);
   }
 
   process.end();
@@ -999,17 +998,17 @@ write command line argument parsing:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CLI cli = CLI.create("my-command").
-    addArgument(new Argument().setArgName("my-arg")).
-    addOption(new Option().setShortName("m").setLongName("my-option"));
+<pre class="CodeRay highlight"><code data-lang="java">CLI cli = CLI.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-command</span><span class="delimiter">&quot;</span></span>).
+    addArgument(<span class="keyword">new</span> Argument().setArgName(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-arg</span><span class="delimiter">&quot;</span></span>)).
+    addOption(<span class="keyword">new</span> <span class="predefined-type">Option</span>().setShortName(<span class="string"><span class="delimiter">&quot;</span><span class="content">m</span><span class="delimiter">&quot;</span></span>).setLongName(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-option</span><span class="delimiter">&quot;</span></span>));
 CommandBuilder command = CommandBuilder.command(cli);
 command.processHandler(process -&gt; {
 
   CommandLine commandLine = process.commandLine();
 
-  String argValue = commandLine.getArgumentValue(0);
-  String optValue = commandLine.getOptionValue("my-option");
-  process.write("The argument is " + argValue + " and the option is " + optValue);
+  <span class="predefined-type">String</span> argValue = commandLine.getArgumentValue(<span class="integer">0</span>);
+  <span class="predefined-type">String</span> optValue = commandLine.getOptionValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-option</span><span class="delimiter">&quot;</span></span>);
+  process.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">The argument is </span><span class="delimiter">&quot;</span></span> + argValue + <span class="string"><span class="delimiter">&quot;</span><span class="content"> and the option is </span><span class="delimiter">&quot;</span></span> + optValue);
 
   process.end();
 });</code></pre>
@@ -1021,12 +1020,12 @@ when the option is activated:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">CLI cli = CLI.create("my-command").
-    addArgument(new Argument().setArgName("my-arg")).
-    addOption(new Option().setArgName("help").setShortName("h").setLongName("help"));
+<pre class="CodeRay highlight"><code data-lang="java">CLI cli = CLI.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-command</span><span class="delimiter">&quot;</span></span>).
+    addArgument(<span class="keyword">new</span> Argument().setArgName(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-arg</span><span class="delimiter">&quot;</span></span>)).
+    addOption(<span class="keyword">new</span> <span class="predefined-type">Option</span>().setArgName(<span class="string"><span class="delimiter">&quot;</span><span class="content">help</span><span class="delimiter">&quot;</span></span>).setShortName(<span class="string"><span class="delimiter">&quot;</span><span class="content">h</span><span class="delimiter">&quot;</span></span>).setLongName(<span class="string"><span class="delimiter">&quot;</span><span class="content">help</span><span class="delimiter">&quot;</span></span>));
 CommandBuilder command = CommandBuilder.command(cli);
 command.processHandler(process -&gt; {
-  // ...
+  <span class="comment">// ...</span>
 });</code></pre>
 </div>
 </div>
@@ -1046,8 +1045,8 @@ receives data, e.g the user uses his keyboard:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">tty.stdinHandler(data -&gt; {
-  System.out.println("Received " + data);
+<pre class="CodeRay highlight"><code data-lang="java">tty.stdinHandler(data -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received </span><span class="delimiter">&quot;</span></span> + data);
 });</code></pre>
 </div>
 </div>
@@ -1056,7 +1055,7 @@ receives data, e.g the user uses his keyboard:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">tty.write("Hello World");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">tty.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -1068,7 +1067,7 @@ receives data, e.g the user uses his keyboard:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">tty.write("Current terminal size: (" + tty.width() + ", " + tty.height() + ")");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">tty.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">Current terminal size: (</span><span class="delimiter">&quot;</span></span> + tty.width() + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> + tty.height() + <span class="string"><span class="delimiter">&quot;</span><span class="content">)</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -1081,8 +1080,8 @@ is called, the new terminal size can be obtained with <code><a href="../../apido
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">tty.resizehandler(v -&gt; {
-  System.out.println("terminal resized : " + tty.width() + " " + tty.height());
+<pre class="CodeRay highlight"><code data-lang="java">tty.resizehandler(v -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">terminal resized : </span><span class="delimiter">&quot;</span></span> + tty.width() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + tty.height());
 });</code></pre>
 </div>
 </div>
@@ -1095,7 +1094,7 @@ returns the current terminal type, it can be null if the terminal has not advert
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">System.out.println("terminal type : " + tty.type());</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">terminal type : </span><span class="delimiter">&quot;</span></span> + tty.type());</code></pre>
 </div>
 </div>
 </div>
@@ -1108,12 +1107,12 @@ used in commands to scope data. A command can get the session with <code><a href
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">command.processHandler(process -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">command.processHandler(process -&gt; {
 
   Session session = process.session();
 
-  if (session.get("my_key") == null) {
-    session.put("my key", "my value");
+  <span class="keyword">if</span> (session.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">my_key</span><span class="delimiter">&quot;</span></span>) == <span class="predefined-constant">null</span>) {
+    session.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">my key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">my value</span><span class="delimiter">&quot;</span></span>);
   }
 
   process.end();
@@ -1129,13 +1128,13 @@ in the invocation of the command handler or any time later:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">command.processHandler(process -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">command.processHandler(process -&gt; {
   Vertx vertx = process.vertx();
 
-  // Set a timer
-  vertx.setTimer(1000, id -&gt; {
+  <span class="comment">// Set a timer</span>
+  vertx.setTimer(<span class="integer">1000</span>, id -&gt; {
 
-    // End the command when the timer is fired
+    <span class="comment">// End the command when the timer is fired</span>
     process.end();
   });
 });</code></pre>
@@ -1156,15 +1155,15 @@ be used for interrupting commands <em>blocking</em> the CLI and gracefully endin
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">command.processHandler(process -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">command.processHandler(process -&gt; {
   Vertx vertx = process.vertx();
 
-  // Every second print a message on the console
-  long periodicId = vertx.setPeriodic(1000, id -&gt; {
-    process.write("tick\n");
+  <span class="comment">// Every second print a message on the console</span>
+  <span class="type">long</span> periodicId = vertx.setPeriodic(<span class="integer">1000</span>, id -&gt; {
+    process.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">tick</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>);
   });
 
-  // When user press Ctrl+C: cancel the timer and end the process
+  <span class="comment">// When user press Ctrl+C: cancel the timer and end the process</span>
   process.interruptHandler(v -&gt; {
     vertx.cancelTimer(periodicId);
     process.end();
@@ -1215,16 +1214,16 @@ is resumed, usually when the user types <em>fg</em>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">command.processHandler(process -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">command.processHandler(process -&gt; {
 
-  // Command is suspended
+  <span class="comment">// Command is suspended</span>
   process.suspendHandler(v -&gt; {
-    System.out.println("Suspended");
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Suspended</span><span class="delimiter">&quot;</span></span>);
   });
 
-  // Command is resumed
+  <span class="comment">// Command is resumed</span>
   process.resumeHandler(v -&gt; {
-    System.out.println("Resumed");
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Resumed</span><span class="delimiter">&quot;</span></span>);
   });
 });</code></pre>
 </div>
@@ -1239,11 +1238,11 @@ the command is <em>terminated</em>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">command.processHandler(process -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">command.processHandler(process -&gt; {
 
-  // Command terminates
+  <span class="comment">// Command terminates</span>
   process.endHandler(v -&gt; {
-    System.out.println("Terminated");
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Terminated</span><span class="delimiter">&quot;</span></span>);
   });
 });</code></pre>
 </div>
@@ -1296,10 +1295,10 @@ steps:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ShellServer server = ShellServer.create(vertx); <b class="conum">(1)</b>
+<pre class="CodeRay highlight"><code data-lang="java">ShellServer server = ShellServer.create(vertx); <b class="conum">(1)</b>
 
 Router shellRouter = Router.router(vertx); <b class="conum">(2)</b>
-router.mountSubRouter("/shell", shellRouter);
+router.mountSubRouter(<span class="string"><span class="delimiter">&quot;</span><span class="content">/shell</span><span class="delimiter">&quot;</span></span>, shellRouter);
 TermServer httpTermServer = TermServer.createHttpTermServer(vertx, router);
 
 TermServer sshTermServer = TermServer.createSSHTermServer(vertx); <b class="conum">(3)</b>
@@ -1342,7 +1341,7 @@ server.listen(); <b class="conum">(6)</b></code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Shell shell = shellServer.createShell();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">Shell shell = shellServer.createShell();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1350,21 +1349,21 @@ server.listen(); <b class="conum">(6)</b></code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Shell shell = shellServer.createShell();
+<pre class="CodeRay highlight"><code data-lang="java">Shell shell = shellServer.createShell();
 
-// Create a job fo the command
-Job job = shell.createJob("my-command 1234");
+<span class="comment">// Create a job fo the command</span>
+Job job = shell.createJob(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-command 1234</span><span class="delimiter">&quot;</span></span>);
 
-// Create a pseudo terminal
+<span class="comment">// Create a pseudo terminal</span>
 Pty pty = Pty.create();
 pty.stdoutHandler(data -&gt; {
-  System.out.println("Command wrote " + data);
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Command wrote </span><span class="delimiter">&quot;</span></span> + data);
 });
 
-// Run the command
+<span class="comment">// Run the command</span>
 job.setTty(pty.slave());
 job.statusUpdateHandler(status -&gt; {
-  System.out.println("Command terminated with status " + status);
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Command terminated with status </span><span class="delimiter">&quot;</span></span> + status);
 });</code></pre>
 </div>
 </div>
@@ -1412,7 +1411,7 @@ terminal.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">TermServer server = TermServer.createSSHTermServer(vertx, new SSHTermOptions().setPort(5000).setHost("localhost"));
+<pre class="CodeRay highlight"><code data-lang="java">TermServer server = TermServer.createSSHTermServer(vertx, <span class="keyword">new</span> SSHTermOptions().setPort(<span class="integer">5000</span>).setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>));
 server.termHandler(term -&gt; {
   term.stdinHandler(line -&gt; {
     term.write(line);
@@ -1430,7 +1429,7 @@ how to use the tty.</p>
 <h3 id="_telnet_term">Telnet term</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">TermServer server = TermServer.createTelnetTermServer(vertx, new TelnetTermOptions().setPort(5000).setHost("localhost"));
+<pre class="CodeRay highlight"><code data-lang="java">TermServer server = TermServer.createTelnetTermServer(vertx, <span class="keyword">new</span> TelnetTermOptions().setPort(<span class="integer">5000</span>).setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>));
 server.termHandler(term -&gt; {
   term.stdinHandler(line -&gt; {
     term.write(line);
@@ -1448,7 +1447,7 @@ on top of Vert.x Web using the SockJS protocol.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">TermServer server = TermServer.createHttpTermServer(vertx, new HttpTermOptions().setPort(5000).setHost("localhost"));
+<pre class="CodeRay highlight"><code data-lang="java">TermServer server = TermServer.createHttpTermServer(vertx, <span class="keyword">new</span> HttpTermOptions().setPort(<span class="integer">5000</span>).setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>));
 server.termHandler(term -&gt; {
   term.stdinHandler(line -&gt; {
     term.write(line);
@@ -1465,7 +1464,7 @@ server.listen();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">TermServer server = TermServer.createHttpTermServer(vertx, router, new HttpTermOptions().setPort(5000).setHost("localhost"));
+<pre class="CodeRay highlight"><code data-lang="java">TermServer server = TermServer.createHttpTermServer(vertx, router, <span class="keyword">new</span> HttpTermOptions().setPort(<span class="integer">5000</span>).setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>));
 server.termHandler(term -&gt; {
   term.stdinHandler(line -&gt; {
     term.write(line);
@@ -1501,11 +1500,11 @@ server.listen();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">window.addEventListener('load', function () {
-  var url = 'http://localhost/shell';
-  new VertxTerm(url, {
-    cols: 80,
-    rows: 24
+<pre class="CodeRay highlight"><code data-lang="javascript">window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">load</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> url = <span class="string"><span class="delimiter">'</span><span class="content">http://localhost/shell</span><span class="delimiter">'</span></span>;
+  <span class="keyword">new</span> VertxTerm(url, {
+    <span class="key">cols</span>: <span class="integer">80</span>,
+    <span class="key">rows</span>: <span class="integer">24</span>
    });
  });</code></pre>
 </div>
@@ -1515,11 +1514,11 @@ server.listen();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">window.addEventListener('load', function () {
-  var url = 'ws://localhost/shell/websocket';
-  new VertxTerm(url, {
-    cols: 80,
-    rows: 24
+<pre class="CodeRay highlight"><code data-lang="javascript">window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">load</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> url = <span class="string"><span class="delimiter">'</span><span class="content">ws://localhost/shell/websocket</span><span class="delimiter">'</span></span>;
+  <span class="keyword">new</span> VertxTerm(url, {
+    <span class="key">cols</span>: <span class="integer">80</span>,
+    <span class="key">rows</span>: <span class="integer">24</span>
    });
  });</code></pre>
 </div>
@@ -1545,10 +1544,10 @@ jar under the <code>io.vertx.ext.shell</code> packages.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">public class CustomCommands implements CommandResolverFactory {
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">CustomCommands</span> <span class="directive">implements</span> CommandResolverFactory {
 
-  public void resolver(Vertx vertx, Handler&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolverHandler) {
-    resolverHandler.handler(() -&gt; Arrays.asList(myCommand1, myCommand2));
+  <span class="directive">public</span> <span class="type">void</span> resolver(Vertx vertx, <span class="predefined-type">Handler</span>&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolverHandler) {
+    resolverHandler.handler(() -&gt; <span class="predefined-type">Arrays</span>.asList(myCommand1, myCommand2));
   }
 }</code></pre>
 </div>
@@ -1563,7 +1562,7 @@ are resolved.</p>
 <div class="listingblock">
 <div class="title">The service provider file <code>META-INF/services/io.vertx.ext.shell.spi.CommandResolverFactory</code></div>
 <div class="content">
-<pre class="prettyprint highlight"><code>my.CustomCommands</code></pre>
+<pre class="CodeRay highlight"><code>my.CustomCommands</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1583,22 +1582,22 @@ don&#8217;t use this mechanism.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">public class CommandPackExample implements CommandResolverFactory {
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">CommandPackExample</span> <span class="directive">implements</span> CommandResolverFactory {
 
-  @Override
-  public void resolver(Vertx vertx, Handler&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolveHandler) {
-    List&lt;Command&gt; commands = new ArrayList&lt;&gt;();
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="type">void</span> resolver(Vertx vertx, <span class="predefined-type">Handler</span>&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolveHandler) {
+    <span class="predefined-type">List</span>&lt;Command&gt; commands = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;();
 
-    // Add commands
+    <span class="comment">// Add commands</span>
     commands.add(Command.create(vertx, JavaCommandExample.class));
 
-    // Add another command
-    commands.add(CommandBuilder.command("another-command").processHandler(process -&gt; {
-      // Handle process
+    <span class="comment">// Add another command</span>
+    commands.add(CommandBuilder.command(<span class="string"><span class="delimiter">&quot;</span><span class="content">another-command</span><span class="delimiter">&quot;</span></span>).processHandler(process -&gt; {
+      <span class="comment">// Handle process</span>
     }).build(vertx));
 
-    // Resolve with the commands
-    resolveHandler.handle(Future.succeededFuture(() -&gt; commands));
+    <span class="comment">// Resolve with the commands</span>
+    resolveHandler.handle(<span class="predefined-type">Future</span>.succeededFuture(() -&gt; commands));
   }
 }</code></pre>
 </div>
@@ -1609,7 +1608,7 @@ don&#8217;t use this mechanism.</p>
 <div class="listingblock">
 <div class="title"><code>META-INF/services/io.vertx.ext.shell.spi.CommandResolverFactory</code> descriptor</div>
 <div class="content">
-<pre class="prettyprint highlight"><code>examples.pack.CommandPackExample</code></pre>
+<pre class="CodeRay highlight"><code>examples.pack.CommandPackExample</code></pre>
 </div>
 </div>
 </div>

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -179,11 +178,11 @@ build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-camel-bridge&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-camel-bridge<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -195,7 +194,7 @@ build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-camel-bridge:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-camel-bridge:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -208,8 +207,8 @@ build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var camel = org.apache.camel.impl.DefaultCamelContext()
-io.vertx.camel.CamelBridge.create(vertx, io.vertx.camel.CamelBridgeOptions(camel).addInboundMapping(io.vertx.camel.InboundMapping.fromCamel("direct:stuff").toVertx("eventbus-address")).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx("eventbus-address").toCamel("stream:out"))).start()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var camel = org.apache.camel.impl.DefaultCamelContext()
+io.vertx.camel.CamelBridge.create(vertx, io.vertx.camel.CamelBridgeOptions(camel).addInboundMapping(io.vertx.camel.InboundMapping.fromCamel(&quot;direct:stuff&quot;).toVertx(&quot;eventbus-address&quot;)).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx(&quot;eventbus-address&quot;).toCamel(&quot;stream:out&quot;))).start()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -225,9 +224,9 @@ transformed to event bus messages.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var endpoint = camel.getEndpoint("direct:foo")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var endpoint = camel.getEndpoint(&quot;direct:foo&quot;)
 
-io.vertx.camel.CamelBridge.create(vertx, io.vertx.camel.CamelBridgeOptions(camel).addInboundMapping(io.vertx.camel.InboundMapping.fromCamel("direct:stuff").toVertx("eventbus-address")).addInboundMapping(io.vertx.camel.InboundMapping.fromCamel(endpoint).toVertx("eventbus-address")).addInboundMapping(io.vertx.camel.InboundMapping.fromCamel(endpoint).toVertx("eventbus-address").withoutHeadersCopy()).addInboundMapping(io.vertx.camel.InboundMapping.fromCamel(endpoint).toVertx("eventbus-address").usePublish()).addInboundMapping(io.vertx.camel.InboundMapping.fromCamel(endpoint).toVertx("eventbus-address").withBodyType(String.`class`)))</code></pre>
+io.vertx.camel.CamelBridge.create(vertx, io.vertx.camel.CamelBridgeOptions(camel).addInboundMapping(io.vertx.camel.InboundMapping.fromCamel(&quot;direct:stuff&quot;).toVertx(&quot;eventbus-address&quot;)).addInboundMapping(io.vertx.camel.InboundMapping.fromCamel(endpoint).toVertx(&quot;eventbus-address&quot;)).addInboundMapping(io.vertx.camel.InboundMapping.fromCamel(endpoint).toVertx(&quot;eventbus-address&quot;).withoutHeadersCopy()).addInboundMapping(io.vertx.camel.InboundMapping.fromCamel(endpoint).toVertx(&quot;eventbus-address&quot;).usePublish()).addInboundMapping(io.vertx.camel.InboundMapping.fromCamel(endpoint).toVertx(&quot;eventbus-address&quot;).withBodyType(String.`class`)))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -259,7 +258,7 @@ code expect as reply to the sent message. When the reply arrives it is propagate
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">Code not translatable</code></pre>
 </div>
 </div>
 </div>
@@ -271,9 +270,9 @@ are transformed to Camel messages and sent to the endpoint.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var endpoint = camel.getEndpoint("stream:out")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var endpoint = camel.getEndpoint(&quot;stream:out&quot;)
 
-io.vertx.camel.CamelBridge.create(vertx, io.vertx.camel.CamelBridgeOptions(camel).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx("eventbus-address").toCamel("stream:out")).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx("eventbus-address").toCamel(endpoint)).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx("eventbus-address").toCamel(endpoint).withoutHeadersCopy()).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx("eventbus-address").toCamel(endpoint)))</code></pre>
+io.vertx.camel.CamelBridge.create(vertx, io.vertx.camel.CamelBridgeOptions(camel).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx(&quot;eventbus-address&quot;).toCamel(&quot;stream:out&quot;)).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx(&quot;eventbus-address&quot;).toCamel(endpoint)).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx(&quot;eventbus-address&quot;).toCamel(endpoint).withoutHeadersCopy()).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx(&quot;eventbus-address&quot;).toCamel(endpoint)))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -284,16 +283,16 @@ io.vertx.camel.CamelBridge.create(vertx, io.vertx.camel.CamelBridgeOptions(camel
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">camel.addRoutes(org.apache.camel.builder.RouteBuilder())
+<pre class="CodeRay highlight"><code data-lang="kotlin">camel.addRoutes(org.apache.camel.builder.RouteBuilder())
 
-var bridge = io.vertx.camel.CamelBridge.create(vertx, io.vertx.camel.CamelBridgeOptions(camel).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx("test").toCamel("direct:start")))
+var bridge = io.vertx.camel.CamelBridge.create(vertx, io.vertx.camel.CamelBridgeOptions(camel).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx(&quot;test&quot;).toCamel(&quot;direct:start&quot;)))
 
 camel.start()
 bridge.start()
 
 
-vertx.eventBus().send&lt;Any&gt;("test", "hello", { reply -&gt;
-  // Reply from the route (here it's "OK")
+vertx.eventBus().send&lt;Any&gt;(&quot;test&quot;, &quot;hello&quot;, { reply -&gt;
+  // Reply from the route (here it's &quot;OK&quot;)
 })</code></pre>
 </div>
 </div>
@@ -304,14 +303,14 @@ route fails, you get a reply failure (recipient failure), with the message as ca
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">camel.addRoutes(org.apache.camel.builder.RouteBuilder())
+<pre class="CodeRay highlight"><code data-lang="kotlin">camel.addRoutes(org.apache.camel.builder.RouteBuilder())
 
-var bridge = io.vertx.camel.CamelBridge.create(vertx, io.vertx.camel.CamelBridgeOptions(camel).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx("camel-route").toCamel("direct:my-route")))
+var bridge = io.vertx.camel.CamelBridge.create(vertx, io.vertx.camel.CamelBridgeOptions(camel).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx(&quot;camel-route&quot;).toCamel(&quot;direct:my-route&quot;)))
 
 camel.start()
 bridge.start()
 
-vertx.eventBus().send&lt;Any&gt;("camel-route", "hello", { reply -&gt;
+vertx.eventBus().send&lt;Any&gt;(&quot;camel-route&quot;, &quot;hello&quot;, { reply -&gt;
   if (reply.succeeded()) {
     var theResponse = reply.result().body()
   } else {
@@ -326,14 +325,14 @@ processing on the event loop thread:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">camel.addRoutes(org.apache.camel.builder.RouteBuilder())
+<pre class="CodeRay highlight"><code data-lang="kotlin">camel.addRoutes(org.apache.camel.builder.RouteBuilder())
 
-var bridge = io.vertx.camel.CamelBridge.create(vertx, io.vertx.camel.CamelBridgeOptions(camel).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx("camel-route").toCamel("direct:my-route").setBlocking(true)))
+var bridge = io.vertx.camel.CamelBridge.create(vertx, io.vertx.camel.CamelBridgeOptions(camel).addOutboundMapping(io.vertx.camel.OutboundMapping.fromVertx(&quot;camel-route&quot;).toCamel(&quot;direct:my-route&quot;).setBlocking(true)))
 
 camel.start()
 bridge.start()
 
-vertx.eventBus().send&lt;Any&gt;("camel-route", "hello", { reply -&gt;
+vertx.eventBus().send&lt;Any&gt;(&quot;camel-route&quot;, &quot;hello&quot;, { reply -&gt;
   if (reply.succeeded()) {
     var theResponse = reply.result().body()
   } else {

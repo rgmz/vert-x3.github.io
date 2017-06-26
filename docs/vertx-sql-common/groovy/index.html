@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -167,11 +166,11 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-sql-common&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-sql-common<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -183,7 +182,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-sql-common:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-sql-common:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -209,11 +208,11 @@ execute in its own transaction.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.setAutoCommit(false, { res -&gt;
-  if (res.succeeded()) {
-    // OK!
-  } else {
-    // Failed!
+<pre class="CodeRay highlight"><code data-lang="java">connection.setAutoCommit(<span class="predefined-constant">false</span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// OK!</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 })</code></pre>
 </div>
@@ -233,12 +232,12 @@ been run.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.query("SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE", { res -&gt;
-  if (res.succeeded()) {
-    // Get the result set
+<pre class="CodeRay highlight"><code data-lang="java">connection.query(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// Get the result set</span>
     def resultSet = res.result()
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 })</code></pre>
 </div>
@@ -255,16 +254,16 @@ available with <code><a href="../../apidocs/io/vertx/ext/sql/ResultSet.html#getR
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">def columnNames = resultSet.columnNames
+<pre class="CodeRay highlight"><code data-lang="java">def columnNames = resultSet.columnNames
 
 def results = resultSet.results
 
 results.each { row -&gt;
 
-  def id = row[0]
-  def fName = row[1]
-  def lName = row[2]
-  def shoeSize = row[3]
+  def id = row[<span class="integer">0</span>]
+  def fName = row[<span class="integer">1</span>]
+  def lName = row[<span class="integer">2</span>]
+  def shoeSize = row[<span class="integer">3</span>]
 
 }</code></pre>
 </div>
@@ -279,7 +278,7 @@ column names - if that&#8217;s the case you should use <code><a href="../../apid
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">def rows = resultSet.rows
+<pre class="CodeRay highlight"><code data-lang="java">def rows = resultSet.rows
 
 rows.each { row -&gt;
 
@@ -304,19 +303,19 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">def query = "SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE WHERE LNAME=? AND SHOE_SIZE &gt; ?"
+<pre class="CodeRay highlight"><code data-lang="java">def query = <span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE WHERE LNAME=? AND SHOE_SIZE &gt; ?</span><span class="delimiter">&quot;</span></span>
 def params = [
-  "Fox",
-  9
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Fox</span><span class="delimiter">&quot;</span></span>,
+  <span class="integer">9</span>
 ]
 
 connection.queryWithParams(query, params, { res -&gt;
 
-  if (res.succeeded()) {
-    // Get the result set
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// Get the result set</span>
     def resultSet = res.result()
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 })</code></pre>
 </div>
@@ -340,15 +339,15 @@ if the update generated keys, they are available with <code><a href="../../apido
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.update("INSERT INTO PEOPLE VALUES (null, 'john', 'smith', 9)", { res -&gt;
-  if (res.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="java">connection.update(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO PEOPLE VALUES (null, 'john', 'smith', 9)</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
 
     def result = res.result()
-    println("Updated no. of rows: ${result.updated}")
-    println("Generated keys: ${result.keys}")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Updated no. of rows: ${result.updated}</span><span class="delimiter">&quot;</span></span>)
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Generated keys: ${result.keys}</span><span class="delimiter">&quot;</span></span>)
 
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 })</code></pre>
 </div>
@@ -366,22 +365,22 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">def update = "UPDATE PEOPLE SET SHOE_SIZE = 10 WHERE LNAME=?"
+<pre class="CodeRay highlight"><code data-lang="java">def update = <span class="string"><span class="delimiter">&quot;</span><span class="content">UPDATE PEOPLE SET SHOE_SIZE = 10 WHERE LNAME=?</span><span class="delimiter">&quot;</span></span>
 def params = [
-  "Fox"
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Fox</span><span class="delimiter">&quot;</span></span>
 ]
 
 connection.updateWithParams(update, params, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
     def updateResult = res.result()
 
-    println("No. of rows updated: ${updateResult.updated}")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">No. of rows updated: ${updateResult.updated}</span><span class="delimiter">&quot;</span></span>)
 
-  } else {
+  } <span class="keyword">else</span> {
 
-    // Failed!
+    <span class="comment">// Failed!</span>
 
   }
 })</code></pre>
@@ -409,20 +408,20 @@ argument then the output array must contain a null value as the first element.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Assume that there is a SQL function like this:
-//
-// create function one_hour_ago() returns timestamp
-//    return now() - 1 hour;
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Assume that there is a SQL function like this:</span>
+<span class="comment">//</span>
+<span class="comment">// create function one_hour_ago() returns timestamp</span>
+<span class="comment">//    return now() - 1 hour;</span>
 
-// note that you do not need to declare the output for functions
-def func = "{ call one_hour_ago() }"
+<span class="comment">// note that you do not need to declare the output for functions</span>
+def func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call one_hour_ago() }</span><span class="delimiter">&quot;</span></span>
 
 connection.call(func, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     def result = res.result()
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 })</code></pre>
 </div>
@@ -433,23 +432,23 @@ not return anything the usage is as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Assume that there is a SQL procedure like this:
-//
-// create procedure new_customer(firstname varchar(50), lastname varchar(50))
-//   modifies sql data
-//   insert into customers values (default, firstname, lastname, current_timestamp);
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Assume that there is a SQL procedure like this:</span>
+<span class="comment">//</span>
+<span class="comment">// create procedure new_customer(firstname varchar(50), lastname varchar(50))</span>
+<span class="comment">//   modifies sql data</span>
+<span class="comment">//   insert into customers values (default, firstname, lastname, current_timestamp);</span>
 
-def func = "{ call new_customer(?, ?) }"
+def func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call new_customer(?, ?) }</span><span class="delimiter">&quot;</span></span>
 
 connection.callWithParams(func, [
-  "John",
-  "Doe"
-], null, { res -&gt;
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">John</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Doe</span><span class="delimiter">&quot;</span></span>
+], <span class="predefined-constant">null</span>, { res -&gt;
 
-  if (res.succeeded()) {
-    // Success!
-  } else {
-    // Failed!
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// Success!</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 })</code></pre>
 </div>
@@ -459,25 +458,25 @@ connection.callWithParams(func, [
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Assume that there is a SQL procedure like this:
-//
-// create procedure customer_lastname(IN firstname varchar(50), OUT lastname varchar(50))
-//   modifies sql data
-//   select lastname into lastname from customers where firstname = firstname;
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Assume that there is a SQL procedure like this:</span>
+<span class="comment">//</span>
+<span class="comment">// create procedure customer_lastname(IN firstname varchar(50), OUT lastname varchar(50))</span>
+<span class="comment">//   modifies sql data</span>
+<span class="comment">//   select lastname into lastname from customers where firstname = firstname;</span>
 
-def func = "{ call customer_lastname(?, ?) }"
+def func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call customer_lastname(?, ?) }</span><span class="delimiter">&quot;</span></span>
 
 connection.callWithParams(func, [
-  "John"
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">John</span><span class="delimiter">&quot;</span></span>
 ], [
-  null,
-  "VARCHAR"
+  <span class="predefined-constant">null</span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">VARCHAR</span><span class="delimiter">&quot;</span></span>
 ], { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     def result = res.result()
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 })</code></pre>
 </div>
@@ -532,16 +531,16 @@ String describing the type you want to receive.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Batch values
-def batch = []
-batch.add("INSERT INTO emp (NAME) VALUES ('JOE')")
-batch.add("INSERT INTO emp (NAME) VALUES ('JANE')")
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Batch values</span>
+def batch = <span class="type">[]</span>
+batch.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (NAME) VALUES ('JOE')</span><span class="delimiter">&quot;</span></span>)
+batch.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (NAME) VALUES ('JANE')</span><span class="delimiter">&quot;</span></span>)
 
 connection.batch(batch, { res -&gt;
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     def result = res.result()
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 })</code></pre>
 </div>
@@ -551,20 +550,20 @@ connection.batch(batch, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Batch values
-def batch = []
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Batch values</span>
+def batch = <span class="type">[]</span>
 batch.add([
-  "joe"
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">joe</span><span class="delimiter">&quot;</span></span>
 ])
 batch.add([
-  "jane"
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">jane</span><span class="delimiter">&quot;</span></span>
 ])
 
-connection.batchWithParams("INSERT INTO emp (name) VALUES (?)", batch, { res -&gt;
-  if (res.succeeded()) {
+connection.batchWithParams(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (name) VALUES (?)</span><span class="delimiter">&quot;</span></span>, batch, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
     def result = res.result()
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 })</code></pre>
 </div>
@@ -582,13 +581,13 @@ is complete</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">def sql = "CREATE TABLE PEOPLE (ID int generated by default as identity (start with 1 increment by 1) not null,FNAME varchar(255), LNAME varchar(255), SHOE_SIZE int);"
+<pre class="CodeRay highlight"><code data-lang="java">def sql = <span class="string"><span class="delimiter">&quot;</span><span class="content">CREATE TABLE PEOPLE (ID int generated by default as identity (start with 1 increment by 1) not null,FNAME varchar(255), LNAME varchar(255), SHOE_SIZE int);</span><span class="delimiter">&quot;</span></span>
 
 connection.execute(sql, { execute -&gt;
-  if (execute.succeeded()) {
-    println("Table created !")
-  } else {
-    // Failed!
+  <span class="keyword">if</span> (execute.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Table created !</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 })</code></pre>
 </div>
@@ -603,9 +602,9 @@ under the property <code>next</code>. A simple walk of all result sets can be ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// do something with the result set...
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// do something with the result set...</span>
 
-// next step
+<span class="comment">// next step</span>
 rs = rs.next</code></pre>
 </div>
 </div>
@@ -618,10 +617,10 @@ inflating the whole response into memory and JSON and data is just processed on 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">connection.queryStream("SELECT * FROM large_table", { stream -&gt;
-  if (stream.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="groovy">connection.queryStream(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM large_table</span><span class="delimiter">&quot;</span></span>, { stream -&gt;
+  <span class="keyword">if</span> (stream.succeeded()) {
     stream.result().handler({ row -&gt;
-      // do something with the row...
+      <span class="comment">// do something with the row...</span>
     })
   }
 })</code></pre>
@@ -634,17 +633,17 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">connection.queryStream("SELECT * FROM large_table; SELECT * FROM other_table", { stream -&gt;
-  if (stream.succeeded()) {
-    def sqlRowStream = stream.result()
+<pre class="CodeRay highlight"><code data-lang="groovy">connection.queryStream(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM large_table; SELECT * FROM other_table</span><span class="delimiter">&quot;</span></span>, { stream -&gt;
+  <span class="keyword">if</span> (stream.succeeded()) {
+    <span class="keyword">def</span> sqlRowStream = stream.result()
 
     sqlRowStream.resultSetClosedHandler({ v -&gt;
-      // will ask to restart the stream with the new result set if any
+      <span class="comment">// will ask to restart the stream with the new result set if any</span>
       sqlRowStream.moreResults()
     }).handler({ row -&gt;
-      // do something with the row...
+      <span class="comment">// do something with the row...</span>
     }).endHandler({ v -&gt;
-      // no more data available...
+      <span class="comment">// no more data available...</span>
     })
   }
 })</code></pre>
@@ -666,15 +665,15 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">// Do stuff with connection - updates etc
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Do stuff with connection - updates etc</span>
 
-// Now commit
+<span class="comment">// Now commit</span>
 
 connection.commit({ res -&gt;
-  if (res.succeeded()) {
-    // Committed OK!
-  } else {
-    // Failed!
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// Committed OK!</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 })</code></pre>
 </div>

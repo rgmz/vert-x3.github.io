@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -270,7 +269,7 @@ You do this by defining a <code><a href="../../apidocs/io/vertx/core/eventbus/Me
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var eb = vertx.eventBus()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var eb = vertx.eventBus()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -285,10 +284,10 @@ Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var eb = vertx.eventBus()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var eb = vertx.eventBus()
 
-eb.consumer&lt;Any&gt;("news.uk.sport", { message -&gt;
-  println("I have received a message: ${message.body()}")
+eb.consumer&lt;Any&gt;(&quot;news.uk.sport&quot;, { message -&gt;
+  println(&quot;I have received a message: ${message.body()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -307,11 +306,11 @@ to return a MessageConsumer with no handler set, and then set the handler on tha
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var eb = vertx.eventBus()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var eb = vertx.eventBus()
 
-var consumer = eb.consumer&lt;Any&gt;("news.uk.sport")
+var consumer = eb.consumer&lt;Any&gt;(&quot;news.uk.sport&quot;)
 consumer.handler({ message -&gt;
-  println("I have received a message: ${message.body()}")
+  println(&quot;I have received a message: ${message.body()}&quot;)
 })</code></pre>
 </div>
 </div>
@@ -325,11 +324,11 @@ on the MessageConsumer object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consumer.completionHandler({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consumer.completionHandler({ res -&gt;
   if (res.succeeded()) {
-    println("The handler registration has reached all nodes")
+    println(&quot;The handler registration has reached all nodes&quot;)
   } else {
-    println("Registration failed!")
+    println(&quot;Registration failed!&quot;)
   }
 })</code></pre>
 </div>
@@ -346,11 +345,11 @@ be notified when this is complete use <code><a href="../../apidocs/io/vertx/core
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consumer.unregister({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consumer.unregister({ res -&gt;
   if (res.succeeded()) {
-    println("The handler un-registration has reached all nodes")
+    println(&quot;The handler un-registration has reached all nodes&quot;)
   } else {
-    println("Un-registration failed!")
+    println(&quot;Un-registration failed!&quot;)
   }
 })</code></pre>
 </div>
@@ -364,7 +363,7 @@ address to publish it to.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">eventBus.publish("news.uk.sport", "Yay! Someone kicked a ball")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">eventBus.publish(&quot;news.uk.sport&quot;, &quot;Yay! Someone kicked a ball&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -382,7 +381,7 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">eventBus.send(&quot;news.uk.sport&quot;, &quot;Yay! Someone kicked a ball&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -430,10 +429,10 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var consumer = eventBus.consumer&lt;Any&gt;("news.uk.sport")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var consumer = eventBus.consumer&lt;Any&gt;(&quot;news.uk.sport&quot;)
 consumer.handler({ message -&gt;
-  println("I have received a message: ${message.body()}")
-  message.reply("how interesting!")
+  println(&quot;I have received a message: ${message.body()}&quot;)
+  message.reply(&quot;how interesting!&quot;)
 })</code></pre>
 </div>
 </div>
@@ -442,9 +441,9 @@ consumer.handler({ message -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">eventBus.send&lt;Any&gt;("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">eventBus.send&lt;Any&gt;(&quot;news.uk.sport&quot;, &quot;Yay! Someone kicked a ball across a patch of grass&quot;, { ar -&gt;
   if (ar.succeeded()) {
-    println("Received reply: ${ar.result().body()}")
+    println(&quot;Received reply: ${ar.result().body()}&quot;)
   }
 })</code></pre>
 </div>
@@ -525,14 +524,14 @@ instance as clustered;</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = VertxOptions()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = VertxOptions()
 Vertx.clusteredVertx(options, { res -&gt;
   if (res.succeeded()) {
     var vertx = res.result()
     var eventBus = vertx.eventBus()
-    println("We now have a clustered event bus: ${eventBus}")
+    println(&quot;We now have a clustered event bus: ${eventBus}&quot;)
   } else {
-    println("Failed: ${res.cause()}")
+    println(&quot;Failed: ${res.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -575,24 +574,24 @@ the event bus acts as a server and client, the configuration is close to
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = VertxOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = VertxOptions(
   eventBusOptions = EventBusOptions(
     ssl = true,
     keyStoreOptions = JksOptions(
-      path = "keystore.jks",
-      password = "wibble"),
+      path = &quot;keystore.jks&quot;,
+      password = &quot;wibble&quot;),
     trustStoreOptions = JksOptions(
-      path = "keystore.jks",
-      password = "wibble"),
+      path = &quot;keystore.jks&quot;,
+      password = &quot;wibble&quot;),
     clientAuth = ClientAuth.REQUIRED))
 
 Vertx.clusteredVertx(options, { res -&gt;
   if (res.succeeded()) {
     var vertx = res.result()
     var eventBus = vertx.eventBus()
-    println("We now have a clustered event bus: ${eventBus}")
+    println(&quot;We now have a clustered event bus: ${eventBus}&quot;)
   } else {
-    println("Failed: ${res.cause()}")
+    println(&quot;Failed: ${res.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -619,18 +618,18 @@ clustered, the port and host, as you would do with <code><a href="../../apidocs/
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = VertxOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = VertxOptions(
   eventBusOptions = EventBusOptions(
-    clusterPublicHost = "whatever",
+    clusterPublicHost = &quot;whatever&quot;,
     clusterPublicPort = 1234))
 
 Vertx.clusteredVertx(options, { res -&gt;
   if (res.succeeded()) {
     var vertx = res.result()
     var eventBus = vertx.eventBus()
-    println("We now have a clustered event bus: ${eventBus}")
+    println(&quot;We now have a clustered event bus: ${eventBus}&quot;)
   } else {
-    println("Failed: ${res.cause()}")
+    println(&quot;Failed: ${res.cause()}&quot;)
   }
 })</code></pre>
 </div>

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -167,11 +166,11 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-sql-common&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-sql-common<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -183,7 +182,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-sql-common:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-sql-common:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -209,11 +208,11 @@ execute in its own transaction.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.set_auto_commit(false) { |res_err,res|
-  if (res_err == nil)
-    # OK!
-  else
-    # Failed!
+<pre class="CodeRay highlight"><code data-lang="java">connection.set_auto_commit(<span class="predefined-constant">false</span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == nil)
+    <span class="error">#</span> OK!
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed!
   end
 }</code></pre>
 </div>
@@ -233,12 +232,12 @@ been run.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.query("SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE") { |res_err,res|
-  if (res_err == nil)
-    # Get the result set
+<pre class="CodeRay highlight"><code data-lang="java">connection.query(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == nil)
+    <span class="error">#</span> Get the result set
     resultSet = res
-  else
-    # Failed!
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed!
   end
 }</code></pre>
 </div>
@@ -255,16 +254,16 @@ available with <code><a href="../dataobjects.html#ResultSet#get_results-instance
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">columnNames = resultSet['columnNames']
+<pre class="CodeRay highlight"><code data-lang="java">columnNames = resultSet[<span class="string"><span class="delimiter">'</span><span class="content">columnNames</span><span class="delimiter">'</span></span>]
 
-results = resultSet['results']
+results = resultSet[<span class="string"><span class="delimiter">'</span><span class="content">results</span><span class="delimiter">'</span></span>]
 
-results.each do |row|
+results.each <span class="keyword">do</span> |row|
 
-  id = row[0]
-  fName = row[1]
-  lName = row[2]
-  shoeSize = row[3]
+  id = row[<span class="integer">0</span>]
+  fName = row[<span class="integer">1</span>]
+  lName = row[<span class="integer">2</span>]
+  shoeSize = row[<span class="integer">3</span>]
 
 end</code></pre>
 </div>
@@ -279,14 +278,14 @@ column names - if that&#8217;s the case you should use <code><a href="../dataobj
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">rows = resultSet['rows']
+<pre class="CodeRay highlight"><code data-lang="java">rows = resultSet[<span class="string"><span class="delimiter">'</span><span class="content">rows</span><span class="delimiter">'</span></span>]
 
-rows.each do |row|
+rows.each <span class="keyword">do</span> |row|
 
-  id = row['ID']
-  fName = row['FNAME']
-  lName = row['LNAME']
-  shoeSize = row['SHOE_SIZE']
+  id = row[<span class="string"><span class="delimiter">'</span><span class="content">ID</span><span class="delimiter">'</span></span>]
+  fName = row[<span class="string"><span class="delimiter">'</span><span class="content">FNAME</span><span class="delimiter">'</span></span>]
+  lName = row[<span class="string"><span class="delimiter">'</span><span class="content">LNAME</span><span class="delimiter">'</span></span>]
+  shoeSize = row[<span class="string"><span class="delimiter">'</span><span class="content">SHOE_SIZE</span><span class="delimiter">'</span></span>]
 
 end</code></pre>
 </div>
@@ -304,19 +303,19 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">query = "SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE WHERE LNAME=? AND SHOE_SIZE &gt; ?"
+<pre class="CodeRay highlight"><code data-lang="java">query = <span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE WHERE LNAME=? AND SHOE_SIZE &gt; ?</span><span class="delimiter">&quot;</span></span>
 params = [
-  "Fox",
-  9
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Fox</span><span class="delimiter">&quot;</span></span>,
+  <span class="integer">9</span>
 ]
 
 connection.query_with_params(query, params) { |res_err,res|
 
-  if (res_err == nil)
-    # Get the result set
+  <span class="keyword">if</span> (res_err == nil)
+    <span class="error">#</span> Get the result set
     resultSet = res
-  else
-    # Failed!
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed!
   end
 }</code></pre>
 </div>
@@ -340,15 +339,15 @@ if the update generated keys, they are available with <code><a href="../dataobje
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">connection.update("INSERT INTO PEOPLE VALUES (null, 'john', 'smith', 9)") { |res_err,res|
-  if (res_err == nil)
+<pre class="CodeRay highlight"><code data-lang="java">connection.update(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO PEOPLE VALUES (null, 'john', 'smith', 9)</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == nil)
 
     result = res
-    puts "Updated no. of rows: #{result['updated']}"
-    puts "Generated keys: #{result['keys']}"
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Updated no. of rows: #{result['updated']}</span><span class="delimiter">&quot;</span></span>
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Generated keys: #{result['keys']}</span><span class="delimiter">&quot;</span></span>
 
-  else
-    # Failed!
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed!
   end
 }</code></pre>
 </div>
@@ -366,22 +365,22 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">update = "UPDATE PEOPLE SET SHOE_SIZE = 10 WHERE LNAME=?"
+<pre class="CodeRay highlight"><code data-lang="java">update = <span class="string"><span class="delimiter">&quot;</span><span class="content">UPDATE PEOPLE SET SHOE_SIZE = 10 WHERE LNAME=?</span><span class="delimiter">&quot;</span></span>
 params = [
-  "Fox"
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Fox</span><span class="delimiter">&quot;</span></span>
 ]
 
 connection.update_with_params(update, params) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == nil)
 
     updateResult = res
 
-    puts "No. of rows updated: #{updateResult['updated']}"
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">No. of rows updated: #{updateResult['updated']}</span><span class="delimiter">&quot;</span></span>
 
-  else
+  <span class="keyword">else</span>
 
-    # Failed!
+    <span class="error">#</span> Failed!
 
   end
 }</code></pre>
@@ -409,20 +408,20 @@ argument then the output array must contain a null value as the first element.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java"># Assume that there is a SQL function like this:
-#
-# create function one_hour_ago() returns timestamp
-#    return now() - 1 hour;
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span> Assume that there is a SQL function like <span class="local-variable">this</span>:
+<span class="error">#</span>
+<span class="error">#</span> create function one_hour_ago() returns timestamp
+<span class="error">#</span>    <span class="keyword">return</span> now() - <span class="integer">1</span> hour;
 
-# note that you do not need to declare the output for functions
-func = "{ call one_hour_ago() }"
+<span class="error">#</span> note that you <span class="keyword">do</span> not need to declare the output <span class="keyword">for</span> functions
+func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call one_hour_ago() }</span><span class="delimiter">&quot;</span></span>
 
 connection.call(func) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == nil)
     result = res
-  else
-    # Failed!
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed!
   end
 }</code></pre>
 </div>
@@ -433,23 +432,23 @@ not return anything the usage is as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java"># Assume that there is a SQL procedure like this:
-#
-# create procedure new_customer(firstname varchar(50), lastname varchar(50))
-#   modifies sql data
-#   insert into customers values (default, firstname, lastname, current_timestamp);
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span> Assume that there is a SQL procedure like <span class="local-variable">this</span>:
+<span class="error">#</span>
+<span class="error">#</span> create procedure new_customer(firstname varchar(<span class="integer">50</span>), lastname varchar(<span class="integer">50</span>))
+<span class="error">#</span>   modifies sql data
+<span class="error">#</span>   insert into customers values (<span class="keyword">default</span>, firstname, lastname, current_timestamp);
 
-func = "{ call new_customer(?, ?) }"
+func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call new_customer(?, ?) }</span><span class="delimiter">&quot;</span></span>
 
 connection.call_with_params(func, [
-  "John",
-  "Doe"
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">John</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Doe</span><span class="delimiter">&quot;</span></span>
 ], nil) { |res_err,res|
 
-  if (res_err == nil)
-    # Success!
-  else
-    # Failed!
+  <span class="keyword">if</span> (res_err == nil)
+    <span class="error">#</span> Success!
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed!
   end
 }</code></pre>
 </div>
@@ -459,25 +458,25 @@ connection.call_with_params(func, [
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java"># Assume that there is a SQL procedure like this:
-#
-# create procedure customer_lastname(IN firstname varchar(50), OUT lastname varchar(50))
-#   modifies sql data
-#   select lastname into lastname from customers where firstname = firstname;
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span> Assume that there is a SQL procedure like <span class="local-variable">this</span>:
+<span class="error">#</span>
+<span class="error">#</span> create procedure customer_lastname(IN firstname varchar(<span class="integer">50</span>), OUT lastname varchar(<span class="integer">50</span>))
+<span class="error">#</span>   modifies sql data
+<span class="error">#</span>   select lastname into lastname from customers where firstname = firstname;
 
-func = "{ call customer_lastname(?, ?) }"
+func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call customer_lastname(?, ?) }</span><span class="delimiter">&quot;</span></span>
 
 connection.call_with_params(func, [
-  "John"
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">John</span><span class="delimiter">&quot;</span></span>
 ], [
   nil,
-  "VARCHAR"
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">VARCHAR</span><span class="delimiter">&quot;</span></span>
 ]) { |res_err,res|
 
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == nil)
     result = res
-  else
-    # Failed!
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed!
   end
 }</code></pre>
 </div>
@@ -532,16 +531,16 @@ String describing the type you want to receive.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java"># Batch values
-batch = Array.new
-batch.push("INSERT INTO emp (NAME) VALUES ('JOE')")
-batch.push("INSERT INTO emp (NAME) VALUES ('JANE')")
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span> Batch values
+batch = <span class="predefined-type">Array</span>.new
+batch.push(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (NAME) VALUES ('JOE')</span><span class="delimiter">&quot;</span></span>)
+batch.push(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (NAME) VALUES ('JANE')</span><span class="delimiter">&quot;</span></span>)
 
 connection.batch(batch) { |res_err,res|
-  if (res_err == nil)
+  <span class="keyword">if</span> (res_err == nil)
     result = res
-  else
-    # Failed!
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed!
   end
 }</code></pre>
 </div>
@@ -551,20 +550,20 @@ connection.batch(batch) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java"># Batch values
-batch = Array.new
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span> Batch values
+batch = <span class="predefined-type">Array</span>.new
 batch.push([
-  "joe"
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">joe</span><span class="delimiter">&quot;</span></span>
 ])
 batch.push([
-  "jane"
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">jane</span><span class="delimiter">&quot;</span></span>
 ])
 
-connection.batch_with_params("INSERT INTO emp (name) VALUES (?)", batch) { |res_err,res|
-  if (res_err == nil)
+connection.batch_with_params(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (name) VALUES (?)</span><span class="delimiter">&quot;</span></span>, batch) { |res_err,res|
+  <span class="keyword">if</span> (res_err == nil)
     result = res
-  else
-    # Failed!
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed!
   end
 }</code></pre>
 </div>
@@ -582,13 +581,13 @@ is complete</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">sql = "CREATE TABLE PEOPLE (ID int generated by default as identity (start with 1 increment by 1) not null,FNAME varchar(255), LNAME varchar(255), SHOE_SIZE int);"
+<pre class="CodeRay highlight"><code data-lang="java">sql = <span class="string"><span class="delimiter">&quot;</span><span class="content">CREATE TABLE PEOPLE (ID int generated by default as identity (start with 1 increment by 1) not null,FNAME varchar(255), LNAME varchar(255), SHOE_SIZE int);</span><span class="delimiter">&quot;</span></span>
 
 connection.execute(sql) { |execute_err,execute|
-  if (execute_err == nil)
-    puts "Table created !"
-  else
-    # Failed!
+  <span class="keyword">if</span> (execute_err == nil)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Table created !</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed!
   end
 }</code></pre>
 </div>
@@ -603,10 +602,10 @@ under the property <code>next</code>. A simple walk of all result sets can be ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># do something with the result set...
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># do something with the result set...</span>
 
-# next step
-rs = rs['next']</code></pre>
+<span class="comment"># next step</span>
+rs = rs[<span class="string"><span class="delimiter">'</span><span class="content">next</span><span class="delimiter">'</span></span>]</code></pre>
 </div>
 </div>
 </div>
@@ -618,12 +617,12 @@ inflating the whole response into memory and JSON and data is just processed on 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection.query_stream("SELECT * FROM large_table") { |stream_err,stream|
-  if (stream_err == nil)
+<pre class="CodeRay highlight"><code data-lang="ruby">connection.query_stream(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM large_table</span><span class="delimiter">&quot;</span></span>) { |stream_err,stream|
+  <span class="keyword">if</span> (stream_err == <span class="predefined-constant">nil</span>)
     stream.handler() { |row|
-      # do something with the row...
+      <span class="comment"># do something with the row...</span>
     }
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -634,19 +633,19 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">connection.query_stream("SELECT * FROM large_table; SELECT * FROM other_table") { |stream_err,stream|
-  if (stream_err == nil)
+<pre class="CodeRay highlight"><code data-lang="ruby">connection.query_stream(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM large_table; SELECT * FROM other_table</span><span class="delimiter">&quot;</span></span>) { |stream_err,stream|
+  <span class="keyword">if</span> (stream_err == <span class="predefined-constant">nil</span>)
     sqlRowStream = stream
 
     sqlRowStream.result_set_closed_handler() { |v|
-      # will ask to restart the stream with the new result set if any
+      <span class="comment"># will ask to restart the stream with the new result set if any</span>
       sqlRowStream.more_results()
     }.handler() { |row|
-      # do something with the row...
+      <span class="comment"># do something with the row...</span>
     }.end_handler() { |v|
-      # no more data available...
+      <span class="comment"># no more data available...</span>
     }
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -666,15 +665,15 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java"># Do stuff with connection - updates etc
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span> Do stuff with connection - updates etc
 
-# Now commit
+<span class="error">#</span> Now commit
 
 connection.commit() { |res_err,res|
-  if (res_err == nil)
-    # Committed OK!
-  else
-    # Failed!
+  <span class="keyword">if</span> (res_err == nil)
+    <span class="error">#</span> Committed OK!
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed!
   end
 }</code></pre>
 </div>

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -288,11 +287,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-&lt;groupId&gt;io.vertx&lt;/groupId&gt;
-&lt;artifactId&gt;vertx-service-discovery&lt;/artifactId&gt;
-&lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+<span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+<span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery<span class="tag">&lt;/artifactId&gt;</span>
+<span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -304,7 +303,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -421,13 +420,13 @@ instance to use the discovery infrastructure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Use default configuration
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Use default configuration
 var discovery = ServiceDiscovery.create(vertx)
 
 // Customize the configuration
 discovery = ServiceDiscovery.create(vertx, ServiceDiscoveryOptions(
-  announceAddress = "service-announce",
-  name = "my-name"))
+  announceAddress = &quot;service-announce&quot;,
+  name = &quot;my-name&quot;))
 
 // Do something...
 
@@ -472,15 +471,15 @@ from the service types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Manual record creation
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Manual record creation
 var record = Record(
-  type = "eventbus-service-proxy",
+  type = &quot;eventbus-service-proxy&quot;,
   location = json {
-    obj("endpoint" to "the-service-address")
+    obj(&quot;endpoint&quot; to &quot;the-service-address&quot;)
   },
-  name = "my-service",
+  name = &quot;my-service&quot;,
   metadata = json {
-    obj("some-label" to "some-value")
+    obj(&quot;some-label&quot; to &quot;some-value&quot;)
   })
 
 discovery.publish(record, { ar -&gt;
@@ -493,7 +492,7 @@ discovery.publish(record, { ar -&gt;
 })
 
 // Record creation from a type
-record = HttpEndpoint.createRecord("some-rest-api", "localhost", 8080, "/api")
+record = HttpEndpoint.createRecord(&quot;some-rest-api&quot;, &quot;localhost&quot;, 8080, &quot;/api&quot;)
 discovery.publish(record, { ar -&gt;
   if (ar.succeeded()) {
     // publication succeeded
@@ -517,7 +516,7 @@ discovery.publish(record, { ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">discovery.unpublish(record.registration, { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">discovery.unpublish(record.registration, { ar -&gt;
   if (ar.succeeded()) {
     // Ok
   } else {
@@ -575,7 +574,7 @@ records, you must return <em>true</em> regardless the record.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Get any record
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Get any record
 discovery.getRecord({ r -&gt;
   true
 }, { ar -&gt;
@@ -605,7 +604,7 @@ discovery.getRecord(null, { ar -&gt;
 
 // Get a record by name
 discovery.getRecord({ r -&gt;
-  r.name == "some-name"
+  r.name == &quot;some-name&quot;
 }, { ar -&gt;
   if (ar.succeeded()) {
     if (ar.result() != null) {
@@ -619,7 +618,7 @@ discovery.getRecord({ r -&gt;
 })
 
 discovery.getRecord(json {
-  obj("name" to "some-service")
+  obj(&quot;name&quot; to &quot;some-service&quot;)
 }, { ar -&gt;
   if (ar.succeeded()) {
     if (ar.result() != null) {
@@ -634,7 +633,7 @@ discovery.getRecord(json {
 
 // Get all records matching the filter
 discovery.getRecords({ r -&gt;
-  "some-value" == r.metadata.getString("some-label")
+  &quot;some-value&quot; == r.metadata.getString(&quot;some-label&quot;)
 }, { ar -&gt;
   if (ar.succeeded()) {
     var results = ar.result()
@@ -647,7 +646,7 @@ discovery.getRecords({ r -&gt;
 
 
 discovery.getRecords(json {
-  obj("some-label" to "some-value")
+  obj(&quot;some-label&quot; to &quot;some-value&quot;)
 }, { ar -&gt;
   if (ar.succeeded()) {
     var results = ar.result()
@@ -687,7 +686,7 @@ By default, record lookup does include only records with a <code>status</code> s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var reference1 = discovery.getReference(record1)
+<pre class="CodeRay highlight"><code data-lang="kotlin">var reference1 = discovery.getReference(record1)
 var reference2 = discovery.getReference(record2)
 
 // Then, gets the service object, the returned type depends on the service type:
@@ -714,7 +713,7 @@ configuration, some require configuration (as data sources):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var reference = discovery.getReferenceWithConfiguration(record, conf)
+<pre class="CodeRay highlight"><code data-lang="kotlin">var reference = discovery.getReferenceWithConfiguration(record, conf)
 
 // Then, gets the service object, the returned type depends on the service type:
 // For http endpoint:
@@ -808,14 +807,14 @@ objects are <code><a href="../../apidocs/io/vertx/core/http/HttpClient.html">Htt
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var record1 = HttpEndpoint.createRecord("some-http-service", "localhost", 8433, "/api")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var record1 = HttpEndpoint.createRecord(&quot;some-http-service&quot;, &quot;localhost&quot;, 8433, &quot;/api&quot;)
 
 discovery.publish(record1, { ar -&gt;
   // ...
 })
 
-var record2 = HttpEndpoint.createRecord("some-other-name", true, "localhost", 8433, "/api", json {
-  obj("some-metadata" to "some value")
+var record2 = HttpEndpoint.createRecord(&quot;some-other-name&quot;, true, &quot;localhost&quot;, 8433, &quot;/api&quot;, json {
+  obj(&quot;some-metadata&quot; to &quot;some value&quot;)
 })</code></pre>
 </div>
 </div>
@@ -832,9 +831,9 @@ publication must be done by another entity having this info. Generally it&#8217;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Get the record
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Get the record
 discovery.getRecord(json {
-  obj("name" to "some-http-service")
+  obj(&quot;name&quot; to &quot;some-http-service&quot;)
 }, { ar -&gt;
   if (ar.succeeded() &amp;&amp; ar.result() != null) {
     // Retrieve the service reference
@@ -843,7 +842,7 @@ discovery.getRecord(json {
     var client = reference.getAs(HttpClient.`class`)
 
     // You need to path the complete path
-    client.getNow("/api/persons", { response -&gt;
+    client.getNow(&quot;/api/persons&quot;, { response -&gt;
 
       // ...
 
@@ -862,14 +861,14 @@ method to combine lookup and service retrieval in one call:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">HttpEndpoint.getClient(discovery, json {
-  obj("name" to "some-http-service")
+<pre class="CodeRay highlight"><code data-lang="kotlin">HttpEndpoint.getClient(discovery, json {
+  obj(&quot;name&quot; to &quot;some-http-service&quot;)
 }, { ar -&gt;
   if (ar.succeeded()) {
     var client = ar.result()
 
     // You need to path the complete path
-    client.getNow("/api/persons", { response -&gt;
+    client.getNow(&quot;/api/persons&quot;, { response -&gt;
 
       // ...
 
@@ -892,9 +891,9 @@ tends to be easier to use. You can retrieve a <code><a href="../../apidocs/io/ve
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Get the record
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Get the record
 discovery.getRecord(json {
-  obj("name" to "some-http-service")
+  obj(&quot;name&quot; to &quot;some-http-service&quot;)
 }, { ar -&gt;
   if (ar.succeeded() &amp;&amp; ar.result() != null) {
     // Retrieve the service reference
@@ -903,7 +902,7 @@ discovery.getRecord(json {
     var client = reference.getAs(WebClient.`class`)
 
     // You need to path the complete path
-    client.get("/api/persons").send({ response -&gt;
+    client.get(&quot;/api/persons&quot;).send({ response -&gt;
 
       // ...
 
@@ -920,14 +919,14 @@ discovery.getRecord(json {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">HttpEndpoint.getWebClient(discovery, json {
-  obj("name" to "some-http-service")
+<pre class="CodeRay highlight"><code data-lang="kotlin">HttpEndpoint.getWebClient(discovery, json {
+  obj(&quot;name&quot; to &quot;some-http-service&quot;)
 }, { ar -&gt;
   if (ar.succeeded()) {
     var client = ar.result()
 
     // You need to path the complete path
-    client.get("/api/persons").send({ response -&gt;
+    client.get(&quot;/api/persons&quot;).send({ response -&gt;
 
       // ...
 
@@ -958,8 +957,8 @@ methods from <code><a href="../../apidocs/io/vertx/servicediscovery/types/EventB
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var record = EventBusService.createRecord("some-eventbus-service", "address", "examples.MyService", json {
-  obj("some-metadata" to "some value")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var record = EventBusService.createRecord(&quot;some-eventbus-service&quot;, &quot;address&quot;, &quot;examples.MyService&quot;, json {
+  obj(&quot;some-metadata&quot; to &quot;some value&quot;)
 })
 
 discovery.publish(record, { ar -&gt;
@@ -1002,13 +1001,13 @@ discovery.publish(record, { ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var record = MessageSource.createRecord("some-message-source-service", "some-address")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var record = MessageSource.createRecord(&quot;some-message-source-service&quot;, &quot;some-address&quot;)
 
 discovery.publish(record, { ar -&gt;
   // ...
 })
 
-record = MessageSource.createRecord("some-other-message-source-service", "some-address", "examples.MyData")</code></pre>
+record = MessageSource.createRecord(&quot;some-other-message-source-service&quot;, &quot;some-address&quot;, &quot;examples.MyData&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1026,9 +1025,9 @@ record = MessageSource.createRecord("some-other-message-source-service", "some-a
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Get the record
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Get the record
 discovery.getRecord(json {
-  obj("name" to "some-message-source-service")
+  obj(&quot;name&quot; to &quot;some-message-source-service&quot;)
 }, { ar -&gt;
   if (ar.succeeded() &amp;&amp; ar.result() != null) {
     // Retrieve the service reference
@@ -1050,8 +1049,8 @@ discovery.getRecord(json {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">MessageSource.getConsumer&lt;JsonObject&gt;(discovery, json {
-  obj("name" to "some-message-source-service")
+<pre class="CodeRay highlight"><code data-lang="kotlin">MessageSource.getConsumer&lt;JsonObject&gt;(discovery, json {
+  obj(&quot;name&quot; to &quot;some-message-source-service&quot;)
 }, { ar -&gt;
   if (ar.succeeded()) {
     var consumer = ar.result()
@@ -1091,10 +1090,10 @@ using a JDBC driver. The client of a JDBC data source service is a <code><a href
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var record = JDBCDataSource.createRecord("some-data-source-service", json {
-  obj("url" to "some jdbc url")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var record = JDBCDataSource.createRecord(&quot;some-data-source-service&quot;, json {
+  obj(&quot;url&quot; to &quot;some jdbc url&quot;)
 }, json {
-  obj("some-metadata" to "some-value")
+  obj(&quot;some-metadata&quot; to &quot;some-value&quot;)
 })
 
 discovery.publish(record, { ar -&gt;
@@ -1118,16 +1117,16 @@ the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Get the record
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Get the record
 discovery.getRecord(json {
-  obj("name" to "some-data-source-service")
+  obj(&quot;name&quot; to &quot;some-data-source-service&quot;)
 }, { ar -&gt;
   if (ar.succeeded() &amp;&amp; ar.result() != null) {
     // Retrieve the service reference
     var reference = discovery.getReferenceWithConfiguration(ar.result(), json {
       obj(
-        "username" to "clement",
-        "password" to "*****"
+        &quot;username&quot; to &quot;clement&quot;,
+        &quot;password&quot; to &quot;*****&quot;
       )
     })
 
@@ -1147,12 +1146,12 @@ discovery.getRecord(json {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">JDBCDataSource.getJDBCClient(discovery, json {
-  obj("name" to "some-data-source-service")
+<pre class="CodeRay highlight"><code data-lang="kotlin">JDBCDataSource.getJDBCClient(discovery, json {
+  obj(&quot;name&quot; to &quot;some-data-source-service&quot;)
 }, json {
   obj(
-    "username" to "clement",
-    "password" to "*****"
+    &quot;username&quot; to &quot;clement&quot;,
+    &quot;password&quot; to &quot;*****&quot;
   )
 }, { ar -&gt;
   if (ar.succeeded()) {
@@ -1192,10 +1191,10 @@ The client of a Redis data source service is a <code><a href="../../apidocs/io/v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var record = RedisDataSource.createRecord("some-redis-data-source-service", json {
-  obj("url" to "localhost")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var record = RedisDataSource.createRecord(&quot;some-redis-data-source-service&quot;, json {
+  obj(&quot;url&quot; to &quot;localhost&quot;)
 }, json {
-  obj("some-metadata" to "some-value")
+  obj(&quot;some-metadata&quot; to &quot;some-value&quot;)
 })
 
 discovery.publish(record, { ar -&gt;
@@ -1217,9 +1216,9 @@ the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Get the record
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Get the record
 discovery.getRecord(json {
-  obj("name" to "some-redis-data-source-service")
+  obj(&quot;name&quot; to &quot;some-redis-data-source-service&quot;)
 }, { ar -&gt;
   if (ar.succeeded() &amp;&amp; ar.result() != null) {
     // Retrieve the service reference
@@ -1241,8 +1240,8 @@ discovery.getRecord(json {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">RedisDataSource.getRedisClient(discovery, json {
-  obj("name" to "some-redis-data-source-service")
+<pre class="CodeRay highlight"><code data-lang="kotlin">RedisDataSource.getRedisClient(discovery, json {
+  obj(&quot;name&quot; to &quot;some-redis-data-source-service&quot;)
 }, { ar -&gt;
   if (ar.succeeded()) {
     var client = ar.result()
@@ -1281,10 +1280,10 @@ The client of a Mongo data source service is a <code><a href="../../apidocs/io/v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var record = MongoDataSource.createRecord("some-data-source-service", json {
-  obj("connection_string" to "some mongo connection")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var record = MongoDataSource.createRecord(&quot;some-data-source-service&quot;, json {
+  obj(&quot;connection_string&quot; to &quot;some mongo connection&quot;)
 }, json {
-  obj("some-metadata" to "some-value")
+  obj(&quot;some-metadata&quot; to &quot;some-value&quot;)
 })
 
 discovery.publish(record, { ar -&gt;
@@ -1306,16 +1305,16 @@ provided by the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Get the record
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Get the record
 discovery.getRecord(json {
-  obj("name" to "some-data-source-service")
+  obj(&quot;name&quot; to &quot;some-data-source-service&quot;)
 }, { ar -&gt;
   if (ar.succeeded() &amp;&amp; ar.result() != null) {
     // Retrieve the service reference
     var reference = discovery.getReferenceWithConfiguration(ar.result(), json {
       obj(
-        "username" to "clement",
-        "password" to "*****"
+        &quot;username&quot; to &quot;clement&quot;,
+        &quot;password&quot; to &quot;*****&quot;
       )
     })
 
@@ -1335,12 +1334,12 @@ discovery.getRecord(json {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">MongoDataSource.getMongoClient(discovery, json {
-  obj("name" to "some-data-source-service")
+<pre class="CodeRay highlight"><code data-lang="kotlin">MongoDataSource.getMongoClient(discovery, json {
+  obj(&quot;name&quot; to &quot;some-data-source-service&quot;)
 }, json {
   obj(
-    "username" to "clement",
-    "password" to "*****"
+    &quot;username&quot; to &quot;clement&quot;,
+    &quot;password&quot; to &quot;*****&quot;
   )
 }, { ar -&gt;
   if (ar.succeeded()) {
@@ -1505,11 +1504,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-consul&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-consul<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1521,7 +1520,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-consul:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-consul:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1529,11 +1528,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">ServiceDiscovery.create(vertx).registerServiceImporter(io.vertx.servicediscovery.consul.ConsulServiceImporter(), json {
+<pre class="CodeRay highlight"><code data-lang="kotlin">ServiceDiscovery.create(vertx).registerServiceImporter(io.vertx.servicediscovery.consul.ConsulServiceImporter(), json {
   obj(
-    "host" to "localhost",
-    "port" to 8500,
-    "scan-period" to 2000
+    &quot;host&quot; to &quot;localhost&quot;,
+    &quot;port&quot; to 8500,
+    &quot;scan-period&quot; to 2000
   )
 })</code></pre>
 </div>
@@ -1584,11 +1583,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-kubernetes&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-kubernetes<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1600,7 +1599,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-kubernetes:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-kubernetes:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1693,11 +1692,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-docker-links&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-docker-links<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1709,7 +1708,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-docker-links:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-docker-links:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1717,7 +1716,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">ServiceDiscovery.create(vertx).registerServiceImporter(io.vertx.servicediscovery.docker.DockerLinksServiceImporter(), json {
+<pre class="CodeRay highlight"><code data-lang="kotlin">ServiceDiscovery.create(vertx).registerServiceImporter(io.vertx.servicediscovery.docker.DockerLinksServiceImporter(), json {
   obj()
 })</code></pre>
 </div>
@@ -1760,11 +1759,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-backend-redis&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-backend-redis<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1776,7 +1775,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-backend-redis:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-backend-redis:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1796,11 +1795,11 @@ the records are stored.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">ServiceDiscovery.create(vertx, ServiceDiscoveryOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">ServiceDiscovery.create(vertx, ServiceDiscoveryOptions(
   backendConfiguration = json {
     obj(
-      "host" to "127.0.0.1",
-      "key" to "records"
+      &quot;host&quot; to &quot;127.0.0.1&quot;,
+      &quot;key&quot; to &quot;records&quot;
     )
   }))</code></pre>
 </div>

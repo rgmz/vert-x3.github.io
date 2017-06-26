@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -215,11 +214,11 @@ your network.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-redis-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-redis-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -231,7 +230,7 @@ your network.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-redis-client:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-redis-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -267,12 +266,12 @@ containing the following values:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-redis/redis_client'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-redis/redis_client</span><span class="delimiter">'</span></span>
 config = {
-  'host' =&gt; "127.0.0.1"
+  <span class="string"><span class="delimiter">'</span><span class="content">host</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.1</span><span class="delimiter">&quot;</span></span>
 }
 
-redis = VertxRedis::RedisClient.create(vertx, config)</code></pre>
+redis = <span class="constant">VertxRedis</span>::<span class="constant">RedisClient</span>.create(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -307,14 +306,14 @@ if one wants to get a value of a key it can be done as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-redis/redis_client'
-redis = VertxRedis::RedisClient.create(vertx, {
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-redis/redis_client</span><span class="delimiter">'</span></span>
+redis = <span class="constant">VertxRedis</span>::<span class="constant">RedisClient</span>.create(vertx, {
 })
 
-redis.get("mykey") { |res_err,res|
-  if (res_err == nil)
-    # so something...
-  end
+redis.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">mykey</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    <span class="comment"># so something...</span>
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -335,25 +334,25 @@ it cannot be used for running other commands than the command to leave that mode
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-redis/redis_client'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-redis/redis_client</span><span class="delimiter">'</span></span>
 
-# register a handler for the incoming message the naming the Redis module will use is base address + '.' + redis channel
-vertx.event_bus().consumer("io.vertx.redis.channel1") { |received|
-  # do whatever you need to do with your message
-  value = received.body()['value']
-  # the value is a JSON doc with the following properties
-  # channel - The channel to which this message was sent
-  # pattern - Pattern is present if you use psubscribe command and is the pattern that matched this message channel
-  # message - The message payload
+<span class="comment"># register a handler for the incoming message the naming the Redis module will use is base address + '.' + redis channel</span>
+vertx.event_bus().consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.redis.channel1</span><span class="delimiter">&quot;</span></span>) { |received|
+  <span class="comment"># do whatever you need to do with your message</span>
+  value = received.body()[<span class="string"><span class="delimiter">'</span><span class="content">value</span><span class="delimiter">'</span></span>]
+  <span class="comment"># the value is a JSON doc with the following properties</span>
+  <span class="comment"># channel - The channel to which this message was sent</span>
+  <span class="comment"># pattern - Pattern is present if you use psubscribe command and is the pattern that matched this message channel</span>
+  <span class="comment"># message - The message payload</span>
 }
 
-redis = VertxRedis::RedisClient.create(vertx, {
+redis = <span class="constant">VertxRedis</span>::<span class="constant">RedisClient</span>.create(vertx, {
 })
 
-redis.subscribe("channel1") { |res_err,res|
-  if (res_err == nil)
-    # so something...
-  end
+redis.subscribe(<span class="string"><span class="delimiter">&quot;</span><span class="content">channel1</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    <span class="comment"># so something...</span>
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -362,15 +361,15 @@ redis.subscribe("channel1") { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-redis/redis_client'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-redis/redis_client</span><span class="delimiter">'</span></span>
 
-redis = VertxRedis::RedisClient.create(vertx, {
+redis = <span class="constant">VertxRedis</span>::<span class="constant">RedisClient</span>.create(vertx, {
 })
 
-redis.publish("channel1", "Hello World!") { |res_err,res|
-  if (res_err == nil)
-    # so something...
-  end
+redis.publish(<span class="string"><span class="delimiter">&quot;</span><span class="content">channel1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    <span class="comment"># so something...</span>
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -495,7 +494,7 @@ will always return a JsonArray, even for example for scripts such as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>return 10</code></pre>
+<pre class="CodeRay highlight"><code>return 10</code></pre>
 </div>
 </div>
 <div class="paragraph">

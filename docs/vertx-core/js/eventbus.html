@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -270,7 +269,7 @@ You do this by defining a <code>codec</code> for the objects you want to send.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var eb = vertx.eventBus();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> eb = vertx.eventBus();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -285,10 +284,10 @@ Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var eb = vertx.eventBus();
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> eb = vertx.eventBus();
 
-eb.consumer("news.uk.sport", function (message) {
-  console.log("I have received a message: " + message.body());
+eb.consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (message) {
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">I have received a message: </span><span class="delimiter">&quot;</span></span> + message.body());
 });</code></pre>
 </div>
 </div>
@@ -307,11 +306,11 @@ to return a MessageConsumer with no handler set, and then set the handler on tha
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var eb = vertx.eventBus();
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> eb = vertx.eventBus();
 
-var consumer = eb.consumer("news.uk.sport");
-consumer.handler(function (message) {
-  console.log("I have received a message: " + message.body());
+<span class="keyword">var</span> consumer = eb.consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>);
+consumer.handler(<span class="keyword">function</span> (message) {
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">I have received a message: </span><span class="delimiter">&quot;</span></span> + message.body());
 });</code></pre>
 </div>
 </div>
@@ -325,11 +324,11 @@ on the MessageConsumer object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">consumer.completionHandler(function (res, res_err) {
-  if (res_err == null) {
-    console.log("The handler registration has reached all nodes");
-  } else {
-    console.log("Registration failed!");
+<pre class="CodeRay highlight"><code data-lang="js">consumer.completionHandler(<span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">The handler registration has reached all nodes</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Registration failed!</span><span class="delimiter">&quot;</span></span>);
   }
 });</code></pre>
 </div>
@@ -346,11 +345,11 @@ be notified when this is complete use <code><a href="../../jsdoc/module-vertx-js
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">consumer.unregister(function (res, res_err) {
-  if (res_err == null) {
-    console.log("The handler un-registration has reached all nodes");
-  } else {
-    console.log("Un-registration failed!");
+<pre class="CodeRay highlight"><code data-lang="js">consumer.unregister(<span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">The handler un-registration has reached all nodes</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Un-registration failed!</span><span class="delimiter">&quot;</span></span>);
   }
 });</code></pre>
 </div>
@@ -364,7 +363,7 @@ address to publish it to.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">eventBus.publish("news.uk.sport", "Yay! Someone kicked a ball");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js">eventBus.publish(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Yay! Someone kicked a ball</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -382,7 +381,7 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js">eventBus.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Yay! Someone kicked a ball</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -397,12 +396,12 @@ inside the <code><a href="../../vertx-core/dataobjects.html#DeliveryOptions">Del
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">var options = {
- headers: {
-   "some-header" : "some-value"
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> options = {
+ <span class="key">headers</span>: {
+   <span class="key"><span class="delimiter">&quot;</span><span class="content">some-header</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
  }
 }
-vertx.eventBus().send("news.uk.sport", "Yay! Someone kicked a ball", options);</code></pre>
+vertx.eventBus().send(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Yay! Someone kicked a ball</span><span class="delimiter">&quot;</span></span>, options);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -410,8 +409,8 @@ vertx.eventBus().send("news.uk.sport", "Yay! Someone kicked a ball", options);</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">vertx.eventBus().consumer("news.uk.sport", function(e) {
- console.log(e.headers().get("some-header"));
+<pre class="CodeRay highlight"><code data-lang="javascript">vertx.eventBus().consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(e) {
+ console.log(e.headers().get(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-header</span><span class="delimiter">&quot;</span></span>));
 });</code></pre>
 </div>
 </div>
@@ -457,10 +456,10 @@ vertx.eventBus().send("news.uk.sport", "Yay! Someone kicked a ball", options);</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var consumer = eventBus.consumer("news.uk.sport");
-consumer.handler(function (message) {
-  console.log("I have received a message: " + message.body());
-  message.reply("how interesting!");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> consumer = eventBus.consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>);
+consumer.handler(<span class="keyword">function</span> (message) {
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">I have received a message: </span><span class="delimiter">&quot;</span></span> + message.body());
+  message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">how interesting!</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -469,9 +468,9 @@ consumer.handler(function (message) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass", function (ar, ar_err) {
-  if (ar_err == null) {
-    console.log("Received reply: " + ar.body());
+<pre class="CodeRay highlight"><code data-lang="js">eventBus.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Yay! Someone kicked a ball across a patch of grass</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (ar, ar_err) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received reply: </span><span class="delimiter">&quot;</span></span> + ar.body());
   }
 });</code></pre>
 </div>
@@ -555,16 +554,16 @@ instance as clustered;</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
-var options = {
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Vertx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> options = {
 };
-Vertx.clusteredVertx(options, function (res, res_err) {
-  if (res_err == null) {
-    var vertx = res;
-    var eventBus = vertx.eventBus();
-    console.log("We now have a clustered event bus: " + eventBus);
-  } else {
-    console.log("Failed: " + res_err);
+Vertx.clusteredVertx(options, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> vertx = res;
+    <span class="keyword">var</span> eventBus = vertx.eventBus();
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">We now have a clustered event bus: </span><span class="delimiter">&quot;</span></span> + eventBus);
+  } <span class="keyword">else</span> {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed: </span><span class="delimiter">&quot;</span></span> + res_err);
   }
 });</code></pre>
 </div>
@@ -607,29 +606,29 @@ the event bus acts as a server and client, the configuration is close to
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
-var options = {
-  "eventBusOptions" : {
-    "ssl" : true,
-    "keyStoreOptions" : {
-      "path" : "keystore.jks",
-      "password" : "wibble"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Vertx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> options = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">eventBusOptions</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">ssl</span><span class="delimiter">&quot;</span></span> : <span class="predefined-constant">true</span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">keyStoreOptions</span><span class="delimiter">&quot;</span></span> : {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jks</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>
     },
-    "trustStoreOptions" : {
-      "path" : "keystore.jks",
-      "password" : "wibble"
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">trustStoreOptions</span><span class="delimiter">&quot;</span></span> : {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jks</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>
     },
-    "clientAuth" : "REQUIRED"
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">clientAuth</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">REQUIRED</span><span class="delimiter">&quot;</span></span>
   }
 };
 
-Vertx.clusteredVertx(options, function (res, res_err) {
-  if (res_err == null) {
-    var vertx = res;
-    var eventBus = vertx.eventBus();
-    console.log("We now have a clustered event bus: " + eventBus);
-  } else {
-    console.log("Failed: " + res_err);
+Vertx.clusteredVertx(options, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> vertx = res;
+    <span class="keyword">var</span> eventBus = vertx.eventBus();
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">We now have a clustered event bus: </span><span class="delimiter">&quot;</span></span> + eventBus);
+  } <span class="keyword">else</span> {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed: </span><span class="delimiter">&quot;</span></span> + res_err);
   }
 });</code></pre>
 </div>
@@ -656,21 +655,21 @@ clustered, the port and host, as you would do with <code><a href="../dataobjects
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Vertx = require("vertx-js/vertx");
-var options = {
-  "eventBusOptions" : {
-    "clusterPublicHost" : "whatever",
-    "clusterPublicPort" : 1234
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Vertx = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/vertx</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> options = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">eventBusOptions</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">clusterPublicHost</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">whatever</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">clusterPublicPort</span><span class="delimiter">&quot;</span></span> : <span class="integer">1234</span>
   }
 };
 
-Vertx.clusteredVertx(options, function (res, res_err) {
-  if (res_err == null) {
-    var vertx = res;
-    var eventBus = vertx.eventBus();
-    console.log("We now have a clustered event bus: " + eventBus);
-  } else {
-    console.log("Failed: " + res_err);
+Vertx.clusteredVertx(options, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    <span class="keyword">var</span> vertx = res;
+    <span class="keyword">var</span> eventBus = vertx.eventBus();
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">We now have a clustered event bus: </span><span class="delimiter">&quot;</span></span> + eventBus);
+  } <span class="keyword">else</span> {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed: </span><span class="delimiter">&quot;</span></span> + res_err);
   }
 });</code></pre>
 </div>

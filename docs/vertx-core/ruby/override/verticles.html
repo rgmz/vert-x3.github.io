@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -134,8 +133,8 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Start a timer
-$vertx.set_periodic(1000) { puts 'Timer has fired' }</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># Start a timer</span>
+<span class="global-variable">$vertx</span>.set_periodic(<span class="integer">1000</span>) { puts <span class="string"><span class="delimiter">'</span><span class="content">Timer has fired</span><span class="delimiter">'</span></span> }</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -151,9 +150,9 @@ execution. The <code>vertx_stop</code> is executed as any other function and doe
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">def vertx_stop future
-  # Cleanup here
-end</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">def</span> <span class="function">vertx_stop</span> future
+  <span class="comment"># Cleanup here</span>
+<span class="keyword">end</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -182,17 +181,17 @@ you need to do (e.g. start other verticles), you can call complete on the Future
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">def vertx_start_async start_future
-  # Now deploy some other verticle:
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">def</span> <span class="function">vertx_start_async</span> start_future
+  <span class="comment"># Now deploy some other verticle:</span>
 
-  $vertx.deploy_verticle("other_verticle.rb") do |res|
-    if res.succeeded?
+  <span class="global-variable">$vertx</span>.deploy_verticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">other_verticle.rb</span><span class="delimiter">&quot;</span></span>) <span class="keyword">do</span> |res|
+    <span class="keyword">if</span> res.succeeded?
       start_future.complete
-    else
+    <span class="keyword">else</span>
       start_future.fail
-    end
-  end
-end</code></pre>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -201,15 +200,15 @@ cleanup that takes some time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">def vertx_stop_async stop_future
-  obj.do_something_that_takes_time do |res|
-    if res.succeeded?
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">def</span> <span class="function">vertx_stop_async</span> stop_future
+  obj.do_something_that_takes_time <span class="keyword">do</span> |res|
+    <span class="keyword">if</span> res.succeeded?
       stop_future.complete
-    else
+    <span class="keyword">else</span>
       stop_future.fail
-    end
-  end
-end</code></pre>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -225,9 +224,9 @@ verticle:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">DeploymentOptions options = new DeploymentOptions().
-    setConfig(new JsonObject().put("GEM_PATH", "/path/to/gems"));
-vertx.deployVerticle("my_verticle.rb", options);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">DeploymentOptions options = <span class="keyword">new</span> DeploymentOptions().
+    setConfig(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">GEM_PATH</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/gems</span><span class="delimiter">&quot;</span></span>));
+vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">my_verticle.rb</span><span class="delimiter">&quot;</span></span>, options);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -235,8 +234,8 @@ vertx.deployVerticle("my_verticle.rb", options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">options = { :config =&gt; { :GEM_PATH =&gt; '/path/to/gems' } }
-$vertx.deploy_verticle('my_verticle.rb', options)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby">options = { <span class="symbol">:config</span> =&gt; { <span class="symbol">:GEM_PATH</span> =&gt; <span class="string"><span class="delimiter">'</span><span class="content">/path/to/gems</span><span class="delimiter">'</span></span> } }
+<span class="global-variable">$vertx</span>.deploy_verticle(<span class="string"><span class="delimiter">'</span><span class="content">my_verticle.rb</span><span class="delimiter">'</span></span>, options)</code></pre>
 </div>
 </div>
 <div class="paragraph">

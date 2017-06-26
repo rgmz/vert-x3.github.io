@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -165,12 +164,12 @@ to the <code>NetSocket</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServer server = vertx.createNetServer(
-    new NetServerOptions().setPort(1234).setHost("localhost")
+<pre class="CodeRay highlight"><code data-lang="java">NetServer server = vertx.createNetServer(
+    <span class="keyword">new</span> NetServerOptions().setPort(<span class="integer">1234</span>).setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>)
 );
 server.connectHandler(sock -&gt; {
   sock.handler(buffer -&gt; {
-    // Write the data straight back
+    <span class="comment">// Write the data straight back</span>
     sock.write(buffer);
   });
 }).listen();</code></pre>
@@ -188,12 +187,12 @@ writing to it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServer server = vertx.createNetServer(
-    new NetServerOptions().setPort(1234).setHost("localhost")
+<pre class="CodeRay highlight"><code data-lang="java">NetServer server = vertx.createNetServer(
+    <span class="keyword">new</span> NetServerOptions().setPort(<span class="integer">1234</span>).setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>)
 );
 server.connectHandler(sock -&gt; {
   sock.handler(buffer -&gt; {
-    if (!sock.writeQueueFull()) {
+    <span class="keyword">if</span> (!sock.writeQueueFull()) {
       sock.write(buffer);
     }
   });
@@ -207,13 +206,13 @@ really want to do is pause the <code>NetSocket</code> when the write queue is fu
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServer server = vertx.createNetServer(
-    new NetServerOptions().setPort(1234).setHost("localhost")
+<pre class="CodeRay highlight"><code data-lang="java">NetServer server = vertx.createNetServer(
+    <span class="keyword">new</span> NetServerOptions().setPort(<span class="integer">1234</span>).setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>)
 );
 server.connectHandler(sock -&gt; {
   sock.handler(buffer -&gt; {
     sock.write(buffer);
-    if (sock.writeQueueFull()) {
+    <span class="keyword">if</span> (sock.writeQueueFull()) {
       sock.pause();
     }
   });
@@ -226,13 +225,13 @@ it when the write queue has processed its backlog:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServer server = vertx.createNetServer(
-    new NetServerOptions().setPort(1234).setHost("localhost")
+<pre class="CodeRay highlight"><code data-lang="java">NetServer server = vertx.createNetServer(
+    <span class="keyword">new</span> NetServerOptions().setPort(<span class="integer">1234</span>).setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>)
 );
 server.connectHandler(sock -&gt; {
   sock.handler(buffer -&gt; {
     sock.write(buffer);
-    if (sock.writeQueueFull()) {
+    <span class="keyword">if</span> (sock.writeQueueFull()) {
       sock.pause();
       sock.drainHandler(done -&gt; {
         sock.resume();
@@ -254,8 +253,8 @@ You just feed it the <code>ReadStream</code> plus the <code>WriteStream</code> t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServer server = vertx.createNetServer(
-    new NetServerOptions().setPort(1234).setHost("localhost")
+<pre class="CodeRay highlight"><code data-lang="java">NetServer server = vertx.createNetServer(
+    <span class="keyword">new</span> NetServerOptions().setPort(<span class="integer">1234</span>).setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>)
 );
 server.connectHandler(sock -&gt; {
   Pump.pump(sock, sock).start();

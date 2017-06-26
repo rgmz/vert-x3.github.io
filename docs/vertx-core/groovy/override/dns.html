@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -181,19 +180,19 @@ can be used to inspect the cause in more detail.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = vertx.createDnsClient(53, "8.8.8.8");
-client.lookup("missing.vertx.io", { ar -&gt;
- if (ar.succeeded()) {
-   def record = ar.result();
-   println "record: " + record;
- } else {
-   def cause = ar.cause();
-   if (cause instanceof DnsException) {
-   def code = cause.code();
-   println "Code : " + code
-   // ...
-   } else {
-     println("Failed to resolve entry" + ar.cause());
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">8.8.8.8</span><span class="delimiter">&quot;</span></span>);
+client.lookup(<span class="string"><span class="delimiter">&quot;</span><span class="content">missing.vertx.io</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
+ <span class="keyword">if</span> (ar.succeeded()) {
+   <span class="keyword">def</span> record = ar.result();
+   println <span class="string"><span class="delimiter">&quot;</span><span class="content">record: </span><span class="delimiter">&quot;</span></span> + record;
+ } <span class="keyword">else</span> {
+   <span class="keyword">def</span> cause = ar.cause();
+   <span class="keyword">if</span> (cause <span class="keyword">instanceof</span> DnsException) {
+   <span class="keyword">def</span> code = cause.code();
+   println <span class="string"><span class="delimiter">&quot;</span><span class="content">Code : </span><span class="delimiter">&quot;</span></span> + code
+   <span class="comment">// ...</span>
+   } <span class="keyword">else</span> {
+     println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to resolve entry</span><span class="delimiter">&quot;</span></span> + ar.cause());
    }
  }
 })</code></pre>

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -157,11 +156,11 @@ connection pooling to keep connections open to be reused.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-mail-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-mail-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -173,7 +172,7 @@ connection pooling to keep connections open to be reused.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mail-client:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mail-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -198,8 +197,8 @@ if it is shared, the same connection pool will be used for all clients using the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MailConfig config = new MailConfig();
-MailClient mailClient = MailClient.createShared(vertx, config, "exampleclient");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">MailConfig config = <span class="keyword">new</span> MailConfig();
+MailClient mailClient = MailClient.createShared(vertx, config, <span class="string"><span class="delimiter">&quot;</span><span class="content">exampleclient</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -216,7 +215,7 @@ same identifier).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MailConfig config = new MailConfig();
+<pre class="CodeRay highlight"><code data-lang="java">MailConfig config = <span class="keyword">new</span> MailConfig();
 MailClient mailClient = MailClient.createNonShared(vertx, config);</code></pre>
 </div>
 </div>
@@ -225,12 +224,12 @@ MailClient mailClient = MailClient.createNonShared(vertx, config);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MailConfig config = new MailConfig();
-config.setHostname("mail.example.com");
-config.setPort(587);
+<pre class="CodeRay highlight"><code data-lang="java">MailConfig config = <span class="keyword">new</span> MailConfig();
+config.setHostname(<span class="string"><span class="delimiter">&quot;</span><span class="content">mail.example.com</span><span class="delimiter">&quot;</span></span>);
+config.setPort(<span class="integer">587</span>);
 config.setStarttls(StartTLSOptions.REQUIRED);
-config.setUsername("user");
-config.setPassword("password");
+config.setUsername(<span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>);
+config.setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>);
 MailClient mailClient = MailClient.createNonShared(vertx, config);</code></pre>
 </div>
 </div>
@@ -258,12 +257,12 @@ quoted-printable) headers/messages</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MailMessage message = new MailMessage();
-message.setFrom("user@example.com (Example User)");
-message.setTo("recipient@example.org");
-message.setCc("Another User &lt;another@example.net&gt;");
-message.setText("this is the plain message text");
-message.setHtml("this is html text &lt;a href=\"http://vertx.io\"&gt;vertx.io&lt;/a&gt;");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">MailMessage message = <span class="keyword">new</span> MailMessage();
+message.setFrom(<span class="string"><span class="delimiter">&quot;</span><span class="content">user@example.com (Example User)</span><span class="delimiter">&quot;</span></span>);
+message.setTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">recipient@example.org</span><span class="delimiter">&quot;</span></span>);
+message.setCc(<span class="string"><span class="delimiter">&quot;</span><span class="content">Another User &lt;another@example.net&gt;</span><span class="delimiter">&quot;</span></span>);
+message.setText(<span class="string"><span class="delimiter">&quot;</span><span class="content">this is the plain message text</span><span class="delimiter">&quot;</span></span>);
+message.setHtml(<span class="string"><span class="delimiter">&quot;</span><span class="content">this is html text &lt;a href=</span><span class="char">\&quot;</span><span class="content">http://vertx.io</span><span class="char">\&quot;</span><span class="content">&gt;vertx.io&lt;/a&gt;</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -272,9 +271,9 @@ this supports base64 attachments.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MailAttachment attachment = new MailAttachment();
-attachment.setContentType("text/plain");
-attachment.setData(Buffer.buffer("attachment file"));
+<pre class="CodeRay highlight"><code data-lang="java">MailAttachment attachment = <span class="keyword">new</span> MailAttachment();
+attachment.setContentType(<span class="string"><span class="delimiter">&quot;</span><span class="content">text/plain</span><span class="delimiter">&quot;</span></span>);
+attachment.setData(<span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">attachment file</span><span class="delimiter">&quot;</span></span>));
 
 message.setAttachment(attachment);</code></pre>
 </div>
@@ -290,11 +289,11 @@ A valid example for a Content-ID value is "&lt;<a href="mailto:filename%201.jpg@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MailAttachment attachment = new MailAttachment();
-attachment.setContentType("image/jpeg");
-attachment.setData(Buffer.buffer("image data"));
-attachment.setDisposition("inline");
-attachment.setContentId("&lt;image1@example.com&gt;");
+<pre class="CodeRay highlight"><code data-lang="java">MailAttachment attachment = <span class="keyword">new</span> MailAttachment();
+attachment.setContentType(<span class="string"><span class="delimiter">&quot;</span><span class="content">image/jpeg</span><span class="delimiter">&quot;</span></span>);
+attachment.setData(<span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">image data</span><span class="delimiter">&quot;</span></span>));
+attachment.setDisposition(<span class="string"><span class="delimiter">&quot;</span><span class="content">inline</span><span class="delimiter">&quot;</span></span>);
+attachment.setContentId(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;image1@example.com&gt;</span><span class="delimiter">&quot;</span></span>);
 
 message.setInlineAttachment(attachment);</code></pre>
 </div>
@@ -308,10 +307,10 @@ the send operation is finished or it failed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">mailClient.sendMail(message, result -&gt; {
-  if (result.succeeded()) {
-    System.out.println(result.result());
-  } else {
+<pre class="CodeRay highlight"><code data-lang="java">mailClient.sendMail(message, result -&gt; {
+  <span class="keyword">if</span> (result.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(result.result());
+  } <span class="keyword">else</span> {
     result.cause().printStackTrace();
   }
 });</code></pre>

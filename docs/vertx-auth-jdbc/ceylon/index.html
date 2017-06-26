@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -129,7 +128,7 @@ to perform authentication and authorisation against any JDBC compliant database.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">shared import io.vertx.ceylon.auth.jdbc "3.3.2";</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml">shared import io.vertx.ceylon.auth.jdbc &quot;3.3.2&quot;;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -141,13 +140,13 @@ of those please consult the documentation for the JDBC client.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import io.vertx.ceylon.ext.auth.jdbc { jdbcAuth }
-import io.vertx.ceylon.ext.jdbc { jdbcClient_ = jdbcClient }
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">io.vertx.ceylon.ext.auth.jdbc</span> { <span class="include">jdbcAuth</span> }
+<span class="include">import</span> <span class="include">io.vertx.ceylon.ext.jdbc</span> { <span class="include">jdbcClient_</span> = <span class="include">jdbcClient</span> }
 
 ...
 
 
-value jdbcClient = jdbcClient_.createShared(vertx, jdbcClientConfig);
+<span class="include">value</span> <span class="include">jdbcClient</span> = <span class="include">jdbcClient_.createShared</span>(<span class="include">vertx</span>, <span class="include">jdbcClientConfig</span>);
 
 value authProvider = jdbcAuth.create(jdbcClient);</code></pre>
 </div>
@@ -195,16 +194,16 @@ authentication info:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">value authInfo = JsonObject {
-  username = "tim";
-  password = "sausages";
+<pre class="CodeRay highlight"><code data-lang="java">value authInfo = JsonObject {
+  username = <span class="string"><span class="delimiter">&quot;</span><span class="content">tim</span><span class="delimiter">&quot;</span></span>;
+  password = <span class="string"><span class="delimiter">&quot;</span><span class="content">sausages</span><span class="delimiter">&quot;</span></span>;
 };
 
-authProvider.authenticate(authInfo, (User|Throwable res) {
-  if (is User res) {
+authProvider.authenticate(authInfo, (User|<span class="predefined-type">Throwable</span> res) {
+  <span class="keyword">if</span> (is User res) {
     value user = res;
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   };
 });</code></pre>
 </div>
@@ -225,11 +224,11 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("commit_code", (Boolean|Throwable res) {
-  if (is Boolean res) {
+<pre class="CodeRay highlight"><code data-lang="java">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">commit_code</span><span class="delimiter">&quot;</span></span>, (<span class="predefined-type">Boolean</span>|<span class="predefined-type">Throwable</span> res) {
+  <span class="keyword">if</span> (is <span class="predefined-type">Boolean</span> res) {
     value hasPermission = res;
-  } else {
-    // Failed to
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed to</span>
   };
 });</code></pre>
 </div>
@@ -239,11 +238,11 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("role:manager", (Boolean|Throwable res) {
-  if (is Boolean res) {
+<pre class="CodeRay highlight"><code data-lang="java">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">role:manager</span><span class="delimiter">&quot;</span></span>, (<span class="predefined-type">Boolean</span>|<span class="predefined-type">Throwable</span> res) {
+  <span class="keyword">if</span> (is <span class="predefined-type">Boolean</span> res) {
     value hasRole = res;
-  } else {
-    // Failed to
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed to</span>
   };
 });</code></pre>
 </div>

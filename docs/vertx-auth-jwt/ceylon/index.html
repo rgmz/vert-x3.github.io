@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -136,7 +135,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">shared import io.vertx.ceylon.auth.jwt "3.3.2";</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml">shared import io.vertx.ceylon.auth.jwt &quot;3.3.2&quot;;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -189,16 +188,16 @@ in a JSON object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import io.vertx.ceylon.ext.auth.jwt { jwtAuth }
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">io.vertx.ceylon.ext.auth.jwt</span> { <span class="include">jwtAuth</span> }
 
 ...
 
 
-value config = JsonObject {
-  keyStore = JsonObject {
-    path = "keystore.jceks";
-    type = "jceks";
-    password = "secret";
+<span class="include">value</span> <span class="include">config</span> = <span class="include">JsonObject</span> {
+  <span class="include">keyStore</span> = <span class="include">JsonObject</span> {
+    <span class="include">path</span> = <span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jceks</span><span class="delimiter">&quot;</span></span>;
+    type = <span class="string"><span class="delimiter">&quot;</span><span class="content">jceks</span><span class="delimiter">&quot;</span></span>;
+    password = <span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>;
   };
 };
 
@@ -212,28 +211,28 @@ do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import io.vertx.ceylon.ext.auth.jwt { jwtAuth }
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">io.vertx.ceylon.ext.auth.jwt</span> { <span class="include">jwtAuth</span> }
 
 ...
 
 
-value config = JsonObject {
-  keyStore = JsonObject {
-    path = "keystore.jceks";
-    type = "jceks";
-    password = "secret";
+<span class="include">value</span> <span class="include">config</span> = <span class="include">JsonObject</span> {
+  <span class="include">keyStore</span> = <span class="include">JsonObject</span> {
+    <span class="include">path</span> = <span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jceks</span><span class="delimiter">&quot;</span></span>;
+    type = <span class="string"><span class="delimiter">&quot;</span><span class="content">jceks</span><span class="delimiter">&quot;</span></span>;
+    password = <span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>;
   };
 };
 
 value provider = jwtAuth.create(vertx, config);
 
-// on the verify endpoint once you verify the identity of the user by its username/password
-if ("paulo" == username &amp;&amp; "super_secret" == password) {
+<span class="comment">// on the verify endpoint once you verify the identity of the user by its username/password</span>
+<span class="keyword">if</span> (<span class="string"><span class="delimiter">&quot;</span><span class="content">paulo</span><span class="delimiter">&quot;</span></span> == username &amp;&amp; <span class="string"><span class="delimiter">&quot;</span><span class="content">super_secret</span><span class="delimiter">&quot;</span></span> == password) {
   value token = provider.generateToken(JsonObject {
-    sub = "paulo";
+    sub = <span class="string"><span class="delimiter">&quot;</span><span class="content">paulo</span><span class="delimiter">&quot;</span></span>;
   }, JWTOptions());
-  // now for any request to protected resources you should pass this string in the HTTP header Authorization as:
-  // Authorization: Bearer &lt;token&gt;
+  <span class="comment">// now for any request to protected resources you should pass this string in the HTTP header Authorization as:</span>
+  <span class="comment">// Authorization: Bearer &lt;token&gt;</span>
 };</code></pre>
 </div>
 </div>
@@ -295,13 +294,13 @@ case all you need to have is a public key im PEM format.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.jwt { jwtAuth }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.jwt { jwtAuth }
 
 ...
 
 
 value config = JsonObject {
-  public-key = "BASE64-ENCODED-PUBLIC_KEY";
+  public-key = &quot;BASE64-ENCODED-PUBLIC_KEY&quot;;
 };
 value provider = jwtAuth.create(vertx, config);</code></pre>
 </div>

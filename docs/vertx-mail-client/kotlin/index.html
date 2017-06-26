@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -157,11 +156,11 @@ connection pooling to keep connections open to be reused.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-mail-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-mail-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -173,7 +172,7 @@ connection pooling to keep connections open to be reused.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mail-client:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mail-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -198,8 +197,8 @@ if it is shared, the same connection pool will be used for all clients using the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var config = MailConfig()
-var mailClient = MailClient.createShared(vertx, config, "exampleclient")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var config = MailConfig()
+var mailClient = MailClient.createShared(vertx, config, &quot;exampleclient&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -216,7 +215,7 @@ same identifier).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var config = MailConfig()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var config = MailConfig()
 var mailClient = MailClient.createNonShared(vertx, config)</code></pre>
 </div>
 </div>
@@ -225,12 +224,12 @@ var mailClient = MailClient.createNonShared(vertx, config)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var config = MailConfig()
-config.hostname = "mail.example.com"
+<pre class="CodeRay highlight"><code data-lang="kotlin">var config = MailConfig()
+config.hostname = &quot;mail.example.com&quot;
 config.port = 587
 config.starttls = StartTLSOptions.REQUIRED
-config.username = "user"
-config.password = "password"
+config.username = &quot;user&quot;
+config.password = &quot;password&quot;
 var mailClient = MailClient.createNonShared(vertx, config)</code></pre>
 </div>
 </div>
@@ -258,12 +257,12 @@ quoted-printable) headers/messages</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var message = MailMessage()
-message.from = "user@example.com (Example User)"
-message.to = "recipient@example.org"
-message.cc = "Another User &lt;another@example.net&gt;"
-message.text = "this is the plain message text"
-message.html = "this is html text &lt;a href=\"http://vertx.io\"&gt;vertx.io&lt;/a&gt;"</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var message = MailMessage()
+message.from = &quot;user@example.com (Example User)&quot;
+message.to = &quot;recipient@example.org&quot;
+message.cc = &quot;Another User &lt;another@example.net&gt;&quot;
+message.text = &quot;this is the plain message text&quot;
+message.html = &quot;this is html text &lt;a href=\&quot;http://vertx.io\&quot;&gt;vertx.io&lt;/a&gt;&quot;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -272,9 +271,9 @@ this supports base64 attachments.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var attachment = MailAttachment()
-attachment.contentType = "text/plain"
-attachment.data = Buffer.buffer("attachment file")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var attachment = MailAttachment()
+attachment.contentType = &quot;text/plain&quot;
+attachment.data = Buffer.buffer(&quot;attachment file&quot;)
 
 message.attachment = attachment</code></pre>
 </div>
@@ -290,11 +289,11 @@ A valid example for a Content-ID value is "&lt;<a href="mailto:filename%201.jpg@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var attachment = MailAttachment()
-attachment.contentType = "image/jpeg"
-attachment.data = Buffer.buffer("image data")
-attachment.disposition = "inline"
-attachment.contentId = "&lt;image1@example.com&gt;"
+<pre class="CodeRay highlight"><code data-lang="kotlin">var attachment = MailAttachment()
+attachment.contentType = &quot;image/jpeg&quot;
+attachment.data = Buffer.buffer(&quot;image data&quot;)
+attachment.disposition = &quot;inline&quot;
+attachment.contentId = &quot;&lt;image1@example.com&gt;&quot;
 
 message.inlineAttachment = attachment</code></pre>
 </div>
@@ -308,7 +307,7 @@ the send operation is finished or it failed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">mailClient.sendMail(message, { result -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">mailClient.sendMail(message, { result -&gt;
   if (result.succeeded()) {
     println(result.result())
   } else {

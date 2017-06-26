@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -198,11 +197,11 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-amqp-bridge&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-amqp-bridge<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -214,7 +213,7 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-amqp-bridge:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-amqp-<span class="key">bridge</span>:<span class="float">3.4</span><span class="float">.2</span></code></pre>
 </div>
 </div>
 </div>
@@ -233,16 +232,16 @@ to configure various options such as for using SSL connections.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var bridge = AmqpBridge.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="kotlin">var bridge = AmqpBridge.create(vertx)
 // Start the bridge, then use the event loop thread to process things thereafter.
-bridge.start("localhost", 5672, { res -&gt;
+bridge.start(&quot;localhost&quot;, 5672, { res -&gt;
   // Set up a producer using the bridge, send a message with it.
-  var producer = bridge.createProducer&lt;Any&gt;("myAmqpAddress")
+  var producer = bridge.createProducer&lt;Any&gt;(&quot;myAmqpAddress&quot;)
 
   var amqpMsgPayload = json {
     obj()
   }
-  amqpMsgPayload.put("body", "myStringContent")
+  amqpMsgPayload.put(&quot;body&quot;, &quot;myStringContent&quot;)
 
   producer.send(amqpMsgPayload)
 })</code></pre>
@@ -259,16 +258,16 @@ messages.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var bridge = AmqpBridge.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="kotlin">var bridge = AmqpBridge.create(vertx)
 // Start the bridge, then use the event loop thread to process things thereafter.
-bridge.start("localhost", 5672, { res -&gt;
+bridge.start(&quot;localhost&quot;, 5672, { res -&gt;
   // Set up a consumer using the bridge, register a handler for it.
-  var consumer = bridge.createConsumer&lt;Any&gt;("myAmqpAddress")
+  var consumer = bridge.createConsumer&lt;Any&gt;(&quot;myAmqpAddress&quot;)
   consumer.handler({ vertxMsg -&gt;
     var amqpMsgPayload = vertxMsg.body()
-    var amqpBody = amqpMsgPayload.get&lt;Any?&gt;("body")
+    var amqpBody = amqpMsgPayload.get&lt;Any?&gt;(&quot;body&quot;)
 
-    println("Received a message with body: ${amqpBody}")
+    println(&quot;Received a message with body: ${amqpBody}&quot;)
   })
 })</code></pre>
 </div>
@@ -394,15 +393,15 @@ message could look something like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var applicationProperties = json {
+<pre class="CodeRay highlight"><code data-lang="kotlin">var applicationProperties = json {
   obj()
 }
-applicationProperties.put("name", "value")
+applicationProperties.put(&quot;name&quot;, &quot;value&quot;)
 
 var amqpMsgPayload = json {
   obj()
 }
-amqpMsgPayload.put("application_properties", applicationProperties)
+amqpMsgPayload.put(&quot;application_properties&quot;, applicationProperties)
 
 producer.send(amqpMsgPayload)</code></pre>
 </div>
@@ -414,10 +413,10 @@ retrieving an application-property from a received message might look like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Check the application properties section was present before use, it may not be
-var appProps = amqpMsgPayload.getJsonObject("application_properties")
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Check the application properties section was present before use, it may not be
+var appProps = amqpMsgPayload.getJsonObject(&quot;application_properties&quot;)
 if (appProps != null) {
-  var propValue = appProps.get&lt;Any?&gt;("propertyName")
+  var propValue = appProps.get&lt;Any?&gt;(&quot;propertyName&quot;)
 }</code></pre>
 </div>
 </div>
@@ -446,7 +445,7 @@ in tandem with the producer and attempt to send only what it knows can actually 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">producer.writeQueueFull()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">producer.writeQueueFull()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -455,7 +454,7 @@ receives more credit and is able to send messages immediately rather than buffer
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">producer.drainHandler({ v -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">producer.drainHandler({ v -&gt;
   // ...do stuff and send...
 })</code></pre>
 </div>
@@ -471,7 +470,7 @@ buffered message value before registering a handler, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consumer.setMaxBufferedMessages(5)
+<pre class="CodeRay highlight"><code data-lang="kotlin">consumer.setMaxBufferedMessages(5)
 consumer.handler({ msg -&gt;
   // ...handle received messages...
 })</code></pre>
@@ -494,16 +493,16 @@ certificate:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var bridgeOptions = AmqpBridgeOptions()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var bridgeOptions = AmqpBridgeOptions()
 bridgeOptions.ssl = true
 
 var trustOptions = PfxOptions(
-  path = "path/to/pkcs12.truststore",
-  password = "password")
+  path = &quot;path/to/pkcs12.truststore&quot;,
+  password = &quot;password&quot;)
 bridgeOptions.pfxTrustOptions = trustOptions
 
 var bridge = AmqpBridge.create(vertx, bridgeOptions)
-bridge.start("localhost", 5672, "username", "password", { res -&gt;
+bridge.start(&quot;localhost&quot;, 5672, &quot;username&quot;, &quot;password&quot;, { res -&gt;
   // ..do things with the bridge..
 })</code></pre>
 </div>
@@ -515,21 +514,21 @@ also a PKCS12 based key store containing an SSL key and certificate the server c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var bridgeOptions = AmqpBridgeOptions()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var bridgeOptions = AmqpBridgeOptions()
 bridgeOptions.ssl = true
 
 var trustOptions = PfxOptions(
-  path = "path/to/pkcs12.truststore",
-  password = "password")
+  path = &quot;path/to/pkcs12.truststore&quot;,
+  password = &quot;password&quot;)
 bridgeOptions.pfxTrustOptions = trustOptions
 
 var keyCertOptions = PfxOptions(
-  path = "path/to/pkcs12.keystore",
-  password = "password")
+  path = &quot;path/to/pkcs12.keystore&quot;,
+  password = &quot;password&quot;)
 bridgeOptions.pfxKeyCertOptions = keyCertOptions
 
 var bridge = AmqpBridge.create(vertx, bridgeOptions)
-bridge.start("localhost", 5672, { res -&gt;
+bridge.start(&quot;localhost&quot;, 5672, { res -&gt;
   // ..do things with the bridge..
 })</code></pre>
 </div>
@@ -617,10 +616,10 @@ value to match it with the reply handler, and then invokes the handler with the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var amqpMsgPayload = json {
+<pre class="CodeRay highlight"><code data-lang="kotlin">var amqpMsgPayload = json {
   obj()
 }
-amqpMsgPayload.put("body", "myRequest")
+amqpMsgPayload.put(&quot;body&quot;, &quot;myRequest&quot;)
 
 producer.send&lt;JsonObject&gt;(amqpMsgPayload, { res -&gt;
   var amqpReplyMessagePayload = res.result().body()
@@ -697,14 +696,14 @@ original sending application .</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consumer.handler({ msg -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consumer.handler({ msg -&gt;
   // ...do something with received message...then reply...
   var replyAddress = msg.replyAddress()
   if (replyAddress != null) {
     var amqpReplyMessagePayload = json {
       obj()
     }
-    amqpReplyMessagePayload.put("body", "myResponse")
+    amqpReplyMessagePayload.put(&quot;body&quot;, &quot;myResponse&quot;)
 
     msg.reply(amqpReplyMessagePayload)
   }

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -476,11 +475,11 @@ over time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-web&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-web<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -492,8 +491,8 @@ over time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-web:3.4.2'
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+  compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-web:3.4.2</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -514,19 +513,19 @@ HTTP servers using Vert.x core, if you&#8217;re not already.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">def server = vertx.createHttpServer()
+<pre class="CodeRay highlight"><code data-lang="java">def server = vertx.createHttpServer()
 
 server.requestHandler({ request -&gt;
 
-  // This handler gets called for each request that arrives on the server
+  <span class="comment">// This handler gets called for each request that arrives on the server</span>
   def response = request.response()
-  response.putHeader("content-type", "text/plain")
+  response.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/plain</span><span class="delimiter">&quot;</span></span>)
 
-  // Write to the response and end it
-  response.end("Hello World!")
+  <span class="comment">// Write to the response and end it</span>
+  response.end(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>)
 })
 
-server.listen(8080)</code></pre>
+server.listen(<span class="integer">8080</span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -567,21 +566,21 @@ request, and then, either end it or pass it to the next matching handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = vertx.createHttpServer()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> server = vertx.createHttpServer()
 
-def router = Router.router(vertx)
+<span class="keyword">def</span> router = Router.router(vertx)
 
 router.route().handler({ routingContext -&gt;
 
-  // This handler will be called for every request
-  def response = routingContext.response()
-  response.putHeader("content-type", "text/plain")
+  <span class="comment">// This handler will be called for every request</span>
+  <span class="keyword">def</span> response = routingContext.response()
+  response.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/plain</span><span class="delimiter">&quot;</span></span>)
 
-  // Write to the response and end it
-  response.end("Hello World from Vert.x-Web!")
+  <span class="comment">// Write to the response and end it</span>
+  response.end(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World from Vert.x-Web!</span><span class="delimiter">&quot;</span></span>)
 })
 
-server.requestHandler(router.&amp;accept).listen(8080)</code></pre>
+server.requestHandler(router.&amp;accept).listen(<span class="integer">8080</span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -630,39 +629,39 @@ You can do this some time later, if you want:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route1 = router.route("/some/path/").handler({ routingContext -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route1 = router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def response = routingContext.response()
-  // enable chunked responses because we will be adding data as
-  // we execute over other handlers. This is only required once and
-  // only if several handlers do output.
-  response.setChunked(true)
+  <span class="keyword">def</span> response = routingContext.response()
+  <span class="comment">// enable chunked responses because we will be adding data as</span>
+  <span class="comment">// we execute over other handlers. This is only required once and</span>
+  <span class="comment">// only if several handlers do output.</span>
+  response.setChunked(<span class="predefined-constant">true</span>)
 
-  response.write("route1\n")
+  response.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">route1</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
 
-  // Call the next matching route after a 5 second delay
-  routingContext.vertx().setTimer(5000, { tid -&gt;
+  <span class="comment">// Call the next matching route after a 5 second delay</span>
+  routingContext.vertx().setTimer(<span class="integer">5000</span>, { tid -&gt;
     routingContext.next()
   })
 })
 
-def route2 = router.route("/some/path/").handler({ routingContext -&gt;
+<span class="keyword">def</span> route2 = router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def response = routingContext.response()
-  response.write("route2\n")
+  <span class="keyword">def</span> response = routingContext.response()
+  response.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">route2</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
 
-  // Call the next matching route after a 5 second delay
-  routingContext.vertx().setTimer(5000, { tid -&gt;
+  <span class="comment">// Call the next matching route after a 5 second delay</span>
+  routingContext.vertx().setTimer(<span class="integer">5000</span>, { tid -&gt;
     routingContext.next()
   })
 })
 
-def route3 = router.route("/some/path/").handler({ routingContext -&gt;
+<span class="keyword">def</span> route3 = router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def response = routingContext.response()
-  response.write("route3")
+  <span class="keyword">def</span> response = routingContext.response()
+  response.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">route3</span><span class="delimiter">&quot;</span></span>)
 
-  // Now end the response
+  <span class="comment">// Now end the response</span>
   routingContext.response().end()
 })</code></pre>
 </div>
@@ -696,12 +695,12 @@ Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.route().blockingHandler({ routingContext -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">router.route().blockingHandler({ routingContext -&gt;
 
-  // Do something that might take some time synchronously
+  <span class="comment">// Do something that might take some time synchronously</span>
   service.doSomethingThatBlocks()
 
-  // Now call the next handler
+  <span class="comment">// Now call the next handler</span>
   routingContext.next()
 
 })</code></pre>
@@ -719,11 +718,11 @@ false using <code><a href="../../apidocs/io/vertx/ext/web/Route.html#blockingHan
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.post("/some/endpoint").handler({ ctx -&gt;
-  ctx.request().setExpectMultipart(true)
+<pre class="CodeRay highlight"><code data-lang="groovy">router.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/endpoint</span><span class="delimiter">&quot;</span></span>).handler({ ctx -&gt;
+  ctx.request().setExpectMultipart(<span class="predefined-constant">true</span>)
   ctx.next()
 }).blockingHandler({ ctx -&gt;
-  // ... Do some blocking operation
+  <span class="comment">// ... Do some blocking operation</span>
 })</code></pre>
 </div>
 </div>
@@ -742,17 +741,17 @@ so it will be called for paths <code>/some/path</code> and <code>/some/path//</c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route = router.route().path("/some/path/")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route = router.route().path(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/</span><span class="delimiter">&quot;</span></span>)
 
 route.handler({ routingContext -&gt;
-  // This handler will be called for the following request paths:
+  <span class="comment">// This handler will be called for the following request paths:</span>
 
-  // `/some/path`
-  // `/some/path/`
-  // `/some/path//`
-  //
-  // but not:
-  // `/some/path/subdir`
+  <span class="comment">// `/some/path`</span>
+  <span class="comment">// `/some/path/`</span>
+  <span class="comment">// `/some/path//`</span>
+  <span class="comment">//</span>
+  <span class="comment">// but not:</span>
+  <span class="comment">// `/some/path/subdir`</span>
 })</code></pre>
 </div>
 </div>
@@ -774,19 +773,19 @@ way is to use an asterisk <code>*</code> at the end of the path when declaring t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route = router.route().path("/some/path/*")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route = router.route().path(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/*</span><span class="delimiter">&quot;</span></span>)
 
 route.handler({ routingContext -&gt;
-  // This handler will be called for any path that starts with
-  // `/some/path/`, e.g.
+  <span class="comment">// This handler will be called for any path that starts with</span>
+  <span class="comment">// `/some/path/`, e.g.</span>
 
-  // `/some/path`
-  // `/some/path/`
-  // `/some/path/subdir`
-  // `/some/path/subdir/blah.html`
-  //
-  // but not:
-  // `/some/bath`
+  <span class="comment">// `/some/path`</span>
+  <span class="comment">// `/some/path/`</span>
+  <span class="comment">// `/some/path/subdir`</span>
+  <span class="comment">// `/some/path/subdir/blah.html`</span>
+  <span class="comment">//</span>
+  <span class="comment">// but not:</span>
+  <span class="comment">// `/some/bath`</span>
 })</code></pre>
 </div>
 </div>
@@ -795,10 +794,10 @@ route.handler({ routingContext -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route = router.route("/some/path/*")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route = router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/*</span><span class="delimiter">&quot;</span></span>)
 
 route.handler({ routingContext -&gt;
-  // This handler will be called same as previous example
+  <span class="comment">// This handler will be called same as previous example</span>
 })</code></pre>
 </div>
 </div>
@@ -816,14 +815,14 @@ route.handler({ routingContext -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route = router.route(HttpMethod.POST, "/catalogue/products/:producttype/:productid/")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route = router.route(HttpMethod.POST, <span class="string"><span class="delimiter">&quot;</span><span class="content">/catalogue/products/:producttype/:productid/</span><span class="delimiter">&quot;</span></span>)
 
 route.handler({ routingContext -&gt;
 
-  def productType = routingContext.request().getParam("producttype")
-  def productID = routingContext.request().getParam("productid")
+  <span class="keyword">def</span> productType = routingContext.request().getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">producttype</span><span class="delimiter">&quot;</span></span>)
+  <span class="keyword">def</span> productID = routingContext.request().getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">productid</span><span class="delimiter">&quot;</span></span>)
 
-  // Do something with them...
+  <span class="comment">// Do something with them...</span>
 })</code></pre>
 </div>
 </div>
@@ -845,20 +844,20 @@ and <code>productType</code> will receive the value <code>tools</code> and produ
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Matches any path ending with 'foo'
-def route = router.route().pathRegex(".*foo")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Matches any path ending with 'foo'</span>
+<span class="keyword">def</span> route = router.route().pathRegex(<span class="string"><span class="delimiter">&quot;</span><span class="content">.*foo</span><span class="delimiter">&quot;</span></span>)
 
 route.handler({ routingContext -&gt;
 
-  // This handler will be called for:
+  <span class="comment">// This handler will be called for:</span>
 
-  // /some/path/foo
-  // /foo
-  // /foo/bar/wibble/foo
-  // /bar/foo
+  <span class="comment">// /some/path/foo</span>
+  <span class="comment">// /foo</span>
+  <span class="comment">// /foo/bar/wibble/foo</span>
+  <span class="comment">// /bar/foo</span>
 
-  // But not:
-  // /bar/wibble
+  <span class="comment">// But not:</span>
+  <span class="comment">// /bar/wibble</span>
 })</code></pre>
 </div>
 </div>
@@ -867,11 +866,11 @@ route.handler({ routingContext -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route = router.routeWithRegex(".*foo")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route = router.routeWithRegex(<span class="string"><span class="delimiter">&quot;</span><span class="content">.*foo</span><span class="delimiter">&quot;</span></span>)
 
 route.handler({ routingContext -&gt;
 
-  // This handler will be called same as previous example
+  <span class="comment">// This handler will be called same as previous example</span>
 
 })</code></pre>
 </div>
@@ -886,17 +885,17 @@ route.handler({ routingContext -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route = router.routeWithRegex(".*foo")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route = router.routeWithRegex(<span class="string"><span class="delimiter">&quot;</span><span class="content">.*foo</span><span class="delimiter">&quot;</span></span>)
 
-// This regular expression matches paths that start with something like:
-// "/foo/bar" - where the "foo" is captured into param0 and the "bar" is captured into
-// param1
-route.pathRegex("\\/([^\\/]+)\\/([^\\/]+)").handler({ routingContext -&gt;
+<span class="comment">// This regular expression matches paths that start with something like:</span>
+<span class="comment">// &quot;/foo/bar&quot; - where the &quot;foo&quot; is captured into param0 and the &quot;bar&quot; is captured into</span>
+<span class="comment">// param1</span>
+route.pathRegex(<span class="string"><span class="delimiter">&quot;</span><span class="char">\\</span><span class="content">/([^</span><span class="char">\\</span><span class="content">/]+)</span><span class="char">\\</span><span class="content">/([^</span><span class="char">\\</span><span class="content">/]+)</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def productType = routingContext.request().getParam("param0")
-  def productID = routingContext.request().getParam("param1")
+  <span class="keyword">def</span> productType = routingContext.request().getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">param0</span><span class="delimiter">&quot;</span></span>)
+  <span class="keyword">def</span> productID = routingContext.request().getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">param1</span><span class="delimiter">&quot;</span></span>)
 
-  // Do something with them...
+  <span class="comment">// Do something with them...</span>
 })</code></pre>
 </div>
 </div>
@@ -920,11 +919,11 @@ and <code>productType</code> will receive the value <code>tools</code> and produ
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route = router.route().method(HttpMethod.POST)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route = router.route().method(HttpMethod.POST)
 
 route.handler({ routingContext -&gt;
 
-  // This handler will be called for any POST request
+  <span class="comment">// This handler will be called for any POST request</span>
 
 })</code></pre>
 </div>
@@ -934,11 +933,11 @@ route.handler({ routingContext -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route = router.route(HttpMethod.POST, "/some/path/")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route = router.route(HttpMethod.POST, <span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/</span><span class="delimiter">&quot;</span></span>)
 
 route.handler({ routingContext -&gt;
 
-  // This handler will be called for any POST request to a URI path starting with /some/path/
+  <span class="comment">// This handler will be called for any POST request to a URI path starting with /some/path/</span>
 
 })</code></pre>
 </div>
@@ -950,27 +949,27 @@ method name. For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.get().handler({ routingContext -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">router.get().handler({ routingContext -&gt;
 
-  // Will be called for any GET request
-
-})
-
-router.get("/some/path/").handler({ routingContext -&gt;
-
-  // Will be called for any GET request to a path
-  // starting with /some/path
+  <span class="comment">// Will be called for any GET request</span>
 
 })
 
-router.getWithRegex(".*foo").handler({ routingContext -&gt;
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  // Will be called for any GET request to a path
-  // ending with `foo`
+  <span class="comment">// Will be called for any GET request to a path</span>
+  <span class="comment">// starting with /some/path</span>
 
 })
 
-// There are also equivalents to the above for PUT, POST, DELETE, HEAD and OPTIONS</code></pre>
+router.getWithRegex(<span class="string"><span class="delimiter">&quot;</span><span class="content">.*foo</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
+
+  <span class="comment">// Will be called for any GET request to a path</span>
+  <span class="comment">// ending with `foo`</span>
+
+})
+
+<span class="comment">// There are also equivalents to the above for PUT, POST, DELETE, HEAD and OPTIONS</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -979,11 +978,11 @@ multiple times:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route = router.route().method(HttpMethod.POST).method(HttpMethod.PUT)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route = router.route().method(HttpMethod.POST).method(HttpMethod.PUT)
 
 route.handler({ routingContext -&gt;
 
-  // This handler will be called for any POST or PUT request
+  <span class="comment">// This handler will be called for any POST or PUT request</span>
 
 })</code></pre>
 </div>
@@ -1009,35 +1008,35 @@ matching route (if any) will be called. And so on.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route1 = router.route("/some/path/").handler({ routingContext -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route1 = router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def response = routingContext.response()
-  // enable chunked responses because we will be adding data as
-  // we execute over other handlers. This is only required once and
-  // only if several handlers do output.
-  response.setChunked(true)
+  <span class="keyword">def</span> response = routingContext.response()
+  <span class="comment">// enable chunked responses because we will be adding data as</span>
+  <span class="comment">// we execute over other handlers. This is only required once and</span>
+  <span class="comment">// only if several handlers do output.</span>
+  response.setChunked(<span class="predefined-constant">true</span>)
 
-  response.write("route1\n")
+  response.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">route1</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
 
-  // Now call the next matching route
+  <span class="comment">// Now call the next matching route</span>
   routingContext.next()
 })
 
-def route2 = router.route("/some/path/").handler({ routingContext -&gt;
+<span class="keyword">def</span> route2 = router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def response = routingContext.response()
-  response.write("route2\n")
+  <span class="keyword">def</span> response = routingContext.response()
+  response.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">route2</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
 
-  // Now call the next matching route
+  <span class="comment">// Now call the next matching route</span>
   routingContext.next()
 })
 
-def route3 = router.route("/some/path/").handler({ routingContext -&gt;
+<span class="keyword">def</span> route3 = router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def response = routingContext.response()
-  response.write("route3")
+  <span class="keyword">def</span> response = routingContext.response()
+  response.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">route3</span><span class="delimiter">&quot;</span></span>)
 
-  // Now end the response
+  <span class="comment">// Now end the response</span>
   routingContext.response().end()
 })</code></pre>
 </div>
@@ -1072,40 +1071,40 @@ want to ensure a route is evaluated before route number <code>0</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route1 = router.route("/some/path/").handler({ routingContext -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route1 = router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def response = routingContext.response()
-  response.write("route1\n")
+  <span class="keyword">def</span> response = routingContext.response()
+  response.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">route1</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
 
-  // Now call the next matching route
+  <span class="comment">// Now call the next matching route</span>
   routingContext.next()
 })
 
-def route2 = router.route("/some/path/").handler({ routingContext -&gt;
+<span class="keyword">def</span> route2 = router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def response = routingContext.response()
-  // enable chunked responses because we will be adding data as
-  // we execute over other handlers. This is only required once and
-  // only if several handlers do output.
-  response.setChunked(true)
+  <span class="keyword">def</span> response = routingContext.response()
+  <span class="comment">// enable chunked responses because we will be adding data as</span>
+  <span class="comment">// we execute over other handlers. This is only required once and</span>
+  <span class="comment">// only if several handlers do output.</span>
+  response.setChunked(<span class="predefined-constant">true</span>)
 
-  response.write("route2\n")
+  response.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">route2</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
 
-  // Now call the next matching route
+  <span class="comment">// Now call the next matching route</span>
   routingContext.next()
 })
 
-def route3 = router.route("/some/path/").handler({ routingContext -&gt;
+<span class="keyword">def</span> route3 = router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def response = routingContext.response()
-  response.write("route3")
+  <span class="keyword">def</span> response = routingContext.response()
+  response.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">route3</span><span class="delimiter">&quot;</span></span>)
 
-  // Now end the response
+  <span class="comment">// Now end the response</span>
   routingContext.response().end()
 })
 
-// Change the order of route2 so it runs before route1
-route2.order(-1)</code></pre>
+<span class="comment">// Change the order of route2 so it runs before route1</span>
+route2.order(-<span class="integer">1</span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1144,11 +1143,11 @@ This will be matched against the value specified in <code><a href="../../apidocs
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Exact match
-router.route().consumes("text/html").handler({ routingContext -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Exact match</span>
+router.route().consumes(<span class="string"><span class="delimiter">&quot;</span><span class="content">text/html</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  // This handler will be called for any request with
-  // content-type header set to `text/html`
+  <span class="comment">// This handler will be called for any request with</span>
+  <span class="comment">// content-type header set to `text/html`</span>
 
 })</code></pre>
 </div>
@@ -1158,11 +1157,11 @@ router.route().consumes("text/html").handler({ routingContext -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Multiple exact matches
-router.route().consumes("text/html").consumes("text/plain").handler({ routingContext -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Multiple exact matches</span>
+router.route().consumes(<span class="string"><span class="delimiter">&quot;</span><span class="content">text/html</span><span class="delimiter">&quot;</span></span>).consumes(<span class="string"><span class="delimiter">&quot;</span><span class="content">text/plain</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  // This handler will be called for any request with
-  // content-type header set to `text/html` or `text/plain`.
+  <span class="comment">// This handler will be called for any request with</span>
+  <span class="comment">// content-type header set to `text/html` or `text/plain`.</span>
 
 })</code></pre>
 </div>
@@ -1172,11 +1171,11 @@ router.route().consumes("text/html").consumes("text/plain").handler({ routingCon
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Sub-type wildcard match
-router.route().consumes("text/*").handler({ routingContext -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Sub-type wildcard match</span>
+router.route().consumes(<span class="string"><span class="delimiter">&quot;</span><span class="content">text/*</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  // This handler will be called for any request with top level type `text`
-  // e.g. content-type header set to `text/html` or `text/plain` will both match
+  <span class="comment">// This handler will be called for any request with top level type `text`</span>
+  <span class="comment">// e.g. content-type header set to `text/html` or `text/plain` will both match</span>
 
 })</code></pre>
 </div>
@@ -1186,11 +1185,11 @@ router.route().consumes("text/*").handler({ routingContext -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Top level type wildcard match
-router.route().consumes("*/json").handler({ routingContext -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Top level type wildcard match</span>
+router.route().consumes(<span class="string"><span class="delimiter">&quot;</span><span class="content">*/json</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  // This handler will be called for any request with sub-type json
-  // e.g. content-type header set to `text/json` or `application/json` will both match
+  <span class="comment">// This handler will be called for any request with sub-type json</span>
+  <span class="comment">// e.g. content-type header set to `text/json` or `application/json` will both match</span>
 
 })</code></pre>
 </div>
@@ -1248,10 +1247,10 @@ following handler produces a response with MIME type <code>application/json</cod
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">router.route().produces("application/json").handler({ routingContext -&gt;
+<pre class="CodeRay highlight"><code data-lang="java">router.route().produces(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
   def response = routingContext.response()
-  response.putHeader("content-type", "application/json")
+  response.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
   response.write(someJSON).end()
 
 })</code></pre>
@@ -1278,15 +1277,15 @@ was accepted.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// This route can produce two different MIME types
-router.route().produces("application/json").produces("text/html").handler({ routingContext -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// This route can produce two different MIME types</span>
+router.route().produces(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>).produces(<span class="string"><span class="delimiter">&quot;</span><span class="content">text/html</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def response = routingContext.response()
+  <span class="keyword">def</span> response = routingContext.response()
 
-  // Get the actual MIME type acceptable
-  def acceptableContentType = routingContext.getAcceptableContentType()
+  <span class="comment">// Get the actual MIME type acceptable</span>
+  <span class="keyword">def</span> acceptableContentType = routingContext.getAcceptableContentType()
 
-  response.putHeader("content-type", acceptableContentType)
+  response.putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, acceptableContentType)
   response.write(whatever).end()
 })</code></pre>
 </div>
@@ -1313,13 +1312,13 @@ acceptable but that has a higher <code>q</code> value.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route = router.route(HttpMethod.PUT, "myapi/orders").consumes("application/json").produces("application/json")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route = router.route(HttpMethod.PUT, <span class="string"><span class="delimiter">&quot;</span><span class="content">myapi/orders</span><span class="delimiter">&quot;</span></span>).consumes(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>).produces(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
 
 route.handler({ routingContext -&gt;
 
-  // This would be match for any PUT method to paths starting with "myapi/orders" with a
-  // content-type of "application/json"
-  // and an accept header matching "application/json"
+  <span class="comment">// This would be match for any PUT method to paths starting with &quot;myapi/orders&quot; with a</span>
+  <span class="comment">// content-type of &quot;application/json&quot;</span>
+  <span class="comment">// and an accept header matching &quot;application/json&quot;</span>
 
 })</code></pre>
 </div>
@@ -1356,17 +1355,17 @@ want to share between handlers for the lifetime of the request.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.get("/some/path").handler({ routingContext -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  routingContext.put("foo", "bar")
+  routingContext.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
   routingContext.next()
 
 })
 
-router.get("/some/path/other").handler({ routingContext -&gt;
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/other</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def bar = routingContext.get("foo")
-  // Do something with bar
+  <span class="keyword">def</span> bar = routingContext.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)
+  <span class="comment">// Do something with bar</span>
   routingContext.response().end()
 
 })</code></pre>
@@ -1385,19 +1384,19 @@ Router.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.get("/some/path").handler({ routingContext -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  routingContext.put("foo", "bar")
+  routingContext.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
   routingContext.next()
 
 })
 
-router.get("/some/path/B").handler({ routingContext -&gt;
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/B</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
   routingContext.response().end()
 })
 
-router.get("/some/path").handler({ routingContext -&gt;
-  routingContext.reroute("/some/path/B")
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
+  routingContext.reroute(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/B</span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -1416,14 +1415,14 @@ for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.get("/my-pretty-notfound-handler").handler({ ctx -&gt;
-  ctx.response().setStatusCode(404).end("NOT FOUND fancy html here!!!")
+<pre class="CodeRay highlight"><code data-lang="groovy">router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/my-pretty-notfound-handler</span><span class="delimiter">&quot;</span></span>).handler({ ctx -&gt;
+  ctx.response().setStatusCode(<span class="integer">404</span>).end(<span class="string"><span class="delimiter">&quot;</span><span class="content">NOT FOUND fancy html here!!!</span><span class="delimiter">&quot;</span></span>)
 })
 
 router.get().failureHandler({ ctx -&gt;
-  if (ctx.statusCode() == 404) {
-    ctx.reroute("/my-pretty-notfound-handler")
-  } else {
+  <span class="keyword">if</span> (ctx.statusCode() == <span class="integer">404</span>) {
+    ctx.reroute(<span class="string"><span class="delimiter">&quot;</span><span class="content">/my-pretty-notfound-handler</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
     ctx.next()
   }
 })</code></pre>
@@ -1435,18 +1434,18 @@ should use the <code>RoutingContext</code> object. For example you want to rerou
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.get("/final-target").handler({ ctx -&gt;
-  // continue from here...
+<pre class="CodeRay highlight"><code data-lang="groovy">router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/final-target</span><span class="delimiter">&quot;</span></span>).handler({ ctx -&gt;
+  <span class="comment">// continue from here...</span>
 })
 
-// THE WRONG WAY! (Will reroute to /final-target excluding the query string)
+<span class="comment">// THE WRONG WAY! (Will reroute to /final-target excluding the query string)</span>
 router.get().handler({ ctx -&gt;
-  ctx.reroute("/final-target?variable=value")
+  ctx.reroute(<span class="string"><span class="delimiter">&quot;</span><span class="content">/final-target?variable=value</span><span class="delimiter">&quot;</span></span>)
 })
 
-// THE CORRECT WAY!
+<span class="comment">// THE CORRECT WAY!</span>
 router.get().handler({ ctx -&gt;
-  ctx.put("variable", "value").reroute("/final-target")
+  ctx.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">variable</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>).reroute(<span class="string"><span class="delimiter">&quot;</span><span class="content">/final-target</span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -1479,25 +1478,25 @@ router. The full implementation of the REST API is not shown.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def restAPI = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> restAPI = Router.router(vertx)
 
-restAPI.get("/products/:productID").handler({ rc -&gt;
+restAPI.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/products/:productID</span><span class="delimiter">&quot;</span></span>).handler({ rc -&gt;
 
-  // TODO Handle the lookup of the product....
+  <span class="comment">// TODO Handle the lookup of the product....</span>
   rc.response().write(productJSON)
 
 })
 
-restAPI.put("/products/:productID").handler({ rc -&gt;
+restAPI.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">/products/:productID</span><span class="delimiter">&quot;</span></span>).handler({ rc -&gt;
 
-  // TODO Add a new product...
+  <span class="comment">// TODO Add a new product...</span>
   rc.response().end()
 
 })
 
-restAPI.delete("/products/:productID").handler({ rc -&gt;
+restAPI.delete(<span class="string"><span class="delimiter">&quot;</span><span class="content">/products/:productID</span><span class="delimiter">&quot;</span></span>).handler({ rc -&gt;
 
-  // TODO delete the product...
+  <span class="comment">// TODO delete the product...</span>
   rc.response().end()
 
 })</code></pre>
@@ -1512,12 +1511,12 @@ would invoke the  API.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def mainRouter = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> mainRouter = Router.router(vertx)
 
-// Handle static resources
-mainRouter.route("/static/*").handler(myStaticHandler)
+<span class="comment">// Handle static resources</span>
+mainRouter.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/static/*</span><span class="delimiter">&quot;</span></span>).handler(myStaticHandler)
 
-mainRouter.route(".*\\.templ").handler(myTemplateHandler)</code></pre>
+mainRouter.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">.*</span><span class="char">\\</span><span class="content">.templ</span><span class="delimiter">&quot;</span></span>).handler(myTemplateHandler)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1525,7 +1524,7 @@ mainRouter.route(".*\\.templ").handler(myTemplateHandler)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">mainRouter.mountSubRouter("/productsAPI", restAPI)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">mainRouter.mountSubRouter(<span class="string"><span class="delimiter">&quot;</span><span class="content">/productsAPI</span><span class="delimiter">&quot;</span></span>, restAPI)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1542,15 +1541,15 @@ locale for a client or the sorted list of preferred locales by quality.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route = router.get("/localized").handler({ rc -&gt;
-  // although it might seem strange by running a loop with a switch we
-  // make sure that the locale order of preference is preserved when
-  // replying in the users language.
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route = router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/localized</span><span class="delimiter">&quot;</span></span>).handler({ rc -&gt;
+  <span class="comment">// although it might seem strange by running a loop with a switch we</span>
+  <span class="comment">// make sure that the locale order of preference is preserved when</span>
+  <span class="comment">// replying in the users language.</span>
   rc.acceptableLanguages().each { language -&gt;
-    return
+    <span class="keyword">return</span>
   }
-  // we do not know the user language so lets just inform that back:
-  rc.response().end("Sorry we don't speak: ${rc.preferredLocale()}")
+  <span class="comment">// we do not know the user language so lets just inform that back:</span>
+  rc.response().end(<span class="string"><span class="delimiter">&quot;</span><span class="content">Sorry we don't speak: </span><span class="inline"><span class="inline-delimiter">${</span>rc.preferredLocale()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -1595,13 +1594,13 @@ to paths that start with <code>/somepath/</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route = router.get("/somepath/*")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route = router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/somepath/*</span><span class="delimiter">&quot;</span></span>)
 
 route.failureHandler({ frc -&gt;
 
-  // This will be called for failures that occur
-  // when routing requests to paths starting with
-  // '/somepath/'
+  <span class="comment">// This will be called for failures that occur</span>
+  <span class="comment">// when routing requests to paths starting with</span>
+  <span class="comment">// '/somepath/'</span>
 
 })</code></pre>
 </div>
@@ -1619,36 +1618,36 @@ to be retrieved so the failure handler can use that to generate a failure respon
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def route1 = router.get("/somepath/path1/")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> route1 = router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/somepath/path1/</span><span class="delimiter">&quot;</span></span>)
 
 route1.handler({ routingContext -&gt;
 
-  // Let's say this throws a RuntimeException
-  throw new java.lang.RuntimeException("something happened!")
+  <span class="comment">// Let's say this throws a RuntimeException</span>
+  <span class="keyword">throw</span> <span class="keyword">new</span> java.lang.RuntimeException(<span class="string"><span class="delimiter">&quot;</span><span class="content">something happened!</span><span class="delimiter">&quot;</span></span>)
 
 })
 
-def route2 = router.get("/somepath/path2")
+<span class="keyword">def</span> route2 = router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/somepath/path2</span><span class="delimiter">&quot;</span></span>)
 
 route2.handler({ routingContext -&gt;
 
-  // This one deliberately fails the request passing in the status code
-  // E.g. 403 - Forbidden
-  routingContext.fail(403)
+  <span class="comment">// This one deliberately fails the request passing in the status code</span>
+  <span class="comment">// E.g. 403 - Forbidden</span>
+  routingContext.fail(<span class="integer">403</span>)
 
 })
 
-// Define a failure handler
-// This will get called for any failures in the above handlers
-def route3 = router.get("/somepath/*")
+<span class="comment">// Define a failure handler</span>
+<span class="comment">// This will get called for any failures in the above handlers</span>
+<span class="keyword">def</span> route3 = router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/somepath/*</span><span class="delimiter">&quot;</span></span>)
 
 route3.failureHandler({ failureRoutingContext -&gt;
 
-  def statusCode = failureRoutingContext.statusCode()
+  <span class="keyword">def</span> statusCode = failureRoutingContext.statusCode()
 
-  // Status code will be 500 for the RuntimeException or 403 for the other failure
-  def response = failureRoutingContext.response()
-  response.setStatusCode(statusCode).end("Sorry! Not today")
+  <span class="comment">// Status code will be 500 for the RuntimeException or 403 for the other failure</span>
+  <span class="keyword">def</span> response = failureRoutingContext.response()
+  response.setStatusCode(statusCode).end(<span class="string"><span class="delimiter">&quot;</span><span class="content">Sorry! Not today</span><span class="delimiter">&quot;</span></span>)
 
 })</code></pre>
 </div>
@@ -1677,7 +1676,7 @@ to install handlers to consume the HTTP request body and this must be done befor
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// This body handler will be called for all routes
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// This body handler will be called for all routes</span>
 router.route().handler(BodyHandler.create())</code></pre>
 </div>
 </div>
@@ -1728,12 +1727,12 @@ context with <code><a href="../../apidocs/io/vertx/ext/web/RoutingContext.html#f
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.route().handler(BodyHandler.create())
+<pre class="CodeRay highlight"><code data-lang="groovy">router.route().handler(BodyHandler.create())
 
-router.post("/some/path/uploads").handler({ routingContext -&gt;
+router.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some/path/uploads</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def uploads = routingContext.fileUploads()
-  // Do something with uploads....
+  <span class="keyword">def</span> uploads = routingContext.fileUploads()
+  <span class="comment">// Do something with uploads....</span>
 
 })</code></pre>
 </div>
@@ -1756,8 +1755,8 @@ such as the name, file-name and size to be accessed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// This cookie handler will be called for all routes
-router.route().handler(CookieHandler.create())</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// This cookie handler will be called for all routes</span>
+router.route().handler(<span class="predefined-type">CookieHandler</span>.create())</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -1785,18 +1784,18 @@ value, domain, path and other normal cookie properties.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// This cookie handler will be called for all routes
-router.route().handler(CookieHandler.create())
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// This cookie handler will be called for all routes</span>
+router.route().handler(<span class="predefined-type">CookieHandler</span>.create())
 
-router.route("some/path/").handler({ routingContext -&gt;
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">some/path/</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def someCookie = routingContext.getCookie("mycookie")
-  def cookieValue = someCookie.getValue()
+  <span class="keyword">def</span> someCookie = routingContext.getCookie(<span class="string"><span class="delimiter">&quot;</span><span class="content">mycookie</span><span class="delimiter">&quot;</span></span>)
+  <span class="keyword">def</span> cookieValue = someCookie.getValue()
 
-  // Do something with cookie...
+  <span class="comment">// Do something with cookie...</span>
 
-  // Add a cookie - this will get written back in the response automatically
-  routingContext.addCookie(Cookie.cookie("othercookie", "somevalue"))
+  <span class="comment">// Add a cookie - this will get written back in the response automatically</span>
+  routingContext.addCookie(Cookie.cookie(<span class="string"><span class="delimiter">&quot;</span><span class="content">othercookie</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">somevalue</span><span class="delimiter">&quot;</span></span>))
 })</code></pre>
 </div>
 </div>
@@ -1894,17 +1893,17 @@ requests might end up on a server which doesn&#8217;t know about your session.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Create a local session store using defaults
-def store1 = LocalSessionStore.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Create a local session store using defaults</span>
+<span class="keyword">def</span> store1 = LocalSessionStore.create(vertx)
 
-// Create a local session store specifying the local shared map name to use
-// This might be useful if you have more than one application in the same
-// Vert.x instance and want to use different maps for different applications
-def store2 = LocalSessionStore.create(vertx, "myapp3.sessionmap")
+<span class="comment">// Create a local session store specifying the local shared map name to use</span>
+<span class="comment">// This might be useful if you have more than one application in the same</span>
+<span class="comment">// Vert.x instance and want to use different maps for different applications</span>
+<span class="keyword">def</span> store2 = LocalSessionStore.create(vertx, <span class="string"><span class="delimiter">&quot;</span><span class="content">myapp3.sessionmap</span><span class="delimiter">&quot;</span></span>)
 
-// Create a local session store specifying the local shared map name to use and
-// setting the reaper interval for expired sessions to 10 seconds
-def store3 = LocalSessionStore.create(vertx, "myapp3.sessionmap", 10000)</code></pre>
+<span class="comment">// Create a local session store specifying the local shared map name to use and</span>
+<span class="comment">// setting the reaper interval for expired sessions to 10 seconds</span>
+<span class="keyword">def</span> store3 = LocalSessionStore.create(vertx, <span class="string"><span class="delimiter">&quot;</span><span class="content">myapp3.sessionmap</span><span class="delimiter">&quot;</span></span>, <span class="integer">10000</span>)</code></pre>
 </div>
 </div>
 </div>
@@ -1928,20 +1927,20 @@ requests from the same browser to different servers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// a clustered Vert.x
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// a clustered Vert.x</span>
 Vertx.clusteredVertx([
-  clustered:true
+  <span class="key">clustered</span>:<span class="predefined-constant">true</span>
 ], { res -&gt;
 
-  def vertx = res.result()
+  <span class="keyword">def</span> vertx = res.result()
 
-  // Create a clustered session store using defaults
-  def store1 = ClusteredSessionStore.create(vertx)
+  <span class="comment">// Create a clustered session store using defaults</span>
+  <span class="keyword">def</span> store1 = ClusteredSessionStore.create(vertx)
 
-  // Create a clustered session store specifying the distributed map name to use
-  // This might be useful if you have more than one application in the cluster
-  // and want to use different maps for different applications
-  def store2 = ClusteredSessionStore.create(vertx, "myclusteredapp3.sessionmap")
+  <span class="comment">// Create a clustered session store specifying the distributed map name to use</span>
+  <span class="comment">// This might be useful if you have more than one application in the cluster</span>
+  <span class="comment">// and want to use different maps for different applications</span>
+  <span class="keyword">def</span> store2 = ClusteredSessionStore.create(vertx, <span class="string"><span class="delimiter">&quot;</span><span class="content">myclusteredapp3.sessionmap</span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -1962,25 +1961,25 @@ lookup the session. The cookie handler should be before the session handler when
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> router = Router.router(vertx)
 
-// We need a cookie handler first
-router.route().handler(CookieHandler.create())
+<span class="comment">// We need a cookie handler first</span>
+router.route().handler(<span class="predefined-type">CookieHandler</span>.create())
 
-// Create a clustered session store using defaults
-def store = ClusteredSessionStore.create(vertx)
+<span class="comment">// Create a clustered session store using defaults</span>
+<span class="keyword">def</span> store = ClusteredSessionStore.create(vertx)
 
-def sessionHandler = SessionHandler.create(store)
+<span class="keyword">def</span> sessionHandler = SessionHandler.create(store)
 
-// Make sure all requests are routed through the session handler too
+<span class="comment">// Make sure all requests are routed through the session handler too</span>
 router.route().handler(sessionHandler)
 
-// Now your application handlers
-router.route("/somepath/blah/").handler({ routingContext -&gt;
+<span class="comment">// Now your application handlers</span>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/somepath/blah/</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def session = routingContext.session()
-  session.put("foo", "bar")
-  // etc
+  <span class="keyword">def</span> session = routingContext.session()
+  session.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
+  <span class="comment">// etc</span>
 
 })</code></pre>
 </div>
@@ -2010,22 +2009,22 @@ a clustered session store they can be any basic type, or <code><a href="../../ap
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.route().handler(CookieHandler.create())
+<pre class="CodeRay highlight"><code data-lang="groovy">router.route().handler(<span class="predefined-type">CookieHandler</span>.create())
 router.route().handler(sessionHandler)
 
-// Now your application handlers
-router.route("/somepath/blah").handler({ routingContext -&gt;
+<span class="comment">// Now your application handlers</span>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/somepath/blah</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  def session = routingContext.session()
+  <span class="keyword">def</span> session = routingContext.session()
 
-  // Put some data from the session
-  session.put("foo", "bar")
+  <span class="comment">// Put some data from the session</span>
+  session.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
 
-  // Retrieve some data from a session
-  def age = session.get("age")
+  <span class="comment">// Retrieve some data from a session</span>
+  <span class="keyword">def</span> age = session.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">age</span><span class="delimiter">&quot;</span></span>)
 
-  // Remove some data from a session
-  def obj = session.remove("myobj")
+  <span class="comment">// Remove some data from a session</span>
+  <span class="keyword">def</span> obj = session.remove(<span class="string"><span class="delimiter">&quot;</span><span class="content">myobj</span><span class="delimiter">&quot;</span></span>)
 
 })</code></pre>
 </div>
@@ -2077,10 +2076,10 @@ please consult the auth documentation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.route().handler(CookieHandler.create())
+<pre class="CodeRay highlight"><code data-lang="groovy">router.route().handler(<span class="predefined-type">CookieHandler</span>.create())
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)))
 
-def basicAuthHandler = BasicAuthHandler.create(authProvider)</code></pre>
+<span class="keyword">def</span> basicAuthHandler = BasicAuthHandler.create(authProvider)</code></pre>
 </div>
 </div>
 </div>
@@ -2092,27 +2091,27 @@ your auth handler is before your application handlers on those paths:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.route().handler(CookieHandler.create())
+<pre class="CodeRay highlight"><code data-lang="groovy">router.route().handler(<span class="predefined-type">CookieHandler</span>.create())
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)))
 router.route().handler(UserSessionHandler.create(authProvider))
 
-def basicAuthHandler = BasicAuthHandler.create(authProvider)
+<span class="keyword">def</span> basicAuthHandler = BasicAuthHandler.create(authProvider)
 
-// All requests to paths starting with '/private/' will be protected
-router.route("/private/*").handler(basicAuthHandler)
+<span class="comment">// All requests to paths starting with '/private/' will be protected</span>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/private/*</span><span class="delimiter">&quot;</span></span>).handler(basicAuthHandler)
 
-router.route("/someotherpath").handler({ routingContext -&gt;
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/someotherpath</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  // This will be public access - no login required
+  <span class="comment">// This will be public access - no login required</span>
 
 })
 
-router.route("/private/somepath").handler({ routingContext -&gt;
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/private/somepath</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  // This will require a login
+  <span class="comment">// This will require a login</span>
 
-  // This will have the value true
-  def isAuthenticated = routingContext.user() != null
+  <span class="comment">// This will have the value true</span>
+  <span class="keyword">def</span> isAuthenticated = routingContext.user() != <span class="predefined-constant">null</span>
 
 })</code></pre>
 </div>
@@ -2188,32 +2187,32 @@ To handle the login we provide a prebuilt handler <code><a href="../../apidocs/i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.route().handler(CookieHandler.create())
+<pre class="CodeRay highlight"><code data-lang="groovy">router.route().handler(<span class="predefined-type">CookieHandler</span>.create())
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)))
 router.route().handler(UserSessionHandler.create(authProvider))
 
-def redirectAuthHandler = RedirectAuthHandler.create(authProvider)
+<span class="keyword">def</span> redirectAuthHandler = RedirectAuthHandler.create(authProvider)
 
-// All requests to paths starting with '/private/' will be protected
-router.route("/private/*").handler(redirectAuthHandler)
+<span class="comment">// All requests to paths starting with '/private/' will be protected</span>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/private/*</span><span class="delimiter">&quot;</span></span>).handler(redirectAuthHandler)
 
-// Handle the actual login
-// One of your pages must POST form login data
-router.post("/login").handler(FormLoginHandler.create(authProvider))
+<span class="comment">// Handle the actual login</span>
+<span class="comment">// One of your pages must POST form login data</span>
+router.post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/login</span><span class="delimiter">&quot;</span></span>).handler(FormLoginHandler.create(authProvider))
 
-// Set a static server to serve static resources, e.g. the login page
+<span class="comment">// Set a static server to serve static resources, e.g. the login page</span>
 router.route().handler(StaticHandler.create())
 
-router.route("/someotherpath").handler({ routingContext -&gt;
-  // This will be public access - no login required
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/someotherpath</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
+  <span class="comment">// This will be public access - no login required</span>
 })
 
-router.route("/private/somepath").handler({ routingContext -&gt;
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/private/somepath</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  // This will require a login
+  <span class="comment">// This will require a login</span>
 
-  // This will have the value true
-  def isAuthenticated = routingContext.user() != null
+  <span class="comment">// This will have the value true</span>
+  <span class="keyword">def</span> isAuthenticated = routingContext.user() != <span class="predefined-constant">null</span>
 
 })</code></pre>
 </div>
@@ -2247,26 +2246,26 @@ transit which leads to session hijacking attacks.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> router = Router.router(vertx)
 
-def authConfig = [
-  keyStore:[
-    type:"jceks",
-    path:"keystore.jceks",
-    password:"secret"
+<span class="keyword">def</span> authConfig = [
+  <span class="key">keyStore</span>:[
+    <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">jceks</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jceks</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>
   ]
 ]
 
-def authProvider = JWTAuth.create(vertx, authConfig)
+<span class="keyword">def</span> authProvider = JWTAuth.create(vertx, authConfig)
 
-router.route("/login").handler({ ctx -&gt;
-  // this is an example, authentication should be done with another provider...
-  if ("paulo" == ctx.request().getParam("username") &amp;&amp; "secret" == ctx.request().getParam("password")) {
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/login</span><span class="delimiter">&quot;</span></span>).handler({ ctx -&gt;
+  <span class="comment">// this is an example, authentication should be done with another provider...</span>
+  <span class="keyword">if</span> (<span class="string"><span class="delimiter">&quot;</span><span class="content">paulo</span><span class="delimiter">&quot;</span></span> == ctx.request().getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>) &amp;&amp; <span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span> == ctx.request().getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>)) {
     ctx.response().end(authProvider.generateToken([
-      sub:"paulo"
+      <span class="key">sub</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">paulo</span><span class="delimiter">&quot;</span></span>
     ], [:]))
-  } else {
-    ctx.fail(401)
+  } <span class="keyword">else</span> {
+    ctx.fail(<span class="integer">401</span>)
   }
 })</code></pre>
 </div>
@@ -2277,22 +2276,22 @@ router.route("/login").handler({ ctx -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> router = Router.router(vertx)
 
-def authConfig = [
-  keyStore:[
-    type:"jceks",
-    path:"keystore.jceks",
-    password:"secret"
+<span class="keyword">def</span> authConfig = [
+  <span class="key">keyStore</span>:[
+    <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">jceks</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jceks</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>
   ]
 ]
 
-def authProvider = JWTAuth.create(vertx, authConfig)
+<span class="keyword">def</span> authProvider = JWTAuth.create(vertx, authConfig)
 
-router.route("/protected/*").handler(JWTAuthHandler.create(authProvider))
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/protected/*</span><span class="delimiter">&quot;</span></span>).handler(JWTAuthHandler.create(authProvider))
 
-router.route("/protected/somepage").handler({ ctx -&gt;
-  // some handle code...
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/protected/somepage</span><span class="delimiter">&quot;</span></span>).handler({ ctx -&gt;
+  <span class="comment">// some handle code...</span>
 })</code></pre>
 </div>
 </div>
@@ -2303,19 +2302,19 @@ token, during the creation of the token just add data to the JsonObject paramete
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def authConfig = [
-  keyStore:[
-    type:"jceks",
-    path:"keystore.jceks",
-    password:"secret"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> authConfig = [
+  <span class="key">keyStore</span>:[
+    <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">jceks</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jceks</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>
   ]
 ]
 
-def authProvider = JWTAuth.create(vertx, authConfig)
+<span class="keyword">def</span> authProvider = JWTAuth.create(vertx, authConfig)
 
 authProvider.generateToken([
-  sub:"paulo",
-  someKey:"some value"
+  <span class="key">sub</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">paulo</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">someKey</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some value</span><span class="delimiter">&quot;</span></span>
 ], [:])</code></pre>
 </div>
 </div>
@@ -2324,9 +2323,9 @@ authProvider.generateToken([
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def handler = { rc -&gt;
-  def theSubject = rc.user().principal().sub
-  def someKey = rc.user().principal().someKey
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> handler = { rc -&gt;
+  <span class="keyword">def</span> theSubject = rc.user().principal().sub
+  <span class="keyword">def</span> someKey = rc.user().principal().someKey
 }</code></pre>
 </div>
 </div>
@@ -2347,17 +2346,17 @@ may support a role/permission based model but others might use another model.</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def listProductsAuthHandler = RedirectAuthHandler.create(authProvider)
-listProductsAuthHandler.addAuthority("list_products")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> listProductsAuthHandler = RedirectAuthHandler.create(authProvider)
+listProductsAuthHandler.addAuthority(<span class="string"><span class="delimiter">&quot;</span><span class="content">list_products</span><span class="delimiter">&quot;</span></span>)
 
-// Need "list_products" authority to list products
-router.route("/listproducts/*").handler(listProductsAuthHandler)
+<span class="comment">// Need &quot;list_products&quot; authority to list products</span>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/listproducts/*</span><span class="delimiter">&quot;</span></span>).handler(listProductsAuthHandler)
 
-def settingsAuthHandler = RedirectAuthHandler.create(authProvider)
-settingsAuthHandler.addAuthority("role:admin")
+<span class="keyword">def</span> settingsAuthHandler = RedirectAuthHandler.create(authProvider)
+settingsAuthHandler.addAuthority(<span class="string"><span class="delimiter">&quot;</span><span class="content">role:admin</span><span class="delimiter">&quot;</span></span>)
 
-// Only "admin" has access to /private/settings
-router.route("/private/settings/*").handler(settingsAuthHandler)</code></pre>
+<span class="comment">// Only &quot;admin&quot; has access to /private/settings</span>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/private/settings/*</span><span class="delimiter">&quot;</span></span>).handler(settingsAuthHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -2383,7 +2382,7 @@ or from the classpath. The default static file directory is <code>webroot</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.route("/static/*").handler(StaticHandler.create())</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/static/*</span><span class="delimiter">&quot;</span></span>).handler(StaticHandler.create())</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2518,12 +2517,12 @@ allowing resources to be requested from one domain and served from another.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Will only accept GET requests from origin "vertx.io"
-router.route().handler(CorsHandler.create("vertx\\.io").allowedMethod(HttpMethod.GET))
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Will only accept GET requests from origin &quot;vertx.io&quot;</span>
+router.route().handler(CorsHandler.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx</span><span class="char">\\</span><span class="content">.io</span><span class="delimiter">&quot;</span></span>).allowedMethod(HttpMethod.GET))
 
 router.route().handler({ routingContext -&gt;
 
-  // Your app handlers
+  <span class="comment">// Your app handlers</span>
 
 })</code></pre>
 </div>
@@ -2562,18 +2561,18 @@ each template engine.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import io.vertx.groovy.ext.web.templ.HandlebarsTemplateEngine
-import io.vertx.groovy.ext.web.handler.TemplateHandler
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">io.vertx.groovy.ext.web.templ.HandlebarsTemplateEngine</span>
+<span class="keyword">import</span> <span class="include">io.vertx.groovy.ext.web.handler.TemplateHandler</span>
 
-def engine = HandlebarsTemplateEngine.create()
-def handler = TemplateHandler.create(engine)
+<span class="keyword">def</span> engine = HandlebarsTemplateEngine.create()
+<span class="keyword">def</span> handler = TemplateHandler.create(engine)
 
-// This will route all GET requests starting with /dynamic/ to the template handler
-// E.g. /dynamic/graph.hbs will look for a template in /templates/graph.hbs
-router.get("/dynamic/*").handler(handler)
+<span class="comment">// This will route all GET requests starting with /dynamic/ to the template handler</span>
+<span class="comment">// E.g. /dynamic/graph.hbs will look for a template in /templates/graph.hbs</span>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/dynamic/*</span><span class="delimiter">&quot;</span></span>).handler(handler)
 
-// Route all GET requests for resource ending in .hbs to the template handler
-router.getWithRegex(".+\\.hbs").handler(handler)</code></pre>
+<span class="comment">// Route all GET requests for resource ending in .hbs to the template handler</span>
+router.getWithRegex(<span class="string"><span class="delimiter">&quot;</span><span class="content">.+</span><span class="char">\\</span><span class="content">.hbs</span><span class="delimiter">&quot;</span></span>).handler(handler)</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -2666,17 +2665,17 @@ add it the context data in a handler before the template handler. For example:</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def handler = TemplateHandler.create(engine)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> handler = TemplateHandler.create(engine)
 
-router.get("/dynamic").handler({ routingContext -&gt;
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/dynamic</span><span class="delimiter">&quot;</span></span>).handler({ routingContext -&gt;
 
-  routingContext.put("request_path", routingContext.request().path())
-  routingContext.put("session_data", routingContext.session().data())
+  routingContext.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">request_path</span><span class="delimiter">&quot;</span></span>, routingContext.request().path())
+  routingContext.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">session_data</span><span class="delimiter">&quot;</span></span>, routingContext.session().data())
 
   routingContext.next()
 })
 
-router.get("/dynamic/").handler(handler)</code></pre>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/dynamic/</span><span class="delimiter">&quot;</span></span>).handler(handler)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2858,7 +2857,7 @@ seconds:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.route("/foo/").handler(TimeoutHandler.create(5000))</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/foo/</span><span class="delimiter">&quot;</span></span>).handler(TimeoutHandler.create(<span class="integer">5000</span>))</code></pre>
 </div>
 </div>
 </div>
@@ -2886,11 +2885,11 @@ Suppose we are building a RESTful web application. We need to set the content ty
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.get("/api/books").produces("application/json").handler({ rc -&gt;
-  this.findBooks({ ar -&gt;
-    if (ar.succeeded()) {
-      rc.response().putHeader("Content-Type", "application/json").end(this.toJson(ar.result()))
-    } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/books</span><span class="delimiter">&quot;</span></span>).produces(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>).handler({ rc -&gt;
+  <span class="local-variable">this</span>.findBooks({ ar -&gt;
+    <span class="keyword">if</span> (ar.succeeded()) {
+      rc.response().putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Content-Type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>).end(<span class="local-variable">this</span>.toJson(ar.result()))
+    } <span class="keyword">else</span> {
       rc.fail(ar.cause())
     }
   })
@@ -2903,12 +2902,12 @@ To avoid this situation, add the <code>ResponseContentTypeHandler</code> to the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.route("/api/*").handler(ResponseContentTypeHandler.create())
-router.get("/api/books").produces("application/json").handler({ rc -&gt;
-  this.findBooks({ ar -&gt;
-    if (ar.succeeded()) {
-      rc.response().end(this.toJson(ar.result()))
-    } else {
+<pre class="CodeRay highlight"><code data-lang="groovy">router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/*</span><span class="delimiter">&quot;</span></span>).handler(ResponseContentTypeHandler.create())
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/books</span><span class="delimiter">&quot;</span></span>).produces(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>).handler({ rc -&gt;
+  <span class="local-variable">this</span>.findBooks({ ar -&gt;
+    <span class="keyword">if</span> (ar.succeeded()) {
+      rc.response().end(<span class="local-variable">this</span>.toJson(ar.result()))
+    } <span class="keyword">else</span> {
       rc.fail(ar.cause())
     }
   })
@@ -2921,16 +2920,16 @@ As a consequence, you can easily share the same handler to produce data of diffe
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.route("/api/*").handler(ResponseContentTypeHandler.create())
-router.get("/api/books").produces("text/xml").produces("application/json").handler({ rc -&gt;
-  this.findBooks({ ar -&gt;
-    if (ar.succeeded()) {
-      if (rc.getAcceptableContentType() == "text/xml") {
-        rc.response().end(this.toXML(ar.result()))
-      } else {
-        rc.response().end(this.toJson(ar.result()))
+<pre class="CodeRay highlight"><code data-lang="groovy">router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/*</span><span class="delimiter">&quot;</span></span>).handler(ResponseContentTypeHandler.create())
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/books</span><span class="delimiter">&quot;</span></span>).produces(<span class="string"><span class="delimiter">&quot;</span><span class="content">text/xml</span><span class="delimiter">&quot;</span></span>).produces(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>).handler({ rc -&gt;
+  <span class="local-variable">this</span>.findBooks({ ar -&gt;
+    <span class="keyword">if</span> (ar.succeeded()) {
+      <span class="keyword">if</span> (rc.getAcceptableContentType() == <span class="string"><span class="delimiter">&quot;</span><span class="content">text/xml</span><span class="delimiter">&quot;</span></span>) {
+        rc.response().end(<span class="local-variable">this</span>.toXML(ar.result()))
+      } <span class="keyword">else</span> {
+        rc.response().end(<span class="local-variable">this</span>.toJson(ar.result()))
       }
-    } else {
+    } <span class="keyword">else</span> {
       rc.fail(ar.cause())
     }
   })
@@ -2969,15 +2968,15 @@ an instance of <code><a href="../../apidocs/io/vertx/ext/web/handler/sockjs/Sock
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> router = Router.router(vertx)
 
-def options = [
-  heartbeatInterval:2000
+<span class="keyword">def</span> options = [
+  <span class="key">heartbeatInterval</span>:<span class="integer">2000</span>
 ]
 
-def sockJSHandler = SockJSHandler.create(vertx, options)
+<span class="keyword">def</span> sockJSHandler = SockJSHandler.create(vertx, options)
 
-router.route("/myapp/*").handler(sockJSHandler)</code></pre>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/myapp/*</span><span class="delimiter">&quot;</span></span>).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -2998,21 +2997,21 @@ a <code><a href="../../apidocs/io/vertx/core/http/WebSocket.html">WebSocket</a><
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> router = Router.router(vertx)
 
-def options = [
-  heartbeatInterval:2000
+<span class="keyword">def</span> options = [
+  <span class="key">heartbeatInterval</span>:<span class="integer">2000</span>
 ]
 
-def sockJSHandler = SockJSHandler.create(vertx, options)
+<span class="keyword">def</span> sockJSHandler = SockJSHandler.create(vertx, options)
 
 sockJSHandler.socketHandler({ sockJSSocket -&gt;
 
-  // Just echo the data back
+  <span class="comment">// Just echo the data back</span>
   sockJSSocket.handler(sockJSSocket.&amp;write)
 })
 
-router.route("/myapp/*").handler(sockJSHandler)</code></pre>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/myapp/*</span><span class="delimiter">&quot;</span></span>).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -3136,13 +3135,13 @@ SockJS handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> router = Router.router(vertx)
 
-def sockJSHandler = SockJSHandler.create(vertx)
-def options = [:]
+<span class="keyword">def</span> sockJSHandler = SockJSHandler.create(vertx)
+<span class="keyword">def</span> options = [:]
 sockJSHandler.bridge(options)
 
-router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/eventbus/*</span><span class="delimiter">&quot;</span></span>).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3151,26 +3150,26 @@ and receive messages:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"&gt;&lt;/script&gt;
-&lt;script src='vertx-eventbus.js'&gt;&lt;/script&gt;
+<pre class="CodeRay highlight"><code data-lang="html"><span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">'</span><span class="content">vertx-eventbus.js</span><span class="delimiter">'</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
 
-&lt;script&gt;
+<span class="tag">&lt;script&gt;</span>
+<span class="inline">
+<span class="keyword">var</span> eb = <span class="keyword">new</span> EventBus(<span class="string"><span class="delimiter">'</span><span class="content">http://localhost:8080/eventbus</span><span class="delimiter">'</span></span>);
 
-var eb = new EventBus('http://localhost:8080/eventbus');
+eb.<span class="function">onopen</span> = <span class="keyword">function</span>() {
 
-eb.onopen = function() {
-
-  // set a handler to receive a message
-  eb.registerHandler('some-address', function(error, message) {
-    console.log('received a message: ' + JSON.stringify(message));
+  <span class="comment">// set a handler to receive a message</span>
+  eb.registerHandler(<span class="string"><span class="delimiter">'</span><span class="content">some-address</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(error, message) {
+    console.log(<span class="string"><span class="delimiter">'</span><span class="content">received a message: </span><span class="delimiter">'</span></span> + JSON.stringify(message));
   });
 
-  // send a message
-  eb.send('some-address', {name: 'tim', age: 587});
+  <span class="comment">// send a message</span>
+  eb.send(<span class="string"><span class="delimiter">'</span><span class="content">some-address</span><span class="delimiter">'</span></span>, {<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">tim</span><span class="delimiter">'</span></span>, <span class="key">age</span>: <span class="integer">587</span>});
 
-}
+}</span>
 
-&lt;/script&gt;</code></pre>
+<span class="tag">&lt;/script&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3178,7 +3177,7 @@ eb.onopen = function() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">var eb = new EventBus('http://localhost:8080/eventbus');</code></pre>
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> eb = <span class="keyword">new</span> EventBus(<span class="string"><span class="delimiter">'</span><span class="content">http://localhost:8080/eventbus</span><span class="delimiter">'</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3205,12 +3204,12 @@ Neither SockJS nor the EventBus bridge support automatic reconnection.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">function setupEventBus() {
-  var eb = new EventBus();
-  eb.onclose = function (e) {
-    setTimeout(setupEventBus, 1000); // Give the server some time to come back
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">function</span> <span class="function">setupEventBus</span>() {
+  <span class="keyword">var</span> eb = <span class="keyword">new</span> EventBus();
+  eb.<span class="function">onclose</span> = <span class="keyword">function</span> (e) {
+    setTimeout(setupEventBus, <span class="integer">1000</span>); <span class="comment">// Give the server some time to come back</span>
   };
-  // Handlers setup here...
+  <span class="comment">// Handlers setup here...</span>
 }</code></pre>
 </div>
 </div>
@@ -3226,13 +3225,13 @@ Neither SockJS nor the EventBus bridge support automatic reconnection.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-web&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-  &lt;classifier&gt;client&lt;/classifier&gt;
-  &lt;type&gt;js&lt;/type&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-web<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;classifier&gt;</span>client<span class="tag">&lt;/classifier&gt;</span>
+  <span class="tag">&lt;type&gt;</span>js<span class="tag">&lt;/type&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -3244,7 +3243,7 @@ Neither SockJS nor the EventBus bridge support automatic reconnection.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-web:3.4.2:client'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-web:3.4.2:client</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3349,54 +3348,54 @@ by looking at all the fields and values in the match object and checking they al
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> router = Router.router(vertx)
 
-def sockJSHandler = SockJSHandler.create(vertx)
+<span class="keyword">def</span> sockJSHandler = SockJSHandler.create(vertx)
 
 
-// Let through any messages sent to 'demo.orderMgr' from the client
-def inboundPermitted1 = [
-  address:"demo.orderMgr"
+<span class="comment">// Let through any messages sent to 'demo.orderMgr' from the client</span>
+<span class="keyword">def</span> inboundPermitted1 = [
+  <span class="key">address</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">demo.orderMgr</span><span class="delimiter">&quot;</span></span>
 ]
 
-// Allow calls to the address 'demo.persistor' from the client as long as the messages
-// have an action field with value 'find' and a collection field with value
-// 'albums'
-def inboundPermitted2 = [
-  address:"demo.persistor",
-  match:[
-    action:"find",
-    collection:"albums"
+<span class="comment">// Allow calls to the address 'demo.persistor' from the client as long as the messages</span>
+<span class="comment">// have an action field with value 'find' and a collection field with value</span>
+<span class="comment">// 'albums'</span>
+<span class="keyword">def</span> inboundPermitted2 = [
+  <span class="key">address</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">demo.persistor</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">match</span>:[
+    <span class="key">action</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">find</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">collection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">albums</span><span class="delimiter">&quot;</span></span>
   ]
 ]
 
-// Allow through any message with a field `wibble` with value `foo`.
-def inboundPermitted3 = [
-  match:[
-    wibble:"foo"
+<span class="comment">// Allow through any message with a field `wibble` with value `foo`.</span>
+<span class="keyword">def</span> inboundPermitted3 = [
+  <span class="key">match</span>:[
+    <span class="key">wibble</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>
   ]
 ]
 
-// First let's define what we're going to allow from server -&gt; client
+<span class="comment">// First let's define what we're going to allow from server -&gt; client</span>
 
-// Let through any messages coming from address 'ticker.mystock'
-def outboundPermitted1 = [
-  address:"ticker.mystock"
+<span class="comment">// Let through any messages coming from address 'ticker.mystock'</span>
+<span class="keyword">def</span> outboundPermitted1 = [
+  <span class="key">address</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">ticker.mystock</span><span class="delimiter">&quot;</span></span>
 ]
 
-// Let through any messages from addresses starting with "news." (e.g. news.europe, news.usa, etc)
-def outboundPermitted2 = [
-  addressRegex:"news\\..+"
+<span class="comment">// Let through any messages from addresses starting with &quot;news.&quot; (e.g. news.europe, news.usa, etc)</span>
+<span class="keyword">def</span> outboundPermitted2 = [
+  <span class="key">addressRegex</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">news</span><span class="char">\\</span><span class="content">..+</span><span class="delimiter">&quot;</span></span>
 ]
 
-// Let's define what we're going to allow from client -&gt; server
-def options = [
-  inboundPermitteds:[
+<span class="comment">// Let's define what we're going to allow from client -&gt; server</span>
+<span class="keyword">def</span> options = [
+  <span class="key">inboundPermitteds</span>:[
     inboundPermitted1,
     inboundPermitted1,
     inboundPermitted3
   ],
-  outboundPermitteds:[
+  <span class="key">outboundPermitteds</span>:[
     outboundPermitted1,
     outboundPermitted2
   ]
@@ -3404,7 +3403,7 @@ def options = [
 
 sockJSHandler.bridge(options)
 
-router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/eventbus/*</span><span class="delimiter">&quot;</span></span>).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -3427,16 +3426,16 @@ required for the match.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Let through any messages sent to 'demo.orderService' from the client
-def inboundPermitted = [
-  address:"demo.orderService"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Let through any messages sent to 'demo.orderService' from the client</span>
+<span class="keyword">def</span> inboundPermitted = [
+  <span class="key">address</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">demo.orderService</span><span class="delimiter">&quot;</span></span>
 ]
 
-// But only if the user is logged in and has the authority "place_orders"
-inboundPermitted.requiredAuthority = "place_orders"
+<span class="comment">// But only if the user is logged in and has the authority &quot;place_orders&quot;</span>
+inboundPermitted.requiredAuthority = <span class="string"><span class="delimiter">&quot;</span><span class="content">place_orders</span><span class="delimiter">&quot;</span></span>
 
-def options = [
-  inboundPermitteds:[
+<span class="keyword">def</span> options = [
+  <span class="key">inboundPermitteds</span>:[
     inboundPermitted
   ]
 ]</code></pre>
@@ -3450,34 +3449,34 @@ def options = [
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> router = Router.router(vertx)
 
-// Let through any messages sent to 'demo.orderService' from the client
-def inboundPermitted = [
-  address:"demo.orderService"
+<span class="comment">// Let through any messages sent to 'demo.orderService' from the client</span>
+<span class="keyword">def</span> inboundPermitted = [
+  <span class="key">address</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">demo.orderService</span><span class="delimiter">&quot;</span></span>
 ]
 
-// But only if the user is logged in and has the authority "place_orders"
-inboundPermitted.requiredAuthority = "place_orders"
+<span class="comment">// But only if the user is logged in and has the authority &quot;place_orders&quot;</span>
+inboundPermitted.requiredAuthority = <span class="string"><span class="delimiter">&quot;</span><span class="content">place_orders</span><span class="delimiter">&quot;</span></span>
 
-def sockJSHandler = SockJSHandler.create(vertx)
+<span class="keyword">def</span> sockJSHandler = SockJSHandler.create(vertx)
 sockJSHandler.bridge([
-  inboundPermitteds:[
+  <span class="key">inboundPermitteds</span>:[
     inboundPermitted
   ]
 ])
 
-// Now set up some basic auth handling:
+<span class="comment">// Now set up some basic auth handling:</span>
 
-router.route().handler(CookieHandler.create())
+router.route().handler(<span class="predefined-type">CookieHandler</span>.create())
 router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)))
 
-def basicAuthHandler = BasicAuthHandler.create(authProvider)
+<span class="keyword">def</span> basicAuthHandler = BasicAuthHandler.create(authProvider)
 
-router.route("/eventbus/*").handler(basicAuthHandler)
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/eventbus/*</span><span class="delimiter">&quot;</span></span>).handler(basicAuthHandler)
 
 
-router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/eventbus/*</span><span class="delimiter">&quot;</span></span>).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -3564,32 +3563,32 @@ authorisation or metrics.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> router = Router.router(vertx)
 
-// Let through any messages sent to 'demo.orderMgr' from the client
-def inboundPermitted = [
-  address:"demo.someService"
+<span class="comment">// Let through any messages sent to 'demo.orderMgr' from the client</span>
+<span class="keyword">def</span> inboundPermitted = [
+  <span class="key">address</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">demo.someService</span><span class="delimiter">&quot;</span></span>
 ]
 
-def sockJSHandler = SockJSHandler.create(vertx)
-def options = [
-  inboundPermitteds:[
+<span class="keyword">def</span> sockJSHandler = SockJSHandler.create(vertx)
+<span class="keyword">def</span> options = [
+  <span class="key">inboundPermitteds</span>:[
     inboundPermitted
   ]
 ]
 
 sockJSHandler.bridge(options, { be -&gt;
-  if (be.type() == BridgeEventType.PUBLISH || be.type() == BridgeEventType.RECEIVE) {
-    if (be.getRawMessage().body == "armadillos") {
-      // Reject it
-      be.complete(false)
-      return
+  <span class="keyword">if</span> (be.type() == BridgeEventType.PUBLISH || be.type() == BridgeEventType.RECEIVE) {
+    <span class="keyword">if</span> (be.getRawMessage().body == <span class="string"><span class="delimiter">&quot;</span><span class="content">armadillos</span><span class="delimiter">&quot;</span></span>) {
+      <span class="comment">// Reject it</span>
+      be.complete(<span class="predefined-constant">false</span>)
+      <span class="keyword">return</span>
     }
   }
-  be.complete(true)
+  be.complete(<span class="predefined-constant">true</span>)
 })
 
-router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/eventbus/*</span><span class="delimiter">&quot;</span></span>).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3599,26 +3598,26 @@ then the SOCKET_IDLE bridge event would be triggered.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> router = Router.router(vertx)
 
-// Initialize SockJS handler
-def sockJSHandler = SockJSHandler.create(vertx)
-def options = [
-  inboundPermitteds:[
+<span class="comment">// Initialize SockJS handler</span>
+<span class="keyword">def</span> sockJSHandler = SockJSHandler.create(vertx)
+<span class="keyword">def</span> options = [
+  <span class="key">inboundPermitteds</span>:[
     inboundPermitted
   ],
-  pingTimeout:5000
+  <span class="key">pingTimeout</span>:<span class="integer">5000</span>
 ]
 
 sockJSHandler.bridge(options, { be -&gt;
-  if (be.type() == BridgeEventType.SOCKET_IDLE) {
-    // Do some custom handling...
+  <span class="keyword">if</span> (be.type() == BridgeEventType.SOCKET_IDLE) {
+    <span class="comment">// Do some custom handling...</span>
   }
 
-  be.complete(true)
+  be.complete(<span class="predefined-constant">true</span>)
 })
 
-router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/eventbus/*</span><span class="delimiter">&quot;</span></span>).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3626,25 +3625,25 @@ router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"&gt;&lt;/script&gt;
-&lt;script src='vertx-eventbus.js'&gt;&lt;/script&gt;
+<pre class="CodeRay highlight"><code data-lang="html"><span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">'</span><span class="content">vertx-eventbus.js</span><span class="delimiter">'</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
 
-&lt;script&gt;
+<span class="tag">&lt;script&gt;</span>
+<span class="inline">
+<span class="keyword">var</span> eb = <span class="keyword">new</span> EventBus(<span class="string"><span class="delimiter">'</span><span class="content">http://localhost:8080/eventbus</span><span class="delimiter">'</span></span>, {<span class="key"><span class="delimiter">&quot;</span><span class="content">vertxbus_ping_interval</span><span class="delimiter">&quot;</span></span>: <span class="integer">300000</span>}); <span class="comment">// sends ping every 5 minutes.</span>
 
-var eb = new EventBus('http://localhost:8080/eventbus', {"vertxbus_ping_interval": 300000}); // sends ping every 5 minutes.
+eb.<span class="function">onopen</span> = <span class="keyword">function</span>() {
 
-eb.onopen = function() {
-
- // set a handler to receive a message
- eb.registerHandler('some-address', function(error, message) {
-   console.log('received a message: ' + JSON.stringify(message));
+ <span class="comment">// set a handler to receive a message</span>
+ eb.registerHandler(<span class="string"><span class="delimiter">'</span><span class="content">some-address</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(error, message) {
+   console.log(<span class="string"><span class="delimiter">'</span><span class="content">received a message: </span><span class="delimiter">'</span></span> + JSON.stringify(message));
  });
 
- // send a message
- eb.send('some-address', {name: 'tim', age: 587});
-}
+ <span class="comment">// send a message</span>
+ eb.send(<span class="string"><span class="delimiter">'</span><span class="content">some-address</span><span class="delimiter">'</span></span>, {<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">tim</span><span class="delimiter">'</span></span>, <span class="key">age</span>: <span class="integer">587</span>});
+}</span>
 
-&lt;/script&gt;</code></pre>
+<span class="tag">&lt;/script&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3652,7 +3651,7 @@ eb.onopen = function() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">var eb = new EventBus('http://localhost:8080/eventbus', {"vertxbus_ping_interval": 300000});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> eb = <span class="keyword">new</span> EventBus(<span class="string"><span class="delimiter">'</span><span class="content">http://localhost:8080/eventbus</span><span class="delimiter">'</span></span>, {<span class="key"><span class="delimiter">&quot;</span><span class="content">vertxbus_ping_interval</span><span class="delimiter">&quot;</span></span>: <span class="integer">300000</span>});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3665,35 +3664,35 @@ also add headers to the message, here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def router = Router.router(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> router = Router.router(vertx)
 
-// Let through any messages sent to 'demo.orderService' from the client
-def inboundPermitted = [
-  address:"demo.orderService"
+<span class="comment">// Let through any messages sent to 'demo.orderService' from the client</span>
+<span class="keyword">def</span> inboundPermitted = [
+  <span class="key">address</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">demo.orderService</span><span class="delimiter">&quot;</span></span>
 ]
 
-def sockJSHandler = SockJSHandler.create(vertx)
-def options = [
-  inboundPermitteds:[
+<span class="keyword">def</span> sockJSHandler = SockJSHandler.create(vertx)
+<span class="keyword">def</span> options = [
+  <span class="key">inboundPermitteds</span>:[
     inboundPermitted
   ]
 ]
 
 sockJSHandler.bridge(options, { be -&gt;
-  if (be.type() == BridgeEventType.PUBLISH || be.type() == BridgeEventType.SEND) {
-    // Add some headers
-    def headers = [
-      header1:"val",
-      header2:"val2"
+  <span class="keyword">if</span> (be.type() == BridgeEventType.PUBLISH || be.type() == BridgeEventType.SEND) {
+    <span class="comment">// Add some headers</span>
+    <span class="keyword">def</span> headers = [
+      <span class="key">header1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">val</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">header2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">val2</span><span class="delimiter">&quot;</span></span>
     ]
-    def rawMessage = be.getRawMessage()
+    <span class="keyword">def</span> rawMessage = be.getRawMessage()
     rawMessage.headers = headers
     be.setRawMessage(rawMessage)
   }
-  be.complete(true)
+  be.complete(<span class="predefined-constant">true</span>)
 })
 
-router.route("/eventbus/*").handler(sockJSHandler)</code></pre>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/eventbus/*</span><span class="delimiter">&quot;</span></span>).handler(sockJSHandler)</code></pre>
 </div>
 </div>
 </div>
@@ -3719,10 +3718,10 @@ header was present in the Form attributes under the same name as the header, e.g
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">---
-&lt;form action="/submit" method="POST"&gt;
-&lt;input type="hidden" name="X-XSRF-TOKEN" value="abracadabra"&gt;
-&lt;/form&gt;
+<pre class="CodeRay highlight"><code data-lang="html">---
+<span class="tag">&lt;form</span> <span class="attribute-name">action</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/submit</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">method</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">POST</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="tag">&lt;input</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">X-XSRF-TOKEN</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">abracadabra</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
 ---</code></pre>
 </div>
 </div>
@@ -3733,8 +3732,8 @@ or the header name they have chosen during the instantiation of the <code>CSRFHa
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.route().handler(CookieHandler.create())
-router.route().handler(CSRFHandler.create("abracadabra"))
+<pre class="CodeRay highlight"><code data-lang="groovy">router.route().handler(<span class="predefined-type">CookieHandler</span>.create())
+router.route().handler(CSRFHandler.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">abracadabra</span><span class="delimiter">&quot;</span></span>))
 router.route().handler({ rc -&gt;
 
 })</code></pre>
@@ -3755,8 +3754,8 @@ example <code></strong>.vertx.io</code> or fully domain names as <code>www.vertx
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">router.route().handler(VirtualHostHandler.create("*.vertx.io", { routingContext -&gt;
-  // do something if the request is for *.vertx.io
+<pre class="CodeRay highlight"><code data-lang="groovy">router.route().handler(VirtualHostHandler.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">*.vertx.io</span><span class="delimiter">&quot;</span></span>, { routingContext -&gt;
+  <span class="comment">// do something if the request is for *.vertx.io</span>
 }))</code></pre>
 </div>
 </div>
@@ -3771,26 +3770,26 @@ authCode flow. An example of using it to protect some resource and authenticate 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// create an OAuth2 provider, clientID and clientSecret should be requested to github
-def authProvider = GithubAuth.create(vertx, "CLIENT_ID", "CLIENT_SECRET")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// create an OAuth2 provider, clientID and clientSecret should be requested to github</span>
+<span class="keyword">def</span> authProvider = GithubAuth.create(vertx, <span class="string"><span class="delimiter">&quot;</span><span class="content">CLIENT_ID</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">CLIENT_SECRET</span><span class="delimiter">&quot;</span></span>)
 
-// create a oauth2 handler on our running server
-// the second argument is the full url to the callback as you entered in your provider management console.
-def oauth2 = OAuth2AuthHandler.create(authProvider, "https://myserver.com/callback")
+<span class="comment">// create a oauth2 handler on our running server</span>
+<span class="comment">// the second argument is the full url to the callback as you entered in your provider management console.</span>
+<span class="keyword">def</span> oauth2 = OAuth2AuthHandler.create(authProvider, <span class="string"><span class="delimiter">&quot;</span><span class="content">https://myserver.com/callback</span><span class="delimiter">&quot;</span></span>)
 
-// setup the callback handler for receiving the GitHub callback
+<span class="comment">// setup the callback handler for receiving the GitHub callback</span>
 oauth2.setupCallback(router.route())
 
-// protect everything under /protected
-router.route("/protected/*").handler(oauth2)
-// mount some handler under the protected zone
-router.route("/protected/somepage").handler({ rc -&gt;
-  rc.response().end("Welcome to the protected resource!")
+<span class="comment">// protect everything under /protected</span>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/protected/*</span><span class="delimiter">&quot;</span></span>).handler(oauth2)
+<span class="comment">// mount some handler under the protected zone</span>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/protected/somepage</span><span class="delimiter">&quot;</span></span>).handler({ rc -&gt;
+  rc.response().end(<span class="string"><span class="delimiter">&quot;</span><span class="content">Welcome to the protected resource!</span><span class="delimiter">&quot;</span></span>)
 })
 
-// welcome page
-router.get("/").handler({ ctx -&gt;
-  ctx.response().putHeader("content-type", "text/html").end("Hello&lt;br&gt;&lt;a href=\"/protected/somepage\"&gt;Protected by Github&lt;/a&gt;")
+<span class="comment">// welcome page</span>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>).handler({ ctx -&gt;
+  ctx.response().putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/html</span><span class="delimiter">&quot;</span></span>).end(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello&lt;br&gt;&lt;a href=</span><span class="char">\&quot;</span><span class="content">/protected/somepage</span><span class="char">\&quot;</span><span class="content">&gt;Protected by Github&lt;/a&gt;</span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -3866,34 +3865,34 @@ vertx-auth provides you with many out of the box implementations:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// create an OAuth2 provider, clientID and clientSecret should be requested to Google
-def authProvider = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, [
-  clientID:"CLIENT_ID",
-  clientSecret:"CLIENT_SECRET",
-  site:"https://accounts.google.com",
-  tokenPath:"https://www.googleapis.com/oauth2/v3/token",
-  authorizationPath:"/o/oauth2/auth"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// create an OAuth2 provider, clientID and clientSecret should be requested to Google</span>
+<span class="keyword">def</span> authProvider = OAuth2Auth.create(vertx, OAuth2FlowType.AUTH_CODE, [
+  <span class="key">clientID</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">CLIENT_ID</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">clientSecret</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">CLIENT_SECRET</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">site</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://accounts.google.com</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">tokenPath</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://www.googleapis.com/oauth2/v3/token</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">authorizationPath</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">/o/oauth2/auth</span><span class="delimiter">&quot;</span></span>
 ])
 
-// create a oauth2 handler on our domain: "http://localhost:8080"
-def oauth2 = OAuth2AuthHandler.create(authProvider, "http://localhost:8080")
+<span class="comment">// create a oauth2 handler on our domain: &quot;http://localhost:8080&quot;</span>
+<span class="keyword">def</span> oauth2 = OAuth2AuthHandler.create(authProvider, <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080</span><span class="delimiter">&quot;</span></span>)
 
-// these are the scopes
-oauth2.addAuthority("profile")
+<span class="comment">// these are the scopes</span>
+oauth2.addAuthority(<span class="string"><span class="delimiter">&quot;</span><span class="content">profile</span><span class="delimiter">&quot;</span></span>)
 
-// setup the callback handler for receiving the Google callback
-oauth2.setupCallback(router.get("/callback"))
+<span class="comment">// setup the callback handler for receiving the Google callback</span>
+oauth2.setupCallback(router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/callback</span><span class="delimiter">&quot;</span></span>))
 
-// protect everything under /protected
-router.route("/protected/*").handler(oauth2)
-// mount some handler under the protected zone
-router.route("/protected/somepage").handler({ rc -&gt;
-  rc.response().end("Welcome to the protected resource!")
+<span class="comment">// protect everything under /protected</span>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/protected/*</span><span class="delimiter">&quot;</span></span>).handler(oauth2)
+<span class="comment">// mount some handler under the protected zone</span>
+router.route(<span class="string"><span class="delimiter">&quot;</span><span class="content">/protected/somepage</span><span class="delimiter">&quot;</span></span>).handler({ rc -&gt;
+  rc.response().end(<span class="string"><span class="delimiter">&quot;</span><span class="content">Welcome to the protected resource!</span><span class="delimiter">&quot;</span></span>)
 })
 
-// welcome page
-router.get("/").handler({ ctx -&gt;
-  ctx.response().putHeader("content-type", "text/html").end("Hello&lt;br&gt;&lt;a href=\"/protected/somepage\"&gt;Protected by Google&lt;/a&gt;")
+<span class="comment">// welcome page</span>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>).handler({ ctx -&gt;
+  ctx.response().putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">content-type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/html</span><span class="delimiter">&quot;</span></span>).end(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello&lt;br&gt;&lt;a href=</span><span class="char">\&quot;</span><span class="content">/protected/somepage</span><span class="char">\&quot;</span><span class="content">&gt;Protected by Google&lt;/a&gt;</span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -3913,9 +3912,9 @@ mandatory for the default values, 80 for http, 443 for https.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// create a oauth2 handler pinned to myserver.com: "https://myserver.com:8447/callback"
-def oauth2 = OAuth2AuthHandler.create(provider, "https://myserver.com:8447/callback")
-// now allow the handler to setup the callback url for you
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// create a oauth2 handler pinned to myserver.com: &quot;https://myserver.com:8447/callback&quot;</span>
+<span class="keyword">def</span> oauth2 = OAuth2AuthHandler.create(provider, <span class="string"><span class="delimiter">&quot;</span><span class="content">https://myserver.com:8447/callback</span><span class="delimiter">&quot;</span></span>)
+<span class="comment">// now allow the handler to setup the callback url for you</span>
 oauth2.setupCallback(router.route())</code></pre>
 </div>
 </div>

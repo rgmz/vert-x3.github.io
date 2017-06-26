@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -139,10 +138,10 @@ which is called when the operation completes or an error occurs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var fs = vertx.fileSystem()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var fs = vertx.fileSystem()
 
 // Copy file from foo.txt to bar.txt
-fs.copy("foo.txt", "bar.txt", { res -&gt;
+fs.copy(&quot;foo.txt&quot;, &quot;bar.txt&quot;, { res -&gt;
   if (res.succeeded()) {
     // Copied ok!
   } else {
@@ -162,10 +161,10 @@ particular application before using them from an event loop, so as not to break 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var fs = vertx.fileSystem()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var fs = vertx.fileSystem()
 
 // Copy file from foo.txt to bar.txt synchronously
-fs.copyBlocking("foo.txt", "bar.txt")</code></pre>
+fs.copyBlocking(&quot;foo.txt&quot;, &quot;bar.txt&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -177,43 +176,43 @@ please consult the <code><a href="../../apidocs/io/vertx/core/file/FileSystem.ht
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var vertx = Vertx.vertx()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var vertx = Vertx.vertx()
 
 // Read a file
-vertx.fileSystem().readFile("target/classes/readme.txt", { result -&gt;
+vertx.fileSystem().readFile(&quot;target/classes/readme.txt&quot;, { result -&gt;
   if (result.succeeded()) {
     println(result.result())
   } else {
-    System.err.println("Oh oh ...${result.cause()}")
+    System.err.println(&quot;Oh oh ...${result.cause()}&quot;)
   }
 })
 
 // Copy a file
-vertx.fileSystem().copy("target/classes/readme.txt", "target/classes/readme2.txt", { result -&gt;
+vertx.fileSystem().copy(&quot;target/classes/readme.txt&quot;, &quot;target/classes/readme2.txt&quot;, { result -&gt;
   if (result.succeeded()) {
-    println("File copied")
+    println(&quot;File copied&quot;)
   } else {
-    System.err.println("Oh oh ...${result.cause()}")
+    System.err.println(&quot;Oh oh ...${result.cause()}&quot;)
   }
 })
 
 // Write a file
-vertx.fileSystem().writeFile("target/classes/hello.txt", Buffer.buffer("Hello"), { result -&gt;
+vertx.fileSystem().writeFile(&quot;target/classes/hello.txt&quot;, Buffer.buffer(&quot;Hello&quot;), { result -&gt;
   if (result.succeeded()) {
-    println("File written")
+    println(&quot;File written&quot;)
   } else {
-    System.err.println("Oh oh ...${result.cause()}")
+    System.err.println(&quot;Oh oh ...${result.cause()}&quot;)
   }
 })
 
 // Check existence and delete
-vertx.fileSystem().exists("target/classes/junk.txt", { result -&gt;
+vertx.fileSystem().exists(&quot;target/classes/junk.txt&quot;, { result -&gt;
   if (result.succeeded() &amp;&amp; result.result()) {
-    vertx.fileSystem().delete("target/classes/junk.txt", { r -&gt;
-      println("File deleted")
+    vertx.fileSystem().delete(&quot;target/classes/junk.txt&quot;, { r -&gt;
+      println(&quot;File deleted&quot;)
     })
   } else {
-    System.err.println("Oh oh ... - cannot delete the file: ${result.cause()}")
+    System.err.println(&quot;Oh oh ... - cannot delete the file: ${result.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -228,8 +227,8 @@ vertx.fileSystem().exists("target/classes/junk.txt", { result -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = OpenOptions()
-fileSystem.open("myfile.txt", options, { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = OpenOptions()
+fileSystem.open(&quot;myfile.txt&quot;, options, { res -&gt;
   if (res.succeeded()) {
     var file = res.result()
   } else {
@@ -273,25 +272,25 @@ of the file, the file will be enlarged to accommodate the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var vertx = Vertx.vertx()
-vertx.fileSystem().open("target/classes/hello.txt", OpenOptions(), { result -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var vertx = Vertx.vertx()
+vertx.fileSystem().open(&quot;target/classes/hello.txt&quot;, OpenOptions(), { result -&gt;
   if (result.succeeded()) {
     var file = result.result()
-    var buff = Buffer.buffer("foo")
+    var buff = Buffer.buffer(&quot;foo&quot;)
     for (i in 0 until 5) {
       file.write(buff, buff.length() * i, { ar -&gt;
         if (ar.succeeded()) {
-          println("Written ok!")
+          println(&quot;Written ok!&quot;)
           // etc
         } else {
-          System.err.println("Failed to write: ${ar.cause()}")
+          System.err.println(&quot;Failed to write: ${ar.cause()}&quot;)
         }
       })
 
     }
 
   } else {
-    System.err.println("Cannot open file ${result.cause()}")
+    System.err.println(&quot;Cannot open file ${result.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -331,24 +330,24 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var vertx = Vertx.vertx()
-vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), { result -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">var vertx = Vertx.vertx()
+vertx.fileSystem().open(&quot;target/classes/les_miserables.txt&quot;, OpenOptions(), { result -&gt;
   if (result.succeeded()) {
     var file = result.result()
     var buff = Buffer.buffer(1000)
     for (i in 0 until 10) {
       file.read(buff, i * 100, i * 100, 100, { ar -&gt;
         if (ar.succeeded()) {
-          println("Read ok!")
+          println(&quot;Read ok!&quot;)
         } else {
-          System.err.println("Failed to write: ${ar.cause()}")
+          System.err.println(&quot;Failed to write: ${ar.cause()}&quot;)
         }
       })
 
     }
 
   } else {
-    System.err.println("Cannot open file ${result.cause()}")
+    System.err.println(&quot;Cannot open file ${result.cause()}&quot;)
   }
 })</code></pre>
 </div>
@@ -392,18 +391,18 @@ copy the content to another <code>AsyncFile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var vertx = Vertx.vertx()
-var output = vertx.fileSystem().openBlocking("target/classes/plagiary.txt", OpenOptions())
+<pre class="CodeRay highlight"><code data-lang="kotlin">var vertx = Vertx.vertx()
+var output = vertx.fileSystem().openBlocking(&quot;target/classes/plagiary.txt&quot;, OpenOptions())
 
-vertx.fileSystem().open("target/classes/les_miserables.txt", OpenOptions(), { result -&gt;
+vertx.fileSystem().open(&quot;target/classes/les_miserables.txt&quot;, OpenOptions(), { result -&gt;
   if (result.succeeded()) {
     var file = result.result()
     Pump.pump(file, output).start()
     file.endHandler({ r -&gt;
-      println("Copy done")
+      println(&quot;Copy done&quot;)
     })
   } else {
-    System.err.println("Cannot open file ${result.cause()}")
+    System.err.println(&quot;Cannot open file ${result.cause()}&quot;)
   }
 })</code></pre>
 </div>

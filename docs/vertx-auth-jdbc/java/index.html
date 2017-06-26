@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -139,11 +138,11 @@ add the following dependency to the <em>dependencies</em> section of your build 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-auth-jdbc&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-auth-jdbc<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -155,7 +154,7 @@ add the following dependency to the <em>dependencies</em> section of your build 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jdbc:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-jdbc:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -167,7 +166,7 @@ of those please consult the documentation for the JDBC client.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JDBCClient jdbcClient = JDBCClient.createShared(vertx, jdbcClientConfig);
+<pre class="CodeRay highlight"><code data-lang="java">JDBCClient jdbcClient = JDBCClient.createShared(vertx, jdbcClientConfig);
 
 JDBCAuth authProvider = JDBCAuth.create(vertx, jdbcClient);</code></pre>
 </div>
@@ -191,31 +190,31 @@ concatenated with a salt. It also assumes the salt is stored in the table too.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-sql" data-lang="sql">--
--- Take this script with a grain of salt and adapt it to your RDBMS
---
-CREATE TABLE `user` (
-  `username` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `password_salt` VARCHAR(255) NOT NULL
+<pre class="CodeRay highlight"><code data-lang="sql"><span class="comment">--
+-- Take this script with a grain of salt and adapt it to your RDBMS</span>
+<span class="comment">--
+CREATE TABLE `user` (</span>
+  <span class="string"><span class="delimiter">`</span><span class="content">username</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">password</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">password_salt</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>
 );
 
-CREATE TABLE `user_roles` (
-  `username` VARCHAR(255) NOT NULL,
-  `role` VARCHAR(255) NOT NULL
+<span class="class">CREATE</span> <span class="type">TABLE</span> <span class="string"><span class="delimiter">`</span><span class="content">user_roles</span><span class="delimiter">`</span></span> (
+  <span class="string"><span class="delimiter">`</span><span class="content">username</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">role</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>
 );
 
-CREATE TABLE `roles_perms` (
-  `role` VARCHAR(255) NOT NULL,
-  `perm` VARCHAR(255) NOT NULL
+<span class="class">CREATE</span> <span class="type">TABLE</span> <span class="string"><span class="delimiter">`</span><span class="content">roles_perms</span><span class="delimiter">`</span></span> (
+  <span class="string"><span class="delimiter">`</span><span class="content">role</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">perm</span><span class="delimiter">`</span></span> <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>
 );
 
-ALTER TABLE user ADD CONSTRAINT `pk_username` PRIMARY KEY (username);
-ALTER TABLE user_roles ADD CONSTRAINT `pk_user_roles` PRIMARY KEY (username, role);
-ALTER TABLE roles_perms ADD CONSTRAINT `pk_roles_perms` PRIMARY KEY (role);
+<span class="class">ALTER</span> <span class="type">TABLE</span> user <span class="class">ADD</span> <span class="type">CONSTRAINT</span> <span class="string"><span class="delimiter">`</span><span class="content">pk_username</span><span class="delimiter">`</span></span> <span class="directive">PRIMARY</span> <span class="type">KEY</span> (username);
+<span class="class">ALTER</span> <span class="type">TABLE</span> user_roles <span class="class">ADD</span> <span class="type">CONSTRAINT</span> <span class="string"><span class="delimiter">`</span><span class="content">pk_user_roles</span><span class="delimiter">`</span></span> <span class="directive">PRIMARY</span> <span class="type">KEY</span> (username, role);
+<span class="class">ALTER</span> <span class="type">TABLE</span> roles_perms <span class="class">ADD</span> <span class="type">CONSTRAINT</span> <span class="string"><span class="delimiter">`</span><span class="content">pk_roles_perms</span><span class="delimiter">`</span></span> <span class="directive">PRIMARY</span> <span class="type">KEY</span> (role);
 
-ALTER TABLE user_roles ADD CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES user(username);
-ALTER TABLE user_roles ADD CONSTRAINT fk_roles FOREIGN KEY (role) REFERENCES roles_perms(role);</code></pre>
+<span class="class">ALTER</span> <span class="type">TABLE</span> user_roles <span class="class">ADD</span> <span class="type">CONSTRAINT</span> fk_username <span class="directive">FOREIGN</span> <span class="type">KEY</span> (username) <span class="keyword">REFERENCES</span> user(username);
+<span class="class">ALTER</span> <span class="type">TABLE</span> user_roles <span class="class">ADD</span> <span class="type">CONSTRAINT</span> fk_roles <span class="directive">FOREIGN</span> <span class="type">KEY</span> (role) <span class="keyword">REFERENCES</span> roles_perms(role);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -261,12 +260,12 @@ to hash new password before storing it to the database. Doing it is a 3 step tas
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">String salt = auth.generateSalt();
-String hash = auth.computeHash("sausages", salt);
-// save to the database
-conn.updateWithParams("INSERT INTO user VALUES (?, ?, ?)", new JsonArray().add("tim").add(hash).add(salt), res -&gt; {
-  if (res.succeeded()) {
-    // success!
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> salt = auth.generateSalt();
+<span class="predefined-type">String</span> hash = auth.computeHash(<span class="string"><span class="delimiter">&quot;</span><span class="content">sausages</span><span class="delimiter">&quot;</span></span>, salt);
+<span class="comment">// save to the database</span>
+conn.updateWithParams(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO user VALUES (?, ?, ?)</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">tim</span><span class="delimiter">&quot;</span></span>).add(hash).add(salt), res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// success!</span>
   }
 });</code></pre>
 </div>
@@ -293,7 +292,7 @@ want to refresh the nonces now and then so you should add and never remove entri
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">auth.setNonces(new JsonArray().add("random_hash_1").add("random_hash_1"));</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">auth.setNonces(<span class="keyword">new</span> JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">random_hash_1</span><span class="delimiter">&quot;</span></span>).add(<span class="string"><span class="delimiter">&quot;</span><span class="content">random_hash_1</span><span class="delimiter">&quot;</span></span>));</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -315,15 +314,15 @@ nonce (by it&#8217;s index) you want to use. If you look at the previous example
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">auth.setNonces(new JsonArray().add("random_hash_1").add("random_hash_1"));
+<pre class="CodeRay highlight"><code data-lang="java">auth.setNonces(<span class="keyword">new</span> JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">random_hash_1</span><span class="delimiter">&quot;</span></span>).add(<span class="string"><span class="delimiter">&quot;</span><span class="content">random_hash_1</span><span class="delimiter">&quot;</span></span>));
 
-String salt = auth.generateSalt();
-// we will pick the second nonce
-String hash = auth.computeHash("sausages", salt, 1);
-// save to the database
-conn.updateWithParams("INSERT INTO user VALUES (?, ?, ?)", new JsonArray().add("tim").add(hash).add(salt), res -&gt; {
-  if (res.succeeded()) {
-    // success!
+<span class="predefined-type">String</span> salt = auth.generateSalt();
+<span class="comment">// we will pick the second nonce</span>
+<span class="predefined-type">String</span> hash = auth.computeHash(<span class="string"><span class="delimiter">&quot;</span><span class="content">sausages</span><span class="delimiter">&quot;</span></span>, salt, <span class="integer">1</span>);
+<span class="comment">// save to the database</span>
+conn.updateWithParams(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO user VALUES (?, ?, ?)</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">tim</span><span class="delimiter">&quot;</span></span>).add(hash).add(salt), res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// success!</span>
   }
 });</code></pre>
 </div>
@@ -339,13 +338,13 @@ authentication info:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject authInfo = new JsonObject().put("username", "tim").put("password", "sausages");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject authInfo = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">tim</span><span class="delimiter">&quot;</span></span>).put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">sausages</span><span class="delimiter">&quot;</span></span>);
 
 authProvider.authenticate(authInfo, res -&gt; {
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     User user = res.result();
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 });</code></pre>
 </div>
@@ -366,11 +365,11 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("commit_code", res -&gt; {
-  if (res.succeeded()) {
-    boolean hasPermission = res.result();
-  } else {
-    // Failed to
+<pre class="CodeRay highlight"><code data-lang="java">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">commit_code</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="type">boolean</span> hasPermission = res.result();
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed to</span>
   }
 });</code></pre>
 </div>
@@ -380,11 +379,11 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("role:manager", res -&gt; {
-  if (res.succeeded()) {
-    boolean hasRole = res.result();
-  } else {
-    // Failed to
+<pre class="CodeRay highlight"><code data-lang="java">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">role:manager</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="type">boolean</span> hasRole = res.result();
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed to</span>
   }
 });</code></pre>
 </div>

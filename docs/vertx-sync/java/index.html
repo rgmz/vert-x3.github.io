@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -243,13 +242,13 @@ the consumer is passed the handler at run-time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">EventBus eb = vertx.eventBus();
+<pre class="CodeRay highlight"><code data-lang="java">EventBus eb = vertx.eventBus();
 
-// Send a message and get the reply synchronously
+<span class="comment">// Send a message and get the reply synchronously</span>
 
-Message&lt;String&gt; reply = awaitResult(h -&gt; eb.send("someaddress", "ping", h));
+Message&lt;<span class="predefined-type">String</span>&gt; reply = awaitResult(h -&gt; eb.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">someaddress</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">ping</span><span class="delimiter">&quot;</span></span>, h));
 
-System.out.println("Received reply " + reply.body());</code></pre>
+<span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received reply </span><span class="delimiter">&quot;</span></span> + reply.body());</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -269,9 +268,9 @@ an end handler. This is achieved using the <code><a href="../../apidocs/io/vertx
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">long tid = awaitEvent(h -&gt; vertx.setTimer(1000, h));
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">long</span> tid = awaitEvent(h -&gt; vertx.setTimer(<span class="integer">1000</span>, h));
 
-System.out.println("Timer has now fired");</code></pre>
+<span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Timer has now fired</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -302,18 +301,18 @@ events synchronously.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">EventBus eb = vertx.eventBus();
+<pre class="CodeRay highlight"><code data-lang="java">EventBus eb = vertx.eventBus();
 
-HandlerReceiverAdaptor&lt;Message&lt;String&gt;&gt; adaptor = streamAdaptor();
+HandlerReceiverAdaptor&lt;Message&lt;<span class="predefined-type">String</span>&gt;&gt; adaptor = streamAdaptor();
 
-eb.&lt;String&gt;consumer("some-address").handler(adaptor);
+eb.&lt;<span class="predefined-type">String</span>&gt;consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-address</span><span class="delimiter">&quot;</span></span>).handler(adaptor);
 
-// Receive 10 messages from the consumer:
-for (int i = 0; i &lt; 10; i++) {
+<span class="comment">// Receive 10 messages from the consumer:</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="integer">0</span>; i &lt; <span class="integer">10</span>; i++) {
 
-  Message&lt;String&gt; received1 = adaptor.receive();
+  Message&lt;<span class="predefined-type">String</span>&gt; received1 = adaptor.receive();
 
-  System.out.println("got message: " + received1.body());
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">got message: </span><span class="delimiter">&quot;</span></span> + received1.body());
 
 }</code></pre>
 </div>
@@ -335,19 +334,19 @@ convert the normal handler to a fiber handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">EventBus eb = vertx.eventBus();
+<pre class="CodeRay highlight"><code data-lang="java">EventBus eb = vertx.eventBus();
 
 vertx.createHttpServer().requestHandler(fiberHandler(req -&gt; {
 
-  // Send a message to address and wait for a reply
-  Message&lt;String&gt; reply = awaitResult(h -&gt; eb.send("some-address", "blah", h));
+  <span class="comment">// Send a message to address and wait for a reply</span>
+  Message&lt;<span class="predefined-type">String</span>&gt; reply = awaitResult(h -&gt; eb.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-address</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">blah</span><span class="delimiter">&quot;</span></span>, h));
 
-  System.out.println("Got reply: " + reply.body());
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Got reply: </span><span class="delimiter">&quot;</span></span> + reply.body());
 
-  // Now end the response
-  req.response().end("blah");
+  <span class="comment">// Now end the response</span>
+  req.response().end(<span class="string"><span class="delimiter">&quot;</span><span class="content">blah</span><span class="delimiter">&quot;</span></span>);
 
-})).listen(8080, "localhost");</code></pre>
+})).listen(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -180,7 +179,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var server = vertx.createNetServer()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var server = vertx.createNetServer()</code></pre>
 </div>
 </div>
 </div>
@@ -192,7 +191,7 @@ instance when creating it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetServerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetServerOptions()
   .setPort(4321)
 
 var server = vertx.createNetServer(options)</code></pre>
@@ -210,7 +209,7 @@ alternatives.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var server = vertx.createNetServer()
+<pre class="CodeRay highlight"><code data-lang="scala">var server = vertx.createNetServer()
 server.listen()</code></pre>
 </div>
 </div>
@@ -219,8 +218,8 @@ server.listen()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var server = vertx.createNetServer()
-server.listen(1234, "localhost")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var server = vertx.createNetServer()
+server.listen(1234, &quot;localhost&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -237,13 +236,13 @@ For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var server = vertx.createNetServer()
-server.listenFuture(1234, "localhost").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">var server = vertx.createNetServer()
+server.listenFuture(1234, &quot;localhost&quot;).onComplete{
   case Success(result) =&gt; {
-    println("Server is now listening!")
+    println(&quot;Server is now listening!&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -259,13 +258,13 @@ server.listenFuture(1234, "localhost").onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var server = vertx.createNetServer()
-server.listenFuture(0, "localhost").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">var server = vertx.createNetServer()
+server.listenFuture(0, &quot;localhost&quot;).onComplete{
   case Success(result) =&gt; {
-    println(s"Server is now listening on actual port: ${server.actualPort()}")
+    println(s&quot;Server is now listening on actual port: ${server.actualPort()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -278,7 +277,7 @@ server.listenFuture(0, "localhost").onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var server = vertx.createNetServer()
+<pre class="CodeRay highlight"><code data-lang="scala">var server = vertx.createNetServer()
 server.connectHandler((socket: io.vertx.scala.core.net.NetSocket) =&gt; {
   // Handle the connection in here
 })</code></pre>
@@ -304,10 +303,10 @@ the socket.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var server = vertx.createNetServer()
+<pre class="CodeRay highlight"><code data-lang="scala">var server = vertx.createNetServer()
 server.connectHandler((socket: io.vertx.scala.core.net.NetSocket) =&gt; {
   socket.handler((buffer: io.vertx.scala.core.buffer.Buffer) =&gt; {
-    println(s"I received some bytes: ${buffer.length()}")
+    println(s&quot;I received some bytes: ${buffer.length()}&quot;)
   })
 })</code></pre>
 </div>
@@ -320,15 +319,15 @@ server.connectHandler((socket: io.vertx.scala.core.net.NetSocket) =&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Write a buffer
+<pre class="CodeRay highlight"><code data-lang="scala">// Write a buffer
 var buffer = Buffer.buffer().appendFloat(12.34).appendInt(123)
 socket.write(buffer)
 
 // Write a string in UTF-8 encoding
-socket.write("some data")
+socket.write(&quot;some data&quot;)
 
 // Write a string using the specified encoding
-socket.write("some data", "UTF-16")</code></pre>
+socket.write(&quot;some data&quot;, &quot;UTF-16&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -343,8 +342,8 @@ on it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">socket.closeHandler((v: java.lang.Void) =&gt; {
-  println("The socket has been closed")
+<pre class="CodeRay highlight"><code data-lang="scala">socket.closeHandler((v: java.lang.Void) =&gt; {
+  println(&quot;The socket has been closed&quot;)
 })</code></pre>
 </div>
 </div>
@@ -392,7 +391,7 @@ classpath resolution or disabling it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">socket.sendFile("myfile.dat")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">socket.sendFile(&quot;myfile.dat&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -432,12 +431,12 @@ If you want to be notified when the actual close has completed then you can pass
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">server.closeFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">server.closeFuture().onComplete{
   case Success(result) =&gt; {
-    println("Server is now closed")
+    println(&quot;Server is now closed&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -467,7 +466,7 @@ deployed then you will have at most one core utilised on your server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Create a few instances so we can utilise cores
+<pre class="CodeRay highlight"><code data-lang="scala">// Create a few instances so we can utilise cores
 
 for ( i &lt;- 0 until 10) {
   var server = vertx.createNetServer()
@@ -477,7 +476,7 @@ for ( i &lt;- 0 until 10) {
       socket.write(buffer)
     })
   })
-  server.listen(1234, "localhost")
+  server.listen(1234, &quot;localhost&quot;)
 }</code></pre>
 </div>
 </div>
@@ -495,10 +494,10 @@ on the command line:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = DeploymentOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = DeploymentOptions()
   .setInstances(10)
 
-vertx.deployVerticle("com.mycompany.MyVerticle", options)</code></pre>
+vertx.deployVerticle(&quot;com.mycompany.MyVerticle&quot;, options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -531,7 +530,7 @@ them in a round-robin fashion to any of the connect handlers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var client = vertx.createNetClient()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createNetClient()</code></pre>
 </div>
 </div>
 </div>
@@ -543,7 +542,7 @@ instance when creating it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setConnectTimeout(10000)
 
 var client = vertx.createNetClient(options)</code></pre>
@@ -559,17 +558,17 @@ specifying the port and host of the server and a handler that will be called wit
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setConnectTimeout(10000)
 
 var client = vertx.createNetClient(options)
-client.connectFuture(4321, "localhost").onComplete{
+client.connectFuture(4321, &quot;localhost&quot;).onComplete{
   case Success(result) =&gt; {
-    println("Connected!")
+    println(&quot;Connected!&quot;)
     var socket = result
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -597,7 +596,7 @@ only apply to creating initial connections.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setReconnectAttempts(10)
   .setReconnectInterval(500)
 
@@ -616,7 +615,7 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetServerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetServerOptions()
   .setLogActivity(true)
 
 
@@ -628,7 +627,7 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setLogActivity(true)
 
 
@@ -693,11 +692,11 @@ utility which ships with the JDK.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetServerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetServerOptions()
   .setSsl(true)
   .setKeyStoreOptions(JksOptions()
-    .setPath("/path/to/your/server-keystore.jks")
-    .setPassword("password-of-your-keystore")
+    .setPath(&quot;/path/to/your/server-keystore.jks&quot;)
+    .setPassword(&quot;password-of-your-keystore&quot;)
   )
 
 var server = vertx.createNetServer(options)</code></pre>
@@ -708,10 +707,10 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.jks")
+<pre class="CodeRay highlight"><code data-lang="scala">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-keystore.jks&quot;)
 var jksOptions = JksOptions()
   .setValue(myKeyStoreAsABuffer)
-  .setPassword("password-of-your-keystore")
+  .setPassword(&quot;password-of-your-keystore&quot;)
 
 var options = NetServerOptions()
   .setSsl(true)
@@ -726,11 +725,11 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetServerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetServerOptions()
   .setSsl(true)
   .setPfxKeyCertOptions(PfxOptions()
-    .setPath("/path/to/your/server-keystore.pfx")
-    .setPassword("password-of-your-keystore")
+    .setPath(&quot;/path/to/your/server-keystore.pfx&quot;)
+    .setPassword(&quot;password-of-your-keystore&quot;)
   )
 
 var server = vertx.createNetServer(options)</code></pre>
@@ -741,10 +740,10 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.pfx")
+<pre class="CodeRay highlight"><code data-lang="scala">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-keystore.pfx&quot;)
 var pfxOptions = PfxOptions()
   .setValue(myKeyStoreAsABuffer)
-  .setPassword("password-of-your-keystore")
+  .setPassword(&quot;password-of-your-keystore&quot;)
 
 var options = NetServerOptions()
   .setSsl(true)
@@ -758,11 +757,11 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetServerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetServerOptions()
   .setSsl(true)
   .setPemKeyCertOptions(PemKeyCertOptions()
-    .setKeyPath("/path/to/your/server-key.pem")
-    .setCertPath("/path/to/your/server-cert.pem")
+    .setKeyPath(&quot;/path/to/your/server-key.pem&quot;)
+    .setCertPath(&quot;/path/to/your/server-cert.pem&quot;)
   )
 
 var server = vertx.createNetServer(options)</code></pre>
@@ -773,8 +772,8 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-key.pem")
-var myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-cert.pem")
+<pre class="CodeRay highlight"><code data-lang="scala">var myKeyAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-key.pem&quot;)
+var myCertAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-cert.pem&quot;)
 var pemOptions = PemKeyCertOptions()
   .setKeyValue(myKeyAsABuffer)
   .setCertValue(myCertAsABuffer)
@@ -807,12 +806,12 @@ utility which ships with the JDK.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetServerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetServerOptions()
   .setSsl(true)
   .setClientAuth(ClientAuth.REQUIRED)
   .setTrustStoreOptions(JksOptions()
-    .setPath("/path/to/your/truststore.jks")
-    .setPassword("password-of-your-truststore")
+    .setPath(&quot;/path/to/your/truststore.jks&quot;)
+    .setPassword(&quot;password-of-your-truststore&quot;)
   )
 
 var server = vertx.createNetServer(options)</code></pre>
@@ -823,13 +822,13 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks")
+<pre class="CodeRay highlight"><code data-lang="scala">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.jks&quot;)
 var options = NetServerOptions()
   .setSsl(true)
   .setClientAuth(ClientAuth.REQUIRED)
   .setTrustStoreOptions(JksOptions()
     .setValue(myTrustStoreAsABuffer)
-    .setPassword("password-of-your-truststore")
+    .setPassword(&quot;password-of-your-truststore&quot;)
   )
 
 var server = vertx.createNetServer(options)</code></pre>
@@ -841,12 +840,12 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetServerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetServerOptions()
   .setSsl(true)
   .setClientAuth(ClientAuth.REQUIRED)
   .setPfxTrustOptions(PfxOptions()
-    .setPath("/path/to/your/truststore.pfx")
-    .setPassword("password-of-your-truststore")
+    .setPath(&quot;/path/to/your/truststore.pfx&quot;)
+    .setPassword(&quot;password-of-your-truststore&quot;)
   )
 
 var server = vertx.createNetServer(options)</code></pre>
@@ -857,13 +856,13 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx")
+<pre class="CodeRay highlight"><code data-lang="scala">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.pfx&quot;)
 var options = NetServerOptions()
   .setSsl(true)
   .setClientAuth(ClientAuth.REQUIRED)
   .setPfxTrustOptions(PfxOptions()
     .setValue(myTrustStoreAsABuffer)
-    .setPassword("password-of-your-truststore")
+    .setPassword(&quot;password-of-your-truststore&quot;)
   )
 
 var server = vertx.createNetServer(options)</code></pre>
@@ -874,11 +873,11 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetServerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetServerOptions()
   .setSsl(true)
   .setClientAuth(ClientAuth.REQUIRED)
   .setPemTrustOptions(PemTrustOptions()
-    .setCertPaths(Set("/path/to/your/server-ca.pem"))
+    .setCertPaths(Set(&quot;/path/to/your/server-ca.pem&quot;))
   )
 
 var server = vertx.createNetServer(options)</code></pre>
@@ -889,7 +888,7 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx")
+<pre class="CodeRay highlight"><code data-lang="scala">var myCaAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/server-ca.pfx&quot;)
 var options = NetServerOptions()
   .setSsl(true)
   .setClientAuth(ClientAuth.REQUIRED)
@@ -919,7 +918,7 @@ be sure who you are connecting to. Use this with caution. Default value is false
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setSsl(true)
   .setTrustAll(true)
 
@@ -936,9 +935,9 @@ To enable host verification, set the algorithm to use on your client (only HTTPS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setSsl(true)
-  .setHostnameVerificationAlgorithm("HTTPS")
+  .setHostnameVerificationAlgorithm(&quot;HTTPS&quot;)
 
 var client = vertx.createNetClient(options)</code></pre>
 </div>
@@ -957,11 +956,11 @@ in the client trust store, the connection attempt will not succeed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setSsl(true)
   .setTrustStoreOptions(JksOptions()
-    .setPath("/path/to/your/truststore.jks")
-    .setPassword("password-of-your-truststore")
+    .setPath(&quot;/path/to/your/truststore.jks&quot;)
+    .setPassword(&quot;password-of-your-truststore&quot;)
   )
 
 var client = vertx.createNetClient(options)</code></pre>
@@ -972,12 +971,12 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks")
+<pre class="CodeRay highlight"><code data-lang="scala">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.jks&quot;)
 var options = NetClientOptions()
   .setSsl(true)
   .setTrustStoreOptions(JksOptions()
     .setValue(myTrustStoreAsABuffer)
-    .setPassword("password-of-your-truststore")
+    .setPassword(&quot;password-of-your-truststore&quot;)
   )
 
 var client = vertx.createNetClient(options)</code></pre>
@@ -989,11 +988,11 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setSsl(true)
   .setPfxTrustOptions(PfxOptions()
-    .setPath("/path/to/your/truststore.pfx")
-    .setPassword("password-of-your-truststore")
+    .setPath(&quot;/path/to/your/truststore.pfx&quot;)
+    .setPassword(&quot;password-of-your-truststore&quot;)
   )
 
 var client = vertx.createNetClient(options)</code></pre>
@@ -1004,12 +1003,12 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx")
+<pre class="CodeRay highlight"><code data-lang="scala">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/truststore.pfx&quot;)
 var options = NetClientOptions()
   .setSsl(true)
   .setPfxTrustOptions(PfxOptions()
     .setValue(myTrustStoreAsABuffer)
-    .setPassword("password-of-your-truststore")
+    .setPassword(&quot;password-of-your-truststore&quot;)
   )
 
 var client = vertx.createNetClient(options)</code></pre>
@@ -1020,10 +1019,10 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setSsl(true)
   .setPemTrustOptions(PemTrustOptions()
-    .setCertPaths(Set("/path/to/your/ca-cert.pem"))
+    .setCertPaths(Set(&quot;/path/to/your/ca-cert.pem&quot;))
   )
 
 var client = vertx.createNetClient(options)</code></pre>
@@ -1034,7 +1033,7 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/ca-cert.pem")
+<pre class="CodeRay highlight"><code data-lang="scala">var myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/ca-cert.pem&quot;)
 var options = NetClientOptions()
   .setSsl(true)
   .setPemTrustOptions(PemTrustOptions()
@@ -1059,11 +1058,11 @@ Again it&#8217;s just a regular Java key store. The client keystore location is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setSsl(true)
   .setKeyStoreOptions(JksOptions()
-    .setPath("/path/to/your/client-keystore.jks")
-    .setPassword("password-of-your-keystore")
+    .setPath(&quot;/path/to/your/client-keystore.jks&quot;)
+    .setPassword(&quot;password-of-your-keystore&quot;)
   )
 
 var client = vertx.createNetClient(options)</code></pre>
@@ -1074,10 +1073,10 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.jks")
+<pre class="CodeRay highlight"><code data-lang="scala">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-keystore.jks&quot;)
 var jksOptions = JksOptions()
   .setValue(myKeyStoreAsABuffer)
-  .setPassword("password-of-your-keystore")
+  .setPassword(&quot;password-of-your-keystore&quot;)
 
 var options = NetClientOptions()
   .setSsl(true)
@@ -1092,11 +1091,11 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setSsl(true)
   .setPfxKeyCertOptions(PfxOptions()
-    .setPath("/path/to/your/client-keystore.pfx")
-    .setPassword("password-of-your-keystore")
+    .setPath(&quot;/path/to/your/client-keystore.pfx&quot;)
+    .setPassword(&quot;password-of-your-keystore&quot;)
   )
 
 var client = vertx.createNetClient(options)</code></pre>
@@ -1107,10 +1106,10 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.pfx")
+<pre class="CodeRay highlight"><code data-lang="scala">var myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-keystore.pfx&quot;)
 var pfxOptions = PfxOptions()
   .setValue(myKeyStoreAsABuffer)
-  .setPassword("password-of-your-keystore")
+  .setPassword(&quot;password-of-your-keystore&quot;)
 
 var options = NetClientOptions()
   .setSsl(true)
@@ -1124,11 +1123,11 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setSsl(true)
   .setPemKeyCertOptions(PemKeyCertOptions()
-    .setKeyPath("/path/to/your/client-key.pem")
-    .setCertPath("/path/to/your/client-cert.pem")
+    .setKeyPath(&quot;/path/to/your/client-key.pem&quot;)
+    .setCertPath(&quot;/path/to/your/client-cert.pem&quot;)
   )
 
 var client = vertx.createNetClient(options)</code></pre>
@@ -1139,8 +1138,8 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-key.pem")
-var myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-cert.pem")
+<pre class="CodeRay highlight"><code data-lang="scala">var myKeyAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-key.pem&quot;)
+var myCertAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/client-cert.pem&quot;)
 var pemOptions = PemKeyCertOptions()
   .setKeyValue(myKeyAsABuffer)
   .setCertValue(myCertAsABuffer)
@@ -1180,7 +1179,7 @@ give <code>KeyCertOptions</code> and <code>TrustOptions</code> configurations:</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var certificate = SelfSignedCertificate.create()
+<pre class="CodeRay highlight"><code data-lang="scala">var certificate = SelfSignedCertificate.create()
 
 var serverOptions = NetServerOptions()
   .setSsl(true)
@@ -1189,8 +1188,8 @@ var serverOptions = NetServerOptions()
 
 
 var server = vertx.createNetServer(serverOptions).connectHandler((socket: io.vertx.scala.core.net.NetSocket) =&gt; {
-  socket.write("Hello!").end()
-}).listen(1234, "localhost")
+  socket.write(&quot;Hello!&quot;).end()
+}).listen(1234, &quot;localhost&quot;)
 
 var clientOptions = NetClientOptions()
   .setSsl(true)
@@ -1199,14 +1198,14 @@ var clientOptions = NetClientOptions()
 
 
 var client = vertx.createNetClient(clientOptions)
-client.connectFuture(1234, "localhost").onComplete{
+client.connectFuture(1234, &quot;localhost&quot;).onComplete{
   case Success(result) =&gt; {
     result.handler((buffer: io.vertx.scala.core.buffer.Buffer) =&gt; {
       println(buffer)
     })
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -1216,7 +1215,7 @@ client.connectFuture(1234, "localhost").onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var clientOptions = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var clientOptions = NetClientOptions()
   .setSsl(true)
   .setTrustAll(true)</code></pre>
 </div>
@@ -1226,14 +1225,14 @@ client.connectFuture(1234, "localhost").onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var certificate = SelfSignedCertificate.create()
+<pre class="CodeRay highlight"><code data-lang="scala">var certificate = SelfSignedCertificate.create()
 
 vertx.createHttpServer(HttpServerOptions()
   .setSsl(true)
   .setKeyCertOptions(certificate.keyCertOptions())
   .setTrustOptions(certificate.trustOptions())
 ).requestHandler((req: io.vertx.scala.core.http.HttpServerRequest) =&gt; {
-  req.response().end("Hello!")
+  req.response().end(&quot;Hello!&quot;)
 }).listen(8080)</code></pre>
 </div>
 </div>
@@ -1247,10 +1246,10 @@ the crl list to use:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setSsl(true)
   .setTrustStoreOptions(trustOptions)
-  .setCrlPaths(Set("/path/to/your/crl.pem"))
+  .setCrlPaths(Set(&quot;/path/to/your/crl.pem&quot;))
 
 var client = vertx.createNetClient(options)</code></pre>
 </div>
@@ -1260,7 +1259,7 @@ var client = vertx.createNetClient(options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var myCrlAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/crl.pem")
+<pre class="CodeRay highlight"><code data-lang="scala">var myCrlAsABuffer = vertx.fileSystem().readFileBlocking(&quot;/path/to/your/crl.pem&quot;)
 var options = NetClientOptions()
   .setSsl(true)
   .setTrustStoreOptions(trustOptions)
@@ -1278,10 +1277,10 @@ configured with a suite of enabled ciphers:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetServerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetServerOptions()
   .setSsl(true)
   .setKeyStoreOptions(keyStoreOptions)
-  .setEnabledCipherSuites(Set("ECDHE-RSA-AES128-GCM-SHA256", "ECDHE-ECDSA-AES128-GCM-SHA256", "ECDHE-RSA-AES256-GCM-SHA384", "CDHE-ECDSA-AES256-GCM-SHA384"))
+  .setEnabledCipherSuites(Set(&quot;ECDHE-RSA-AES128-GCM-SHA256&quot;, &quot;ECDHE-ECDSA-AES128-GCM-SHA256&quot;, &quot;ECDHE-RSA-AES256-GCM-SHA384&quot;, &quot;CDHE-ECDSA-AES256-GCM-SHA384&quot;))
 
 var server = vertx.createNetServer(options)</code></pre>
 </div>
@@ -1298,10 +1297,10 @@ configured by explicitly adding enabled protocols:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetServerOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetServerOptions()
   .setSsl(true)
   .setKeyStoreOptions(keyStoreOptions)
-  .setEnabledSecureTransportProtocols(Set("TLSv1.1", "TLSv1.2"))
+  .setEnabledSecureTransportProtocols(Set(&quot;TLSv1.1&quot;, &quot;TLSv1.2&quot;))
 
 var server = vertx.createNetServer(options)</code></pre>
 </div>
@@ -1331,7 +1330,7 @@ OpenSSL provides better performances and CPU usage than the JDK engine, as well 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Use JDK SSL engine
+<pre class="CodeRay highlight"><code data-lang="scala">// Use JDK SSL engine
 var options = NetServerOptions()
   .setSsl(true)
   .setKeyStoreOptions(keyStoreOptions)
@@ -1384,9 +1383,9 @@ configured the server with multiple key/certificate pairs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var keyCertOptions = JksOptions()
-  .setPath("keystore.jks")
-  .setPassword("wibble")
+<pre class="CodeRay highlight"><code data-lang="scala">var keyCertOptions = JksOptions()
+  .setPath(&quot;keystore.jks&quot;)
+  .setPassword(&quot;wibble&quot;)
 
 
 var netServer = vertx.createNetServer(NetServerOptions()
@@ -1401,9 +1400,9 @@ var netServer = vertx.createNetServer(NetServerOptions()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var keyCertOptions = PemKeyCertOptions()
-  .setKeyPaths(List("default-key.pem", "host1-key.pem", "etc..."))
-  .setCertPaths(List("default-cert.pem", "host2-key.pem", "etc..."))
+<pre class="CodeRay highlight"><code data-lang="scala">var keyCertOptions = PemKeyCertOptions()
+  .setKeyPaths(List(&quot;default-key.pem&quot;, &quot;host1-key.pem&quot;, &quot;etc...&quot;))
+  .setCertPaths(List(&quot;default-cert.pem&quot;, &quot;host2-key.pem&quot;, &quot;etc...&quot;))
 
 
 var netServer = vertx.createNetServer(NetServerOptions()
@@ -1421,19 +1420,19 @@ var netServer = vertx.createNetServer(NetServerOptions()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var client = vertx.createNetClient(NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createNetClient(NetClientOptions()
   .setTrustStoreOptions(trustOptions)
   .setSsl(true)
 )
 
 // Connect to 'localhost' and present 'server.name' server name
-client.connectFuture(1234, "localhost", "server.name").onComplete{
+client.connectFuture(1234, &quot;localhost&quot;, &quot;server.name&quot;).onComplete{
   case Success(result) =&gt; {
-    println("Connected!")
+    println(&quot;Connected!&quot;)
     var socket = result
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -1551,13 +1550,13 @@ ALPN version for the JVM running it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="scala">var options = NetClientOptions()
   .setProxyOptions(ProxyOptions()
     .setType(ProxyType.SOCKS5)
-    .setHost("localhost")
+    .setHost(&quot;localhost&quot;)
     .setPort(1080)
-    .setUsername("username")
-    .setPassword("secret")
+    .setUsername(&quot;username&quot;)
+    .setPassword(&quot;secret&quot;)
   )
 
 var client = vertx.createNetClient(options)</code></pre>

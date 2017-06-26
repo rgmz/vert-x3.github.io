@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -160,11 +159,11 @@ cluster managers are pluggable.  This implementation is packaged inside:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-hazelcast&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-hazelcast<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -216,15 +215,15 @@ when you are creating your Vert.x instance, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ClusterManager mgr = new HazelcastClusterManager();
+<pre class="CodeRay highlight"><code data-lang="java">ClusterManager mgr = <span class="keyword">new</span> HazelcastClusterManager();
 
-VertxOptions options = new VertxOptions().setClusterManager(mgr);
+VertxOptions options = <span class="keyword">new</span> VertxOptions().setClusterManager(mgr);
 
 Vertx.clusteredVertx(options, res -&gt; {
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     Vertx vertx = res.result();
-  } else {
-    // failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// failed!</span>
   }
 });</code></pre>
 </div>
@@ -247,7 +246,7 @@ example, if you are using the <em>launcher</em> class from Vert.x, the classpath
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code># If the cluster.xml is in the current directory:
+<pre class="CodeRay highlight"><code># If the cluster.xml is in the current directory:
 java -jar ... -cp . -cluster
 vertx run MyVerticle -cp . -cluster
 
@@ -261,7 +260,7 @@ location:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code># Use a cluster configuration located in an external file
+<pre class="CodeRay highlight"><code># Use a cluster configuration located in an external file
 java -Dvertx.hazelcast.config=./config/my-cluster-config.xml -jar ... -cluster
 
 # Or use a custom configuration from the classpath
@@ -295,19 +294,19 @@ web-site.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Config hazelcastConfig = new Config();
+<pre class="CodeRay highlight"><code data-lang="java">Config hazelcastConfig = <span class="keyword">new</span> Config();
 
-// Now set some stuff on the config (omitted)
+<span class="comment">// Now set some stuff on the config (omitted)</span>
 
-ClusterManager mgr = new HazelcastClusterManager(hazelcastConfig);
+ClusterManager mgr = <span class="keyword">new</span> HazelcastClusterManager(hazelcastConfig);
 
-VertxOptions options = new VertxOptions().setClusterManager(mgr);
+VertxOptions options = <span class="keyword">new</span> VertxOptions().setClusterManager(mgr);
 
 Vertx.clusteredVertx(options, res -&gt; {
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     Vertx vertx = res.result();
-  } else {
-    // failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// failed!</span>
   }
 });</code></pre>
 </div>
@@ -330,13 +329,13 @@ Hazelcast documentation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ClusterManager mgr = new HazelcastClusterManager(hazelcastInstance);
-VertxOptions options = new VertxOptions().setClusterManager(mgr);
+<pre class="CodeRay highlight"><code data-lang="java">ClusterManager mgr = <span class="keyword">new</span> HazelcastClusterManager(hazelcastInstance);
+VertxOptions options = <span class="keyword">new</span> VertxOptions().setClusterManager(mgr);
 Vertx.clusteredVertx(options, res -&gt; {
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     Vertx vertx = res.result();
-  } else {
-    // failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// failed!</span>
   }
 });</code></pre>
 </div>
@@ -349,23 +348,23 @@ Vertx.clusteredVertx(options, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;properties&gt;
-  &lt;property name="hazelcast.shutdownhook.enabled"&gt;false&lt;/property&gt;
-&lt;/properties&gt;
-&lt;multimap name="__vertx.subs"&gt;
-  &lt;backup-count&gt;1&lt;/backup-count&gt;
-&lt;/multimap&gt;
-&lt;map name="__vertx.haInfo"&gt;
-  &lt;time-to-live-seconds&gt;0&lt;/time-to-live-seconds&gt;
-  &lt;max-idle-seconds&gt;0&lt;/max-idle-seconds&gt;
-  &lt;eviction-policy&gt;NONE&lt;/eviction-policy&gt;
-  &lt;max-size policy="PER_NODE"&gt;0&lt;/max-size&gt;
-  &lt;eviction-percentage&gt;25&lt;/eviction-percentage&gt;
-  &lt;merge-policy&gt;com.hazelcast.map.merge.LatestUpdateMapMergePolicy&lt;/merge-policy&gt;
-&lt;/map&gt;
-&lt;semaphore name="__vertx.*"&gt;
-  &lt;initial-permits&gt;1&lt;/initial-permits&gt;
-&lt;/semaphore&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;properties&gt;</span>
+  <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">hazelcast.shutdownhook.enabled</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>false<span class="tag">&lt;/property&gt;</span>
+<span class="tag">&lt;/properties&gt;</span>
+<span class="tag">&lt;multimap</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">__vertx.subs</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;backup-count&gt;</span>1<span class="tag">&lt;/backup-count&gt;</span>
+<span class="tag">&lt;/multimap&gt;</span>
+<span class="tag">&lt;map</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">__vertx.haInfo</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;time-to-live-seconds&gt;</span>0<span class="tag">&lt;/time-to-live-seconds&gt;</span>
+  <span class="tag">&lt;max-idle-seconds&gt;</span>0<span class="tag">&lt;/max-idle-seconds&gt;</span>
+  <span class="tag">&lt;eviction-policy&gt;</span>NONE<span class="tag">&lt;/eviction-policy&gt;</span>
+  <span class="tag">&lt;max-size</span> <span class="attribute-name">policy</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">PER_NODE</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>0<span class="tag">&lt;/max-size&gt;</span>
+  <span class="tag">&lt;eviction-percentage&gt;</span>25<span class="tag">&lt;/eviction-percentage&gt;</span>
+  <span class="tag">&lt;merge-policy&gt;</span>com.hazelcast.map.merge.LatestUpdateMapMergePolicy<span class="tag">&lt;/merge-policy&gt;</span>
+<span class="tag">&lt;/map&gt;</span>
+<span class="tag">&lt;semaphore</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">__vertx.*</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;initial-permits&gt;</span>1<span class="tag">&lt;/initial-permits&gt;</span>
+<span class="tag">&lt;/semaphore&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -551,16 +550,16 @@ need to:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;com.hazelcast&lt;/groupId&gt;
-  &lt;artifactId&gt;hazelcast&lt;/artifactId&gt;
-  &lt;version&gt;ENTER_YOUR_VERSION_HERE&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-hazelcast&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>com.hazelcast<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>hazelcast<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>ENTER_YOUR_VERSION_HERE<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span>
+<span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-hazelcast<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -571,7 +570,7 @@ need to:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>dependencies {
+<pre class="CodeRay highlight"><code>dependencies {
  compile ("io.vertx:vertx-hazelcast:3.4.2"){
    exclude group: 'com.hazelcast', module: 'hazelcast'
  }

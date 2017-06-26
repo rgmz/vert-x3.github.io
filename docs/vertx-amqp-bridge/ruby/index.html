@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -198,11 +197,11 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-amqp-bridge&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-amqp-bridge<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -214,7 +213,7 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-amqp-bridge:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-amqp-<span class="key">bridge</span>:<span class="float">3.4</span><span class="float">.2</span></code></pre>
 </div>
 </div>
 </div>
@@ -233,16 +232,16 @@ to configure various options such as for using SSL connections.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-amqp-bridge/amqp_bridge'
-bridge = VertxAmqpBridge::AmqpBridge.create(vertx)
-# Start the bridge, then use the event loop thread to process things thereafter.
-bridge.start("localhost", 5672) { |res_err,res|
-  # Set up a producer using the bridge, send a message with it.
-  producer = bridge.create_producer("myAmqpAddress")
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-amqp-bridge/amqp_bridge</span><span class="delimiter">'</span></span>
+bridge = <span class="constant">VertxAmqpBridge</span>::<span class="constant">AmqpBridge</span>.create(vertx)
+<span class="comment"># Start the bridge, then use the event loop thread to process things thereafter.</span>
+bridge.start(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">5672</span>) { |res_err,res|
+  <span class="comment"># Set up a producer using the bridge, send a message with it.</span>
+  producer = bridge.create_producer(<span class="string"><span class="delimiter">&quot;</span><span class="content">myAmqpAddress</span><span class="delimiter">&quot;</span></span>)
 
   amqpMsgPayload = {
   }
-  amqpMsgPayload['body'] = "myStringContent"
+  amqpMsgPayload[<span class="string"><span class="delimiter">'</span><span class="content">body</span><span class="delimiter">'</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">myStringContent</span><span class="delimiter">&quot;</span></span>
 
   producer.send(amqpMsgPayload)
 }</code></pre>
@@ -259,17 +258,17 @@ messages.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-amqp-bridge/amqp_bridge'
-bridge = VertxAmqpBridge::AmqpBridge.create(vertx)
-# Start the bridge, then use the event loop thread to process things thereafter.
-bridge.start("localhost", 5672) { |res_err,res|
-  # Set up a consumer using the bridge, register a handler for it.
-  consumer = bridge.create_consumer("myAmqpAddress")
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-amqp-bridge/amqp_bridge</span><span class="delimiter">'</span></span>
+bridge = <span class="constant">VertxAmqpBridge</span>::<span class="constant">AmqpBridge</span>.create(vertx)
+<span class="comment"># Start the bridge, then use the event loop thread to process things thereafter.</span>
+bridge.start(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">5672</span>) { |res_err,res|
+  <span class="comment"># Set up a consumer using the bridge, register a handler for it.</span>
+  consumer = bridge.create_consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">myAmqpAddress</span><span class="delimiter">&quot;</span></span>)
   consumer.handler() { |vertxMsg|
     amqpMsgPayload = vertxMsg.body()
-    amqpBody = amqpMsgPayload['body']
+    amqpBody = amqpMsgPayload[<span class="string"><span class="delimiter">'</span><span class="content">body</span><span class="delimiter">'</span></span>]
 
-    puts "Received a message with body: #{amqpBody}"
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Received a message with body: </span><span class="inline"><span class="inline-delimiter">#{</span>amqpBody<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
   }
 }</code></pre>
 </div>
@@ -395,13 +394,13 @@ message could look something like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">applicationProperties = {
+<pre class="CodeRay highlight"><code data-lang="ruby">applicationProperties = {
 }
-applicationProperties['name'] = "value"
+applicationProperties[<span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>
 
 amqpMsgPayload = {
 }
-amqpMsgPayload['application_properties'] = applicationProperties
+amqpMsgPayload[<span class="string"><span class="delimiter">'</span><span class="content">application_properties</span><span class="delimiter">'</span></span>] = applicationProperties
 
 producer.send(amqpMsgPayload)</code></pre>
 </div>
@@ -413,11 +412,11 @@ retrieving an application-property from a received message might look like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Check the application properties section was present before use, it may not be
-appProps = amqpMsgPayload['application_properties']
-if (appProps != nil)
-  propValue = appProps['propertyName']
-end</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># Check the application properties section was present before use, it may not be</span>
+appProps = amqpMsgPayload[<span class="string"><span class="delimiter">'</span><span class="content">application_properties</span><span class="delimiter">'</span></span>]
+<span class="keyword">if</span> (appProps != <span class="predefined-constant">nil</span>)
+  propValue = appProps[<span class="string"><span class="delimiter">'</span><span class="content">propertyName</span><span class="delimiter">'</span></span>]
+<span class="keyword">end</span></code></pre>
 </div>
 </div>
 </div>
@@ -445,7 +444,7 @@ in tandem with the producer and attempt to send only what it knows can actually 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">producer.write_queue_full?()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby">producer.write_queue_full?()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -454,8 +453,8 @@ receives more credit and is able to send messages immediately rather than buffer
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">producer.drain_handler() { |v|
-  # ...do stuff and send...
+<pre class="CodeRay highlight"><code data-lang="ruby">producer.drain_handler() { |v|
+  <span class="comment"># ...do stuff and send...</span>
 }</code></pre>
 </div>
 </div>
@@ -470,9 +469,9 @@ buffered message value before registering a handler, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consumer.set_max_buffered_messages(5)
+<pre class="CodeRay highlight"><code data-lang="ruby">consumer.set_max_buffered_messages(<span class="integer">5</span>)
 consumer.handler() { |msg|
-  # ...handle received messages...
+  <span class="comment"># ...handle received messages...</span>
 }</code></pre>
 </div>
 </div>
@@ -493,20 +492,20 @@ certificate:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-amqp-bridge/amqp_bridge'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-amqp-bridge/amqp_bridge</span><span class="delimiter">'</span></span>
 bridgeOptions = {
 }
-bridgeOptions['ssl'] = true
+bridgeOptions[<span class="string"><span class="delimiter">'</span><span class="content">ssl</span><span class="delimiter">'</span></span>] = <span class="predefined-constant">true</span>
 
 trustOptions = {
-  'path' =&gt; "path/to/pkcs12.truststore",
-  'password' =&gt; "password"
+  <span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">path/to/pkcs12.truststore</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">password</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>
 }
-bridgeOptions['pfxTrustOptions'] = trustOptions
+bridgeOptions[<span class="string"><span class="delimiter">'</span><span class="content">pfxTrustOptions</span><span class="delimiter">'</span></span>] = trustOptions
 
-bridge = VertxAmqpBridge::AmqpBridge.create(vertx, bridgeOptions)
-bridge.start("localhost", 5672, "username", "password") { |res_err,res|
-  # ..do things with the bridge..
+bridge = <span class="constant">VertxAmqpBridge</span>::<span class="constant">AmqpBridge</span>.create(vertx, bridgeOptions)
+bridge.start(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">5672</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="comment"># ..do things with the bridge..</span>
 }</code></pre>
 </div>
 </div>
@@ -517,26 +516,26 @@ also a PKCS12 based key store containing an SSL key and certificate the server c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-amqp-bridge/amqp_bridge'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-amqp-bridge/amqp_bridge</span><span class="delimiter">'</span></span>
 bridgeOptions = {
 }
-bridgeOptions['ssl'] = true
+bridgeOptions[<span class="string"><span class="delimiter">'</span><span class="content">ssl</span><span class="delimiter">'</span></span>] = <span class="predefined-constant">true</span>
 
 trustOptions = {
-  'path' =&gt; "path/to/pkcs12.truststore",
-  'password' =&gt; "password"
+  <span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">path/to/pkcs12.truststore</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">password</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>
 }
-bridgeOptions['pfxTrustOptions'] = trustOptions
+bridgeOptions[<span class="string"><span class="delimiter">'</span><span class="content">pfxTrustOptions</span><span class="delimiter">'</span></span>] = trustOptions
 
 keyCertOptions = {
-  'path' =&gt; "path/to/pkcs12.keystore",
-  'password' =&gt; "password"
+  <span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">path/to/pkcs12.keystore</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">password</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>
 }
-bridgeOptions['pfxKeyCertOptions'] = keyCertOptions
+bridgeOptions[<span class="string"><span class="delimiter">'</span><span class="content">pfxKeyCertOptions</span><span class="delimiter">'</span></span>] = keyCertOptions
 
-bridge = VertxAmqpBridge::AmqpBridge.create(vertx, bridgeOptions)
-bridge.start("localhost", 5672) { |res_err,res|
-  # ..do things with the bridge..
+bridge = <span class="constant">VertxAmqpBridge</span>::<span class="constant">AmqpBridge</span>.create(vertx, bridgeOptions)
+bridge.start(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">5672</span>) { |res_err,res|
+  <span class="comment"># ..do things with the bridge..</span>
 }</code></pre>
 </div>
 </div>
@@ -623,13 +622,13 @@ value to match it with the reply handler, and then invokes the handler with the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">amqpMsgPayload = {
+<pre class="CodeRay highlight"><code data-lang="ruby">amqpMsgPayload = {
 }
-amqpMsgPayload['body'] = "myRequest"
+amqpMsgPayload[<span class="string"><span class="delimiter">'</span><span class="content">body</span><span class="delimiter">'</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">myRequest</span><span class="delimiter">&quot;</span></span>
 
 producer.send(amqpMsgPayload) { |res_err,res|
   amqpReplyMessagePayload = res.body()
-  # ...do something with reply message...
+  <span class="comment"># ...do something with reply message...</span>
 }</code></pre>
 </div>
 </div>
@@ -702,16 +701,16 @@ original sending application .</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consumer.handler() { |msg|
-  # ...do something with received message...then reply...
+<pre class="CodeRay highlight"><code data-lang="ruby">consumer.handler() { |msg|
+  <span class="comment"># ...do something with received message...then reply...</span>
   replyAddress = msg.reply_address()
-  if (replyAddress != nil)
+  <span class="keyword">if</span> (replyAddress != <span class="predefined-constant">nil</span>)
     amqpReplyMessagePayload = {
     }
-    amqpReplyMessagePayload['body'] = "myResponse"
+    amqpReplyMessagePayload[<span class="string"><span class="delimiter">'</span><span class="content">body</span><span class="delimiter">'</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">myResponse</span><span class="delimiter">&quot;</span></span>
 
     msg.reply(amqpReplyMessagePayload)
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>

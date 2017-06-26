@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -172,25 +171,25 @@ so you don&#8217;t have to worry about protecting that state by synchronising ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">SharedData sd = vertx.sharedData();
+<pre class="CodeRay highlight"><code data-lang="java">SharedData sd = vertx.sharedData();
 
-LocalMap&lt;String, String&gt; map1 = sd.getLocalMap("mymap1");
+LocalMap&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt; map1 = sd.getLocalMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap1</span><span class="delimiter">&quot;</span></span>);
 
-map1.put("foo", "bar"); // Strings are immutable so no need to copy
+map1.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>); <span class="comment">// Strings are immutable so no need to copy</span>
 
-LocalMap&lt;String, Buffer&gt; map2 = sd.getLocalMap("mymap2");
+LocalMap&lt;<span class="predefined-type">String</span>, <span class="predefined-type">Buffer</span>&gt; map2 = sd.getLocalMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap2</span><span class="delimiter">&quot;</span></span>);
 
-map2.put("eek", Buffer.buffer().appendInt(123)); // This buffer will be copied before adding to map
+map2.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">eek</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Buffer</span>.buffer().appendInt(<span class="integer">123</span>)); <span class="comment">// This buffer will be copied before adding to map</span>
 
-// Then... in another part of your application:
+<span class="comment">// Then... in another part of your application:</span>
 
-map1 = sd.getLocalMap("mymap1");
+map1 = sd.getLocalMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap1</span><span class="delimiter">&quot;</span></span>);
 
-String val = map1.get("foo");
+<span class="predefined-type">String</span> val = map1.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>);
 
-map2 = sd.getLocalMap("mymap2");
+map2 = sd.getLocalMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap2</span><span class="delimiter">&quot;</span></span>);
 
-Buffer buff = map2.get("eek");</code></pre>
+<span class="predefined-type">Buffer</span> buff = map2.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">eek</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -213,13 +212,13 @@ application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">SharedData sd = vertx.sharedData();
+<pre class="CodeRay highlight"><code data-lang="java">SharedData sd = vertx.sharedData();
 
-sd.&lt;String, String&gt;getClusterWideMap("mymap", res -&gt; {
-  if (res.succeeded()) {
-    AsyncMap&lt;String, String&gt; map = res.result();
-  } else {
-    // Something went wrong!
+sd.&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt;getClusterWideMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    AsyncMap&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt; map = res.result();
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong!</span>
   }
 });</code></pre>
 </div>
@@ -234,11 +233,11 @@ sd.&lt;String, String&gt;getClusterWideMap("mymap", res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">map.put("foo", "bar", resPut -&gt; {
-  if (resPut.succeeded()) {
-    // Successfully put the value
-  } else {
-    // Something went wrong!
+<pre class="CodeRay highlight"><code data-lang="java">map.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>, resPut -&gt; {
+  <span class="keyword">if</span> (resPut.succeeded()) {
+    <span class="comment">// Successfully put the value</span>
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong!</span>
   }
 });</code></pre>
 </div>
@@ -254,12 +253,12 @@ sd.&lt;String, String&gt;getClusterWideMap("mymap", res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">map.get("foo", resGet -&gt; {
-  if (resGet.succeeded()) {
-    // Successfully got the value
-    Object val = resGet.result();
-  } else {
-    // Something went wrong!
+<pre class="CodeRay highlight"><code data-lang="java">map.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, resGet -&gt; {
+  <span class="keyword">if</span> (resGet.succeeded()) {
+    <span class="comment">// Successfully got the value</span>
+    <span class="predefined-type">Object</span> val = resGet.result();
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong!</span>
   }
 });</code></pre>
 </div>
@@ -301,17 +300,17 @@ another caller can obtain it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">sd.getLock("mylock", res -&gt; {
-  if (res.succeeded()) {
-    // Got the lock!
-    Lock lock = res.result();
+<pre class="CodeRay highlight"><code data-lang="java">sd.getLock(<span class="string"><span class="delimiter">&quot;</span><span class="content">mylock</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// Got the lock!</span>
+    <span class="predefined-type">Lock</span> lock = res.result();
 
-    // 5 seconds later we release the lock so someone else can get it
+    <span class="comment">// 5 seconds later we release the lock so someone else can get it</span>
 
-    vertx.setTimer(5000, tid -&gt; lock.release());
+    vertx.setTimer(<span class="integer">5000</span>, tid -&gt; lock.release());
 
-  } else {
-    // Something went wrong
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong</span>
   }
 });</code></pre>
 </div>
@@ -322,13 +321,13 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">sd.getLockWithTimeout("mylock", 10000, res -&gt; {
-  if (res.succeeded()) {
-    // Got the lock!
-    Lock lock = res.result();
+<pre class="CodeRay highlight"><code data-lang="java">sd.getLockWithTimeout(<span class="string"><span class="delimiter">&quot;</span><span class="content">mylock</span><span class="delimiter">&quot;</span></span>, <span class="integer">10000</span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="comment">// Got the lock!</span>
+    <span class="predefined-type">Lock</span> lock = res.result();
 
-  } else {
-    // Failed to get lock
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed to get lock</span>
   }
 });</code></pre>
 </div>
@@ -347,11 +346,11 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">sd.getCounter("mycounter", res -&gt; {
-  if (res.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="java">sd.getCounter(<span class="string"><span class="delimiter">&quot;</span><span class="content">mycounter</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
     Counter counter = res.result();
-  } else {
-    // Something went wrong!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Something went wrong!</span>
   }
 });</code></pre>
 </div>

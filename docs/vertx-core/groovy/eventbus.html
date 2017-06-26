@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -270,7 +269,7 @@ You do this by defining a <code><a href="../../apidocs/io/vertx/core/eventbus/Me
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def eb = vertx.eventBus()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> eb = vertx.eventBus()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -285,10 +284,10 @@ Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def eb = vertx.eventBus()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> eb = vertx.eventBus()
 
-eb.consumer("news.uk.sport", { message -&gt;
-  println("I have received a message: ${message.body()}")
+eb.consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, { message -&gt;
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">I have received a message: </span><span class="inline"><span class="inline-delimiter">${</span>message.body()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -307,11 +306,11 @@ to return a MessageConsumer with no handler set, and then set the handler on tha
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def eb = vertx.eventBus()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> eb = vertx.eventBus()
 
-def consumer = eb.consumer("news.uk.sport")
+<span class="keyword">def</span> consumer = eb.consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>)
 consumer.handler({ message -&gt;
-  println("I have received a message: ${message.body()}")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">I have received a message: </span><span class="inline"><span class="inline-delimiter">${</span>message.body()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -325,11 +324,11 @@ on the MessageConsumer object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consumer.completionHandler({ res -&gt;
-  if (res.succeeded()) {
-    println("The handler registration has reached all nodes")
-  } else {
-    println("Registration failed!")
+<pre class="CodeRay highlight"><code data-lang="groovy">consumer.completionHandler({ res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">The handler registration has reached all nodes</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Registration failed!</span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -346,11 +345,11 @@ be notified when this is complete use <code><a href="../../apidocs/io/vertx/core
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consumer.unregister({ res -&gt;
-  if (res.succeeded()) {
-    println("The handler un-registration has reached all nodes")
-  } else {
-    println("Un-registration failed!")
+<pre class="CodeRay highlight"><code data-lang="groovy">consumer.unregister({ res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">The handler un-registration has reached all nodes</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Un-registration failed!</span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -364,7 +363,7 @@ address to publish it to.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">eventBus.publish("news.uk.sport", "Yay! Someone kicked a ball")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">eventBus.publish(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Yay! Someone kicked a ball</span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -382,7 +381,7 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">eventBus.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Yay! Someone kicked a ball</span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
 </div>
@@ -397,12 +396,12 @@ publishing:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
-  headers: [
-   "some-header" : "some-value"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> options = [
+  <span class="key">headers</span>: [
+   <span class="string"><span class="delimiter">&quot;</span><span class="content">some-header</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
   ]
 ]
-vertx.eventBus().send("news.uk.sport", "Yay! Someone kicked a ball", options);</code></pre>
+vertx.eventBus().send(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Yay! Someone kicked a ball</span><span class="delimiter">&quot;</span></span>, options);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -410,8 +409,8 @@ vertx.eventBus().send("news.uk.sport", "Yay! Someone kicked a ball", options);</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.eventBus().consumer("news.uk.sport",  { e -&gt;
- println e.headers()["some-header"];
+<pre class="CodeRay highlight"><code data-lang="groovy">vertx.eventBus().consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>,  { e -&gt;
+ println e.headers()[<span class="string"><span class="delimiter">&quot;</span><span class="content">some-header</span><span class="delimiter">&quot;</span></span>];
 });</code></pre>
 </div>
 </div>
@@ -457,10 +456,10 @@ vertx.eventBus().send("news.uk.sport", "Yay! Someone kicked a ball", options);</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def consumer = eventBus.consumer("news.uk.sport")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> consumer = eventBus.consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>)
 consumer.handler({ message -&gt;
-  println("I have received a message: ${message.body()}")
-  message.reply("how interesting!")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">I have received a message: </span><span class="inline"><span class="inline-delimiter">${</span>message.body()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">how interesting!</span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -469,9 +468,9 @@ consumer.handler({ message -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass", { ar -&gt;
-  if (ar.succeeded()) {
-    println("Received reply: ${ar.result().body()}")
+<pre class="CodeRay highlight"><code data-lang="groovy">eventBus.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Yay! Someone kicked a ball across a patch of grass</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
+  <span class="keyword">if</span> (ar.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received reply: </span><span class="inline"><span class="inline-delimiter">${</span>ar.result().body()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -545,13 +544,13 @@ when sending or publishing the message:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">eventBus.registerCodec(myCodec)
+<pre class="CodeRay highlight"><code data-lang="java">eventBus.registerCodec(myCodec)
 
 def options = [
   codecName:myCodec.name()
 ]
 
-eventBus.send("orders", new docoverride.eventbus.Examples.MyPOJO(), options)</code></pre>
+eventBus.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">orders</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> docoverride.eventbus.Examples.MyPOJO(), options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -560,7 +559,7 @@ you don&#8217;t have to specify the codec on each send in the delivery options:<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">Code not translatable</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -586,14 +585,14 @@ instance as clustered;</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [:]
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> options = [:]
 Vertx.clusteredVertx(options, { res -&gt;
-  if (res.succeeded()) {
-    def vertx = res.result()
-    def eventBus = vertx.eventBus()
-    println("We now have a clustered event bus: ${eventBus}")
-  } else {
-    println("Failed: ${res.cause()}")
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="keyword">def</span> vertx = res.result()
+    <span class="keyword">def</span> eventBus = vertx.eventBus()
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">We now have a clustered event bus: </span><span class="inline"><span class="inline-delimiter">${</span>eventBus<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed: </span><span class="inline"><span class="inline-delimiter">${</span>res.cause()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -636,28 +635,28 @@ the event bus acts as a server and client, the configuration is close to
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
-  eventBusOptions:[
-    ssl:true,
-    keyStoreOptions:[
-      path:"keystore.jks",
-      password:"wibble"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> options = [
+  <span class="key">eventBusOptions</span>:[
+    <span class="key">ssl</span>:<span class="predefined-constant">true</span>,
+    <span class="key">keyStoreOptions</span>:[
+      <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jks</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>
     ],
-    trustStoreOptions:[
-      path:"keystore.jks",
-      password:"wibble"
+    <span class="key">trustStoreOptions</span>:[
+      <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jks</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>
     ],
-    clientAuth:"REQUIRED"
+    <span class="key">clientAuth</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">REQUIRED</span><span class="delimiter">&quot;</span></span>
   ]
 ]
 
 Vertx.clusteredVertx(options, { res -&gt;
-  if (res.succeeded()) {
-    def vertx = res.result()
-    def eventBus = vertx.eventBus()
-    println("We now have a clustered event bus: ${eventBus}")
-  } else {
-    println("Failed: ${res.cause()}")
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="keyword">def</span> vertx = res.result()
+    <span class="keyword">def</span> eventBus = vertx.eventBus()
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">We now have a clustered event bus: </span><span class="inline"><span class="inline-delimiter">${</span>eventBus<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed: </span><span class="inline"><span class="inline-delimiter">${</span>res.cause()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -684,20 +683,20 @@ clustered, the port and host, as you would do with <code><a href="../../apidocs/
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
-  eventBusOptions:[
-    clusterPublicHost:"whatever",
-    clusterPublicPort:1234
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> options = [
+  <span class="key">eventBusOptions</span>:[
+    <span class="key">clusterPublicHost</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">whatever</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">clusterPublicPort</span>:<span class="integer">1234</span>
   ]
 ]
 
 Vertx.clusteredVertx(options, { res -&gt;
-  if (res.succeeded()) {
-    def vertx = res.result()
-    def eventBus = vertx.eventBus()
-    println("We now have a clustered event bus: ${eventBus}")
-  } else {
-    println("Failed: ${res.cause()}")
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="keyword">def</span> vertx = res.result()
+    <span class="keyword">def</span> eventBus = vertx.eventBus()
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">We now have a clustered event bus: </span><span class="inline"><span class="inline-delimiter">${</span>eventBus<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed: </span><span class="inline"><span class="inline-delimiter">${</span>res.cause()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>

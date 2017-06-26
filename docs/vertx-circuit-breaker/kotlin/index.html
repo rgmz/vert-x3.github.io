@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -173,11 +172,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-circuit-breaker&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-circuit-breaker<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -189,7 +188,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-circuit-breaker:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-circuit-breaker:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -215,7 +214,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, CircuitBreakerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var breaker = CircuitBreaker.create(&quot;my-circuit-breaker&quot;, vertx, CircuitBreakerOptions(
   maxFailures = 5,
   timeout = 2000,
   fallbackOnFailure = true,
@@ -238,14 +237,14 @@ output of a REST endpoint invocation:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, CircuitBreakerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var breaker = CircuitBreaker.create(&quot;my-circuit-breaker&quot;, vertx, CircuitBreakerOptions(
   maxFailures = 5,
   timeout = 2000))
 
 breaker.execute&lt;String&gt;({ future -&gt;
-  vertx.createHttpClient().getNow(8080, "localhost", "/", { response -&gt;
+  vertx.createHttpClient().getNow(8080, &quot;localhost&quot;, &quot;/&quot;, { response -&gt;
     if (response.statusCode() != 200) {
-      future.fail("HTTP error")
+      future.fail(&quot;HTTP error&quot;)
     } else {
       response.exceptionHandler({ future.fail(it) }).bodyHandler({ buffer -&gt;
         future.complete(buffer.toString())
@@ -275,14 +274,14 @@ breaker.execute&lt;String&gt;({ future -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, CircuitBreakerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var breaker = CircuitBreaker.create(&quot;my-circuit-breaker&quot;, vertx, CircuitBreakerOptions(
   maxFailures = 5,
   timeout = 2000))
 
 breaker.executeWithFallback({ future -&gt;
-  vertx.createHttpClient().getNow(8080, "localhost", "/", { response -&gt;
+  vertx.createHttpClient().getNow(8080, &quot;localhost&quot;, &quot;/&quot;, { response -&gt;
     if (response.statusCode() != 200) {
-      future.fail("HTTP error")
+      future.fail(&quot;HTTP error&quot;)
     } else {
       response.exceptionHandler({ future.fail(it) }).bodyHandler({ buffer -&gt;
         future.complete(buffer.toString())
@@ -291,7 +290,7 @@ breaker.executeWithFallback({ future -&gt;
   })
 }, { v -&gt;
   // Executed when the circuit is opened
-  return "Hello"
+  return &quot;Hello&quot;
 }).setHandler({ ar -&gt;
   // Do something with the result
 })</code></pre>
@@ -308,17 +307,17 @@ set, the result is using the output of the fallback function. The fallback funct
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, CircuitBreakerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var breaker = CircuitBreaker.create(&quot;my-circuit-breaker&quot;, vertx, CircuitBreakerOptions(
   maxFailures = 5,
   timeout = 2000)).fallback({ v -&gt;
   // Executed when the circuit is opened.
-  return "hello"
+  return &quot;hello&quot;
 })
 
 breaker.execute&lt;Any&gt;({ future -&gt;
-  vertx.createHttpClient().getNow(8080, "localhost", "/", { response -&gt;
+  vertx.createHttpClient().getNow(8080, &quot;localhost&quot;, &quot;/&quot;, { response -&gt;
     if (response.statusCode() != 200) {
-      future.fail("HTTP error")
+      future.fail(&quot;HTTP error&quot;)
     } else {
       response.exceptionHandler({ future.fail(it) }).bodyHandler({ buffer -&gt;
         future.complete(buffer.toString())
@@ -345,18 +344,18 @@ retries left are skipped. Retries are only supported when the circuit is closed.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var breaker = CircuitBreaker.create("my-circuit-breaker", vertx, CircuitBreakerOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var breaker = CircuitBreaker.create(&quot;my-circuit-breaker&quot;, vertx, CircuitBreakerOptions(
   maxFailures = 5,
   timeout = 2000)).openHandler({ v -&gt;
-  println("Circuit opened")
+  println(&quot;Circuit opened&quot;)
 }).closeHandler({ v -&gt;
-  println("Circuit closed")
+  println(&quot;Circuit closed&quot;)
 })
 
 breaker.execute&lt;Any&gt;({ future -&gt;
-  vertx.createHttpClient().getNow(8080, "localhost", "/", { response -&gt;
+  vertx.createHttpClient().getNow(8080, &quot;localhost&quot;, &quot;/&quot;, { response -&gt;
     if (response.statusCode() != 200) {
-      future.fail("HTTP error")
+      future.fail(&quot;HTTP error&quot;)
     } else {
       // Do something with the response
       future.complete()
@@ -426,14 +425,14 @@ a SSE stream sending the metrics. This stream is provided by the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Create the circuit breaker as usual.
-var breaker = CircuitBreaker.create("my-circuit-breaker", vertx)
-var breaker2 = CircuitBreaker.create("my-second-circuit-breaker", vertx)
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Create the circuit breaker as usual.
+var breaker = CircuitBreaker.create(&quot;my-circuit-breaker&quot;, vertx)
+var breaker2 = CircuitBreaker.create(&quot;my-second-circuit-breaker&quot;, vertx)
 
 // Create a Vert.x Web router
 var router = Router.router(vertx)
 // Register the metric handler
-router.get("/hystrix-metrics").handler(HystrixMetricHandler.create(vertx))
+router.get(&quot;/hystrix-metrics&quot;).handler(HystrixMetricHandler.create(vertx))
 
 // Create the HTTP server using the router to dispatch the requests
 vertx.createHttpServer().requestHandler({ router.accept(it) }).listen(8080)</code></pre>

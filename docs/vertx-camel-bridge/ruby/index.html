@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -179,11 +178,11 @@ build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-camel-bridge&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-camel-bridge<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -195,7 +194,7 @@ build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-camel-bridge:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-camel-bridge:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -208,8 +207,8 @@ build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">camel = Java::OrgApacheCamelImpl::DefaultCamelContext.new()
-Java::IoVertxCamel::CamelBridge.create(vertx, Java::IoVertxCamel::CamelBridgeOptions.new(camel).add_inbound_mapping(Java::IoVertxCamel::InboundMapping.from_camel("direct:stuff").to_vertx("eventbus-address")).add_outbound_mapping(Java::IoVertxCamel::OutboundMapping.from_vertx("eventbus-address").to_camel("stream:out"))).start()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby">camel = <span class="constant">Java</span>::<span class="constant">OrgApacheCamelImpl</span>::<span class="constant">DefaultCamelContext</span>.new()
+<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">CamelBridge</span>.create(vertx, <span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">CamelBridgeOptions</span>.new(camel).add_inbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">InboundMapping</span>.from_camel(<span class="string"><span class="delimiter">&quot;</span><span class="content">direct:stuff</span><span class="delimiter">&quot;</span></span>).to_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-address</span><span class="delimiter">&quot;</span></span>)).add_outbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">OutboundMapping</span>.from_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-address</span><span class="delimiter">&quot;</span></span>).to_camel(<span class="string"><span class="delimiter">&quot;</span><span class="content">stream:out</span><span class="delimiter">&quot;</span></span>))).start()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -225,9 +224,9 @@ transformed to event bus messages.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">endpoint = camel.get_endpoint("direct:foo")
+<pre class="CodeRay highlight"><code data-lang="ruby">endpoint = camel.get_endpoint(<span class="string"><span class="delimiter">&quot;</span><span class="content">direct:foo</span><span class="delimiter">&quot;</span></span>)
 
-Java::IoVertxCamel::CamelBridge.create(vertx, Java::IoVertxCamel::CamelBridgeOptions.new(camel).add_inbound_mapping(Java::IoVertxCamel::InboundMapping.from_camel("direct:stuff").to_vertx("eventbus-address")).add_inbound_mapping(Java::IoVertxCamel::InboundMapping.from_camel(endpoint).to_vertx("eventbus-address")).add_inbound_mapping(Java::IoVertxCamel::InboundMapping.from_camel(endpoint).to_vertx("eventbus-address").without_headers_copy()).add_inbound_mapping(Java::IoVertxCamel::InboundMapping.from_camel(endpoint).to_vertx("eventbus-address").use_publish()).add_inbound_mapping(Java::IoVertxCamel::InboundMapping.from_camel(endpoint).to_vertx("eventbus-address").with_body_type(Java::JavaLang::String::class)))</code></pre>
+<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">CamelBridge</span>.create(vertx, <span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">CamelBridgeOptions</span>.new(camel).add_inbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">InboundMapping</span>.from_camel(<span class="string"><span class="delimiter">&quot;</span><span class="content">direct:stuff</span><span class="delimiter">&quot;</span></span>).to_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-address</span><span class="delimiter">&quot;</span></span>)).add_inbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">InboundMapping</span>.from_camel(endpoint).to_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-address</span><span class="delimiter">&quot;</span></span>)).add_inbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">InboundMapping</span>.from_camel(endpoint).to_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-address</span><span class="delimiter">&quot;</span></span>).without_headers_copy()).add_inbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">InboundMapping</span>.from_camel(endpoint).to_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-address</span><span class="delimiter">&quot;</span></span>).use_publish()).add_inbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">InboundMapping</span>.from_camel(endpoint).to_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-address</span><span class="delimiter">&quot;</span></span>).with_body_type(<span class="constant">Java</span>::<span class="constant">JavaLang</span>::<span class="constant">String</span>::class)))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -259,7 +258,7 @@ code expect as reply to the sent message. When the reply arrives it is propagate
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="constant">Code</span> <span class="keyword">not</span> translatable</code></pre>
 </div>
 </div>
 </div>
@@ -271,9 +270,9 @@ are transformed to Camel messages and sent to the endpoint.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">endpoint = camel.get_endpoint("stream:out")
+<pre class="CodeRay highlight"><code data-lang="ruby">endpoint = camel.get_endpoint(<span class="string"><span class="delimiter">&quot;</span><span class="content">stream:out</span><span class="delimiter">&quot;</span></span>)
 
-Java::IoVertxCamel::CamelBridge.create(vertx, Java::IoVertxCamel::CamelBridgeOptions.new(camel).add_outbound_mapping(Java::IoVertxCamel::OutboundMapping.from_vertx("eventbus-address").to_camel("stream:out")).add_outbound_mapping(Java::IoVertxCamel::OutboundMapping.from_vertx("eventbus-address").to_camel(endpoint)).add_outbound_mapping(Java::IoVertxCamel::OutboundMapping.from_vertx("eventbus-address").to_camel(endpoint).without_headers_copy()).add_outbound_mapping(Java::IoVertxCamel::OutboundMapping.from_vertx("eventbus-address").to_camel(endpoint)))</code></pre>
+<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">CamelBridge</span>.create(vertx, <span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">CamelBridgeOptions</span>.new(camel).add_outbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">OutboundMapping</span>.from_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-address</span><span class="delimiter">&quot;</span></span>).to_camel(<span class="string"><span class="delimiter">&quot;</span><span class="content">stream:out</span><span class="delimiter">&quot;</span></span>)).add_outbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">OutboundMapping</span>.from_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-address</span><span class="delimiter">&quot;</span></span>).to_camel(endpoint)).add_outbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">OutboundMapping</span>.from_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-address</span><span class="delimiter">&quot;</span></span>).to_camel(endpoint).without_headers_copy()).add_outbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">OutboundMapping</span>.from_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-address</span><span class="delimiter">&quot;</span></span>).to_camel(endpoint)))</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -284,16 +283,16 @@ Java::IoVertxCamel::CamelBridge.create(vertx, Java::IoVertxCamel::CamelBridgeOpt
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">camel.add_routes(Java::OrgApacheCamelBuilder::RouteBuilder.new())
+<pre class="CodeRay highlight"><code data-lang="ruby">camel.add_routes(<span class="constant">Java</span>::<span class="constant">OrgApacheCamelBuilder</span>::<span class="constant">RouteBuilder</span>.new())
 
-bridge = Java::IoVertxCamel::CamelBridge.create(vertx, Java::IoVertxCamel::CamelBridgeOptions.new(camel).add_outbound_mapping(Java::IoVertxCamel::OutboundMapping.from_vertx("test").to_camel("direct:start")))
+bridge = <span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">CamelBridge</span>.create(vertx, <span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">CamelBridgeOptions</span>.new(camel).add_outbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">OutboundMapping</span>.from_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>).to_camel(<span class="string"><span class="delimiter">&quot;</span><span class="content">direct:start</span><span class="delimiter">&quot;</span></span>)))
 
 camel.start()
 bridge.start()
 
 
-vertx.event_bus().send("test", "hello") { |reply_err,reply|
-  # Reply from the route (here it's "OK")
+vertx.event_bus().send(<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">hello</span><span class="delimiter">&quot;</span></span>) { |reply_err,reply|
+  <span class="comment"># Reply from the route (here it's &quot;OK&quot;)</span>
 }</code></pre>
 </div>
 </div>
@@ -304,19 +303,19 @@ route fails, you get a reply failure (recipient failure), with the message as ca
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">camel.add_routes(Java::OrgApacheCamelBuilder::RouteBuilder.new())
+<pre class="CodeRay highlight"><code data-lang="ruby">camel.add_routes(<span class="constant">Java</span>::<span class="constant">OrgApacheCamelBuilder</span>::<span class="constant">RouteBuilder</span>.new())
 
-bridge = Java::IoVertxCamel::CamelBridge.create(vertx, Java::IoVertxCamel::CamelBridgeOptions.new(camel).add_outbound_mapping(Java::IoVertxCamel::OutboundMapping.from_vertx("camel-route").to_camel("direct:my-route")))
+bridge = <span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">CamelBridge</span>.create(vertx, <span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">CamelBridgeOptions</span>.new(camel).add_outbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">OutboundMapping</span>.from_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">camel-route</span><span class="delimiter">&quot;</span></span>).to_camel(<span class="string"><span class="delimiter">&quot;</span><span class="content">direct:my-route</span><span class="delimiter">&quot;</span></span>)))
 
 camel.start()
 bridge.start()
 
-vertx.event_bus().send("camel-route", "hello") { |reply_err,reply|
-  if (reply_err == nil)
+vertx.event_bus().send(<span class="string"><span class="delimiter">&quot;</span><span class="content">camel-route</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">hello</span><span class="delimiter">&quot;</span></span>) { |reply_err,reply|
+  <span class="keyword">if</span> (reply_err == <span class="predefined-constant">nil</span>)
     theResponse = reply.body()
-  else
+  <span class="keyword">else</span>
     theCause = reply_err
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -326,19 +325,19 @@ processing on the event loop thread:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">camel.add_routes(Java::OrgApacheCamelBuilder::RouteBuilder.new())
+<pre class="CodeRay highlight"><code data-lang="ruby">camel.add_routes(<span class="constant">Java</span>::<span class="constant">OrgApacheCamelBuilder</span>::<span class="constant">RouteBuilder</span>.new())
 
-bridge = Java::IoVertxCamel::CamelBridge.create(vertx, Java::IoVertxCamel::CamelBridgeOptions.new(camel).add_outbound_mapping(Java::IoVertxCamel::OutboundMapping.from_vertx("camel-route").to_camel("direct:my-route").set_blocking(true)))
+bridge = <span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">CamelBridge</span>.create(vertx, <span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">CamelBridgeOptions</span>.new(camel).add_outbound_mapping(<span class="constant">Java</span>::<span class="constant">IoVertxCamel</span>::<span class="constant">OutboundMapping</span>.from_vertx(<span class="string"><span class="delimiter">&quot;</span><span class="content">camel-route</span><span class="delimiter">&quot;</span></span>).to_camel(<span class="string"><span class="delimiter">&quot;</span><span class="content">direct:my-route</span><span class="delimiter">&quot;</span></span>).set_blocking(<span class="predefined-constant">true</span>)))
 
 camel.start()
 bridge.start()
 
-vertx.event_bus().send("camel-route", "hello") { |reply_err,reply|
-  if (reply_err == nil)
+vertx.event_bus().send(<span class="string"><span class="delimiter">&quot;</span><span class="content">camel-route</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">hello</span><span class="delimiter">&quot;</span></span>) { |reply_err,reply|
+  <span class="keyword">if</span> (reply_err == <span class="predefined-constant">nil</span>)
     theResponse = reply.body()
-  else
+  <span class="keyword">else</span>
     theCause = reply_err
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>

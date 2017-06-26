@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -156,11 +155,11 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-auth-jwt&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-auth-jwt<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -172,7 +171,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-auth-jwt:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-jwt:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -225,12 +224,12 @@ in a JSON object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject config = new JsonObject().put("keyStore", new JsonObject()
-    .put("path", "keystore.jceks")
-    .put("type", "jceks")
-    .put("password", "secret"));
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject config = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyStore</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject()
+    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jceks</span><span class="delimiter">&quot;</span></span>)
+    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">jceks</span><span class="delimiter">&quot;</span></span>)
+    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>));
 
-AuthProvider provider = JWTAuth.create(vertx, config);</code></pre>
+<span class="predefined-type">AuthProvider</span> provider = JWTAuth.create(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -240,18 +239,18 @@ do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject config = new JsonObject().put("keyStore", new JsonObject()
-    .put("path", "keystore.jceks")
-    .put("type", "jceks")
-    .put("password", "secret"));
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject config = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyStore</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject()
+    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jceks</span><span class="delimiter">&quot;</span></span>)
+    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">jceks</span><span class="delimiter">&quot;</span></span>)
+    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>));
 
 JWTAuth provider = JWTAuth.create(vertx, config);
 
-// on the verify endpoint once you verify the identity of the user by its username/password
-if ("paulo".equals(username) &amp;&amp; "super_secret".equals(password)) {
-  String token = provider.generateToken(new JsonObject().put("sub", "paulo"), new JWTOptions());
-  // now for any request to protected resources you should pass this string in the HTTP header Authorization as:
-  // Authorization: Bearer &lt;token&gt;
+<span class="comment">// on the verify endpoint once you verify the identity of the user by its username/password</span>
+<span class="keyword">if</span> (<span class="string"><span class="delimiter">&quot;</span><span class="content">paulo</span><span class="delimiter">&quot;</span></span>.equals(username) &amp;&amp; <span class="string"><span class="delimiter">&quot;</span><span class="content">super_secret</span><span class="delimiter">&quot;</span></span>.equals(password)) {
+  <span class="predefined-type">String</span> token = provider.generateToken(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">sub</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">paulo</span><span class="delimiter">&quot;</span></span>), <span class="keyword">new</span> JWTOptions());
+  <span class="comment">// now for any request to protected resources you should pass this string in the HTTP header Authorization as:</span>
+  <span class="comment">// Authorization: Bearer &lt;token&gt;</span>
 }</code></pre>
 </div>
 </div>
@@ -313,8 +312,8 @@ case all you need to have is a public key im PEM format.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject config = new JsonObject().put("public-key", "BASE64-ENCODED-PUBLIC_KEY");
-AuthProvider provider = JWTAuth.create(vertx, config);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject config = <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">public-key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">BASE64-ENCODED-PUBLIC_KEY</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">AuthProvider</span> provider = JWTAuth.create(vertx, config);</code></pre>
 </div>
 </div>
 </div>
@@ -342,11 +341,11 @@ be a security hole.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">jwtAuth.authenticate(new JsonObject().put("jwt", "BASE64-ENCODED-STRING"), res -&gt; {
-  if (res.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="java">jwtAuth.authenticate(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">jwt</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">BASE64-ENCODED-STRING</span><span class="delimiter">&quot;</span></span>), res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
     User theUser = res.result();
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 });</code></pre>
 </div>
@@ -372,14 +371,14 @@ be a security hole.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">jwtAuth.authenticate(new JsonObject()
-  .put("jwt", "BASE64-ENCODED-STRING")
-  .put("options", new JsonObject()
-    .put("ignoreExpiration", true)), res -&gt; {
-  if (res.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="java">jwtAuth.authenticate(<span class="keyword">new</span> JsonObject()
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">jwt</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">BASE64-ENCODED-STRING</span><span class="delimiter">&quot;</span></span>)
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">options</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject()
+    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">ignoreExpiration</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>)), res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
     User theUser = res.result();
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 });</code></pre>
 </div>
@@ -389,14 +388,14 @@ be a security hole.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">jwtAuth.authenticate(new JsonObject()
-  .put("jwt", "BASE64-ENCODED-STRING")
-  .put("options", new JsonObject()
-    .put("audience", new JsonArray().add("paulo@server.com"))), res -&gt; {
-  if (res.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="java">jwtAuth.authenticate(<span class="keyword">new</span> JsonObject()
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">jwt</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">BASE64-ENCODED-STRING</span><span class="delimiter">&quot;</span></span>)
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">options</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject()
+    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">audience</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">paulo@server.com</span><span class="delimiter">&quot;</span></span>))), res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
     User theUser = res.result();
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 });</code></pre>
 </div>
@@ -406,14 +405,14 @@ be a security hole.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">jwtAuth.authenticate(new JsonObject()
-  .put("jwt", "BASE64-ENCODED-STRING")
-  .put("options", new JsonObject()
-    .put("issuer", "mycorp.com")), res -&gt; {
-  if (res.succeeded()) {
+<pre class="CodeRay highlight"><code data-lang="java">jwtAuth.authenticate(<span class="keyword">new</span> JsonObject()
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">jwt</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">BASE64-ENCODED-STRING</span><span class="delimiter">&quot;</span></span>)
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">options</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject()
+    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">issuer</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">mycorp.com</span><span class="delimiter">&quot;</span></span>)), res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
     User theUser = res.result();
-  } else {
-    // Failed!
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
   }
 });</code></pre>
 </div>
@@ -427,9 +426,9 @@ user has a specific authority. In this case one needs to to:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">user.isAuthorised("create-report", res -&gt; {
-  if (res.succeeded() &amp;&amp; res.result()) {
-    // Yes the user can create reports
+<pre class="CodeRay highlight"><code data-lang="java">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">create-report</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded() &amp;&amp; res.result()) {
+    <span class="comment">// Yes the user can create reports</span>
   }
 });</code></pre>
 </div>
@@ -444,12 +443,12 @@ configured to use something else than <code>permissions</code>, for example one 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject config = new JsonObject()
-  .put("public-key", "BASE64-ENCODED-PUBLIC_KEY")
-  // since we're consuming keycloak JWTs we need to locate the permission claims in the token
-  .put("permissionsClaimKey", "realm_access/roles");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject config = <span class="keyword">new</span> JsonObject()
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">public-key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">BASE64-ENCODED-PUBLIC_KEY</span><span class="delimiter">&quot;</span></span>)
+  <span class="comment">// since we're consuming keycloak JWTs we need to locate the permission claims in the token</span>
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">permissionsClaimKey</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">realm_access/roles</span><span class="delimiter">&quot;</span></span>);
 
-AuthProvider provider = JWTAuth.create(vertx, config);</code></pre>
+<span class="predefined-type">AuthProvider</span> provider = JWTAuth.create(vertx, config);</code></pre>
 </div>
 </div>
 <div class="paragraph">

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -177,11 +176,11 @@ result as JSON.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-health-check&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-health-check<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -193,7 +192,7 @@ result as JSON.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-health-check:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-health-check:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -203,7 +202,7 @@ result as JSON.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js">Code not translatable</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -227,18 +226,18 @@ result as JSON.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var HealthCheckHandler = require("vertx-health-checks-js/health_check_handler");
-var HealthChecks = require("vertx-health-checks-js/health_checks");
-var Router = require("vertx-web-js/router");
-var healthCheckHandler1 = HealthCheckHandler.create(vertx);
-var healthCheckHandler2 = HealthCheckHandler.createWithHealthChecks(HealthChecks.create(vertx));
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> HealthCheckHandler = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-health-checks-js/health_check_handler</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> HealthChecks = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-health-checks-js/health_checks</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> Router = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-web-js/router</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> healthCheckHandler1 = HealthCheckHandler.create(vertx);
+<span class="keyword">var</span> healthCheckHandler2 = HealthCheckHandler.createWithHealthChecks(HealthChecks.create(vertx));
 
-var router = Router.router(vertx);
-// Populate the router with routes...
-// Register the health check handler
-router.get("/health*").handler(healthCheckHandler1.handle);
-// Or
-router.get("/ping*").handler(healthCheckHandler2.handle);</code></pre>
+<span class="keyword">var</span> router = Router.router(vertx);
+<span class="comment">// Populate the router with routes...</span>
+<span class="comment">// Register the health check handler</span>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/health*</span><span class="delimiter">&quot;</span></span>).handler(healthCheckHandler1.handle);
+<span class="comment">// Or</span>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/ping*</span><span class="delimiter">&quot;</span></span>).handler(healthCheckHandler2.handle);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -249,7 +248,7 @@ anytime, even after the route registration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js">Code not translatable</code></pre>
 </div>
 </div>
 </div>
@@ -293,7 +292,7 @@ the check is considered as <em>KO</em>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js">Code not translatable</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -302,20 +301,20 @@ tree and the structure is mapped to HTTP urls (see below).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var HealthCheckHandler = require("vertx-health-checks-js/health_check_handler");
-var healthCheckHandler = HealthCheckHandler.create(vertx);
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> HealthCheckHandler = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-health-checks-js/health_check_handler</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> healthCheckHandler = HealthCheckHandler.create(vertx);
 
-// Register procedures
-// Procedure can be grouped. The group is deduced using a name with "/".
-// Groups can contains other group
-healthCheckHandler.register("a-group/my-procedure-name", function (future) {
-  //....
+<span class="comment">// Register procedures</span>
+<span class="comment">// Procedure can be grouped. The group is deduced using a name with &quot;/&quot;.</span>
+<span class="comment">// Groups can contains other group</span>
+healthCheckHandler.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">a-group/my-procedure-name</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (future) {
+  <span class="comment">//....</span>
 });
-healthCheckHandler.register("a-group/a-second-group/my-second-procedure-name", function (future) {
-  //....
+healthCheckHandler.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">a-group/a-second-group/my-second-procedure-name</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (future) {
+  <span class="comment">//....</span>
 });
 
-router.get("/health").handler(healthCheckHandler.handle);</code></pre>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/health</span><span class="delimiter">&quot;</span></span>).handler(healthCheckHandler.handle);</code></pre>
 </div>
 </div>
 </div>
@@ -356,7 +355,7 @@ additional data, the data is also given:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>{
+<pre class="CodeRay highlight"><code>{
  "checks" : [
  {
    "id" : "A",
@@ -379,7 +378,7 @@ additional data, the data is also given:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>{
+<pre class="CodeRay highlight"><code>{
  "checks" : [
  {
    "id" : "my-group",
@@ -417,7 +416,7 @@ additional data, the data is also given:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js">Code not translatable</code></pre>
 </div>
 </div>
 </div>
@@ -428,7 +427,7 @@ additional data, the data is also given:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js">Code not translatable</code></pre>
 </div>
 </div>
 </div>
@@ -441,7 +440,7 @@ if it&#8217;s listening on a specific event address.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js">Code not translatable</code></pre>
 </div>
 </div>
 </div>
@@ -489,7 +488,7 @@ to expose the data differently. This section gives an example to expose the data
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">vertx.eventBus().consumer("health", function (message) {
+<pre class="CodeRay highlight"><code data-lang="js">vertx.eventBus().consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">health</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (message) {
   healthChecks.invoke(message.reply);
 });</code></pre>
 </div>

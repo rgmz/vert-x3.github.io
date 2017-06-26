@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -172,25 +171,25 @@ so you don&#8217;t have to worry about protecting that state by synchronising ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var sd = vertx.sharedData()
+<pre class="CodeRay highlight"><code data-lang="scala">var sd = vertx.sharedData()
 
-var map1 = sd.getLocalMap("mymap1")
+var map1 = sd.getLocalMap(&quot;mymap1&quot;)
 
-map1.put("foo", "bar")
+map1.put(&quot;foo&quot;, &quot;bar&quot;)
 
-var map2 = sd.getLocalMap("mymap2")
+var map2 = sd.getLocalMap(&quot;mymap2&quot;)
 
-map2.put("eek", Buffer.buffer().appendInt(123))
+map2.put(&quot;eek&quot;, Buffer.buffer().appendInt(123))
 
 // Then... in another part of your application:
 
-map1 = sd.getLocalMap("mymap1")
+map1 = sd.getLocalMap(&quot;mymap1&quot;)
 
-var val = map1.get("foo")
+var val = map1.get(&quot;foo&quot;)
 
-map2 = sd.getLocalMap("mymap2")
+map2 = sd.getLocalMap(&quot;mymap2&quot;)
 
-var buff = map2.get("eek")</code></pre>
+var buff = map2.get(&quot;eek&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -213,14 +212,14 @@ application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var sd = vertx.sharedData()
+<pre class="CodeRay highlight"><code data-lang="scala">var sd = vertx.sharedData()
 
-sd.getClusterWideMapFuture("mymap").onComplete{
+sd.getClusterWideMapFuture(&quot;mymap&quot;).onComplete{
   case Success(result) =&gt; {
     var map = result
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -235,12 +234,12 @@ sd.getClusterWideMapFuture("mymap").onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">map.putFuture("foo", "bar").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">map.putFuture(&quot;foo&quot;, &quot;bar&quot;).onComplete{
   case Success(result) =&gt; {
     // Successfully put the value
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -256,13 +255,13 @@ sd.getClusterWideMapFuture("mymap").onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">map.getFuture("foo").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">map.getFuture(&quot;foo&quot;).onComplete{
   case Success(result) =&gt; {
     // Successfully got the value
     var val = result
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -304,7 +303,7 @@ another caller can obtain it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">sd.getLockFuture("mylock").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">sd.getLockFuture(&quot;mylock&quot;).onComplete{
   case Success(result) =&gt; {
     // Got the lock!
     var lock = result
@@ -317,7 +316,7 @@ another caller can obtain it.</p>
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -328,14 +327,14 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">sd.getLockWithTimeoutFuture("mylock", 10000).onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">sd.getLockWithTimeoutFuture(&quot;mylock&quot;, 10000).onComplete{
   case Success(result) =&gt; {
     // Got the lock!
     var lock = result
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -354,12 +353,12 @@ with a failure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">sd.getCounterFuture("mycounter").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">sd.getCounterFuture(&quot;mycounter&quot;).onComplete{
   case Success(result) =&gt; {
     var counter = result
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>

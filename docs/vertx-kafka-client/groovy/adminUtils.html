@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -150,12 +149,12 @@ It might return an error, e.g. if the number of requested replicas is greater th
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def adminUtils = AdminUtils.create(Vertx.vertx(), "localhost:2181", true)
-// Create topic 'myNewTopic' with 2 partition and 1 replicas
-adminUtils.createTopic("myNewTopic", 2, 1, { result -&gt;
-  if (result.succeeded()) {
-    println("Creation of topic myNewTopic successful!")} else {
-    println("Creation of topic myNewTopic failed: ${result.cause().getLocalizedMessage()}")}
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> adminUtils = AdminUtils.create(Vertx.vertx(), <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:2181</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>)
+<span class="comment">// Create topic 'myNewTopic' with 2 partition and 1 replicas</span>
+adminUtils.createTopic(<span class="string"><span class="delimiter">&quot;</span><span class="content">myNewTopic</span><span class="delimiter">&quot;</span></span>, <span class="integer">2</span>, <span class="integer">1</span>, { result -&gt;
+  <span class="keyword">if</span> (result.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Creation of topic myNewTopic successful!</span><span class="delimiter">&quot;</span></span>)} <span class="keyword">else</span> {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Creation of topic myNewTopic failed: </span><span class="inline"><span class="inline-delimiter">${</span>result.cause().getLocalizedMessage()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)}
 })</code></pre>
 </div>
 </div>
@@ -169,12 +168,12 @@ It might return an error, e.g. if the topic does not exist.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def adminUtils = AdminUtils.create(Vertx.vertx(), "localhost:2181", true)
-// Delete topic 'myNewTopic'
-adminUtils.deleteTopic("myNewTopic", { result -&gt;
-  if (result.succeeded()) {
-    println("Deletion of topic myNewTopic successful!")} else {
-    println("Deletion of topic myNewTopic failed: ${result.cause().getLocalizedMessage()}")}
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> adminUtils = AdminUtils.create(Vertx.vertx(), <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:2181</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>)
+<span class="comment">// Delete topic 'myNewTopic'</span>
+adminUtils.deleteTopic(<span class="string"><span class="delimiter">&quot;</span><span class="content">myNewTopic</span><span class="delimiter">&quot;</span></span>, { result -&gt;
+  <span class="keyword">if</span> (result.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Deletion of topic myNewTopic successful!</span><span class="delimiter">&quot;</span></span>)} <span class="keyword">else</span> {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Deletion of topic myNewTopic failed: </span><span class="inline"><span class="inline-delimiter">${</span>result.cause().getLocalizedMessage()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)}
 })</code></pre>
 </div>
 </div>
@@ -190,15 +189,15 @@ It might return an error, e.g. if the topic does not exist.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def adminUtils = AdminUtils.create(Vertx.vertx(), "localhost:2181", true)
-// Set retention to 1000 ms and max size of the topic partition to 1 kiByte
-def properties = [:]
-properties["delete.retention.ms"] = "1000"
-properties["retention.bytes"] = "1024"
-adminUtils.changeTopicConfig("myNewTopic", properties, { result -&gt;
-  if (result.succeeded()) {
-    println("Configuration change of topic myNewTopic successful!")} else {
-    println("Configuration change of topic myNewTopic failed: ${result.cause().getLocalizedMessage()}")}
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> adminUtils = AdminUtils.create(Vertx.vertx(), <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:2181</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>)
+<span class="comment">// Set retention to 1000 ms and max size of the topic partition to 1 kiByte</span>
+<span class="keyword">def</span> properties = [:]
+properties[<span class="string"><span class="delimiter">&quot;</span><span class="content">delete.retention.ms</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">1000</span><span class="delimiter">&quot;</span></span>
+properties[<span class="string"><span class="delimiter">&quot;</span><span class="content">retention.bytes</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">1024</span><span class="delimiter">&quot;</span></span>
+adminUtils.changeTopicConfig(<span class="string"><span class="delimiter">&quot;</span><span class="content">myNewTopic</span><span class="delimiter">&quot;</span></span>, properties, { result -&gt;
+  <span class="keyword">if</span> (result.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Configuration change of topic myNewTopic successful!</span><span class="delimiter">&quot;</span></span>)} <span class="keyword">else</span> {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Configuration change of topic myNewTopic failed: </span><span class="inline"><span class="inline-delimiter">${</span>result.cause().getLocalizedMessage()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)}
 })
 }</code></pre>
 </div>
@@ -213,12 +212,12 @@ It might return an error, e.g. if the topic does not exist.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def adminUtils = AdminUtils.create(Vertx.vertx(), "localhost:2181", true)
-adminUtils.topicExists("myNewTopic", { result -&gt;
-  if (result.succeeded()) {
-    println("Topic myNewTopic exists: ${result.result()}")
-  } else {
-    println("Failed to check if topic myNewTopic exists: ${result.cause().getLocalizedMessage()}")}
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> adminUtils = AdminUtils.create(Vertx.vertx(), <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:2181</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>)
+adminUtils.topicExists(<span class="string"><span class="delimiter">&quot;</span><span class="content">myNewTopic</span><span class="delimiter">&quot;</span></span>, { result -&gt;
+  <span class="keyword">if</span> (result.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Topic myNewTopic exists: </span><span class="inline"><span class="inline-delimiter">${</span>result.result()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to check if topic myNewTopic exists: </span><span class="inline"><span class="inline-delimiter">${</span>result.cause().getLocalizedMessage()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)}
 })</code></pre>
 </div>
 </div>

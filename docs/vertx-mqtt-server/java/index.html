@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -182,11 +181,11 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-    &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-    &lt;artifactId&gt;vertx-mqtt-server&lt;/artifactId&gt;
-    &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>vertx-mqtt-server<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -198,7 +197,7 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-mqtt-server:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-mqtt-<span class="key">server</span>:<span class="float">3.4</span><span class="float">.2</span></code></pre>
 </div>
 </div>
 </div>
@@ -222,34 +221,34 @@ to check if the server is started properly or not.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MqttServer mqttServer = MqttServer.create(vertx);
+<pre class="CodeRay highlight"><code data-lang="java">MqttServer mqttServer = MqttServer.create(vertx);
 mqttServer.endpointHandler(endpoint -&gt; {
 
-  // shows main connect info
-  System.out.println("MQTT client [" + endpoint.clientIdentifier() + "] request to connect, clean session = " + endpoint.isCleanSession());
+  <span class="comment">// shows main connect info</span>
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT client [</span><span class="delimiter">&quot;</span></span> + endpoint.clientIdentifier() + <span class="string"><span class="delimiter">&quot;</span><span class="content">] request to connect, clean session = </span><span class="delimiter">&quot;</span></span> + endpoint.isCleanSession());
 
-  if (endpoint.auth() != null) {
-    System.out.println("[username = " + endpoint.auth().userName() + ", password = " + endpoint.auth().password() + "]");
+  <span class="keyword">if</span> (endpoint.auth() != <span class="predefined-constant">null</span>) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">[username = </span><span class="delimiter">&quot;</span></span> + endpoint.auth().userName() + <span class="string"><span class="delimiter">&quot;</span><span class="content">, password = </span><span class="delimiter">&quot;</span></span> + endpoint.auth().password() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
   }
-  if (endpoint.will() != null) {
-    System.out.println("[will topic = " + endpoint.will().willTopic() + " msg = " + endpoint.will().willMessage() +
-      " QoS = " + endpoint.will().willQos() + " isRetain = " + endpoint.will().isWillRetain() + "]");
+  <span class="keyword">if</span> (endpoint.will() != <span class="predefined-constant">null</span>) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">[will topic = </span><span class="delimiter">&quot;</span></span> + endpoint.will().willTopic() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> msg = </span><span class="delimiter">&quot;</span></span> + endpoint.will().willMessage() +
+      <span class="string"><span class="delimiter">&quot;</span><span class="content"> QoS = </span><span class="delimiter">&quot;</span></span> + endpoint.will().willQos() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> isRetain = </span><span class="delimiter">&quot;</span></span> + endpoint.will().isWillRetain() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
   }
 
-  System.out.println("[keep alive timeout = " + endpoint.keepAliveTimeSeconds() + "]");
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">[keep alive timeout = </span><span class="delimiter">&quot;</span></span> + endpoint.keepAliveTimeSeconds() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
 
-  // accept connection from the remote client
-  endpoint.accept(false);
+  <span class="comment">// accept connection from the remote client</span>
+  endpoint.accept(<span class="predefined-constant">false</span>);
 
 })
   .listen(ar -&gt; {
 
-    if (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.succeeded()) {
 
-      System.out.println("MQTT server is listening on port " + ar.result().actualPort());
-    } else {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT server is listening on port </span><span class="delimiter">&quot;</span></span> + ar.result().actualPort());
+    } <span class="keyword">else</span> {
 
-      System.out.println("Error on starting the server");
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error on starting the server</span><span class="delimiter">&quot;</span></span>);
       ar.cause().printStackTrace();
     }
   });</code></pre>
@@ -262,9 +261,9 @@ this handler takes no parameters.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">endpoint.disconnectHandler(v -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">endpoint.disconnectHandler(v -&gt; {
 
-  System.out.println("Received disconnect from client");
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received disconnect from client</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -286,41 +285,41 @@ The MQTT server is started passing the Vert.x instance as usual and the above MQ
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MqttServerOptions options = new MqttServerOptions()
-  .setPort(8883)
-  .setKeyCertOptions(new PemKeyCertOptions()
-    .setKeyPath("./src/test/resources/tls/server-key.pem")
-    .setCertPath("./src/test/resources/tls/server-cert.pem"))
-  .setSsl(true);
+<pre class="CodeRay highlight"><code data-lang="java">MqttServerOptions options = <span class="keyword">new</span> MqttServerOptions()
+  .setPort(<span class="integer">8883</span>)
+  .setKeyCertOptions(<span class="keyword">new</span> PemKeyCertOptions()
+    .setKeyPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">./src/test/resources/tls/server-key.pem</span><span class="delimiter">&quot;</span></span>)
+    .setCertPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">./src/test/resources/tls/server-cert.pem</span><span class="delimiter">&quot;</span></span>))
+  .setSsl(<span class="predefined-constant">true</span>);
 
 MqttServer mqttServer = MqttServer.create(vertx, options);
 mqttServer.endpointHandler(endpoint -&gt; {
 
-  // shows main connect info
-  System.out.println("MQTT client [" + endpoint.clientIdentifier() + "] request to connect, clean session = " + endpoint.isCleanSession());
+  <span class="comment">// shows main connect info</span>
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT client [</span><span class="delimiter">&quot;</span></span> + endpoint.clientIdentifier() + <span class="string"><span class="delimiter">&quot;</span><span class="content">] request to connect, clean session = </span><span class="delimiter">&quot;</span></span> + endpoint.isCleanSession());
 
-  if (endpoint.auth() != null) {
-    System.out.println("[username = " + endpoint.auth().userName() + ", password = " + endpoint.auth().password() + "]");
+  <span class="keyword">if</span> (endpoint.auth() != <span class="predefined-constant">null</span>) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">[username = </span><span class="delimiter">&quot;</span></span> + endpoint.auth().userName() + <span class="string"><span class="delimiter">&quot;</span><span class="content">, password = </span><span class="delimiter">&quot;</span></span> + endpoint.auth().password() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
   }
-  if (endpoint.will() != null) {
-    System.out.println("[will topic = " + endpoint.will().willTopic() + " msg = " + endpoint.will().willMessage() +
-      " QoS = " + endpoint.will().willQos() + " isRetain = " + endpoint.will().isWillRetain() + "]");
+  <span class="keyword">if</span> (endpoint.will() != <span class="predefined-constant">null</span>) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">[will topic = </span><span class="delimiter">&quot;</span></span> + endpoint.will().willTopic() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> msg = </span><span class="delimiter">&quot;</span></span> + endpoint.will().willMessage() +
+      <span class="string"><span class="delimiter">&quot;</span><span class="content"> QoS = </span><span class="delimiter">&quot;</span></span> + endpoint.will().willQos() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> isRetain = </span><span class="delimiter">&quot;</span></span> + endpoint.will().isWillRetain() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
   }
 
-  System.out.println("[keep alive timeout = " + endpoint.keepAliveTimeSeconds() + "]");
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">[keep alive timeout = </span><span class="delimiter">&quot;</span></span> + endpoint.keepAliveTimeSeconds() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
 
-  // accept connection from the remote client
-  endpoint.accept(false);
+  <span class="comment">// accept connection from the remote client</span>
+  endpoint.accept(<span class="predefined-constant">false</span>);
 
 })
   .listen(ar -&gt; {
 
-    if (ar.succeeded()) {
+    <span class="keyword">if</span> (ar.succeeded()) {
 
-      System.out.println("MQTT server is listening on port " + ar.result().actualPort());
-    } else {
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT server is listening on port </span><span class="delimiter">&quot;</span></span> + ar.result().actualPort());
+    } <span class="keyword">else</span> {
 
-      System.out.println("Error on starting the server");
+      <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error on starting the server</span><span class="delimiter">&quot;</span></span>);
       ar.cause().printStackTrace();
     }
   });</code></pre>
@@ -343,14 +342,14 @@ for replying to the client with the related SUBACK message containing the grante
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">endpoint.subscribeHandler(subscribe -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">endpoint.subscribeHandler(subscribe -&gt; {
 
-  List&lt;MqttQoS&gt; grantedQosLevels = new ArrayList&lt;&gt;();
-  for (MqttTopicSubscription s: subscribe.topicSubscriptions()) {
-    System.out.println("Subscription for " + s.topicName() + " with QoS " + s.qualityOfService());
+  <span class="predefined-type">List</span>&lt;MqttQoS&gt; grantedQosLevels = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;();
+  <span class="keyword">for</span> (MqttTopicSubscription s: subscribe.topicSubscriptions()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Subscription for </span><span class="delimiter">&quot;</span></span> + s.topicName() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> with QoS </span><span class="delimiter">&quot;</span></span> + s.qualityOfService());
     grantedQosLevels.add(s.qualityOfService());
   }
-  // ack the subscriptions request
+  <span class="comment">// ack the subscriptions request</span>
   endpoint.subscribeAcknowledge(subscribe.messageId(), grantedQosLevels);
 
 });</code></pre>
@@ -365,12 +364,12 @@ for replying to the client with the related UNSUBACK message.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">endpoint.unsubscribeHandler(unsubscribe -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">endpoint.unsubscribeHandler(unsubscribe -&gt; {
 
-  for (String t: unsubscribe.topics()) {
-    System.out.println("Unsubscription for " + t);
+  <span class="keyword">for</span> (<span class="predefined-type">String</span> t: unsubscribe.topics()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Unsubscription for </span><span class="delimiter">&quot;</span></span> + t);
   }
-  // ack the subscriptions request
+  <span class="comment">// ack the subscriptions request</span>
   endpoint.unsubscribeAcknowledge(unsubscribe.messageId());
 });</code></pre>
 </div>
@@ -401,13 +400,13 @@ for sending the PUBCOMP message to the client.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">endpoint.publishHandler(message -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">endpoint.publishHandler(message -&gt; {
 
-  System.out.println("Just received message [" + message.payload().toString(Charset.defaultCharset()) + "] with QoS [" + message.qosLevel() + "]");
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Just received message [</span><span class="delimiter">&quot;</span></span> + message.payload().toString(<span class="predefined-type">Charset</span>.defaultCharset()) + <span class="string"><span class="delimiter">&quot;</span><span class="content">] with QoS [</span><span class="delimiter">&quot;</span></span> + message.qosLevel() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
 
-  if (message.qosLevel() == MqttQoS.AT_LEAST_ONCE) {
+  <span class="keyword">if</span> (message.qosLevel() == MqttQoS.AT_LEAST_ONCE) {
     endpoint.publishAcknowledge(message.messageId());
-  } else if (message.qosLevel() == MqttQoS.EXACTLY_ONCE) {
+  } <span class="keyword">else</span> <span class="keyword">if</span> (message.qosLevel() == MqttQoS.EXACTLY_ONCE) {
     endpoint.publishRelease(message.messageId());
   }
 
@@ -443,16 +442,16 @@ for specifying the handler called when the final PUBCOMP message is received.</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">endpoint.publish("my_topic",
-  Buffer.buffer("Hello from the Vert.x MQTT server"),
+<pre class="CodeRay highlight"><code data-lang="java">endpoint.publish(<span class="string"><span class="delimiter">&quot;</span><span class="content">my_topic</span><span class="delimiter">&quot;</span></span>,
+  <span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from the Vert.x MQTT server</span><span class="delimiter">&quot;</span></span>),
   MqttQoS.EXACTLY_ONCE,
-  false,
-  false);
+  <span class="predefined-constant">false</span>,
+  <span class="predefined-constant">false</span>);
 
-// specifing handlers for handling QoS 1 and 2
+<span class="comment">// specifing handlers for handling QoS 1 and 2</span>
 endpoint.publishAcknowledgeHandler(messageId -&gt; {
 
-  System.out.println("Received ack for message = " +  messageId);
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received ack for message = </span><span class="delimiter">&quot;</span></span> +  messageId);
 
 }).publishReceivedHandler(messageId -&gt; {
 
@@ -460,7 +459,7 @@ endpoint.publishAcknowledgeHandler(messageId -&gt; {
 
 }).publishCompleteHandler(messageId -&gt; {
 
-  System.out.println("Received ack for message = " +  messageId);
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received ack for message = </span><span class="delimiter">&quot;</span></span> +  messageId);
 });</code></pre>
 </div>
 </div>
@@ -481,9 +480,9 @@ by the server internally as described above.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">endpoint.pingHandler(v -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">endpoint.pingHandler(v -&gt; {
 
-  System.out.println("Ping received from client");
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Ping received from client</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -498,9 +497,9 @@ that will be called when the server is really closed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">mqttServer.close(v -&gt; {
+<pre class="CodeRay highlight"><code data-lang="java">mqttServer.close(v -&gt; {
 
-  System.out.println("MQTT server closed");
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT server closed</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -523,15 +522,15 @@ more instances of the MQTT server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">for (int i = 0; i &lt; 10; i++) {
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="integer">0</span>; i &lt; <span class="integer">10</span>; i++) {
 
   MqttServer mqttServer = MqttServer.create(vertx);
   mqttServer.endpointHandler(endpoint -&gt; {
-    // handling endpoint
+    <span class="comment">// handling endpoint</span>
   })
     .listen(ar -&gt; {
 
-      // handling start listening
+      <span class="comment">// handling start listening</span>
     });
 
 }</code></pre>
@@ -542,8 +541,8 @@ more instances of the MQTT server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">DeploymentOptions options = new DeploymentOptions().setInstances(10);
-vertx.deployVerticle("com.mycompany.MyVerticle", options);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">DeploymentOptions options = <span class="keyword">new</span> DeploymentOptions().setInstances(<span class="integer">10</span>);
+vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.mycompany.MyVerticle</span><span class="delimiter">&quot;</span></span>, options);</code></pre>
 </div>
 </div>
 <div class="paragraph">

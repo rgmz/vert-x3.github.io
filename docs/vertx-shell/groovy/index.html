@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -204,7 +203,7 @@ or deployed as a service.</p>
 <div class="listingblock">
 <div class="title">Starting a shell service available via Telnet</div>
 <div class="content">
-<pre class="prettyprint highlight"><code>vertx run -conf '{"telnetOptions":{"port":5000}}' maven:io.vertx:vertx-shell:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code>vertx run -conf '{"telnetOptions":{"port":5000}}' maven:io.vertx:vertx-shell:3.4.2</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -213,7 +212,7 @@ or deployed as a service.</p>
 <div class="listingblock">
 <div class="title">Starting a shell service available via SSH</div>
 <div class="content">
-<pre class="prettyprint highlight"><code># create a key pair for the SSH server
+<pre class="CodeRay highlight"><code># create a key pair for the SSH server
 keytool -genkey -keyalg RSA -keystore ssh.jks -keysize 2048 -validity 1095 -dname CN=localhost -keypass secret -storepass secret
 # create the auth config
 echo user.admin=password &gt; auth.properties
@@ -227,7 +226,7 @@ vertx run -conf '{"sshOptions":{"port":4000,"keyPairOptions":{"path":"ssh.jks","
 <div class="listingblock">
 <div class="title">Starting a shell service available via HTTP</div>
 <div class="content">
-<pre class="prettyprint highlight"><code># create a certificate for the HTTP server
+<pre class="CodeRay highlight"><code># create a certificate for the HTTP server
 keytool -genkey -keyalg RSA -keystore keystore.jks -keysize 2048 -validity 1095 -dname CN=localhost -keypass secret -storepass secret
 # create the auth config
 echo user.admin=password &gt; auth.properties
@@ -239,11 +238,11 @@ vertx run -conf '{"httpOptions":{"port":8080,"ssl":true,"keyStoreOptions":{"path
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", [
-  config:[
-    telnetOptions:[
-      host:"localhost",
-      port:4000
+<pre class="CodeRay highlight"><code data-lang="groovy">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>, [
+  <span class="key">config</span>:[
+    <span class="key">telnetOptions</span>:[
+      <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">port</span>:<span class="integer">4000</span>
     ]
   ]
 ])</code></pre>
@@ -254,19 +253,19 @@ vertx run -conf '{"httpOptions":{"port":8080,"ssl":true,"keyStoreOptions":{"path
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", [
-  config:[
-    sshOptions:[
-      host:"localhost",
-      port:5000,
-      keyPairOptions:[
-        path:"src/test/resources/ssh.jks",
-        password:"wibble"
+<pre class="CodeRay highlight"><code data-lang="groovy">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>, [
+  <span class="key">config</span>:[
+    <span class="key">sshOptions</span>:[
+      <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">port</span>:<span class="integer">5000</span>,
+      <span class="key">keyPairOptions</span>:[
+        <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">src/test/resources/ssh.jks</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>
       ],
-      authOptions:[
-        provider:"shiro",
-        config:[
-          properties_path:"file:/path/to/my/auth.properties"
+      <span class="key">authOptions</span>:[
+        <span class="key">provider</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">shiro</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">config</span>:[
+          <span class="key">properties_path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">file:/path/to/my/auth.properties</span><span class="delimiter">&quot;</span></span>
         ]
       ]
     ]
@@ -279,20 +278,20 @@ vertx run -conf '{"httpOptions":{"port":8080,"ssl":true,"keyStoreOptions":{"path
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", [
-  config:[
-    httpOptions:[
-      host:"localhost",
-      port:8080,
-      ssl:true,
-      keyPairOptions:[
-        path:"src/test/resources/server-keystore.jks",
-        password:"wibble"
+<pre class="CodeRay highlight"><code data-lang="groovy">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>, [
+  <span class="key">config</span>:[
+    <span class="key">httpOptions</span>:[
+      <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">port</span>:<span class="integer">8080</span>,
+      <span class="key">ssl</span>:<span class="predefined-constant">true</span>,
+      <span class="key">keyPairOptions</span>:[
+        <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">src/test/resources/server-keystore.jks</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>
       ],
-      authOptions:[
-        provider:"shiro",
-        config:[
-          properties_path:"file:/path/to/my/auth.properties"
+      <span class="key">authOptions</span>:[
+        <span class="key">provider</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">shiro</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">config</span>:[
+          <span class="key">properties_path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">file:/path/to/my/auth.properties</span><span class="delimiter">&quot;</span></span>
         ]
       ]
     ]
@@ -324,18 +323,18 @@ or <code>maven:io.vertx:vertx-shell:3.4.2</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def service = ShellService.create(vertx, [
-  sSHOptions:[
-    host:"localhost",
-    port:5000,
-    keyPairOptions:[
-      path:"server-keystore.jks",
-      password:"wibble"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> service = ShellService.create(vertx, [
+  <span class="key">sSHOptions</span>:[
+    <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">port</span>:<span class="integer">5000</span>,
+    <span class="key">keyPairOptions</span>:[
+      <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">server-keystore.jks</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>
     ],
-    authOptions:[
-      type:"PROPERTIES",
-      config:[
-        properties_path:"file:/path/to/my/auth.properties"
+    <span class="key">authOptions</span>:[
+      <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">PROPERTIES</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">config</span>:[
+        <span class="key">properties_path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">file:/path/to/my/auth.properties</span><span class="delimiter">&quot;</span></span>
       ]
     ]
   ]
@@ -348,10 +347,10 @@ service.start()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def service = ShellService.create(vertx, [
-  telnetOptions:[
-    host:"localhost",
-    port:4000
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> service = ShellService.create(vertx, [
+  <span class="key">telnetOptions</span>:[
+    <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">port</span>:<span class="integer">4000</span>
   ]
 ])
 service.start()</code></pre>
@@ -378,10 +377,10 @@ Telnet does not provide any authentication nor encryption at all.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def service = ShellService.create(vertx, [
-  httpOptions:[
-    host:"localhost",
-    port:8080
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> service = ShellService.create(vertx, [
+  <span class="key">httpOptions</span>:[
+    <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">port</span>:<span class="integer">8080</span>
   ]
 ])
 service.start()</code></pre>
@@ -501,19 +500,19 @@ or LDAP, see Vert.x Auth for more info:</p>
 <div class="listingblock">
 <div class="title">Deploying the Shell Service on SSH with Mongo authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", [
-  config:[
-    sshOptions:[
-      host:"localhost",
-      port:5000,
-      keyPairOptions:[
-        path:"src/test/resources/ssh.jks",
-        password:"wibble"
+<pre class="CodeRay highlight"><code data-lang="groovy">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>, [
+  <span class="key">config</span>:[
+    <span class="key">sshOptions</span>:[
+      <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">port</span>:<span class="integer">5000</span>,
+      <span class="key">keyPairOptions</span>:[
+        <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">src/test/resources/ssh.jks</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>
       ],
-      authOptions:[
-        provider:"mongo",
-        config:[
-          connection_string:"mongodb://localhost:27018"
+      <span class="key">authOptions</span>:[
+        <span class="key">provider</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mongo</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">config</span>:[
+          <span class="key">connection_string</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mongodb://localhost:27018</span><span class="delimiter">&quot;</span></span>
         ]
       ]
     ]
@@ -524,17 +523,17 @@ or LDAP, see Vert.x Auth for more info:</p>
 <div class="listingblock">
 <div class="title">Running the Shell Service on SSH with Mongo authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def service = ShellService.create(vertx, [
-  sSHOptions:[
-    host:"localhost",
-    port:5000,
-    keyPairOptions:[
-      path:"server-keystore.jks",
-      password:"wibble"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> service = ShellService.create(vertx, [
+  <span class="key">sSHOptions</span>:[
+    <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">port</span>:<span class="integer">5000</span>,
+    <span class="key">keyPairOptions</span>:[
+      <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">server-keystore.jks</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>
     ],
-    authOptions:[
-      config:[
-        connection_string:"mongodb://localhost:27018"
+    <span class="key">authOptions</span>:[
+      <span class="key">config</span>:[
+        <span class="key">connection_string</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mongodb://localhost:27018</span><span class="delimiter">&quot;</span></span>
       ]
     ]
   ]
@@ -545,20 +544,20 @@ service.start()</code></pre>
 <div class="listingblock">
 <div class="title">Deploying the Shell Service on SSH with JDBC authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", [
-  config:[
-    sshOptions:[
-      host:"localhost",
-      port:5000,
-      keyPairOptions:[
-        path:"src/test/resources/ssh.jks",
-        password:"wibble"
+<pre class="CodeRay highlight"><code data-lang="groovy">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>, [
+  <span class="key">config</span>:[
+    <span class="key">sshOptions</span>:[
+      <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">port</span>:<span class="integer">5000</span>,
+      <span class="key">keyPairOptions</span>:[
+        <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">src/test/resources/ssh.jks</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>
       ],
-      authOptions:[
-        provider:"jdbc",
-        config:[
-          url:"jdbc:hsqldb:mem:test?shutdown=true",
-          driver_class:"org.hsqldb.jdbcDriver"
+      <span class="key">authOptions</span>:[
+        <span class="key">provider</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">config</span>:[
+          <span class="key">url</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc:hsqldb:mem:test?shutdown=true</span><span class="delimiter">&quot;</span></span>,
+          <span class="key">driver_class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">org.hsqldb.jdbcDriver</span><span class="delimiter">&quot;</span></span>
         ]
       ]
     ]
@@ -569,18 +568,18 @@ service.start()</code></pre>
 <div class="listingblock">
 <div class="title">Running the Shell Service on SSH with JDBC authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def service = ShellService.create(vertx, [
-  sSHOptions:[
-    host:"localhost",
-    port:5000,
-    keyPairOptions:[
-      path:"server-keystore.jks",
-      password:"wibble"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> service = ShellService.create(vertx, [
+  <span class="key">sSHOptions</span>:[
+    <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">port</span>:<span class="integer">5000</span>,
+    <span class="key">keyPairOptions</span>:[
+      <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">server-keystore.jks</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>
     ],
-    authOptions:[
-      config:[
-        url:"jdbc:hsqldb:mem:test?shutdown=true",
-        driver_class:"org.hsqldb.jdbcDriver"
+    <span class="key">authOptions</span>:[
+      <span class="key">config</span>:[
+        <span class="key">url</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc:hsqldb:mem:test?shutdown=true</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">driver_class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">org.hsqldb.jdbcDriver</span><span class="delimiter">&quot;</span></span>
       ]
     ]
   ]
@@ -616,20 +615,20 @@ extends the <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.ht
 <div class="listingblock">
 <div class="title">Deploying the Shell Service on HTTP with Mongo authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", [
-  config:[
-    httpOptions:[
-      host:"localhost",
-      port:8080,
-      ssl:true,
-      keyPairOptions:[
-        path:"src/test/resources/server-keystore.jks",
-        password:"wibble"
+<pre class="CodeRay highlight"><code data-lang="groovy">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>, [
+  <span class="key">config</span>:[
+    <span class="key">httpOptions</span>:[
+      <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">port</span>:<span class="integer">8080</span>,
+      <span class="key">ssl</span>:<span class="predefined-constant">true</span>,
+      <span class="key">keyPairOptions</span>:[
+        <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">src/test/resources/server-keystore.jks</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>
       ],
-      authOptions:[
-        provider:"mongo",
-        config:[
-          connection_string:"mongodb://localhost:27018"
+      <span class="key">authOptions</span>:[
+        <span class="key">provider</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mongo</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">config</span>:[
+          <span class="key">connection_string</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mongodb://localhost:27018</span><span class="delimiter">&quot;</span></span>
         ]
       ]
     ]
@@ -640,13 +639,13 @@ extends the <code><a href="../../apidocs/io/vertx/core/http/HttpServerOptions.ht
 <div class="listingblock">
 <div class="title">Running the Shell Service on HTTP with Mongo authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def service = ShellService.create(vertx, [
-  httpOptions:[
-    host:"localhost",
-    port:8080,
-    authOptions:[
-      config:[
-        connection_string:"mongodb://localhost:27018"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> service = ShellService.create(vertx, [
+  <span class="key">httpOptions</span>:[
+    <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">port</span>:<span class="integer">8080</span>,
+    <span class="key">authOptions</span>:[
+      <span class="key">config</span>:[
+        <span class="key">connection_string</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mongodb://localhost:27018</span><span class="delimiter">&quot;</span></span>
       ]
     ]
   ]
@@ -657,21 +656,21 @@ service.start()</code></pre>
 <div class="listingblock">
 <div class="title">Deploying the Shell Service on HTTP with JDBC authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">vertx.deployVerticle("maven:{maven-groupId}:{maven-artifactId}:{maven-version}", [
-  config:[
-    httpOptions:[
-      host:"localhost",
-      port:8080,
-      ssl:true,
-      keyPairOptions:[
-        path:"src/test/resources/server-keystore.jks",
-        password:"wibble"
+<pre class="CodeRay highlight"><code data-lang="groovy">vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">maven:{maven-groupId}:{maven-artifactId}:{maven-version}</span><span class="delimiter">&quot;</span></span>, [
+  <span class="key">config</span>:[
+    <span class="key">httpOptions</span>:[
+      <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+      <span class="key">port</span>:<span class="integer">8080</span>,
+      <span class="key">ssl</span>:<span class="predefined-constant">true</span>,
+      <span class="key">keyPairOptions</span>:[
+        <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">src/test/resources/server-keystore.jks</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">password</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>
       ],
-      authOptions:[
-        provider:"jdbc",
-        config:[
-          url:"jdbc:hsqldb:mem:test?shutdown=true",
-          driver_class:"org.hsqldb.jdbcDriver"
+      <span class="key">authOptions</span>:[
+        <span class="key">provider</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">config</span>:[
+          <span class="key">url</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc:hsqldb:mem:test?shutdown=true</span><span class="delimiter">&quot;</span></span>,
+          <span class="key">driver_class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">org.hsqldb.jdbcDriver</span><span class="delimiter">&quot;</span></span>
         ]
       ]
     ]
@@ -682,14 +681,14 @@ service.start()</code></pre>
 <div class="listingblock">
 <div class="title">Running the Shell Service on HTTP with JDBC authentication</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def service = ShellService.create(vertx, [
-  httpOptions:[
-    host:"localhost",
-    port:8080,
-    authOptions:[
-      config:[
-        url:"jdbc:hsqldb:mem:test?shutdown=true",
-        driver_class:"org.hsqldb.jdbcDriver"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> service = ShellService.create(vertx, [
+  <span class="key">httpOptions</span>:[
+    <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">port</span>:<span class="integer">8080</span>,
+    <span class="key">authOptions</span>:[
+      <span class="key">config</span>:[
+        <span class="key">url</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc:hsqldb:mem:test?shutdown=true</span><span class="delimiter">&quot;</span></span>,
+        <span class="key">driver_class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">org.hsqldb.jdbcDriver</span><span class="delimiter">&quot;</span></span>
       ]
     ]
   ]
@@ -949,18 +948,18 @@ method:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def builder = CommandBuilder.command("my-command")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> builder = CommandBuilder.command(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-command</span><span class="delimiter">&quot;</span></span>)
 builder.processHandler({ process -&gt;
 
-  // Write a message to the console
-  process.write("Hello World")
+  <span class="comment">// Write a message to the console</span>
+  process.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World</span><span class="delimiter">&quot;</span></span>)
 
-  // End the process
+  <span class="comment">// End the process</span>
   process.end()
 })
 
-// Register the command
-def registry = CommandRegistry.getShared(vertx)
+<span class="comment">// Register the command</span>
+<span class="keyword">def</span> registry = CommandRegistry.getShared(vertx)
 registry.registerCommand(builder.build(vertx))</code></pre>
 </div>
 </div>
@@ -995,11 +994,11 @@ registry. Keep this in mind if you maintain state in a command.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">command.processHandler({ process -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">command.processHandler({ process -&gt;
 
   process.args().each { arg -&gt;
-    // Print each argument on the console
-    process.write("Argument ${arg}")
+    <span class="comment">// Print each argument on the console</span>
+    process.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">Argument </span><span class="inline"><span class="inline-delimiter">${</span>arg<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 
   process.end()
@@ -1025,20 +1024,20 @@ write command line argument parsing:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = CLI.create("my-command").addArgument([
-  argName:"my-arg"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> cli = CLI.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-command</span><span class="delimiter">&quot;</span></span>).addArgument([
+  <span class="key">argName</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">my-arg</span><span class="delimiter">&quot;</span></span>
 ]).addOption([
-  shortName:"m",
-  longName:"my-option"
+  <span class="key">shortName</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">m</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">longName</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">my-option</span><span class="delimiter">&quot;</span></span>
 ])
-def command = CommandBuilder.command(cli)
+<span class="keyword">def</span> command = CommandBuilder.command(cli)
 command.processHandler({ process -&gt;
 
-  def commandLine = process.commandLine()
+  <span class="keyword">def</span> commandLine = process.commandLine()
 
-  def argValue = commandLine.getArgumentValue(0)
-  def optValue = commandLine.getOptionValue("my-option")
-  process.write("The argument is ${argValue} and the option is ${optValue}")
+  <span class="keyword">def</span> argValue = commandLine.getArgumentValue(<span class="integer">0</span>)
+  <span class="keyword">def</span> optValue = commandLine.getOptionValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-option</span><span class="delimiter">&quot;</span></span>)
+  process.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">The argument is </span><span class="inline"><span class="inline-delimiter">${</span>argValue<span class="inline-delimiter">}</span></span><span class="content"> and the option is </span><span class="inline"><span class="inline-delimiter">${</span>optValue<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 
   process.end()
 })</code></pre>
@@ -1050,16 +1049,16 @@ when the option is activated:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = CLI.create("my-command").addArgument([
-  argName:"my-arg"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> cli = CLI.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-command</span><span class="delimiter">&quot;</span></span>).addArgument([
+  <span class="key">argName</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">my-arg</span><span class="delimiter">&quot;</span></span>
 ]).addOption([
-  argName:"help",
-  shortName:"h",
-  longName:"help"
+  <span class="key">argName</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">help</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">shortName</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">h</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">longName</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">help</span><span class="delimiter">&quot;</span></span>
 ])
-def command = CommandBuilder.command(cli)
+<span class="keyword">def</span> command = CommandBuilder.command(cli)
 command.processHandler({ process -&gt;
-  // ...
+  <span class="comment">// ...</span>
 })</code></pre>
 </div>
 </div>
@@ -1079,8 +1078,8 @@ receives data, e.g the user uses his keyboard:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">tty.stdinHandler({ data -&gt;
-  println("Received ${data}")
+<pre class="CodeRay highlight"><code data-lang="groovy">tty.stdinHandler({ data -&gt;
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received </span><span class="inline"><span class="inline-delimiter">${</span>data<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -1089,7 +1088,7 @@ receives data, e.g the user uses his keyboard:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">tty.write("Hello World")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">tty.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World</span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
 </div>
@@ -1101,7 +1100,7 @@ receives data, e.g the user uses his keyboard:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">tty.write("Current terminal size: (${tty.width()}, ${tty.height()})")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">tty.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">Current terminal size: (</span><span class="inline"><span class="inline-delimiter">${</span>tty.width()<span class="inline-delimiter">}</span></span><span class="content">, </span><span class="inline"><span class="inline-delimiter">${</span>tty.height()<span class="inline-delimiter">}</span></span><span class="content">)</span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
 </div>
@@ -1114,8 +1113,8 @@ is called, the new terminal size can be obtained with <code><a href="../../apido
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">tty.resizehandler({ v -&gt;
-  println("terminal resized : ${tty.width()} ${tty.height()}")
+<pre class="CodeRay highlight"><code data-lang="groovy">tty.resizehandler({ v -&gt;
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">terminal resized : </span><span class="inline"><span class="inline-delimiter">${</span>tty.width()<span class="inline-delimiter">}</span></span><span class="content"> </span><span class="inline"><span class="inline-delimiter">${</span>tty.height()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -1128,7 +1127,7 @@ returns the current terminal type, it can be null if the terminal has not advert
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">println("terminal type : ${tty.type()}")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">println(<span class="string"><span class="delimiter">&quot;</span><span class="content">terminal type : </span><span class="inline"><span class="inline-delimiter">${</span>tty.type()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
 </div>
@@ -1141,12 +1140,12 @@ used in commands to scope data. A command can get the session with <code><a href
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">command.processHandler({ process -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">command.processHandler({ process -&gt;
 
-  def session = process.session()
+  <span class="keyword">def</span> session = process.session()
 
-  if (session.get("my_key") == null) {
-    session.put("my key", "my value")
+  <span class="keyword">if</span> (session.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">my_key</span><span class="delimiter">&quot;</span></span>) == <span class="predefined-constant">null</span>) {
+    session.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">my key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">my value</span><span class="delimiter">&quot;</span></span>)
   }
 
   process.end()
@@ -1162,13 +1161,13 @@ in the invocation of the command handler or any time later:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">command.processHandler({ process -&gt;
-  def vertx = process.vertx()
+<pre class="CodeRay highlight"><code data-lang="groovy">command.processHandler({ process -&gt;
+  <span class="keyword">def</span> vertx = process.vertx()
 
-  // Set a timer
-  vertx.setTimer(1000, { id -&gt;
+  <span class="comment">// Set a timer</span>
+  vertx.setTimer(<span class="integer">1000</span>, { id -&gt;
 
-    // End the command when the timer is fired
+    <span class="comment">// End the command when the timer is fired</span>
     process.end()
   })
 })</code></pre>
@@ -1189,15 +1188,15 @@ be used for interrupting commands <em>blocking</em> the CLI and gracefully endin
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">command.processHandler({ process -&gt;
-  def vertx = process.vertx()
+<pre class="CodeRay highlight"><code data-lang="groovy">command.processHandler({ process -&gt;
+  <span class="keyword">def</span> vertx = process.vertx()
 
-  // Every second print a message on the console
-  def periodicId = vertx.setPeriodic(1000, { id -&gt;
-    process.write("tick\n")
+  <span class="comment">// Every second print a message on the console</span>
+  <span class="keyword">def</span> periodicId = vertx.setPeriodic(<span class="integer">1000</span>, { id -&gt;
+    process.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">tick</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
   })
 
-  // When user press Ctrl+C: cancel the timer and end the process
+  <span class="comment">// When user press Ctrl+C: cancel the timer and end the process</span>
   process.interruptHandler({ v -&gt;
     vertx.cancelTimer(periodicId)
     process.end()
@@ -1248,16 +1247,16 @@ is resumed, usually when the user types <em>fg</em>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">command.processHandler({ process -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">command.processHandler({ process -&gt;
 
-  // Command is suspended
+  <span class="comment">// Command is suspended</span>
   process.suspendHandler({ v -&gt;
-    println("Suspended")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Suspended</span><span class="delimiter">&quot;</span></span>)
   })
 
-  // Command is resumed
+  <span class="comment">// Command is resumed</span>
   process.resumeHandler({ v -&gt;
-    println("Resumed")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Resumed</span><span class="delimiter">&quot;</span></span>)
   })
 })</code></pre>
 </div>
@@ -1272,11 +1271,11 @@ the command is <em>terminated</em>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">command.processHandler({ process -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">command.processHandler({ process -&gt;
 
-  // Command terminates
+  <span class="comment">// Command terminates</span>
   process.endHandler({ v -&gt;
-    println("Terminated")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Terminated</span><span class="delimiter">&quot;</span></span>)
   })
 })</code></pre>
 </div>
@@ -1329,13 +1328,13 @@ steps:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = ShellServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> server = ShellServer.create(vertx)
 
-def shellRouter = Router.router(vertx)
-router.mountSubRouter("/shell", shellRouter)
-def httpTermServer = TermServer.createHttpTermServer(vertx, router)
+<span class="keyword">def</span> shellRouter = Router.router(vertx)
+router.mountSubRouter(<span class="string"><span class="delimiter">&quot;</span><span class="content">/shell</span><span class="delimiter">&quot;</span></span>, shellRouter)
+<span class="keyword">def</span> httpTermServer = TermServer.createHttpTermServer(vertx, router)
 
-def sshTermServer = TermServer.createSSHTermServer(vertx)
+<span class="keyword">def</span> sshTermServer = TermServer.createSSHTermServer(vertx)
 
 server.registerTermServer(httpTermServer)
 server.registerTermServer(sshTermServer)
@@ -1375,8 +1374,8 @@ server.listen()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Create a shell ession
-def shell = shellServer.createShell()</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Create a shell ession</span>
+<span class="keyword">def</span> shell = shellServer.createShell()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1384,22 +1383,22 @@ def shell = shellServer.createShell()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Create a shell
-def shell = shellServer.createShell()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Create a shell</span>
+<span class="keyword">def</span> shell = shellServer.createShell()
 
-// Create a job fo the command
-def job = shell.createJob("my-command 1234")
+<span class="comment">// Create a job fo the command</span>
+<span class="keyword">def</span> job = shell.createJob(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-command 1234</span><span class="delimiter">&quot;</span></span>)
 
-// Create a pseudo terminal
-def pty = Pty.create()
+<span class="comment">// Create a pseudo terminal</span>
+<span class="keyword">def</span> pty = Pty.create()
 pty.stdoutHandler({ data -&gt;
-  println("Command wrote ${data}")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Command wrote </span><span class="inline"><span class="inline-delimiter">${</span>data<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })
 
-// Run the command
+<span class="comment">// Run the command</span>
 job.setTty(pty.slave())
 job.statusUpdateHandler({ status -&gt;
-  println("Command terminated with status ${status}")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Command terminated with status </span><span class="inline"><span class="inline-delimiter">${</span>status<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -1447,9 +1446,9 @@ terminal.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = TermServer.createSSHTermServer(vertx, [
-  port:5000,
-  host:"localhost"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> server = TermServer.createSSHTermServer(vertx, [
+  <span class="key">port</span>:<span class="integer">5000</span>,
+  <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>
 ])
 server.termHandler({ term -&gt;
   term.stdinHandler({ line -&gt;
@@ -1468,9 +1467,9 @@ how to use the tty.</p>
 <h3 id="_telnet_term">Telnet term</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = TermServer.createTelnetTermServer(vertx, [
-  port:5000,
-  host:"localhost"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> server = TermServer.createTelnetTermServer(vertx, [
+  <span class="key">port</span>:<span class="integer">5000</span>,
+  <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>
 ])
 server.termHandler({ term -&gt;
   term.stdinHandler({ line -&gt;
@@ -1489,9 +1488,9 @@ on top of Vert.x Web using the SockJS protocol.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = TermServer.createHttpTermServer(vertx, [
-  port:5000,
-  host:"localhost"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> server = TermServer.createHttpTermServer(vertx, [
+  <span class="key">port</span>:<span class="integer">5000</span>,
+  <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>
 ])
 server.termHandler({ term -&gt;
   term.stdinHandler({ line -&gt;
@@ -1509,9 +1508,9 @@ server.listen()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = TermServer.createHttpTermServer(vertx, router, [
-  port:5000,
-  host:"localhost"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> server = TermServer.createHttpTermServer(vertx, router, [
+  <span class="key">port</span>:<span class="integer">5000</span>,
+  <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>
 ])
 server.termHandler({ term -&gt;
   term.stdinHandler({ line -&gt;
@@ -1548,11 +1547,11 @@ server.listen()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">window.addEventListener('load', function () {
-  var url = 'http://localhost/shell';
-  new VertxTerm(url, {
-    cols: 80,
-    rows: 24
+<pre class="CodeRay highlight"><code data-lang="javascript">window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">load</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> url = <span class="string"><span class="delimiter">'</span><span class="content">http://localhost/shell</span><span class="delimiter">'</span></span>;
+  <span class="keyword">new</span> VertxTerm(url, {
+    <span class="key">cols</span>: <span class="integer">80</span>,
+    <span class="key">rows</span>: <span class="integer">24</span>
    });
  });</code></pre>
 </div>
@@ -1562,11 +1561,11 @@ server.listen()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">window.addEventListener('load', function () {
-  var url = 'ws://localhost/shell/websocket';
-  new VertxTerm(url, {
-    cols: 80,
-    rows: 24
+<pre class="CodeRay highlight"><code data-lang="javascript">window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">load</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> url = <span class="string"><span class="delimiter">'</span><span class="content">ws://localhost/shell/websocket</span><span class="delimiter">'</span></span>;
+  <span class="keyword">new</span> VertxTerm(url, {
+    <span class="key">cols</span>: <span class="integer">80</span>,
+    <span class="key">rows</span>: <span class="integer">24</span>
    });
  });</code></pre>
 </div>
@@ -1592,10 +1591,10 @@ jar under the <code>io.vertx.ext.shell</code> packages.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">public class CustomCommands implements CommandResolverFactory {
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">CustomCommands</span> <span class="directive">implements</span> CommandResolverFactory {
 
-  public void resolver(Vertx vertx, Handler&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolverHandler) {
-    resolverHandler.handler(() -&gt; Arrays.asList(myCommand1, myCommand2));
+  <span class="directive">public</span> <span class="type">void</span> resolver(Vertx vertx, <span class="predefined-type">Handler</span>&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolverHandler) {
+    resolverHandler.handler(() -&gt; <span class="predefined-type">Arrays</span>.asList(myCommand1, myCommand2));
   }
 }</code></pre>
 </div>
@@ -1610,7 +1609,7 @@ are resolved.</p>
 <div class="listingblock">
 <div class="title">The service provider file <code>META-INF/services/io.vertx.ext.shell.spi.CommandResolverFactory</code></div>
 <div class="content">
-<pre class="prettyprint highlight"><code>my.CustomCommands</code></pre>
+<pre class="CodeRay highlight"><code>my.CustomCommands</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1630,22 +1629,22 @@ don&#8217;t use this mechanism.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">public class CommandPackExample implements CommandResolverFactory {
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">CommandPackExample</span> <span class="directive">implements</span> CommandResolverFactory {
 
-  @Override
-  public void resolver(Vertx vertx, Handler&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolveHandler) {
-    List&lt;Command&gt; commands = new ArrayList&lt;&gt;();
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="type">void</span> resolver(Vertx vertx, <span class="predefined-type">Handler</span>&lt;AsyncResult&lt;CommandResolver&gt;&gt; resolveHandler) {
+    <span class="predefined-type">List</span>&lt;Command&gt; commands = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;();
 
-    // Add commands
+    <span class="comment">// Add commands</span>
     commands.add(Command.create(vertx, JavaCommandExample.class));
 
-    // Add another command
-    commands.add(CommandBuilder.command("another-command").processHandler(process -&gt; {
-      // Handle process
+    <span class="comment">// Add another command</span>
+    commands.add(CommandBuilder.command(<span class="string"><span class="delimiter">&quot;</span><span class="content">another-command</span><span class="delimiter">&quot;</span></span>).processHandler(process -&gt; {
+      <span class="comment">// Handle process</span>
     }).build(vertx));
 
-    // Resolve with the commands
-    resolveHandler.handle(Future.succeededFuture(() -&gt; commands));
+    <span class="comment">// Resolve with the commands</span>
+    resolveHandler.handle(<span class="predefined-type">Future</span>.succeededFuture(() -&gt; commands));
   }
 }</code></pre>
 </div>
@@ -1656,7 +1655,7 @@ don&#8217;t use this mechanism.</p>
 <div class="listingblock">
 <div class="title"><code>META-INF/services/io.vertx.ext.shell.spi.CommandResolverFactory</code> descriptor</div>
 <div class="content">
-<pre class="prettyprint highlight"><code>examples.pack.CommandPackExample</code></pre>
+<pre class="CodeRay highlight"><code>examples.pack.CommandPackExample</code></pre>
 </div>
 </div>
 </div>

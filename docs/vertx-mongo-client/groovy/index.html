@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -210,11 +209,11 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-mongo-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-mongo-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -226,7 +225,7 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mongo-client:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mongo-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -251,7 +250,7 @@ to share the same pool so you don&#8217;t end up with multiple pools</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = MongoClient.createShared(vertx, config)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = MongoClient.createShared(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -269,7 +268,7 @@ will actually create the pool, and the specified config will be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = MongoClient.createShared(vertx, config, "MyPoolName")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = MongoClient.createShared(vertx, config, <span class="string"><span class="delimiter">&quot;</span><span class="content">MyPoolName</span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -299,7 +298,7 @@ However, it&#8217;s possible you want to create a client instance that doesn&#82
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def client = MongoClient.createNonShared(vertx, config)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = MongoClient.createNonShared(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -332,20 +331,20 @@ if it doesn&#8217;t already exist, otherwise it is updated.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Document has no id
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Document has no id</span>
 
-def document = [
-  title:"The Hobbit"
+<span class="keyword">def</span> document = [
+  <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 ]
 
-mongoClient.save("books", document, { res -&gt;
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    def id = res.result()
-    println("Saved book with id ${id}")
+    <span class="keyword">def</span> id = res.result()
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Saved book with id </span><span class="inline"><span class="inline-delimiter">${</span>id<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 
@@ -357,20 +356,20 @@ mongoClient.save("books", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Document has an id already
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Document has an id already</span>
 
-def document = [
-  title:"The Hobbit",
-  _id:"123244"
+<span class="keyword">def</span> document = [
+  <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">_id</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">123244</span><span class="delimiter">&quot;</span></span>
 ]
 
-mongoClient.save("books", document, { res -&gt;
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    // ...
+    <span class="comment">// ...</span>
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 
@@ -388,20 +387,20 @@ mongoClient.save("books", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Document has an id already
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Document has an id already</span>
 
-def document = [
-  title:"The Hobbit"
+<span class="keyword">def</span> document = [
+  <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 ]
 
-mongoClient.insert("books", document, { res -&gt;
+mongoClient.insert(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    def id = res.result()
-    println("Inserted book with id ${id}")
+    <span class="keyword">def</span> id = res.result()
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Inserted book with id </span><span class="inline"><span class="inline-delimiter">${</span>id<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 
@@ -413,22 +412,22 @@ mongoClient.insert("books", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Document has an id already
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Document has an id already</span>
 
-def document = [
-  title:"The Hobbit",
-  _id:"123244"
+<span class="keyword">def</span> document = [
+  <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">_id</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">123244</span><span class="delimiter">&quot;</span></span>
 ]
 
-mongoClient.insert("books", document, { res -&gt;
+mongoClient.insert(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    //...
+    <span class="comment">//...</span>
 
-  } else {
+  } <span class="keyword">else</span> {
 
-    // Will fail if the book with that id already exists.
+    <span class="comment">// Will fail if the book with that id already exists.</span>
   }
 
 })</code></pre>
@@ -453,25 +452,25 @@ how the object is updated.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Match any documents with title=The Hobbit
-def query = [
-  title:"The Hobbit"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Match any documents with title=The Hobbit</span>
+<span class="keyword">def</span> query = [
+  <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 ]
 
-// Set the author field
-def update = [
-  $set:[
-    author:"J. R. R. Tolkien"
+<span class="comment">// Set the author field</span>
+<span class="keyword">def</span> update = [
+  <span class="error">$</span><span class="key">set</span>:[
+    <span class="key">author</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
   ]
 ]
 
-mongoClient.update("books", query, update, { res -&gt;
+mongoClient.update(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, update, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    println("Book updated !")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Book updated !</span><span class="delimiter">&quot;</span></span>)
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace()
   }
@@ -504,29 +503,29 @@ and pass in an instance of <code><a href="../../apidocs/io/vertx/ext/mongo/Updat
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Match any documents with title=The Hobbit
-def query = [
-  title:"The Hobbit"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Match any documents with title=The Hobbit</span>
+<span class="keyword">def</span> query = [
+  <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 ]
 
-// Set the author field
-def update = [
-  $set:[
-    author:"J. R. R. Tolkien"
+<span class="comment">// Set the author field</span>
+<span class="keyword">def</span> update = [
+  <span class="error">$</span><span class="key">set</span>:[
+    <span class="key">author</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
   ]
 ]
 
-def options = [
-  multi:true
+<span class="keyword">def</span> options = [
+  <span class="key">multi</span>:<span class="predefined-constant">true</span>
 ]
 
-mongoClient.updateWithOptions("books", query, update, options, { res -&gt;
+mongoClient.updateWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, update, options, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    println("Book updated !")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Book updated !</span><span class="delimiter">&quot;</span></span>)
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace()
   }
@@ -549,22 +548,22 @@ Instead it replaces the entire document with the one provided.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def query = [
-  title:"The Hobbit"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> query = [
+  <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 ]
 
-def replace = [
-  title:"The Lord of the Rings",
-  author:"J. R. R. Tolkien"
+<span class="keyword">def</span> replace = [
+  <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The Lord of the Rings</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">author</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 ]
 
-mongoClient.replace("books", query, replace, { res -&gt;
+mongoClient.replace(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, replace, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    println("Book replaced !")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Book replaced !</span><span class="delimiter">&quot;</span></span>)
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace()
 
@@ -602,12 +601,12 @@ For more explanation what ordered means, see <a href="https://docs.mongodb.com/m
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// empty query = match any
-def query = [:]
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// empty query = match any</span>
+<span class="keyword">def</span> query = [:]
 
-mongoClient.find("books", query, { res -&gt;
+mongoClient.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
     res.result().each { json -&gt;
 
@@ -615,7 +614,7 @@ mongoClient.find("books", query, { res -&gt;
 
     }
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace()
 
@@ -629,14 +628,14 @@ mongoClient.find("books", query, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// will match all Tolkien books
-def query = [
-  author:"J. R. R. Tolkien"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// will match all Tolkien books</span>
+<span class="keyword">def</span> query = [
+  <span class="key">author</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 ]
 
-mongoClient.find("books", query, { res -&gt;
+mongoClient.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
     res.result().each { json -&gt;
 
@@ -644,7 +643,7 @@ mongoClient.find("books", query, { res -&gt;
 
     }
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace()
 
@@ -738,17 +737,17 @@ mongoClient.findBatch("book", query, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def query = [
-  author:"J. R. R. Tolkien"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> query = [
+  <span class="key">author</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 ]
 
-mongoClient.remove("books", query, { res -&gt;
+mongoClient.remove(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    println("Never much liked Tolkien stuff!")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Never much liked Tolkien stuff!</span><span class="delimiter">&quot;</span></span>)
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace()
 
@@ -776,17 +775,17 @@ mongoClient.remove("books", query, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def query = [
-  author:"J. R. R. Tolkien"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> query = [
+  <span class="key">author</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 ]
 
-mongoClient.count("books", query, { res -&gt;
+mongoClient.count(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    def num = res.result()
+    <span class="keyword">def</span> num = res.result()
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace()
 
@@ -805,13 +804,13 @@ mongoClient.count("books", query, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">mongoClient.getCollections({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">mongoClient.getCollections({ res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    def collections = res.result()
+    <span class="keyword">def</span> collections = res.result()
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace()
 
@@ -824,13 +823,13 @@ mongoClient.count("books", query, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">mongoClient.createCollection("mynewcollectionr", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">mongoClient.createCollection(<span class="string"><span class="delimiter">&quot;</span><span class="content">mynewcollectionr</span><span class="delimiter">&quot;</span></span>, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    // Created ok!
+    <span class="comment">// Created ok!</span>
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace()
 
@@ -855,13 +854,13 @@ Dropping a collection will delete all documents within it!
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">mongoClient.dropCollection("mynewcollectionr", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">mongoClient.dropCollection(<span class="string"><span class="delimiter">&quot;</span><span class="content">mynewcollectionr</span><span class="delimiter">&quot;</span></span>, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    // Dropped ok!
+    <span class="comment">// Dropped ok!</span>
 
-  } else {
+  } <span class="keyword">else</span> {
 
     res.cause().printStackTrace()
 
@@ -887,17 +886,17 @@ of the entries in the JSON is the command name it must be specified as a paramet
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def command = [
-  aggregate:"collection_name",
-  pipeline:[
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> command = [
+  <span class="key">aggregate</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">collection_name</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">pipeline</span>:[
   ]
 ]
 
-mongoClient.runCommand("aggregate", command, { res -&gt;
-  if (res.succeeded()) {
-    def resArr = res.result().result
-    // etc
-  } else {
+mongoClient.runCommand(<span class="string"><span class="delimiter">&quot;</span><span class="content">aggregate</span><span class="delimiter">&quot;</span></span>, command, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="keyword">def</span> resArr = res.result().result
+    <span class="comment">// etc</span>
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 })</code></pre>
@@ -914,32 +913,32 @@ mongoClient.runCommand("aggregate", command, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def document = [
-  title:"The Hobbit",
-  publicationDate:[
-    $date:"1937-09-21T00:00:00+00:00"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> document = [
+  <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">publicationDate</span>:[
+    <span class="error">$</span><span class="key">date</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">1937-09-21T00:00:00+00:00</span><span class="delimiter">&quot;</span></span>
   ]
 ]
 
-mongoService.save("publishedBooks", document, { res -&gt;
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">publishedBooks</span><span class="delimiter">&quot;</span></span>, document, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    def id = res.result()
+    <span class="keyword">def</span> id = res.result()
 
-    mongoService.findOne("publishedBooks", [
-      _id:id
-    ], null, { res2 -&gt;
-      if (res2.succeeded()) {
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">publishedBooks</span><span class="delimiter">&quot;</span></span>, [
+      <span class="key">_id</span>:id
+    ], <span class="predefined-constant">null</span>, { res2 -&gt;
+      <span class="keyword">if</span> (res2.succeeded()) {
 
-        println("To retrieve ISO-8601 date : ${res2.result().publicationDate.$date}")
+        println(<span class="string"><span class="delimiter">&quot;</span><span class="content">To retrieve ISO-8601 date : </span><span class="inline"><span class="inline-delimiter">${</span>res2.result().publicationDate.<span class="error">$</span>date<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 
-      } else {
+      } <span class="keyword">else</span> {
         res2.cause().printStackTrace()
       }
     })
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 
@@ -951,29 +950,29 @@ mongoService.save("publishedBooks", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">byte[] binaryObject = new byte[40];
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">byte</span><span class="type">[]</span> binaryObject = <span class="keyword">new</span> <span class="type">byte</span>[<span class="integer">40</span>];
 
-JsonObject document = new JsonObject()
-        .put("name", "Alan Turing")
-        .put("binaryStuff", new JsonObject().put("$binary", binaryObject));
+JsonObject document = <span class="keyword">new</span> JsonObject()
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Alan Turing</span><span class="delimiter">&quot;</span></span>)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>binary</span><span class="delimiter">&quot;</span></span>, binaryObject));
 
-mongoService.save("smartPeople", document, res -&gt; {
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    String id = res.result();
+    <span class="predefined-type">String</span> id = res.result();
 
-    mongoService.findOne("smartPeople", new JsonObject().put("_id", id), null, res2 -&gt; {
-      if(res2.succeeded()) {
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span>, id), <span class="predefined-constant">null</span>, res2 -&gt; {
+      <span class="keyword">if</span>(res2.succeeded()) {
 
-        byte[] reconstitutedBinaryObject = res2.result().getJsonObject("binaryStuff").getBinary("$binary");
-        //This could now be de-serialized into an object in real life
-      } else {
+        <span class="type">byte</span><span class="type">[]</span> reconstitutedBinaryObject = res2.result().getJsonObject(<span class="string"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span>).getBinary(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>binary</span><span class="delimiter">&quot;</span></span>);
+        <span class="comment">//This could now be de-serialized into an object in real life</span>
+      } <span class="keyword">else</span> {
         res2.cause().printStackTrace();
       }
     });
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
 
@@ -985,35 +984,35 @@ mongoService.save("smartPeople", document, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">//This could be a the byte contents of a pdf file, etc converted to base 64
-def base64EncodedString = "a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ="
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">//This could be a the byte contents of a pdf file, etc converted to base 64</span>
+<span class="keyword">def</span> base64EncodedString = <span class="string"><span class="delimiter">&quot;</span><span class="content">a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ=</span><span class="delimiter">&quot;</span></span>
 
-def document = [
-  name:"Alan Turing",
-  binaryStuff:[
-    $binary:base64EncodedString
+<span class="keyword">def</span> document = [
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Alan Turing</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">binaryStuff</span>:[
+    <span class="error">$</span><span class="key">binary</span>:base64EncodedString
   ]
 ]
 
-mongoService.save("smartPeople", document, { res -&gt;
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    def id = res.result()
+    <span class="keyword">def</span> id = res.result()
 
-    mongoService.findOne("smartPeople", [
-      _id:id
-    ], null, { res2 -&gt;
-      if (res2.succeeded()) {
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, [
+      <span class="key">_id</span>:id
+    ], <span class="predefined-constant">null</span>, { res2 -&gt;
+      <span class="keyword">if</span> (res2.succeeded()) {
 
-        def reconstitutedBase64EncodedString = res2.result().binaryStuff.$binary
-        //This could now converted back to bytes from the base 64 string
-      } else {
+        <span class="keyword">def</span> reconstitutedBase64EncodedString = res2.result().binaryStuff.<span class="error">$</span>binary
+        <span class="comment">//This could now converted back to bytes from the base 64 string</span>
+      } <span class="keyword">else</span> {
         res2.cause().printStackTrace()
       }
     })
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 
@@ -1025,32 +1024,32 @@ mongoService.save("smartPeople", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def individualId = new org.bson.types.ObjectId().toHexString()
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> individualId = <span class="keyword">new</span> org.bson.types.ObjectId().toHexString()
 
-def document = [
-  name:"Stephen Hawking",
-  individualId:[
-    $oid:individualId
+<span class="keyword">def</span> document = [
+  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Stephen Hawking</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">individualId</span>:[
+    <span class="error">$</span><span class="key">oid</span>:individualId
   ]
 ]
 
-mongoService.save("smartPeople", document, { res -&gt;
+mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    def id = res.result()
+    <span class="keyword">def</span> id = res.result()
 
-    mongoService.findOne("smartPeople", [
-      _id:id
-    ], null, { res2 -&gt;
-      if (res2.succeeded()) {
-        def reconstitutedIndividualId = res2.result().individualId.$oid
-      } else {
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, [
+      <span class="key">_id</span>:id
+    ], <span class="predefined-constant">null</span>, { res2 -&gt;
+      <span class="keyword">if</span> (res2.succeeded()) {
+        <span class="keyword">def</span> reconstitutedIndividualId = res2.result().individualId.<span class="error">$</span>oid
+      } <span class="keyword">else</span> {
         res2.cause().printStackTrace()
       }
     })
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 
@@ -1062,19 +1061,19 @@ mongoService.save("smartPeople", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def document = [
-  title:"The Hobbit"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> document = [
+  <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 ]
 
-mongoClient.save("books", document, { res -&gt;
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    mongoClient.distinct("books", "title", java.lang.String.class.getName(), { res2 -&gt;
-      println("Title is : ${res2.result()[0]}")
+    mongoClient.distinct(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, java.lang.String.class.getName(), { res2 -&gt;
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Title is : </span><span class="inline"><span class="inline-delimiter">${</span>res2.result()[<span class="integer">0</span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     })
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 
@@ -1086,19 +1085,19 @@ mongoClient.save("books", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def document = [
-  title:"The Hobbit"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> document = [
+  <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 ]
 
-mongoClient.save("books", document, { res -&gt;
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, { res -&gt;
 
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
 
-    mongoClient.distinctBatch("books", "title", java.lang.String.class.getName(), { res2 -&gt;
-      println("Title is : ${res2.result().title}")
+    mongoClient.distinctBatch(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, java.lang.String.class.getName(), { res2 -&gt;
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Title is : </span><span class="inline"><span class="inline-delimiter">${</span>res2.result().title<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     })
 
-  } else {
+  } <span class="keyword">else</span> {
     res.cause().printStackTrace()
   }
 

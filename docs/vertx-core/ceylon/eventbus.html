@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -270,7 +269,7 @@ You do this by defining a <code>codec</code> for the objects you want to send.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value eb = vertx.eventBus();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">value eb = vertx.eventBus();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -285,10 +284,10 @@ Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value eb = vertx.eventBus();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value eb = vertx.eventBus();
 
-eb.consumer("news.uk.sport", (Message&lt;Object&gt; message) {
-  print("I have received a message: ``message.body()``");
+eb.consumer(&quot;news.uk.sport&quot;, (Message&lt;Object&gt; message) {
+  print(&quot;I have received a message: ``message.body()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -307,11 +306,11 @@ to return a MessageConsumer with no handler set, and then set the handler on tha
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value eb = vertx.eventBus();
+<pre class="CodeRay highlight"><code data-lang="ceylon">value eb = vertx.eventBus();
 
-value consumer = eb.consumer("news.uk.sport");
+value consumer = eb.consumer(&quot;news.uk.sport&quot;);
 consumer.handler((Message&lt;String&gt; message) {
-  print("I have received a message: ``message.body()``");
+  print(&quot;I have received a message: ``message.body()``&quot;);
 });</code></pre>
 </div>
 </div>
@@ -325,11 +324,11 @@ on the MessageConsumer object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">consumer.completionHandler((Throwable? res) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">consumer.completionHandler((Throwable? res) {
   if (!exists res) {
-    print("The handler registration has reached all nodes");
+    print(&quot;The handler registration has reached all nodes&quot;);
   } else {
-    print("Registration failed!");
+    print(&quot;Registration failed!&quot;);
   };
 });</code></pre>
 </div>
@@ -346,11 +345,11 @@ be notified when this is complete use <code><a href="../../ceylondoc/vertx-core/
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">consumer.unregister((Throwable? res) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">consumer.unregister((Throwable? res) {
   if (!exists res) {
-    print("The handler un-registration has reached all nodes");
+    print(&quot;The handler un-registration has reached all nodes&quot;);
   } else {
-    print("Un-registration failed!");
+    print(&quot;Un-registration failed!&quot;);
   };
 });</code></pre>
 </div>
@@ -364,7 +363,7 @@ address to publish it to.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">eventBus.publish("news.uk.sport", "Yay! Someone kicked a ball");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">eventBus.publish(&quot;news.uk.sport&quot;, &quot;Yay! Someone kicked a ball&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -382,7 +381,7 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="ceylon">eventBus.send(&quot;news.uk.sport&quot;, &quot;Yay! Someone kicked a ball&quot;);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -430,10 +429,10 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">value consumer = eventBus.consumer("news.uk.sport");
+<pre class="CodeRay highlight"><code data-lang="ceylon">value consumer = eventBus.consumer(&quot;news.uk.sport&quot;);
 consumer.handler((Message&lt;String&gt; message) {
-  print("I have received a message: ``message.body()``");
-  message.reply("how interesting!");
+  print(&quot;I have received a message: ``message.body()``&quot;);
+  message.reply(&quot;how interesting!&quot;);
 });</code></pre>
 </div>
 </div>
@@ -442,9 +441,9 @@ consumer.handler((Message&lt;String&gt; message) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass", (Message&lt;Object&gt;|Throwable ar) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">eventBus.send(&quot;news.uk.sport&quot;, &quot;Yay! Someone kicked a ball across a patch of grass&quot;, (Message&lt;Object&gt;|Throwable ar) {
   if (is Message&lt;Object&gt; ar) {
-    print("Received reply: ``ar.body()``");
+    print(&quot;Received reply: ``ar.body()``&quot;);
   };
 });</code></pre>
 </div>
@@ -525,7 +524,7 @@ instance as clustered;</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
 
 ...
 
@@ -534,9 +533,9 @@ vertx_.clusteredVertx(options, (Vertx|Throwable res) {
   if (is Vertx res) {
     value vertx = res;
     value eventBus = vertx.eventBus();
-    print("We now have a clustered event bus: ``eventBus``");
+    print(&quot;We now have a clustered event bus: ``eventBus``&quot;);
   } else {
-    print("Failed: ``res``");
+    print(&quot;Failed: ``res``&quot;);
   };
 });</code></pre>
 </div>
@@ -579,7 +578,7 @@ the event bus acts as a server and client, the configuration is close to
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
 import io.vertx.ceylon.core.http { required }
 
 ...
@@ -588,14 +587,14 @@ value options = VertxOptions {
   eventBusOptions = EventBusOptions {
     ssl = true;
     keyStoreOptions = JksOptions {
-      path = "keystore.jks";
-      password = "wibble";
+      path = &quot;keystore.jks&quot;;
+      password = &quot;wibble&quot;;
     };
     trustStoreOptions = JksOptions {
-      path = "keystore.jks";
-      password = "wibble";
+      path = &quot;keystore.jks&quot;;
+      password = &quot;wibble&quot;;
     };
-    clientAuth = "REQUIRED";
+    clientAuth = &quot;REQUIRED&quot;;
   };
 };
 
@@ -603,9 +602,9 @@ vertx_.clusteredVertx(options, (Vertx|Throwable res) {
   if (is Vertx res) {
     value vertx = res;
     value eventBus = vertx.eventBus();
-    print("We now have a clustered event bus: ``eventBus``");
+    print(&quot;We now have a clustered event bus: ``eventBus``&quot;);
   } else {
-    print("Failed: ``res``");
+    print(&quot;Failed: ``res``&quot;);
   };
 });</code></pre>
 </div>
@@ -632,13 +631,13 @@ clustered, the port and host, as you would do with <code><a href="../../ceylondo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.core { vertx_ = vertx }
 
 ...
 
 value options = VertxOptions {
   eventBusOptions = EventBusOptions {
-    clusterPublicHost = "whatever";
+    clusterPublicHost = &quot;whatever&quot;;
     clusterPublicPort = 1234;
   };
 };
@@ -647,9 +646,9 @@ vertx_.clusteredVertx(options, (Vertx|Throwable res) {
   if (is Vertx res) {
     value vertx = res;
     value eventBus = vertx.eventBus();
-    print("We now have a clustered event bus: ``eventBus``");
+    print(&quot;We now have a clustered event bus: ``eventBus``&quot;);
   } else {
-    print("Failed: ``res``");
+    print(&quot;Failed: ``res``&quot;);
   };
 });</code></pre>
 </div>

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -198,11 +197,11 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-amqp-bridge&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-amqp-bridge<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -214,7 +213,7 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-amqp-bridge:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-amqp-<span class="key">bridge</span>:<span class="float">3.4</span><span class="float">.2</span></code></pre>
 </div>
 </div>
 </div>
@@ -233,14 +232,14 @@ to configure various options such as for using SSL connections.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">AmqpBridge bridge = AmqpBridge.create(vertx);
-// Start the bridge, then use the event loop thread to process things thereafter.
-bridge.start("localhost", 5672, res -&gt; {
-  // Set up a producer using the bridge, send a message with it.
-  MessageProducer&lt;JsonObject&gt; producer = bridge.createProducer("myAmqpAddress");
+<pre class="CodeRay highlight"><code data-lang="java">AmqpBridge bridge = AmqpBridge.create(vertx);
+<span class="comment">// Start the bridge, then use the event loop thread to process things thereafter.</span>
+bridge.start(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">5672</span>, res -&gt; {
+  <span class="comment">// Set up a producer using the bridge, send a message with it.</span>
+  MessageProducer&lt;JsonObject&gt; producer = bridge.createProducer(<span class="string"><span class="delimiter">&quot;</span><span class="content">myAmqpAddress</span><span class="delimiter">&quot;</span></span>);
 
-  JsonObject amqpMsgPayload = new JsonObject();
-  amqpMsgPayload.put("body", "myStringContent");
+  JsonObject amqpMsgPayload = <span class="keyword">new</span> JsonObject();
+  amqpMsgPayload.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">body</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myStringContent</span><span class="delimiter">&quot;</span></span>);
 
   producer.send(amqpMsgPayload);
 });</code></pre>
@@ -257,16 +256,16 @@ messages.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">AmqpBridge bridge = AmqpBridge.create(vertx);
-// Start the bridge, then use the event loop thread to process things thereafter.
-bridge.start("localhost", 5672, res -&gt; {
-  // Set up a consumer using the bridge, register a handler for it.
-  MessageConsumer&lt;JsonObject&gt; consumer = bridge.createConsumer("myAmqpAddress");
+<pre class="CodeRay highlight"><code data-lang="java">AmqpBridge bridge = AmqpBridge.create(vertx);
+<span class="comment">// Start the bridge, then use the event loop thread to process things thereafter.</span>
+bridge.start(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">5672</span>, res -&gt; {
+  <span class="comment">// Set up a consumer using the bridge, register a handler for it.</span>
+  MessageConsumer&lt;JsonObject&gt; consumer = bridge.createConsumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">myAmqpAddress</span><span class="delimiter">&quot;</span></span>);
   consumer.handler(vertxMsg -&gt; {
     JsonObject amqpMsgPayload = vertxMsg.body();
-    Object amqpBody = amqpMsgPayload.getValue("body");
+    <span class="predefined-type">Object</span> amqpBody = amqpMsgPayload.getValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">body</span><span class="delimiter">&quot;</span></span>);
 
-    System.out.println("Received a message with body: " + amqpBody);
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received a message with body: </span><span class="delimiter">&quot;</span></span> + amqpBody);
   });
 });</code></pre>
 </div>
@@ -392,11 +391,11 @@ message could look something like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject applicationProperties = new JsonObject();
-applicationProperties.put("name", "value");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject applicationProperties = <span class="keyword">new</span> JsonObject();
+applicationProperties.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>);
 
-JsonObject amqpMsgPayload = new JsonObject();
-amqpMsgPayload.put("application_properties", applicationProperties);
+JsonObject amqpMsgPayload = <span class="keyword">new</span> JsonObject();
+amqpMsgPayload.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">application_properties</span><span class="delimiter">&quot;</span></span>, applicationProperties);
 
 producer.send(amqpMsgPayload);</code></pre>
 </div>
@@ -408,9 +407,9 @@ retrieving an application-property from a received message might look like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject appProps = amqpMsgPayload.getJsonObject("application_properties");
-if(appProps != null) {
-  Object propValue = appProps.getValue("propertyName");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject appProps = amqpMsgPayload.getJsonObject(<span class="string"><span class="delimiter">&quot;</span><span class="content">application_properties</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">if</span>(appProps != <span class="predefined-constant">null</span>) {
+  <span class="predefined-type">Object</span> propValue = appProps.getValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">propertyName</span><span class="delimiter">&quot;</span></span>);
 }</code></pre>
 </div>
 </div>
@@ -439,7 +438,7 @@ in tandem with the producer and attempt to send only what it knows can actually 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">producer.writeQueueFull();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">producer.writeQueueFull();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -448,8 +447,8 @@ receives more credit and is able to send messages immediately rather than buffer
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">producer.drainHandler(v -&gt; {
-  // ...do stuff and send...
+<pre class="CodeRay highlight"><code data-lang="java">producer.drainHandler(v -&gt; {
+  <span class="comment">// ...do stuff and send...</span>
 });</code></pre>
 </div>
 </div>
@@ -464,9 +463,9 @@ buffered message value before registering a handler, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consumer.setMaxBufferedMessages(5);
+<pre class="CodeRay highlight"><code data-lang="java">consumer.setMaxBufferedMessages(<span class="integer">5</span>);
 consumer.handler(msg -&gt; {
-  // ...handle received messages...
+  <span class="comment">// ...handle received messages...</span>
 });</code></pre>
 </div>
 </div>
@@ -487,16 +486,16 @@ certificate:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">AmqpBridgeOptions bridgeOptions = new AmqpBridgeOptions();
-bridgeOptions.setSsl(true);
+<pre class="CodeRay highlight"><code data-lang="java">AmqpBridgeOptions bridgeOptions = <span class="keyword">new</span> AmqpBridgeOptions();
+bridgeOptions.setSsl(<span class="predefined-constant">true</span>);
 
-PfxOptions trustOptions = new PfxOptions().setPath("path/to/pkcs12.truststore")
-                                          .setPassword("password");
+PfxOptions trustOptions = <span class="keyword">new</span> PfxOptions().setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">path/to/pkcs12.truststore</span><span class="delimiter">&quot;</span></span>)
+                                          .setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>);
 bridgeOptions.setPfxTrustOptions(trustOptions);
 
 AmqpBridge bridge = AmqpBridge.create(vertx, bridgeOptions);
-bridge.start("localhost", 5672, "username", "password", res -&gt; {
-  // ..do things with the bridge..
+bridge.start(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">5672</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="comment">// ..do things with the bridge..</span>
 });</code></pre>
 </div>
 </div>
@@ -507,20 +506,20 @@ also a PKCS12 based key store containing an SSL key and certificate the server c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">AmqpBridgeOptions bridgeOptions = new AmqpBridgeOptions();
-bridgeOptions.setSsl(true);
+<pre class="CodeRay highlight"><code data-lang="java">AmqpBridgeOptions bridgeOptions = <span class="keyword">new</span> AmqpBridgeOptions();
+bridgeOptions.setSsl(<span class="predefined-constant">true</span>);
 
-PfxOptions trustOptions = new PfxOptions().setPath("path/to/pkcs12.truststore")
-                                          .setPassword("password");
+PfxOptions trustOptions = <span class="keyword">new</span> PfxOptions().setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">path/to/pkcs12.truststore</span><span class="delimiter">&quot;</span></span>)
+                                          .setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>);
 bridgeOptions.setPfxTrustOptions(trustOptions);
 
-PfxOptions keyCertOptions = new PfxOptions().setPath("path/to/pkcs12.keystore")
-                                            .setPassword("password");
+PfxOptions keyCertOptions = <span class="keyword">new</span> PfxOptions().setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">path/to/pkcs12.keystore</span><span class="delimiter">&quot;</span></span>)
+                                            .setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>);
 bridgeOptions.setPfxKeyCertOptions(keyCertOptions);
 
 AmqpBridge bridge = AmqpBridge.create(vertx, bridgeOptions);
-bridge.start("localhost", 5672, res -&gt; {
-  // ..do things with the bridge..
+bridge.start(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">5672</span>, res -&gt; {
+  <span class="comment">// ..do things with the bridge..</span>
 });</code></pre>
 </div>
 </div>
@@ -607,12 +606,12 @@ value to match it with the reply handler, and then invokes the handler with the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JsonObject amqpMsgPayload = new JsonObject();
-amqpMsgPayload.put("body", "myRequest");
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject amqpMsgPayload = <span class="keyword">new</span> JsonObject();
+amqpMsgPayload.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">body</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myRequest</span><span class="delimiter">&quot;</span></span>);
 
 producer.&lt;JsonObject&gt; send(amqpMsgPayload, res -&gt; {
   JsonObject amqpReplyMessagePayload = res.result().body();
-  // ...do something with reply message...
+  <span class="comment">// ...do something with reply message...</span>
 });</code></pre>
 </div>
 </div>
@@ -685,12 +684,12 @@ original sending application .</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consumer.handler(msg -&gt; {
-  // ...do something with received message...then reply...
-  String replyAddress = msg.replyAddress();
-  if(replyAddress != null) {
-    JsonObject amqpReplyMessagePayload = new JsonObject();
-    amqpReplyMessagePayload.put("body", "myResponse");
+<pre class="CodeRay highlight"><code data-lang="java">consumer.handler(msg -&gt; {
+  <span class="comment">// ...do something with received message...then reply...</span>
+  <span class="predefined-type">String</span> replyAddress = msg.replyAddress();
+  <span class="keyword">if</span>(replyAddress != <span class="predefined-constant">null</span>) {
+    JsonObject amqpReplyMessagePayload = <span class="keyword">new</span> JsonObject();
+    amqpReplyMessagePayload.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">body</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">myResponse</span><span class="delimiter">&quot;</span></span>);
 
     msg.reply(amqpReplyMessagePayload);
   }

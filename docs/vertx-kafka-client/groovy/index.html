@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -188,11 +187,11 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-kafka-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-kafka-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -204,7 +203,7 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-kafka-client:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-kafka-<span class="key">client</span>:<span class="float">3.4</span><span class="float">.2</span></code></pre>
 </div>
 </div>
 </div>
@@ -227,17 +226,17 @@ static creation methods exposed by <code><a href="../../apidocs/io/vertx/kafka/c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// creating the consumer using map config
-def config = [:]
-config["bootstrap.servers"] = "localhost:9092"
-config["key.deserializer"] = "org.apache.kafka.common.serialization.StringDeserializer"
-config["value.deserializer"] = "org.apache.kafka.common.serialization.StringDeserializer"
-config["group.id"] = "my_group"
-config["auto.offset.reset"] = "earliest"
-config["enable.auto.commit"] = "false"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// creating the consumer using map config</span>
+<span class="keyword">def</span> config = [:]
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">bootstrap.servers</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:9092</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">key.deserializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">org.apache.kafka.common.serialization.StringDeserializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">value.deserializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">org.apache.kafka.common.serialization.StringDeserializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">group.id</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">my_group</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">auto.offset.reset</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">earliest</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">enable.auto.commit</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">false</span><span class="delimiter">&quot;</span></span>
 
-// use consumer for interacting with Apache Kafka
-def consumer = KafkaConsumer.create(vertx, config)</code></pre>
+<span class="comment">// use consumer for interacting with Apache Kafka</span>
+<span class="keyword">def</span> consumer = KafkaConsumer.create(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -250,15 +249,15 @@ the deserializers to use for getting key and value from each received message.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// creating the producer using map and class types for key and value serializers/deserializers
-def config = [:]
-config["bootstrap.servers"] = "localhost:9092"
-config["key.serializer"] = "org.apache.kafka.common.serialization.StringSerializer"
-config["value.serializer"] = "org.apache.kafka.common.serialization.StringSerializer"
-config["acks"] = "1"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// creating the producer using map and class types for key and value serializers/deserializers</span>
+<span class="keyword">def</span> config = [:]
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">bootstrap.servers</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:9092</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">key.serializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">org.apache.kafka.common.serialization.StringSerializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">value.serializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">org.apache.kafka.common.serialization.StringSerializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">acks</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span>
 
-// use producer for interacting with Apache Kafka
-def producer = KafkaProducer.create(vertx, config)</code></pre>
+<span class="comment">// use producer for interacting with Apache Kafka</span>
+<span class="keyword">def</span> producer = KafkaProducer.create(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -266,17 +265,17 @@ def producer = KafkaProducer.create(vertx, config)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// creating the consumer using properties config
-def config = new java.util.Properties()
-config.put(org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// creating the consumer using properties config</span>
+<span class="keyword">def</span> config = <span class="keyword">new</span> java.util.Properties()
+config.put(org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:9092</span><span class="delimiter">&quot;</span></span>)
 config.put(org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, org.apache.kafka.common.serialization.StringDeserializer.class)
 config.put(org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, org.apache.kafka.common.serialization.StringDeserializer.class)
-config.put(org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG, "my_group")
-config.put(org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
-config.put(org.apache.kafka.clients.consumer.ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false")
+config.put(org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG, <span class="string"><span class="delimiter">&quot;</span><span class="content">my_group</span><span class="delimiter">&quot;</span></span>)
+config.put(org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, <span class="string"><span class="delimiter">&quot;</span><span class="content">earliest</span><span class="delimiter">&quot;</span></span>)
+config.put(org.apache.kafka.clients.consumer.ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, <span class="string"><span class="delimiter">&quot;</span><span class="content">false</span><span class="delimiter">&quot;</span></span>)
 
-// use consumer for interacting with Apache Kafka
-def consumer = KafkaConsumer.create(vertx, config)</code></pre>
+<span class="comment">// use consumer for interacting with Apache Kafka</span>
+<span class="keyword">def</span> consumer = KafkaConsumer.create(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -286,13 +285,13 @@ using the related properties for that</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// creating the producer using map and class types for key and value serializers/deserializers
-def config = new java.util.Properties()
-config.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
-config.put(org.apache.kafka.clients.producer.ProducerConfig.ACKS_CONFIG, "1")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// creating the producer using map and class types for key and value serializers/deserializers</span>
+<span class="keyword">def</span> config = <span class="keyword">new</span> java.util.Properties()
+config.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:9092</span><span class="delimiter">&quot;</span></span>)
+config.put(org.apache.kafka.clients.producer.ProducerConfig.ACKS_CONFIG, <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span>)
 
-// use producer for interacting with Apache Kafka
-def producer = KafkaProducer.create(vertx, config, java.lang.String.class, java.lang.String.class)</code></pre>
+<span class="comment">// use producer for interacting with Apache Kafka</span>
+<span class="keyword">def</span> producer = KafkaProducer.create(vertx, config, java.lang.String.class, java.lang.String.class)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -316,20 +315,20 @@ subscribing to a set of topics being part of a consumer group (specified by the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// register the handler for incoming messages
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// register the handler for incoming messages</span>
 consumer.handler({ record -&gt;
-  println("Processing key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Processing key=</span><span class="inline"><span class="inline-delimiter">${</span>record.key()<span class="inline-delimiter">}</span></span><span class="content">,value=</span><span class="inline"><span class="inline-delimiter">${</span>record.value()<span class="inline-delimiter">}</span></span><span class="content">,partition=</span><span class="inline"><span class="inline-delimiter">${</span>record.partition()<span class="inline-delimiter">}</span></span><span class="content">,offset=</span><span class="inline"><span class="inline-delimiter">${</span>record.offset()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })
 
-// subscribe to several topics
-def topics = new java.util.HashSet()
-topics.add("topic1")
-topics.add("topic2")
-topics.add("topic3")
+<span class="comment">// subscribe to several topics</span>
+<span class="keyword">def</span> topics = <span class="keyword">new</span> java.util.HashSet()
+topics.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">topic1</span><span class="delimiter">&quot;</span></span>)
+topics.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">topic2</span><span class="delimiter">&quot;</span></span>)
+topics.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">topic3</span><span class="delimiter">&quot;</span></span>)
 consumer.subscribe(topics)
 
-// or just subscribe to a single topic
-consumer.subscribe("a-single-topic")</code></pre>
+<span class="comment">// or just subscribe to a single topic</span>
+consumer.subscribe(<span class="string"><span class="delimiter">&quot;</span><span class="content">a-single-topic</span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -343,30 +342,30 @@ is completed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// register the handler for incoming messages
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// register the handler for incoming messages</span>
 consumer.handler({ record -&gt;
-  println("Processing key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Processing key=</span><span class="inline"><span class="inline-delimiter">${</span>record.key()<span class="inline-delimiter">}</span></span><span class="content">,value=</span><span class="inline"><span class="inline-delimiter">${</span>record.value()<span class="inline-delimiter">}</span></span><span class="content">,partition=</span><span class="inline"><span class="inline-delimiter">${</span>record.partition()<span class="inline-delimiter">}</span></span><span class="content">,offset=</span><span class="inline"><span class="inline-delimiter">${</span>record.offset()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })
 
-// subscribe to several topics
-def topics = new java.util.HashSet()
-topics.add("topic1")
-topics.add("topic2")
-topics.add("topic3")
+<span class="comment">// subscribe to several topics</span>
+<span class="keyword">def</span> topics = <span class="keyword">new</span> java.util.HashSet()
+topics.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">topic1</span><span class="delimiter">&quot;</span></span>)
+topics.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">topic2</span><span class="delimiter">&quot;</span></span>)
+topics.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">topic3</span><span class="delimiter">&quot;</span></span>)
 consumer.subscribe(topics, { ar -&gt;
-  if (ar.succeeded()) {
-    println("subscribed")
-  } else {
-    println("Could not subscribe ${ar.cause().getMessage()}")
+  <span class="keyword">if</span> (ar.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">subscribed</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Could not subscribe </span><span class="inline"><span class="inline-delimiter">${</span>ar.cause().getMessage()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })
 
-// or just subscribe to a single topic
-consumer.subscribe("a-single-topic", { ar -&gt;
-  if (ar.succeeded()) {
-    println("subscribed")
-  } else {
-    println("Could not subscribe ${ar.cause().getMessage()}")
+<span class="comment">// or just subscribe to a single topic</span>
+consumer.subscribe(<span class="string"><span class="delimiter">&quot;</span><span class="content">a-single-topic</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
+  <span class="keyword">if</span> (ar.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">subscribed</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Could not subscribe </span><span class="inline"><span class="inline-delimiter">${</span>ar.cause().getMessage()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -387,33 +386,33 @@ of the partitions revocations and assignments by the Kafka cluster using
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// register the handler for incoming messages
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// register the handler for incoming messages</span>
 consumer.handler({ record -&gt;
-  println("Processing key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Processing key=</span><span class="inline"><span class="inline-delimiter">${</span>record.key()<span class="inline-delimiter">}</span></span><span class="content">,value=</span><span class="inline"><span class="inline-delimiter">${</span>record.value()<span class="inline-delimiter">}</span></span><span class="content">,partition=</span><span class="inline"><span class="inline-delimiter">${</span>record.partition()<span class="inline-delimiter">}</span></span><span class="content">,offset=</span><span class="inline"><span class="inline-delimiter">${</span>record.offset()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })
 
-// registering handlers for assigned and revoked partitions
+<span class="comment">// registering handlers for assigned and revoked partitions</span>
 consumer.partitionsAssignedHandler({ topicPartitions -&gt;
 
-  println("Partitions assigned")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Partitions assigned</span><span class="delimiter">&quot;</span></span>)
   topicPartitions.each { topicPartition -&gt;
-    println("${topicPartition.topic} ${topicPartition.partition}")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>topicPartition.topic<span class="inline-delimiter">}</span></span><span class="content"> </span><span class="inline"><span class="inline-delimiter">${</span>topicPartition.partition<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })
 
 consumer.partitionsRevokedHandler({ topicPartitions -&gt;
 
-  println("Partitions revoked")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Partitions revoked</span><span class="delimiter">&quot;</span></span>)
   topicPartitions.each { topicPartition -&gt;
-    println("${topicPartition.topic} ${topicPartition.partition}")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>topicPartition.topic<span class="inline-delimiter">}</span></span><span class="content"> </span><span class="inline"><span class="inline-delimiter">${</span>topicPartition.partition<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })
 
-// subscribes to the topic
-consumer.subscribe("test", { ar -&gt;
+<span class="comment">// subscribes to the topic</span>
+consumer.subscribe(<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
 
-  if (ar.succeeded()) {
-    println("Consumer subscribed")
+  <span class="keyword">if</span> (ar.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Consumer subscribed</span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -424,9 +423,9 @@ not get messages anymore using <code><a href="../../apidocs/io/vertx/kafka/clien
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// consumer is already member of a consumer group
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// consumer is already member of a consumer group</span>
 
-// unsubscribing request
+<span class="comment">// unsubscribing request</span>
 consumer.unsubscribe()</code></pre>
 </div>
 </div>
@@ -435,13 +434,13 @@ consumer.unsubscribe()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// consumer is already member of a consumer group
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// consumer is already member of a consumer group</span>
 
-// unsubscribing request
+<span class="comment">// unsubscribing request</span>
 consumer.unsubscribe({ ar -&gt;
 
-  if (ar.succeeded()) {
-    println("Consumer unsubscribed")
+  <span class="keyword">if</span> (ar.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Consumer unsubscribed</span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -462,31 +461,31 @@ in order to ask for specific partitions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// register the handler for incoming messages
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// register the handler for incoming messages</span>
 consumer.handler({ record -&gt;
-  println("key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">key=</span><span class="inline"><span class="inline-delimiter">${</span>record.key()<span class="inline-delimiter">}</span></span><span class="content">,value=</span><span class="inline"><span class="inline-delimiter">${</span>record.value()<span class="inline-delimiter">}</span></span><span class="content">,partition=</span><span class="inline"><span class="inline-delimiter">${</span>record.partition()<span class="inline-delimiter">}</span></span><span class="content">,offset=</span><span class="inline"><span class="inline-delimiter">${</span>record.offset()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })
 
-//
-def topicPartitions = new java.util.HashSet()
+<span class="comment">//</span>
+<span class="keyword">def</span> topicPartitions = <span class="keyword">new</span> java.util.HashSet()
 topicPartitions.add([
-  topic:"test",
-  partition:0
+  <span class="key">topic</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">partition</span>:<span class="integer">0</span>
 ])
 
-// requesting to be assigned the specific partition
+<span class="comment">// requesting to be assigned the specific partition</span>
 consumer.assign(topicPartitions, { done -&gt;
 
-  if (done.succeeded()) {
-    println("Partition assigned")
+  <span class="keyword">if</span> (done.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Partition assigned</span><span class="delimiter">&quot;</span></span>)
 
-    // requesting the assigned partitions
+    <span class="comment">// requesting the assigned partitions</span>
     consumer.assignment({ done1 -&gt;
 
-      if (done1.succeeded()) {
+      <span class="keyword">if</span> (done1.succeeded()) {
 
         done1.result().each { topicPartition -&gt;
-          println("${topicPartition.topic} ${topicPartition.partition}")
+          println(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>topicPartition.topic<span class="inline-delimiter">}</span></span><span class="content"> </span><span class="inline"><span class="inline-delimiter">${</span>topicPartition.partition<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
         }
       }
     })
@@ -515,10 +514,10 @@ partitions for a specified topic</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// asking partitions information about specific topic
-consumer.partitionsFor("test", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// asking partitions information about specific topic</span>
+consumer.partitionsFor(<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
 
-  if (ar.succeeded()) {
+  <span class="keyword">if</span> (ar.succeeded()) {
 
     ar.result().each { partitionInfo -&gt;
       println(partitionInfo)
@@ -533,15 +532,15 @@ with related partitions</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// asking information about available topics and related partitions
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// asking information about available topics and related partitions</span>
 consumer.listTopics({ ar -&gt;
 
-  if (ar.succeeded()) {
+  <span class="keyword">if</span> (ar.succeeded()) {
 
-    def map = ar.result()
+    <span class="keyword">def</span> map = ar.result()
     map.each { topic, partitions -&gt;
-      println("topic = ${topic}")
-      println("partitions = ${map[topic]}")
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">topic = </span><span class="inline"><span class="inline-delimiter">${</span>topic<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">partitions = </span><span class="inline"><span class="inline-delimiter">${</span>map[topic]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     }
   }
 })</code></pre>
@@ -567,13 +566,13 @@ the offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// consumer is processing read messages
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// consumer is processing read messages</span>
 
-// committing offset of the last read message
+<span class="comment">// committing offset of the last read message</span>
 consumer.commit({ ar -&gt;
 
-  if (ar.succeeded()) {
-    println("Last read message offset committed")
+  <span class="keyword">if</span> (ar.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Last read message offset committed</span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -593,16 +592,16 @@ position</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def topicPartition = [
-  topic:"test",
-  partition:0
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> topicPartition = [
+  <span class="key">topic</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">partition</span>:<span class="integer">0</span>
 ]
 
-// seek to a specific offset
-consumer.seek(topicPartition, 10, { done -&gt;
+<span class="comment">// seek to a specific offset</span>
+consumer.seek(topicPartition, <span class="integer">10</span>, { done -&gt;
 
-  if (done.succeeded()) {
-    println("Seeking done")
+  <span class="keyword">if</span> (done.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Seeking done</span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -612,16 +611,16 @@ consumer.seek(topicPartition, 10, { done -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def topicPartition = [
-  topic:"test",
-  partition:0
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> topicPartition = [
+  <span class="key">topic</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">partition</span>:<span class="integer">0</span>
 ]
 
-// seek to the beginning of the partition
+<span class="comment">// seek to the beginning of the partition</span>
 consumer.seekToBeginning(java.util.Collections.singleton(topicPartition), { done -&gt;
 
-  if (done.succeeded()) {
-    println("Seeking done")
+  <span class="keyword">if</span> (done.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Seeking done</span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -631,16 +630,16 @@ consumer.seekToBeginning(java.util.Collections.singleton(topicPartition), { done
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def topicPartition = [
-  topic:"test",
-  partition:0
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> topicPartition = [
+  <span class="key">topic</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">partition</span>:<span class="integer">0</span>
 ]
 
-// seek to the end of the partition
+<span class="comment">// seek to the end of the partition</span>
 consumer.seekToEnd(java.util.Collections.singleton(topicPartition), { done -&gt;
 
-  if (done.succeeded()) {
-    println("Seeking done")
+  <span class="keyword">if</span> (done.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Seeking done</span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -657,27 +656,27 @@ it does not change the consumer&#8217;s offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def topicPartitions = new java.util.HashSet()
-def topicPartition = [
-  topic:"test",
-  partition:0
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> topicPartitions = <span class="keyword">new</span> java.util.HashSet()
+<span class="keyword">def</span> topicPartition = [
+  <span class="key">topic</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">partition</span>:<span class="integer">0</span>
 ]
 topicPartitions.add(topicPartition)
 
 consumer.beginningOffsets(topicPartitions, { done -&gt;
-  if (done.succeeded()) {
-    def results = done.result()
+  <span class="keyword">if</span> (done.succeeded()) {
+    <span class="keyword">def</span> results = done.result()
     results.each { topic, beginningOffset -&gt;
-      println("Beginning offset for topic=${topic.topic}, partition=${topic.partition}, beginningOffset=${beginningOffset}")
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Beginning offset for topic=</span><span class="inline"><span class="inline-delimiter">${</span>topic.topic<span class="inline-delimiter">}</span></span><span class="content">, partition=</span><span class="inline"><span class="inline-delimiter">${</span>topic.partition<span class="inline-delimiter">}</span></span><span class="content">, beginningOffset=</span><span class="inline"><span class="inline-delimiter">${</span>beginningOffset<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     }
   }
 })
 
-// Convenience method for single-partition lookup
+<span class="comment">// Convenience method for single-partition lookup</span>
 consumer.beginningOffsets(topicPartition, { done -&gt;
-  if (done.succeeded()) {
-    def beginningOffset = done.result()
-    println("Beginning offset for topic=${topicPartition.topic}, partition=${topicPartition.partition}, beginningOffset=${beginningOffset}")
+  <span class="keyword">if</span> (done.succeeded()) {
+    <span class="keyword">def</span> beginningOffset = done.result()
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Beginning offset for topic=</span><span class="inline"><span class="inline-delimiter">${</span>topicPartition.topic<span class="inline-delimiter">}</span></span><span class="content">, partition=</span><span class="inline"><span class="inline-delimiter">${</span>topicPartition.partition<span class="inline-delimiter">}</span></span><span class="content">, beginningOffset=</span><span class="inline"><span class="inline-delimiter">${</span>beginningOffset<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -689,27 +688,27 @@ it does not change the consumer&#8217;s offset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def topicPartitions = new java.util.HashSet()
-def topicPartition = [
-  topic:"test",
-  partition:0
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> topicPartitions = <span class="keyword">new</span> java.util.HashSet()
+<span class="keyword">def</span> topicPartition = [
+  <span class="key">topic</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">partition</span>:<span class="integer">0</span>
 ]
 topicPartitions.add(topicPartition)
 
 consumer.endOffsets(topicPartitions, { done -&gt;
-  if (done.succeeded()) {
-    def results = done.result()
+  <span class="keyword">if</span> (done.succeeded()) {
+    <span class="keyword">def</span> results = done.result()
     results.each { topic, endOffset -&gt;
-      println("End offset for topic=${topic.topic}, partition=${topic.partition}, endOffset=${endOffset}")
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">End offset for topic=</span><span class="inline"><span class="inline-delimiter">${</span>topic.topic<span class="inline-delimiter">}</span></span><span class="content">, partition=</span><span class="inline"><span class="inline-delimiter">${</span>topic.partition<span class="inline-delimiter">}</span></span><span class="content">, endOffset=</span><span class="inline"><span class="inline-delimiter">${</span>endOffset<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     }
   }
 })
 
-// Convenience method for single-partition lookup
+<span class="comment">// Convenience method for single-partition lookup</span>
 consumer.endOffsets(topicPartition, { done -&gt;
-  if (done.succeeded()) {
-    def endOffset = done.result()
-    println("End offset for topic=${topicPartition.topic}, partition=${topicPartition.partition}, endOffset=${endOffset}")
+  <span class="keyword">if</span> (done.succeeded()) {
+    <span class="keyword">def</span> endOffset = done.result()
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">End offset for topic=</span><span class="inline"><span class="inline-delimiter">${</span>topicPartition.topic<span class="inline-delimiter">}</span></span><span class="content">, partition=</span><span class="inline"><span class="inline-delimiter">${</span>topicPartition.partition<span class="inline-delimiter">}</span></span><span class="content">, endOffset=</span><span class="inline"><span class="inline-delimiter">${</span>endOffset<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -721,7 +720,7 @@ with ingestion timestamp &gt;= given timestamp.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">Code not translatable</code></pre>
 </div>
 </div>
 </div>
@@ -740,29 +739,29 @@ to continue message processing.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def topicPartition = [
-  topic:"test",
-  partition:0
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> topicPartition = [
+  <span class="key">topic</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">partition</span>:<span class="integer">0</span>
 ]
 
-// registering the handler for incoming messages
+<span class="comment">// registering the handler for incoming messages</span>
 consumer.handler({ record -&gt;
-  println("key=${record.key()},value=${record.value()},partition=${record.partition()},offset=${record.offset()}")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">key=</span><span class="inline"><span class="inline-delimiter">${</span>record.key()<span class="inline-delimiter">}</span></span><span class="content">,value=</span><span class="inline"><span class="inline-delimiter">${</span>record.value()<span class="inline-delimiter">}</span></span><span class="content">,partition=</span><span class="inline"><span class="inline-delimiter">${</span>record.partition()<span class="inline-delimiter">}</span></span><span class="content">,offset=</span><span class="inline"><span class="inline-delimiter">${</span>record.offset()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 
-  // i.e. pause/resume on partition 0, after reading message up to offset 5
-  if ((record.partition() == 0) &amp;&amp; (record.offset() == 5)) {
+  <span class="comment">// i.e. pause/resume on partition 0, after reading message up to offset 5</span>
+  <span class="keyword">if</span> ((record.partition() == <span class="integer">0</span>) &amp;&amp; (record.offset() == <span class="integer">5</span>)) {
 
-    // pause the read operations
+    <span class="comment">// pause the read operations</span>
     consumer.pause(topicPartition, { ar -&gt;
 
-      if (ar.succeeded()) {
+      <span class="keyword">if</span> (ar.succeeded()) {
 
-        println("Paused")
+        println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Paused</span><span class="delimiter">&quot;</span></span>)
 
-        // resume read operation after a specific time
-        vertx.setTimer(5000, { timeId -&gt;
+        <span class="comment">// resume read operation after a specific time</span>
+        vertx.setTimer(<span class="integer">5000</span>, { timeId -&gt;
 
-          // resumi read operations
+          <span class="comment">// resumi read operations</span>
           consumer.resume(topicPartition)
         })
       }
@@ -788,11 +787,11 @@ when the actual close has completed then you can pass in a handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">consumer.close({ res -&gt;
-  if (res.succeeded()) {
-    println("Consumer is now closed")
-  } else {
-    println("close failed")
+<pre class="CodeRay highlight"><code data-lang="groovy">consumer.close({ res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Consumer is now closed</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">close failed</span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -811,10 +810,10 @@ or partition, in this case the messages are sent in a round robin fashion across
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">(0..&lt;5).each { i -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">(<span class="integer">0</span>..&lt;<span class="integer">5</span>).each { i -&gt;
 
-  // only topic and message value are specified, round robin on destination partitions
-  def record = KafkaProducerRecord.create("test", "message_${i}")
+  <span class="comment">// only topic and message value are specified, round robin on destination partitions</span>
+  <span class="keyword">def</span> record = KafkaProducerRecord.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">message_</span><span class="inline"><span class="inline-delimiter">${</span>i<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 
   producer.write(record)
 }</code></pre>
@@ -825,17 +824,17 @@ or partition, in this case the messages are sent in a round robin fashion across
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">(0..&lt;5).each { i -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">(<span class="integer">0</span>..&lt;<span class="integer">5</span>).each { i -&gt;
 
-  // only topic and message value are specified, round robin on destination partitions
-  def record = KafkaProducerRecord.create("test", "message_${i}")
+  <span class="comment">// only topic and message value are specified, round robin on destination partitions</span>
+  <span class="keyword">def</span> record = KafkaProducerRecord.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">message_</span><span class="inline"><span class="inline-delimiter">${</span>i<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 
   producer.write(record, { done -&gt;
 
-    if (done.succeeded()) {
+    <span class="keyword">if</span> (done.succeeded()) {
 
-      def recordMetadata = done.result()
-      println("Message ${record.value()} written on topic=${recordMetadata.topic}, partition=${recordMetadata.partition}, offset=${recordMetadata.offset}")
+      <span class="keyword">def</span> recordMetadata = done.result()
+      println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Message </span><span class="inline"><span class="inline-delimiter">${</span>record.value()<span class="inline-delimiter">}</span></span><span class="content"> written on topic=</span><span class="inline"><span class="inline-delimiter">${</span>recordMetadata.topic<span class="inline-delimiter">}</span></span><span class="content">, partition=</span><span class="inline"><span class="inline-delimiter">${</span>recordMetadata.partition<span class="inline-delimiter">}</span></span><span class="content">, offset=</span><span class="inline"><span class="inline-delimiter">${</span>recordMetadata.offset<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     }
 
   })
@@ -848,10 +847,10 @@ or its key</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">(0..&lt;10).each { i -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">(<span class="integer">0</span>..&lt;<span class="integer">10</span>).each { i -&gt;
 
-  // a destination partition is specified
-  def record = KafkaProducerRecord.create("test", null, "message_${i}", 0)
+  <span class="comment">// a destination partition is specified</span>
+  <span class="keyword">def</span> record = KafkaProducerRecord.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">message_</span><span class="inline"><span class="inline-delimiter">${</span>i<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>, <span class="integer">0</span>)
 
   producer.write(record)
 }</code></pre>
@@ -863,13 +862,13 @@ messages with the same key are sent to the same partition and retain the order.<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">(0..&lt;10).each { i -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">(<span class="integer">0</span>..&lt;<span class="integer">10</span>).each { i -&gt;
 
-  // i.e. defining different keys for odd and even messages
-  def key = i % 2
+  <span class="comment">// i.e. defining different keys for odd and even messages</span>
+  <span class="keyword">def</span> key = i % <span class="integer">2</span>
 
-  // a key is specified, all messages with same key will be sent to the same partition
-  def record = KafkaProducerRecord.create("test", java.lang.String.valueOf(key), "message_${i}")
+  <span class="comment">// a key is specified, all messages with same key will be sent to the same partition</span>
+  <span class="keyword">def</span> record = KafkaProducerRecord.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>, java.lang.String.valueOf(key), <span class="string"><span class="delimiter">&quot;</span><span class="content">message_</span><span class="inline"><span class="inline-delimiter">${</span>i<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 
   producer.write(record)
 }</code></pre>
@@ -902,10 +901,10 @@ returns a producer that can be shared safely.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Create a shared producer identified by 'the-producer'
-def producer1 = KafkaProducer.createShared(vertx, "the-producer", config)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Create a shared producer identified by 'the-producer'</span>
+<span class="keyword">def</span> producer1 = KafkaProducer.createShared(vertx, <span class="string"><span class="delimiter">&quot;</span><span class="content">the-producer</span><span class="delimiter">&quot;</span></span>, config)
 
-// Sometimes later you can close it
+<span class="comment">// Sometimes later you can close it</span>
 producer1.close()</code></pre>
 </div>
 </div>
@@ -933,11 +932,11 @@ when the actual close has completed then you can pass in a handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">producer.close({ res -&gt;
-  if (res.succeeded()) {
-    println("Producer is now closed")
-  } else {
-    println("close failed")
+<pre class="CodeRay highlight"><code data-lang="groovy">producer.close({ res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Producer is now closed</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">close failed</span><span class="delimiter">&quot;</span></span>)
   }
 })</code></pre>
 </div>
@@ -953,10 +952,10 @@ partitions for a specified topic:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// asking partitions information about specific topic
-producer.partitionsFor("test", { ar -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// asking partitions information about specific topic</span>
+producer.partitionsFor(<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
 
-  if (ar.succeeded()) {
+  <span class="keyword">if</span> (ar.succeeded()) {
 
     ar.result().each { partitionInfo -&gt;
       println(partitionInfo)
@@ -977,9 +976,9 @@ producer.partitionsFor("test", { ar -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// setting handler for errors
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// setting handler for errors</span>
 consumer.exceptionHandler({ e -&gt;
-  println("Error = ${e.getMessage()}")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error = </span><span class="inline"><span class="inline-delimiter">${</span>e.getMessage()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -1006,32 +1005,32 @@ and json array.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Creating a consumer able to deserialize to buffers
-def config = [:]
-config["bootstrap.servers"] = "localhost:9092"
-config["key.deserializer"] = "io.vertx.kafka.client.serialization.BufferDeserializer"
-config["value.deserializer"] = "io.vertx.kafka.client.serialization.BufferDeserializer"
-config["group.id"] = "my_group"
-config["auto.offset.reset"] = "earliest"
-config["enable.auto.commit"] = "false"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Creating a consumer able to deserialize to buffers</span>
+<span class="keyword">def</span> config = [:]
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">bootstrap.servers</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:9092</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">key.deserializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.kafka.client.serialization.BufferDeserializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">value.deserializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.kafka.client.serialization.BufferDeserializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">group.id</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">my_group</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">auto.offset.reset</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">earliest</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">enable.auto.commit</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">false</span><span class="delimiter">&quot;</span></span>
 
-// Creating a consumer able to deserialize to json object
+<span class="comment">// Creating a consumer able to deserialize to json object</span>
 config = [:]
-config["bootstrap.servers"] = "localhost:9092"
-config["key.deserializer"] = "io.vertx.kafka.client.serialization.JsonObjectDeserializer"
-config["value.deserializer"] = "io.vertx.kafka.client.serialization.JsonObjectDeserializer"
-config["group.id"] = "my_group"
-config["auto.offset.reset"] = "earliest"
-config["enable.auto.commit"] = "false"
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">bootstrap.servers</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:9092</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">key.deserializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.kafka.client.serialization.JsonObjectDeserializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">value.deserializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.kafka.client.serialization.JsonObjectDeserializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">group.id</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">my_group</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">auto.offset.reset</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">earliest</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">enable.auto.commit</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">false</span><span class="delimiter">&quot;</span></span>
 
-// Creating a consumer able to deserialize to json array
+<span class="comment">// Creating a consumer able to deserialize to json array</span>
 config = [:]
-config["bootstrap.servers"] = "localhost:9092"
-config["key.deserializer"] = "io.vertx.kafka.client.serialization.JsonArrayDeserializer"
-config["value.deserializer"] = "io.vertx.kafka.client.serialization.JsonArrayDeserializer"
-config["group.id"] = "my_group"
-config["auto.offset.reset"] = "earliest"
-config["enable.auto.commit"] = "false"</code></pre>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">bootstrap.servers</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:9092</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">key.deserializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.kafka.client.serialization.JsonArrayDeserializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">value.deserializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.kafka.client.serialization.JsonArrayDeserializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">group.id</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">my_group</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">auto.offset.reset</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">earliest</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">enable.auto.commit</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">false</span><span class="delimiter">&quot;</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1039,26 +1038,26 @@ config["enable.auto.commit"] = "false"</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Creating a producer able to serialize to buffers
-def config = [:]
-config["bootstrap.servers"] = "localhost:9092"
-config["key.serializer"] = "io.vertx.kafka.client.serialization.BufferSerializer"
-config["value.serializer"] = "io.vertx.kafka.client.serialization.BufferSerializer"
-config["acks"] = "1"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Creating a producer able to serialize to buffers</span>
+<span class="keyword">def</span> config = [:]
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">bootstrap.servers</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:9092</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">key.serializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.kafka.client.serialization.BufferSerializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">value.serializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.kafka.client.serialization.BufferSerializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">acks</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span>
 
-// Creating a producer able to serialize to json object
+<span class="comment">// Creating a producer able to serialize to json object</span>
 config = [:]
-config["bootstrap.servers"] = "localhost:9092"
-config["key.serializer"] = "io.vertx.kafka.client.serialization.JsonObjectSerializer"
-config["value.serializer"] = "io.vertx.kafka.client.serialization.JsonObjectSerializer"
-config["acks"] = "1"
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">bootstrap.servers</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:9092</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">key.serializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.kafka.client.serialization.JsonObjectSerializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">value.serializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.kafka.client.serialization.JsonObjectSerializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">acks</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span>
 
-// Creating a producer able to serialize to json array
+<span class="comment">// Creating a producer able to serialize to json array</span>
 config = [:]
-config["bootstrap.servers"] = "localhost:9092"
-config["key.serializer"] = "io.vertx.kafka.client.serialization.JsonArraySerializer"
-config["value.serializer"] = "io.vertx.kafka.client.serialization.JsonArraySerializer"
-config["acks"] = "1"</code></pre>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">bootstrap.servers</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:9092</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">key.serializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.kafka.client.serialization.JsonArraySerializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">value.serializer</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.kafka.client.serialization.JsonArraySerializer</span><span class="delimiter">&quot;</span></span>
+config[<span class="string"><span class="delimiter">&quot;</span><span class="content">acks</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1069,7 +1068,7 @@ config["acks"] = "1"</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">Code not translatable</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1077,7 +1076,7 @@ config["acks"] = "1"</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">Code not translatable</code></pre>
 </div>
 </div>
 </div>

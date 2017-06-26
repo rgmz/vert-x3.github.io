@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -210,11 +209,11 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-mongo-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-mongo-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -226,7 +225,7 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mongo-client:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mongo-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -251,7 +250,7 @@ to share the same pool so you don&#8217;t end up with multiple pools</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = MongoClient.createShared(vertx, config)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = MongoClient.createShared(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -269,7 +268,7 @@ will actually create the pool, and the specified config will be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = MongoClient.createShared(vertx, config, "MyPoolName")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = MongoClient.createShared(vertx, config, &quot;MyPoolName&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -299,7 +298,7 @@ However, it&#8217;s possible you want to create a client instance that doesn&#82
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = MongoClient.createNonShared(vertx, config)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = MongoClient.createNonShared(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -332,18 +331,18 @@ if it doesn&#8217;t already exist, otherwise it is updated.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Document has no id
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Document has no id
 
 var document = json {
-  obj("title" to "The Hobbit")
+  obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
 
-mongoClient.save("books", document, { res -&gt;
+mongoClient.save(&quot;books&quot;, document, { res -&gt;
 
   if (res.succeeded()) {
 
     var id = res.result()
-    println("Saved book with id ${id}")
+    println(&quot;Saved book with id ${id}&quot;)
 
   } else {
     res.cause().printStackTrace()
@@ -357,16 +356,16 @@ mongoClient.save("books", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Document has an id already
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Document has an id already
 
 var document = json {
   obj(
-    "title" to "The Hobbit",
-    "_id" to "123244"
+    &quot;title&quot; to &quot;The Hobbit&quot;,
+    &quot;_id&quot; to &quot;123244&quot;
   )
 }
 
-mongoClient.save("books", document, { res -&gt;
+mongoClient.save(&quot;books&quot;, document, { res -&gt;
 
   if (res.succeeded()) {
 
@@ -390,18 +389,18 @@ mongoClient.save("books", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Document has an id already
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Document has an id already
 
 var document = json {
-  obj("title" to "The Hobbit")
+  obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
 
-mongoClient.insert("books", document, { res -&gt;
+mongoClient.insert(&quot;books&quot;, document, { res -&gt;
 
   if (res.succeeded()) {
 
     var id = res.result()
-    println("Inserted book with id ${id}")
+    println(&quot;Inserted book with id ${id}&quot;)
 
   } else {
     res.cause().printStackTrace()
@@ -415,16 +414,16 @@ mongoClient.insert("books", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Document has an id already
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Document has an id already
 
 var document = json {
   obj(
-    "title" to "The Hobbit",
-    "_id" to "123244"
+    &quot;title&quot; to &quot;The Hobbit&quot;,
+    &quot;_id&quot; to &quot;123244&quot;
   )
 }
 
-mongoClient.insert("books", document, { res -&gt;
+mongoClient.insert(&quot;books&quot;, document, { res -&gt;
 
   if (res.succeeded()) {
 
@@ -457,21 +456,21 @@ how the object is updated.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Match any documents with title=The Hobbit
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Match any documents with title=The Hobbit
 var query = json {
-  obj("title" to "The Hobbit")
+  obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
 
 // Set the author field
 var update = json {
-  obj("\$$set" to obj("author" to "J. R. R. Tolkien"))
+  obj(&quot;\$$set&quot; to obj(&quot;author&quot; to &quot;J. R. R. Tolkien&quot;))
 }
 
-mongoClient.update("books", query, update, { res -&gt;
+mongoClient.update(&quot;books&quot;, query, update, { res -&gt;
 
   if (res.succeeded()) {
 
-    println("Book updated !")
+    println(&quot;Book updated !&quot;)
 
   } else {
 
@@ -506,24 +505,24 @@ and pass in an instance of <code><a href="../../apidocs/io/vertx/ext/mongo/Updat
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// Match any documents with title=The Hobbit
+<pre class="CodeRay highlight"><code data-lang="kotlin">// Match any documents with title=The Hobbit
 var query = json {
-  obj("title" to "The Hobbit")
+  obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
 
 // Set the author field
 var update = json {
-  obj("\$$set" to obj("author" to "J. R. R. Tolkien"))
+  obj(&quot;\$$set&quot; to obj(&quot;author&quot; to &quot;J. R. R. Tolkien&quot;))
 }
 
 var options = UpdateOptions(
   multi = true)
 
-mongoClient.updateWithOptions("books", query, update, options, { res -&gt;
+mongoClient.updateWithOptions(&quot;books&quot;, query, update, options, { res -&gt;
 
   if (res.succeeded()) {
 
-    println("Book updated !")
+    println(&quot;Book updated !&quot;)
 
   } else {
 
@@ -548,22 +547,22 @@ Instead it replaces the entire document with the one provided.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var query = json {
-  obj("title" to "The Hobbit")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var query = json {
+  obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
 
 var replace = json {
   obj(
-    "title" to "The Lord of the Rings",
-    "author" to "J. R. R. Tolkien"
+    &quot;title&quot; to &quot;The Lord of the Rings&quot;,
+    &quot;author&quot; to &quot;J. R. R. Tolkien&quot;
   )
 }
 
-mongoClient.replace("books", query, replace, { res -&gt;
+mongoClient.replace(&quot;books&quot;, query, replace, { res -&gt;
 
   if (res.succeeded()) {
 
-    println("Book replaced !")
+    println(&quot;Book replaced !&quot;)
 
   } else {
 
@@ -603,12 +602,12 @@ For more explanation what ordered means, see <a href="https://docs.mongodb.com/m
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// empty query = match any
+<pre class="CodeRay highlight"><code data-lang="kotlin">// empty query = match any
 var query = json {
   obj()
 }
 
-mongoClient.find("books", query, { res -&gt;
+mongoClient.find(&quot;books&quot;, query, { res -&gt;
 
   if (res.succeeded()) {
 
@@ -632,12 +631,12 @@ mongoClient.find("books", query, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">// will match all Tolkien books
+<pre class="CodeRay highlight"><code data-lang="kotlin">// will match all Tolkien books
 var query = json {
-  obj("author" to "J. R. R. Tolkien")
+  obj(&quot;author&quot; to &quot;J. R. R. Tolkien&quot;)
 }
 
-mongoClient.find("books", query, { res -&gt;
+mongoClient.find(&quot;books&quot;, query, { res -&gt;
 
   if (res.succeeded()) {
 
@@ -741,15 +740,15 @@ mongoClient.findBatch("book", query, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var query = json {
-  obj("author" to "J. R. R. Tolkien")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var query = json {
+  obj(&quot;author&quot; to &quot;J. R. R. Tolkien&quot;)
 }
 
-mongoClient.remove("books", query, { res -&gt;
+mongoClient.remove(&quot;books&quot;, query, { res -&gt;
 
   if (res.succeeded()) {
 
-    println("Never much liked Tolkien stuff!")
+    println(&quot;Never much liked Tolkien stuff!&quot;)
 
   } else {
 
@@ -779,11 +778,11 @@ mongoClient.remove("books", query, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var query = json {
-  obj("author" to "J. R. R. Tolkien")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var query = json {
+  obj(&quot;author&quot; to &quot;J. R. R. Tolkien&quot;)
 }
 
-mongoClient.count("books", query, { res -&gt;
+mongoClient.count(&quot;books&quot;, query, { res -&gt;
 
   if (res.succeeded()) {
 
@@ -808,7 +807,7 @@ mongoClient.count("books", query, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">mongoClient.getCollections({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">mongoClient.getCollections({ res -&gt;
 
   if (res.succeeded()) {
 
@@ -827,7 +826,7 @@ mongoClient.count("books", query, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">mongoClient.createCollection("mynewcollectionr", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">mongoClient.createCollection(&quot;mynewcollectionr&quot;, { res -&gt;
 
   if (res.succeeded()) {
 
@@ -858,7 +857,7 @@ Dropping a collection will delete all documents within it!
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">mongoClient.dropCollection("mynewcollectionr", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">mongoClient.dropCollection(&quot;mynewcollectionr&quot;, { res -&gt;
 
   if (res.succeeded()) {
 
@@ -890,16 +889,16 @@ of the entries in the JSON is the command name it must be specified as a paramet
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var command = json {
+<pre class="CodeRay highlight"><code data-lang="kotlin">var command = json {
   obj(
-    "aggregate" to "collection_name",
-    "pipeline" to array()
+    &quot;aggregate&quot; to &quot;collection_name&quot;,
+    &quot;pipeline&quot; to array()
   )
 }
 
-mongoClient.runCommand("aggregate", command, { res -&gt;
+mongoClient.runCommand(&quot;aggregate&quot;, command, { res -&gt;
   if (res.succeeded()) {
-    var resArr = res.result().getJsonArray("result")
+    var resArr = res.result().getJsonArray(&quot;result&quot;)
     // etc
   } else {
     res.cause().printStackTrace()
@@ -918,25 +917,25 @@ mongoClient.runCommand("aggregate", command, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var document = json {
+<pre class="CodeRay highlight"><code data-lang="kotlin">var document = json {
   obj(
-    "title" to "The Hobbit",
-    "publicationDate" to obj("\$$date" to "1937-09-21T00:00:00+00:00")
+    &quot;title&quot; to &quot;The Hobbit&quot;,
+    &quot;publicationDate&quot; to obj(&quot;\$$date&quot; to &quot;1937-09-21T00:00:00+00:00&quot;)
   )
 }
 
-mongoService.save("publishedBooks", document, { res -&gt;
+mongoService.save(&quot;publishedBooks&quot;, document, { res -&gt;
 
   if (res.succeeded()) {
 
     var id = res.result()
 
-    mongoService.findOne("publishedBooks", json {
-      obj("_id" to id)
+    mongoService.findOne(&quot;publishedBooks&quot;, json {
+      obj(&quot;_id&quot; to id)
     }, null, { res2 -&gt;
       if (res2.succeeded()) {
 
-        println("To retrieve ISO-8601 date : ${res2.result().getJsonObject("publicationDate").getString("\$$date")}")
+        println(&quot;To retrieve ISO-8601 date : ${res2.result().getJsonObject(&quot;publicationDate&quot;).getString(&quot;\$$date&quot;)}&quot;)
 
       } else {
         res2.cause().printStackTrace()
@@ -955,22 +954,22 @@ mongoService.save("publishedBooks", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">byte[] binaryObject = new byte[40];
+<pre class="CodeRay highlight"><code data-lang="kotlin">byte[] binaryObject = new byte[40];
 
 JsonObject document = new JsonObject()
-        .put("name", "Alan Turing")
-        .put("binaryStuff", new JsonObject().put("$binary", binaryObject));
+        .put(&quot;name&quot;, &quot;Alan Turing&quot;)
+        .put(&quot;binaryStuff&quot;, new JsonObject().put(&quot;$binary&quot;, binaryObject));
 
-mongoService.save("smartPeople", document, res -&gt; {
+mongoService.save(&quot;smartPeople&quot;, document, res -&gt; {
 
   if (res.succeeded()) {
 
     String id = res.result();
 
-    mongoService.findOne("smartPeople", new JsonObject().put("_id", id), null, res2 -&gt; {
+    mongoService.findOne(&quot;smartPeople&quot;, new JsonObject().put(&quot;_id&quot;, id), null, res2 -&gt; {
       if(res2.succeeded()) {
 
-        byte[] reconstitutedBinaryObject = res2.result().getJsonObject("binaryStuff").getBinary("$binary");
+        byte[] reconstitutedBinaryObject = res2.result().getJsonObject(&quot;binaryStuff&quot;).getBinary(&quot;$binary&quot;);
         //This could now be de-serialized into an object in real life
       } else {
         res2.cause().printStackTrace();
@@ -989,28 +988,28 @@ mongoService.save("smartPeople", document, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">//This could be a the byte contents of a pdf file, etc converted to base 64
-var base64EncodedString = "a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ="
+<pre class="CodeRay highlight"><code data-lang="kotlin">//This could be a the byte contents of a pdf file, etc converted to base 64
+var base64EncodedString = &quot;a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ=&quot;
 
 var document = json {
   obj(
-    "name" to "Alan Turing",
-    "binaryStuff" to obj("\$$binary" to base64EncodedString)
+    &quot;name&quot; to &quot;Alan Turing&quot;,
+    &quot;binaryStuff&quot; to obj(&quot;\$$binary&quot; to base64EncodedString)
   )
 }
 
-mongoService.save("smartPeople", document, { res -&gt;
+mongoService.save(&quot;smartPeople&quot;, document, { res -&gt;
 
   if (res.succeeded()) {
 
     var id = res.result()
 
-    mongoService.findOne("smartPeople", json {
-      obj("_id" to id)
+    mongoService.findOne(&quot;smartPeople&quot;, json {
+      obj(&quot;_id&quot; to id)
     }, null, { res2 -&gt;
       if (res2.succeeded()) {
 
-        var reconstitutedBase64EncodedString = res2.result().getJsonObject("binaryStuff").getString("\$$binary")
+        var reconstitutedBase64EncodedString = res2.result().getJsonObject(&quot;binaryStuff&quot;).getString(&quot;\$$binary&quot;)
         //This could now converted back to bytes from the base 64 string
       } else {
         res2.cause().printStackTrace()
@@ -1029,26 +1028,26 @@ mongoService.save("smartPeople", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var individualId = org.bson.types.ObjectId().toHexString()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var individualId = org.bson.types.ObjectId().toHexString()
 
 var document = json {
   obj(
-    "name" to "Stephen Hawking",
-    "individualId" to obj("\$$oid" to individualId)
+    &quot;name&quot; to &quot;Stephen Hawking&quot;,
+    &quot;individualId&quot; to obj(&quot;\$$oid&quot; to individualId)
   )
 }
 
-mongoService.save("smartPeople", document, { res -&gt;
+mongoService.save(&quot;smartPeople&quot;, document, { res -&gt;
 
   if (res.succeeded()) {
 
     var id = res.result()
 
-    mongoService.findOne("smartPeople", json {
-      obj("_id" to id)
+    mongoService.findOne(&quot;smartPeople&quot;, json {
+      obj(&quot;_id&quot; to id)
     }, null, { res2 -&gt;
       if (res2.succeeded()) {
-        var reconstitutedIndividualId = res2.result().getJsonObject("individualId").getString("\$$oid")
+        var reconstitutedIndividualId = res2.result().getJsonObject(&quot;individualId&quot;).getString(&quot;\$$oid&quot;)
       } else {
         res2.cause().printStackTrace()
       }
@@ -1066,16 +1065,16 @@ mongoService.save("smartPeople", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var document = json {
-  obj("title" to "The Hobbit")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var document = json {
+  obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
 
-mongoClient.save("books", document, { res -&gt;
+mongoClient.save(&quot;books&quot;, document, { res -&gt;
 
   if (res.succeeded()) {
 
-    mongoClient.distinct("books", "title", String.`class`.getName(), { res2 -&gt;
-      println("Title is : ${res2.result().getJsonArray(0)}")
+    mongoClient.distinct(&quot;books&quot;, &quot;title&quot;, String.`class`.getName(), { res2 -&gt;
+      println(&quot;Title is : ${res2.result().getJsonArray(0)}&quot;)
     })
 
   } else {
@@ -1090,16 +1089,16 @@ mongoClient.save("books", document, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var document = json {
-  obj("title" to "The Hobbit")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var document = json {
+  obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
 
-mongoClient.save("books", document, { res -&gt;
+mongoClient.save(&quot;books&quot;, document, { res -&gt;
 
   if (res.succeeded()) {
 
-    mongoClient.distinctBatch("books", "title", String.`class`.getName(), { res2 -&gt;
-      println("Title is : ${res2.result().getString("title")}")
+    mongoClient.distinctBatch(&quot;books&quot;, &quot;title&quot;, String.`class`.getName(), { res2 -&gt;
+      println(&quot;Title is : ${res2.result().getString(&quot;title&quot;)}&quot;)
     })
 
   } else {

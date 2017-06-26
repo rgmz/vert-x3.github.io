@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -182,11 +181,11 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-    &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-    &lt;artifactId&gt;vertx-mqtt-server&lt;/artifactId&gt;
-    &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>vertx-mqtt-server<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -198,7 +197,7 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-mqtt-server:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-mqtt-<span class="key">server</span>:<span class="float">3.4</span><span class="float">.2</span></code></pre>
 </div>
 </div>
 </div>
@@ -222,32 +221,32 @@ to check if the server is started properly or not.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def mqttServer = MqttServer.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> mqttServer = MqttServer.create(vertx)
 mqttServer.endpointHandler({ endpoint -&gt;
 
-  // shows main connect info
-  println("MQTT client [${endpoint.clientIdentifier()}] request to connect, clean session = ${endpoint.isCleanSession()}")
+  <span class="comment">// shows main connect info</span>
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT client [</span><span class="inline"><span class="inline-delimiter">${</span>endpoint.clientIdentifier()<span class="inline-delimiter">}</span></span><span class="content">] request to connect, clean session = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.isCleanSession()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 
-  if (endpoint.auth() != null) {
-    println("[username = ${endpoint.auth().userName()}, password = ${endpoint.auth().password()}]")
+  <span class="keyword">if</span> (endpoint.auth() != <span class="predefined-constant">null</span>) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">[username = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.auth().userName()<span class="inline-delimiter">}</span></span><span class="content">, password = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.auth().password()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>)
   }
-  if (endpoint.will() != null) {
-    println("[will topic = ${endpoint.will().willTopic()} msg = ${endpoint.will().willMessage()} QoS = ${endpoint.will().willQos()} isRetain = ${endpoint.will().isWillRetain()}]")
+  <span class="keyword">if</span> (endpoint.will() != <span class="predefined-constant">null</span>) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">[will topic = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.will().willTopic()<span class="inline-delimiter">}</span></span><span class="content"> msg = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.will().willMessage()<span class="inline-delimiter">}</span></span><span class="content"> QoS = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.will().willQos()<span class="inline-delimiter">}</span></span><span class="content"> isRetain = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.will().isWillRetain()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>)
   }
 
-  println("[keep alive timeout = ${endpoint.keepAliveTimeSeconds()}]")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">[keep alive timeout = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.keepAliveTimeSeconds()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>)
 
-  // accept connection from the remote client
-  endpoint.accept(false)
+  <span class="comment">// accept connection from the remote client</span>
+  endpoint.accept(<span class="predefined-constant">false</span>)
 
 }).listen({ ar -&gt;
 
-  if (ar.succeeded()) {
+  <span class="keyword">if</span> (ar.succeeded()) {
 
-    println("MQTT server is listening on port ${ar.result().actualPort()}")
-  } else {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT server is listening on port </span><span class="inline"><span class="inline-delimiter">${</span>ar.result().actualPort()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
 
-    println("Error on starting the server")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error on starting the server</span><span class="delimiter">&quot;</span></span>)
     ar.cause().printStackTrace()
   }
 })</code></pre>
@@ -260,10 +259,10 @@ this handler takes no parameters.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// handling disconnect message
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// handling disconnect message</span>
 endpoint.disconnectHandler({ v -&gt;
 
-  println("Received disconnect from client")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received disconnect from client</span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -285,41 +284,41 @@ The MQTT server is started passing the Vert.x instance as usual and the above MQ
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
-  port:8883,
-  keyCertOptions:[
-    keyPath:"./src/test/resources/tls/server-key.pem",
-    certPath:"./src/test/resources/tls/server-cert.pem"
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> options = [
+  <span class="key">port</span>:<span class="integer">8883</span>,
+  <span class="key">keyCertOptions</span>:[
+    <span class="key">keyPath</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">./src/test/resources/tls/server-key.pem</span><span class="delimiter">&quot;</span></span>,
+    <span class="key">certPath</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">./src/test/resources/tls/server-cert.pem</span><span class="delimiter">&quot;</span></span>
   ],
-  ssl:true
+  <span class="key">ssl</span>:<span class="predefined-constant">true</span>
 ]
 
-def mqttServer = MqttServer.create(vertx, options)
+<span class="keyword">def</span> mqttServer = MqttServer.create(vertx, options)
 mqttServer.endpointHandler({ endpoint -&gt;
 
-  // shows main connect info
-  println("MQTT client [${endpoint.clientIdentifier()}] request to connect, clean session = ${endpoint.isCleanSession()}")
+  <span class="comment">// shows main connect info</span>
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT client [</span><span class="inline"><span class="inline-delimiter">${</span>endpoint.clientIdentifier()<span class="inline-delimiter">}</span></span><span class="content">] request to connect, clean session = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.isCleanSession()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 
-  if (endpoint.auth() != null) {
-    println("[username = ${endpoint.auth().userName()}, password = ${endpoint.auth().password()}]")
+  <span class="keyword">if</span> (endpoint.auth() != <span class="predefined-constant">null</span>) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">[username = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.auth().userName()<span class="inline-delimiter">}</span></span><span class="content">, password = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.auth().password()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>)
   }
-  if (endpoint.will() != null) {
-    println("[will topic = ${endpoint.will().willTopic()} msg = ${endpoint.will().willMessage()} QoS = ${endpoint.will().willQos()} isRetain = ${endpoint.will().isWillRetain()}]")
+  <span class="keyword">if</span> (endpoint.will() != <span class="predefined-constant">null</span>) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">[will topic = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.will().willTopic()<span class="inline-delimiter">}</span></span><span class="content"> msg = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.will().willMessage()<span class="inline-delimiter">}</span></span><span class="content"> QoS = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.will().willQos()<span class="inline-delimiter">}</span></span><span class="content"> isRetain = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.will().isWillRetain()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>)
   }
 
-  println("[keep alive timeout = ${endpoint.keepAliveTimeSeconds()}]")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">[keep alive timeout = </span><span class="inline"><span class="inline-delimiter">${</span>endpoint.keepAliveTimeSeconds()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>)
 
-  // accept connection from the remote client
-  endpoint.accept(false)
+  <span class="comment">// accept connection from the remote client</span>
+  endpoint.accept(<span class="predefined-constant">false</span>)
 
 }).listen({ ar -&gt;
 
-  if (ar.succeeded()) {
+  <span class="keyword">if</span> (ar.succeeded()) {
 
-    println("MQTT server is listening on port ${ar.result().actualPort()}")
-  } else {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT server is listening on port </span><span class="inline"><span class="inline-delimiter">${</span>ar.result().actualPort()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
 
-    println("Error on starting the server")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error on starting the server</span><span class="delimiter">&quot;</span></span>)
     ar.cause().printStackTrace()
   }
 })</code></pre>
@@ -342,15 +341,15 @@ for replying to the client with the related SUBACK message containing the grante
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// handling requests for subscriptions
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// handling requests for subscriptions</span>
 endpoint.subscribeHandler({ subscribe -&gt;
 
-  def grantedQosLevels = []
+  <span class="keyword">def</span> grantedQosLevels = <span class="type">[]</span>
   subscribe.topicSubscriptions().each { s -&gt;
-    println("Subscription for ${s.topicName()} with QoS ${s.qualityOfService()}")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Subscription for </span><span class="inline"><span class="inline-delimiter">${</span>s.topicName()<span class="inline-delimiter">}</span></span><span class="content"> with QoS </span><span class="inline"><span class="inline-delimiter">${</span>s.qualityOfService()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
     grantedQosLevels.add(s.qualityOfService())
   }
-  // ack the subscriptions request
+  <span class="comment">// ack the subscriptions request</span>
   endpoint.subscribeAcknowledge(subscribe.messageId(), grantedQosLevels)
 
 })</code></pre>
@@ -365,13 +364,13 @@ for replying to the client with the related UNSUBACK message.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// handling requests for unsubscriptions
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// handling requests for unsubscriptions</span>
 endpoint.unsubscribeHandler({ unsubscribe -&gt;
 
   unsubscribe.topics().each { t -&gt;
-    println("Unsubscription for ${t}")
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Unsubscription for </span><span class="inline"><span class="inline-delimiter">${</span>t<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
   }
-  // ack the subscriptions request
+  <span class="comment">// ack the subscriptions request</span>
   endpoint.unsubscribeAcknowledge(unsubscribe.messageId())
 })</code></pre>
 </div>
@@ -402,14 +401,14 @@ for sending the PUBCOMP message to the client.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// handling incoming published messages
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// handling incoming published messages</span>
 endpoint.publishHandler({ message -&gt;
 
-  println("Just received message [${message.payload().toString(java.nio.charset.Charset.defaultCharset())}] with QoS [${message.qosLevel()}]")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Just received message [</span><span class="inline"><span class="inline-delimiter">${</span>message.payload().toString(java.nio.charset.Charset.defaultCharset())<span class="inline-delimiter">}</span></span><span class="content">] with QoS [</span><span class="inline"><span class="inline-delimiter">${</span>message.qosLevel()<span class="inline-delimiter">}</span></span><span class="content">]</span><span class="delimiter">&quot;</span></span>)
 
-  if (message.qosLevel() == MqttQoS.AT_LEAST_ONCE) {
+  <span class="keyword">if</span> (message.qosLevel() == MqttQoS.AT_LEAST_ONCE) {
     endpoint.publishAcknowledge(message.messageId())
-  } else if (message.qosLevel() == MqttQoS.EXACTLY_ONCE) {
+  } <span class="keyword">else</span> <span class="keyword">if</span> (message.qosLevel() == MqttQoS.EXACTLY_ONCE) {
     endpoint.publishRelease(message.messageId())
   }
 
@@ -445,13 +444,13 @@ for specifying the handler called when the final PUBCOMP message is received.</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// just as example, publish a message with QoS level 2
-endpoint.publish("my_topic", Buffer.buffer("Hello from the Vert.x MQTT server"), MqttQoS.EXACTLY_ONCE, false, false)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// just as example, publish a message with QoS level 2</span>
+endpoint.publish(<span class="string"><span class="delimiter">&quot;</span><span class="content">my_topic</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from the Vert.x MQTT server</span><span class="delimiter">&quot;</span></span>), MqttQoS.EXACTLY_ONCE, <span class="predefined-constant">false</span>, <span class="predefined-constant">false</span>)
 
-// specifing handlers for handling QoS 1 and 2
+<span class="comment">// specifing handlers for handling QoS 1 and 2</span>
 endpoint.publishAcknowledgeHandler({ messageId -&gt;
 
-  println("Received ack for message = ${messageId}")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received ack for message = </span><span class="inline"><span class="inline-delimiter">${</span>messageId<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 
 }).publishReceivedHandler({ messageId -&gt;
 
@@ -459,7 +458,7 @@ endpoint.publishAcknowledgeHandler({ messageId -&gt;
 
 }).publishCompleteHandler({ messageId -&gt;
 
-  println("Received ack for message = ${messageId}")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received ack for message = </span><span class="inline"><span class="inline-delimiter">${</span>messageId<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -480,10 +479,10 @@ by the server internally as described above.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// handling ping from client
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// handling ping from client</span>
 endpoint.pingHandler({ v -&gt;
 
-  println("Ping received from client")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Ping received from client</span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -498,9 +497,9 @@ that will be called when the server is really closed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">mqttServer.close({ v -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">mqttServer.close({ v -&gt;
 
-  println("MQTT server closed")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT server closed</span><span class="delimiter">&quot;</span></span>)
 })</code></pre>
 </div>
 </div>
@@ -523,14 +522,14 @@ more instances of the MQTT server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">(0..&lt;10).each { i -&gt;
+<pre class="CodeRay highlight"><code data-lang="groovy">(<span class="integer">0</span>..&lt;<span class="integer">10</span>).each { i -&gt;
 
-  def mqttServer = MqttServer.create(vertx)
+  <span class="keyword">def</span> mqttServer = MqttServer.create(vertx)
   mqttServer.endpointHandler({ endpoint -&gt;
-    // handling endpoint
+    <span class="comment">// handling endpoint</span>
   }).listen({ ar -&gt;
 
-    // handling start listening
+    <span class="comment">// handling start listening</span>
   })
 
 }</code></pre>
@@ -541,10 +540,10 @@ more instances of the MQTT server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def options = [
-  instances:10
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> options = [
+  <span class="key">instances</span>:<span class="integer">10</span>
 ]
-vertx.deployVerticle("com.mycompany.MyVerticle", options)</code></pre>
+vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.mycompany.MyVerticle</span><span class="delimiter">&quot;</span></span>, options)</code></pre>
 </div>
 </div>
 <div class="paragraph">

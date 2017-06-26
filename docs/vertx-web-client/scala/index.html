@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -204,11 +203,11 @@ be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-web-client-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-web-client-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -220,8 +219,8 @@ be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-  compile 'io.vertx:vertx-web-client-scala_2.12:3.4.2'
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+  compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-web-client-scala_2.12:3.4.2</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -244,7 +243,7 @@ be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var client = WebClient.create(vertx)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var client = WebClient.create(vertx)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -252,8 +251,8 @@ be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var options = WebClientOptions()
-  .setUserAgent("My-App/1.2.3")
+<pre class="CodeRay highlight"><code data-lang="scala">var options = WebClientOptions()
+  .setUserAgent(&quot;My-App/1.2.3&quot;)
 
 options.setKeepAlive(false)
 var client = WebClient.create(vertx, options)</code></pre>
@@ -267,7 +266,7 @@ var client = WebClient.create(vertx, options)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var client = WebClient.wrap(httpClient)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var client = WebClient.wrap(httpClient)</code></pre>
 </div>
 </div>
 </div>
@@ -283,31 +282,31 @@ and HEAD requests</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var client = WebClient.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = WebClient.create(vertx)
 
 // Send a GET request
-client.get(8080, "myserver.mycompany.com", "/some-uri").sendFuture().onComplete{
+client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).sendFuture().onComplete{
   case Success(result) =&gt; {
     // Obtain response
     var response = result
 
-    println(s"Received response with status code${response.statusCode()}")
+    println(s&quot;Received response with status code${response.statusCode()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }
 
 // Send a HEAD request
-client.head(8080, "myserver.mycompany.com", "/some-uri").sendFuture().onComplete{
+client.head(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).sendFuture().onComplete{
   case Success(result) =&gt; {
     // Obtain response
     var response = result
 
-    println(s"Received response with status code${response.statusCode()}")
+    println(s&quot;Received response with status code${response.statusCode()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -317,7 +316,7 @@ client.head(8080, "myserver.mycompany.com", "/some-uri").sendFuture().onComplete
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">Code not translatable</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -325,13 +324,13 @@ client.head(8080, "myserver.mycompany.com", "/some-uri").sendFuture().onComplete
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var request = client.get(8080, "myserver.mycompany.com", "/some-uri?param1=param1_value&amp;param2=param2_value")
+<pre class="CodeRay highlight"><code data-lang="scala">var request = client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri?param1=param1_value&amp;param2=param2_value&quot;)
 
 // Add param3
-request.addQueryParam("param3", "param3_value")
+request.addQueryParam(&quot;param3&quot;, &quot;param3_value&quot;)
 
 // Overwrite param2
-request.setQueryParam("param2", "another_param2_value")</code></pre>
+request.setQueryParam(&quot;param2&quot;, &quot;another_param2_value&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -339,13 +338,13 @@ request.setQueryParam("param2", "another_param2_value")</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var request = client.get(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="scala">var request = client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;)
 
 // Add param1
-request.addQueryParam("param1", "param1_value")
+request.addQueryParam(&quot;param1&quot;, &quot;param1_value&quot;)
 
 // Overwrite param1 and add param2
-request.uri("/some-uri?param1=param1_value&amp;param2=param2_value")</code></pre>
+request.uri(&quot;/some-uri?param1=param1_value&amp;param2=param2_value&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -360,12 +359,12 @@ that expects a body to send.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Send a buffer to the server using POST, the content-length header will be set for you
-client.post(8080, "myserver.mycompany.com", "/some-uri").sendBufferFuture(buffer).onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">// Send a buffer to the server using POST, the content-length header will be set for you
+client.post(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).sendBufferFuture(buffer).onComplete{
   case Success(result) =&gt; {
     // Ok
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -377,7 +376,7 @@ for each request. For this purpose the web client can send <code>ReadStream&lt;B
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">Code not translatable</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">Code not translatable</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -389,21 +388,21 @@ the request will use chunked transfer encoding .</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">fs.openFuture("content.txt", OpenOptions()).onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">fs.openFuture(&quot;content.txt&quot;, OpenOptions()).onComplete{
   case Success(result) =&gt; {
     var fileStream = result
 
-    var fileLen = "1024"
+    var fileLen = &quot;1024&quot;
 
     // Send the file to the server using POST
-    client.post(8080, "myserver.mycompany.com", "/some-uri").putHeader("content-length", fileLen).sendStreamFuture(fileStream).onComplete{
+    client.post(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).putHeader(&quot;content-length&quot;, fileLen).sendStreamFuture(fileStream).onComplete{
       case Success(result) =&gt; {
         // Ok
       }
-      case Failure(cause) =&gt; println("Failure")
+      case Failure(cause) =&gt; println(&quot;Failure&quot;)
     }
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -418,11 +417,11 @@ use the <code><a href="../../scaladocs/io/vertx/scala/ext/web/client/HttpRequest
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">client.post(8080, "myserver.mycompany.com", "/some-uri").sendJsonObjectFuture(new io.vertx.core.json.JsonObject().put("firstName", "Dale").put("lastName", "Cooper")).onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">client.post(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).sendJsonObjectFuture(new io.vertx.core.json.JsonObject().put(&quot;firstName&quot;, &quot;Dale&quot;).put(&quot;lastName&quot;, &quot;Cooper&quot;)).onComplete{
   case Success(result) =&gt; {
     // Ok
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -433,11 +432,11 @@ method</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">client.post(8080, "myserver.mycompany.com", "/some-uri").sendJsonFuture(new examples.WebClientExamples.User("Dale", "Cooper")).onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">client.post(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).sendJsonFuture(new examples.WebClientExamples.User(&quot;Dale&quot;, &quot;Cooper&quot;)).onComplete{
   case Success(result) =&gt; {
     // Ok
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -463,16 +462,16 @@ variant.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var form = MultiMap.caseInsensitiveMultiMap()
-form.set("firstName", "Dale")
-form.set("lastName", "Cooper")
+<pre class="CodeRay highlight"><code data-lang="scala">var form = MultiMap.caseInsensitiveMultiMap()
+form.set(&quot;firstName&quot;, &quot;Dale&quot;)
+form.set(&quot;lastName&quot;, &quot;Cooper&quot;)
 
 // Submit the form as a form URL encoded body
-client.post(8080, "myserver.mycompany.com", "/some-uri").sendFormFuture(form).onComplete{
+client.post(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).sendFormFuture(form).onComplete{
   case Success(result) =&gt; {
     // Ok
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -482,16 +481,16 @@ the <code>content-type</code> header to <code>multipart/form-data</code> instead
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var form = MultiMap.caseInsensitiveMultiMap()
-form.set("firstName", "Dale")
-form.set("lastName", "Cooper")
+<pre class="CodeRay highlight"><code data-lang="scala">var form = MultiMap.caseInsensitiveMultiMap()
+form.set(&quot;firstName&quot;, &quot;Dale&quot;)
+form.set(&quot;lastName&quot;, &quot;Cooper&quot;)
 
 // Submit the form as a multipart form body
-client.post(8080, "myserver.mycompany.com", "/some-uri").putHeader("content-type", "multipart/form-data").sendFormFuture(form).onComplete{
+client.post(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).putHeader(&quot;content-type&quot;, &quot;multipart/form-data&quot;).sendFormFuture(form).onComplete{
   case Success(result) =&gt; {
     // Ok
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -517,10 +516,10 @@ of the API.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var request = client.get(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="scala">var request = client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;)
 var headers = request.headers()
-headers.set("content-type", "application/json")
-headers.set("other-header", "foo")</code></pre>
+headers.set(&quot;content-type&quot;, &quot;application/json&quot;)
+headers.set(&quot;other-header&quot;, &quot;foo&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -532,9 +531,9 @@ setting and removing entries. Http headers allow more than one value for a speci
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var request = client.get(8080, "myserver.mycompany.com", "/some-uri")
-request.putHeader("content-type", "application/json")
-request.putHeader("other-header", "foo")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var request = client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;)
+request.putHeader(&quot;content-type&quot;, &quot;application/json&quot;)
+request.putHeader(&quot;other-header&quot;, &quot;foo&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -546,12 +545,12 @@ safely, making it very easy to configure and reuse <code><a href="../../scaladoc
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var get = client.get(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="scala">var get = client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;)
 get.sendFuture().onComplete{
   case Success(result) =&gt; {
     // Ok
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }
 
 // Same request again
@@ -559,7 +558,7 @@ get.sendFuture().onComplete{
   case Success(result) =&gt; {
     // Ok
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -569,20 +568,20 @@ Therefore you should call the <code><a href="../../scaladocs/io/vertx/scala/ext/
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var get = client.get(8080, "myserver.mycompany.com", "/some-uri")
+<pre class="CodeRay highlight"><code data-lang="scala">var get = client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;)
 get.sendFuture().onComplete{
   case Success(result) =&gt; {
     // Ok
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }
 
-// The "get" request instance remains unmodified
-get.copy().putHeader("a-header", "with-some-value").sendFuture().onComplete{
+// The &quot;get&quot; request instance remains unmodified
+get.copy().putHeader(&quot;a-header&quot;, &quot;with-some-value&quot;).sendFuture().onComplete{
   case Success(result) =&gt; {
     // Ok
   }
-  case Failure(cause) =&gt; println("Failure")
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
 }</code></pre>
 </div>
 </div>
@@ -594,12 +593,12 @@ get.copy().putHeader("a-header", "with-some-value").sendFuture().onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">client.get(8080, "myserver.mycompany.com", "/some-uri").timeout(5000).sendFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).timeout(5000).sendFuture().onComplete{
   case Success(result) =&gt; {
     // Ok
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -622,15 +621,15 @@ handler.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">client.get(8080, "myserver.mycompany.com", "/some-uri").sendFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).sendFuture().onComplete{
   case Success(result) =&gt; {
 
     var response = result
 
-    println(s"Received response with status code${response.statusCode()}")
+    println(s&quot;Received response with status code${response.statusCode()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -682,16 +681,16 @@ step in your response handlers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">client.get(8080, "myserver.mycompany.com", "/some-uri").as(BodyCodec.jsonObject()).sendFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).as(BodyCodec.jsonObject()).sendFuture().onComplete{
   case Success(result) =&gt; {
     var response = result
 
     var body = response.body()
 
-    println(s"Received response with status code${response.statusCode()} with body ${body}")
+    println(s&quot;Received response with status code${response.statusCode()} with body ${body}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -701,16 +700,16 @@ step in your response handlers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">client.get(8080, "myserver.mycompany.com", "/some-uri").as(BodyCodec.json(examples.WebClientExamples.User.class)).sendFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).as(BodyCodec.json(examples.WebClientExamples.User.class)).sendFuture().onComplete{
   case Success(result) =&gt; {
     var response = result
 
     var user = response.body()
 
-    println(s"Received response with status code${response.statusCode()} with body ${user.getFirstName()} ${user.getLastName()}")
+    println(s&quot;Received response with status code${response.statusCode()} with body ${user.getFirstName()} ${user.getLastName()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -722,15 +721,15 @@ and signals the success or the failure of the operation in the async result resp
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">client.get(8080, "myserver.mycompany.com", "/some-uri").as(BodyCodec.pipe(writeStream)).sendFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).as(BodyCodec.pipe(writeStream)).sendFuture().onComplete{
   case Success(result) =&gt; {
 
     var response = result
 
-    println(s"Received response with status code${response.statusCode()}")
+    println(s&quot;Received response with status code${response.statusCode()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -741,15 +740,15 @@ simply discards the entire response body</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">client.get(8080, "myserver.mycompany.com", "/some-uri").as(BodyCodec.none()).sendFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).as(BodyCodec.none()).sendFuture().onComplete{
   case Success(result) =&gt; {
 
     var response = result
 
-    println(s"Received response with status code${response.statusCode()}")
+    println(s&quot;Received response with status code${response.statusCode()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -760,7 +759,7 @@ that decode the response to a specific type</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">client.get(8080, "myserver.mycompany.com", "/some-uri").sendFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">client.get(8080, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).sendFuture().onComplete{
   case Success(result) =&gt; {
 
     var response = result
@@ -768,10 +767,10 @@ that decode the response to a specific type</p>
     // Decode the body as a json object
     var body = response.bodyAsJsonObject()
 
-    println(s"Received response with status code${response.statusCode()} with body ${body}")
+    println(s&quot;Received response with status code${response.statusCode()} with body ${body}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -796,7 +795,7 @@ this is only valid for the response decoded as a buffer.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Change the default behavior to not follow redirects
+<pre class="CodeRay highlight"><code data-lang="scala">// Change the default behavior to not follow redirects
 var client = WebClient.create(vertx, WebClientOptions()
   .setFollowRedirects(false)
 )</code></pre>
@@ -807,7 +806,7 @@ var client = WebClient.create(vertx, WebClientOptions()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Follow at most 5 redirections
+<pre class="CodeRay highlight"><code data-lang="scala">// Follow at most 5 redirections
 var client = WebClient.create(vertx, WebClientOptions()
   .setMaxRedirects(5)
 )</code></pre>
@@ -827,15 +826,15 @@ var client = WebClient.create(vertx, WebClientOptions()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">client.get(443, "myserver.mycompany.com", "/some-uri").ssl(true).sendFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">client.get(443, &quot;myserver.mycompany.com&quot;, &quot;/some-uri&quot;).ssl(true).sendFuture().onComplete{
   case Success(result) =&gt; {
     // Obtain response
     var response = result
 
-    println(s"Received response with status code${response.statusCode()}")
+    println(s&quot;Received response with status code${response.statusCode()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -845,15 +844,15 @@ var client = WebClient.create(vertx, WebClientOptions()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">client.getAbs("https://myserver.mycompany.com:4043/some-uri").sendFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">client.getAbs(&quot;https://myserver.mycompany.com:4043/some-uri&quot;).sendFuture().onComplete{
   case Success(result) =&gt; {
     // Obtain response
     var response = result
 
-    println(s"Received response with status code${response.statusCode()}")
+    println(s&quot;Received response with status code${response.statusCode()}&quot;)
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -270,7 +269,7 @@ You do this by defining a <code><a href="../../apidocs/io/vertx/core/eventbus/Me
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">EventBus eb = vertx.eventBus();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">EventBus eb = vertx.eventBus();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -285,10 +284,10 @@ Here&#8217;s an example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">EventBus eb = vertx.eventBus();
+<pre class="CodeRay highlight"><code data-lang="java">EventBus eb = vertx.eventBus();
 
-eb.consumer("news.uk.sport", message -&gt; {
-  System.out.println("I have received a message: " + message.body());
+eb.consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, message -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">I have received a message: </span><span class="delimiter">&quot;</span></span> + message.body());
 });</code></pre>
 </div>
 </div>
@@ -307,11 +306,11 @@ to return a MessageConsumer with no handler set, and then set the handler on tha
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">EventBus eb = vertx.eventBus();
+<pre class="CodeRay highlight"><code data-lang="java">EventBus eb = vertx.eventBus();
 
-MessageConsumer&lt;String&gt; consumer = eb.consumer("news.uk.sport");
+MessageConsumer&lt;<span class="predefined-type">String</span>&gt; consumer = eb.consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>);
 consumer.handler(message -&gt; {
-  System.out.println("I have received a message: " + message.body());
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">I have received a message: </span><span class="delimiter">&quot;</span></span> + message.body());
 });</code></pre>
 </div>
 </div>
@@ -325,11 +324,11 @@ on the MessageConsumer object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consumer.completionHandler(res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("The handler registration has reached all nodes");
-  } else {
-    System.out.println("Registration failed!");
+<pre class="CodeRay highlight"><code data-lang="java">consumer.completionHandler(res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">The handler registration has reached all nodes</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Registration failed!</span><span class="delimiter">&quot;</span></span>);
   }
 });</code></pre>
 </div>
@@ -346,11 +345,11 @@ be notified when this is complete use <code><a href="../../apidocs/io/vertx/core
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">consumer.unregister(res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("The handler un-registration has reached all nodes");
-  } else {
-    System.out.println("Un-registration failed!");
+<pre class="CodeRay highlight"><code data-lang="java">consumer.unregister(res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">The handler un-registration has reached all nodes</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Un-registration failed!</span><span class="delimiter">&quot;</span></span>);
   }
 });</code></pre>
 </div>
@@ -364,7 +363,7 @@ address to publish it to.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">eventBus.publish("news.uk.sport", "Yay! Someone kicked a ball");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">eventBus.publish(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Yay! Someone kicked a ball</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -382,7 +381,7 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">eventBus.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Yay! Someone kicked a ball</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -397,9 +396,9 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">DeliveryOptions options = new DeliveryOptions();
-options.addHeader("some-header", "some-value");
-eventBus.send("news.uk.sport", "Yay! Someone kicked a ball", options);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">DeliveryOptions options = <span class="keyword">new</span> DeliveryOptions();
+options.addHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-header</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>);
+eventBus.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Yay! Someone kicked a ball</span><span class="delimiter">&quot;</span></span>, options);</code></pre>
 </div>
 </div>
 </div>
@@ -444,10 +443,10 @@ eventBus.send("news.uk.sport", "Yay! Someone kicked a ball", options);</code></p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">MessageConsumer&lt;String&gt; consumer = eventBus.consumer("news.uk.sport");
+<pre class="CodeRay highlight"><code data-lang="java">MessageConsumer&lt;<span class="predefined-type">String</span>&gt; consumer = eventBus.consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>);
 consumer.handler(message -&gt; {
-  System.out.println("I have received a message: " + message.body());
-  message.reply("how interesting!");
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">I have received a message: </span><span class="delimiter">&quot;</span></span> + message.body());
+  message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">how interesting!</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -456,9 +455,9 @@ consumer.handler(message -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">eventBus.send("news.uk.sport", "Yay! Someone kicked a ball across a patch of grass", ar -&gt; {
-  if (ar.succeeded()) {
-    System.out.println("Received reply: " + ar.result().body());
+<pre class="CodeRay highlight"><code data-lang="java">eventBus.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">news.uk.sport</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Yay! Someone kicked a ball across a patch of grass</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received reply: </span><span class="delimiter">&quot;</span></span> + ar.result().body());
   }
 });</code></pre>
 </div>
@@ -532,11 +531,11 @@ when sending or publishing the message:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">eventBus.registerCodec(myCodec);
+<pre class="CodeRay highlight"><code data-lang="java">eventBus.registerCodec(myCodec);
 
-DeliveryOptions options = new DeliveryOptions().setCodecName(myCodec.name());
+DeliveryOptions options = <span class="keyword">new</span> DeliveryOptions().setCodecName(myCodec.name());
 
-eventBus.send("orders", new MyPOJO(), options);</code></pre>
+eventBus.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">orders</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> MyPOJO(), options);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -545,9 +544,9 @@ you don&#8217;t have to specify the codec on each send in the delivery options:<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">eventBus.registerDefaultCodec(MyPOJO.class, myCodec);
+<pre class="CodeRay highlight"><code data-lang="java">eventBus.registerDefaultCodec(MyPOJO.class, myCodec);
 
-eventBus.send("orders", new MyPOJO());</code></pre>
+eventBus.send(<span class="string"><span class="delimiter">&quot;</span><span class="content">orders</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> MyPOJO());</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -573,14 +572,14 @@ instance as clustered;</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">VertxOptions options = new VertxOptions();
+<pre class="CodeRay highlight"><code data-lang="java">VertxOptions options = <span class="keyword">new</span> VertxOptions();
 Vertx.clusteredVertx(options, res -&gt; {
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     Vertx vertx = res.result();
     EventBus eventBus = vertx.eventBus();
-    System.out.println("We now have a clustered event bus: " + eventBus);
-  } else {
-    System.out.println("Failed: " + res.cause());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">We now have a clustered event bus: </span><span class="delimiter">&quot;</span></span> + eventBus);
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed: </span><span class="delimiter">&quot;</span></span> + res.cause());
   }
 });</code></pre>
 </div>
@@ -623,21 +622,21 @@ the event bus acts as a server and client, the configuration is close to
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">VertxOptions options = new VertxOptions()
-    .setEventBusOptions(new EventBusOptions()
-        .setSsl(true)
-        .setKeyStoreOptions(new JksOptions().setPath("keystore.jks").setPassword("wibble"))
-        .setTrustStoreOptions(new JksOptions().setPath("keystore.jks").setPassword("wibble"))
+<pre class="CodeRay highlight"><code data-lang="java">VertxOptions options = <span class="keyword">new</span> VertxOptions()
+    .setEventBusOptions(<span class="keyword">new</span> EventBusOptions()
+        .setSsl(<span class="predefined-constant">true</span>)
+        .setKeyStoreOptions(<span class="keyword">new</span> JksOptions().setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jks</span><span class="delimiter">&quot;</span></span>).setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>))
+        .setTrustStoreOptions(<span class="keyword">new</span> JksOptions().setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jks</span><span class="delimiter">&quot;</span></span>).setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>))
         .setClientAuth(ClientAuth.REQUIRED)
     );
 
 Vertx.clusteredVertx(options, res -&gt; {
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     Vertx vertx = res.result();
     EventBus eventBus = vertx.eventBus();
-    System.out.println("We now have a clustered event bus: " + eventBus);
-  } else {
-    System.out.println("Failed: " + res.cause());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">We now have a clustered event bus: </span><span class="delimiter">&quot;</span></span> + eventBus);
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed: </span><span class="delimiter">&quot;</span></span> + res.cause());
   }
 });</code></pre>
 </div>
@@ -664,19 +663,19 @@ clustered, the port and host, as you would do with <code><a href="../../apidocs/
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">VertxOptions options = new VertxOptions()
-    .setEventBusOptions(new EventBusOptions()
-        .setClusterPublicHost("whatever")
-        .setClusterPublicPort(1234)
+<pre class="CodeRay highlight"><code data-lang="java">VertxOptions options = <span class="keyword">new</span> VertxOptions()
+    .setEventBusOptions(<span class="keyword">new</span> EventBusOptions()
+        .setClusterPublicHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">whatever</span><span class="delimiter">&quot;</span></span>)
+        .setClusterPublicPort(<span class="integer">1234</span>)
     );
 
 Vertx.clusteredVertx(options, res -&gt; {
-  if (res.succeeded()) {
+  <span class="keyword">if</span> (res.succeeded()) {
     Vertx vertx = res.result();
     EventBus eventBus = vertx.eventBus();
-    System.out.println("We now have a clustered event bus: " + eventBus);
-  } else {
-    System.out.println("Failed: " + res.cause());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">We now have a clustered event bus: </span><span class="delimiter">&quot;</span></span> + eventBus);
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed: </span><span class="delimiter">&quot;</span></span> + res.cause());
   }
 });</code></pre>
 </div>

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -173,11 +172,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-circuit-breaker&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-circuit-breaker<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -189,7 +188,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-circuit-breaker:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-circuit-breaker:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -215,20 +214,20 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
-  maxFailures:5,
-  timeout:2000,
-  fallbackOnFailure:true,
-  resetTimeout:10000
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> breaker = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx, [
+  <span class="key">maxFailures</span>:<span class="integer">5</span>,
+  <span class="key">timeout</span>:<span class="integer">2000</span>,
+  <span class="key">fallbackOnFailure</span>:<span class="predefined-constant">true</span>,
+  <span class="key">resetTimeout</span>:<span class="integer">10000</span>
 ])
 
 breaker.execute({ future -&gt;
-  // some code executing with the breaker
-  // the code reports failures or success on the given future.
-  // if this future is marked as failed, the breaker increased the
-  // number of failures
+  <span class="comment">// some code executing with the breaker</span>
+  <span class="comment">// the code reports failures or success on the given future.</span>
+  <span class="comment">// if this future is marked as failed, the breaker increased the</span>
+  <span class="comment">// number of failures</span>
 }).setHandler({ ar -&gt;
-  // Get the operation result.
+  <span class="comment">// Get the operation result.</span>
 })</code></pre>
 </div>
 </div>
@@ -239,23 +238,23 @@ output of a REST endpoint invocation:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
-  maxFailures:5,
-  timeout:2000
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> breaker = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx, [
+  <span class="key">maxFailures</span>:<span class="integer">5</span>,
+  <span class="key">timeout</span>:<span class="integer">2000</span>
 ])
 
 breaker.execute({ future -&gt;
-  vertx.createHttpClient().getNow(8080, "localhost", "/", { response -&gt;
-    if (response.statusCode() != 200) {
-      future.fail("HTTP error")
-    } else {
+  vertx.createHttpClient().getNow(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>, { response -&gt;
+    <span class="keyword">if</span> (response.statusCode() != <span class="integer">200</span>) {
+      future.fail(<span class="string"><span class="delimiter">&quot;</span><span class="content">HTTP error</span><span class="delimiter">&quot;</span></span>)
+    } <span class="keyword">else</span> {
       response.exceptionHandler(future.&amp;fail).bodyHandler({ buffer -&gt;
         future.complete(buffer.toString())
       })
     }
   })
 }).setHandler({ ar -&gt;
-  // Do something with the result
+  <span class="comment">// Do something with the result</span>
 })</code></pre>
 </div>
 </div>
@@ -277,26 +276,26 @@ breaker.execute({ future -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
-  maxFailures:5,
-  timeout:2000
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> breaker = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx, [
+  <span class="key">maxFailures</span>:<span class="integer">5</span>,
+  <span class="key">timeout</span>:<span class="integer">2000</span>
 ])
 
 breaker.executeWithFallback({ future -&gt;
-  vertx.createHttpClient().getNow(8080, "localhost", "/", { response -&gt;
-    if (response.statusCode() != 200) {
-      future.fail("HTTP error")
-    } else {
+  vertx.createHttpClient().getNow(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>, { response -&gt;
+    <span class="keyword">if</span> (response.statusCode() != <span class="integer">200</span>) {
+      future.fail(<span class="string"><span class="delimiter">&quot;</span><span class="content">HTTP error</span><span class="delimiter">&quot;</span></span>)
+    } <span class="keyword">else</span> {
       response.exceptionHandler(future.&amp;fail).bodyHandler({ buffer -&gt;
         future.complete(buffer.toString())
       })
     }
   })
 }, { v -&gt;
-  // Executed when the circuit is opened
-  return "Hello"
+  <span class="comment">// Executed when the circuit is opened</span>
+  <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>
 }).setHandler({ ar -&gt;
-  // Do something with the result
+  <span class="comment">// Do something with the result</span>
 })</code></pre>
 </div>
 </div>
@@ -311,19 +310,19 @@ set, the result is using the output of the fallback function. The fallback funct
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
-  maxFailures:5,
-  timeout:2000
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> breaker = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx, [
+  <span class="key">maxFailures</span>:<span class="integer">5</span>,
+  <span class="key">timeout</span>:<span class="integer">2000</span>
 ]).fallback({ v -&gt;
-  // Executed when the circuit is opened.
-  return "hello"
+  <span class="comment">// Executed when the circuit is opened.</span>
+  <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">hello</span><span class="delimiter">&quot;</span></span>
 })
 
 breaker.execute({ future -&gt;
-  vertx.createHttpClient().getNow(8080, "localhost", "/", { response -&gt;
-    if (response.statusCode() != 200) {
-      future.fail("HTTP error")
-    } else {
+  vertx.createHttpClient().getNow(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>, { response -&gt;
+    <span class="keyword">if</span> (response.statusCode() != <span class="integer">200</span>) {
+      future.fail(<span class="string"><span class="delimiter">&quot;</span><span class="content">HTTP error</span><span class="delimiter">&quot;</span></span>)
+    } <span class="keyword">else</span> {
       response.exceptionHandler(future.&amp;fail).bodyHandler({ buffer -&gt;
         future.complete(buffer.toString())
       })
@@ -349,21 +348,21 @@ retries left are skipped. Retries are only supported when the circuit is closed.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def breaker = CircuitBreaker.create("my-circuit-breaker", vertx, [
-  maxFailures:5,
-  timeout:2000
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> breaker = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx, [
+  <span class="key">maxFailures</span>:<span class="integer">5</span>,
+  <span class="key">timeout</span>:<span class="integer">2000</span>
 ]).openHandler({ v -&gt;
-  println("Circuit opened")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Circuit opened</span><span class="delimiter">&quot;</span></span>)
 }).closeHandler({ v -&gt;
-  println("Circuit closed")
+  println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Circuit closed</span><span class="delimiter">&quot;</span></span>)
 })
 
 breaker.execute({ future -&gt;
-  vertx.createHttpClient().getNow(8080, "localhost", "/", { response -&gt;
-    if (response.statusCode() != 200) {
-      future.fail("HTTP error")
-    } else {
-      // Do something with the response
+  vertx.createHttpClient().getNow(<span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>, { response -&gt;
+    <span class="keyword">if</span> (response.statusCode() != <span class="integer">200</span>) {
+      future.fail(<span class="string"><span class="delimiter">&quot;</span><span class="content">HTTP error</span><span class="delimiter">&quot;</span></span>)
+    } <span class="keyword">else</span> {
+      <span class="comment">// Do something with the response</span>
       future.complete()
     }
   })
@@ -431,17 +430,17 @@ a SSE stream sending the metrics. This stream is provided by the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Create the circuit breaker as usual.
-def breaker = CircuitBreaker.create("my-circuit-breaker", vertx)
-def breaker2 = CircuitBreaker.create("my-second-circuit-breaker", vertx)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Create the circuit breaker as usual.</span>
+<span class="keyword">def</span> breaker = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx)
+<span class="keyword">def</span> breaker2 = CircuitBreaker.create(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-second-circuit-breaker</span><span class="delimiter">&quot;</span></span>, vertx)
 
-// Create a Vert.x Web router
-def router = Router.router(vertx)
-// Register the metric handler
-router.get("/hystrix-metrics").handler(HystrixMetricHandler.create(vertx))
+<span class="comment">// Create a Vert.x Web router</span>
+<span class="keyword">def</span> router = Router.router(vertx)
+<span class="comment">// Register the metric handler</span>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/hystrix-metrics</span><span class="delimiter">&quot;</span></span>).handler(HystrixMetricHandler.create(vertx))
 
-// Create the HTTP server using the router to dispatch the requests
-vertx.createHttpServer().requestHandler(router.&amp;accept).listen(8080)</code></pre>
+<span class="comment">// Create the HTTP server using the router to dispatch the requests</span>
+vertx.createHttpServer().requestHandler(router.&amp;accept).listen(<span class="integer">8080</span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">

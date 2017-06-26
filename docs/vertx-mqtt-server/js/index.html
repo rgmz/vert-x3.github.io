@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -182,11 +181,11 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-    &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-    &lt;artifactId&gt;vertx-mqtt-server&lt;/artifactId&gt;
-    &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>vertx-mqtt-server<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -198,7 +197,7 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile io.vertx:vertx-mqtt-server:3.4.2</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-mqtt-<span class="key">server</span>:<span class="float">3.4</span><span class="float">.2</span></code></pre>
 </div>
 </div>
 </div>
@@ -222,34 +221,34 @@ to check if the server is started properly or not.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var MqttServer = require("vertx-mqtt-server-js/mqtt_server");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MqttServer = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-mqtt-server-js/mqtt_server</span><span class="delimiter">&quot;</span></span>);
 
-var mqttServer = MqttServer.create(vertx);
-mqttServer.endpointHandler(function (endpoint) {
+<span class="keyword">var</span> mqttServer = MqttServer.create(vertx);
+mqttServer.endpointHandler(<span class="keyword">function</span> (endpoint) {
 
-  // shows main connect info
-  console.log("MQTT client [" + endpoint.clientIdentifier() + "] request to connect, clean session = " + endpoint.isCleanSession());
+  <span class="comment">// shows main connect info</span>
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT client [</span><span class="delimiter">&quot;</span></span> + endpoint.clientIdentifier() + <span class="string"><span class="delimiter">&quot;</span><span class="content">] request to connect, clean session = </span><span class="delimiter">&quot;</span></span> + endpoint.isCleanSession());
 
-  if ((endpoint.auth() !== null &amp;&amp; endpoint.auth() !== undefined)) {
-    console.log("[username = " + endpoint.auth().userName() + ", password = " + endpoint.auth().password() + "]");
+  <span class="keyword">if</span> ((endpoint.auth() !== <span class="predefined-constant">null</span> &amp;&amp; endpoint.auth() !== <span class="predefined-constant">undefined</span>)) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[username = </span><span class="delimiter">&quot;</span></span> + endpoint.auth().userName() + <span class="string"><span class="delimiter">&quot;</span><span class="content">, password = </span><span class="delimiter">&quot;</span></span> + endpoint.auth().password() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
   }
-  if ((endpoint.will() !== null &amp;&amp; endpoint.will() !== undefined)) {
-    console.log("[will topic = " + endpoint.will().willTopic() + " msg = " + endpoint.will().willMessage() + " QoS = " + endpoint.will().willQos() + " isRetain = " + endpoint.will().isWillRetain() + "]");
+  <span class="keyword">if</span> ((endpoint.will() !== <span class="predefined-constant">null</span> &amp;&amp; endpoint.will() !== <span class="predefined-constant">undefined</span>)) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[will topic = </span><span class="delimiter">&quot;</span></span> + endpoint.will().willTopic() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> msg = </span><span class="delimiter">&quot;</span></span> + endpoint.will().willMessage() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> QoS = </span><span class="delimiter">&quot;</span></span> + endpoint.will().willQos() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> isRetain = </span><span class="delimiter">&quot;</span></span> + endpoint.will().isWillRetain() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
   }
 
-  console.log("[keep alive timeout = " + endpoint.keepAliveTimeSeconds() + "]");
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[keep alive timeout = </span><span class="delimiter">&quot;</span></span> + endpoint.keepAliveTimeSeconds() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
 
-  // accept connection from the remote client
-  endpoint.accept(false);
+  <span class="comment">// accept connection from the remote client</span>
+  endpoint.accept(<span class="predefined-constant">false</span>);
 
-}).listen(function (ar, ar_err) {
+}).listen(<span class="keyword">function</span> (ar, ar_err) {
 
-  if (ar_err == null) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
 
-    console.log("MQTT server is listening on port " + ar.actualPort());
-  } else {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT server is listening on port </span><span class="delimiter">&quot;</span></span> + ar.actualPort());
+  } <span class="keyword">else</span> {
 
-    console.log("Error on starting the server");
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error on starting the server</span><span class="delimiter">&quot;</span></span>);
     ar_err.printStackTrace();
   }
 });</code></pre>
@@ -262,10 +261,10 @@ this handler takes no parameters.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// handling disconnect message
-endpoint.disconnectHandler(function (v) {
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// handling disconnect message</span>
+endpoint.disconnectHandler(<span class="keyword">function</span> (v) {
 
-  console.log("Received disconnect from client");
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received disconnect from client</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -287,43 +286,43 @@ The MQTT server is started passing the Vert.x instance as usual and the above MQ
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var MqttServer = require("vertx-mqtt-server-js/mqtt_server");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MqttServer = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-mqtt-server-js/mqtt_server</span><span class="delimiter">&quot;</span></span>);
 
-var options = {
-  "port" : 8883,
-  "keyCertOptions" : {
-    "keyPath" : "./src/test/resources/tls/server-key.pem",
-    "certPath" : "./src/test/resources/tls/server-cert.pem"
+<span class="keyword">var</span> options = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span> : <span class="integer">8883</span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">keyCertOptions</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">keyPath</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">./src/test/resources/tls/server-key.pem</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">certPath</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">./src/test/resources/tls/server-cert.pem</span><span class="delimiter">&quot;</span></span>
   },
-  "ssl" : true
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">ssl</span><span class="delimiter">&quot;</span></span> : <span class="predefined-constant">true</span>
 };
 
-var mqttServer = MqttServer.create(vertx, options);
-mqttServer.endpointHandler(function (endpoint) {
+<span class="keyword">var</span> mqttServer = MqttServer.create(vertx, options);
+mqttServer.endpointHandler(<span class="keyword">function</span> (endpoint) {
 
-  // shows main connect info
-  console.log("MQTT client [" + endpoint.clientIdentifier() + "] request to connect, clean session = " + endpoint.isCleanSession());
+  <span class="comment">// shows main connect info</span>
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT client [</span><span class="delimiter">&quot;</span></span> + endpoint.clientIdentifier() + <span class="string"><span class="delimiter">&quot;</span><span class="content">] request to connect, clean session = </span><span class="delimiter">&quot;</span></span> + endpoint.isCleanSession());
 
-  if ((endpoint.auth() !== null &amp;&amp; endpoint.auth() !== undefined)) {
-    console.log("[username = " + endpoint.auth().userName() + ", password = " + endpoint.auth().password() + "]");
+  <span class="keyword">if</span> ((endpoint.auth() !== <span class="predefined-constant">null</span> &amp;&amp; endpoint.auth() !== <span class="predefined-constant">undefined</span>)) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[username = </span><span class="delimiter">&quot;</span></span> + endpoint.auth().userName() + <span class="string"><span class="delimiter">&quot;</span><span class="content">, password = </span><span class="delimiter">&quot;</span></span> + endpoint.auth().password() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
   }
-  if ((endpoint.will() !== null &amp;&amp; endpoint.will() !== undefined)) {
-    console.log("[will topic = " + endpoint.will().willTopic() + " msg = " + endpoint.will().willMessage() + " QoS = " + endpoint.will().willQos() + " isRetain = " + endpoint.will().isWillRetain() + "]");
+  <span class="keyword">if</span> ((endpoint.will() !== <span class="predefined-constant">null</span> &amp;&amp; endpoint.will() !== <span class="predefined-constant">undefined</span>)) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[will topic = </span><span class="delimiter">&quot;</span></span> + endpoint.will().willTopic() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> msg = </span><span class="delimiter">&quot;</span></span> + endpoint.will().willMessage() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> QoS = </span><span class="delimiter">&quot;</span></span> + endpoint.will().willQos() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> isRetain = </span><span class="delimiter">&quot;</span></span> + endpoint.will().isWillRetain() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
   }
 
-  console.log("[keep alive timeout = " + endpoint.keepAliveTimeSeconds() + "]");
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[keep alive timeout = </span><span class="delimiter">&quot;</span></span> + endpoint.keepAliveTimeSeconds() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
 
-  // accept connection from the remote client
-  endpoint.accept(false);
+  <span class="comment">// accept connection from the remote client</span>
+  endpoint.accept(<span class="predefined-constant">false</span>);
 
-}).listen(function (ar, ar_err) {
+}).listen(<span class="keyword">function</span> (ar, ar_err) {
 
-  if (ar_err == null) {
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">null</span>) {
 
-    console.log("MQTT server is listening on port " + ar.actualPort());
-  } else {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT server is listening on port </span><span class="delimiter">&quot;</span></span> + ar.actualPort());
+  } <span class="keyword">else</span> {
 
-    console.log("Error on starting the server");
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error on starting the server</span><span class="delimiter">&quot;</span></span>);
     ar_err.printStackTrace();
   }
 });</code></pre>
@@ -346,15 +345,15 @@ for replying to the client with the related SUBACK message containing the grante
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// handling requests for subscriptions
-endpoint.subscribeHandler(function (subscribe) {
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// handling requests for subscriptions</span>
+endpoint.subscribeHandler(<span class="keyword">function</span> (subscribe) {
 
-  var grantedQosLevels = [];
-  Array.prototype.forEach.call(subscribe.topicSubscriptions(), function(s) {
-    console.log("Subscription for " + s.topicName() + " with QoS " + s.qualityOfService());
+  <span class="keyword">var</span> grantedQosLevels = [];
+  Array.prototype.forEach.call(subscribe.topicSubscriptions(), <span class="keyword">function</span>(s) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Subscription for </span><span class="delimiter">&quot;</span></span> + s.topicName() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> with QoS </span><span class="delimiter">&quot;</span></span> + s.qualityOfService());
     grantedQosLevels.push(s.qualityOfService());
   });
-  // ack the subscriptions request
+  <span class="comment">// ack the subscriptions request</span>
   endpoint.subscribeAcknowledge(subscribe.messageId(), grantedQosLevels);
 
 });</code></pre>
@@ -369,13 +368,13 @@ for replying to the client with the related UNSUBACK message.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// handling requests for unsubscriptions
-endpoint.unsubscribeHandler(function (unsubscribe) {
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// handling requests for unsubscriptions</span>
+endpoint.unsubscribeHandler(<span class="keyword">function</span> (unsubscribe) {
 
-  Array.prototype.forEach.call(unsubscribe.topics(), function(t) {
-    console.log("Unsubscription for " + t);
+  Array.prototype.forEach.call(unsubscribe.topics(), <span class="keyword">function</span>(t) {
+    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Unsubscription for </span><span class="delimiter">&quot;</span></span> + t);
   });
-  // ack the subscriptions request
+  <span class="comment">// ack the subscriptions request</span>
   endpoint.unsubscribeAcknowledge(unsubscribe.messageId());
 });</code></pre>
 </div>
@@ -406,18 +405,18 @@ for sending the PUBCOMP message to the client.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// handling incoming published messages
-endpoint.publishHandler(function (message) {
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// handling incoming published messages</span>
+endpoint.publishHandler(<span class="keyword">function</span> (message) {
 
-  console.log("Just received message [" + message.payload().toString(Java.type("java.nio.charset.Charset").defaultCharset()) + "] with QoS [" + message.qosLevel() + "]");
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Just received message [</span><span class="delimiter">&quot;</span></span> + message.payload().toString(Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">java.nio.charset.Charset</span><span class="delimiter">&quot;</span></span>).defaultCharset()) + <span class="string"><span class="delimiter">&quot;</span><span class="content">] with QoS [</span><span class="delimiter">&quot;</span></span> + message.qosLevel() + <span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>);
 
-  if (message.qosLevel() === 'AT_LEAST_ONCE') {
+  <span class="keyword">if</span> (message.qosLevel() === <span class="string"><span class="delimiter">'</span><span class="content">AT_LEAST_ONCE</span><span class="delimiter">'</span></span>) {
     endpoint.publishAcknowledge(message.messageId());
-  } else if (message.qosLevel() === 'EXACTLY_ONCE') {
+  } <span class="keyword">else</span> <span class="keyword">if</span> (message.qosLevel() === <span class="string"><span class="delimiter">'</span><span class="content">EXACTLY_ONCE</span><span class="delimiter">'</span></span>) {
     endpoint.publishRelease(message.messageId());
   }
 
-}).publishReleaseHandler(function (messageId) {
+}).publishReleaseHandler(<span class="keyword">function</span> (messageId) {
 
   endpoint.publishComplete(messageId);
 });</code></pre>
@@ -449,23 +448,23 @@ for specifying the handler called when the final PUBCOMP message is received.</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var Buffer = require("vertx-js/buffer");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> Buffer = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-js/buffer</span><span class="delimiter">&quot;</span></span>);
 
-// just as example, publish a message with QoS level 2
-endpoint.publish("my_topic", Buffer.buffer("Hello from the Vert.x MQTT server"), 'EXACTLY_ONCE', false, false);
+<span class="comment">// just as example, publish a message with QoS level 2</span>
+endpoint.publish(<span class="string"><span class="delimiter">&quot;</span><span class="content">my_topic</span><span class="delimiter">&quot;</span></span>, Buffer.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from the Vert.x MQTT server</span><span class="delimiter">&quot;</span></span>), <span class="string"><span class="delimiter">'</span><span class="content">EXACTLY_ONCE</span><span class="delimiter">'</span></span>, <span class="predefined-constant">false</span>, <span class="predefined-constant">false</span>);
 
-// specifing handlers for handling QoS 1 and 2
-endpoint.publishAcknowledgeHandler(function (messageId) {
+<span class="comment">// specifing handlers for handling QoS 1 and 2</span>
+endpoint.publishAcknowledgeHandler(<span class="keyword">function</span> (messageId) {
 
-  console.log("Received ack for message = " + messageId);
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received ack for message = </span><span class="delimiter">&quot;</span></span> + messageId);
 
-}).publishReceivedHandler(function (messageId) {
+}).publishReceivedHandler(<span class="keyword">function</span> (messageId) {
 
   endpoint.publishRelease(messageId);
 
-}).publishCompleteHandler(function (messageId) {
+}).publishCompleteHandler(<span class="keyword">function</span> (messageId) {
 
-  console.log("Received ack for message = " + messageId);
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Received ack for message = </span><span class="delimiter">&quot;</span></span> + messageId);
 });</code></pre>
 </div>
 </div>
@@ -486,10 +485,10 @@ by the server internally as described above.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">// handling ping from client
-endpoint.pingHandler(function (v) {
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// handling ping from client</span>
+endpoint.pingHandler(<span class="keyword">function</span> (v) {
 
-  console.log("Ping received from client");
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Ping received from client</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -504,9 +503,9 @@ that will be called when the server is really closed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">mqttServer.close(function (v, v_err) {
+<pre class="CodeRay highlight"><code data-lang="js">mqttServer.close(<span class="keyword">function</span> (v, v_err) {
 
-  console.log("MQTT server closed");
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">MQTT server closed</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -529,16 +528,16 @@ more instances of the MQTT server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var MqttServer = require("vertx-mqtt-server-js/mqtt_server");
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MqttServer = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-mqtt-server-js/mqtt_server</span><span class="delimiter">&quot;</span></span>);
 
-for (var i = 0;i &lt; 10;i++) {
+<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; <span class="integer">10</span>;i++) {
 
-  var mqttServer = MqttServer.create(vertx);
-  mqttServer.endpointHandler(function (endpoint) {
-    // handling endpoint
-  }).listen(function (ar, ar_err) {
+  <span class="keyword">var</span> mqttServer = MqttServer.create(vertx);
+  mqttServer.endpointHandler(<span class="keyword">function</span> (endpoint) {
+    <span class="comment">// handling endpoint</span>
+  }).listen(<span class="keyword">function</span> (ar, ar_err) {
 
-    // handling start listening
+    <span class="comment">// handling start listening</span>
   });
 
 }</code></pre>
@@ -549,10 +548,10 @@ for (var i = 0;i &lt; 10;i++) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-js" data-lang="js">var options = {
-  "instances" : 10
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> options = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">instances</span><span class="delimiter">&quot;</span></span> : <span class="integer">10</span>
 };
-vertx.deployVerticle("com.mycompany.MyVerticle", options);</code></pre>
+vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.mycompany.MyVerticle</span><span class="delimiter">&quot;</span></span>, options);</code></pre>
 </div>
 </div>
 <div class="paragraph">

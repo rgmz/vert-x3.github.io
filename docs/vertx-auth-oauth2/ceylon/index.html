@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -142,7 +141,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">shared import io.vertx.ceylon.auth.oauth2 "3.3.2";</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml">shared import io.vertx.ceylon.auth.oauth2 &quot;3.3.2&quot;;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -216,26 +215,26 @@ specification).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
 
 ...
 
 
 value oauth2 = oAuth2Auth.create(vertx, auth_code, OAuth2ClientOptions {
-  clientID = "YOUR_CLIENT_ID";
-  clientSecret = "YOUR_CLIENT_SECRET";
-  site = "https://github.com/login";
-  tokenPath = "/oauth/access_token";
-  authorizationPath = "/oauth/authorize";
+  clientID = &quot;YOUR_CLIENT_ID&quot;;
+  clientSecret = &quot;YOUR_CLIENT_SECRET&quot;;
+  site = &quot;https://github.com/login&quot;;
+  tokenPath = &quot;/oauth/access_token&quot;;
+  authorizationPath = &quot;/oauth/authorize&quot;;
 });
 
 // when there is a need to access a protected resource or call a protected method,
 // call the authZ url for a challenge
 
 value authorization_uri = oauth2.authorizeURL(JsonObject {
-  redirect_uri = "http://localhost:8080/callback";
-  scope = "notifications";
-  state = "3(#0/!~";
+  redirect_uri = &quot;http://localhost:8080/callback&quot;;
+  scope = &quot;notifications&quot;;
+  state = &quot;3(#0/!~&quot;;
 });
 
 // when working with web application use the above string as a redirect url
@@ -243,11 +242,11 @@ value authorization_uri = oauth2.authorizeURL(JsonObject {
 // in this case GitHub will call you back in the callback uri one should now complete the handshake as:
 
 
-value code = "xxxxxxxxxxxxxxxxxxxxxxxx";
+value code = &quot;xxxxxxxxxxxxxxxxxxxxxxxx&quot;;
 
 oauth2.getToken(JsonObject {
   code = code;
-  redirect_uri = "http://localhost:8080/callback";
+  redirect_uri = &quot;http://localhost:8080/callback&quot;;
 }, (AccessToken|Throwable res) {
   if (is Throwable name) {
     // error, the code provided is not valid
@@ -267,16 +266,16 @@ access token.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, auth_code }
 
 ...
 
 
 // Set the client credentials and the OAuth2 server
 value credentials = OAuth2ClientOptions {
-  clientID = "&lt;client-id&gt;";
-  clientSecret = "&lt;client-secret&gt;";
-  site = "https://api.oauth.com";
+  clientID = &quot;&lt;client-id&gt;&quot;;
+  clientSecret = &quot;&lt;client-secret&gt;&quot;;
+  site = &quot;https://api.oauth.com&quot;;
 };
 
 
@@ -285,24 +284,24 @@ value oauth2 = oAuth2Auth.create(vertx, auth_code, credentials);
 
 // Authorization oauth2 URI
 value authorization_uri = oauth2.authorizeURL(JsonObject {
-  redirect_uri = "http://localhost:8080/callback";
-  scope = "&lt;scope&gt;";
-  state = "&lt;state&gt;";
+  redirect_uri = &quot;http://localhost:8080/callback&quot;;
+  scope = &quot;&lt;scope&gt;&quot;;
+  state = &quot;&lt;state&gt;&quot;;
 });
 
 // Redirect example using Vert.x
-response.putHeader("Location", authorization_uri).setStatusCode(302).end();
+response.putHeader(&quot;Location&quot;, authorization_uri).setStatusCode(302).end();
 
 value tokenConfig = JsonObject {
-  code = "&lt;code&gt;";
-  redirect_uri = "http://localhost:3000/callback";
+  code = &quot;&lt;code&gt;&quot;;
+  redirect_uri = &quot;http://localhost:3000/callback&quot;;
 };
 
 // Callbacks
 // Save the access token
 oauth2.getToken(tokenConfig, (AccessToken|Throwable res) {
   if (is Throwable name) {
-    print("Access Token Error: ``res.getMessage()``");
+    print(&quot;Access Token Error: ``res.getMessage()``&quot;);
   } else {
     // Get the access token object (the authorization code is given from the previous step).
     value token = res;
@@ -320,7 +319,7 @@ need a fast way to test your application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, password }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, password }
 import io.vertx.ceylon.core.http { get }
 
 ...
@@ -330,21 +329,21 @@ import io.vertx.ceylon.core.http { get }
 value oauth2 = oAuth2Auth.create(vertx, password);
 
 value tokenConfig = JsonObject {
-  username = "username";
-  password = "password";
+  username = &quot;username&quot;;
+  password = &quot;password&quot;;
 };
 
 // Callbacks
 // Save the access token
 oauth2.getToken(tokenConfig, (AccessToken|Throwable res) {
   if (is Throwable name) {
-    print("Access Token Error: ``res.getMessage()``");
+    print(&quot;Access Token Error: ``res.getMessage()``&quot;);
   } else {
     // Get the access token object (the authorization code is given from the previous step).
     value token = res;
 
-    oauth2.api(get, "/users", JsonObject {
-      access_token = token.principal()get("access_token";
+    oauth2.api(get, &quot;/users&quot;, JsonObject {
+      access_token = token.principal()get(&quot;access_token&quot;;
     }, (JsonObject|Throwable res2) {
       // the user object should be returned here...
     });
@@ -360,16 +359,16 @@ oauth2.getToken(tokenConfig, (AccessToken|Throwable res) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
 
 ...
 
 
 // Set the client credentials and the OAuth2 server
 value credentials = OAuth2ClientOptions {
-  clientID = "&lt;client-id&gt;";
-  clientSecret = "&lt;client-secret&gt;";
-  site = "https://api.oauth.com";
+  clientID = &quot;&lt;client-id&gt;&quot;;
+  clientSecret = &quot;&lt;client-secret&gt;&quot;;
+  site = &quot;https://api.oauth.com&quot;;
 };
 
 
@@ -382,7 +381,7 @@ value tokenConfig = JsonObject();
 // Save the access token
 oauth2.getToken(tokenConfig, (AccessToken|Throwable res) {
   if (is Throwable name) {
-    print("Access Token Error: ``res.getMessage()``");
+    print(&quot;Access Token Error: ``res.getMessage()``&quot;);
   } else {
     // Get the access token object (the authorization code is given from the previous step).
     value token = res;
@@ -400,7 +399,7 @@ to refresh the access token when it is expired.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Check if the token is expired. If expired it is refreshed.
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Check if the token is expired. If expired it is refreshed.
 if (token.expired()) {
   // Callbacks
   token.refresh((Throwable? res) {
@@ -418,13 +417,13 @@ if (token.expired()) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">// Revoke only the access token
-token.revoke("access_token", (Throwable? res) {
+<pre class="CodeRay highlight"><code data-lang="ceylon">// Revoke only the access token
+token.revoke(&quot;access_token&quot;, (Throwable? res) {
   // Session ended. But the refresh_token is still valid.
 
   // Revoke the refresh_token
-  token.revoke("refresh_token", (Throwable? res1) {
-    print("token revoked.");
+  token.revoke(&quot;refresh_token&quot;, (Throwable? res1) {
+    print(&quot;token revoked.&quot;);
   });
 });</code></pre>
 </div>
@@ -436,17 +435,17 @@ token.revoke("access_token", (Throwable? res) {
 <h4 id="_google">Google</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
 
 ...
 
 // Set the client credentials and the OAuth2 server
 value credentials = OAuth2ClientOptions {
-  clientID = "CLIENT_ID";
-  clientSecret = "CLIENT_SECRET";
-  site = "https://accounts.google.com";
-  tokenPath = "https://www.googleapis.com/oauth2/v3/token";
-  authorizationPath = "/o/oauth2/auth";
+  clientID = &quot;CLIENT_ID&quot;;
+  clientSecret = &quot;CLIENT_SECRET&quot;;
+  site = &quot;https://accounts.google.com&quot;;
+  tokenPath = &quot;https://www.googleapis.com/oauth2/v3/token&quot;;
+  authorizationPath = &quot;/o/oauth2/auth&quot;;
 };
 
 
@@ -459,17 +458,17 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 <h4 id="_github">GitHub</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
 
 ...
 
 // Set the client credentials and the OAuth2 server
 value credentials = OAuth2ClientOptions {
-  clientID = "CLIENT_ID";
-  clientSecret = "CLIENT_SECRET";
-  site = "https://github.com/login";
-  tokenPath = "/oauth/access_token";
-  authorizationPath = "/oauth/authorize";
+  clientID = &quot;CLIENT_ID&quot;;
+  clientSecret = &quot;CLIENT_SECRET&quot;;
+  site = &quot;https://github.com/login&quot;;
+  tokenPath = &quot;/oauth/access_token&quot;;
+  authorizationPath = &quot;/oauth/authorize&quot;;
 };
 
 
@@ -482,17 +481,17 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 <h4 id="_linkedin">Linkedin</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
 
 ...
 
 // Set the client credentials and the OAuth2 server
 value credentials = OAuth2ClientOptions {
-  clientID = "CLIENT_ID";
-  clientSecret = "CLIENT_SECRET";
-  site = "https://www.linkedin.com";
-  authorizationPath = "/uas/oauth2/authorization";
-  tokenPath = "/uas/oauth2/accessToken";
+  clientID = &quot;CLIENT_ID&quot;;
+  clientSecret = &quot;CLIENT_SECRET&quot;;
+  site = &quot;https://www.linkedin.com&quot;;
+  authorizationPath = &quot;/uas/oauth2/authorization&quot;;
+  tokenPath = &quot;/uas/oauth2/accessToken&quot;;
 };
 
 
@@ -505,17 +504,17 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 <h4 id="_twitter">Twitter</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
 
 ...
 
 // Set the client credentials and the OAuth2 server
 value credentials = OAuth2ClientOptions {
-  clientID = "CLIENT_ID";
-  clientSecret = "CLIENT_SECRET";
-  site = "https://api.twitter.com";
-  authorizationPath = "/oauth/authorize";
-  tokenPath = "/oauth/access_token";
+  clientID = &quot;CLIENT_ID&quot;;
+  clientSecret = &quot;CLIENT_SECRET&quot;;
+  site = &quot;https://api.twitter.com&quot;;
+  authorizationPath = &quot;/oauth/authorize&quot;;
+  tokenPath = &quot;/oauth/access_token&quot;;
 };
 
 
@@ -528,17 +527,17 @@ value oauth2 = oAuth2Auth.create(vertx, client, credentials);</code></pre>
 <h4 id="_facebook">Facebook</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
 
 ...
 
 // Set the client credentials and the OAuth2 server
 value credentials = OAuth2ClientOptions {
-  clientID = "CLIENT_ID";
-  clientSecret = "CLIENT_SECRET";
-  site = "https://www.facebook.com";
-  authorizationPath = "/dialog/oauth";
-  tokenPath = "https://graph.facebook.com/oauth/access_token";
+  clientID = &quot;CLIENT_ID&quot;;
+  clientSecret = &quot;CLIENT_SECRET&quot;;
+  site = &quot;https://www.facebook.com&quot;;
+  authorizationPath = &quot;/dialog/oauth&quot;;
+  tokenPath = &quot;https://graph.facebook.com/oauth/access_token&quot;;
 };
 
 
@@ -555,7 +554,7 @@ web UI and use it as the OAuth2 config with the helper class <code><a href="../.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, client }
 
 ...
 
@@ -563,13 +562,13 @@ web UI and use it as the OAuth2 config with the helper class <code><a href="../.
 // the configuration json file from the web interface and load it in your application e.g.:
 
 value keycloakJson = JsonObject {
-  realm = "master";
-  realm-public-key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqGQkaBkiZWpUjFOuaabgfXgjzZzfJd0wozrS1czX5qHNKG3P79P/UtZeR3wGN8r15jVYiH42GMINMs7R7iP5Mbm1iImge5p/7/dPmXirKOKOBhjA3hNTiV5BlPDTQyiuuTAUEms5dY4+moswXo5zM4q9DFu6B7979o+v3kX6ZB+k3kNhP08wH82I4eJKoenN/0iCT7ALoG3ysEJf18+HEysSnniLMJr8R1pYF2QRFlqaDv3Mqyp7ipxYkt4ebMCgE7aDzT6OrfpyPowObpdjSMTUXpcwIcH8mIZCWFmyfF675zEeE0e+dHKkL1rPeCI7rr7Bqc5+1DS5YM54fk8xQwIDAQAB";
-  auth-server-url = "http://localhost:9000/auth";
-  ssl-required = "external";
-  resource = "frontend";
+  realm = &quot;master&quot;;
+  realm-public-key = &quot;MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqGQkaBkiZWpUjFOuaabgfXgjzZzfJd0wozrS1czX5qHNKG3P79P/UtZeR3wGN8r15jVYiH42GMINMs7R7iP5Mbm1iImge5p/7/dPmXirKOKOBhjA3hNTiV5BlPDTQyiuuTAUEms5dY4+moswXo5zM4q9DFu6B7979o+v3kX6ZB+k3kNhP08wH82I4eJKoenN/0iCT7ALoG3ysEJf18+HEysSnniLMJr8R1pYF2QRFlqaDv3Mqyp7ipxYkt4ebMCgE7aDzT6OrfpyPowObpdjSMTUXpcwIcH8mIZCWFmyfF675zEeE0e+dHKkL1rPeCI7rr7Bqc5+1DS5YM54fk8xQwIDAQAB&quot;;
+  auth-server-url = &quot;http://localhost:9000/auth&quot;;
+  ssl-required = &quot;external&quot;;
+  resource = &quot;frontend&quot;;
   credentials = JsonObject {
-    secret = "2fbf5e18-b923-4a83-9657-b4ebd5317f60";
+    secret = &quot;2fbf5e18-b923-4a83-9657-b4ebd5317f60&quot;;
   };
 };
 
@@ -583,19 +582,19 @@ This information is quite valuable since it allows to do authorization at the AP
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ceylon" data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, password }
+<pre class="CodeRay highlight"><code data-lang="ceylon">import io.vertx.ceylon.ext.auth.oauth2 { oAuth2Auth, password }
 
 ...
 
 // you can now use this config with the OAuth2 provider like this:
 value keycloakJson = JsonObject {
-  realm = "master";
-  realm-public-key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqGQkaBkiZWpUjFOuaabgfXgjzZzfJd0wozrS1czX5qHNKG3P79P/UtZeR3wGN8r15jVYiH42GMINMs7R7iP5Mbm1iImge5p/7/dPmXirKOKOBhjA3hNTiV5BlPDTQyiuuTAUEms5dY4+moswXo5zM4q9DFu6B7979o+v3kX6ZB+k3kNhP08wH82I4eJKoenN/0iCT7ALoG3ysEJf18+HEysSnniLMJr8R1pYF2QRFlqaDv3Mqyp7ipxYkt4ebMCgE7aDzT6OrfpyPowObpdjSMTUXpcwIcH8mIZCWFmyfF675zEeE0e+dHKkL1rPeCI7rr7Bqc5+1DS5YM54fk8xQwIDAQAB";
-  auth-server-url = "http://localhost:9000/auth";
-  ssl-required = "external";
-  resource = "frontend";
+  realm = &quot;master&quot;;
+  realm-public-key = &quot;MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqGQkaBkiZWpUjFOuaabgfXgjzZzfJd0wozrS1czX5qHNKG3P79P/UtZeR3wGN8r15jVYiH42GMINMs7R7iP5Mbm1iImge5p/7/dPmXirKOKOBhjA3hNTiV5BlPDTQyiuuTAUEms5dY4+moswXo5zM4q9DFu6B7979o+v3kX6ZB+k3kNhP08wH82I4eJKoenN/0iCT7ALoG3ysEJf18+HEysSnniLMJr8R1pYF2QRFlqaDv3Mqyp7ipxYkt4ebMCgE7aDzT6OrfpyPowObpdjSMTUXpcwIcH8mIZCWFmyfF675zEeE0e+dHKkL1rPeCI7rr7Bqc5+1DS5YM54fk8xQwIDAQAB&quot;;
+  auth-server-url = &quot;http://localhost:9000/auth&quot;;
+  ssl-required = &quot;external&quot;;
+  resource = &quot;frontend&quot;;
   credentials = JsonObject {
-    secret = "2fbf5e18-b923-4a83-9657-b4ebd5317f60";
+    secret = &quot;2fbf5e18-b923-4a83-9657-b4ebd5317f60&quot;;
   };
 };
 
@@ -604,8 +603,8 @@ value oauth2 = oAuth2Auth.createKeycloak(vertx, password, keycloakJson);
 
 // first get a token (authenticate)
 oauth2.getToken(JsonObject {
-  username = "user";
-  password = "secret";
+  username = &quot;user&quot;;
+  password = &quot;secret&quot;;
 }, (AccessToken|Throwable res) {
   if (is Throwable name) {
     // error handling...
@@ -613,7 +612,7 @@ oauth2.getToken(JsonObject {
     value token = res;
 
     // now check for permissions
-    token.isAuthorised("account:manage-account", (Boolean|Throwable r) {
+    token.isAuthorised(&quot;account:manage-account&quot;, (Boolean|Throwable r) {
       if (r) {
         // this user is authorized to manage its account
       };

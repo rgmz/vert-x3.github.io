@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -288,11 +287,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-&lt;groupId&gt;io.vertx&lt;/groupId&gt;
-&lt;artifactId&gt;vertx-service-discovery&lt;/artifactId&gt;
-&lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+<span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+<span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery<span class="tag">&lt;/artifactId&gt;</span>
+<span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -304,7 +303,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -421,17 +420,17 @@ instance to use the discovery infrastructure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/service_discovery'
-# Use default configuration
-discovery = VertxServiceDiscovery::ServiceDiscovery.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/service_discovery</span><span class="delimiter">'</span></span>
+<span class="comment"># Use default configuration</span>
+discovery = <span class="constant">VertxServiceDiscovery</span>::<span class="constant">ServiceDiscovery</span>.create(vertx)
 
-# Customize the configuration
-discovery = VertxServiceDiscovery::ServiceDiscovery.create(vertx, {
-  'announceAddress' =&gt; "service-announce",
-  'name' =&gt; "my-name"
+<span class="comment"># Customize the configuration</span>
+discovery = <span class="constant">VertxServiceDiscovery</span>::<span class="constant">ServiceDiscovery</span>.create(vertx, {
+  <span class="string"><span class="delimiter">'</span><span class="content">announceAddress</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">service-announce</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">my-name</span><span class="delimiter">&quot;</span></span>
 })
 
-# Do something...
+<span class="comment"># Do something...</span>
 
 discovery.close()</code></pre>
 </div>
@@ -474,37 +473,37 @@ from the service types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/http_endpoint'
-# Manual record creation
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/http_endpoint</span><span class="delimiter">'</span></span>
+<span class="comment"># Manual record creation</span>
 record = {
-  'type' =&gt; "eventbus-service-proxy",
-  'location' =&gt; {
-    'endpoint' =&gt; "the-service-address"
+  <span class="string"><span class="delimiter">'</span><span class="content">type</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">eventbus-service-proxy</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">location</span><span class="delimiter">'</span></span> =&gt; {
+    <span class="string"><span class="delimiter">'</span><span class="content">endpoint</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">the-service-address</span><span class="delimiter">&quot;</span></span>
   },
-  'name' =&gt; "my-service",
-  'metadata' =&gt; {
-    'some-label' =&gt; "some-value"
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">my-service</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">metadata</span><span class="delimiter">'</span></span> =&gt; {
+    <span class="string"><span class="delimiter">'</span><span class="content">some-label</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
   }
 }
 
 discovery.publish(record) { |ar_err,ar|
-  if (ar_err == nil)
-    # publication succeeded
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
+    <span class="comment"># publication succeeded</span>
     publishedRecord = ar
-  else
-    # publication failed
-  end
+  <span class="keyword">else</span>
+    <span class="comment"># publication failed</span>
+  <span class="keyword">end</span>
 }
 
-# Record creation from a type
-record = VertxServiceDiscovery::HttpEndpoint.create_record("some-rest-api", "localhost", 8080, "/api")
+<span class="comment"># Record creation from a type</span>
+record = <span class="constant">VertxServiceDiscovery</span>::<span class="constant">HttpEndpoint</span>.create_record(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-rest-api</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/api</span><span class="delimiter">&quot;</span></span>)
 discovery.publish(record) { |ar_err,ar|
-  if (ar_err == nil)
-    # publication succeeded
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
+    <span class="comment"># publication succeeded</span>
     publishedRecord = ar
-  else
-    # publication failed
-  end
+  <span class="keyword">else</span>
+    <span class="comment"># publication failed</span>
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -521,12 +520,12 @@ discovery.publish(record) { |ar_err,ar|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">discovery.unpublish(record['registration']) { |ar_err,ar|
-  if (ar_err == nil)
-    # Ok
-  else
-    # cannot un-publish the service, may have already been removed, or the record is not published
-  end
+<pre class="CodeRay highlight"><code data-lang="ruby">discovery.unpublish(record[<span class="string"><span class="delimiter">'</span><span class="content">registration</span><span class="delimiter">'</span></span>]) { |ar_err,ar|
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
+    <span class="comment"># Ok</span>
+  <span class="keyword">else</span>
+    <span class="comment"># cannot un-publish the service, may have already been removed, or the record is not published</span>
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -579,87 +578,87 @@ records, you must return <em>true</em> regardless the record.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Get any record
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># Get any record</span>
 discovery.get_record(lambda { |r|
-  true
+  <span class="predefined-constant">true</span>
 }) { |ar_err,ar|
-  if (ar_err == nil)
-    if (ar != nil)
-      # we have a record
-    else
-      # the lookup succeeded, but no matching service
-    end
-  else
-    # lookup failed
-  end
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
+    <span class="keyword">if</span> (ar != <span class="predefined-constant">nil</span>)
+      <span class="comment"># we have a record</span>
+    <span class="keyword">else</span>
+      <span class="comment"># the lookup succeeded, but no matching service</span>
+    <span class="keyword">end</span>
+  <span class="keyword">else</span>
+    <span class="comment"># lookup failed</span>
+  <span class="keyword">end</span>
 }
 
-discovery.get_record(nil) { |ar_err,ar|
-  if (ar_err == nil)
-    if (ar != nil)
-      # we have a record
-    else
-      # the lookup succeeded, but no matching service
-    end
-  else
-    # lookup failed
-  end
+discovery.get_record(<span class="predefined-constant">nil</span>) { |ar_err,ar|
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
+    <span class="keyword">if</span> (ar != <span class="predefined-constant">nil</span>)
+      <span class="comment"># we have a record</span>
+    <span class="keyword">else</span>
+      <span class="comment"># the lookup succeeded, but no matching service</span>
+    <span class="keyword">end</span>
+  <span class="keyword">else</span>
+    <span class="comment"># lookup failed</span>
+  <span class="keyword">end</span>
 }
 
 
-# Get a record by name
+<span class="comment"># Get a record by name</span>
 discovery.get_record(lambda { |r|
-  r['name'].==("some-name")
+  r[<span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span>].==(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-name</span><span class="delimiter">&quot;</span></span>)
 }) { |ar_err,ar|
-  if (ar_err == nil)
-    if (ar != nil)
-      # we have a record
-    else
-      # the lookup succeeded, but no matching service
-    end
-  else
-    # lookup failed
-  end
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
+    <span class="keyword">if</span> (ar != <span class="predefined-constant">nil</span>)
+      <span class="comment"># we have a record</span>
+    <span class="keyword">else</span>
+      <span class="comment"># the lookup succeeded, but no matching service</span>
+    <span class="keyword">end</span>
+  <span class="keyword">else</span>
+    <span class="comment"># lookup failed</span>
+  <span class="keyword">end</span>
 }
 
 discovery.get_record({
-  'name' =&gt; "some-service"
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-service</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil)
-    if (ar != nil)
-      # we have a record
-    else
-      # the lookup succeeded, but no matching service
-    end
-  else
-    # lookup failed
-  end
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
+    <span class="keyword">if</span> (ar != <span class="predefined-constant">nil</span>)
+      <span class="comment"># we have a record</span>
+    <span class="keyword">else</span>
+      <span class="comment"># the lookup succeeded, but no matching service</span>
+    <span class="keyword">end</span>
+  <span class="keyword">else</span>
+    <span class="comment"># lookup failed</span>
+  <span class="keyword">end</span>
 }
 
-# Get all records matching the filter
+<span class="comment"># Get all records matching the filter</span>
 discovery.get_records(lambda { |r|
-  "some-value".==(r['metadata']['some-label'])
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>.==(r[<span class="string"><span class="delimiter">'</span><span class="content">metadata</span><span class="delimiter">'</span></span>][<span class="string"><span class="delimiter">'</span><span class="content">some-label</span><span class="delimiter">'</span></span>])
 }) { |ar_err,ar|
-  if (ar_err == nil)
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
     results = ar
-    # If the list is not empty, we have matching record
-    # Else, the lookup succeeded, but no matching service
-  else
-    # lookup failed
-  end
+    <span class="comment"># If the list is not empty, we have matching record</span>
+    <span class="comment"># Else, the lookup succeeded, but no matching service</span>
+  <span class="keyword">else</span>
+    <span class="comment"># lookup failed</span>
+  <span class="keyword">end</span>
 }
 
 
 discovery.get_records({
-  'some-label' =&gt; "some-value"
+  <span class="string"><span class="delimiter">'</span><span class="content">some-label</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil)
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
     results = ar
-    # If the list is not empty, we have matching record
-    # Else, the lookup succeeded, but no matching service
-  else
-    # lookup failed
-  end
+    <span class="comment"># If the list is not empty, we have matching record</span>
+    <span class="comment"># Else, the lookup succeeded, but no matching service</span>
+  <span class="keyword">else</span>
+    <span class="comment"># lookup failed</span>
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -691,18 +690,18 @@ By default, record lookup does include only records with a <code>status</code> s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/http_client'
-require 'vertx/message_consumer'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx/http_client</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">vertx/message_consumer</span><span class="delimiter">'</span></span>
 reference1 = discovery.get_reference(record1)
 reference2 = discovery.get_reference(record2)
 
-# Then, gets the service object, the returned type depends on the service type:
-# For http endpoint:
-client = reference1.get_as(Vertx::HttpClient::class)
-# For message source
-consumer = reference2.get_as(Vertx::MessageConsumer::class)
+<span class="comment"># Then, gets the service object, the returned type depends on the service type:</span>
+<span class="comment"># For http endpoint:</span>
+client = reference1.get_as(<span class="constant">Vertx</span>::<span class="constant">HttpClient</span>::class)
+<span class="comment"># For message source</span>
+consumer = reference2.get_as(<span class="constant">Vertx</span>::<span class="constant">MessageConsumer</span>::class)
 
-# When done with the service
+<span class="comment"># When done with the service</span>
 reference1.release()
 reference2.release()</code></pre>
 </div>
@@ -720,16 +719,16 @@ configuration, some require configuration (as data sources):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-jdbc/jdbc_client'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-jdbc/jdbc_client</span><span class="delimiter">'</span></span>
 reference = discovery.get_reference_with_configuration(record, conf)
 
-# Then, gets the service object, the returned type depends on the service type:
-# For http endpoint:
-client = reference.get_as(VertxJdbc::JDBCClient::class)
+<span class="comment"># Then, gets the service object, the returned type depends on the service type:</span>
+<span class="comment"># For http endpoint:</span>
+client = reference.get_as(<span class="constant">VertxJdbc</span>::<span class="constant">JDBCClient</span>::class)
 
-# Do something with the client...
+<span class="comment"># Do something with the client...</span>
 
-# When done with the service
+<span class="comment"># When done with the service</span>
 reference.release()</code></pre>
 </div>
 </div>
@@ -815,15 +814,15 @@ objects are <code><a href="../../yardoc/Vertx/HttpClient.html">HttpClient</a></c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/http_endpoint'
-record1 = VertxServiceDiscovery::HttpEndpoint.create_record("some-http-service", "localhost", 8433, "/api")
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/http_endpoint</span><span class="delimiter">'</span></span>
+record1 = <span class="constant">VertxServiceDiscovery</span>::<span class="constant">HttpEndpoint</span>.create_record(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">8433</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/api</span><span class="delimiter">&quot;</span></span>)
 
 discovery.publish(record1) { |ar_err,ar|
-  # ...
+  <span class="comment"># ...</span>
 }
 
-record2 = VertxServiceDiscovery::HttpEndpoint.create_record("some-other-name", true, "localhost", 8433, "/api", {
-  'some-metadata' =&gt; "some value"
+record2 = <span class="constant">VertxServiceDiscovery</span>::<span class="constant">HttpEndpoint</span>.create_record(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-other-name</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="integer">8433</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/api</span><span class="delimiter">&quot;</span></span>, {
+  <span class="string"><span class="delimiter">'</span><span class="content">some-metadata</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some value</span><span class="delimiter">&quot;</span></span>
 })</code></pre>
 </div>
 </div>
@@ -840,27 +839,27 @@ publication must be done by another entity having this info. Generally it&#8217;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/http_client'
-# Get the record
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx/http_client</span><span class="delimiter">'</span></span>
+<span class="comment"># Get the record</span>
 discovery.get_record({
-  'name' =&gt; "some-http-service"
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil &amp;&amp; ar != nil)
-    # Retrieve the service reference
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span> &amp;&amp; ar != <span class="predefined-constant">nil</span>)
+    <span class="comment"># Retrieve the service reference</span>
     reference = discovery.get_reference(ar)
-    # Retrieve the service object
-    client = reference.get_as(Vertx::HttpClient::class)
+    <span class="comment"># Retrieve the service object</span>
+    client = reference.get_as(<span class="constant">Vertx</span>::<span class="constant">HttpClient</span>::class)
 
-    # You need to path the complete path
-    client.get_now("/api/persons") { |response|
+    <span class="comment"># You need to path the complete path</span>
+    client.get_now(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>) { |response|
 
-      # ...
+      <span class="comment"># ...</span>
 
-      # Dont' forget to release the service
+      <span class="comment"># Dont' forget to release the service</span>
       reference.release()
 
     }
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -871,24 +870,24 @@ method to combine lookup and service retrieval in one call:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/service_discovery'
-require 'vertx-service-discovery/http_endpoint'
-VertxServiceDiscovery::HttpEndpoint.get_client(discovery, {
-  'name' =&gt; "some-http-service"
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/service_discovery</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/http_endpoint</span><span class="delimiter">'</span></span>
+<span class="constant">VertxServiceDiscovery</span>::<span class="constant">HttpEndpoint</span>.get_client(discovery, {
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil)
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
     client = ar
 
-    # You need to path the complete path
-    client.get_now("/api/persons") { |response|
+    <span class="comment"># You need to path the complete path</span>
+    client.get_now(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>) { |response|
 
-      # ...
+      <span class="comment"># ...</span>
 
-      # Dont' forget to release the service
-      VertxServiceDiscovery::ServiceDiscovery.release_service_object(discovery, client)
+      <span class="comment"># Dont' forget to release the service</span>
+      <span class="constant">VertxServiceDiscovery</span>::<span class="constant">ServiceDiscovery</span>.release_service_object(discovery, client)
 
     }
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -903,27 +902,27 @@ tends to be easier to use. You can retrieve a <code><a href="../../yardoc/VertxW
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-web-client/web_client'
-# Get the record
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-web-client/web_client</span><span class="delimiter">'</span></span>
+<span class="comment"># Get the record</span>
 discovery.get_record({
-  'name' =&gt; "some-http-service"
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil &amp;&amp; ar != nil)
-    # Retrieve the service reference
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span> &amp;&amp; ar != <span class="predefined-constant">nil</span>)
+    <span class="comment"># Retrieve the service reference</span>
     reference = discovery.get_reference(ar)
-    # Retrieve the service object
-    client = reference.get_as(VertxWebClient::WebClient::class)
+    <span class="comment"># Retrieve the service object</span>
+    client = reference.get_as(<span class="constant">VertxWebClient</span>::<span class="constant">WebClient</span>::class)
 
-    # You need to path the complete path
-    client.get("/api/persons").send() { |response_err,response|
+    <span class="comment"># You need to path the complete path</span>
+    client.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>).send() { |response_err,response|
 
-      # ...
+      <span class="comment"># ...</span>
 
-      # Dont' forget to release the service
+      <span class="comment"># Dont' forget to release the service</span>
       reference.release()
 
     }
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -932,24 +931,24 @@ discovery.get_record({
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/service_discovery'
-require 'vertx-service-discovery/http_endpoint'
-VertxServiceDiscovery::HttpEndpoint.get_web_client(discovery, {
-  'name' =&gt; "some-http-service"
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/service_discovery</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/http_endpoint</span><span class="delimiter">'</span></span>
+<span class="constant">VertxServiceDiscovery</span>::<span class="constant">HttpEndpoint</span>.get_web_client(discovery, {
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-http-service</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil)
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
     client = ar
 
-    # You need to path the complete path
-    client.get("/api/persons").send() { |response_err,response|
+    <span class="comment"># You need to path the complete path</span>
+    client.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/api/persons</span><span class="delimiter">&quot;</span></span>).send() { |response_err,response|
 
-      # ...
+      <span class="comment"># ...</span>
 
-      # Dont' forget to release the service
-      VertxServiceDiscovery::ServiceDiscovery.release_service_object(discovery, client)
+      <span class="comment"># Dont' forget to release the service</span>
+      <span class="constant">VertxServiceDiscovery</span>::<span class="constant">ServiceDiscovery</span>.release_service_object(discovery, client)
 
     }
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -972,13 +971,13 @@ methods from <code><a href="../../yardoc/VertxServiceDiscovery/EventBusService.h
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/event_bus_service'
-record = VertxServiceDiscovery::EventBusService.create_record("some-eventbus-service", "address", "examples.MyService", {
-  'some-metadata' =&gt; "some value"
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/event_bus_service</span><span class="delimiter">'</span></span>
+record = <span class="constant">VertxServiceDiscovery</span>::<span class="constant">EventBusService</span>.create_record(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-eventbus-service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">address</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">examples.MyService</span><span class="delimiter">&quot;</span></span>, {
+  <span class="string"><span class="delimiter">'</span><span class="content">some-metadata</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some value</span><span class="delimiter">&quot;</span></span>
 })
 
 discovery.publish(record) { |ar_err,ar|
-  # ...
+  <span class="comment"># ...</span>
 }</code></pre>
 </div>
 </div>
@@ -994,18 +993,18 @@ discovery.publish(record) { |ar_err,ar|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/service_discovery'
-require 'vertx-service-discovery/event_bus_service'
-require 'org-acme/MyService'
-VertxServiceDiscovery::EventBusService.get_service_proxy_with_json_filter(discovery, {
-'service.interface' =&gt; "org.acme.MyService"
-}, Acme::MyService) { |ar_err,ar|
-if (ar_err == nil)
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/service_discovery</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/event_bus_service</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">org-acme/MyService</span><span class="delimiter">'</span></span>
+<span class="constant">VertxServiceDiscovery</span>::<span class="constant">EventBusService</span>.get_service_proxy_with_json_filter(discovery, {
+<span class="string"><span class="delimiter">'</span><span class="content">service.interface</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">org.acme.MyService</span><span class="delimiter">&quot;</span></span>
+}, <span class="constant">Acme</span>::<span class="constant">MyService</span>) { |ar_err,ar|
+<span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
 service = ar
 
-# Dont' forget to release the service
-VertxServiceDiscovery::ServiceDiscovery.release_service_object(discovery, service)
-end
+<span class="comment"># Dont' forget to release the service</span>
+<span class="constant">VertxServiceDiscovery</span>::<span class="constant">ServiceDiscovery</span>.release_service_object(discovery, service)
+<span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1037,14 +1036,14 @@ end
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/message_source'
-record = VertxServiceDiscovery::MessageSource.create_record("some-message-source-service", "some-address")
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/message_source</span><span class="delimiter">'</span></span>
+record = <span class="constant">VertxServiceDiscovery</span>::<span class="constant">MessageSource</span>.create_record(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-message-source-service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-address</span><span class="delimiter">&quot;</span></span>)
 
 discovery.publish(record) { |ar_err,ar|
-  # ...
+  <span class="comment"># ...</span>
 }
 
-record = VertxServiceDiscovery::MessageSource.create_record("some-other-message-source-service", "some-address", "examples.MyData")</code></pre>
+record = <span class="constant">VertxServiceDiscovery</span>::<span class="constant">MessageSource</span>.create_record(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-other-message-source-service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">some-address</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">examples.MyData</span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1062,23 +1061,23 @@ record = VertxServiceDiscovery::MessageSource.create_record("some-other-message-
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx/message_consumer'
-# Get the record
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx/message_consumer</span><span class="delimiter">'</span></span>
+<span class="comment"># Get the record</span>
 discovery.get_record({
-  'name' =&gt; "some-message-source-service"
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-message-source-service</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil &amp;&amp; ar != nil)
-    # Retrieve the service reference
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span> &amp;&amp; ar != <span class="predefined-constant">nil</span>)
+    <span class="comment"># Retrieve the service reference</span>
     reference = discovery.get_reference(ar)
-    # Retrieve the service object
-    consumer = reference.get_as(Vertx::MessageConsumer::class)
+    <span class="comment"># Retrieve the service object</span>
+    consumer = reference.get_as(<span class="constant">Vertx</span>::<span class="constant">MessageConsumer</span>::class)
 
-    # Attach a message handler on it
+    <span class="comment"># Attach a message handler on it</span>
     consumer.handler() { |message|
-      # message handler
+      <span class="comment"># message handler</span>
       payload = message.body()
     }
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1087,20 +1086,20 @@ discovery.get_record({
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/message_source'
-VertxServiceDiscovery::MessageSource.get_consumer(discovery, {
-  'name' =&gt; "some-message-source-service"
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/message_source</span><span class="delimiter">'</span></span>
+<span class="constant">VertxServiceDiscovery</span>::<span class="constant">MessageSource</span>.get_consumer(discovery, {
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-message-source-service</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil)
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
     consumer = ar
 
-    # Attach a message handler on it
+    <span class="comment"># Attach a message handler on it</span>
     consumer.handler() { |message|
-      # message handler
+      <span class="comment"># message handler</span>
       payload = message.body()
     }
-    # ...
-  end
+    <span class="comment"># ...</span>
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1129,15 +1128,15 @@ using a JDBC driver. The client of a JDBC data source service is a <code><a href
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/jdbc_data_source'
-record = VertxServiceDiscovery::JDBCDataSource.create_record("some-data-source-service", {
-  'url' =&gt; "some jdbc url"
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/jdbc_data_source</span><span class="delimiter">'</span></span>
+record = <span class="constant">VertxServiceDiscovery</span>::<span class="constant">JDBCDataSource</span>.create_record(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>, {
+  <span class="string"><span class="delimiter">'</span><span class="content">url</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some jdbc url</span><span class="delimiter">&quot;</span></span>
 }, {
-  'some-metadata' =&gt; "some-value"
+  <span class="string"><span class="delimiter">'</span><span class="content">some-metadata</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
 })
 
 discovery.publish(record) { |ar_err,ar|
-  # ...
+  <span class="comment"># ...</span>
 }</code></pre>
 </div>
 </div>
@@ -1157,26 +1156,26 @@ the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-jdbc/jdbc_client'
-# Get the record
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-jdbc/jdbc_client</span><span class="delimiter">'</span></span>
+<span class="comment"># Get the record</span>
 discovery.get_record({
-  'name' =&gt; "some-data-source-service"
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil &amp;&amp; ar != nil)
-    # Retrieve the service reference
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span> &amp;&amp; ar != <span class="predefined-constant">nil</span>)
+    <span class="comment"># Retrieve the service reference</span>
     reference = discovery.get_reference_with_configuration(ar, {
-      'username' =&gt; "clement",
-      'password' =&gt; "*****"
+      <span class="string"><span class="delimiter">'</span><span class="content">username</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">'</span><span class="content">password</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>
     })
 
-    # Retrieve the service object
-    client = reference.get_as(VertxJdbc::JDBCClient::class)
+    <span class="comment"># Retrieve the service object</span>
+    client = reference.get_as(<span class="constant">VertxJdbc</span>::<span class="constant">JDBCClient</span>::class)
 
-    # ...
+    <span class="comment"># ...</span>
 
-    # when done
+    <span class="comment"># when done</span>
     reference.release()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1185,23 +1184,23 @@ discovery.get_record({
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/service_discovery'
-require 'vertx-service-discovery/jdbc_data_source'
-VertxServiceDiscovery::JDBCDataSource.get_jdbc_client(discovery, {
-  'name' =&gt; "some-data-source-service"
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/service_discovery</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/jdbc_data_source</span><span class="delimiter">'</span></span>
+<span class="constant">VertxServiceDiscovery</span>::<span class="constant">JDBCDataSource</span>.get_jdbc_client(discovery, {
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>
 }, {
-  'username' =&gt; "clement",
-  'password' =&gt; "*****"
+  <span class="string"><span class="delimiter">'</span><span class="content">username</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">password</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil)
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
     client = ar
 
-    # ...
+    <span class="comment"># ...</span>
 
-    # Dont' forget to release the service
-    VertxServiceDiscovery::ServiceDiscovery.release_service_object(discovery, client)
+    <span class="comment"># Dont' forget to release the service</span>
+    <span class="constant">VertxServiceDiscovery</span>::<span class="constant">ServiceDiscovery</span>.release_service_object(discovery, client)
 
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1230,15 +1229,15 @@ The client of a Redis data source service is a <code><a href="../../yardoc/Vertx
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/redis_data_source'
-record = VertxServiceDiscovery::RedisDataSource.create_record("some-redis-data-source-service", {
-  'url' =&gt; "localhost"
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/redis_data_source</span><span class="delimiter">'</span></span>
+record = <span class="constant">VertxServiceDiscovery</span>::<span class="constant">RedisDataSource</span>.create_record(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-redis-data-source-service</span><span class="delimiter">&quot;</span></span>, {
+  <span class="string"><span class="delimiter">'</span><span class="content">url</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>
 }, {
-  'some-metadata' =&gt; "some-value"
+  <span class="string"><span class="delimiter">'</span><span class="content">some-metadata</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
 })
 
 discovery.publish(record) { |ar_err,ar|
-  # ...
+  <span class="comment"># ...</span>
 }</code></pre>
 </div>
 </div>
@@ -1256,23 +1255,23 @@ the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-redis/redis_client'
-# Get the record
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-redis/redis_client</span><span class="delimiter">'</span></span>
+<span class="comment"># Get the record</span>
 discovery.get_record({
-  'name' =&gt; "some-redis-data-source-service"
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-redis-data-source-service</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil &amp;&amp; ar != nil)
-    # Retrieve the service reference
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span> &amp;&amp; ar != <span class="predefined-constant">nil</span>)
+    <span class="comment"># Retrieve the service reference</span>
     reference = discovery.get_reference(ar)
 
-    # Retrieve the service instance
-    client = reference.get_as(VertxRedis::RedisClient::class)
+    <span class="comment"># Retrieve the service instance</span>
+    client = reference.get_as(<span class="constant">VertxRedis</span>::<span class="constant">RedisClient</span>::class)
 
-    # ...
+    <span class="comment"># ...</span>
 
-    # when done
+    <span class="comment"># when done</span>
     reference.release()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1281,20 +1280,20 @@ discovery.get_record({
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/service_discovery'
-require 'vertx-service-discovery/redis_data_source'
-VertxServiceDiscovery::RedisDataSource.get_redis_client(discovery, {
-  'name' =&gt; "some-redis-data-source-service"
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/service_discovery</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/redis_data_source</span><span class="delimiter">'</span></span>
+<span class="constant">VertxServiceDiscovery</span>::<span class="constant">RedisDataSource</span>.get_redis_client(discovery, {
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-redis-data-source-service</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil)
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
     client = ar
 
-    # ...
+    <span class="comment"># ...</span>
 
-    # Dont' forget to release the service
-    VertxServiceDiscovery::ServiceDiscovery.release_service_object(discovery, client)
+    <span class="comment"># Dont' forget to release the service</span>
+    <span class="constant">VertxServiceDiscovery</span>::<span class="constant">ServiceDiscovery</span>.release_service_object(discovery, client)
 
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1323,15 +1322,15 @@ The client of a Mongo data source service is a <code><a href="../../yardoc/Vertx
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/mongo_data_source'
-record = VertxServiceDiscovery::MongoDataSource.create_record("some-data-source-service", {
-  'connection_string' =&gt; "some mongo connection"
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/mongo_data_source</span><span class="delimiter">'</span></span>
+record = <span class="constant">VertxServiceDiscovery</span>::<span class="constant">MongoDataSource</span>.create_record(<span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>, {
+  <span class="string"><span class="delimiter">'</span><span class="content">connection_string</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some mongo connection</span><span class="delimiter">&quot;</span></span>
 }, {
-  'some-metadata' =&gt; "some-value"
+  <span class="string"><span class="delimiter">'</span><span class="content">some-metadata</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-value</span><span class="delimiter">&quot;</span></span>
 })
 
 discovery.publish(record) { |ar_err,ar|
-  # ...
+  <span class="comment"># ...</span>
 }</code></pre>
 </div>
 </div>
@@ -1349,25 +1348,25 @@ provided by the consumer:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby"># Get the record
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># Get the record</span>
 discovery.get_record({
-  'name' =&gt; "some-data-source-service"
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil &amp;&amp; ar != nil)
-    # Retrieve the service reference
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span> &amp;&amp; ar != <span class="predefined-constant">nil</span>)
+    <span class="comment"># Retrieve the service reference</span>
     reference = discovery.get_reference_with_configuration(ar, {
-      'username' =&gt; "clement",
-      'password' =&gt; "*****"
+      <span class="string"><span class="delimiter">'</span><span class="content">username</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">'</span><span class="content">password</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>
     })
 
-    # Retrieve the service object
+    <span class="comment"># Retrieve the service object</span>
     client = reference.get()
 
-    # ...
+    <span class="comment"># ...</span>
 
-    # when done
+    <span class="comment"># when done</span>
     reference.release()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1376,23 +1375,23 @@ discovery.get_record({
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/service_discovery'
-require 'vertx-service-discovery/mongo_data_source'
-VertxServiceDiscovery::MongoDataSource.get_mongo_client(discovery, {
-  'name' =&gt; "some-data-source-service"
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/service_discovery</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/mongo_data_source</span><span class="delimiter">'</span></span>
+<span class="constant">VertxServiceDiscovery</span>::<span class="constant">MongoDataSource</span>.get_mongo_client(discovery, {
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">some-data-source-service</span><span class="delimiter">&quot;</span></span>
 }, {
-  'username' =&gt; "clement",
-  'password' =&gt; "*****"
+  <span class="string"><span class="delimiter">'</span><span class="content">username</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">clement</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">password</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">*****</span><span class="delimiter">&quot;</span></span>
 }) { |ar_err,ar|
-  if (ar_err == nil)
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
     client = ar
 
-    # ...
+    <span class="comment"># ...</span>
 
-    # Dont' forget to release the service
-    VertxServiceDiscovery::ServiceDiscovery.release_service_object(discovery, client)
+    <span class="comment"># Dont' forget to release the service</span>
+    <span class="constant">VertxServiceDiscovery</span>::<span class="constant">ServiceDiscovery</span>.release_service_object(discovery, client)
 
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1546,11 +1545,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-consul&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-consul<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1562,7 +1561,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-consul:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-consul:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1570,11 +1569,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/service_discovery'
-VertxServiceDiscovery::ServiceDiscovery.create(vertx).register_service_importer(Java::IoVertxServicediscoveryConsul::ConsulServiceImporter.new(), {
-  'host' =&gt; "localhost",
-  'port' =&gt; 8500,
-  'scan-period' =&gt; 2000
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/service_discovery</span><span class="delimiter">'</span></span>
+<span class="constant">VertxServiceDiscovery</span>::<span class="constant">ServiceDiscovery</span>.create(vertx).register_service_importer(<span class="constant">Java</span>::<span class="constant">IoVertxServicediscoveryConsul</span>::<span class="constant">ConsulServiceImporter</span>.new(), {
+  <span class="string"><span class="delimiter">'</span><span class="content">host</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">port</span><span class="delimiter">'</span></span> =&gt; <span class="integer">8500</span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">scan-period</span><span class="delimiter">'</span></span> =&gt; <span class="integer">2000</span>
 })</code></pre>
 </div>
 </div>
@@ -1624,11 +1623,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-kubernetes&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-kubernetes<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1640,7 +1639,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-kubernetes:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-kubernetes:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1733,11 +1732,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-bridge-docker-links&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-bridge-docker-links<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1749,7 +1748,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-bridge-docker-links:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-bridge-docker-links:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1757,8 +1756,8 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/service_discovery'
-VertxServiceDiscovery::ServiceDiscovery.create(vertx).register_service_importer(Java::IoVertxServicediscoveryDocker::DockerLinksServiceImporter.new(), {
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/service_discovery</span><span class="delimiter">'</span></span>
+<span class="constant">VertxServiceDiscovery</span>::<span class="constant">ServiceDiscovery</span>.create(vertx).register_service_importer(<span class="constant">Java</span>::<span class="constant">IoVertxServicediscoveryDocker</span>::<span class="constant">DockerLinksServiceImporter</span>.new(), {
 })</code></pre>
 </div>
 </div>
@@ -1800,11 +1799,11 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-service-discovery-backend-redis&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-service-discovery-backend-redis<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1816,7 +1815,7 @@ descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-service-discovery-backend-redis:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-discovery-backend-redis:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1836,11 +1835,11 @@ the records are stored.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-service-discovery/service_discovery'
-VertxServiceDiscovery::ServiceDiscovery.create(vertx, {
-  'backendConfiguration' =&gt; {
-    'host' =&gt; "127.0.0.1",
-    'key' =&gt; "records"
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-service-discovery/service_discovery</span><span class="delimiter">'</span></span>
+<span class="constant">VertxServiceDiscovery</span>::<span class="constant">ServiceDiscovery</span>.create(vertx, {
+  <span class="string"><span class="delimiter">'</span><span class="content">backendConfiguration</span><span class="delimiter">'</span></span> =&gt; {
+    <span class="string"><span class="delimiter">'</span><span class="content">host</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.1</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">'</span><span class="content">key</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">records</span><span class="delimiter">&quot;</span></span>
   }
 })</code></pre>
 </div>

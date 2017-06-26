@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -210,11 +209,11 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-mongo-client-scala_2.12&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-mongo-client-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -226,7 +225,7 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-mongo-client-scala_2.12:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mongo-client-scala_2.12:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -251,7 +250,7 @@ to share the same pool so you don&#8217;t end up with multiple pools</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var client = MongoClient.createShared(vertx, config)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var client = MongoClient.createShared(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -269,7 +268,7 @@ will actually create the pool, and the specified config will be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var client = MongoClient.createShared(vertx, config, "MyPoolName")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var client = MongoClient.createShared(vertx, config, &quot;MyPoolName&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -299,7 +298,7 @@ However, it&#8217;s possible you want to create a client instance that doesn&#82
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var client = MongoClient.createNonShared(vertx, config)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var client = MongoClient.createNonShared(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -332,19 +331,19 @@ if it doesn&#8217;t already exist, otherwise it is updated.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Document has no id
+<pre class="CodeRay highlight"><code data-lang="scala">// Document has no id
 
-var document = new io.vertx.core.json.JsonObject().put("title", "The Hobbit")
+var document = new io.vertx.core.json.JsonObject().put(&quot;title&quot;, &quot;The Hobbit&quot;)
 
-mongoClient.saveFuture("books", document).onComplete{
+mongoClient.saveFuture(&quot;books&quot;, document).onComplete{
   case Success(result) =&gt; {
 
     var id = result
-    println(s"Saved book with id ${id}")
+    println(s&quot;Saved book with id ${id}&quot;)
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -354,18 +353,18 @@ mongoClient.saveFuture("books", document).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Document has an id already
+<pre class="CodeRay highlight"><code data-lang="scala">// Document has an id already
 
-var document = new io.vertx.core.json.JsonObject().put("title", "The Hobbit").put("_id", "123244")
+var document = new io.vertx.core.json.JsonObject().put(&quot;title&quot;, &quot;The Hobbit&quot;).put(&quot;_id&quot;, &quot;123244&quot;)
 
-mongoClient.saveFuture("books", document).onComplete{
+mongoClient.saveFuture(&quot;books&quot;, document).onComplete{
   case Success(result) =&gt; {
 
     // ...
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -381,19 +380,19 @@ mongoClient.saveFuture("books", document).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Document has an id already
+<pre class="CodeRay highlight"><code data-lang="scala">// Document has an id already
 
-var document = new io.vertx.core.json.JsonObject().put("title", "The Hobbit")
+var document = new io.vertx.core.json.JsonObject().put(&quot;title&quot;, &quot;The Hobbit&quot;)
 
-mongoClient.insertFuture("books", document).onComplete{
+mongoClient.insertFuture(&quot;books&quot;, document).onComplete{
   case Success(result) =&gt; {
 
     var id = result
-    println(s"Inserted book with id ${id}")
+    println(s&quot;Inserted book with id ${id}&quot;)
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -403,18 +402,18 @@ mongoClient.insertFuture("books", document).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Document has an id already
+<pre class="CodeRay highlight"><code data-lang="scala">// Document has an id already
 
-var document = new io.vertx.core.json.JsonObject().put("title", "The Hobbit").put("_id", "123244")
+var document = new io.vertx.core.json.JsonObject().put(&quot;title&quot;, &quot;The Hobbit&quot;).put(&quot;_id&quot;, &quot;123244&quot;)
 
-mongoClient.insertFuture("books", document).onComplete{
+mongoClient.insertFuture(&quot;books&quot;, document).onComplete{
   case Success(result) =&gt; {
 
     //...
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -438,20 +437,20 @@ how the object is updated.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Match any documents with title=The Hobbit
-var query = new io.vertx.core.json.JsonObject().put("title", "The Hobbit")
+<pre class="CodeRay highlight"><code data-lang="scala">// Match any documents with title=The Hobbit
+var query = new io.vertx.core.json.JsonObject().put(&quot;title&quot;, &quot;The Hobbit&quot;)
 
 // Set the author field
-var update = new io.vertx.core.json.JsonObject().put("$set", new io.vertx.core.json.JsonObject().put("author", "J. R. R. Tolkien"))
+var update = new io.vertx.core.json.JsonObject().put(&quot;$set&quot;, new io.vertx.core.json.JsonObject().put(&quot;author&quot;, &quot;J. R. R. Tolkien&quot;))
 
-mongoClient.updateFuture("books", query, update).onComplete{
+mongoClient.updateFuture(&quot;books&quot;, query, update).onComplete{
   case Success(result) =&gt; {
 
-    println("Book updated !")
+    println(&quot;Book updated !&quot;)
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -481,24 +480,24 @@ and pass in an instance of <code><a href="../dataobjects.html#UpdateOptions">Upd
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// Match any documents with title=The Hobbit
-var query = new io.vertx.core.json.JsonObject().put("title", "The Hobbit")
+<pre class="CodeRay highlight"><code data-lang="scala">// Match any documents with title=The Hobbit
+var query = new io.vertx.core.json.JsonObject().put(&quot;title&quot;, &quot;The Hobbit&quot;)
 
 // Set the author field
-var update = new io.vertx.core.json.JsonObject().put("$set", new io.vertx.core.json.JsonObject().put("author", "J. R. R. Tolkien"))
+var update = new io.vertx.core.json.JsonObject().put(&quot;$set&quot;, new io.vertx.core.json.JsonObject().put(&quot;author&quot;, &quot;J. R. R. Tolkien&quot;))
 
 var options = UpdateOptions()
   .setMulti(true)
 
 
-mongoClient.updateWithOptionsFuture("books", query, update, options).onComplete{
+mongoClient.updateWithOptionsFuture(&quot;books&quot;, query, update, options).onComplete{
   case Success(result) =&gt; {
 
-    println("Book updated !")
+    println(&quot;Book updated !&quot;)
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -518,18 +517,18 @@ Instead it replaces the entire document with the one provided.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var query = new io.vertx.core.json.JsonObject().put("title", "The Hobbit")
+<pre class="CodeRay highlight"><code data-lang="scala">var query = new io.vertx.core.json.JsonObject().put(&quot;title&quot;, &quot;The Hobbit&quot;)
 
-var replace = new io.vertx.core.json.JsonObject().put("title", "The Lord of the Rings").put("author", "J. R. R. Tolkien")
+var replace = new io.vertx.core.json.JsonObject().put(&quot;title&quot;, &quot;The Lord of the Rings&quot;).put(&quot;author&quot;, &quot;J. R. R. Tolkien&quot;)
 
-mongoClient.replaceFuture("books", query, replace).onComplete{
+mongoClient.replaceFuture(&quot;books&quot;, query, replace).onComplete{
   case Success(result) =&gt; {
 
-    println("Book replaced !")
+    println(&quot;Book replaced !&quot;)
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -563,10 +562,10 @@ For more explanation what ordered means, see <a href="https://docs.mongodb.com/m
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// empty query = match any
+<pre class="CodeRay highlight"><code data-lang="scala">// empty query = match any
 var query = new io.vertx.core.json.JsonObject()
 
-mongoClient.findFuture("books", query).onComplete{
+mongoClient.findFuture(&quot;books&quot;, query).onComplete{
   case Success(result) =&gt; {
 
     result.foreach(json =&gt; {
@@ -578,7 +577,7 @@ mongoClient.findFuture("books", query).onComplete{
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -588,10 +587,10 @@ mongoClient.findFuture("books", query).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">// will match all Tolkien books
-var query = new io.vertx.core.json.JsonObject().put("author", "J. R. R. Tolkien")
+<pre class="CodeRay highlight"><code data-lang="scala">// will match all Tolkien books
+var query = new io.vertx.core.json.JsonObject().put(&quot;author&quot;, &quot;J. R. R. Tolkien&quot;)
 
-mongoClient.findFuture("books", query).onComplete{
+mongoClient.findFuture(&quot;books&quot;, query).onComplete{
   case Success(result) =&gt; {
 
     result.foreach(json =&gt; {
@@ -603,7 +602,7 @@ mongoClient.findFuture("books", query).onComplete{
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -689,16 +688,16 @@ mongoClient.findBatchFuture("book", query).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var query = new io.vertx.core.json.JsonObject().put("author", "J. R. R. Tolkien")
+<pre class="CodeRay highlight"><code data-lang="scala">var query = new io.vertx.core.json.JsonObject().put(&quot;author&quot;, &quot;J. R. R. Tolkien&quot;)
 
-mongoClient.removeFuture("books", query).onComplete{
+mongoClient.removeFuture(&quot;books&quot;, query).onComplete{
   case Success(result) =&gt; {
 
-    println("Never much liked Tolkien stuff!")
+    println(&quot;Never much liked Tolkien stuff!&quot;)
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -723,16 +722,16 @@ mongoClient.removeFuture("books", query).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var query = new io.vertx.core.json.JsonObject().put("author", "J. R. R. Tolkien")
+<pre class="CodeRay highlight"><code data-lang="scala">var query = new io.vertx.core.json.JsonObject().put(&quot;author&quot;, &quot;J. R. R. Tolkien&quot;)
 
-mongoClient.countFuture("books", query).onComplete{
+mongoClient.countFuture(&quot;books&quot;, query).onComplete{
   case Success(result) =&gt; {
 
     var num = result
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -748,14 +747,14 @@ mongoClient.countFuture("books", query).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">mongoClient.getCollectionsFuture().onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">mongoClient.getCollectionsFuture().onComplete{
   case Success(result) =&gt; {
 
     var collections = result
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -765,14 +764,14 @@ mongoClient.countFuture("books", query).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">mongoClient.createCollectionFuture("mynewcollectionr").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">mongoClient.createCollectionFuture(&quot;mynewcollectionr&quot;).onComplete{
   case Success(result) =&gt; {
 
     // Created ok!
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -794,14 +793,14 @@ Dropping a collection will delete all documents within it!
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">mongoClient.dropCollectionFuture("mynewcollectionr").onComplete{
+<pre class="CodeRay highlight"><code data-lang="scala">mongoClient.dropCollectionFuture(&quot;mynewcollectionr&quot;).onComplete{
   case Success(result) =&gt; {
 
     // Dropped ok!
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -824,15 +823,15 @@ of the entries in the JSON is the command name it must be specified as a paramet
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var command = new io.vertx.core.json.JsonObject().put("aggregate", "collection_name").put("pipeline", new io.vertx.core.json.JsonArray())
+<pre class="CodeRay highlight"><code data-lang="scala">var command = new io.vertx.core.json.JsonObject().put(&quot;aggregate&quot;, &quot;collection_name&quot;).put(&quot;pipeline&quot;, new io.vertx.core.json.JsonArray())
 
-mongoClient.runCommandFuture("aggregate", command).onComplete{
+mongoClient.runCommandFuture(&quot;aggregate&quot;, command).onComplete{
   case Success(result) =&gt; {
-    var resArr = result.getValue("result")
+    var resArr = result.getValue(&quot;result&quot;)
     // etc
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -848,27 +847,27 @@ mongoClient.runCommandFuture("aggregate", command).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var document = new io.vertx.core.json.JsonObject().put("title", "The Hobbit").put("publicationDate", new io.vertx.core.json.JsonObject().put("$date", "1937-09-21T00:00:00+00:00"))
+<pre class="CodeRay highlight"><code data-lang="scala">var document = new io.vertx.core.json.JsonObject().put(&quot;title&quot;, &quot;The Hobbit&quot;).put(&quot;publicationDate&quot;, new io.vertx.core.json.JsonObject().put(&quot;$date&quot;, &quot;1937-09-21T00:00:00+00:00&quot;))
 
-mongoService.saveFuture("publishedBooks", document).onComplete{
+mongoService.saveFuture(&quot;publishedBooks&quot;, document).onComplete{
   case Success(result) =&gt; {
 
     var id = result
 
-    mongoService.findOneFuture("publishedBooks", new io.vertx.core.json.JsonObject().put("_id", id), null).onComplete{
+    mongoService.findOneFuture(&quot;publishedBooks&quot;, new io.vertx.core.json.JsonObject().put(&quot;_id&quot;, id), null).onComplete{
       case Success(result) =&gt; {
 
-        println(s"To retrieve ISO-8601 date : ${result.getValue("publicationDate").getValue("$date")}")
+        println(s&quot;To retrieve ISO-8601 date : ${result.getValue(&quot;publicationDate&quot;).getValue(&quot;$date&quot;)}&quot;)
 
       }
       case Failure(cause) =&gt; {
-        println(s"$cause")
+        println(s&quot;$cause&quot;)
       }
     }
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -878,22 +877,22 @@ mongoService.saveFuture("publishedBooks", document).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">byte[] binaryObject = new byte[40];
+<pre class="CodeRay highlight"><code data-lang="scala">byte[] binaryObject = new byte[40];
 
 JsonObject document = new JsonObject()
-        .put("name", "Alan Turing")
-        .put("binaryStuff", new JsonObject().put("$binary", binaryObject));
+        .put(&quot;name&quot;, &quot;Alan Turing&quot;)
+        .put(&quot;binaryStuff&quot;, new JsonObject().put(&quot;$binary&quot;, binaryObject));
 
-mongoService.save("smartPeople", document, res -&gt; {
+mongoService.save(&quot;smartPeople&quot;, document, res -&gt; {
 
   if (res.succeeded()) {
 
     String id = res.result();
 
-    mongoService.findOne("smartPeople", new JsonObject().put("_id", id), null, res2 -&gt; {
+    mongoService.findOne(&quot;smartPeople&quot;, new JsonObject().put(&quot;_id&quot;, id), null, res2 -&gt; {
       if(res2.succeeded()) {
 
-        byte[] reconstitutedBinaryObject = res2.result().getJsonObject("binaryStuff").getBinary("$binary");
+        byte[] reconstitutedBinaryObject = res2.result().getJsonObject(&quot;binaryStuff&quot;).getBinary(&quot;$binary&quot;);
         //This could now be de-serialized into an object in real life
       } else {
         res2.cause().printStackTrace();
@@ -912,30 +911,30 @@ mongoService.save("smartPeople", document, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">//This could be a the byte contents of a pdf file, etc converted to base 64
-var base64EncodedString = "a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ="
+<pre class="CodeRay highlight"><code data-lang="scala">//This could be a the byte contents of a pdf file, etc converted to base 64
+var base64EncodedString = &quot;a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ=&quot;
 
-var document = new io.vertx.core.json.JsonObject().put("name", "Alan Turing").put("binaryStuff", new io.vertx.core.json.JsonObject().put("$binary", base64EncodedString))
+var document = new io.vertx.core.json.JsonObject().put(&quot;name&quot;, &quot;Alan Turing&quot;).put(&quot;binaryStuff&quot;, new io.vertx.core.json.JsonObject().put(&quot;$binary&quot;, base64EncodedString))
 
-mongoService.saveFuture("smartPeople", document).onComplete{
+mongoService.saveFuture(&quot;smartPeople&quot;, document).onComplete{
   case Success(result) =&gt; {
 
     var id = result
 
-    mongoService.findOneFuture("smartPeople", new io.vertx.core.json.JsonObject().put("_id", id), null).onComplete{
+    mongoService.findOneFuture(&quot;smartPeople&quot;, new io.vertx.core.json.JsonObject().put(&quot;_id&quot;, id), null).onComplete{
       case Success(result) =&gt; {
 
-        var reconstitutedBase64EncodedString = result.getValue("binaryStuff").getValue("$binary")
+        var reconstitutedBase64EncodedString = result.getValue(&quot;binaryStuff&quot;).getValue(&quot;$binary&quot;)
         //This could now converted back to bytes from the base 64 string
       }
       case Failure(cause) =&gt; {
-        println(s"$cause")
+        println(s&quot;$cause&quot;)
       }
     }
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -945,27 +944,27 @@ mongoService.saveFuture("smartPeople", document).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var individualId = new org.bson.types.ObjectId().toHexString()
+<pre class="CodeRay highlight"><code data-lang="scala">var individualId = new org.bson.types.ObjectId().toHexString()
 
-var document = new io.vertx.core.json.JsonObject().put("name", "Stephen Hawking").put("individualId", new io.vertx.core.json.JsonObject().put("$oid", individualId))
+var document = new io.vertx.core.json.JsonObject().put(&quot;name&quot;, &quot;Stephen Hawking&quot;).put(&quot;individualId&quot;, new io.vertx.core.json.JsonObject().put(&quot;$oid&quot;, individualId))
 
-mongoService.saveFuture("smartPeople", document).onComplete{
+mongoService.saveFuture(&quot;smartPeople&quot;, document).onComplete{
   case Success(result) =&gt; {
 
     var id = result
 
-    mongoService.findOneFuture("smartPeople", new io.vertx.core.json.JsonObject().put("_id", id), null).onComplete{
+    mongoService.findOneFuture(&quot;smartPeople&quot;, new io.vertx.core.json.JsonObject().put(&quot;_id&quot;, id), null).onComplete{
       case Success(result) =&gt; {
-        var reconstitutedIndividualId = result.getValue("individualId").getValue("$oid")
+        var reconstitutedIndividualId = result.getValue(&quot;individualId&quot;).getValue(&quot;$oid&quot;)
       }
       case Failure(cause) =&gt; {
-        println(s"$cause")
+        println(s&quot;$cause&quot;)
       }
     }
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -975,19 +974,19 @@ mongoService.saveFuture("smartPeople", document).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var document = new io.vertx.core.json.JsonObject().put("title", "The Hobbit")
+<pre class="CodeRay highlight"><code data-lang="scala">var document = new io.vertx.core.json.JsonObject().put(&quot;title&quot;, &quot;The Hobbit&quot;)
 
-mongoClient.saveFuture("books", document).onComplete{
+mongoClient.saveFuture(&quot;books&quot;, document).onComplete{
   case Success(result) =&gt; {
 
-    mongoClient.distinctFuture("books", "title", java.lang.String.class.getName()).onComplete{
-      case Success(result) =&gt; println("Success")
-      case Failure(cause) =&gt; println("Failure")
+    mongoClient.distinctFuture(&quot;books&quot;, &quot;title&quot;, java.lang.String.class.getName()).onComplete{
+      case Success(result) =&gt; println(&quot;Success&quot;)
+      case Failure(cause) =&gt; println(&quot;Failure&quot;)
     }
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>
@@ -997,19 +996,19 @@ mongoClient.saveFuture("books", document).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-scala" data-lang="scala">var document = new io.vertx.core.json.JsonObject().put("title", "The Hobbit")
+<pre class="CodeRay highlight"><code data-lang="scala">var document = new io.vertx.core.json.JsonObject().put(&quot;title&quot;, &quot;The Hobbit&quot;)
 
-mongoClient.saveFuture("books", document).onComplete{
+mongoClient.saveFuture(&quot;books&quot;, document).onComplete{
   case Success(result) =&gt; {
 
-    mongoClient.distinctBatchFuture("books", "title", java.lang.String.class.getName()).onComplete{
-      case Success(result) =&gt; println("Success")
-      case Failure(cause) =&gt; println("Failure")
+    mongoClient.distinctBatchFuture(&quot;books&quot;, &quot;title&quot;, java.lang.String.class.getName()).onComplete{
+      case Success(result) =&gt; println(&quot;Success&quot;)
+      case Failure(cause) =&gt; println(&quot;Failure&quot;)
     }
 
   }
   case Failure(cause) =&gt; {
-    println(s"$cause")
+    println(s&quot;$cause&quot;)
   }
 }</code></pre>
 </div>

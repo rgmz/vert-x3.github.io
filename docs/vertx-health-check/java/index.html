@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -177,11 +176,11 @@ result as JSON.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-health-check&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-health-check<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -193,7 +192,7 @@ result as JSON.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-health-check:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-health-check:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -203,9 +202,9 @@ result as JSON.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HealthChecks hc = HealthChecks.create(vertx);
+<pre class="CodeRay highlight"><code data-lang="java">HealthChecks hc = HealthChecks.create(vertx);
 
-hc.register("my-procedure", future -&gt; future.complete(Status.OK()));</code></pre>
+hc.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-procedure</span><span class="delimiter">&quot;</span></span>, future -&gt; future.complete(Status.OK()));</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -229,15 +228,15 @@ hc.register("my-procedure", future -&gt; future.complete(Status.OK()));</code></
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HealthCheckHandler healthCheckHandler1 = HealthCheckHandler.create(vertx);
+<pre class="CodeRay highlight"><code data-lang="java">HealthCheckHandler healthCheckHandler1 = HealthCheckHandler.create(vertx);
 HealthCheckHandler healthCheckHandler2 = HealthCheckHandler.createWithHealthChecks(HealthChecks.create(vertx));
 
 Router router = Router.router(vertx);
-// Populate the router with routes...
-// Register the health check handler
-router.get("/health*").handler(healthCheckHandler1);
-// Or
-router.get("/ping*").handler(healthCheckHandler2);</code></pre>
+<span class="comment">// Populate the router with routes...</span>
+<span class="comment">// Register the health check handler</span>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/health*</span><span class="delimiter">&quot;</span></span>).handler(healthCheckHandler1);
+<span class="comment">// Or</span>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/ping*</span><span class="delimiter">&quot;</span></span>).handler(healthCheckHandler2);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -248,19 +247,19 @@ anytime, even after the route registration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx);
+<pre class="CodeRay highlight"><code data-lang="java">HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx);
 
-// Register procedures
-// It can be done after the route registration, or even at runtime
-healthCheckHandler.register("my-procedure-name", future -&gt; {
-  // Do the check ....
-  // Upon success do
+<span class="comment">// Register procedures</span>
+<span class="comment">// It can be done after the route registration, or even at runtime</span>
+healthCheckHandler.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-procedure-name</span><span class="delimiter">&quot;</span></span>, future -&gt; {
+  <span class="comment">// Do the check ....</span>
+  <span class="comment">// Upon success do</span>
   future.complete(Status.OK());
-  // In case of failure do:
+  <span class="comment">// In case of failure do:</span>
   future.complete(Status.KO());
 });
 
-router.get("/health").handler(healthCheckHandler);</code></pre>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/health</span><span class="delimiter">&quot;</span></span>).handler(healthCheckHandler);</code></pre>
 </div>
 </div>
 </div>
@@ -304,18 +303,18 @@ the check is considered as <em>KO</em>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx);
+<pre class="CodeRay highlight"><code data-lang="java">HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx);
 
-// Status can provide addition data provided as JSON
-healthCheckHandler.register("my-procedure-name", future -&gt; {
-  future.complete(Status.OK(new JsonObject().put("available-memory", "2mb")));
+<span class="comment">// Status can provide addition data provided as JSON</span>
+healthCheckHandler.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-procedure-name</span><span class="delimiter">&quot;</span></span>, future -&gt; {
+  future.complete(Status.OK(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">available-memory</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">2mb</span><span class="delimiter">&quot;</span></span>)));
 });
 
-healthCheckHandler.register("my-second-procedure-name", future -&gt; {
-  future.complete(Status.KO(new JsonObject().put("load", 99)));
+healthCheckHandler.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-second-procedure-name</span><span class="delimiter">&quot;</span></span>, future -&gt; {
+  future.complete(Status.KO(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">load</span><span class="delimiter">&quot;</span></span>, <span class="integer">99</span>)));
 });
 
-router.get("/health").handler(healthCheckHandler);</code></pre>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/health</span><span class="delimiter">&quot;</span></span>).handler(healthCheckHandler);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -324,19 +323,19 @@ tree and the structure is mapped to HTTP urls (see below).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx);
+<pre class="CodeRay highlight"><code data-lang="java">HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx);
 
-// Register procedures
-// Procedure can be grouped. The group is deduced using a name with "/".
-// Groups can contains other group
-healthCheckHandler.register("a-group/my-procedure-name", future -&gt; {
-  //....
+<span class="comment">// Register procedures</span>
+<span class="comment">// Procedure can be grouped. The group is deduced using a name with &quot;/&quot;.</span>
+<span class="comment">// Groups can contains other group</span>
+healthCheckHandler.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">a-group/my-procedure-name</span><span class="delimiter">&quot;</span></span>, future -&gt; {
+  <span class="comment">//....</span>
 });
-healthCheckHandler.register("a-group/a-second-group/my-second-procedure-name", future -&gt; {
-  //....
+healthCheckHandler.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">a-group/a-second-group/my-second-procedure-name</span><span class="delimiter">&quot;</span></span>, future -&gt; {
+  <span class="comment">//....</span>
 });
 
-router.get("/health").handler(healthCheckHandler);</code></pre>
+router.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/health</span><span class="delimiter">&quot;</span></span>).handler(healthCheckHandler);</code></pre>
 </div>
 </div>
 </div>
@@ -377,7 +376,7 @@ additional data, the data is also given:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>{
+<pre class="CodeRay highlight"><code>{
  "checks" : [
  {
    "id" : "A",
@@ -400,7 +399,7 @@ additional data, the data is also given:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code>{
+<pre class="CodeRay highlight"><code>{
  "checks" : [
  {
    "id" : "my-group",
@@ -438,11 +437,11 @@ additional data, the data is also given:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">handler.register("database",
+<pre class="CodeRay highlight"><code data-lang="java">handler.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">database</span><span class="delimiter">&quot;</span></span>,
   future -&gt; jdbcClient.getConnection(connection -&gt; {
-    if (connection.failed()) {
+    <span class="keyword">if</span> (connection.failed()) {
       future.fail(connection.cause());
-    } else {
+    } <span class="keyword">else</span> {
       connection.result().close();
       future.complete(Status.OK());
     }
@@ -457,13 +456,13 @@ additional data, the data is also given:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">handler.register("my-service",
+<pre class="CodeRay highlight"><code data-lang="java">handler.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-service</span><span class="delimiter">&quot;</span></span>,
   future -&gt; HttpEndpoint.getClient(discovery,
-    (rec) -&gt; "my-service".equals(rec.getName()),
+    (rec) -&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">my-service</span><span class="delimiter">&quot;</span></span>.equals(rec.getName()),
     client -&gt; {
-      if (client.failed()) {
+      <span class="keyword">if</span> (client.failed()) {
         future.fail(client.cause());
-      } else {
+      } <span class="keyword">else</span> {
         client.result().close();
         future.complete(Status.OK());
       }
@@ -480,12 +479,12 @@ if it&#8217;s listening on a specific event address.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">handler.register("receiver",
+<pre class="CodeRay highlight"><code data-lang="java">handler.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">receiver</span><span class="delimiter">&quot;</span></span>,
   future -&gt;
-    vertx.eventBus().send("health", "ping", response -&gt; {
-      if (response.succeeded()) {
+    vertx.eventBus().send(<span class="string"><span class="delimiter">&quot;</span><span class="content">health</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">ping</span><span class="delimiter">&quot;</span></span>, response -&gt; {
+      <span class="keyword">if</span> (response.succeeded()) {
         future.complete(Status.OK());
-      } else {
+      } <span class="keyword">else</span> {
         future.complete(Status.KO());
       }
     })
@@ -537,7 +536,7 @@ to expose the data differently. This section gives an example to expose the data
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">vertx.eventBus().consumer("health",
+<pre class="CodeRay highlight"><code data-lang="java">vertx.eventBus().consumer(<span class="string"><span class="delimiter">&quot;</span><span class="content">health</span><span class="delimiter">&quot;</span></span>,
   message -&gt; healthChecks.invoke(message::reply));</code></pre>
 </div>
 </div>

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -180,7 +179,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServer server = vertx.createNetServer();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">NetServer server = vertx.createNetServer();</code></pre>
 </div>
 </div>
 </div>
@@ -192,7 +191,7 @@ instance when creating it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().setPort(4321);
+<pre class="CodeRay highlight"><code data-lang="java">NetServerOptions options = <span class="keyword">new</span> NetServerOptions().setPort(<span class="integer">4321</span>);
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -208,7 +207,7 @@ alternatives.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServer server = vertx.createNetServer();
+<pre class="CodeRay highlight"><code data-lang="java">NetServer server = vertx.createNetServer();
 server.listen();</code></pre>
 </div>
 </div>
@@ -217,8 +216,8 @@ server.listen();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServer server = vertx.createNetServer();
-server.listen(1234, "localhost");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">NetServer server = vertx.createNetServer();
+server.listen(<span class="integer">1234</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -235,12 +234,12 @@ For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServer server = vertx.createNetServer();
-server.listen(1234, "localhost", res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Server is now listening!");
-  } else {
-    System.out.println("Failed to bind!");
+<pre class="CodeRay highlight"><code data-lang="java">NetServer server = vertx.createNetServer();
+server.listen(<span class="integer">1234</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Server is now listening!</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to bind!</span><span class="delimiter">&quot;</span></span>);
   }
 });</code></pre>
 </div>
@@ -256,12 +255,12 @@ server.listen(1234, "localhost", res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServer server = vertx.createNetServer();
-server.listen(0, "localhost", res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Server is now listening on actual port: " + server.actualPort());
-  } else {
-    System.out.println("Failed to bind!");
+<pre class="CodeRay highlight"><code data-lang="java">NetServer server = vertx.createNetServer();
+server.listen(<span class="integer">0</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Server is now listening on actual port: </span><span class="delimiter">&quot;</span></span> + server.actualPort());
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to bind!</span><span class="delimiter">&quot;</span></span>);
   }
 });</code></pre>
 </div>
@@ -274,9 +273,9 @@ server.listen(0, "localhost", res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServer server = vertx.createNetServer();
+<pre class="CodeRay highlight"><code data-lang="java">NetServer server = vertx.createNetServer();
 server.connectHandler(socket -&gt; {
-  // Handle the connection in here
+  <span class="comment">// Handle the connection in here</span>
 });</code></pre>
 </div>
 </div>
@@ -300,10 +299,10 @@ the socket.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServer server = vertx.createNetServer();
+<pre class="CodeRay highlight"><code data-lang="java">NetServer server = vertx.createNetServer();
 server.connectHandler(socket -&gt; {
   socket.handler(buffer -&gt; {
-    System.out.println("I received some bytes: " + buffer.length());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">I received some bytes: </span><span class="delimiter">&quot;</span></span> + buffer.length());
   });
 });</code></pre>
 </div>
@@ -316,14 +315,14 @@ server.connectHandler(socket -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer buffer = Buffer.buffer().appendFloat(12.34f).appendInt(123);
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> buffer = <span class="predefined-type">Buffer</span>.buffer().appendFloat(<span class="float">12.34f</span>).appendInt(<span class="integer">123</span>);
 socket.write(buffer);
 
-// Write a string in UTF-8 encoding
-socket.write("some data");
+<span class="comment">// Write a string in UTF-8 encoding</span>
+socket.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">some data</span><span class="delimiter">&quot;</span></span>);
 
-// Write a string using the specified encoding
-socket.write("some data", "UTF-16");</code></pre>
+<span class="comment">// Write a string using the specified encoding</span>
+socket.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">some data</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">UTF-16</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -338,8 +337,8 @@ on it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">socket.closeHandler(v -&gt; {
-  System.out.println("The socket has been closed");
+<pre class="CodeRay highlight"><code data-lang="java">socket.closeHandler(v -&gt; {
+  <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">The socket has been closed</span><span class="delimiter">&quot;</span></span>);
 });</code></pre>
 </div>
 </div>
@@ -387,7 +386,7 @@ classpath resolution or disabling it.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">socket.sendFile("myfile.dat");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">socket.sendFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">myfile.dat</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -427,11 +426,11 @@ If you want to be notified when the actual close has completed then you can pass
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">server.close(res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Server is now closed");
-  } else {
-    System.out.println("close failed");
+<pre class="CodeRay highlight"><code data-lang="java">server.close(res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Server is now closed</span><span class="delimiter">&quot;</span></span>);
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">close failed</span><span class="delimiter">&quot;</span></span>);
   }
 });</code></pre>
 </div>
@@ -461,15 +460,15 @@ deployed then you will have at most one core utilised on your server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">for (int i = 0; i &lt; 10; i++) {
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="integer">0</span>; i &lt; <span class="integer">10</span>; i++) {
   NetServer server = vertx.createNetServer();
   server.connectHandler(socket -&gt; {
     socket.handler(buffer -&gt; {
-      // Just echo back the data
+      <span class="comment">// Just echo back the data</span>
       socket.write(buffer);
     });
   });
-  server.listen(1234, "localhost");
+  server.listen(<span class="integer">1234</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>);
 }</code></pre>
 </div>
 </div>
@@ -487,8 +486,8 @@ on the command line:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">DeploymentOptions options = new DeploymentOptions().setInstances(10);
-vertx.deployVerticle("com.mycompany.MyVerticle", options);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">DeploymentOptions options = <span class="keyword">new</span> DeploymentOptions().setInstances(<span class="integer">10</span>);
+vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.mycompany.MyVerticle</span><span class="delimiter">&quot;</span></span>, options);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -521,7 +520,7 @@ them in a round-robin fashion to any of the connect handlers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClient client = vertx.createNetClient();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">NetClient client = vertx.createNetClient();</code></pre>
 </div>
 </div>
 </div>
@@ -533,7 +532,7 @@ instance when creating it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().setConnectTimeout(10000);
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions().setConnectTimeout(<span class="integer">10000</span>);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -547,14 +546,14 @@ specifying the port and host of the server and a handler that will be called wit
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().setConnectTimeout(10000);
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions().setConnectTimeout(<span class="integer">10000</span>);
 NetClient client = vertx.createNetClient(options);
-client.connect(4321, "localhost", res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Connected!");
+client.connect(<span class="integer">4321</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Connected!</span><span class="delimiter">&quot;</span></span>);
     NetSocket socket = res.result();
-  } else {
-    System.out.println("Failed to connect: " + res.cause().getMessage());
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect: </span><span class="delimiter">&quot;</span></span> + res.cause().getMessage());
   }
 });</code></pre>
 </div>
@@ -582,9 +581,9 @@ only apply to creating initial connections.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-  setReconnectAttempts(10).
-  setReconnectInterval(500);
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setReconnectAttempts(<span class="integer">10</span>).
+  setReconnectInterval(<span class="integer">500</span>);
 
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -600,7 +599,7 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().setLogActivity(true);
+<pre class="CodeRay highlight"><code data-lang="java">NetServerOptions options = <span class="keyword">new</span> NetServerOptions().setLogActivity(<span class="predefined-constant">true</span>);
 
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -610,7 +609,7 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().setLogActivity(true);
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions().setLogActivity(<span class="predefined-constant">true</span>);
 
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -673,10 +672,10 @@ utility which ships with the JDK.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().setSsl(true).setKeyStoreOptions(
-  new JksOptions().
-    setPath("/path/to/your/server-keystore.jks").
-    setPassword("password-of-your-keystore")
+<pre class="CodeRay highlight"><code data-lang="java">NetServerOptions options = <span class="keyword">new</span> NetServerOptions().setSsl(<span class="predefined-constant">true</span>).setKeyStoreOptions(
+  <span class="keyword">new</span> JksOptions().
+    setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/server-keystore.jks</span><span class="delimiter">&quot;</span></span>).
+    setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-keystore</span><span class="delimiter">&quot;</span></span>)
 );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -686,12 +685,12 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.jks");
-JksOptions jksOptions = new JksOptions().
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/server-keystore.jks</span><span class="delimiter">&quot;</span></span>);
+JksOptions jksOptions = <span class="keyword">new</span> JksOptions().
   setValue(myKeyStoreAsABuffer).
-  setPassword("password-of-your-keystore");
-NetServerOptions options = new NetServerOptions().
-  setSsl(true).
+  setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-keystore</span><span class="delimiter">&quot;</span></span>);
+NetServerOptions options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setKeyStoreOptions(jksOptions);
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -702,10 +701,10 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().setSsl(true).setPfxKeyCertOptions(
-  new PfxOptions().
-    setPath("/path/to/your/server-keystore.pfx").
-    setPassword("password-of-your-keystore")
+<pre class="CodeRay highlight"><code data-lang="java">NetServerOptions options = <span class="keyword">new</span> NetServerOptions().setSsl(<span class="predefined-constant">true</span>).setPfxKeyCertOptions(
+  <span class="keyword">new</span> PfxOptions().
+    setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/server-keystore.pfx</span><span class="delimiter">&quot;</span></span>).
+    setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-keystore</span><span class="delimiter">&quot;</span></span>)
 );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -715,12 +714,12 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-keystore.pfx");
-PfxOptions pfxOptions = new PfxOptions().
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/server-keystore.pfx</span><span class="delimiter">&quot;</span></span>);
+PfxOptions pfxOptions = <span class="keyword">new</span> PfxOptions().
   setValue(myKeyStoreAsABuffer).
-  setPassword("password-of-your-keystore");
-NetServerOptions options = new NetServerOptions().
-  setSsl(true).
+  setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-keystore</span><span class="delimiter">&quot;</span></span>);
+NetServerOptions options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setPfxKeyCertOptions(pfxOptions);
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -730,10 +729,10 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().setSsl(true).setPemKeyCertOptions(
-  new PemKeyCertOptions().
-    setKeyPath("/path/to/your/server-key.pem").
-    setCertPath("/path/to/your/server-cert.pem")
+<pre class="CodeRay highlight"><code data-lang="java">NetServerOptions options = <span class="keyword">new</span> NetServerOptions().setSsl(<span class="predefined-constant">true</span>).setPemKeyCertOptions(
+  <span class="keyword">new</span> PemKeyCertOptions().
+    setKeyPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/server-key.pem</span><span class="delimiter">&quot;</span></span>).
+    setCertPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/server-cert.pem</span><span class="delimiter">&quot;</span></span>)
 );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -743,13 +742,13 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-key.pem");
-Buffer myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-cert.pem");
-PemKeyCertOptions pemOptions = new PemKeyCertOptions().
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> myKeyAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/server-key.pem</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">Buffer</span> myCertAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/server-cert.pem</span><span class="delimiter">&quot;</span></span>);
+PemKeyCertOptions pemOptions = <span class="keyword">new</span> PemKeyCertOptions().
   setKeyValue(myKeyAsABuffer).
   setCertValue(myCertAsABuffer);
-NetServerOptions options = new NetServerOptions().
-  setSsl(true).
+NetServerOptions options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setPemKeyCertOptions(pemOptions);
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -775,13 +774,13 @@ utility which ships with the JDK.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java">NetServerOptions options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setClientAuth(ClientAuth.REQUIRED).
   setTrustStoreOptions(
-    new JksOptions().
-      setPath("/path/to/your/truststore.jks").
-      setPassword("password-of-your-truststore")
+    <span class="keyword">new</span> JksOptions().
+      setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/truststore.jks</span><span class="delimiter">&quot;</span></span>).
+      setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-truststore</span><span class="delimiter">&quot;</span></span>)
   );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -791,14 +790,14 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks");
-NetServerOptions options = new NetServerOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/truststore.jks</span><span class="delimiter">&quot;</span></span>);
+NetServerOptions options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setClientAuth(ClientAuth.REQUIRED).
   setTrustStoreOptions(
-    new JksOptions().
+    <span class="keyword">new</span> JksOptions().
       setValue(myTrustStoreAsABuffer).
-      setPassword("password-of-your-truststore")
+      setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-truststore</span><span class="delimiter">&quot;</span></span>)
   );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -809,13 +808,13 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java">NetServerOptions options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setClientAuth(ClientAuth.REQUIRED).
   setPfxTrustOptions(
-    new PfxOptions().
-      setPath("/path/to/your/truststore.pfx").
-      setPassword("password-of-your-truststore")
+    <span class="keyword">new</span> PfxOptions().
+      setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/truststore.pfx</span><span class="delimiter">&quot;</span></span>).
+      setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-truststore</span><span class="delimiter">&quot;</span></span>)
   );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -825,14 +824,14 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx");
-NetServerOptions options = new NetServerOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/truststore.pfx</span><span class="delimiter">&quot;</span></span>);
+NetServerOptions options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setClientAuth(ClientAuth.REQUIRED).
   setPfxTrustOptions(
-    new PfxOptions().
+    <span class="keyword">new</span> PfxOptions().
       setValue(myTrustStoreAsABuffer).
-      setPassword("password-of-your-truststore")
+      setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-truststore</span><span class="delimiter">&quot;</span></span>)
   );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -842,12 +841,12 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java">NetServerOptions options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setClientAuth(ClientAuth.REQUIRED).
   setPemTrustOptions(
-    new PemTrustOptions().
-      addCertPath("/path/to/your/server-ca.pem")
+    <span class="keyword">new</span> PemTrustOptions().
+      addCertPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/server-ca.pem</span><span class="delimiter">&quot;</span></span>)
   );
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
@@ -857,12 +856,12 @@ NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myCaAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/server-ca.pfx");
-NetServerOptions options = new NetServerOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> myCaAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/server-ca.pfx</span><span class="delimiter">&quot;</span></span>);
+NetServerOptions options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setClientAuth(ClientAuth.REQUIRED).
   setPemTrustOptions(
-    new PemTrustOptions().
+    <span class="keyword">new</span> PemTrustOptions().
       addCertValue(myCaAsABuffer)
   );
 NetServer server = vertx.createNetServer(options);</code></pre>
@@ -887,9 +886,9 @@ be sure who you are connecting to. Use this with caution. Default value is false
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-  setSsl(true).
-  setTrustAll(true);
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setSsl(<span class="predefined-constant">true</span>).
+  setTrustAll(<span class="predefined-constant">true</span>);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -903,9 +902,9 @@ To enable host verification, set the algorithm to use on your client (only HTTPS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-  setSsl(true).
-  setHostnameVerificationAlgorithm("HTTPS");
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setSsl(<span class="predefined-constant">true</span>).
+  setHostnameVerificationAlgorithm(<span class="string"><span class="delimiter">&quot;</span><span class="content">HTTPS</span><span class="delimiter">&quot;</span></span>);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -923,12 +922,12 @@ in the client trust store, the connection attempt will not succeed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setTrustStoreOptions(
-    new JksOptions().
-      setPath("/path/to/your/truststore.jks").
-      setPassword("password-of-your-truststore")
+    <span class="keyword">new</span> JksOptions().
+      setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/truststore.jks</span><span class="delimiter">&quot;</span></span>).
+      setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-truststore</span><span class="delimiter">&quot;</span></span>)
   );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -938,13 +937,13 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.jks");
-NetClientOptions options = new NetClientOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/truststore.jks</span><span class="delimiter">&quot;</span></span>);
+NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setTrustStoreOptions(
-    new JksOptions().
+    <span class="keyword">new</span> JksOptions().
       setValue(myTrustStoreAsABuffer).
-      setPassword("password-of-your-truststore")
+      setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-truststore</span><span class="delimiter">&quot;</span></span>)
   );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -955,12 +954,12 @@ extension can also be loaded in a similar fashion than JKS trust stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setPfxTrustOptions(
-    new PfxOptions().
-      setPath("/path/to/your/truststore.pfx").
-      setPassword("password-of-your-truststore")
+    <span class="keyword">new</span> PfxOptions().
+      setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/truststore.pfx</span><span class="delimiter">&quot;</span></span>).
+      setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-truststore</span><span class="delimiter">&quot;</span></span>)
   );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -970,13 +969,13 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/truststore.pfx");
-NetClientOptions options = new NetClientOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/truststore.pfx</span><span class="delimiter">&quot;</span></span>);
+NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setPfxTrustOptions(
-    new PfxOptions().
+    <span class="keyword">new</span> PfxOptions().
       setValue(myTrustStoreAsABuffer).
-      setPassword("password-of-your-truststore")
+      setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-truststore</span><span class="delimiter">&quot;</span></span>)
   );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -986,11 +985,11 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setPemTrustOptions(
-    new PemTrustOptions().
-      addCertPath("/path/to/your/ca-cert.pem")
+    <span class="keyword">new</span> PemTrustOptions().
+      addCertPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/ca-cert.pem</span><span class="delimiter">&quot;</span></span>)
   );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -1000,11 +999,11 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/ca-cert.pem");
-NetClientOptions options = new NetClientOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> myTrustStoreAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/ca-cert.pem</span><span class="delimiter">&quot;</span></span>);
+NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setPemTrustOptions(
-    new PemTrustOptions().
+    <span class="keyword">new</span> PemTrustOptions().
       addCertValue(myTrustStoreAsABuffer)
   );
 NetClient client = vertx.createNetClient(options);</code></pre>
@@ -1025,10 +1024,10 @@ Again it&#8217;s just a regular Java key store. The client keystore location is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().setSsl(true).setKeyStoreOptions(
-  new JksOptions().
-    setPath("/path/to/your/client-keystore.jks").
-    setPassword("password-of-your-keystore")
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions().setSsl(<span class="predefined-constant">true</span>).setKeyStoreOptions(
+  <span class="keyword">new</span> JksOptions().
+    setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/client-keystore.jks</span><span class="delimiter">&quot;</span></span>).
+    setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-keystore</span><span class="delimiter">&quot;</span></span>)
 );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -1038,12 +1037,12 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.jks");
-JksOptions jksOptions = new JksOptions().
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/client-keystore.jks</span><span class="delimiter">&quot;</span></span>);
+JksOptions jksOptions = <span class="keyword">new</span> JksOptions().
   setValue(myKeyStoreAsABuffer).
-  setPassword("password-of-your-keystore");
-NetClientOptions options = new NetClientOptions().
-  setSsl(true).
+  setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-keystore</span><span class="delimiter">&quot;</span></span>);
+NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setKeyStoreOptions(jksOptions);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -1054,10 +1053,10 @@ extension can also be loaded in a similar fashion than JKS key stores:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().setSsl(true).setPfxKeyCertOptions(
-  new PfxOptions().
-    setPath("/path/to/your/client-keystore.pfx").
-    setPassword("password-of-your-keystore")
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions().setSsl(<span class="predefined-constant">true</span>).setPfxKeyCertOptions(
+  <span class="keyword">new</span> PfxOptions().
+    setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/client-keystore.pfx</span><span class="delimiter">&quot;</span></span>).
+    setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-keystore</span><span class="delimiter">&quot;</span></span>)
 );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -1067,12 +1066,12 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-keystore.pfx");
-PfxOptions pfxOptions = new PfxOptions().
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> myKeyStoreAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/client-keystore.pfx</span><span class="delimiter">&quot;</span></span>);
+PfxOptions pfxOptions = <span class="keyword">new</span> PfxOptions().
   setValue(myKeyStoreAsABuffer).
-  setPassword("password-of-your-keystore");
-NetClientOptions options = new NetClientOptions().
-  setSsl(true).
+  setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password-of-your-keystore</span><span class="delimiter">&quot;</span></span>);
+NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setPfxKeyCertOptions(pfxOptions);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -1082,10 +1081,10 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().setSsl(true).setPemKeyCertOptions(
-  new PemKeyCertOptions().
-    setKeyPath("/path/to/your/client-key.pem").
-    setCertPath("/path/to/your/client-cert.pem")
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions().setSsl(<span class="predefined-constant">true</span>).setPemKeyCertOptions(
+  <span class="keyword">new</span> PemKeyCertOptions().
+    setKeyPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/client-key.pem</span><span class="delimiter">&quot;</span></span>).
+    setCertPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/client-cert.pem</span><span class="delimiter">&quot;</span></span>)
 );
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -1095,13 +1094,13 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myKeyAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-key.pem");
-Buffer myCertAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/client-cert.pem");
-PemKeyCertOptions pemOptions = new PemKeyCertOptions().
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> myKeyAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/client-key.pem</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">Buffer</span> myCertAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/client-cert.pem</span><span class="delimiter">&quot;</span></span>);
+PemKeyCertOptions pemOptions = <span class="keyword">new</span> PemKeyCertOptions().
   setKeyValue(myKeyAsABuffer).
   setCertValue(myCertAsABuffer);
-NetClientOptions options = new NetClientOptions().
-  setSsl(true).
+NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setPemKeyCertOptions(pemOptions);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
@@ -1134,28 +1133,28 @@ give <code><a href="../../apidocs/io/vertx/core/net/KeyCertOptions.html">KeyCert
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">SelfSignedCertificate certificate = SelfSignedCertificate.create();
+<pre class="CodeRay highlight"><code data-lang="java">SelfSignedCertificate certificate = SelfSignedCertificate.create();
 
-NetServerOptions serverOptions = new NetServerOptions()
-  .setSsl(true)
+NetServerOptions serverOptions = <span class="keyword">new</span> NetServerOptions()
+  .setSsl(<span class="predefined-constant">true</span>)
   .setKeyCertOptions(certificate.keyCertOptions())
   .setTrustOptions(certificate.trustOptions());
 
 NetServer server = vertx.createNetServer(serverOptions)
-  .connectHandler(socket -&gt; socket.write("Hello!").end())
-  .listen(1234, "localhost");
+  .connectHandler(socket -&gt; socket.write(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello!</span><span class="delimiter">&quot;</span></span>).end())
+  .listen(<span class="integer">1234</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>);
 
-NetClientOptions clientOptions = new NetClientOptions()
-  .setSsl(true)
+NetClientOptions clientOptions = <span class="keyword">new</span> NetClientOptions()
+  .setSsl(<span class="predefined-constant">true</span>)
   .setKeyCertOptions(certificate.keyCertOptions())
   .setTrustOptions(certificate.trustOptions());
 
 NetClient client = vertx.createNetClient(clientOptions);
-client.connect(1234, "localhost", ar -&gt; {
-  if (ar.succeeded()) {
-    ar.result().handler(buffer -&gt; System.out.println(buffer));
-  } else {
-    System.err.println("Woops: " + ar.cause().getMessage());
+client.connect(<span class="integer">1234</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
+  <span class="keyword">if</span> (ar.succeeded()) {
+    ar.result().handler(buffer -&gt; <span class="predefined-type">System</span>.out.println(buffer));
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Woops: </span><span class="delimiter">&quot;</span></span> + ar.cause().getMessage());
   }
 });</code></pre>
 </div>
@@ -1165,9 +1164,9 @@ client.connect(1234, "localhost", ar -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions clientOptions = new NetClientOptions()
-  .setSsl(true)
-  .setTrustAll(true);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions clientOptions = <span class="keyword">new</span> NetClientOptions()
+  .setSsl(<span class="predefined-constant">true</span>)
+  .setTrustAll(<span class="predefined-constant">true</span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1175,14 +1174,14 @@ client.connect(1234, "localhost", ar -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">SelfSignedCertificate certificate = SelfSignedCertificate.create();
+<pre class="CodeRay highlight"><code data-lang="java">SelfSignedCertificate certificate = SelfSignedCertificate.create();
 
-vertx.createHttpServer(new HttpServerOptions()
-  .setSsl(true)
+vertx.createHttpServer(<span class="keyword">new</span> HttpServerOptions()
+  .setSsl(<span class="predefined-constant">true</span>)
   .setKeyCertOptions(certificate.keyCertOptions())
   .setTrustOptions(certificate.trustOptions()))
-  .requestHandler(req -&gt; req.response().end("Hello!"))
-  .listen(8080);</code></pre>
+  .requestHandler(req -&gt; req.response().end(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello!</span><span class="delimiter">&quot;</span></span>))
+  .listen(<span class="integer">8080</span>);</code></pre>
 </div>
 </div>
 </div>
@@ -1195,10 +1194,10 @@ the crl list to use:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setTrustStoreOptions(trustOptions).
-  addCrlPath("/path/to/your/crl.pem");
+  addCrlPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/crl.pem</span><span class="delimiter">&quot;</span></span>);
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>
@@ -1207,9 +1206,9 @@ NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Buffer myCrlAsABuffer = vertx.fileSystem().readFileBlocking("/path/to/your/crl.pem");
-NetClientOptions options = new NetClientOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Buffer</span> myCrlAsABuffer = vertx.fileSystem().readFileBlocking(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/your/crl.pem</span><span class="delimiter">&quot;</span></span>);
+NetClientOptions options = <span class="keyword">new</span> NetClientOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setTrustStoreOptions(trustOptions).
   addCrlValue(myCrlAsABuffer);
 NetClient client = vertx.createNetClient(options);</code></pre>
@@ -1224,13 +1223,13 @@ configured with a suite of enabled ciphers:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java">NetServerOptions options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setKeyStoreOptions(keyStoreOptions).
-  addEnabledCipherSuite("ECDHE-RSA-AES128-GCM-SHA256").
-  addEnabledCipherSuite("ECDHE-ECDSA-AES128-GCM-SHA256").
-  addEnabledCipherSuite("ECDHE-RSA-AES256-GCM-SHA384").
-  addEnabledCipherSuite("CDHE-ECDSA-AES256-GCM-SHA384");
+  addEnabledCipherSuite(<span class="string"><span class="delimiter">&quot;</span><span class="content">ECDHE-RSA-AES128-GCM-SHA256</span><span class="delimiter">&quot;</span></span>).
+  addEnabledCipherSuite(<span class="string"><span class="delimiter">&quot;</span><span class="content">ECDHE-ECDSA-AES128-GCM-SHA256</span><span class="delimiter">&quot;</span></span>).
+  addEnabledCipherSuite(<span class="string"><span class="delimiter">&quot;</span><span class="content">ECDHE-RSA-AES256-GCM-SHA384</span><span class="delimiter">&quot;</span></span>).
+  addEnabledCipherSuite(<span class="string"><span class="delimiter">&quot;</span><span class="content">CDHE-ECDSA-AES256-GCM-SHA384</span><span class="delimiter">&quot;</span></span>);
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -1246,11 +1245,11 @@ configured by explicitly adding enabled protocols:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java">NetServerOptions options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setKeyStoreOptions(keyStoreOptions).
-  addEnabledSecureTransportProtocol("TLSv1.1").
-  addEnabledSecureTransportProtocol("TLSv1.2");
+  addEnabledSecureTransportProtocol(<span class="string"><span class="delimiter">&quot;</span><span class="content">TLSv1.1</span><span class="delimiter">&quot;</span></span>).
+  addEnabledSecureTransportProtocol(<span class="string"><span class="delimiter">&quot;</span><span class="content">TLSv1.2</span><span class="delimiter">&quot;</span></span>);
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -1279,21 +1278,21 @@ OpenSSL provides better performances and CPU usage than the JDK engine, as well 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetServerOptions options = new NetServerOptions().
-  setSsl(true).
+<pre class="CodeRay highlight"><code data-lang="java">NetServerOptions options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setKeyStoreOptions(keyStoreOptions);
 
-// Use JDK SSL engine explicitly
-options = new NetServerOptions().
-  setSsl(true).
+<span class="comment">// Use JDK SSL engine explicitly</span>
+options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setKeyStoreOptions(keyStoreOptions).
-  setJdkSslEngineOptions(new JdkSSLEngineOptions());
+  setJdkSslEngineOptions(<span class="keyword">new</span> JdkSSLEngineOptions());
 
-// Use OpenSSL engine
-options = new NetServerOptions().
-  setSsl(true).
+<span class="comment">// Use OpenSSL engine</span>
+options = <span class="keyword">new</span> NetServerOptions().
+  setSsl(<span class="predefined-constant">true</span>).
   setKeyStoreOptions(keyStoreOptions).
-  setOpenSslEngineOptions(new OpenSSLEngineOptions());</code></pre>
+  setOpenSslEngineOptions(<span class="keyword">new</span> OpenSSLEngineOptions());</code></pre>
 </div>
 </div>
 </div>
@@ -1329,12 +1328,12 @@ configured the server with multiple key/certificate pairs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">JksOptions keyCertOptions = new JksOptions().setPath("keystore.jks").setPassword("wibble");
+<pre class="CodeRay highlight"><code data-lang="java">JksOptions keyCertOptions = <span class="keyword">new</span> JksOptions().setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jks</span><span class="delimiter">&quot;</span></span>).setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">wibble</span><span class="delimiter">&quot;</span></span>);
 
-NetServer netServer = vertx.createNetServer(new NetServerOptions()
+NetServer netServer = vertx.createNetServer(<span class="keyword">new</span> NetServerOptions()
     .setKeyStoreOptions(keyCertOptions)
-    .setSsl(true)
-    .setSni(true)
+    .setSsl(<span class="predefined-constant">true</span>)
+    .setSni(<span class="predefined-constant">true</span>)
 );</code></pre>
 </div>
 </div>
@@ -1343,15 +1342,15 @@ NetServer netServer = vertx.createNetServer(new NetServerOptions()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">PemKeyCertOptions keyCertOptions = new PemKeyCertOptions()
-    .setKeyPaths(Arrays.asList("default-key.pem", "host1-key.pem", "etc..."))
-    .setCertPaths(Arrays.asList("default-cert.pem", "host2-key.pem", "etc...")
+<pre class="CodeRay highlight"><code data-lang="java">PemKeyCertOptions keyCertOptions = <span class="keyword">new</span> PemKeyCertOptions()
+    .setKeyPaths(<span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">default-key.pem</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">host1-key.pem</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">etc...</span><span class="delimiter">&quot;</span></span>))
+    .setCertPaths(<span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">default-cert.pem</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">host2-key.pem</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">etc...</span><span class="delimiter">&quot;</span></span>)
     );
 
-NetServer netServer = vertx.createNetServer(new NetServerOptions()
+NetServer netServer = vertx.createNetServer(<span class="keyword">new</span> NetServerOptions()
     .setPemKeyCertOptions(keyCertOptions)
-    .setSsl(true)
-    .setSni(true)
+    .setSsl(<span class="predefined-constant">true</span>)
+    .setSni(<span class="predefined-constant">true</span>)
 );</code></pre>
 </div>
 </div>
@@ -1363,18 +1362,18 @@ NetServer netServer = vertx.createNetServer(new NetServerOptions()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClient client = vertx.createNetClient(new NetClientOptions()
+<pre class="CodeRay highlight"><code data-lang="java">NetClient client = vertx.createNetClient(<span class="keyword">new</span> NetClientOptions()
     .setTrustStoreOptions(trustOptions)
-    .setSsl(true)
+    .setSsl(<span class="predefined-constant">true</span>)
 );
 
-// Connect to 'localhost' and present 'server.name' server name
-client.connect(1234, "localhost", "server.name", res -&gt; {
-  if (res.succeeded()) {
-    System.out.println("Connected!");
+<span class="comment">// Connect to 'localhost' and present 'server.name' server name</span>
+client.connect(<span class="integer">1234</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">server.name</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Connected!</span><span class="delimiter">&quot;</span></span>);
     NetSocket socket = res.result();
-  } else {
-    System.out.println("Failed to connect: " + res.cause().getMessage());
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failed to connect: </span><span class="delimiter">&quot;</span></span> + res.cause().getMessage());
   }
 });</code></pre>
 </div>
@@ -1492,10 +1491,10 @@ ALPN version for the JVM running it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">NetClientOptions options = new NetClientOptions()
-  .setProxyOptions(new ProxyOptions().setType(ProxyType.SOCKS5)
-    .setHost("localhost").setPort(1080)
-    .setUsername("username").setPassword("secret"));
+<pre class="CodeRay highlight"><code data-lang="java">NetClientOptions options = <span class="keyword">new</span> NetClientOptions()
+  .setProxyOptions(<span class="keyword">new</span> ProxyOptions().setType(ProxyType.SOCKS5)
+    .setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>).setPort(<span class="integer">1080</span>)
+    .setUsername(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>).setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>));
 NetClient client = vertx.createNetClient(options);</code></pre>
 </div>
 </div>

@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -190,11 +189,11 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-consul-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-consul-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -206,7 +205,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-consul-client:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-consul-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -219,7 +218,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var client = ConsulClient.create(vertx)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var client = ConsulClient.create(vertx)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -227,8 +226,8 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var options = ConsulClientOptions(
-  host = "consul.example.com")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var options = ConsulClientOptions(
+  host = &quot;consul.example.com&quot;)
 
 var client = ConsulClient.create(vertx, options)</code></pre>
 </div>
@@ -298,9 +297,9 @@ the current state of the requested resource. The following configuration is used
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var opts = BlockingQueryOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var opts = BlockingQueryOptions(
   index = lastIndex,
-  wait = "1m")</code></pre>
+  wait = &quot;1m&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -334,10 +333,10 @@ The following endpoints are supported:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.getValue("key", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.getValue(&quot;key&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("retrieved value: ${res.result().value}")
-    println("modify index: ${res.result().modifyIndex}")
+    println(&quot;retrieved value: ${res.result().value}&quot;)
+    println(&quot;modify index: ${res.result().modifyIndex}&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -349,11 +348,11 @@ The following endpoints are supported:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.getValues("prefix", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.getValues(&quot;prefix&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("modify index: ${res.result().index}")
+    println(&quot;modify index: ${res.result().index}&quot;)
     for (kv in res.result().list) {
-      println("retrieved value: ${kv.value}")
+      println(&quot;retrieved value: ${kv.value}&quot;)
     }
   } else {
     res.cause().printStackTrace()
@@ -402,14 +401,14 @@ sense for their application</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var opts = BlockingQueryOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var opts = BlockingQueryOptions(
   index = modifyIndex,
-  wait = "1m")
+  wait = &quot;1m&quot;)
 
-consulClient.getValueWithOptions("key", opts, { res -&gt;
+consulClient.getValueWithOptions(&quot;key&quot;, opts, { res -&gt;
   if (res.succeeded()) {
-    println("retrieved value: ${res.result().value}")
-    println("new modify index: ${res.result().modifyIndex}")
+    println(&quot;retrieved value: ${res.result().value}&quot;)
+    println(&quot;new modify index: ${res.result().modifyIndex}&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -421,10 +420,10 @@ consulClient.getValueWithOptions("key", opts, { res -&gt;
 <h3 id="_put_key_value_pair_to_store">Put key-value pair to store</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.putValue("key", "value", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.putValue(&quot;key&quot;, &quot;value&quot;, { res -&gt;
   if (res.succeeded()) {
-    var opResult = res.result() ? "success" : "fail"
-    println("result of the operation: ${opResult}")
+    var opResult = res.result() ? &quot;success&quot; : &quot;fail&quot;
+    println(&quot;result of the operation: ${opResult}&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -436,16 +435,16 @@ consulClient.getValueWithOptions("key", opts, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var opts = KeyValueOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var opts = KeyValueOptions(
   flags = 42,
   casIndex = modifyIndex,
-  acquireSession = "acquireSessionID",
-  releaseSession = "releaseSessionID")
+  acquireSession = &quot;acquireSessionID&quot;,
+  releaseSession = &quot;releaseSessionID&quot;)
 
-consulClient.putValueWithOptions("key", "value", opts, { res -&gt;
+consulClient.putValueWithOptions(&quot;key&quot;, &quot;value&quot;, opts, { res -&gt;
   if (res.succeeded()) {
-    var opResult = res.result() ? "success" : "fail"
-    println("result of the operation: ${opResult}")
+    var opResult = res.result() ? &quot;success&quot; : &quot;fail&quot;
+    println(&quot;result of the operation: ${opResult}&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -496,19 +495,19 @@ may be added in future versions of Consul to be mixed with key/value operations
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var request = TxnRequest(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var request = TxnRequest(
   operations = listOf(TxnKVOperation(
-    key = "key1",
-    value = "value1",
+    key = &quot;key1&quot;,
+    value = &quot;value1&quot;,
     type = TxnKVVerb.SET), TxnKVOperation(
-    key = "key2",
-    value = "value2",
+    key = &quot;key2&quot;,
+    value = &quot;value2&quot;,
     type = TxnKVVerb.SET)))
 
 consulClient.transaction(request, { res -&gt;
   if (res.succeeded()) {
-    println("succeeded results: ${res.result().results.size}")
-    println("errors: ${res.result().errors.size}")
+    println(&quot;succeeded results: ${res.result().results.size}&quot;)
+    println(&quot;errors: ${res.result().errors.size}&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -523,9 +522,9 @@ consulClient.transaction(request, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.deleteValue("key", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.deleteValue(&quot;key&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("complete")
+    println(&quot;complete&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -537,9 +536,9 @@ consulClient.transaction(request, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.deleteValues("prefix", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.deleteValues(&quot;prefix&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("complete")
+    println(&quot;complete&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -564,13 +563,13 @@ and to potentially associate it with a health check.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var opts = ServiceOptions(
-  name = "serviceName",
-  id = "serviceId",
-  tags = listOf("tag1", "tag2"),
+<pre class="CodeRay highlight"><code data-lang="kotlin">var opts = ServiceOptions(
+  name = &quot;serviceName&quot;,
+  id = &quot;serviceId&quot;,
+  tags = listOf(&quot;tag1&quot;, &quot;tag2&quot;),
   checkOptions = CheckOptions(
-    ttl = "10s"),
-  address = "10.0.0.1",
+    ttl = &quot;10s&quot;),
+  address = &quot;10.0.0.1&quot;,
   port = 8048)</code></pre>
 </div>
 </div>
@@ -611,9 +610,9 @@ the address and port of a service can be discovered.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.registerService(opts, { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.registerService(opts, { res -&gt;
   if (res.succeeded()) {
-    println("Service successfully registered")
+    println(&quot;Service successfully registered&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -629,14 +628,14 @@ the address and port of a service can be discovered.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.catalogServiceNodes("serviceName", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.catalogServiceNodes(&quot;serviceName&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("found ${res.result().list.size} services")
-    println("consul state index: ${res.result().index}")
+    println(&quot;found ${res.result().list.size} services&quot;)
+    println(&quot;consul state index: ${res.result().index}&quot;)
     for (service in res.result().list) {
-      println("Service node: ${service.node}")
-      println("Service address: ${service.address}")
-      println("Service port: ${service.port}")
+      println(&quot;Service node: ${service.node}&quot;)
+      println(&quot;Service address: ${service.address}&quot;)
+      println(&quot;Service port: ${service.port}&quot;)
     }
   } else {
     res.cause().printStackTrace()
@@ -650,14 +649,14 @@ The result can be filtered by check status.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.healthServiceNodes("serviceName", passingOnly, { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.healthServiceNodes(&quot;serviceName&quot;, passingOnly, { res -&gt;
   if (res.succeeded()) {
-    println("found ${res.result().list.size} services")
-    println("consul state index: ${res.result().index}")
+    println(&quot;found ${res.result().list.size} services&quot;)
+    println(&quot;consul state index: ${res.result().index}&quot;)
     for (entry in res.result().list) {
-      println("Service node: ${entry.node}")
-      println("Service address: ${entry.service.address}")
-      println("Service port: ${entry.service.port}")
+      println(&quot;Service node: ${entry.node}&quot;)
+      println(&quot;Service address: ${entry.service.address}&quot;)
+      println(&quot;Service port: ${entry.service.port}&quot;)
     }
   } else {
     res.cause().printStackTrace()
@@ -670,9 +669,9 @@ The result can be filtered by check status.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var queryOpts = ServiceQueryOptions(
-  tag = "tag1",
-  near = "_agent",
+<pre class="CodeRay highlight"><code data-lang="kotlin">var queryOpts = ServiceQueryOptions(
+  tag = &quot;tag1&quot;,
+  near = &quot;_agent&quot;,
   blockingOptions = BlockingQueryOptions(
     index = lastIndex))</code></pre>
 </div>
@@ -700,9 +699,9 @@ based on the estimated round trip time from that node. Passing <code>near</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.healthServiceNodesWithOptions("serviceName", passingOnly, queryOpts, { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.healthServiceNodesWithOptions(&quot;serviceName&quot;, passingOnly, queryOpts, { res -&gt;
   if (res.succeeded()) {
-    println("found ${res.result().list.size} services")
+    println(&quot;found ${res.result().list.size} services&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -718,9 +717,9 @@ based on the estimated round trip time from that node. Passing <code>near</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.deregisterService("serviceId", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.deregisterService(&quot;serviceId&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("Service successfully deregistered")
+    println(&quot;Service successfully deregistered&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -740,9 +739,9 @@ If not associated with a service, the check monitors the health of the entire no
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var opts = CheckOptions(
-  tcp = "localhost:4848",
-  interval = "1s")</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var opts = CheckOptions(
+  tcp = &quot;localhost:4848&quot;,
+  interval = &quot;1s&quot;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -811,9 +810,9 @@ You cannot have duplicate ID entries per agent, so it may be necessary to provid
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.registerCheck(opts, { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.registerCheck(opts, { res -&gt;
   if (res.succeeded()) {
-    println("check successfully registered")
+    println(&quot;check successfully registered&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -835,10 +834,10 @@ restart services, or perform any other orchestration action.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.fireEvent("eventName", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.fireEvent(&quot;eventName&quot;, { res -&gt;
   if (res.succeeded()) {
-    println("Event sent")
-    println("id: ${res.result().id}")
+    println(&quot;Event sent&quot;)
+    println(&quot;id: ${res.result().id}&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -871,14 +870,14 @@ The body contents are opaque to Consul and become the "payload" of the event</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var opts = EventOptions(
-  tag = "tag",
-  payload = "message")
+<pre class="CodeRay highlight"><code data-lang="kotlin">var opts = EventOptions(
+  tag = &quot;tag&quot;,
+  payload = &quot;message&quot;)
 
-consulClient.fireEventWithOptions("eventName", opts, { res -&gt;
+consulClient.fireEventWithOptions(&quot;eventName&quot;, opts, { res -&gt;
   if (res.succeeded()) {
-    println("Event sent")
-    println("id: ${res.result().id}")
+    println(&quot;Event sent&quot;)
+    println(&quot;id: ${res.result().id}&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -892,13 +891,13 @@ the most recent entries. The current buffer size is 256, but this value could ch
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.listEvents({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.listEvents({ res -&gt;
   if (res.succeeded()) {
-    println("Consul index: ${res.result().index}")
+    println(&quot;Consul index: ${res.result().index}&quot;)
     for (event in res.result().list) {
-      println("Event id: ${event.id}")
-      println("Event name: ${event.name}")
-      println("Event payload: ${event.payload}")
+      println(&quot;Event id: ${event.id}&quot;)
+      println(&quot;Event name: ${event.name}&quot;)
+      println(&quot;Event payload: ${event.payload}&quot;)
     }
   } else {
     res.cause().printStackTrace()
@@ -911,16 +910,16 @@ the most recent entries. The current buffer size is 256, but this value could ch
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var opts = EventListOptions(
-  name = "eventName",
+<pre class="CodeRay highlight"><code data-lang="kotlin">var opts = EventListOptions(
+  name = &quot;eventName&quot;,
   blockingOptions = BlockingQueryOptions(
     index = lastIndex))
 
 consulClient.listEventsWithOptions(opts, { res -&gt;
   if (res.succeeded()) {
-    println("Consul index: ${res.result().index}")
+    println(&quot;Consul index: ${res.result().index}&quot;)
     for (event in res.result().list) {
-      println("Event id: ${event.id}")
+      println(&quot;Event id: ${event.id}&quot;)
     }
   } else {
     res.cause().printStackTrace()
@@ -941,8 +940,8 @@ may be provided.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var opts = SessionOptions(
-  node = "nodeId",
+<pre class="CodeRay highlight"><code data-lang="kotlin">var opts = SessionOptions(
+  node = &quot;nodeId&quot;,
   behavior = SessionBehavior.RELEASE)</code></pre>
 </div>
 </div>
@@ -987,10 +986,10 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.createSessionWithOptions(opts, { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.createSessionWithOptions(opts, { res -&gt;
   if (res.succeeded()) {
-    println("Session successfully created")
-    println("id: ${res.result()}")
+    println(&quot;Session successfully created&quot;)
+    println(&quot;id: ${res.result()}&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -1002,9 +1001,9 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.destroySession(sessionId, { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.destroySession(sessionId, { res -&gt;
   if (res.succeeded()) {
-    println("Session successfully destroyed")
+    println(&quot;Session successfully destroyed&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -1016,12 +1015,12 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.listNodeSessions("nodeId", { res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.listNodeSessions(&quot;nodeId&quot;, { res -&gt;
   if (res.succeeded()) {
     for (session in res.result().list) {
-      println("Session id: ${session.id}")
-      println("Session node: ${session.node}")
-      println("Session create index: ${session.createIndex}")
+      println(&quot;Session id: ${session.id}&quot;)
+      println(&quot;Session node: ${session.node}&quot;)
+      println(&quot;Session create index: ${session.createIndex}&quot;)
     }
   } else {
     res.cause().printStackTrace()
@@ -1034,12 +1033,12 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var blockingOpts = BlockingQueryOptions(
+<pre class="CodeRay highlight"><code data-lang="kotlin">var blockingOpts = BlockingQueryOptions(
   index = lastIndex)
 
 consulClient.listSessionsWithOptions(blockingOpts, { res -&gt;
   if (res.succeeded()) {
-    println("Found ${res.result().list.size} sessions")
+    println(&quot;Found ${res.result().list.size} sessions&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -1053,10 +1052,10 @@ consulClient.listSessionsWithOptions(blockingOpts, { res -&gt;
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">consulClient.catalogNodes({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">consulClient.catalogNodes({ res -&gt;
   if (res.succeeded()) {
-    println("found ${res.result().list.size} nodes")
-    println("consul state index ${res.result().index}")
+    println(&quot;found ${res.result().list.size} nodes&quot;)
+    println(&quot;consul state index ${res.result().index}&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -1068,14 +1067,14 @@ consulClient.listSessionsWithOptions(blockingOpts, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">var opts = NodeQueryOptions(
-  near = "_agent",
+<pre class="CodeRay highlight"><code data-lang="kotlin">var opts = NodeQueryOptions(
+  near = &quot;_agent&quot;,
   blockingOptions = BlockingQueryOptions(
     index = lastIndex))
 
 consulClient.catalogNodesWithOptions(opts, { res -&gt;
   if (res.succeeded()) {
-    println("found ${res.result().list.size} nodes")
+    println(&quot;found ${res.result().list.size} nodes&quot;)
   } else {
     res.cause().printStackTrace()
   }
@@ -1094,9 +1093,9 @@ As an example, you could watch the status of health checks and notify when a che
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">Watch.key("foo/bar", vertx).setHandler({ res -&gt;
+<pre class="CodeRay highlight"><code data-lang="kotlin">Watch.key(&quot;foo/bar&quot;, vertx).setHandler({ res -&gt;
   if (res.succeeded()) {
-    println("value: ${res.result().value}")
+    println(&quot;value: ${res.result().value}&quot;)
   } else {
     res.cause().printStackTrace()
   }

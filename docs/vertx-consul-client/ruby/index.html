@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -190,11 +189,11 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-  &lt;groupId&gt;io.vertx&lt;/groupId&gt;
-  &lt;artifactId&gt;vertx-consul-client&lt;/artifactId&gt;
-  &lt;version&gt;3.4.2&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-consul-client<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -206,7 +205,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'io.vertx:vertx-consul-client:3.4.2'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-consul-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -219,9 +218,9 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-consul/consul_client'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-consul/consul_client</span><span class="delimiter">'</span></span>
 
-client = VertxConsul::ConsulClient.create(vertx)</code></pre>
+client = <span class="constant">VertxConsul</span>::<span class="constant">ConsulClient</span>.create(vertx)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -229,13 +228,13 @@ client = VertxConsul::ConsulClient.create(vertx)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-consul/consul_client'
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-consul/consul_client</span><span class="delimiter">'</span></span>
 
 options = {
-  'host' =&gt; "consul.example.com"
+  <span class="string"><span class="delimiter">'</span><span class="content">host</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">consul.example.com</span><span class="delimiter">&quot;</span></span>
 }
 
-client = VertxConsul::ConsulClient.create(vertx, options)</code></pre>
+client = <span class="constant">VertxConsul</span>::<span class="constant">ConsulClient</span>.create(vertx, options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -303,9 +302,9 @@ the current state of the requested resource. The following configuration is used
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">opts = {
-  'index' =&gt; lastIndex,
-  'wait' =&gt; "1m"
+<pre class="CodeRay highlight"><code data-lang="ruby">opts = {
+  <span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span> =&gt; lastIndex,
+  <span class="string"><span class="delimiter">'</span><span class="content">wait</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">1m</span><span class="delimiter">&quot;</span></span>
 }</code></pre>
 </div>
 </div>
@@ -340,13 +339,13 @@ The following endpoints are supported:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.get_value("key") { |res_err,res|
-  if (res_err == nil)
-    puts "retrieved value: #{res['value']}"
-    puts "modify index: #{res['modifyIndex']}"
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.get_value(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">retrieved value: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">value</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">modify index: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">modifyIndex</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -355,15 +354,15 @@ The following endpoints are supported:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.get_values("prefix") { |res_err,res|
-  if (res_err == nil)
-    puts "modify index: #{res['index']}"
-    res['list'].each do |kv|
-      puts "retrieved value: #{kv['value']}"
-    end
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.get_values(<span class="string"><span class="delimiter">&quot;</span><span class="content">prefix</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">modify index: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    res[<span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>].each <span class="keyword">do</span> |kv|
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">retrieved value: </span><span class="inline"><span class="inline-delimiter">#{</span>kv[<span class="string"><span class="delimiter">'</span><span class="content">value</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    <span class="keyword">end</span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -408,18 +407,18 @@ sense for their application</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">opts = {
-  'index' =&gt; modifyIndex,
-  'wait' =&gt; "1m"
+<pre class="CodeRay highlight"><code data-lang="ruby">opts = {
+  <span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span> =&gt; modifyIndex,
+  <span class="string"><span class="delimiter">'</span><span class="content">wait</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">1m</span><span class="delimiter">&quot;</span></span>
 }
 
-consulClient.get_value_with_options("key", opts) { |res_err,res|
-  if (res_err == nil)
-    puts "retrieved value: #{res['value']}"
-    puts "new modify index: #{res['modifyIndex']}"
-  else
+consulClient.get_value_with_options(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, opts) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">retrieved value: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">value</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">new modify index: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">modifyIndex</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -428,13 +427,13 @@ consulClient.get_value_with_options("key", opts) { |res_err,res|
 <h3 id="_put_key_value_pair_to_store">Put key-value pair to store</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.put_value("key", "value") { |res_err,res|
-  if (res_err == nil)
-    opResult = res ? "success" : "fail"
-    puts "result of the operation: #{opResult}"
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.put_value(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    opResult = res ? <span class="string"><span class="delimiter">&quot;</span><span class="content">success</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">fail</span><span class="delimiter">&quot;</span></span>
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">result of the operation: </span><span class="inline"><span class="inline-delimiter">#{</span>opResult<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -443,20 +442,20 @@ consulClient.get_value_with_options("key", opts) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">opts = {
-  'flags' =&gt; 42,
-  'casIndex' =&gt; modifyIndex,
-  'acquireSession' =&gt; "acquireSessionID",
-  'releaseSession' =&gt; "releaseSessionID"
+<pre class="CodeRay highlight"><code data-lang="ruby">opts = {
+  <span class="string"><span class="delimiter">'</span><span class="content">flags</span><span class="delimiter">'</span></span> =&gt; <span class="integer">42</span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">casIndex</span><span class="delimiter">'</span></span> =&gt; modifyIndex,
+  <span class="string"><span class="delimiter">'</span><span class="content">acquireSession</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">acquireSessionID</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">releaseSession</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">releaseSessionID</span><span class="delimiter">&quot;</span></span>
 }
 
-consulClient.put_value_with_options("key", "value", opts) { |res_err,res|
-  if (res_err == nil)
-    opResult = res ? "success" : "fail"
-    puts "result of the operation: #{opResult}"
-  else
+consulClient.put_value_with_options(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>, opts) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    opResult = res ? <span class="string"><span class="delimiter">&quot;</span><span class="content">success</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">fail</span><span class="delimiter">&quot;</span></span>
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">result of the operation: </span><span class="inline"><span class="inline-delimiter">#{</span>opResult<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -504,28 +503,28 @@ may be added in future versions of Consul to be mixed with key/value operations
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">request = {
-  'operations' =&gt; [
+<pre class="CodeRay highlight"><code data-lang="ruby">request = {
+  <span class="string"><span class="delimiter">'</span><span class="content">operations</span><span class="delimiter">'</span></span> =&gt; [
     {
-      'key' =&gt; "key1",
-      'value' =&gt; "value1",
-      'type' =&gt; "SET"
+      <span class="string"><span class="delimiter">'</span><span class="content">key</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">'</span><span class="content">value</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">'</span><span class="content">type</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">SET</span><span class="delimiter">&quot;</span></span>
     },
     {
-      'key' =&gt; "key2",
-      'value' =&gt; "value2",
-      'type' =&gt; "SET"
+      <span class="string"><span class="delimiter">'</span><span class="content">key</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">'</span><span class="content">value</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">'</span><span class="content">type</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">SET</span><span class="delimiter">&quot;</span></span>
     }
   ]
 }
 
 consulClient.transaction(request) { |res_err,res|
-  if (res_err == nil)
-    puts "succeeded results: #{res['results'].length}"
-    puts "errors: #{res['errors'].length}"
-  else
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">succeeded results: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">results</span><span class="delimiter">'</span></span>].length<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">errors: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">errors</span><span class="delimiter">'</span></span>].length<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -537,12 +536,12 @@ consulClient.transaction(request) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.delete_value("key") { |res_err,res|
-  if (res_err == nil)
-    puts "complete"
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.delete_value(<span class="string"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">complete</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -551,12 +550,12 @@ consulClient.transaction(request) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.delete_values("prefix") { |res_err,res|
-  if (res_err == nil)
-    puts "complete"
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.delete_values(<span class="string"><span class="delimiter">&quot;</span><span class="content">prefix</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">complete</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -578,15 +577,15 @@ and to potentially associate it with a health check.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">opts = {
-  'name' =&gt; "serviceName",
-  'id' =&gt; "serviceId",
-  'tags' =&gt; ["tag1", "tag2"],
-  'checkOptions' =&gt; {
-    'ttl' =&gt; "10s"
+<pre class="CodeRay highlight"><code data-lang="ruby">opts = {
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">serviceName</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">id</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">serviceId</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">tags</span><span class="delimiter">'</span></span> =&gt; [<span class="string"><span class="delimiter">&quot;</span><span class="content">tag1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">tag2</span><span class="delimiter">&quot;</span></span>],
+  <span class="string"><span class="delimiter">'</span><span class="content">checkOptions</span><span class="delimiter">'</span></span> =&gt; {
+    <span class="string"><span class="delimiter">'</span><span class="content">ttl</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">10s</span><span class="delimiter">&quot;</span></span>
   },
-  'address' =&gt; "10.0.0.1",
-  'port' =&gt; 8048
+  <span class="string"><span class="delimiter">'</span><span class="content">address</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">port</span><span class="delimiter">'</span></span> =&gt; <span class="integer">8048</span>
 }</code></pre>
 </div>
 </div>
@@ -627,12 +626,12 @@ the address and port of a service can be discovered.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.register_service(opts) { |res_err,res|
-  if (res_err == nil)
-    puts "Service successfully registered"
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.register_service(opts) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Service successfully registered</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -645,18 +644,18 @@ the address and port of a service can be discovered.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.catalog_service_nodes("serviceName") { |res_err,res|
-  if (res_err == nil)
-    puts "found #{res['list'].length} services"
-    puts "consul state index: #{res['index']}"
-    res['list'].each do |service|
-      puts "Service node: #{service['node']}"
-      puts "Service address: #{service['address']}"
-      puts "Service port: #{service['port']}"
-    end
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.catalog_service_nodes(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceName</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>].length<span class="inline-delimiter">}</span></span><span class="content"> services</span><span class="delimiter">&quot;</span></span>
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">consul state index: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    res[<span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>].each <span class="keyword">do</span> |service|
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Service node: </span><span class="inline"><span class="inline-delimiter">#{</span>service[<span class="string"><span class="delimiter">'</span><span class="content">node</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Service address: </span><span class="inline"><span class="inline-delimiter">#{</span>service[<span class="string"><span class="delimiter">'</span><span class="content">address</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Service port: </span><span class="inline"><span class="inline-delimiter">#{</span>service[<span class="string"><span class="delimiter">'</span><span class="content">port</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    <span class="keyword">end</span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -666,18 +665,18 @@ The result can be filtered by check status.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.health_service_nodes("serviceName", passingOnly) { |res_err,res|
-  if (res_err == nil)
-    puts "found #{res['list'].length} services"
-    puts "consul state index: #{res['index']}"
-    res['list'].each do |entry|
-      puts "Service node: #{entry['node']}"
-      puts "Service address: #{entry['service']['address']}"
-      puts "Service port: #{entry['service']['port']}"
-    end
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.health_service_nodes(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceName</span><span class="delimiter">&quot;</span></span>, passingOnly) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>].length<span class="inline-delimiter">}</span></span><span class="content"> services</span><span class="delimiter">&quot;</span></span>
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">consul state index: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    res[<span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>].each <span class="keyword">do</span> |entry|
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Service node: </span><span class="inline"><span class="inline-delimiter">#{</span>entry[<span class="string"><span class="delimiter">'</span><span class="content">node</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Service address: </span><span class="inline"><span class="inline-delimiter">#{</span>entry[<span class="string"><span class="delimiter">'</span><span class="content">service</span><span class="delimiter">'</span></span>][<span class="string"><span class="delimiter">'</span><span class="content">address</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Service port: </span><span class="inline"><span class="inline-delimiter">#{</span>entry[<span class="string"><span class="delimiter">'</span><span class="content">service</span><span class="delimiter">'</span></span>][<span class="string"><span class="delimiter">'</span><span class="content">port</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    <span class="keyword">end</span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -686,11 +685,11 @@ The result can be filtered by check status.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">queryOpts = {
-  'tag' =&gt; "tag1",
-  'near' =&gt; "_agent",
-  'blockingOptions' =&gt; {
-    'index' =&gt; lastIndex
+<pre class="CodeRay highlight"><code data-lang="ruby">queryOpts = {
+  <span class="string"><span class="delimiter">'</span><span class="content">tag</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">tag1</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">near</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">_agent</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">blockingOptions</span><span class="delimiter">'</span></span> =&gt; {
+    <span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span> =&gt; lastIndex
   }
 }</code></pre>
 </div>
@@ -718,12 +717,12 @@ based on the estimated round trip time from that node. Passing <code>near</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.health_service_nodes_with_options("serviceName", passingOnly, queryOpts) { |res_err,res|
-  if (res_err == nil)
-    puts "found #{res['list'].length} services"
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.health_service_nodes_with_options(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceName</span><span class="delimiter">&quot;</span></span>, passingOnly, queryOpts) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>].length<span class="inline-delimiter">}</span></span><span class="content"> services</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 
 }</code></pre>
 </div>
@@ -736,12 +735,12 @@ based on the estimated round trip time from that node. Passing <code>near</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.deregister_service("serviceId") { |res_err,res|
-  if (res_err == nil)
-    puts "Service successfully deregistered"
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.deregister_service(<span class="string"><span class="delimiter">&quot;</span><span class="content">serviceId</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Service successfully deregistered</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -758,9 +757,9 @@ If not associated with a service, the check monitors the health of the entire no
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">opts = {
-  'tcp' =&gt; "localhost:4848",
-  'interval' =&gt; "1s"
+<pre class="CodeRay highlight"><code data-lang="ruby">opts = {
+  <span class="string"><span class="delimiter">'</span><span class="content">tcp</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost:4848</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">interval</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">1s</span><span class="delimiter">&quot;</span></span>
 }</code></pre>
 </div>
 </div>
@@ -830,12 +829,12 @@ You cannot have duplicate ID entries per agent, so it may be necessary to provid
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.register_check(opts) { |res_err,res|
-  if (res_err == nil)
-    puts "check successfully registered"
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.register_check(opts) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">check successfully registered</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -854,13 +853,13 @@ restart services, or perform any other orchestration action.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.fire_event("eventName") { |res_err,res|
-  if (res_err == nil)
-    puts "Event sent"
-    puts "id: #{res['id']}"
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.fire_event(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventName</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Event sent</span><span class="delimiter">&quot;</span></span>
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">id: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">id</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -890,18 +889,18 @@ The body contents are opaque to Consul and become the "payload" of the event</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">opts = {
-  'tag' =&gt; "tag",
-  'payload' =&gt; "message"
+<pre class="CodeRay highlight"><code data-lang="ruby">opts = {
+  <span class="string"><span class="delimiter">'</span><span class="content">tag</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">tag</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">payload</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">message</span><span class="delimiter">&quot;</span></span>
 }
 
-consulClient.fire_event_with_options("eventName", opts) { |res_err,res|
-  if (res_err == nil)
-    puts "Event sent"
-    puts "id: #{res['id']}"
-  else
+consulClient.fire_event_with_options(<span class="string"><span class="delimiter">&quot;</span><span class="content">eventName</span><span class="delimiter">&quot;</span></span>, opts) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Event sent</span><span class="delimiter">&quot;</span></span>
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">id: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">id</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -912,17 +911,17 @@ the most recent entries. The current buffer size is 256, but this value could ch
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.list_events() { |res_err,res|
-  if (res_err == nil)
-    puts "Consul index: #{res['index']}"
-    res['list'].each do |event|
-      puts "Event id: #{event['id']}"
-      puts "Event name: #{event['name']}"
-      puts "Event payload: #{event['payload']}"
-    end
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.list_events() { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Consul index: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    res[<span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>].each <span class="keyword">do</span> |event|
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Event id: </span><span class="inline"><span class="inline-delimiter">#{</span>event[<span class="string"><span class="delimiter">'</span><span class="content">id</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Event name: </span><span class="inline"><span class="inline-delimiter">#{</span>event[<span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Event payload: </span><span class="inline"><span class="inline-delimiter">#{</span>event[<span class="string"><span class="delimiter">'</span><span class="content">payload</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    <span class="keyword">end</span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -931,22 +930,22 @@ the most recent entries. The current buffer size is 256, but this value could ch
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">opts = {
-  'name' =&gt; "eventName",
-  'blockingOptions' =&gt; {
-    'index' =&gt; lastIndex
+<pre class="CodeRay highlight"><code data-lang="ruby">opts = {
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">eventName</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">blockingOptions</span><span class="delimiter">'</span></span> =&gt; {
+    <span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span> =&gt; lastIndex
   }
 }
 
 consulClient.list_events_with_options(opts) { |res_err,res|
-  if (res_err == nil)
-    puts "Consul index: #{res['index']}"
-    res['list'].each do |event|
-      puts "Event id: #{event['id']}"
-    end
-  else
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Consul index: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    res[<span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>].each <span class="keyword">do</span> |event|
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Event id: </span><span class="inline"><span class="inline-delimiter">#{</span>event[<span class="string"><span class="delimiter">'</span><span class="content">id</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    <span class="keyword">end</span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -963,9 +962,9 @@ may be provided.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">opts = {
-  'node' =&gt; "nodeId",
-  'behavior' =&gt; "RELEASE"
+<pre class="CodeRay highlight"><code data-lang="ruby">opts = {
+  <span class="string"><span class="delimiter">'</span><span class="content">node</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">nodeId</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">behavior</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">RELEASE</span><span class="delimiter">&quot;</span></span>
 }</code></pre>
 </div>
 </div>
@@ -1010,13 +1009,13 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.create_session_with_options(opts) { |res_err,res|
-  if (res_err == nil)
-    puts "Session successfully created"
-    puts "id: #{res}"
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.create_session_with_options(opts) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Session successfully created</span><span class="delimiter">&quot;</span></span>
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">id: </span><span class="inline"><span class="inline-delimiter">#{</span>res<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1025,12 +1024,12 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.destroy_session(sessionId) { |res_err,res|
-  if (res_err == nil)
-    puts "Session successfully destroyed"
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.destroy_session(sessionId) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Session successfully destroyed</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1039,16 +1038,16 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.list_node_sessions("nodeId") { |res_err,res|
-  if (res_err == nil)
-    res['list'].each do |session|
-      puts "Session id: #{session['id']}"
-      puts "Session node: #{session['node']}"
-      puts "Session create index: #{session['createIndex']}"
-    end
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.list_node_sessions(<span class="string"><span class="delimiter">&quot;</span><span class="content">nodeId</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    res[<span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>].each <span class="keyword">do</span> |session|
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Session id: </span><span class="inline"><span class="inline-delimiter">#{</span>session[<span class="string"><span class="delimiter">'</span><span class="content">id</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Session node: </span><span class="inline"><span class="inline-delimiter">#{</span>session[<span class="string"><span class="delimiter">'</span><span class="content">node</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Session create index: </span><span class="inline"><span class="inline-delimiter">#{</span>session[<span class="string"><span class="delimiter">'</span><span class="content">createIndex</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    <span class="keyword">end</span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1057,16 +1056,16 @@ This ID can be used with the KV store to acquire locks: advisory mechanisms for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">blockingOpts = {
-  'index' =&gt; lastIndex
+<pre class="CodeRay highlight"><code data-lang="ruby">blockingOpts = {
+  <span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span> =&gt; lastIndex
 }
 
 consulClient.list_sessions_with_options(blockingOpts) { |res_err,res|
-  if (res_err == nil)
-    puts "Found #{res['list'].length} sessions"
-  else
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Found </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>].length<span class="inline-delimiter">}</span></span><span class="content"> sessions</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1077,13 +1076,13 @@ consulClient.list_sessions_with_options(blockingOpts) { |res_err,res|
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">consulClient.catalog_nodes() { |res_err,res|
-  if (res_err == nil)
-    puts "found #{res['list'].length} nodes"
-    puts "consul state index #{res['index']}"
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.catalog_nodes() { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>].length<span class="inline-delimiter">}</span></span><span class="content"> nodes</span><span class="delimiter">&quot;</span></span>
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">consul state index </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1092,19 +1091,19 @@ consulClient.list_sessions_with_options(blockingOpts) { |res_err,res|
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">opts = {
-  'near' =&gt; "_agent",
-  'blockingOptions' =&gt; {
-    'index' =&gt; lastIndex
+<pre class="CodeRay highlight"><code data-lang="ruby">opts = {
+  <span class="string"><span class="delimiter">'</span><span class="content">near</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">_agent</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">blockingOptions</span><span class="delimiter">'</span></span> =&gt; {
+    <span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span> =&gt; lastIndex
   }
 }
 
 consulClient.catalog_nodes_with_options(opts) { |res_err,res|
-  if (res_err == nil)
-    puts "found #{res['list'].length} nodes"
-  else
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">found </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>].length<span class="inline-delimiter">}</span></span><span class="content"> nodes</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }</code></pre>
 </div>
 </div>
@@ -1120,13 +1119,13 @@ As an example, you could watch the status of health checks and notify when a che
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-ruby" data-lang="ruby">require 'vertx-consul/watch'
-VertxConsul::Watch.key("foo/bar", vertx).set_handler() { |res_err,res|
-  if (res_err == nil)
-    puts "value: #{res['value']}"
-  else
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-consul/watch</span><span class="delimiter">'</span></span>
+<span class="constant">VertxConsul</span>::<span class="constant">Watch</span>.key(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo/bar</span><span class="delimiter">&quot;</span></span>, vertx).set_handler() { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">value: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">value</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
     res_err.print_stack_trace()
-  end
+  <span class="keyword">end</span>
 }.start()</code></pre>
 </div>
 </div>
