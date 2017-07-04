@@ -8,6 +8,191 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>OpenAPI (fka Swagger) 3 support in Eclipse Vert.x now in test stage!</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;As GSoC 2017’s student, I’m actually working on an embedded support to OpenAPI 3 standard inside Eclipse Vert.x framework. Now, after a lot of work, you can try it!&lt;/p&gt;
+&lt;h2 id=&quot;why-openapi-3-&quot;&gt;Why OpenAPI 3?&lt;/h2&gt;
+&lt;p&gt;OpenAPI 2 is the most important industry-grade standard for API Specifications. As you can see on &lt;a href=&quot;https://www.openapis.org/blog/2017/05/25/the-open-api-initiative-is-sending-you-a-save-the-date-card?utm_source=Blog&amp;utm_medium=Twitter&amp;utm_campaign=SaveTheDate&quot;&gt;official blog of OpenAPI Initiative&lt;/a&gt;, the release of version 3 is behind the corner, so we want to give to our community the latest tools for the latest standards!&lt;/p&gt;
+&lt;p&gt;Vert.x project objective is to give you more integrated tools. With this new support, it gives you the ability to use the &lt;a href=&quot;https://swaggerhub.com/blog/api-design/design-first-or-code-first-api-development/&quot;&gt;Design Driven&lt;/a&gt; (or Design First) approach &lt;strong&gt;without loading any thirds parties libraries&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;features&quot;&gt;Features&lt;/h2&gt;
+&lt;p&gt;The actually supported features are the following (we refeer to document Version 3.0.0-rc2):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;OpenAPI 3 compliant API specification validation (thanks to &lt;a href=&quot;https://github.com/RepreZen/KaiZen-OpenApi-Parser&quot;&gt;Kaizen-OpenApi-Parser&lt;/a&gt;) with &lt;strong&gt;loading of external Json schemas&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Automatic request validation&lt;/li&gt;
+&lt;li&gt;Automatic mount of security validation handlers&lt;/li&gt;
+&lt;li&gt;Automatic 501 response for not implemented operations&lt;/li&gt;
+&lt;li&gt;Router factory to provide all this features to users&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Automatic request validation is provided by a new handler: &lt;code&gt;ValidationHandler&lt;/code&gt;. You can also define your own &lt;code&gt;ValidationHandler&lt;/code&gt; without API specifications, but I will discuss it later.&lt;/p&gt;
+&lt;p&gt;The request validation (provided by subclass &lt;code&gt;OpenAPI3RequestValidationHandler&lt;/code&gt;) actually supports:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Parameters defined in &lt;a href=&quot;https://github.com/OAI/OpenAPI-Specification/blob/OpenAPI.next/versions/3.0.md#parameter-object&quot;&gt;Parameter object&lt;/a&gt;. We support every type of parameter, including &lt;code&gt;object&lt;/code&gt; and &lt;code&gt;array&lt;/code&gt;. We also support every type description field (for example &lt;code&gt;format&lt;/code&gt;, &lt;code&gt;minimum&lt;/code&gt;, &lt;code&gt;maximum&lt;/code&gt;, etc). Also, at the moment, we support every combination of &lt;code&gt;style&lt;/code&gt; and &lt;code&gt;explode&lt;/code&gt; field (excluded styles &lt;code&gt;matrix&lt;/code&gt; and &lt;code&gt;label&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Body defined in new &lt;a href=&quot;https://github.com/OAI/OpenAPI-Specification/blob/OpenAPI.next/versions/3.0.md#request-body-object&quot;&gt;RequestBody object&lt;/a&gt;. In particular:&lt;ul&gt;
+&lt;li&gt;For &lt;code&gt;application/json&lt;/code&gt; the validation handler will take schema that you have defined in &lt;code&gt;schema&lt;/code&gt; object and will validate json bodies with it&lt;/li&gt;
+&lt;li&gt;For &lt;code&gt;application/x-www-form-urlencoded&lt;/code&gt; and &lt;code&gt;multipart/form-data&lt;/code&gt; the validation handler will take care of validate every parameters in form attributes. It actually supports only comma separated values for &lt;code&gt;object&lt;/code&gt; and &lt;code&gt;arrays&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;For other parameter types it will check &lt;code&gt;Content-Type&lt;/code&gt; header&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Request validation errors will be carried with &lt;code&gt;RoutingContext&lt;/code&gt; encapsulated in an object called &lt;code&gt;ValidationHandler&lt;/code&gt;, so you have to attach failure handler to check if something went wrong during validation. Also the &lt;code&gt;RoutingContext&lt;/code&gt; carry a new object called &lt;code&gt;RequestParameters&lt;/code&gt; that encapsulate all request parameters deserialized and parsed.&lt;/p&gt;
+&lt;p&gt;Router factory is intended to give you a really simple user interface to use OpenAPI 3 support. Most important features are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Async loading of specification and its schema dependencies&lt;/li&gt;
+&lt;li&gt;Automatic convert OpenAPI style paths to Vert.x style paths&lt;/li&gt;
+&lt;li&gt;Lazy methods: operations (combination of paths and HTTP methods) are mounted in definition order inside specification&lt;/li&gt;
+&lt;li&gt;Automatic mount of security validation handlers&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Also, it’s planned to release a &lt;strong&gt;project skeleton generator&lt;/strong&gt; based on API spec.&lt;/p&gt;
+&lt;h2 id=&quot;startup-your-project&quot;&gt;Startup your project&lt;/h2&gt;
+&lt;p&gt;We are in a testing stage, so the vertx-web official repo doesn’t contain it. To include the modified version of vertx-web replace your vertx-web maven dependency with this one:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;com.github.slinkydeveloper&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;vertx-web&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;89d6254d50&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;&lt;!-- Or &lt;version&gt;designdriven-SNAPSHOT&lt;/version&gt; for latest versions --&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+Then you have to add this maven repository in your `pom.xml`
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;repositories&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;repository&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;jitpack.io&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;id&lt;/span&gt;&gt;&lt;/span&gt;
+      &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;url&lt;/span&gt;&gt;&lt;/span&gt;https://jitpack.io&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;url&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;repository&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;repositories&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can also use it with &lt;a href=&quot;https://jitpack.io/#slinkydeveloper/vertx-web/designdriven-SNAPSHOT&quot;&gt;gradle&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Now you can start using OpenAPI 3 inside your Vert.x powered app!&lt;/p&gt;
+&lt;p&gt;First of all you need to load the specification and construct the router factory:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Load the api spec. This operation is asynchronous&lt;/span&gt;
+OpenAPI3RouterFactory.createRouterFactoryFromFile(&lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.vertx, &lt;span class=&quot;hljs-string&quot;&gt;&quot;src/main/resources/petstore.yaml&quot;&lt;/span&gt;, ar -&gt; {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar.succeeded()) {
+        &lt;span class=&quot;hljs-comment&quot;&gt;// Spec loaded with success&lt;/span&gt;
+        OpenAPI3RouterFactory routerFactory = ar.result();
+    } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+        &lt;span class=&quot;hljs-comment&quot;&gt;// Something went wrong during router factory initialization&lt;/span&gt;
+        Throwable exception = ar.cause();
+        logger.error(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Ops!&quot;&lt;/span&gt;, exception);
+    }
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;handlers-mounting&quot;&gt;Handlers mounting&lt;/h2&gt;
+&lt;p&gt;Now load your first path. There are two functions to load the handlers:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;addHandler(HttpMethod method, String path, Handler&lt;RoutingContext&gt; handler, Handler&lt;RoutingContext&gt; failureHandler)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;addHandlerByOperationId(String operationId, Handler&lt;RoutingContext&gt; handler, Handler&lt;RoutingContext&gt; failureHandler)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This two functions wants an handler and a failure handler. You can, of course, &lt;strong&gt;add multiple handlers to same operation&lt;/strong&gt;, without overwrite the existing ones.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block important&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-exclamation-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Add operations with operationId &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; Usage of combination of path and HTTP method is allowed, but it’s better to add operations handlers with operationId, for performance reasons and to avoid paths nomenclature errors&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;This is an example of &lt;code&gt;addHandlerByOperationId()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Add an handler with operationId&lt;/span&gt;
+routerFactory.addHandlerByOperationId(&lt;span class=&quot;hljs-string&quot;&gt;&quot;listPets&quot;&lt;/span&gt;, routingContext -&gt; {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Handle listPets operation (GET /pets)&lt;/span&gt;
+}, routingContext -&gt; {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Handle failure&lt;/span&gt;
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is an example of &lt;code&gt;addHandler&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Add an handler with a combination of HttpMethod and path&lt;/span&gt;
+routerFactory.addHandler(HttpMethod.POST, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/pets&quot;&lt;/span&gt;, routingContext -&gt; {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Handle /pets POST operation&lt;/span&gt;
+}, routingContext -&gt; {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Handle failure&lt;/span&gt;
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;request-parameters&quot;&gt;Request parameters&lt;/h2&gt;
+&lt;p&gt;Now you can freely use request parameters. To get the &lt;code&gt;RequestParameters&lt;/code&gt; object:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;RequestParameters params = routingContext.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;parsedParameters&quot;&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;RequestParameters&lt;/code&gt; object provides all methods to access to query, cookie, header, path, form and entire body parameters. Here are some examples of how to use this object.&lt;/p&gt;
+&lt;p&gt;Parameter with name &lt;code&gt;awesomeParameter&lt;/code&gt; with type &lt;code&gt;integer&lt;/code&gt; in &lt;code&gt;query&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;RequestParameter awesomeParameter = params.queryParameter(&lt;span class=&quot;hljs-string&quot;&gt;&quot;awesomeParameter&quot;&lt;/span&gt;);
+&lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (awesomeParameter != &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt;) {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// awesomeParameter parameter exists, but we are not sure that is empty or not (query parameters can be empty with allowEmptyValue: true)&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (!awesomeParameter.isEmpty()) {
+      &lt;span class=&quot;hljs-comment&quot;&gt;// Now we are sure that it exists and it&#39;s not empty, so we can extract it&lt;/span&gt;
+      Integer awesome = awesomeParameter.getInteger();
+    } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+      &lt;span class=&quot;hljs-comment&quot;&gt;// Parameter exists, but it&#39;s empty value&lt;/span&gt;
+    }
+} &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Parameter doesn&#39;t exist (it&#39;s not required)&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, every parameter is mapped in respective objects (&lt;code&gt;integer&lt;/code&gt; in &lt;code&gt;Integer&lt;/code&gt;, &lt;code&gt;integer&lt;/code&gt; with &lt;code&gt;format: int64&lt;/code&gt; in &lt;code&gt;Long&lt;/code&gt;, &lt;code&gt;float&lt;/code&gt; in &lt;code&gt;Float&lt;/code&gt; and so on)&lt;/p&gt;
+&lt;p&gt;Comma separated array with name &lt;code&gt;awesomeParameters&lt;/code&gt; with type &lt;code&gt;integer&lt;/code&gt; in &lt;code&gt;query&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;RequestParameter awesomeParameters = params.queryParameter(&lt;span class=&quot;hljs-string&quot;&gt;&quot;awesomeParameters&quot;&lt;/span&gt;);
+&lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (awesomeParameters != &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt; &amp;&amp; !awesomeParameters.isEmpty()) {
+    List&lt;RequestParameter&gt; awesomeList = awesomeParameters.getArray();
+    &lt;span class=&quot;hljs-keyword&quot;&gt;for&lt;/span&gt; (RequestParameter awesome : awesomeList) {
+      Integer a = awesome.getInteger();
+    }
+} &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+  &lt;span class=&quot;hljs-comment&quot;&gt;// awesomeParameters not found or empty string&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;JSON Body:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;RequestParameter body = params.body();
+&lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (body != &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt;)
+  JsonObject jsonBody = body.getJsonObject();&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;security-handling&quot;&gt;Security handling&lt;/h2&gt;
+&lt;p&gt;You can mount only one security handler for a combination of schema and scope.&lt;/p&gt;
+&lt;p&gt;To add a security handler only with a schema name:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;routerFactory.addSecurityHandler(&lt;span class=&quot;hljs-string&quot;&gt;&quot;security_scheme_name&quot;&lt;/span&gt;, routingContext -&gt; {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Handle security here and then call next()&lt;/span&gt;
+    routingContext.next();
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To add a security handler with a combination of schema name and scope:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;routerFactory.addSecuritySchemaScopeValidator(&lt;span class=&quot;hljs-string&quot;&gt;&quot;security_scheme_name&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;scope_name&quot;&lt;/span&gt;, routingContext -&gt; {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Handle security here and then call next()&lt;/span&gt;
+    routingContext.next();
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;You can define security handlers where you want but define it! &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; During Router instantiation, if factory finds a path that require a security schema without an assigned handler, It will throw a &lt;code&gt;RouterFactoryException&lt;/code&gt; &lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;h2 id=&quot;error-handling&quot;&gt;Error handling&lt;/h2&gt;
+&lt;p&gt;Every time you add an handler for an operation you can add a failure handler. To handle a &lt;code&gt;ValidationException&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;Throwable failure = routingContext.failure();
+&lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (failure &lt;span class=&quot;hljs-keyword&quot;&gt;instanceof&lt;/span&gt; ValidationException)
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Handle Validation Exception&lt;/span&gt;
+    routingContext.response().setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;400&lt;/span&gt;).setStatusMessage(&lt;span class=&quot;hljs-string&quot;&gt;&quot;ValidationError&quot;&lt;/span&gt;).end(failure.getMessage());&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Also the router factory provides two other tools:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It automatically mounts a 501 &lt;code&gt;Not Implemented&lt;/code&gt; handler for operations where you haven’t mounted any handler&lt;/li&gt;
+&lt;li&gt;It can load a default &lt;code&gt;ValidationException&lt;/code&gt; failure handler (You can enable this feature via &lt;code&gt;routerFactory.enableValidationFailureHandler(true)&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;and-now-use-it-&quot;&gt;And now use it!&lt;/h2&gt;
+&lt;p&gt;Now you are ready to generate the &lt;code&gt;Router&lt;/code&gt;!&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;Router router = routerFactory.getRouter();
+
+&lt;span class=&quot;hljs-comment&quot;&gt;// Now you can use your Router instance&lt;/span&gt;
+HttpServer server = vertx.createHttpServer(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; HttpServerOptions().setPort(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;).setHost(&lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;));
+server.requestHandler(router::accept).listen();&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Lazy methods! &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; &lt;code&gt;getRouter()&lt;/code&gt; generate the &lt;code&gt;Router&lt;/code&gt; object, so you don’t have to care about code definition order&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;h2 id=&quot;and-now-&quot;&gt;And now?&lt;/h2&gt;
+&lt;p&gt;You can find a complete example here: &lt;a href=&quot;https://gist.github.com/slinkydeveloper/bdf5929c2506988d78fc08205089409a&quot;&gt;OpenAPI 3 Vert.x example gists&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;You can access to documentation (WIP) &lt;a href=&quot;https://github.com/slinkydeveloper/vertx-web/blob/designdriven/vertx-web/src/main/asciidoc/java/index.adoc#openapi-3&quot;&gt;here&lt;/a&gt; (for others languages, check out &lt;a href=&quot;https://github.com/slinkydeveloper/vertx-web/tree/designdriven/vertx-web/src/main/asciidoc&quot;&gt;here&lt;/a&gt;), but you can also check Javadoc inside code. These are the most important ones:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/slinkydeveloper/vertx-web/blob/designdriven/vertx-web/src/main/java/io/vertx/ext/web/designdriven/DesignDrivenRouterFactory.java&quot;&gt;DesignDrivenRouterFactory (Base interface of OpenAPI3RouterFactory)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/slinkydeveloper/vertx-web/blob/designdriven/vertx-web/src/main/java/io/vertx/ext/web/designdriven/OpenAPI3RouterFactory.java&quot;&gt;OpenAPI3RouterFactory&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/slinkydeveloper/vertx-web/blob/designdriven/vertx-web/src/main/java/io/vertx/ext/web/RequestParameters.java&quot;&gt;RequestParameters (container of all parameters)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/slinkydeveloper/vertx-web/blob/designdriven/vertx-web/src/main/java/io/vertx/ext/web/RequestParameter.java&quot;&gt;RequestParameter (container of a parameter instance)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/slinkydeveloper/vertx-web/blob/designdriven/vertx-web/src/main/java/io/vertx/ext/web/validation/ValidationException.java&quot;&gt;ValidationException&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Follow &lt;a href=&quot;https://github.com/slinkydeveloper/vertx-web&quot;&gt;my fork of vertx-web project&lt;/a&gt; to get last updates.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block important&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-exclamation-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;We want you! &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; Please give us your feedback opening an issue &lt;a href=&quot;https://github.com/slinkydeveloper/vertx-web/issues&quot;&gt;here&lt;/a&gt; &lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Tue, 04 Jul 2017 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/openapi-fka-swagger-3-support-in-eclipse-vert-x-now-in-test-stage</link>
+          <guid isPermaLink="true">http://vertx.io/blog/openapi-fka-swagger-3-support-in-eclipse-vert-x-now-in-test-stage</guid>
+          <author>
+            <name>slinkydeveloper</name>
+            <uri>http://github.com/slinkydeveloper</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Preview of a guide for Java developers</title>
           <description>
       &lt;article&gt;&lt;p&gt;I could not attend the last Eclipse Vert.x community face-to-face meeting last fall, but one item that was discussed is the need for guides aimed at certain types of developers.
