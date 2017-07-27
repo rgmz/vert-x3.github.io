@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -103,6 +102,7 @@
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
 <li><a href="#_scenario_backing_up_to_github_gist">Scenario: backing up to GitHub Gist</a></li>
+<li><a href="#_updating_the_database_service">Updating the database service</a></li>
 <li><a href="#_the_web_client_api">The web client API</a></li>
 <li><a href="#_creating_anonymous_gists">Creating anonymous Gists</a></li>
 </ul>
@@ -113,6 +113,7 @@
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
 <li><a href="#_scenario_backing_up_to_github_gist">Scenario: backing up to GitHub Gist</a></li>
+<li><a href="#_updating_the_database_service">Updating the database service</a></li>
 <li><a href="#_the_web_client_api">The web client API</a></li>
 <li><a href="#_creating_anonymous_gists">Creating anonymous Gists</a></li>
 </ul>
@@ -177,6 +178,56 @@ We are going to leverage this feature to backup our wiki pages as Gists.</p>
 <div class="imageblock">
 <div class="content">
 <img src="images/images/gist.png" alt="gist">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_updating_the_database_service">Updating the database service</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before we dive into the web client API and perform HTTP requests to another service, we need to update the database service API to fetch all the wiki pages data in one pass.
+This corresponds to the following SQL query to add to <code>db-queries.properties</code>:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>all-pages-data=select * from Pages</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A new method is added to the <code>WikiDatabaseService</code> interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Fluent</span>
+WikiDatabaseService fetchAllPagesData(<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">List</span>&lt;JsonObject&gt;&gt;&gt; resultHandler);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The implementation in <code>WikiDatabaseServiceImpl</code> is the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Override</span>
+<span class="directive">public</span> WikiDatabaseService fetchAllPagesData(<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">List</span>&lt;JsonObject&gt;&gt;&gt; resultHandler) {
+  dbClient.getConnection(car -&gt; {
+    <span class="keyword">if</span> (car.succeeded()) {
+      SQLConnection connection = car.result();
+      connection.query(sqlQueries.get(SqlQuery.ALL_PAGES_DATA), queryResult -&gt; {
+        <span class="keyword">if</span> (queryResult.succeeded()) {
+          resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture(queryResult.result().getRows()));
+        } <span class="keyword">else</span> {
+          LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, queryResult.cause());
+          resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(queryResult.cause()));
+        }
+      });
+    } <span class="keyword">else</span> {
+      LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, car.cause());
+      resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(car.cause()));
+    }
+  });
+  <span class="keyword">return</span> <span class="local-variable">this</span>;
+}</code></pre>
 </div>
 </div>
 </div>
@@ -374,7 +425,7 @@ We override the default user agent with <code>vert-x3</code> but you may opt to 
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-26 09:34:44 CEST
+                Last updated 2017-07-27 11:46:46 CEST
               
               
             </div>

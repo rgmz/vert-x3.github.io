@@ -24,7 +24,7 @@
 
   <groupId>io.vertx</groupId>
   <artifactId>wiki-step-1</artifactId>
-  <version>1.0</version>
+  <version>1.0.1</version>
 
   <properties>
     <vertx.version>3.4.2</vertx.version>
@@ -77,6 +77,14 @@
     </dependency>
     <!-- end::db-deps[] -->
 
+    <!-- tag::logger[] -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
+    </dependency>
+    <!-- end::logger[] -->
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -99,6 +107,7 @@
           <configuration>
             <source>1.8</source>
             <target>1.8</target>
+            <useIncrementalCompilation>false</useIncrementalCompilation>
           </configuration>
         </plugin>
         <plugin>
@@ -149,6 +158,12 @@
         <version>1.5.0</version>
         <configuration>
           <mainClass>io.vertx.core.Launcher</mainClass>
+          <systemProperties>
+            <systemProperty>
+              <key>hsqldb.reconfig_logging</key>
+              <value>false</value>
+            </systemProperty>
+          </systemProperties>
           <arguments>
             <argument>run</argument>
             <argument>${main.verticle}</argument>

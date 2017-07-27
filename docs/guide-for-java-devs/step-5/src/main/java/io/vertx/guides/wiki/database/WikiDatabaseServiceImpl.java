@@ -22,8 +22,8 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.sql.ResultSet;
 import io.vertx.ext.sql.SQLConnection;
@@ -196,6 +196,7 @@ class WikiDatabaseServiceImpl implements WikiDatabaseService {
     return this;
   }
 
+  // tag::fetchAllPagesData[]
   @Override
   public WikiDatabaseService fetchAllPagesData(Handler<AsyncResult<List<JsonObject>>> resultHandler) {
     dbClient.getConnection(car -> {
@@ -216,4 +217,5 @@ class WikiDatabaseServiceImpl implements WikiDatabaseService {
     });
     return this;
   }
+  // end::fetchAllPagesData[]
 }

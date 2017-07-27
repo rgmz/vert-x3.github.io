@@ -25,8 +25,8 @@ import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import io.vertx.core.net.JksOptions;
 import io.vertx.ext.auth.AuthProvider;
 import io.vertx.ext.auth.User;
@@ -356,7 +356,7 @@ public class HttpServerVerticle extends AbstractVerticle {
           context.put("pages", reply.result().getList());
           context.put("canCreatePage", canCreatePage);  // <3>
           context.put("username", context.user().principal().getString("username"));  // <4>
-          templateEngine.render(context, "templates/index.ftl", ar -> {
+          templateEngine.render(context, "templates", "/index.ftl", ar -> {
             if (ar.succeeded()) {
               context.response().putHeader("Content-Type", "text/html");
               context.response().end(ar.result());
@@ -395,7 +395,7 @@ public class HttpServerVerticle extends AbstractVerticle {
             context.put("canSavePage", canSavePage);
             context.put("canDeletePage", canDeletePage);
 
-            templateEngine.render(context, "templates/page.ftl", ar -> {
+            templateEngine.render(context, "templates", "/page.ftl", ar -> {
               if (ar.succeeded()) {
                 context.response().putHeader("Content-Type", "text/html");
                 context.response().end(ar.result());

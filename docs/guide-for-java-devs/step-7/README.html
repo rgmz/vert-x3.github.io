@@ -95,7 +95,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -293,11 +292,6 @@ The Vert.x Shiro integration has some issues due to the inner workings of Apache
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-auth-shiro<span class="tag">&lt;/artifactId&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span>
-<span class="tag">&lt;dependency&gt;</span>
-  <span class="tag">&lt;groupId&gt;</span>org.slf4j<span class="tag">&lt;/groupId&gt;</span>
-  <span class="tag">&lt;artifactId&gt;</span>slf4j-api<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>1.7.21<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -482,7 +476,7 @@ Here is how this is implemented for the <code>indexHandler</code> handler method
         context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">pages</span><span class="delimiter">&quot;</span></span>, reply.result().getList());
         context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">canCreatePage</span><span class="delimiter">&quot;</span></span>, canCreatePage);  <b class="conum">(3)</b>
         context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, context.user().principal().getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>));  <b class="conum">(4)</b>
-        templateEngine.render(context, <span class="string"><span class="delimiter">&quot;</span><span class="content">templates/index.ftl</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
+        templateEngine.render(context, <span class="string"><span class="delimiter">&quot;</span><span class="content">templates</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/index.ftl</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
           <span class="keyword">if</span> (ar.succeeded()) {
             context.response().putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Content-Type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/html</span><span class="delimiter">&quot;</span></span>);
             context.response().end(ar.result());
@@ -946,7 +940,7 @@ postRequest.compose(h -&gt; {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-26 09:34:44 CEST
+                Last updated 2017-07-27 11:46:46 CEST
               
               
             </div>

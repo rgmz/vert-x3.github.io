@@ -23,8 +23,8 @@ import io.vertx.core.Future;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -38,10 +38,10 @@ import java.util.Date;
 // tag::start[]
 public class HttpServerVerticle extends AbstractVerticle {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(HttpServerVerticle.class);  
+  private static final Logger LOGGER = LoggerFactory.getLogger(HttpServerVerticle.class);
 
   public static final String CONFIG_HTTP_SERVER_PORT = "http.server.port";  // <1>
-  public static final String CONFIG_WIKIDB_QUEUE = "wikidb.queue";  
+  public static final String CONFIG_WIKIDB_QUEUE = "wikidb.queue";
 
   private String wikiDbQueue = "wikidb.queue";
 
@@ -78,7 +78,7 @@ public class HttpServerVerticle extends AbstractVerticle {
   // end::start[]
 
   // tag::indexHandler[]
-  private final FreeMarkerTemplateEngine templateEngine = FreeMarkerTemplateEngine.create();  
+  private final FreeMarkerTemplateEngine templateEngine = FreeMarkerTemplateEngine.create();
 
   private void indexHandler(RoutingContext context) {
 
@@ -89,7 +89,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         JsonObject body = (JsonObject) reply.result().body();   // <3>
         context.put("title", "Wiki home");
         context.put("pages", body.getJsonArray("pages").getList());
-        templateEngine.render(context, "templates/index.ftl", ar -> {
+        templateEngine.render(context, "templates", "/index.ftl", ar -> {
           if (ar.succeeded()) {
             context.response().putHeader("Content-Type", "text/html");
             context.response().end(ar.result());
@@ -130,7 +130,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         context.put("content", Processor.process(rawContent));
         context.put("timestamp", new Date().toString());
 
-        templateEngine.render(context, "templates/page.ftl", ar -> {
+        templateEngine.render(context, "templates","/page.ftl", ar -> {
           if (ar.succeeded()) {
             context.response().putHeader("Content-Type", "text/html");
             context.response().end(ar.result());

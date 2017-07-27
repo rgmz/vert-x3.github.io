@@ -23,14 +23,14 @@ import io.vertx.core.Future;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.sql.SQLConnection;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.templ.FreeMarkerTemplateEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.List;
@@ -172,7 +172,7 @@ public class MainVerticle extends AbstractVerticle {
 
             context.put("title", "Wiki home");  // <2>
             context.put("pages", pages);
-            templateEngine.render(context, "templates/index.ftl", ar -> {   // <3>
+            templateEngine.render(context, "templates", "/index.ftl", ar -> {   // <3>
               if (ar.succeeded()) {
                 context.response().putHeader("Content-Type", "text/html");
                 context.response().end(ar.result());  // <4>
@@ -257,7 +257,7 @@ public class MainVerticle extends AbstractVerticle {
             context.put("content", Processor.process(rawContent));  // <3>
             context.put("timestamp", new Date().toString());
 
-            templateEngine.render(context, "templates/page.ftl", ar -> {
+            templateEngine.render(context, "templates", "/page.ftl", ar -> {
               if (ar.succeeded()) {
                 context.response().putHeader("Content-Type", "text/html");
                 context.response().end(ar.result());

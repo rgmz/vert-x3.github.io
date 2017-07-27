@@ -22,8 +22,8 @@ import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import io.vertx.core.net.JksOptions;
 import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.ext.auth.shiro.ShiroAuthOptions;
@@ -305,7 +305,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         context.put("title", "Wiki home");
         context.put("pages", result.getList());
         context.put("username", context.user().principal().getString("username"));
-        return templateEngine.rxRender(context, "templates/index.ftl");
+        return templateEngine.rxRender(context, "templates", "/index.ftl");
       })
       .subscribe(markup -> {
         context.response().putHeader("Content-Type", "text/html");
@@ -335,7 +335,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         context.put("content", Processor.process(rawContent));
         context.put("timestamp", new Date().toString());
         context.put("username", user.principal().getString("username"));
-        return templateEngine.rxRender(context, "templates/page.ftl");
+        return templateEngine.rxRender(context, "templates", "/page.ftl");
       })
       .subscribe(
         markup -> {
