@@ -8,6 +8,114 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Vert.x 3.5.0.Beta1 -</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;it’s summer time and we have just released Vert.x 3.5.0.Beta1!&lt;/p&gt;
+&lt;h3 id=&quot;let-s-go-rxjava2&quot;&gt;Let’s go RxJava2&lt;/h3&gt;
+&lt;p&gt;First and foremost this release delivers the RxJava2 API with support of its full range of types.&lt;/p&gt;
+&lt;p&gt;In addition of &lt;code&gt;Single&lt;/code&gt;, Rxified APIs expose also the&lt;code&gt;Completable&lt;/code&gt; and &lt;code&gt;Maybe&lt;/code&gt; types&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;// expose &lt;span class=&quot;hljs-type&quot;&gt;Handler&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;AsyncResult&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;Void&lt;/span&gt;&gt;&gt;
+&lt;span class=&quot;hljs-type&quot;&gt;Completable&lt;/span&gt; completable = server.rxClose();
+
+completable.subscribe(() -&gt; &lt;span class=&quot;hljs-type&quot;&gt;System&lt;/span&gt;.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;closed&quot;&lt;/span&gt;));
+
+// expose &lt;span class=&quot;hljs-type&quot;&gt;Handler&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;AsyncResult&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;String&lt;/span&gt;&gt;&gt; where the &lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt; can be null
+&lt;span class=&quot;hljs-type&quot;&gt;Maybe&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;String&lt;/span&gt;&gt; ipAddress = dnsClient.rxLookup(&lt;span class=&quot;hljs-string&quot;&gt;&quot;www.google.com&quot;&lt;/span&gt;);
+ipAddress.subscribe(
+  value -&gt; &lt;span class=&quot;hljs-type&quot;&gt;System&lt;/span&gt;.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;resolved to &quot;&lt;/span&gt; + value),
+  err -&gt; err.printStackTrace(),
+  () -&gt; &lt;span class=&quot;hljs-type&quot;&gt;System&lt;/span&gt;.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;does not resolve&quot;&lt;/span&gt;));&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;RxJava augments Vert.x streams with a &lt;code&gt;toObservable()&lt;/code&gt; method, RxJava2 adds the &lt;code&gt;toFlowable()&lt;/code&gt; method:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-prompt&quot;&gt;// Flowable&lt;Buffer&gt;&lt;/span&gt; maps to a &lt;span class=&quot;hljs-constant&quot;&gt;ReadStream&lt;/span&gt;&lt;&lt;span class=&quot;hljs-constant&quot;&gt;Buffer&lt;/span&gt;&gt;
+&lt;span class=&quot;hljs-regexp&quot;&gt;//&lt;/span&gt; back-pressured stream
+&lt;span class=&quot;hljs-prompt&quot;&gt;Flowable&lt;Buffer&gt;&lt;/span&gt; flowable = asyncFile.toFlowable();
+
+&lt;span class=&quot;hljs-regexp&quot;&gt;//&lt;/span&gt; but we still can get an &lt;span class=&quot;hljs-constant&quot;&gt;Observable&lt;/span&gt;&lt;&lt;span class=&quot;hljs-constant&quot;&gt;Buffer&lt;/span&gt;&gt;
+&lt;span class=&quot;hljs-regexp&quot;&gt;//&lt;/span&gt; non back-pressured stream
+&lt;span class=&quot;hljs-prompt&quot;&gt;Observable&lt;Buffer&gt;&lt;/span&gt; flowable = asyncFile.toObservable();&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What’s so different between &lt;code&gt;Flowable&lt;/code&gt; and &lt;code&gt;Observable&lt;/code&gt; ? the former handles back-pressure, i.e the
+subscriber can control the flow of items and the later can not!!!&lt;/p&gt;
+&lt;p&gt;You can read the documentation in the beta section of the &lt;a href=&quot;http://vertx.io/docs/3.5.0.Beta1/vertx-rx/java2/&quot;&gt;docs&lt;/a&gt;
+or go straight to the &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/3.5.0.beta1/rxjava2-examples&quot;&gt;examples&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;mqtt-client&quot;&gt;MQTT Client&lt;/h3&gt;
+&lt;p&gt;In Vert.x 3.4 we added the MQTT server, 3.5 completes the MQTT story with the MQTT client:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;MqttClient mqttClient = MqttClient.create(vertx,
+   &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; MqttClientOptions()
+     .setPort(BROKER_PORT)
+     .setHost(BROKER_HOST)).connect(ar -&gt;
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar.succeeded()) {
+    System.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Connected to a server&quot;&lt;/span&gt;);
+
+    mqttClient.publish(
+      MQTT_TOPIC,
+      Buffer.buffer(MQTT_MESSAGE),
+      MqttQoS.AT_MOST_ONCE,
+      &lt;span class=&quot;hljs-keyword&quot;&gt;false&lt;/span&gt;,
+      &lt;span class=&quot;hljs-keyword&quot;&gt;false&lt;/span&gt;,
+      s -&gt; mqttClient.disconnect(d -&gt; System.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Disconnected from server&quot;&lt;/span&gt;)));
+  } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+    System.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Failed to connect to a server&quot;&lt;/span&gt;);
+    ar.cause().printStackTrace();
+  }
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can find MQTT client and server examples &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/3.5.0.beta1/mqtt-examples&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;auth-handler-chaining&quot;&gt;Auth handler chaining&lt;/h3&gt;
+&lt;p&gt;There are times when you want to support multiple authN/authZ mechanisms in a single application.&lt;/p&gt;
+&lt;p&gt;Vert.x Web supports auth handlers &lt;a href=&quot;http://vertx.io/docs/3.5.0.Beta1/vertx-web/java/#_chaining_multiple_auth_handlers&quot;&gt;chaining&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;ChainAuthHandler chain = ChainAuthHandler.create();
+
+&lt;span class=&quot;hljs-comment&quot;&gt;// add http basic auth handler to the chain&lt;/span&gt;
+chain.&lt;span class=&quot;hljs-built_in&quot;&gt;append&lt;/span&gt;(BasicAuthHandler.create(provider));
+
+&lt;span class=&quot;hljs-comment&quot;&gt;// add form redirect auth handler to the chain&lt;/span&gt;
+chain.&lt;span class=&quot;hljs-built_in&quot;&gt;append&lt;/span&gt;(RedirectAuthHandler.create(provider));
+
+&lt;span class=&quot;hljs-comment&quot;&gt;// secure your route&lt;/span&gt;
+router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/secure/resource&quot;&lt;/span&gt;).handler(chain);
+
+&lt;span class=&quot;hljs-comment&quot;&gt;// your app&lt;/span&gt;
+router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/secure/resource&quot;&lt;/span&gt;).handler(ctx -&gt; {
+  &lt;span class=&quot;hljs-comment&quot;&gt;// do something...&lt;/span&gt;
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;finally&quot;&gt;Finally&lt;/h3&gt;
+&lt;p&gt;this beta also provides&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Vert.x Config stores for Vault and Consul&lt;/li&gt;
+&lt;li&gt;Upgrade to Hazelcast 3.8.2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;use-it-&quot;&gt;Use it!&lt;/h3&gt;
+&lt;p&gt;You can use and consume it in your projects from Maven or Gradle as usual with the version &lt;code&gt;3.5.0.Beta1&lt;/code&gt; or read&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;the &lt;a href=&quot;http://vertx.io/docs/index-beta.html&quot;&gt;documentation preview&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;see the &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/3.5.0.beta1&quot;&gt;examples&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You can also download various binaries from Maven Central:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://search.maven.org/remotecontent?filepath=io/vertx/vertx-stack-manager/3.5.0.Beta1/vertx-stack-manager-3.5.0.Beta1.tar.gz&quot;&gt;base distrib&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://search.maven.org/remotecontent?filepath=io/vertx/vertx-stack-manager/3.5.0.Beta1/vertx-stack-manager-3.5.0.Beta1-full.tar.gz&quot;&gt;full distrib&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://search.maven.org/remotecontent?filepath=io/vertx/vertx-stack-manager/3.5.0.Beta1/vertx-stack-manager-3.5.0.Beta1-docs.zip&quot;&gt;docs zip&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://search.maven.org/remotecontent?filepath=io/vertx/vertx-stack-manager/3.5.0.Beta1/vertx-stack-manager-3.5.0.Beta1-stack-scala.tar.gz&quot;&gt;scala distrib&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;as usual feedback is very important to us and one goal of this beta release is to let the community
+provide early feedback!&lt;/p&gt;
+&lt;p&gt;The final is expected at the beginning of October.&lt;/p&gt;
+&lt;p&gt;Enjoy&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Fri, 10 Aug 2018 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/vert-x-3-5-0-beta1</link>
+          <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-5-0-beta1</guid>
+          <author>
+            <name>vietj</name>
+            <uri>http://github.com/vietj</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>OpenAPI (fka Swagger) 3 support in Eclipse Vert.x now in test stage!</title>
           <description>
       &lt;article&gt;&lt;p&gt;As GSoC 2017’s student, I’m actually working on an embedded support to OpenAPI 3 standard inside Eclipse Vert.x framework. Now, after a lot of work, you can try it!&lt;/p&gt;
