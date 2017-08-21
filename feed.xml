@@ -8,6 +8,84 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Introducing Vert.x MQTT client?</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;In this article we will see how to sett up the new Vert.x MQTT client. Actually, I have a &lt;a href=&quot;https://github.com/Sammers21/vertx-mqtt-client-example&quot;&gt;real example&lt;/a&gt; so you can try it quickly.&lt;/p&gt;
+&lt;p&gt;If you are using Maven or Gradle, add the following dependency to the dependencies section of your project descriptor to access the Vert.x MQTT client:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Maven (in your pom.xml):&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.vertx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;vertx-mqtt&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;3.5.0.Beta1&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Gradle (in your build.gradle file):&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs groovy&quot;&gt;dependencies {
+  compile &lt;span class=&quot;hljs-string&quot;&gt;&#39;io.vertx:vertx-mqtt:3.5.0.Beta1&#39;&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now that you’ve set up your project, you can create a simple application which will receive all messages from all broker channels:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.core.AbstractVerticle;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.mqtt.MqttClient;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.mqtt.MqttClientOptions;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; java.io.UnsupportedEncodingException;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;MainVerticle&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+     MqttClientOptions options = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; MqttClientOptions();
+      &lt;span class=&quot;hljs-comment&quot;&gt;// specify broker host&lt;/span&gt;
+      options.setHost(&lt;span class=&quot;hljs-string&quot;&gt;&quot;iot.eclipse.org&quot;&lt;/span&gt;);
+      &lt;span class=&quot;hljs-comment&quot;&gt;// specify max size of message in bytes&lt;/span&gt;
+      options.setMaxMessageSize(&lt;span class=&quot;hljs-number&quot;&gt;100&lt;/span&gt;_000_000);
+
+    MqttClient client = MqttClient.create(vertx, options);
+
+    client.publishHandler(s -&gt; {
+      &lt;span class=&quot;hljs-keyword&quot;&gt;try&lt;/span&gt; {
+        String message = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; String(s.payload().getBytes(), &lt;span class=&quot;hljs-string&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;);
+        System.out.println(String.format(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Receive message with content: \&quot;%s\&quot; from topic \&quot;%s\&quot;&quot;&lt;/span&gt;, message, s.topicName()));
+      } &lt;span class=&quot;hljs-keyword&quot;&gt;catch&lt;/span&gt; (UnsupportedEncodingException e) {
+        e.printStackTrace();
+      }
+    });
+
+    client.connect(s -&gt; {
+      &lt;span class=&quot;hljs-comment&quot;&gt;// subscribe to all subtopics&lt;/span&gt;
+      client.subscribe(&lt;span class=&quot;hljs-string&quot;&gt;&quot;#&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;);
+    });
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;strong&gt;publishHandler&lt;/strong&gt; is the handler called each time the broker, located at &lt;code&gt;iot.eclipse.org:1883&lt;/code&gt;, sends a message to you, from the topics you are subscribing for.&lt;/p&gt;
+&lt;p&gt;But only providing a handler is not enough, you should also connect to the broker and subscribe to some topics. For this reason, you should use the &lt;strong&gt;connect&lt;/strong&gt; method and then call &lt;strong&gt;subscribe&lt;/strong&gt; when the connection established. &lt;/p&gt;
+&lt;p&gt;To deploy this verticle from an application you should have in your &lt;strong&gt;main&lt;/strong&gt; method something like that:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;Vertx vertx = Vertx.vertx();
+vertx.deployVerticle(MainVerticle.class.getCanonicalName());&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When you have completed all steps correctly the result should look like that:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://i.imgur.com/b4yYQJE.gif&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;As the alternative and recommended way to bootstrap Vert.x applications you can use &lt;a href=&quot;https://github.com/vert-x3/vertx-maven-starter&quot;&gt;vertx-maven-starter&lt;/a&gt; or &lt;a href=&quot;https://github.com/vert-x3/vertx-gradle-starter&quot;&gt;vertx-gradle-starter&lt;/a&gt;. For completing this guide I have used the first one. The final source code available &lt;a href=&quot;https://github.com/Sammers21/vertx-mqtt-client-example&quot;&gt;here&lt;/a&gt;. If you would like to learn more about Vert.x MQTT client API then check out the &lt;a href=&quot;https://github.com/vert-x3/vertx-mqtt-client/blob/initial-work/src/main/asciidoc/java/index.adoc&quot;&gt;full documentation&lt;/a&gt; and &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/3.5.0.beta1/mqtt-examples&quot;&gt;more examples&lt;/a&gt;. &lt;/p&gt;
+&lt;p&gt;Thank you for reading!&lt;/p&gt;
+&lt;p&gt;Cheers!&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 21 Aug 2017 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/introducing-vert-x-mqtt-client</link>
+          <guid isPermaLink="true">http://vertx.io/blog/introducing-vert-x-mqtt-client</guid>
+          <author>
+            <name>sammers21</name>
+            <uri>http://github.com/sammers21</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Vert.x 3.5.0.Beta1</title>
           <description>
       &lt;article&gt;&lt;p&gt;it’s summer time and we have just released Vert.x 3.5.0.Beta1!&lt;/p&gt;
