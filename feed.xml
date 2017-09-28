@@ -8,6 +8,150 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>An Eclipse Vert.x Gradle Plugin</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;Eclipse Vert.x is a versatile toolkit, and as such it does not have any strong opinion on the tools that you should be using.&lt;/p&gt;
+&lt;p&gt;Gradle is a popular build tool in the JVM ecosystem, and it is quite easy to use for building Vert.x project as &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/blob/master/gradle-verticles/gradle-verticle/build.gradle&quot;&gt;show in one of the &lt;code&gt;vertx-examples&lt;/code&gt; samples&lt;/a&gt; where a so-called &lt;em&gt;fat Jar&lt;/em&gt; is being produced.&lt;/p&gt;
+&lt;p&gt;The new &lt;a href=&quot;https://plugins.gradle.org/plugin/io.vertx.vertx-plugin&quot;&gt;Vert.x Gradle plugin&lt;/a&gt; offers an &lt;em&gt;opinionated&lt;/em&gt; plugin for building Vert.x applications with Gradle.&lt;/p&gt;
+&lt;p&gt;It automatically applies the following plugins:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;java&lt;/code&gt; (and sets the source compatibility to Java 8),&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;application&lt;/code&gt; + &lt;code&gt;shadow&lt;/code&gt; to generate fat Jars with all dependencies bundled,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;nebula-dependency-recommender-plugin&lt;/code&gt; so that you can omit versions from modules from the the Vert.x stack.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The plugin automatically adds &lt;code&gt;io.vertx:vertx-core&lt;/code&gt; as a &lt;code&gt;compile&lt;/code&gt; dependency, so you don’t need to do it.&lt;/p&gt;
+&lt;p&gt;The plugin provides a &lt;code&gt;vertxRun&lt;/code&gt; task that can take advantage of the Vert.x auto-reloading capabilities, so you can just run it then have your code being automatically compiled and reloaded as you make changes.&lt;/p&gt;
+&lt;h2 id=&quot;getting-started&quot;&gt;Getting started&lt;/h2&gt;
+&lt;p&gt;A minimal &lt;code&gt;build.gradle&lt;/code&gt; looks like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs groovy&quot;&gt;plugins {
+  id &lt;span class=&quot;hljs-string&quot;&gt;&#39;io.vertx.vertx-plugin&#39;&lt;/span&gt; version &lt;span class=&quot;hljs-string&quot;&gt;&#39;0.0.4&#39;&lt;/span&gt;
+}
+
+repositories {
+  jcenter()
+}
+
+vertx {
+  mainVerticle = &lt;span class=&quot;hljs-string&quot;&gt;&#39;sample.App&#39;&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Provided &lt;code&gt;sample.App&lt;/code&gt; is a Vert.x verticle, then:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;gradle shadowJar&lt;/code&gt; builds an executable Jar with all dependencies: &lt;code&gt;java -jar build/libs/simple-project-fat.jar&lt;/code&gt;, and&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gradle vertxRun&lt;/code&gt; starts the application and automatically recompiles (&lt;code&gt;gradle classes&lt;/code&gt;) and reloads the code when any file under &lt;code&gt;src/&lt;/code&gt; is being added, modified or deleted.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;using-with-kotlin-or-groovy-or-&quot;&gt;Using with Kotlin (or Groovy, or…)&lt;/h2&gt;
+&lt;p&gt;The plugin integrates well with plugins that add configurations and tasks triggered by the &lt;code&gt;classes&lt;/code&gt; task.&lt;/p&gt;
+&lt;p&gt;Here is how to use the plugin with Kotlin (replace the version numbers with the latest ones…):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs groovy&quot;&gt;plugins {
+  id &lt;span class=&quot;hljs-string&quot;&gt;&#39;io.vertx.vertx-plugin&#39;&lt;/span&gt; version &lt;span class=&quot;hljs-string&quot;&gt;&#39;x.y.z&#39;&lt;/span&gt;
+  id &lt;span class=&quot;hljs-string&quot;&gt;&#39;org.jetbrains.kotlin.jvm&#39;&lt;/span&gt; version &lt;span class=&quot;hljs-string&quot;&gt;&#39;a.b.c&#39;&lt;/span&gt;
+}
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+  compile &lt;span class=&quot;hljs-string&quot;&gt;&#39;io.vertx:vertx-lang-kotlin&#39;&lt;/span&gt;
+  compile &lt;span class=&quot;hljs-string&quot;&gt;&#39;org.jetbrains.kotlin:kotlin-stdlib-jre8&#39;&lt;/span&gt;
+}
+
+vertx {
+  mainVerticle = &lt;span class=&quot;hljs-string&quot;&gt;&quot;sample.MainVerticle&quot;&lt;/span&gt;
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+  kotlinOptions {
+    jvmTarget = &lt;span class=&quot;hljs-string&quot;&gt;&quot;1.8&quot;&lt;/span&gt;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;using-with-webpack-or-any-other-custom-task-&quot;&gt;Using with WebPack (or any other custom task)&lt;/h2&gt;
+&lt;p&gt;WebPack is popular to bundle web assets, and there is even &lt;a href=&quot;https://guides.gradle.org/running-webpack-with-gradle/&quot;&gt;a guide for its integration with Gradle&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Mixing the Vert.x Gradle plugin with WebPack is very simple, especially in combination with the &lt;code&gt;com.moowork.node&lt;/code&gt; plugin that integrates Node into Gradle.&lt;/p&gt;
+&lt;p&gt;Suppose we want to mix Vert.x code and JavaScript with Gradle and WebPack.
+We assume a &lt;code&gt;package.json&lt;/code&gt; as:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;{
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;webpack-sample&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;version&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;0.0.1&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;A sample with Vert.x, Gradle and Webpack&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;main&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;src/main/webapp/index.js&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;scripts&quot;&lt;/span&gt;: {
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;test&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;&lt;/span&gt;
+  },
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;author&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;license&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;ISC&quot;&lt;/span&gt;,
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;devDependencies&quot;&lt;/span&gt;: {
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;webpack&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;^2.7.0&quot;&lt;/span&gt;
+  },
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;dependencies&quot;&lt;/span&gt;: {
+    &lt;span class=&quot;hljs-string&quot;&gt;&quot;axios&quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&quot;^0.16.2&quot;&lt;/span&gt;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and &lt;code&gt;webpack.config.js&lt;/code&gt; as:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs javascript&quot;&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;module&lt;/span&gt;.exports = {
+  entry: &lt;span class=&quot;hljs-string&quot;&gt;&#39;./src/main/webapp/index.js&#39;&lt;/span&gt;,
+  output: {
+    filename: &lt;span class=&quot;hljs-string&quot;&gt;&#39;./build/resources/main/webroot/bundle.js&#39;&lt;/span&gt;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;build.gradle&lt;/code&gt; file is the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs groovy&quot;&gt;plugins {
+  id &lt;span class=&quot;hljs-string&quot;&gt;&#39;io.vertx.vertx-plugin&#39;&lt;/span&gt; version &lt;span class=&quot;hljs-string&quot;&gt;&#39;0.0.4&#39;&lt;/span&gt;
+  id &lt;span class=&quot;hljs-string&quot;&gt;&#39;com.moowork.node&#39;&lt;/span&gt; version &lt;span class=&quot;hljs-string&quot;&gt;&#39;1.2.0&#39;&lt;/span&gt;
+}
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+  compile &lt;span class=&quot;hljs-string&quot;&gt;&quot;io.vertx:vertx-web&quot;&lt;/span&gt;
+}
+
+vertx {
+  mainVerticle = &lt;span class=&quot;hljs-string&quot;&gt;&quot;sample.MainVerticle&quot;&lt;/span&gt;
+  watch = [&lt;span class=&quot;hljs-string&quot;&gt;&quot;src/**/*&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;build.gradle&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;yarn.lock&quot;&lt;/span&gt;]
+  onRedeploy = [&lt;span class=&quot;hljs-string&quot;&gt;&quot;classes&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;webpack&quot;&lt;/span&gt;]
+}
+
+task webpack(&lt;span class=&quot;hljs-string&quot;&gt;type:&lt;/span&gt; Exec) {
+  inputs.file(&lt;span class=&quot;hljs-string&quot;&gt;&quot;$projectDir/yarn.lock&quot;&lt;/span&gt;)
+  inputs.file(&lt;span class=&quot;hljs-string&quot;&gt;&quot;$projectDir/webpack.config.js&quot;&lt;/span&gt;)
+  inputs.dir(&lt;span class=&quot;hljs-string&quot;&gt;&quot;$projectDir/src/main/webapp&quot;&lt;/span&gt;)
+  outputs.dir(&lt;span class=&quot;hljs-string&quot;&gt;&quot;$buildDir/resources/main/webroot&quot;&lt;/span&gt;)
+  commandLine &lt;span class=&quot;hljs-string&quot;&gt;&quot;$projectDir/node_modules/.bin/webpack&quot;&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This custom build exposes a &lt;code&gt;webpack&lt;/code&gt; task that invokes WebPack, with proper file tracking so that Gradle knows when the task is up-to-date or not.&lt;/p&gt;
+&lt;p&gt;The Node plugin adds many tasks, and integrates fine with &lt;code&gt;npm&lt;/code&gt; or &lt;code&gt;yarn&lt;/code&gt;, so fetching all NPM dependencies is done by calling &lt;code&gt;./gradlew yarn&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;vertxRun&lt;/code&gt; task now redeploys on modifications to files in &lt;code&gt;src/&lt;/code&gt; (and sub-folders), &lt;code&gt;build.gradle&lt;/code&gt; and &lt;code&gt;yarn.lock&lt;/code&gt;, calling both the &lt;code&gt;classes&lt;/code&gt; and &lt;code&gt;webpack&lt;/code&gt; tasks:&lt;/p&gt;
+&lt;iframe width=&quot;872&quot; height=&quot;602&quot; src=&quot;https://www.youtube.com/embed/OGy-1w8Z6Dc?rel=0&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
+&lt;p&gt;The Vert.x Gradle plugin provides lots of defaults to configure a Gradle project for Vert.x applications, producing &lt;em&gt;fat Jars&lt;/em&gt; and offering a running task with automatic redeployment.
+The plugin also integrates well with other plugins and external tools for which a Gradle task is available.&lt;/p&gt;
+&lt;p&gt;The project is still in its early stages and we are looking forward to hearing from you!&lt;/p&gt;
+&lt;h3 id=&quot;links&quot;&gt;Links&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jponge/vertx-gradle-plugin&quot;&gt;The project on GitHub&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://plugins.gradle.org/plugin/io.vertx.vertx-plugin&quot;&gt;The plugin on the Gradle plugins portal&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Thu, 28 Sep 2017 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/an-eclipse-vert-x-gradle-plugin</link>
+          <guid isPermaLink="true">http://vertx.io/blog/an-eclipse-vert-x-gradle-plugin</guid>
+          <author>
+            <name>jponge</name>
+            <uri>http://github.com/jponge</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Introducing Vert.x MQTT client</title>
           <description>
       &lt;article&gt;&lt;p&gt;In this article we will see how to sett up the new Vert.x MQTT client. Actually, I have a &lt;a href=&quot;https://github.com/Sammers21/vertx-mqtt-client-example&quot;&gt;real example&lt;/a&gt; so you can try it quickly.&lt;/p&gt;
