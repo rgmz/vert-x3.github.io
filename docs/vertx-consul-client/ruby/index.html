@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -127,6 +128,7 @@
 <li><a href="#_events">Events</a></li>
 <li><a href="#_sessions">Sessions</a></li>
 <li><a href="#_nodes_in_datacenter">Nodes in datacenter</a></li>
+<li><a href="#_prepated_queries">Prepated Queries</a></li>
 <li><a href="#_watches">Watches</a></li>
 </ul>
         </div>
@@ -161,6 +163,7 @@
 <li><a href="#_events">Events</a></li>
 <li><a href="#_sessions">Sessions</a></li>
 <li><a href="#_nodes_in_datacenter">Nodes in datacenter</a></li>
+<li><a href="#_prepated_queries">Prepated Queries</a></li>
 <li><a href="#_watches">Watches</a></li>
 </ul>
         </div>
@@ -192,7 +195,7 @@
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-consul-client<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -205,7 +208,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-consul-client:3.4.2</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-consul-client:3.5.0</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -255,7 +258,7 @@ client = <span class="constant">VertxConsul</span>::<span class="constant">Consu
 <p>Sets the amount of time (in milliseconds) after which if the request does not return any data
 within the timeout period an failure will be passed to the handler and the request will be closed.</p>
 </dd>
-<dt class="hdlist1"><code>acl_token</code></dt>
+<dt class="hdlist1"><code>aclToken</code></dt>
 <dd>
 <p>The ACL token. When provided, the client will use this token when making requests to the Consul
 by providing the "?token" query parameter. When not provided, the empty token, which maps to the 'anonymous'
@@ -1110,6 +1113,153 @@ consulClient.catalog_nodes_with_options(opts) { |res_err,res|
 </div>
 </div>
 <div class="sect1">
+<h2 id="_prepated_queries">Prepated Queries</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This endpoint creates, updates, destroys, and executes prepared queries.
+Prepared queries allow you to register a complex service query and then execute it later via its ID
+or name to get a set of healthy nodes that provide a given service. This is particularly useful in combination
+with Consul&#8217;s DNS Interface as it allows for much richer queries than would be possible given
+the limited entry points exposed by DNS.</p>
+</div>
+<div class="paragraph">
+<p>There are many parameters to creating a prepared query.
+For full details please <a href="https://www.consul.io/api/query.html">see docs</a></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>dc</code> </dt>
+<dd>
+<p>Specifies the datacenter to query. This will default to the datacenter of the agent being queried. This is specified as part of the URL as a query parameter.</p>
+</dd>
+<dt class="hdlist1"><code>name</code> </dt>
+<dd>
+<p>Specifies an optional friendly name that can be used to execute a query instead of using its ID.</p>
+</dd>
+<dt class="hdlist1"><code>session</code> </dt>
+<dd>
+<p>Specifies the ID of an existing session. This provides a way to automatically remove a prepared query when the given session is invalidated. If not given the prepared query must be manually removed when no longer needed.</p>
+</dd>
+<dt class="hdlist1"><code>token</code> </dt>
+<dd>
+<p>Specifies the ACL token to use each time the query is executed. This allows queries to be executed by clients with lesser or even no ACL Token, so this should be used with care. The token itself can only be seen by clients with a management token. If the Token field is left blank or omitted, the client&#8217;s ACL Token will be used to determine if they have access to the service being queried. If the client does not supply an ACL Token, the anonymous token will be used.</p>
+</dd>
+<dt class="hdlist1"><code>service</code> </dt>
+<dd>
+<p>Specifies the name of the service to query. This is required field.</p>
+</dd>
+<dt class="hdlist1"><code>failover</code> </dt>
+<dd>
+<p>contains two fields, both of which are optional, and determine what happens if no healthy nodes are available in the local datacenter when the query is executed. It allows the use of nodes in other datacenters with very little configuration.</p>
+</dd>
+<dt class="hdlist1"><code>nearestN</code> </dt>
+<dd>
+<p>Specifies that the query will be forwarded to up to NearestN other datacenters based on their estimated network round trip time using Network Coordinates from the WAN gossip pool. The median round trip time from the server handling the query to the servers in the remote datacenter is used to determine the priority.</p>
+</dd>
+<dt class="hdlist1"><code>datacenters</code> </dt>
+<dd>
+<p>Specifies a fixed list of remote datacenters to forward the query to if there are no healthy nodes in the local datacenter. Datacenters are queried in the order given in the list. If this option is combined with NearestN, then the NearestN queries will be performed first, followed by the list given by Datacenters. A given datacenter will only be queried one time during a failover, even if it is selected by both NearestN and is listed in Datacenters.</p>
+</dd>
+<dt class="hdlist1"><code>onlyPassing</code> </dt>
+<dd>
+<p>Specifies the behavior of the query&#8217;s health check filtering. If this is set to false, the results will include nodes with checks in the passing as well as the warning states. If this is set to true, only nodes with checks in the passing state will be returned.</p>
+</dd>
+<dt class="hdlist1"><code>tags</code> </dt>
+<dd>
+<p>Specifies a list of service tags to filter the query results. For a service to pass the tag filter it must have all of the required tags, and none of the excluded tags (prefixed with !).</p>
+</dd>
+<dt class="hdlist1"><code>nodeMeta</code> </dt>
+<dd>
+<p>Specifies a list of user-defined key/value pairs that will be used for filtering the query results to nodes with the given metadata values present.</p>
+</dd>
+<dt class="hdlist1"><code>dnsTtl</code> </dt>
+<dd>
+<p>Specifies the TTL duration when query results are served over DNS. If this is specified, it will take precedence over any Consul agent-specific configuration.</p>
+</dd>
+<dt class="hdlist1"><code>templateType</code> </dt>
+<dd>
+<p>is the query type, which must be <code>name_prefix_match</code>. This means that the template will apply to any query lookup with a name whose prefix matches the Name field of the template. In this example, any query for geo-db will match this query. Query templates are resolved using a longest prefix match, so it&#8217;s possible to have high-level templates that are overridden for specific services. Static queries are always resolved first, so they can also override templates.</p>
+</dd>
+<dt class="hdlist1"><code>templateRegexp</code> </dt>
+<dd>
+<p>is an optional regular expression which is used to extract fields from the entire name, once this template is selected. In this example, the regular expression takes the first item after the "-" as the database name and everything else after as a tag. See the RE2 reference for syntax of this regular expression.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="keyword">def</span> = {
+  <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">Query name</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">service</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">service-${match(1)}-${match(2)}</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">dcs</span><span class="delimiter">'</span></span> =&gt; [<span class="string"><span class="delimiter">&quot;</span><span class="content">dc1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">dc42</span><span class="delimiter">&quot;</span></span>],
+  <span class="string"><span class="delimiter">'</span><span class="content">templateType</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">name_prefix_match</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">templateRegexp</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">^find_(.+?)_(.+?)$</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the query is successfully created, its ID will be provided</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.create_prepared_query(<span class="keyword">def</span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    queryId = res
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Query created: </span><span class="inline"><span class="inline-delimiter">#{</span>queryId<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
+    res_err.print_stack_trace()
+  <span class="keyword">end</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The prepared query can be executed by its id</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.execute_prepared_query(id) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    response = res
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Found </span><span class="inline"><span class="inline-delimiter">#{</span>response[<span class="string"><span class="delimiter">'</span><span class="content">nodes</span><span class="delimiter">'</span></span>].length<span class="inline-delimiter">}</span></span><span class="content"> nodes</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
+    res_err.print_stack_trace()
+  <span class="keyword">end</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or by query string that must match template regexp</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.execute_prepared_query(<span class="string"><span class="delimiter">&quot;</span><span class="content">find_1_2</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="comment"># matches template regexp &quot;^find_(.+?)_(.+?)$&quot;</span>
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    response = res
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Found </span><span class="inline"><span class="inline-delimiter">#{</span>response[<span class="string"><span class="delimiter">'</span><span class="content">nodes</span><span class="delimiter">'</span></span>].length<span class="inline-delimiter">}</span></span><span class="content"> nodes</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
+    res_err.print_stack_trace()
+  <span class="keyword">end</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, <code>ConsulClient</code> allows you to modify, get or delete prepared queries</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">consulClient.delete_prepared_query(query) { |res_err,res|
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Query deleted</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
+    res_err.print_stack_trace()
+  <span class="keyword">end</span>
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_watches">Watches</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -1120,11 +1270,11 @@ As an example, you could watch the status of health checks and notify when a che
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-consul/watch</span><span class="delimiter">'</span></span>
-<span class="constant">VertxConsul</span>::<span class="constant">Watch</span>.key(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo/bar</span><span class="delimiter">&quot;</span></span>, vertx).set_handler() { |res_err,res|
-  <span class="keyword">if</span> (res_err == <span class="predefined-constant">nil</span>)
-    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">value: </span><span class="inline"><span class="inline-delimiter">#{</span>res[<span class="string"><span class="delimiter">'</span><span class="content">value</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+<span class="constant">VertxConsul</span>::<span class="constant">Watch</span>.key(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo/bar</span><span class="delimiter">&quot;</span></span>, vertx).set_handler() { |res|
+  <span class="keyword">if</span> (res.succeeded?())
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">value: </span><span class="inline"><span class="inline-delimiter">#{</span>res.next_result()[<span class="string"><span class="delimiter">'</span><span class="content">value</span><span class="delimiter">'</span></span>]<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
   <span class="keyword">else</span>
-    res_err.print_stack_trace()
+    res.cause().print_stack_trace()
   <span class="keyword">end</span>
 }.start()</code></pre>
 </div>
@@ -1138,7 +1288,7 @@ As an example, you could watch the status of health checks and notify when a che
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:36 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

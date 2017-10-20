@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -103,6 +104,12 @@
           <ul class="sectlevel1">
 <li><a href="#_enabling_the_rxjava_apis">Enabling the RxJava APIs</a></li>
 <li><a href="#_deploying_verticles_in_order">Deploying verticles in order</a></li>
+<li><a href="#_partially_em_rxifying_em_code_httpserververticle_code">Partially <em>"Rxifying"</em> <code>HttpServerVerticle</code></a>
+<ul class="sectlevel2">
+<li><a href="#_import_rxjava_versions_of_vert_x_classes">Import RxJava versions of Vert.x classes</a></li>
+<li><a href="#_use_delegate_on_a_em_rxified_em_code_vertx_code_instance">Use delegate on a <em>"Rxified"</em> <code>vertx</code> instance</a></li>
+</ul>
+</li>
 <li><a href="#_executing_authorization_queries_concurrently">Executing authorization queries concurrently</a></li>
 <li><a href="#_working_with_database_connections">Working with database connections</a></li>
 <li><a href="#_bridging_the_gap_between_callbacks_and_rxjava">Bridging the gap between callbacks and RxJava</a></li>
@@ -116,6 +123,12 @@
           <ul class="sectlevel1">
 <li><a href="#_enabling_the_rxjava_apis">Enabling the RxJava APIs</a></li>
 <li><a href="#_deploying_verticles_in_order">Deploying verticles in order</a></li>
+<li><a href="#_partially_em_rxifying_em_code_httpserververticle_code">Partially <em>"Rxifying"</em> <code>HttpServerVerticle</code></a>
+<ul class="sectlevel2">
+<li><a href="#_import_rxjava_versions_of_vert_x_classes">Import RxJava versions of Vert.x classes</a></li>
+<li><a href="#_use_delegate_on_a_em_rxified_em_code_vertx_code_instance">Use delegate on a <em>"Rxified"</em> <code>vertx</code> instance</a></li>
+</ul>
+</li>
 <li><a href="#_executing_authorization_queries_concurrently">Executing authorization queries concurrently</a></li>
 <li><a href="#_working_with_database_connections">Working with database connections</a></li>
 <li><a href="#_bridging_the_gap_between_callbacks_and_rxjava">Bridging the gap between callbacks and RxJava</a></li>
@@ -221,6 +234,68 @@ When the operation completes, it emits the deployment <code>id</code> or signals
 </div>
 </div>
 <div class="sect1">
+<h2 id="_partially_em_rxifying_em_code_httpserververticle_code">Partially <em>"Rxifying"</em> <code>HttpServerVerticle</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you follow the guide in sequence, editing the code as you go, your <code>HttpServerVerticle</code> class is still using the
+callback-based API. Before you can use the RxJava API to execute asynchronous operations <em>naturally</em>, i.e.
+<strong><em>concurrently</em></strong>, you need to refactor <code>HttpServerVerticle</code>.</p>
+</div>
+<div class="sect2">
+<h3 id="_import_rxjava_versions_of_vert_x_classes">Import RxJava versions of Vert.x classes</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">io.vertx.rxjava.core.AbstractVerticle</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.core.http.HttpServer</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.auth.AuthProvider</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.auth.User</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.auth.jwt.JWTAuth</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.auth.shiro.ShiroAuth</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.Router</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.RoutingContext</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.client.WebClient</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.client.HttpResponse</span>; <b class="conum">(1)</b>
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.codec.BodyCodec</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.handler</span>.*;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.sstore.LocalSessionStore</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.templ.FreeMarkerTemplateEngine</span>;
+<span class="keyword">import</span> <span class="include">org.slf4j.Logger</span>;
+<span class="keyword">import</span> <span class="include">org.slf4j.LoggerFactory</span>;
+<span class="keyword">import</span> <span class="include">rx.Observable</span>;
+<span class="keyword">import</span> <span class="include">rx.Single</span>;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Our <code>backupHandler()</code> method still uses <code>HttpResponse</code> class, so it must be imported. It turns out that the RxJava
+version of <code>HttpResponse</code> provided by Vert.x can serve as a drop-in replacement in this specific case.
+The <em>"Rxified"</em> code in <code>step-8</code> folder of the guide repository does not import this class as the
+response type is inferred by the lambda expression.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_use_delegate_on_a_em_rxified_em_code_vertx_code_instance">Use delegate on a <em>"Rxified"</em> <code>vertx</code> instance</h3>
+<div class="paragraph">
+<p>To call a method expecting a <code>io.vertx.core.Vertx</code> instance when you have a <code>io.vertx.rxjava.core.Vertx</code> one, call
+the <code>getDelegate()</code> method. Verticle&#8217;s <code>start()</code> method needs to be adjusted when creating an instance of
+<code>WikiDatabaseService</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Override</span>
+<span class="directive">public</span> <span class="type">void</span> start(<span class="predefined-type">Future</span>&lt;<span class="predefined-type">Void</span>&gt; startFuture) <span class="directive">throws</span> <span class="exception">Exception</span> {
+
+  <span class="predefined-type">String</span> wikiDbQueue = config().getString(CONFIG_WIKIDB_QUEUE, <span class="string"><span class="delimiter">&quot;</span><span class="content">wikidb.queue</span><span class="delimiter">&quot;</span></span>);
+  dbService = io.vertx.guides.wiki.database.WikiDatabaseService.createProxy(vertx.getDelegate(), wikiDbQueue);</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_executing_authorization_queries_concurrently">Executing authorization queries concurrently</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -233,21 +308,25 @@ To create a token, we need all authorization query results to complete, but quer
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Single&lt;<span class="predefined-type">Boolean</span>&gt; create = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">create</span><span class="delimiter">&quot;</span></span>); <b class="conum">(1)</b>
-Single&lt;<span class="predefined-type">Boolean</span>&gt; delete = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">delete</span><span class="delimiter">&quot;</span></span>);
-Single&lt;<span class="predefined-type">Boolean</span>&gt; update = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">update</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">auth.rxAuthenticate(creds).flatMap(user -&gt; {
+  Single&lt;<span class="predefined-type">Boolean</span>&gt; create = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">create</span><span class="delimiter">&quot;</span></span>); <b class="conum">(1)</b>
+  Single&lt;<span class="predefined-type">Boolean</span>&gt; delete = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">delete</span><span class="delimiter">&quot;</span></span>);
+  Single&lt;<span class="predefined-type">Boolean</span>&gt; update = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">update</span><span class="delimiter">&quot;</span></span>);
 
-<span class="keyword">return</span> Single.zip(create, delete, update, (canCreate, canDelete, canUpdate) -&gt; { <b class="conum">(2)</b>
-  <span class="keyword">return</span> jwtAuth.generateToken(
-    <span class="keyword">new</span> JsonObject()
-      .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, context.request().getHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">login</span><span class="delimiter">&quot;</span></span>))
-      .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">canCreate</span><span class="delimiter">&quot;</span></span>, canCreate)
-      .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">canDelete</span><span class="delimiter">&quot;</span></span>, canDelete)
-      .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">canUpdate</span><span class="delimiter">&quot;</span></span>, canUpdate),
-    <span class="keyword">new</span> JWTOptions()
-      .setSubject(<span class="string"><span class="delimiter">&quot;</span><span class="content">Wiki API</span><span class="delimiter">&quot;</span></span>)
-      .setIssuer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Vert.x</span><span class="delimiter">&quot;</span></span>));
-});</code></pre>
+  <span class="keyword">return</span> Single.zip(create, delete, update, (canCreate, canDelete, canUpdate) -&gt; { <b class="conum">(2)</b>
+    <span class="keyword">return</span> jwtAuth.generateToken(
+      <span class="keyword">new</span> JsonObject()
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, context.request().getHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">login</span><span class="delimiter">&quot;</span></span>))
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">canCreate</span><span class="delimiter">&quot;</span></span>, canCreate)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">canDelete</span><span class="delimiter">&quot;</span></span>, canDelete)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">canUpdate</span><span class="delimiter">&quot;</span></span>, canUpdate),
+      <span class="keyword">new</span> JWTOptions()
+        .setSubject(<span class="string"><span class="delimiter">&quot;</span><span class="content">Wiki API</span><span class="delimiter">&quot;</span></span>)
+        .setIssuer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Vert.x</span><span class="delimiter">&quot;</span></span>));
+  });
+}).subscribe(token -&gt; {
+  context.response().putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Content-Type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/plain</span><span class="delimiter">&quot;</span></span>).end(token);
+}, t -&gt; context.fail(<span class="integer">401</span>));</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -278,8 +357,8 @@ Single&lt;<span class="predefined-type">Boolean</span>&gt; update = user.rxIsAut
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Single&lt;<span class="predefined-type">ResultSet</span>&gt; resultSet = connection
-  .flatMap(conn -&gt; conn.rxQueryWithParams(sqlQueries.get(SqlQuery.GET_PAGE_BY_ID), <span class="keyword">new</span> JsonArray().add(id)));</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">Single&lt;<span class="predefined-type">ResultSet</span>&gt; resultSet = dbClient.rxQueryWithParams(
+  sqlQueries.get(SqlQuery.GET_PAGE_BY_ID), <span class="keyword">new</span> JsonArray().add(id));</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -323,9 +402,9 @@ For example, service proxy interfaces can only be defined with callbacks, but th
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> WikiDatabaseService fetchAllPagesData(<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">List</span>&lt;JsonObject&gt;&gt;&gt; resultHandler) { <b class="conum">(1)</b>
-  getConnection()
-    .flatMap(connection -&gt; connection.rxQuery(sqlQueries.get(SqlQuery.ALL_PAGES_DATA)))
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Override</span>
+<span class="directive">public</span> WikiDatabaseService fetchAllPagesData(<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">List</span>&lt;JsonObject&gt;&gt;&gt; resultHandler) { <b class="conum">(1)</b>
+  dbClient.rxQuery(sqlQueries.get(SqlQuery.ALL_PAGES_DATA))
     .map(<span class="predefined-type">ResultSet</span>::getRows)
     .subscribe(RxHelper.toSubscriber(resultHandler));  <b class="conum">(2)</b>
   <span class="keyword">return</span> <span class="local-variable">this</span>;
@@ -358,8 +437,7 @@ And it comes with an extensive set of data manipulation operators.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> WikiDatabaseService fetchAllPages(<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;JsonArray&gt;&gt; resultHandler) {
-  getConnection()
-    .flatMap(conn -&gt; conn.rxQuery(sqlQueries.get(SqlQuery.ALL_PAGES)))
+  dbClient.rxQuery(sqlQueries.get(SqlQuery.ALL_PAGES))
     .flatMapObservable(res -&gt; {  <b class="conum">(1)</b>
       <span class="predefined-type">List</span>&lt;JsonArray&gt; results = res.getResults();
       <span class="keyword">return</span> <span class="predefined-type">Observable</span>.from(results); <b class="conum">(2)</b>
@@ -400,7 +478,7 @@ And it comes with an extensive set of data manipulation operators.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-07-27 11:46:46 CEST
+                Last updated 2017-10-19 14:01:10 CEST
               
               
             </div>

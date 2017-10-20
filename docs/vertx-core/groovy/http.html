@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -1241,6 +1242,14 @@ cache and does not want it anymore.</p>
 the pushed response can be written after.</p>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_handling_exceptions">Handling exceptions</h4>
+<div class="paragraph">
+<p>You can set an <code><a href="../../apidocs/io/vertx/core/http/HttpServer.html#exceptionHandler-io.vertx.core.Handler-">exceptionHandler</a></code> to receive any
+exceptions that happens before the connection is passed to the <code><a href="../../apidocs/io/vertx/core/http/HttpServer.html#requestHandler-io.vertx.core.Handler-">requestHandler</a></code>
+or to the <code><a href="../../apidocs/io/vertx/core/http/HttpServer.html#websocketHandler-io.vertx.core.Handler-">websocketHandler</a></code>, e.g during the TLS handshake.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_http_compression">HTTP Compression</h3>
@@ -1269,6 +1278,15 @@ includes the supported compressions. Commonly used are deflate and gzip. Both ar
 <div class="paragraph">
 <p>If such a header is found the server will automatically compress the body of the response with one of the supported
 compressions and send it back to the client.</p>
+</div>
+<div class="paragraph">
+<p>Whenever the response needs to be sent without compression you can set the header <code>content-encoding</code> to <code>identity</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Disable compression and send an image</span>
+request.response().putHeader(io.vertx.core.http.HttpHeaders.CONTENT_ENCODING, io.vertx.core.http.HttpHeaders.IDENTITY).sendFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/image.jpg</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Be aware that compression may be able to reduce network traffic but is more CPU-intensive.</p>
@@ -1690,7 +1708,7 @@ request.end()</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_handling_exceptions">Handling exceptions</h4>
+<h4 id="_handling_exceptions_2">Handling exceptions</h4>
 <div class="paragraph">
 <p>You can handle exceptions corresponding to a request by setting an exception handler on the
 <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html">HttpClientRequest</a></code> instance:</p>
@@ -3106,7 +3124,7 @@ when the verticle is undeployed.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:36 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

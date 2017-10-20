@@ -8,6 +8,190 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Vert.x 3.5.0 released !</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;The Vert.x team is pleased to announce the release of Vert.x 3.5.0.&lt;/p&gt;
+&lt;p&gt;As usual it delivers an impressive number of high quality features.&lt;/p&gt;
+&lt;h4 id=&quot;let-s-go-rxjava2&quot;&gt;Let’s go RxJava2&lt;/h4&gt;
+&lt;p&gt;First and foremost this release delivers the RxJava2 API with support of its full range of types.&lt;/p&gt;
+&lt;p&gt;In addition of &lt;code&gt;Single&lt;/code&gt;, Rxified APIs also expose the&lt;code&gt;Completable&lt;/code&gt; and &lt;code&gt;Maybe&lt;/code&gt; types:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;// expose &lt;span class=&quot;hljs-type&quot;&gt;Handler&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;AsyncResult&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;Void&lt;/span&gt;&gt;&gt;
+&lt;span class=&quot;hljs-type&quot;&gt;Completable&lt;/span&gt; completable = server.rxClose();
+
+completable.subscribe(() -&gt; &lt;span class=&quot;hljs-type&quot;&gt;System&lt;/span&gt;.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;closed&quot;&lt;/span&gt;));
+
+// expose &lt;span class=&quot;hljs-type&quot;&gt;Handler&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;AsyncResult&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;String&lt;/span&gt;&gt;&gt; where the &lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt; can be null
+&lt;span class=&quot;hljs-type&quot;&gt;Maybe&lt;/span&gt;&lt;&lt;span class=&quot;hljs-type&quot;&gt;String&lt;/span&gt;&gt; ipAddress = dnsClient.rxLookup(&lt;span class=&quot;hljs-string&quot;&gt;&quot;www.google.com&quot;&lt;/span&gt;);
+ipAddress.subscribe(
+  value -&gt; &lt;span class=&quot;hljs-type&quot;&gt;System&lt;/span&gt;.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;resolved to &quot;&lt;/span&gt; + value),
+  err -&gt; err.printStackTrace(),
+  () -&gt; &lt;span class=&quot;hljs-type&quot;&gt;System&lt;/span&gt;.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;does not resolve&quot;&lt;/span&gt;));&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;RxJava augments Vert.x streams with a &lt;code&gt;toObservable()&lt;/code&gt; method, likewise RxJava2 adds the &lt;code&gt;toFlowable()&lt;/code&gt; method:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-prompt&quot;&gt;// Flowable&lt;Buffer&gt;&lt;/span&gt; maps to a &lt;span class=&quot;hljs-constant&quot;&gt;ReadStream&lt;/span&gt;&lt;&lt;span class=&quot;hljs-constant&quot;&gt;Buffer&lt;/span&gt;&gt;
+&lt;span class=&quot;hljs-regexp&quot;&gt;//&lt;/span&gt; back-pressured stream
+&lt;span class=&quot;hljs-prompt&quot;&gt;Flowable&lt;Buffer&gt;&lt;/span&gt; flowable = asyncFile.toFlowable();
+
+&lt;span class=&quot;hljs-regexp&quot;&gt;//&lt;/span&gt; but we still can get an &lt;span class=&quot;hljs-constant&quot;&gt;Observable&lt;/span&gt;&lt;&lt;span class=&quot;hljs-constant&quot;&gt;Buffer&lt;/span&gt;&gt;
+&lt;span class=&quot;hljs-regexp&quot;&gt;//&lt;/span&gt; non back-pressured stream
+&lt;span class=&quot;hljs-prompt&quot;&gt;Observable&lt;Buffer&gt;&lt;/span&gt; flowable = asyncFile.toObservable();&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What’s so different between &lt;code&gt;Flowable&lt;/code&gt; and &lt;code&gt;Observable&lt;/code&gt;? the former handles back-pressure, i.e the
+subscriber can control the flow of items and the later can not!!!&lt;/p&gt;
+&lt;p&gt;You can read the documentation in the section of the &lt;a href=&quot;http://vertx.io/docs/master/vertx-rx/java2/&quot;&gt;docs&lt;/a&gt;
+or go straight to the &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/rxjava2-examples&quot;&gt;examples&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;kotlin-coroutines&quot;&gt;Kotlin coroutines&lt;/h4&gt;
+&lt;p&gt;Support for &lt;a href=&quot;http://vertx.io/docs/vertx-lang-kotlin-coroutines/kotlin/&quot;&gt;Kotlin Coroutines&lt;/a&gt; is one of my favourite 3.5 features (by the way I’ll present a talk about Vert.x
+and coroutines at &lt;a href=&quot;https://www.kotlinconf.com/sessions/&quot;&gt;KotlinConf&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Coroutines allows you to reason about asynchronous flow the same way you do with traditional sequential flow with
+the extra bonus to use &lt;code&gt;try&lt;/code&gt;/&lt;code&gt;catch&lt;/code&gt;/&lt;code&gt;finally&lt;/code&gt; super combo:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;val movie = ctx.pathParam(&lt;span class=&quot;hljs-string&quot;&gt;&quot;id&quot;&lt;/span&gt;)
+val rating = &lt;span class=&quot;hljs-type&quot;&gt;Integer&lt;/span&gt;.parseInt(ctx.queryParam(&lt;span class=&quot;hljs-string&quot;&gt;&quot;getRating&quot;&lt;/span&gt;)[&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;])
+val connection = awaitResult&lt;&lt;span class=&quot;hljs-type&quot;&gt;SQLConnection&lt;/span&gt;&gt; { client.getConnection(it) }
+&lt;span class=&quot;hljs-keyword&quot;&gt;try&lt;/span&gt; {
+  val &lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt; = awaitResult&lt;&lt;span class=&quot;hljs-type&quot;&gt;ResultSet&lt;/span&gt;&gt; { connection.queryWithParams(&lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT TITLE FROM MOVIE WHERE ID=?&quot;&lt;/span&gt;, json { &lt;span class=&quot;hljs-type&quot;&gt;array&lt;/span&gt;(movie) }, it) }
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;.rows.size == &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;) {
+    awaitResult&lt;&lt;span class=&quot;hljs-type&quot;&gt;UpdateResult&lt;/span&gt;&gt; { connection.updateWithParams(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO RATING (VALUE, MOVIE_ID) VALUES ?, ?&quot;&lt;/span&gt;, json { &lt;span class=&quot;hljs-type&quot;&gt;array&lt;/span&gt;(rating, movie) }, it) }
+    ctx.response().setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt;).&lt;span class=&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;()
+  } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+    ctx.response().setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;404&lt;/span&gt;).&lt;span class=&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;()
+  }
+} &lt;span class=&quot;hljs-keyword&quot;&gt;finally&lt;/span&gt; {
+  connection.close()
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This example is borrowed from our &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/kotlin-examples/coroutines&quot;&gt;examples&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;NOTE: I’ve used &lt;code&gt;try&lt;/code&gt;/&lt;code&gt;finally&lt;/code&gt; purposely instead of Kotlin’s &lt;code&gt;use&lt;/code&gt; extension method&lt;/p&gt;
+&lt;h4 id=&quot;mqtt-client&quot;&gt;MQTT Client&lt;/h4&gt;
+&lt;p&gt;In Vert.x 3.4 we added the &lt;a href=&quot;http://vertx.io/docs/vertx-mqtt/java/#_vert_x_mqtt_server&quot;&gt;MQTT server&lt;/a&gt;, 3.5 completes the
+MQTT story with the &lt;a href=&quot;http://vertx.io/docs/vertx-mqtt/java/#_vert_x_mqtt_client&quot;&gt;MQTT client&lt;/a&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;MqttClient mqttClient = MqttClient.create(vertx,
+   &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; MqttClientOptions()
+     .setPort(BROKER_PORT)
+     .setHost(BROKER_HOST)).connect(ar -&gt;
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar.succeeded()) {
+    System.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Connected to a server&quot;&lt;/span&gt;);
+
+    mqttClient.publish(
+      MQTT_TOPIC,
+      Buffer.buffer(MQTT_MESSAGE),
+      MqttQoS.AT_MOST_ONCE,
+      &lt;span class=&quot;hljs-keyword&quot;&gt;false&lt;/span&gt;,
+      &lt;span class=&quot;hljs-keyword&quot;&gt;false&lt;/span&gt;,
+      s -&gt; mqttClient.disconnect(d -&gt; System.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Disconnected from server&quot;&lt;/span&gt;)));
+  } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+    System.&lt;span class=&quot;hljs-keyword&quot;&gt;out&lt;/span&gt;.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Failed to connect to a server&quot;&lt;/span&gt;);
+    ar.cause().printStackTrace();
+  }
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can find MQTT client and server examples &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/mqtt-examples&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;web-api-contracts&quot;&gt;Web API contracts&lt;/h4&gt;
+&lt;p&gt;With the new &lt;a href=&quot;http://vertx.io/docs/vertx-web-api-contract/java/&quot;&gt;OpenAPI&lt;/a&gt; router factory we can focus on the API implementation and not on the validation
+of the input. The usage is quite simple:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-type&quot;&gt;OpenAPI3RouterFactory&lt;/span&gt;.createRouterFactoryFromFile(vertx, &lt;span class=&quot;hljs-string&quot;&gt;&quot;petstore.yaml&quot;&lt;/span&gt;, ar -&gt; {
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar.succeeded()) {
+    // &lt;span class=&quot;hljs-type&quot;&gt;Spec&lt;/span&gt; loaded &lt;span class=&quot;hljs-keyword&quot;&gt;with&lt;/span&gt; success
+    &lt;span class=&quot;hljs-type&quot;&gt;OpenAPI3RouterFactory&lt;/span&gt; routerFactory = ar.&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;();
+
+    // add your &lt;span class=&quot;hljs-type&quot;&gt;API&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;and&lt;/span&gt; security handlers to the factory
+
+    // add it to a server
+    vertx.createHttpServer()
+      .requestHandler(routerFactory.getRouter()::accept)
+      .listen();
+  } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+    // &lt;span class=&quot;hljs-type&quot;&gt;Something&lt;/span&gt; went wrong during router factory initialization
+  }
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now as a developer you only need to care about the API and not on the validation. The OpenAPI router will ensure that a
+request to an API will first to the contract before your handler is invoked.&lt;/p&gt;
+&lt;h4 id=&quot;java-9-support&quot;&gt;Java 9 support&lt;/h4&gt;
+&lt;p&gt;Java 9 was released a few days ago and the Vert.x stack has been carefully tested on Java 9 and most of our components
+run on Java 9 (Groovy does not run well on Java 9, please see the support &lt;a href=&quot;https://github.com/vert-x3/wiki/wiki/Java-9-Support&quot;&gt;matrix&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;As a bonus you can now use HTTP/2 out of the box with JDK SSL!&lt;/p&gt;
+&lt;p&gt;You can also use Vert.x jars as anonymous modules.&lt;/p&gt;
+&lt;h4 id=&quot;event-driven-json-parsing&quot;&gt;Event driven JSON Parsing&lt;/h4&gt;
+&lt;p&gt;We provide now an event driven &lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/core/parsetools/JsonParser.html&quot;&gt;JSON Parser&lt;/a&gt; emitting parse events that is very handy when you need to handle very large
+JSON structures and you don’t want to buffer it which introduce extra latency and increase the memory consumption.&lt;/p&gt;
+&lt;p&gt;The parser allows you to switch between fine grained JSON parse events or full structures, for instance
+you can parse an array of object very efficiently:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;JsonParser parser = JsonParser.newParser();
+
+&lt;span class=&quot;hljs-comment&quot;&gt;// The parser will handle JSON objects as values&lt;/span&gt;
+parser.objectValueMode();
+
+parser.handler(event -&gt; {
+  &lt;span class=&quot;hljs-keyword&quot;&gt;switch&lt;/span&gt; (event.type()) {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;START_ARRAY:&lt;/span&gt;
+      &lt;span class=&quot;hljs-comment&quot;&gt;// Start the array&lt;/span&gt;
+      &lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt;;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;END_ARRAY:&lt;/span&gt;
+      &lt;span class=&quot;hljs-comment&quot;&gt;// End the array&lt;/span&gt;
+      &lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt;;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;VALUE:&lt;/span&gt;
+      &lt;span class=&quot;hljs-comment&quot;&gt;// Handle each object&lt;/span&gt;
+      &lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt;;
+  }
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;single-sql-operations&quot;&gt;Single SQL operations&lt;/h4&gt;
+&lt;p&gt;Single SQL operations (aka &lt;em&gt;one-shot&lt;/em&gt;) have been drastically simplified: most of the &lt;code&gt;SQLOperations&lt;/code&gt; operations can now be 
+performed directly on the &lt;code&gt;SQLClient&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;client.queryWithParams(&lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT AVG(VALUE) AS VALUE FROM RATING WHERE MOVIE_ID=?&quot;&lt;/span&gt;, new &lt;span class=&quot;hljs-type&quot;&gt;JsonArray&lt;/span&gt;().add(id), ar2 -&gt; {
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (ar.succeeded()) {
+    &lt;span class=&quot;hljs-type&quot;&gt;int&lt;/span&gt; value = ar.&lt;span class=&quot;hljs-literal&quot;&gt;result&lt;/span&gt;().get(&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;).getInteger(&lt;span class=&quot;hljs-string&quot;&gt;&quot;VALUE&quot;&lt;/span&gt;);
+    // &lt;span class=&quot;hljs-type&quot;&gt;Continue&lt;/span&gt;
+  }
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Under the hood, the client takes care of the pool acquire/release interaction for you.&lt;/p&gt;
+&lt;h4 id=&quot;native-transport-and-domain-sockets&quot;&gt;Native transport and domain sockets&lt;/h4&gt;
+&lt;p&gt;We now support &lt;a href=&quot;http://vertx.io/docs/vertx-core/java/#_native_transports&quot;&gt;native transports&lt;/a&gt; on Linux (Epoll) and MacOS (KQueue), as well as &lt;a href=&quot;http://vertx.io/docs/vertx-core/java/#_domain_sockets&quot;&gt;UNIX domain sockets&lt;/a&gt; for
+&lt;code&gt;NetServer/NetClient&lt;/code&gt; (&lt;code&gt;HttpServer&lt;/code&gt;/&lt;code&gt;HttpClient&lt;/code&gt; should support UNIX domain sockets soon).&lt;/p&gt;
+&lt;h4 id=&quot;auth-handler-chaining&quot;&gt;Auth handler chaining&lt;/h4&gt;
+&lt;p&gt;There are times when you want to support multiple authN/authZ mechanisms in a single application.&lt;/p&gt;
+&lt;p&gt;Vert.x Web supports auth handlers &lt;a href=&quot;http://vertx.io/docs/vertx-web/java/#_chaining_multiple_auth_handlers&quot;&gt;chaining&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;vert-x-config-improvements&quot;&gt;Vert.x config improvements&lt;/h4&gt;
+&lt;p&gt;Vert.x Config allows configuring your application by assembling config chunks from different locations such as file,
+http, zookeeper…&lt;/p&gt;
+&lt;p&gt;In this version, we have added the support for Consul and Vault.&lt;/p&gt;
+&lt;p&gt;With the &lt;a href=&quot;http://vertx.io/docs/vertx-config/java/#_consul_configuration_store&quot;&gt;Consul config store&lt;/a&gt;, you can retrieve your configuration from a Consul server - so in other words, distribute
+the configuration from your orchestration infrastructure.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&quot;http://vertx.io/docs/vertx-config/java/#_vault_config_store&quot;&gt;Vault config store&lt;/a&gt; lets you retrieve secrets avoiding hard coding secrets or distributing credentials using an
+insecure way. Vault enforces the security of your secrets and only allowed applications can retrieve them. In other
+words, now you can keep your secrets secret.&lt;/p&gt;
+&lt;h3 id=&quot;acks&quot;&gt;ACKs&lt;/h3&gt;
+&lt;p&gt;I want on behalf of the team to thank all the contributors for this release including the Google Summer of Code students
+(&lt;a href=&quot;https://twitter.com/titantins&quot;&gt;Pavel Drankov&lt;/a&gt;, &lt;a href=&quot;https://twitter.com/slinkyguardiani&quot;&gt;Francesco Guardiani&lt;/a&gt; and &lt;a href=&quot;https://yunyul.in&quot;&gt;Yunyu Lin&lt;/a&gt;)
+that delivered an impressive work.&lt;/p&gt;
+&lt;h3 id=&quot;finally&quot;&gt;Finally&lt;/h3&gt;
+&lt;p&gt;The release notes&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/vert-x3/wiki/wiki/3.5.0-Release-Notes&quot;&gt;https://github.com/vert-x3/wiki/wiki/3.5.0-Release-Notes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Docker images are also available on the &lt;a href=&quot;https://hub.docker.com/u/vertx/&quot;&gt;Docker Hub&lt;/a&gt;. The Vert.x distribution is also available
+from &lt;a href=&quot;http://sdkman.io/index.html&quot;&gt;SDKMan&lt;/a&gt; and &lt;a href=&quot;http://brew.sh/&quot;&gt;HomeBrew&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The event bus client using the SockJS bridge are available from NPM, Bower and as a WebJar:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.npmjs.com/package/vertx3-eventbus-client&quot;&gt;https://www.npmjs.com/package/vertx3-eventbus-client&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/vert-x3/vertx-bus-bower&quot;&gt;https://github.com/vert-x3/vertx-bus-bower&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.webjars.org/&quot;&gt;http://www.webjars.org/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The artifacts have been deployed to &lt;a href=&quot;http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.vertx%22%20AND%20v%3A%223.5.0%22&quot;&gt;Maven Central&lt;/a&gt; and you can get the distribution on &lt;a href=&quot;https://bintray.com/vertx/downloads/distribution/3.5.0/view&quot;&gt;Bintray&lt;/a&gt;.&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Fri, 20 Oct 2017 02:00:00 +0200</pubDate>
+          <link>http://vertx.io/blog/vert-x-3-5-0-released</link>
+          <guid isPermaLink="true">http://vertx.io/blog/vert-x-3-5-0-released</guid>
+          <author>
+            <name>vietj</name>
+            <uri>http://github.com/vietj</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>An Eclipse Vert.x Gradle Plugin</title>
           <description>
       &lt;article&gt;&lt;p&gt;Eclipse Vert.x is a versatile toolkit, and as such it does not have any strong opinion on the tools that you should be using.&lt;/p&gt;

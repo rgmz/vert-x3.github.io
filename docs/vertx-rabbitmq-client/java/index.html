@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -169,7 +170,7 @@
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-rabbitmq-client<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -182,7 +183,7 @@
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-rabbitmq-client:3.4.2</span><span class="delimiter">'</span></span>
+  compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-rabbitmq-client:3.5.0</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -194,9 +195,9 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">JsonObject config = <span class="keyword">new</span> JsonObject();
+<pre class="CodeRay highlight"><code data-lang="java">RabbitMQOptions config = <span class="keyword">new</span> RabbitMQOptions();
 <span class="comment">// full amqp uri</span>
-config.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">uri</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">amqp://xvjvsrrc:VbuL1atClKt7zVNQha0bnnScbNvGiqgb@moose.rmq.cloudamqp.com/xvjvsrrc</span><span class="delimiter">&quot;</span></span>);
+config.setUri(<span class="string"><span class="delimiter">&quot;</span><span class="content">amqp://xvjvsrrc:VbuL1atClKt7zVNQha0bnnScbNvGiqgb@moose.rmq.cloudamqp.com/xvjvsrrc</span><span class="delimiter">&quot;</span></span>);
 RabbitMQClient client = RabbitMQClient.create(vertx, config);</code></pre>
 </div>
 </div>
@@ -205,20 +206,20 @@ RabbitMQClient client = RabbitMQClient.create(vertx, config);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">JsonObject config = <span class="keyword">new</span> JsonObject();
+<pre class="CodeRay highlight"><code data-lang="java">RabbitMQOptions config = <span class="keyword">new</span> RabbitMQOptions();
 <span class="comment">// Each parameter is optional</span>
 <span class="comment">// The default parameter with be used if the parameter is not set</span>
-config.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">user1</span><span class="delimiter">&quot;</span></span>);
-config.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">password1</span><span class="delimiter">&quot;</span></span>);
-config.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>);
-config.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>, <span class="integer">5672</span>);
-config.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">virtualHost</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">vhost1</span><span class="delimiter">&quot;</span></span>);
-config.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">connectionTimeout</span><span class="delimiter">&quot;</span></span>, <span class="integer">60</span>); <span class="comment">// in seconds</span>
-config.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">requestedHeartbeat</span><span class="delimiter">&quot;</span></span>, <span class="integer">60</span>); <span class="comment">// in seconds</span>
-config.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">handshakeTimeout</span><span class="delimiter">&quot;</span></span>, <span class="integer">60</span>); <span class="comment">// in seconds</span>
-config.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">requestedChannelMax</span><span class="delimiter">&quot;</span></span>, <span class="integer">5</span>);
-config.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">networkRecoveryInterval</span><span class="delimiter">&quot;</span></span>, <span class="integer">5</span>); <span class="comment">// in seconds</span>
-config.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">automaticRecoveryEnabled</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>);
+config.setUser(<span class="string"><span class="delimiter">&quot;</span><span class="content">user1</span><span class="delimiter">&quot;</span></span>);
+config.setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">password1</span><span class="delimiter">&quot;</span></span>);
+config.setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>);
+config.setPort(<span class="integer">5672</span>);
+config.setVirtualHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">vhost1</span><span class="delimiter">&quot;</span></span>);
+config.setConnectionTimeout(<span class="integer">6000</span>); <span class="comment">// in milliseconds</span>
+config.setRequestedHeartbeat(<span class="integer">60</span>); <span class="comment">// in seconds</span>
+config.setHandshakeTimeout(<span class="integer">6000</span>); <span class="comment">// in milliseconds</span>
+config.setRequestedChannelMax(<span class="integer">5</span>);
+config.setNetworkRecoveryInterval(<span class="integer">500</span>); <span class="comment">// in milliseconds</span>
+config.setAutomaticRecoveryEnabled(<span class="predefined-constant">true</span>);
 
 RabbitMQClient client = RabbitMQClient.create(vertx, config);</code></pre>
 </div>
@@ -390,7 +391,7 @@ client.basicConsume(<span class="string"><span class="delimiter">&quot;</span><s
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:36 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

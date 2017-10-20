@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -122,6 +123,9 @@
 <li><a href="#Node">Node</a></li>
 <li><a href="#NodeList">NodeList</a></li>
 <li><a href="#NodeQueryOptions">NodeQueryOptions</a></li>
+<li><a href="#PreparedQueryDefinition">PreparedQueryDefinition</a></li>
+<li><a href="#PreparedQueryExecuteOptions">PreparedQueryExecuteOptions</a></li>
+<li><a href="#PreparedQueryExecuteResponse">PreparedQueryExecuteResponse</a></li>
 <li><a href="#Service">Service</a></li>
 <li><a href="#ServiceEntry">ServiceEntry</a></li>
 <li><a href="#ServiceEntryList">ServiceEntryList</a></li>
@@ -163,6 +167,9 @@
 <li><a href="#Node">Node</a></li>
 <li><a href="#NodeList">NodeList</a></li>
 <li><a href="#NodeQueryOptions">NodeQueryOptions</a></li>
+<li><a href="#PreparedQueryDefinition">PreparedQueryDefinition</a></li>
+<li><a href="#PreparedQueryExecuteOptions">PreparedQueryExecuteOptions</a></li>
+<li><a href="#PreparedQueryExecuteResponse">PreparedQueryExecuteResponse</a></li>
 <li><a href="#Service">Service</a></li>
 <li><a href="#ServiceEntry">ServiceEntry</a></li>
 <li><a href="#ServiceEntryList">ServiceEntryList</a></li>
@@ -718,6 +725,13 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the value of reuse address</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="reusePort"></a><code>reusePort</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the value of reuse port.
+ <p/>
+ This is only supported by native transports.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="sendBufferSize"></a><code>sendBufferSize</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the TCP send buffer size</p></td>
@@ -740,6 +754,16 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set whether SSL/TLS is enabled</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="tcpCork"></a><code>tcpCork</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable the <code>TCP_CORK</code> option - only with linux native transport.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="tcpFastOpen"></a><code>tcpFastOpen</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable the <code>TCP_FASTOPEN</code> option - only with linux native transport.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-right valign-top"><p class="tableblock"><a id="tcpKeepAlive"></a><code>tcpKeepAlive</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set whether TCP keep alive is enabled</p></td>
@@ -750,7 +774,12 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set whether TCP no delay is enabled</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="timeoutMs"></a><code>timeoutMs</code></p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="tcpQuickAck"></a><code>tcpQuickAck</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable the <code>TCP_QUICKACK</code> option - only with linux native transport.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="timeout"></a><code>timeout</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (long)</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets the amount of time (in milliseconds) after which if the request does not return any data
  within the timeout period an failure will be passed to the handler and the request will be closed.</p></td>
@@ -1351,6 +1380,186 @@
 </div>
 </div>
 <div class="sect1">
+<h2 id="PreparedQueryDefinition">PreparedQueryDefinition</h2>
+<div class="sectionbody">
+ Defines a prepared query.
+<hr>
+<table class="tableblock frame-topbot grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="dcs"></a><code>dcs</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies a fixed list of remote datacenters to forward the query to if there are no healthy nodes
+ in the local datacenter. Datacenters are queried in the order given in the list. If this option is combined
+ with NearestN, then the NearestN queries will be performed first, followed by the list given by Datacenters.
+ A given datacenter will only be queried one time during a failover, even if it is selected by both NearestN
+ and is listed in Datacenters.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="dnsTtl"></a><code>dnsTtl</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the TTL duration when query results are served over DNS. If this is specified,
+ it will take precedence over any Consul agent-specific configuration.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="id"></a><code>id</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set ID of the query, always generated by Consul</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="meta"></a><code>meta</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set a list of user-defined key/value pairs that will be used for filtering the query results to nodes
+ with the given metadata values present.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="name"></a><code>name</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set an optional friendly name that can be used to execute a query instead of using its ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="nearestN"></a><code>nearestN</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies that the query will be forwarded to up to NearestN other datacenters based on their estimated network
+ round trip time using Network Coordinates from the WAN gossip pool. The median round trip time from the server
+ handling the query to the servers in the remote datacenter is used to determine the priority.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="passing"></a><code>passing</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the behavior of the query's health check filtering. If this is set to false, the results will include
+ nodes with checks in the passing as well as the warning states. If this is set to true,
+ only nodes with checks in the passing state will be returned.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="service"></a><code>service</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the name of the service to query</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="session"></a><code>session</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the ID of an existing session. This provides a way to automatically remove a prepared query when
+ the given session is invalidated. If not given the prepared query must be manually removed when no longer needed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="tags"></a><code>tags</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set a list of service tags to filter the query results. For a service to pass the tag filter
+ it must have all of the required tags, and none of the excluded tags (prefixed with `!`).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="templateRegexp"></a><code>templateRegexp</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set regular expression which is used to extract fields from the entire name, once this template is selected.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="templateType"></a><code>templateType</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The template type, which must be <code>name_prefix_match</code>. This means that the template will apply to
+ any query lookup with a name whose prefix matches the Name field of the template.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="token"></a><code>token</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the ACL token to use each time the query is executed. This allows queries to be executed by clients
+ with lesser or even no ACL Token, so this should be used with care.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="PreparedQueryExecuteOptions">PreparedQueryExecuteOptions</h2>
+<div class="sectionbody">
+ Options used to execute prepared query
+<hr>
+<table class="tableblock frame-topbot grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="limit"></a><code>limit</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the size of the list to the given number of nodes. This is applied after any sorting or shuffling.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="near"></a><code>near</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set node name for sorting the list in ascending order based on the estimated round trip time from that node.
+ Passing <code>_agent</code> will use the agent's node for the sort. If this is not present,
+ the default behavior will shuffle the nodes randomly each time the query is executed.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="PreparedQueryExecuteResponse">PreparedQueryExecuteResponse</h2>
+<div class="sectionbody">
+ The results of executing prepared query
+<hr>
+<table class="tableblock frame-topbot grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Type</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="dc"></a><code>dc</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the datacenter that ultimately provided the list of nodes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="dnsTtl"></a><code>dnsTtl</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the TTL duration when query results are served over DNS. If this is specified, it will take precedence over any Consul agent-specific configuration.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="failovers"></a><code>failovers</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Number (int)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the number of remote datacenters that were queried while executing the query.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="nodes"></a><code>nodes</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Array of <a href="dataobjects.html#ServiceEntry">ServiceEntry</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the list of healthy nodes providing the given service, as specified by the constraints of the prepared query.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><a id="service"></a><code>service</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the service name that the query was selecting.
+ This is useful for context in case an empty list of nodes is returned.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
 <h2 id="Service">Service</h2>
 <div class="sectionbody">
  Holds properties of service and node that its containing
@@ -1877,7 +2086,7 @@
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:36 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

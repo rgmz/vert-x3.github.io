@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -271,6 +272,7 @@
 </ul>
 </li>
 <li><a href="#_record_parser">Record Parser</a></li>
+<li><a href="#_json_parser">Json Parser</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
@@ -306,6 +308,13 @@
 <li><a href="#_automatic_failover">Automatic failover</a></li>
 <li><a href="#_ha_groups">HA groups</a></li>
 <li><a href="#_dealing_with_network_partitions_quora">Dealing with network partitions - Quora</a></li>
+</ul>
+</li>
+<li><a href="#_native_transports">Native transports</a>
+<ul class="sectlevel2">
+<li><a href="#_native_linux_transport">Native Linux Transport</a></li>
+<li><a href="#_native_bsd_transport">Native BSD Transport</a></li>
+<li><a href="#_domain_sockets">Domain sockets</a></li>
 </ul>
 </li>
 <li><a href="#_security_notes">Security notes</a>
@@ -508,6 +517,7 @@
 </ul>
 </li>
 <li><a href="#_record_parser">Record Parser</a></li>
+<li><a href="#_json_parser">Json Parser</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
@@ -543,6 +553,13 @@
 <li><a href="#_automatic_failover">Automatic failover</a></li>
 <li><a href="#_ha_groups">HA groups</a></li>
 <li><a href="#_dealing_with_network_partitions_quora">Dealing with network partitions - Quora</a></li>
+</ul>
+</li>
+<li><a href="#_native_transports">Native transports</a>
+<ul class="sectlevel2">
+<li><a href="#_native_linux_transport">Native Linux Transport</a></li>
+<li><a href="#_native_bsd_transport">Native BSD Transport</a></li>
+<li><a href="#_domain_sockets">Domain sockets</a></li>
 </ul>
 </li>
 <li><a href="#_security_notes">Security notes</a>
@@ -614,6 +631,9 @@
 <p>High availability</p>
 </li>
 <li>
+<p>Native transports</p>
+</li>
+<li>
 <p>Clustering</p>
 </li>
 </ul>
@@ -652,12 +672,12 @@ project descriptor to access the Vert.x Core API and enable the Ruby support:</p
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
  <span class="tag">&lt;artifactId&gt;</span>vertx-core<span class="tag">&lt;/artifactId&gt;</span>
- <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+ <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span>
 <span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-lang-ruby<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -670,8 +690,8 @@ project descriptor to access the Vert.x Core API and enable the Ruby support:</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:vertx-core:3.4.2</span><span class="delimiter">&quot;</span></span>
-compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:vertx-lang-ruby:3.4.2</span><span class="delimiter">&quot;</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:vertx-core:3.5.0</span><span class="delimiter">&quot;</span></span>
+compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:vertx-lang-ruby:3.5.0</span><span class="delimiter">&quot;</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3088,6 +3108,11 @@ on it:</p>
 <p>You can set an <code><a href="../../yardoc/Vertx/NetSocket.html#exception_handler-instance_method">exceptionHandler</a></code> to receive any
 exceptions that happen on the socket.</p>
 </div>
+<div class="paragraph">
+<p>You can set an <code><a href="../../yardoc/Vertx/NetServer.html#exception_handler-instance_method">exceptionHandler</a></code> to receive any
+exceptions that happens before the connection is passed to the <code><a href="../../yardoc/Vertx/NetServer.html#connect_handler-instance_method">connectHandler</a></code>
+, e.g during the TLS handshake.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_event_bus_write_handler">Event bus write handler</h3>
@@ -3518,7 +3543,19 @@ server = vertx.create_net_server(options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Keep in mind that pem configuration, the private key is not crypted.</p>
+<p>PKCS8, PKCS1 and X.509 certificates wrapped in a PEM block formats are supported.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+keep in mind that pem configuration, the private key is not crypted.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -4216,6 +4253,9 @@ client.connect(<span class="integer">1234</span>, <span class="string"><span cla
 <p>Application-Layer Protocol Negotiation (ALPN) is a TLS extension for application layer protocol negotiation. It is used by
 HTTP/2: during the TLS handshake the client gives the list of application protocols it accepts and the server responds
 with a protocol it supports.</p>
+</div>
+<div class="paragraph">
+<p>If you are using Java 9, you are fine and you can use HTTP/2 out of the box without extra steps.</p>
 </div>
 <div class="paragraph">
 <p>Java 8 does not supports ALPN out of the box, so ALPN should be enabled by other means:</p>
@@ -5405,6 +5445,14 @@ cache and does not want it anymore.</p>
 the pushed response can be written after.</p>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_handling_exceptions_2">Handling exceptions</h4>
+<div class="paragraph">
+<p>You can set an <code><a href="../../yardoc/Vertx/HttpServer.html#exception_handler-instance_method">exceptionHandler</a></code> to receive any
+exceptions that happens before the connection is passed to the <code><a href="../../yardoc/Vertx/HttpServer.html#request_handler-instance_method">requestHandler</a></code>
+or to the <code><a href="../../yardoc/Vertx/HttpServer.html#websocket_handler-instance_method">websocketHandler</a></code>, e.g during the TLS handshake.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_http_compression">HTTP Compression</h3>
@@ -5433,6 +5481,15 @@ includes the supported compressions. Commonly used are deflate and gzip. Both ar
 <div class="paragraph">
 <p>If such a header is found the server will automatically compress the body of the response with one of the supported
 compressions and send it back to the client.</p>
+</div>
+<div class="paragraph">
+<p>Whenever the response needs to be sent without compression you can set the header <code>content-encoding</code> to <code>identity</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># Disable compression and send an image</span>
+request.response().put_header(<span class="constant">Java</span>::<span class="constant">IoVertxCoreHttp</span>::<span class="constant">HttpHeaders</span>::<span class="constant">CONTENT_ENCODING</span>, <span class="constant">Java</span>::<span class="constant">IoVertxCoreHttp</span>::<span class="constant">HttpHeaders</span>::<span class="constant">IDENTITY</span>).send_file(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/image.jpg</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Be aware that compression may be able to reduce network traffic but is more CPU-intensive.</p>
@@ -5859,7 +5916,7 @@ request.end()</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_handling_exceptions_2">Handling exceptions</h4>
+<h4 id="_handling_exceptions_3">Handling exceptions</h4>
 <div class="paragraph">
 <p>You can handle exceptions corresponding to a request by setting an exception handler on the
 <code><a href="../../yardoc/Vertx/HttpClientRequest.html">HttpClientRequest</a></code> instance:</p>
@@ -8897,6 +8954,113 @@ parser.handle(<span class="constant">Vertx</span>::<span class="constant">Buffer
 </div>
 </div>
 <div class="sect1">
+<h2 id="_json_parser">Json Parser</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can easily parse JSON structures but that requires to provide the JSON content at once, but it
+may not be convenient when you need to parse very large structures.</p>
+</div>
+<div class="paragraph">
+<p>The non-blocking JSON parser is an event driven parser able to deal with very large structures.
+It transforms a sequence of input buffer to a sequence of JSON parse events.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="constant">Code</span> <span class="keyword">not</span> translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The parser is non-blocking and emitted events are driven by the input buffers.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx/json_parser</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">vertx/buffer</span><span class="delimiter">'</span></span>
+
+parser = <span class="constant">Vertx</span>::<span class="constant">JsonParser</span>.new_parser()
+
+<span class="comment"># start array event</span>
+<span class="comment"># start object event</span>
+<span class="comment"># &quot;firstName&quot;:&quot;Bob&quot; event</span>
+parser.handle(<span class="constant">Vertx</span>::<span class="constant">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">[{</span><span class="char">\&quot;</span><span class="content">firstName</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">Bob</span><span class="char">\&quot;</span><span class="content">,</span><span class="delimiter">&quot;</span></span>))
+
+<span class="comment"># &quot;lastName&quot;:&quot;Morane&quot; event</span>
+<span class="comment"># end object event</span>
+parser.handle(<span class="constant">Vertx</span>::<span class="constant">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="char">\&quot;</span><span class="content">lastName</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">Morane</span><span class="char">\&quot;</span><span class="content">},</span><span class="delimiter">&quot;</span></span>))
+
+<span class="comment"># start object event</span>
+<span class="comment"># &quot;firstName&quot;:&quot;Luke&quot; event</span>
+<span class="comment"># &quot;lastName&quot;:&quot;Lucky&quot; event</span>
+<span class="comment"># end object event</span>
+parser.handle(<span class="constant">Vertx</span>::<span class="constant">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">{</span><span class="char">\&quot;</span><span class="content">firstName</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">Luke</span><span class="char">\&quot;</span><span class="content">,</span><span class="char">\&quot;</span><span class="content">lastName</span><span class="char">\&quot;</span><span class="content">:</span><span class="char">\&quot;</span><span class="content">Lucky</span><span class="char">\&quot;</span><span class="content">}</span><span class="delimiter">&quot;</span></span>))
+
+<span class="comment"># end array event</span>
+parser.handle(<span class="constant">Vertx</span>::<span class="constant">Buffer</span>.buffer(<span class="string"><span class="delimiter">&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>))
+
+<span class="comment"># Always call end</span>
+parser.end()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Event driven parsing provides more control but comes at the price of dealing with fine grained events, which can be
+inconvenient sometimes. The JSON parser allows you to handle JSON structures as values when it is desired:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="constant">Code</span> <span class="keyword">not</span> translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The value mode can be set and unset during the parsing allowing you to switch between fine grained
+events or JSON object value events.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="constant">Code</span> <span class="keyword">not</span> translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can do the same with arrays as well</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="constant">Code</span> <span class="keyword">not</span> translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also decode POJOs</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">parser.handler() { |event|
+  <span class="comment"># Handle each object</span>
+  <span class="comment"># Get the field in which this object was parsed</span>
+  id = event.field_name()
+  user = event.map_to(<span class="constant">Java</span>::<span class="constant">ExamplesParseToolsExamples</span>::<span class="constant">User</span>::class)
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">User with id </span><span class="inline"><span class="inline-delimiter">#{</span>id<span class="inline-delimiter">}</span></span><span class="content"> : </span><span class="inline"><span class="inline-delimiter">#{</span>user::firstName<span class="inline-delimiter">}</span></span><span class="content"> </span><span class="inline"><span class="inline-delimiter">#{</span>user::lastName<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Whenever the parser fails to process a buffer, an exception will be thrown unless you set an exception handler:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx/json_parser</span><span class="delimiter">'</span></span>
+
+parser = <span class="constant">Vertx</span>::<span class="constant">JsonParser</span>.new_parser()
+
+parser.exception_handler() { |err|
+  <span class="comment"># Catch any parsing or decoding error</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more details, check out the <code><a href="../../yardoc/Vertx/JsonParser.html">JsonParser</a></code> class.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_thread_safety">Thread safety</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -9997,6 +10161,167 @@ group.</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_native_transports">Native transports</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vert.x can run with <a href="http://netty.io/wiki/native-transports.html">native transports</a> (when available) on BSD (OSX) and Linux:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx/vertx</span><span class="delimiter">'</span></span>
+vertx = <span class="constant">Vertx</span>::<span class="constant">Vertx</span>.vertx({
+  <span class="string"><span class="delimiter">'</span><span class="content">preferNativeTransport</span><span class="delimiter">'</span></span> =&gt; <span class="predefined-constant">true</span>
+})
+
+<span class="comment"># True when native is available</span>
+usingNative = vertx.native_transport_enabled?()
+puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Running with native: </span><span class="inline"><span class="inline-delimiter">#{</span>usingNative<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+preferring native transport will not prevent the application to execute, if your application requires native
+transport, you need to check <code><a href="../../yardoc/Vertx/Vertx.html#is_native_transport_enabled-instance_method">isNativeTransportEnabled</a></code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_native_linux_transport">Native Linux Transport</h3>
+<div class="paragraph">
+<p>You need to add the following dependency in your classpath:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.netty<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>netty-transport-native-epoll<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>4.1.15.Final<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;classifier&gt;</span>linux-x86_64<span class="tag">&lt;/classifier&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Native on Linux gives you extra networking options:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SO_REUSEPORT</p>
+</li>
+<li>
+<p>TCP_QUICKACK</p>
+</li>
+<li>
+<p>TCP_CORK</p>
+</li>
+<li>
+<p>TCP_FASTOPEN</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># Available on Linux</span>
+vertx.create_http_server({
+  <span class="string"><span class="delimiter">'</span><span class="content">tcpFastOpen</span><span class="delimiter">'</span></span> =&gt; fastOpen,
+  <span class="string"><span class="delimiter">'</span><span class="content">tcpCork</span><span class="delimiter">'</span></span> =&gt; cork,
+  <span class="string"><span class="delimiter">'</span><span class="content">tcpQuickAck</span><span class="delimiter">'</span></span> =&gt; quickAck,
+  <span class="string"><span class="delimiter">'</span><span class="content">reusePort</span><span class="delimiter">'</span></span> =&gt; reusePort
+})</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_native_bsd_transport">Native BSD Transport</h3>
+<div class="paragraph">
+<p>You need to add the following dependency in your classpath:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.netty<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>netty-transport-native-epoll<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>4.1.15.Final<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;classifier&gt;</span>osx-x86_64<span class="tag">&lt;/classifier&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>MacOS Sierra and above are supported.</p>
+</div>
+<div class="paragraph">
+<p>Native on BSD gives you extra networking options:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SO_REUSEPORT</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby"><span class="comment"># Available on BSD</span>
+vertx.create_http_server({
+  <span class="string"><span class="delimiter">'</span><span class="content">reusePort</span><span class="delimiter">'</span></span> =&gt; reusePort
+})</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_domain_sockets">Domain sockets</h3>
+<div class="paragraph">
+<p>Natives provide support domain sockets for <code>NetServer</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx/socket_address</span><span class="delimiter">'</span></span>
+<span class="comment"># Only available on BSD and Linux</span>
+vertx.create_net_server().connect_handler() { |so|
+  <span class="comment"># Handle application</span>
+}.listen(<span class="constant">Vertx</span>::<span class="constant">SocketAddress</span>.domain_socket_address(<span class="string"><span class="delimiter">&quot;</span><span class="content">/var/tmp/myservice.sock</span><span class="delimiter">&quot;</span></span>))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As well as <code>NetClient</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx/socket_address</span><span class="delimiter">'</span></span>
+netClient = vertx.create_net_client()
+
+<span class="comment"># Only available on BSD and Linux</span>
+netClient.connect(<span class="constant">Vertx</span>::<span class="constant">SocketAddress</span>.domain_socket_address(<span class="string"><span class="delimiter">&quot;</span><span class="content">/var/tmp/myservice.sock</span><span class="delimiter">&quot;</span></span>)) { |ar_err,ar|
+  <span class="keyword">if</span> (ar_err == <span class="predefined-constant">nil</span>)
+    <span class="comment"># Connected</span>
+  <span class="keyword">else</span>
+    ar_err.print_stack_trace()
+  <span class="keyword">end</span>
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+support for <code>HttpServer</code> and <code>HttpClient</code> can be expected in later versions of Vert.x
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_security_notes">Security notes</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -10589,7 +10914,7 @@ very careful when using this settings.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:36 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

@@ -3,9 +3,9 @@
         <head>
           <meta http-equiv="X-UA-Compatible" content="IE=edge" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-          <title>vertx-lang-scala-docs_2.12 3.4.2 API  - io.vertx.scala.redis.RedisClient</title>
-          <meta name="description" content="vertx - lang - scala - docs 2.12 3.4.2 API - io.vertx.scala.redis.RedisClient" />
-          <meta name="keywords" content="vertx lang scala docs 2.12 3.4.2 API io.vertx.scala.redis.RedisClient" />
+          <title>vertx-lang-scala-docs_2.12 3.5.0 API  - io.vertx.scala.redis.RedisClient</title>
+          <meta name="description" content="vertx - lang - scala - docs 2.12 3.5.0 API - io.vertx.scala.redis.RedisClient" />
+          <meta name="keywords" content="vertx lang scala docs 2.12 3.5.0 API io.vertx.scala.redis.RedisClient" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,7 +28,7 @@
         </head>
         <body>
       <div id="search">
-        <span id="doc-title">vertx-lang-scala-docs_2.12 3.4.2 API<span id="doc-version"></span></span>
+        <span id="doc-title">vertx-lang-scala-docs_2.12 3.5.0 API<span id="doc-version"></span></span>
         <span class="close-results"><span class="left">&lt;</span> Back</span>
         <div id="textfilter">
           <span class="input">
@@ -180,6 +180,12 @@
                         <a href="RedisTransaction.html" title="This Interface represents a TX
 ">
                           RedisTransaction
+                        </a>
+                      </li><li class="current-entities indented4">
+                        <a class="object" href="Script$.html" title=""></a>
+                        <a class="class" href="Script.html" title="Container for a script and its sha1 hash."></a>
+                        <a href="Script.html" title="Container for a script and its sha1 hash.">
+                          Script
                         </a>
                       </li>
               </ul>
@@ -1123,7 +1129,7 @@ behaviour is slightly different than if only start is specified</p></div><dl cla
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
@@ -2484,6 +2490,43 @@ the String.</p></div><dl class="paramcmts block"><dt class="param">script</dt><d
       </span>
       
       <p class="shortcomment cmt">Like <a href="#eval(script:String,keys:scala.collection.mutable.Buffer[String],args:scala.collection.mutable.Buffer[String],handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[io.vertx.core.json.JsonArray]]):io.vertx.scala.redis.RedisClient" class="extmbr" name="io.vertx.scala.redis.RedisClient#eval">eval</a> but returns a <span class="extype" name="scala.concurrent.Future">scala.concurrent.Future</span> instead of taking an AsyncResultHandler.</p>
+    </li><li name="io.vertx.scala.redis.RedisClient#evalScript" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="evalScript(script:io.vertx.scala.redis.Script,keys:scala.collection.mutable.Buffer[String],args:scala.collection.mutable.Buffer[String],handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[io.vertx.core.json.JsonArray]]):io.vertx.scala.redis.RedisClient"></a><a id="evalScript(Script,Buffer[String],Buffer[String],Handler[AsyncResult[JsonArray]]):RedisClient"></a>
+      <span class="permalink">
+      <a href="../../../../io/vertx/scala/redis/RedisClient.html#evalScript(script:io.vertx.scala.redis.Script,keys:scala.collection.mutable.Buffer[String],args:scala.collection.mutable.Buffer[String],handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[io.vertx.core.json.JsonArray]]):io.vertx.scala.redis.RedisClient" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">evalScript</span><span class="params">(<span name="script">script: <a href="Script.html" class="extype" name="io.vertx.scala.redis.Script">Script</a></span>, <span name="keys">keys: <span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="args">args: <span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="handler">handler: <span class="extype" name="io.vertx.core.Handler">Handler</span>[<span class="extype" name="io.vertx.core.AsyncResult">AsyncResult</span>[<span class="extype" name="io.vertx.core.json.JsonArray">JsonArray</span>]]</span>)</span><span class="result">: <a href="" class="extype" name="io.vertx.scala.redis.RedisClient">RedisClient</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Execute a Lua script server side.</p><div class="fullcomment"><div class="comment cmt"><p>Execute a Lua script server side. This method is a high level wrapper around EVAL and EVALSHA
+using the latter if possible, falling back to EVAL if the script is not cached by the server yet.
+According to Redis documentation, executed scripts are guaranteed to be in the script cache of a
+given execution of a Redis instance forever, which means typically the overhead incurred by
+optimistically sending EVALSHA is minimal, while improving performance and saving bandwidth
+compared to using EVAL every time.</p></div><dl class="paramcmts block"><dt class="param">script</dt><dd class="cmt"><p>Lua script and its SHA1 digest</p></dd><dt class="param">keys</dt><dd class="cmt"><p>List of keys</p></dd><dt class="param">args</dt><dd class="cmt"><p>List of argument values</p></dd><dt class="param">handler</dt><dd class="cmt"><p>Handler for the result of this call. group: scripting</p></dd></dl></div>
+    </li><li name="io.vertx.scala.redis.RedisClient#evalScriptFuture" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="evalScriptFuture(script:io.vertx.scala.redis.Script,keys:scala.collection.mutable.Buffer[String],args:scala.collection.mutable.Buffer[String]):scala.concurrent.Future[io.vertx.core.json.JsonArray]"></a><a id="evalScriptFuture(Script,Buffer[String],Buffer[String]):Future[JsonArray]"></a>
+      <span class="permalink">
+      <a href="../../../../io/vertx/scala/redis/RedisClient.html#evalScriptFuture(script:io.vertx.scala.redis.Script,keys:scala.collection.mutable.Buffer[String],args:scala.collection.mutable.Buffer[String]):scala.concurrent.Future[io.vertx.core.json.JsonArray]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">evalScriptFuture</span><span class="params">(<span name="script">script: <a href="Script.html" class="extype" name="io.vertx.scala.redis.Script">Script</a></span>, <span name="keys">keys: <span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="args">args: <span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="io.vertx.core.json.JsonArray">JsonArray</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Like <a href="#evalScript(script:io.vertx.scala.redis.Script,keys:scala.collection.mutable.Buffer[String],args:scala.collection.mutable.Buffer[String],handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[io.vertx.core.json.JsonArray]]):io.vertx.scala.redis.RedisClient" class="extmbr" name="io.vertx.scala.redis.RedisClient#evalScript">evalScript</a> but returns a <span class="extype" name="scala.concurrent.Future">scala.concurrent.Future</span> instead of taking an AsyncResultHandler.</p>
     </li><li name="io.vertx.scala.redis.RedisClient#evalsha" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="evalsha(sha1:String,keys:scala.collection.mutable.Buffer[String],values:scala.collection.mutable.Buffer[String],handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[io.vertx.core.json.JsonArray]]):io.vertx.scala.redis.RedisClient"></a><a id="evalsha(String,Buffer[String],Buffer[String],Handler[AsyncResult[JsonArray]]):RedisClient"></a>
       <span class="permalink">
@@ -2629,7 +2672,7 @@ the String.</p></div><dl class="paramcmts block"><dt class="param">sha1</dt><dd 
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[java.lang.Throwable]</span>
@@ -7048,6 +7091,38 @@ index represented by the sorted set.</p></div><dl class="paramcmts block"><dt cl
       </span>
       
       <p class="shortcomment cmt">Like <a href="#sunionstore(destkey:String,keys:scala.collection.mutable.Buffer[String],handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[Long]]):io.vertx.scala.redis.RedisClient" class="extmbr" name="io.vertx.scala.redis.RedisClient#sunionstore">sunionstore</a> but returns a <span class="extype" name="scala.concurrent.Future">scala.concurrent.Future</span> instead of taking an AsyncResultHandler.</p>
+    </li><li name="io.vertx.scala.redis.RedisClient#swapdb" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="swapdb(index1:Int,index2:Int,handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[String]]):io.vertx.scala.redis.RedisClient"></a><a id="swapdb(Int,Int,Handler[AsyncResult[String]]):RedisClient"></a>
+      <span class="permalink">
+      <a href="../../../../io/vertx/scala/redis/RedisClient.html#swapdb(index1:Int,index2:Int,handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[String]]):io.vertx.scala.redis.RedisClient" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">swapdb</span><span class="params">(<span name="index1">index1: <span class="extype" name="scala.Int">Int</span></span>, <span name="index2">index2: <span class="extype" name="scala.Int">Int</span></span>, <span name="handler">handler: <span class="extype" name="io.vertx.core.Handler">Handler</span>[<span class="extype" name="io.vertx.core.AsyncResult">AsyncResult</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>)</span><span class="result">: <a href="" class="extype" name="io.vertx.scala.redis.RedisClient">RedisClient</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Swaps two Redis databases</p><div class="fullcomment"><div class="comment cmt"><p>Swaps two Redis databases</p></div><dl class="paramcmts block"><dt class="param">index1</dt><dd class="cmt"><p>index of first database to swap</p></dd><dt class="param">index2</dt><dd class="cmt"><p>index of second database to swap</p></dd><dt class="param">handler</dt><dd class="cmt"><p>Handler for the result of this call.</p></dd></dl></div>
+    </li><li name="io.vertx.scala.redis.RedisClient#swapdbFuture" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="swapdbFuture(index1:Int,index2:Int):scala.concurrent.Future[String]"></a><a id="swapdbFuture(Int,Int):Future[String]"></a>
+      <span class="permalink">
+      <a href="../../../../io/vertx/scala/redis/RedisClient.html#swapdbFuture(index1:Int,index2:Int):scala.concurrent.Future[String]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">swapdbFuture</span><span class="params">(<span name="index1">index1: <span class="extype" name="scala.Int">Int</span></span>, <span name="index2">index2: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Like <a href="#swapdb(index1:Int,index2:Int,handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[String]]):io.vertx.scala.redis.RedisClient" class="extmbr" name="io.vertx.scala.redis.RedisClient#swapdb">swapdb</a> but returns a <span class="extype" name="scala.concurrent.Future">scala.concurrent.Future</span> instead of taking an AsyncResultHandler.</p>
     </li><li name="io.vertx.scala.redis.RedisClient#sync" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="sync(handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[Unit]]):io.vertx.scala.redis.RedisClient"></a><a id="sync(Handler[AsyncResult[Unit]]):RedisClient"></a>
       <span class="permalink">
@@ -7290,6 +7365,70 @@ index represented by the sorted set.</p></div><dl class="paramcmts block"><dt cl
       </span>
       
       <p class="shortcomment cmt">Like <a href="#type(key:String,handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[String]]):io.vertx.scala.redis.RedisClient" class="extmbr" name="io.vertx.scala.redis.RedisClient#type">type</a> but returns a <span class="extype" name="scala.concurrent.Future">scala.concurrent.Future</span> instead of taking an AsyncResultHandler.</p>
+    </li><li name="io.vertx.scala.redis.RedisClient#unlink" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unlink(key:String,handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[Long]]):io.vertx.scala.redis.RedisClient"></a><a id="unlink(String,Handler[AsyncResult[Long]]):RedisClient"></a>
+      <span class="permalink">
+      <a href="../../../../io/vertx/scala/redis/RedisClient.html#unlink(key:String,handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[Long]]):io.vertx.scala.redis.RedisClient" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unlink</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="handler">handler: <span class="extype" name="io.vertx.core.Handler">Handler</span>[<span class="extype" name="io.vertx.core.AsyncResult">AsyncResult</span>[<span class="extype" name="scala.Long">Long</span>]]</span>)</span><span class="result">: <a href="" class="extype" name="io.vertx.scala.redis.RedisClient">RedisClient</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Delete a key asynchronously in another thread.</p><div class="fullcomment"><div class="comment cmt"><p>Delete a key asynchronously in another thread. Otherwise it is just as DEL, but non blocking.</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>Key to delete</p></dd><dt class="param">handler</dt><dd class="cmt"><p>Handler for the result of this call.</p></dd></dl></div>
+    </li><li name="io.vertx.scala.redis.RedisClient#unlinkFuture" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="unlinkFuture(key:String):scala.concurrent.Future[Long]"></a><a id="unlinkFuture(String):Future[Long]"></a>
+      <span class="permalink">
+      <a href="../../../../io/vertx/scala/redis/RedisClient.html#unlinkFuture(key:String):scala.concurrent.Future[Long]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unlinkFuture</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Long">Long</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Like <a href="#unlink(key:String,handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[Long]]):io.vertx.scala.redis.RedisClient" class="extmbr" name="io.vertx.scala.redis.RedisClient#unlink">unlink</a> but returns a <span class="extype" name="scala.concurrent.Future">scala.concurrent.Future</span> instead of taking an AsyncResultHandler.</p>
+    </li><li name="io.vertx.scala.redis.RedisClient#unlinkMany" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unlinkMany(keys:scala.collection.mutable.Buffer[String],handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[Long]]):io.vertx.scala.redis.RedisClient"></a><a id="unlinkMany(Buffer[String],Handler[AsyncResult[Long]]):RedisClient"></a>
+      <span class="permalink">
+      <a href="../../../../io/vertx/scala/redis/RedisClient.html#unlinkMany(keys:scala.collection.mutable.Buffer[String],handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[Long]]):io.vertx.scala.redis.RedisClient" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unlinkMany</span><span class="params">(<span name="keys">keys: <span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="handler">handler: <span class="extype" name="io.vertx.core.Handler">Handler</span>[<span class="extype" name="io.vertx.core.AsyncResult">AsyncResult</span>[<span class="extype" name="scala.Long">Long</span>]]</span>)</span><span class="result">: <a href="" class="extype" name="io.vertx.scala.redis.RedisClient">RedisClient</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Delete multiple keys asynchronously in another thread.</p><div class="fullcomment"><div class="comment cmt"><p>Delete multiple keys asynchronously in another thread. Otherwise it is just as DEL, but non blocking.</p></div><dl class="paramcmts block"><dt class="param">keys</dt><dd class="cmt"><p>List of keys to delete</p></dd><dt class="param">handler</dt><dd class="cmt"><p>Handler for the result of this call.</p></dd></dl></div>
+    </li><li name="io.vertx.scala.redis.RedisClient#unlinkManyFuture" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="unlinkManyFuture(keys:scala.collection.mutable.Buffer[String]):scala.concurrent.Future[Long]"></a><a id="unlinkManyFuture(Buffer[String]):Future[Long]"></a>
+      <span class="permalink">
+      <a href="../../../../io/vertx/scala/redis/RedisClient.html#unlinkManyFuture(keys:scala.collection.mutable.Buffer[String]):scala.concurrent.Future[Long]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unlinkManyFuture</span><span class="params">(<span name="keys">keys: <span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Long">Long</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Like <a href="#unlinkMany(keys:scala.collection.mutable.Buffer[String],handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[Long]]):io.vertx.scala.redis.RedisClient" class="extmbr" name="io.vertx.scala.redis.RedisClient#unlinkMany">unlinkMany</a> but returns a <span class="extype" name="scala.concurrent.Future">scala.concurrent.Future</span> instead of taking an AsyncResultHandler.</p>
     </li><li name="io.vertx.scala.redis.RedisClient#unsubscribe" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="unsubscribe(channels:scala.collection.mutable.Buffer[String],handler:io.vertx.core.Handler[io.vertx.core.AsyncResult[Unit]]):io.vertx.scala.redis.RedisClient"></a><a id="unsubscribe(Buffer[String],Handler[AsyncResult[Unit]]):RedisClient"></a>
       <span class="permalink">

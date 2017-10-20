@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -104,7 +105,7 @@
 <li><a href="#_using_this_cluster_manager">Using this cluster manager</a></li>
 <li><a href="#_configuring_this_cluster_manager">Configuring this cluster manager</a></li>
 <li><a href="#_using_an_existing_infinispan_cache_manager">Using an existing Infinispan Cache Manager</a></li>
-<li><a href="#_configuring_for_openshift_3">Configuring for Openshift 3</a></li>
+<li><a href="#_configuring_for_kubernetes_or_openshift_3">Configuring for Kubernetes or Openshift 3</a></li>
 <li><a href="#_configuring_for_docker_compose">Configuring for Docker Compose</a></li>
 <li><a href="#_trouble_shooting_clustering">Trouble shooting clustering</a>
 <ul class="sectlevel2">
@@ -118,6 +119,11 @@
 </li>
 <li><a href="#_infinispan_logging">Infinispan logging</a></li>
 <li><a href="#_jgroups_logging">JGroups logging</a></li>
+<li><a href="#_shareddata_extensions">SharedData extensions</a>
+<ul class="sectlevel2">
+<li><a href="#_asyncmap_content_streams">AsyncMap content streams</a></li>
+</ul>
+</li>
 </ul>
         </div>
       </div>
@@ -128,7 +134,7 @@
 <li><a href="#_using_this_cluster_manager">Using this cluster manager</a></li>
 <li><a href="#_configuring_this_cluster_manager">Configuring this cluster manager</a></li>
 <li><a href="#_using_an_existing_infinispan_cache_manager">Using an existing Infinispan Cache Manager</a></li>
-<li><a href="#_configuring_for_openshift_3">Configuring for Openshift 3</a></li>
+<li><a href="#_configuring_for_kubernetes_or_openshift_3">Configuring for Kubernetes or Openshift 3</a></li>
 <li><a href="#_configuring_for_docker_compose">Configuring for Docker Compose</a></li>
 <li><a href="#_trouble_shooting_clustering">Trouble shooting clustering</a>
 <ul class="sectlevel2">
@@ -142,6 +148,11 @@
 </li>
 <li><a href="#_infinispan_logging">Infinispan logging</a></li>
 <li><a href="#_jgroups_logging">JGroups logging</a></li>
+<li><a href="#_shareddata_extensions">SharedData extensions</a>
+<ul class="sectlevel2">
+<li><a href="#_asyncmap_content_streams">AsyncMap content streams</a></li>
+</ul>
+</li>
 </ul>
         </div>
         <div id="preamble">
@@ -157,7 +168,7 @@
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-infinispan<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -192,12 +203,12 @@
 <h2 id="_using_this_cluster_manager">Using this cluster manager</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you are using Vert.x from the command line, the jar corresponding to this cluster manager (it will be named <code>vertx-infinispan-3.4.2.jar</code>
+<p>If you are using Vert.x from the command line, the jar corresponding to this cluster manager (it will be named <code>vertx-infinispan-3.5.0.jar</code>
 should be in the <code>lib</code> directory of the Vert.x installation.</p>
 </div>
 <div class="paragraph">
 <p>If you want clustering with this cluster manager in your Vert.x Maven or Gradle project then just add a dependency to
-the artifact: <code>io.vertx:vertx-infinispan:3.4.2</code> in your project.</p>
+the artifact: <code>io.vertx:vertx-infinispan:3.5.0</code> in your project.</p>
 </div>
 <div class="paragraph">
 <p>If the jar is on your classpath as above then Vert.x will automatically detect this and use it as the cluster manager.
@@ -341,13 +352,13 @@ Vertx.clusteredVertx(options, res -&gt; {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_configuring_for_openshift_3">Configuring for Openshift 3</h2>
+<h2 id="_configuring_for_kubernetes_or_openshift_3">Configuring for Kubernetes or Openshift 3</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>On Openshift 3, JGroups should be configured to use the <code>KUBE_PING</code> protocol.</p>
+<p>On Kubernetes or Openshift 3, JGroups should be configured to use the <code>KUBE_PING</code> protocol.</p>
 </div>
 <div class="paragraph">
-<p>First, add the <code>org.infinispan:infinispan-cloud:9.0.0.Final</code> dependency to your project.
+<p>First, add the <code>org.infinispan:infinispan-cloud:9.1.1.Final</code> and <code>org.jgroups.kubernetes:jgroups-kubernetes:1.0.3.Final</code> dependencies to your project.
 With Maven it looks like:</p>
 </div>
 <div class="listingblock">
@@ -355,29 +366,15 @@ With Maven it looks like:</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>org.infinispan<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>infinispan-cloud<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>9.0.0.Final<span class="tag">&lt;/version&gt;</span>
-  <span class="tag">&lt;exclusions&gt;</span>
-    <span class="tag">&lt;exclusion&gt;</span>
-      <span class="tag">&lt;groupId&gt;</span>org.jgroups<span class="tag">&lt;/groupId&gt;</span>                <b class="conum">(1)</b>
-      <span class="tag">&lt;artifactId&gt;</span>jgroups<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;/exclusion&gt;</span>
-    <span class="tag">&lt;exclusion&gt;</span>
-      <span class="tag">&lt;artifactId&gt;</span>undertow-core<span class="tag">&lt;/artifactId&gt;</span>        <b class="conum">(2)</b>
-      <span class="tag">&lt;groupId&gt;</span>io.undertow<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;/exclusion&gt;</span>
-  <span class="tag">&lt;/exclusions&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span></code></pre>
+  <span class="tag">&lt;version&gt;</span>9.1.1.Final<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span>
+<span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>org.jgroups.kubernetes<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>jgroups-kubernetes<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>1.0.3.Final<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span>
+<span class="tag">&lt;dependency&gt;</span></code></pre>
 </div>
-</div>
-<div class="colist arabic">
-<ol>
-<li>
-<p>make sure to use the <code>infinispan-core</code> JGroups version</p>
-</li>
-<li>
-<p>avoid extra dependencies, <code>KUBE_PING</code> works fine with the JDK&#8217;s Http server</p>
-</li>
-</ol>
 </div>
 <div class="paragraph">
 <p>Then, set the <code>vertx.jgroups.config</code> system property to <code>default-configs/default-jgroups-kubernetes.xml</code>.</p>
@@ -391,19 +388,19 @@ With Maven it looks like:</p>
 <p>This JGroups stack file is located in the <code>infinispan-cloud</code> JAR and preconfigured for Kubernetes/Openshift3.</p>
 </div>
 <div class="paragraph">
-<p><code>KUBE_PING</code> listens to requests on port <code>8888</code> by default, so make sure to declare it when building the container image.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="Dockerfile">EXPOSE 8888</code></pre>
-</div>
-</div>
-<div class="paragraph">
 <p>Also, set the project namespace as the scope for discovery.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Dockerfile">ENV OPENSHIFT_KUBE_PING_NAMESPACE my-openshift3-project</code></pre>
+<pre class="CodeRay highlight"><code data-lang="Dockerfile">ENV KUBERNETES_NAMESPACE my-project</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Optionnaly, to create separate clusters in the same namespace, add a labels selector:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Dockerfile">ENV KUBERNETES_LABELS my-label=my-value</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -423,8 +420,7 @@ With Maven it looks like:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Further configuration details are available in the
-<a href="https://github.com/jgroups-extras/jgroups-kubernetes">Kubernetes discovery protocol for JGroups</a> README.</p>
+<p>Further configuration details are available on the <a href="https://github.com/jgroups-extras/jgroups-kubernetes">Kubernetes discovery protocol for JGroups repository</a>.</p>
 </div>
 </div>
 </div>
@@ -597,6 +593,26 @@ more details or want to implement your own logging backend implementation.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_shareddata_extensions">SharedData extensions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_asyncmap_content_streams">AsyncMap content streams</h3>
+<div class="paragraph">
+<p>The <code>InfinispanAsyncMap</code> API allows to retrieve keys, values and entries as streams.
+This can be useful if you need to go through the content of a large map for bulk processing.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">InfinispanAsyncMap&lt;K, V&gt; infinispanAsyncMap = InfinispanAsyncMap.unwrap(asyncMap);
+ReadStream&lt;K&gt; keyStream = infinispanAsyncMap.keyStream();
+ReadStream&lt;V&gt; valueStream = infinispanAsyncMap.valueStream();
+ReadStream&lt;<span class="predefined-type">Map</span>.Entry&lt;K, V&gt;&gt; entryReadStream = infinispanAsyncMap.entryStream();</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 
         
 
@@ -604,7 +620,7 @@ more details or want to implement your own logging backend implementation.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:36 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

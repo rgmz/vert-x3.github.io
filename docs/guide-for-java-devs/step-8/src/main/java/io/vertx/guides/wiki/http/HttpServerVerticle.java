@@ -22,14 +22,15 @@ import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import io.vertx.core.net.JksOptions;
+import io.vertx.ext.auth.KeyStoreOptions;
+import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.ext.auth.shiro.ShiroAuthOptions;
 import io.vertx.ext.auth.shiro.ShiroAuthRealmType;
 import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.guides.wiki.database.rxjava.WikiDatabaseService;
+// tag::rx-imports[]
 import io.vertx.rxjava.core.AbstractVerticle;
 import io.vertx.rxjava.core.http.HttpServer;
 import io.vertx.rxjava.ext.auth.AuthProvider;
@@ -39,19 +40,16 @@ import io.vertx.rxjava.ext.auth.shiro.ShiroAuth;
 import io.vertx.rxjava.ext.web.Router;
 import io.vertx.rxjava.ext.web.RoutingContext;
 import io.vertx.rxjava.ext.web.client.WebClient;
+import io.vertx.rxjava.ext.web.client.HttpResponse; // <1>
 import io.vertx.rxjava.ext.web.codec.BodyCodec;
-import io.vertx.rxjava.ext.web.handler.AuthHandler;
-import io.vertx.rxjava.ext.web.handler.BodyHandler;
-import io.vertx.rxjava.ext.web.handler.CookieHandler;
-import io.vertx.rxjava.ext.web.handler.FormLoginHandler;
-import io.vertx.rxjava.ext.web.handler.JWTAuthHandler;
-import io.vertx.rxjava.ext.web.handler.RedirectAuthHandler;
-import io.vertx.rxjava.ext.web.handler.SessionHandler;
-import io.vertx.rxjava.ext.web.handler.UserSessionHandler;
+import io.vertx.rxjava.ext.web.handler.*;
 import io.vertx.rxjava.ext.web.sstore.LocalSessionStore;
 import io.vertx.rxjava.ext.web.templ.FreeMarkerTemplateEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import rx.Observable;
 import rx.Single;
+// end::rx-imports[]
 
 import java.util.Arrays;
 import java.util.Date;
@@ -77,11 +75,13 @@ public class HttpServerVerticle extends AbstractVerticle {
       "\n" +
       "Feel-free to write in Markdown!\n";
 
+  // tag::rx-vertx-delegate[]
   @Override
   public void start(Future<Void> startFuture) throws Exception {
 
     String wikiDbQueue = config().getString(CONFIG_WIKIDB_QUEUE, "wikidb.queue");
     dbService = io.vertx.guides.wiki.database.WikiDatabaseService.createProxy(vertx.getDelegate(), wikiDbQueue);
+    // end::rx-vertx-delegate[]
 
     webClient = WebClient.create(vertx, new WebClientOptions()
       .setSsl(true)
@@ -128,11 +128,11 @@ public class HttpServerVerticle extends AbstractVerticle {
         .end();
     });
 
-    JWTAuth jwtAuth = JWTAuth.create(vertx, new JsonObject()
-      .put("keyStore", new JsonObject()
-        .put("path", "keystore.jceks")
-        .put("type", "jceks")
-        .put("password", "secret")));
+    JWTAuth jwtAuth = JWTAuth.create(vertx, new JWTAuthOptions()
+      .setKeyStore(new KeyStoreOptions()
+        .setPath("keystore.jceks")
+        .setType("jceks")
+        .setPassword("secret")));
 
     Router apiRouter = Router.router(vertx);
 
@@ -144,10 +144,9 @@ public class HttpServerVerticle extends AbstractVerticle {
         .put("username", context.request().getHeader("login"))
         .put("password", context.request().getHeader("password"));
 
+      // tag::rx-concurrent-composition[]
+
       auth.rxAuthenticate(creds).flatMap(user -> {
-
-        // tag::rx-concurrent-composition[]
-
         Single<Boolean> create = user.rxIsAuthorised("create"); // <1>
         Single<Boolean> delete = user.rxIsAuthorised("delete");
         Single<Boolean> update = user.rxIsAuthorised("update");
@@ -163,12 +162,12 @@ public class HttpServerVerticle extends AbstractVerticle {
               .setSubject("Wiki API")
               .setIssuer("Vert.x"));
         });
-
-        // end::rx-concurrent-composition[]
-
       }).subscribe(token -> {
         context.response().putHeader("Content-Type", "text/plain").end(token);
       }, t -> context.fail(401));
+
+      // end::rx-concurrent-composition[]
+
     });
 
     apiRouter.get("/pages").handler(this::apiRoot);

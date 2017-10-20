@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -271,6 +272,7 @@
 </ul>
 </li>
 <li><a href="#_record_parser">Record Parser</a></li>
+<li><a href="#_json_parser">Json Parser</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
@@ -306,6 +308,13 @@
 <li><a href="#_automatic_failover">Automatic failover</a></li>
 <li><a href="#_ha_groups">HA groups</a></li>
 <li><a href="#_dealing_with_network_partitions_quora">Dealing with network partitions - Quora</a></li>
+</ul>
+</li>
+<li><a href="#_native_transports">Native transports</a>
+<ul class="sectlevel2">
+<li><a href="#_native_linux_transport">Native Linux Transport</a></li>
+<li><a href="#_native_bsd_transport">Native BSD Transport</a></li>
+<li><a href="#_domain_sockets">Domain sockets</a></li>
 </ul>
 </li>
 <li><a href="#_security_notes">Security notes</a>
@@ -508,6 +517,7 @@
 </ul>
 </li>
 <li><a href="#_record_parser">Record Parser</a></li>
+<li><a href="#_json_parser">Json Parser</a></li>
 <li><a href="#_thread_safety">Thread safety</a></li>
 <li><a href="#_metrics_spi">Metrics SPI</a></li>
 <li><a href="#_osgi">OSGi</a></li>
@@ -543,6 +553,13 @@
 <li><a href="#_automatic_failover">Automatic failover</a></li>
 <li><a href="#_ha_groups">HA groups</a></li>
 <li><a href="#_dealing_with_network_partitions_quora">Dealing with network partitions - Quora</a></li>
+</ul>
+</li>
+<li><a href="#_native_transports">Native transports</a>
+<ul class="sectlevel2">
+<li><a href="#_native_linux_transport">Native Linux Transport</a></li>
+<li><a href="#_native_bsd_transport">Native BSD Transport</a></li>
+<li><a href="#_domain_sockets">Domain sockets</a></li>
 </ul>
 </li>
 <li><a href="#_security_notes">Security notes</a>
@@ -614,6 +631,9 @@
 <p>High availability</p>
 </li>
 <li>
+<p>Native transports</p>
+</li>
+<li>
 <p>Clustering</p>
 </li>
 </ul>
@@ -649,7 +669,7 @@ project descriptor to access the Vert.x Core API and enable the Scala support:</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">libraryDependencies += &quot;io.vertx&quot; %% &quot;vertx-lang-scala&quot; % &quot;3.4.2&quot;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">libraryDependencies += &quot;io.vertx&quot; %% &quot;vertx-lang-scala&quot; % &quot;3.5.0&quot;</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -664,7 +684,7 @@ project descriptor to access the Vert.x Core API and enable the Scala support:</
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-lang-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -677,7 +697,7 @@ project descriptor to access the Vert.x Core API and enable the Scala support:</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:vertx-lang-scala_2.12:3.4.2</span><span class="delimiter">&quot;</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:vertx-lang-scala_2.12:3.5.0</span><span class="delimiter">&quot;</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3119,6 +3139,11 @@ on it:</p>
 <p>You can set an <code><a href="../../scaladocs/io/vertx/scala/core/net/NetSocket.html#exceptionHandler(io.vertx.core.Handler)">exceptionHandler</a></code> to receive any
 exceptions that happen on the socket.</p>
 </div>
+<div class="paragraph">
+<p>You can set an <code><a href="../../scaladocs/io/vertx/scala/core/net/NetServer.html#exceptionHandler(io.vertx.core.Handler)">exceptionHandler</a></code> to receive any
+exceptions that happens before the connection is passed to the <code><a href="../../scaladocs/io/vertx/scala/core/net/NetServer.html#connectHandler(io.vertx.core.Handler))">connectHandler</a></code>
+, e.g during the TLS handshake.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_event_bus_write_handler">Event bus write handler</h3>
@@ -3551,7 +3576,19 @@ var server = vertx.createNetServer(options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Keep in mind that pem configuration, the private key is not crypted.</p>
+<p>PKCS8, PKCS1 and X.509 certificates wrapped in a PEM block formats are supported.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+keep in mind that pem configuration, the private key is not crypted.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -4225,6 +4262,9 @@ client.connectFuture(1234, &quot;localhost&quot;, &quot;server.name&quot;).onCom
 <p>Application-Layer Protocol Negotiation (ALPN) is a TLS extension for application layer protocol negotiation. It is used by
 HTTP/2: during the TLS handshake the client gives the list of application protocols it accepts and the server responds
 with a protocol it supports.</p>
+</div>
+<div class="paragraph">
+<p>If you are using Java 9, you are fine and you can use HTTP/2 out of the box without extra steps.</p>
 </div>
 <div class="paragraph">
 <p>Java 8 does not supports ALPN out of the box, so ALPN should be enabled by other means:</p>
@@ -5410,6 +5450,14 @@ cache and does not want it anymore.</p>
 the pushed response can be written after.</p>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_handling_exceptions_2">Handling exceptions</h4>
+<div class="paragraph">
+<p>You can set an <code><a href="../../scaladocs/io/vertx/scala/core/http/HttpServer.html#exceptionHandler(io.vertx.core.Handler)">exceptionHandler</a></code> to receive any
+exceptions that happens before the connection is passed to the <code><a href="../../scaladocs/io/vertx/scala/core/http/HttpServer.html#requestHandler(io.vertx.core.Handler)">requestHandler</a></code>
+or to the <code><a href="../../scaladocs/io/vertx/scala/core/http/HttpServer.html#websocketHandler(io.vertx.core.Handler)">websocketHandler</a></code>, e.g during the TLS handshake.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_http_compression">HTTP Compression</h3>
@@ -5438,6 +5486,15 @@ includes the supported compressions. Commonly used are deflate and gzip. Both ar
 <div class="paragraph">
 <p>If such a header is found the server will automatically compress the body of the response with one of the supported
 compressions and send it back to the client.</p>
+</div>
+<div class="paragraph">
+<p>Whenever the response needs to be sent without compression you can set the header <code>content-encoding</code> to <code>identity</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">// Disable compression and send an image
+request.response().putHeader(io.vertx.core.http.HttpHeaders.CONTENT_ENCODING, io.vertx.core.http.HttpHeaders.IDENTITY).sendFile(&quot;/path/to/image.jpg&quot;)</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Be aware that compression may be able to reduce network traffic but is more CPU-intensive.</p>
@@ -5860,7 +5917,7 @@ request.end()</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_handling_exceptions_2">Handling exceptions</h4>
+<h4 id="_handling_exceptions_3">Handling exceptions</h4>
 <div class="paragraph">
 <p>You can handle exceptions corresponding to a request by setting an exception handler on the
 <code><a href="../../scaladocs/io/vertx/scala/core/http/HttpClientRequest.html">HttpClientRequest</a></code> instance:</p>
@@ -8901,6 +8958,108 @@ parser.handle(Buffer.buffer(&quot;\n&quot;))</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_json_parser">Json Parser</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can easily parse JSON structures but that requires to provide the JSON content at once, but it
+may not be convenient when you need to parse very large structures.</p>
+</div>
+<div class="paragraph">
+<p>The non-blocking JSON parser is an event driven parser able to deal with very large structures.
+It transforms a sequence of input buffer to a sequence of JSON parse events.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">Code not translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The parser is non-blocking and emitted events are driven by the input buffers.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">var parser = JsonParser.newParser()
+
+// start array event
+// start object event
+// &quot;firstName&quot;:&quot;Bob&quot; event
+parser.handle(Buffer.buffer(&quot;[{\&quot;firstName\&quot;:\&quot;Bob\&quot;,&quot;))
+
+// &quot;lastName&quot;:&quot;Morane&quot; event
+// end object event
+parser.handle(Buffer.buffer(&quot;\&quot;lastName\&quot;:\&quot;Morane\&quot;},&quot;))
+
+// start object event
+// &quot;firstName&quot;:&quot;Luke&quot; event
+// &quot;lastName&quot;:&quot;Lucky&quot; event
+// end object event
+parser.handle(Buffer.buffer(&quot;{\&quot;firstName\&quot;:\&quot;Luke\&quot;,\&quot;lastName\&quot;:\&quot;Lucky\&quot;}&quot;))
+
+// end array event
+parser.handle(Buffer.buffer(&quot;]&quot;))
+
+// Always call end
+parser.end()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Event driven parsing provides more control but comes at the price of dealing with fine grained events, which can be
+inconvenient sometimes. The JSON parser allows you to handle JSON structures as values when it is desired:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">Code not translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The value mode can be set and unset during the parsing allowing you to switch between fine grained
+events or JSON object value events.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">Code not translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can do the same with arrays as well</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">Code not translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also decode POJOs</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">parser.handler((event: io.vertx.scala.core.parsetools.JsonEvent) =&gt; {
+  // Handle each object
+  // Get the field in which this object was parsed
+  var id = event.fieldName()
+  var user = event.mapTo(examples.ParseToolsExamples.User.class)
+  println(s&quot;User with id ${id} : ${user.firstName} ${user.lastName}&quot;)
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Whenever the parser fails to process a buffer, an exception will be thrown unless you set an exception handler:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">var parser = JsonParser.newParser()
+
+parser.exceptionHandler((err: java.lang.Throwable) =&gt; {
+  // Catch any parsing or decoding error
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more details, check out the <code><a href="../../scaladocs/io/vertx/scala/core/parsetools/JsonParser.html">JsonParser</a></code> class.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_thread_safety">Thread safety</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -9992,6 +10151,165 @@ group.</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_native_transports">Native transports</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vert.x can run with <a href="http://netty.io/wiki/native-transports.html">native transports</a> (when available) on BSD (OSX) and Linux:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">var vertx = Vertx.vertx(VertxOptions()
+  .setPreferNativeTransport(true)
+)
+
+// True when native is available
+var usingNative = vertx.isNativeTransportEnabled()
+println(s&quot;Running with native: ${usingNative}&quot;)</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+preferring native transport will not prevent the application to execute, if your application requires native
+transport, you need to check <code><a href="../../scaladocs/io/vertx/scala/core/Vertx.html#isNativeTransportEnabled()">isNativeTransportEnabled</a></code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_native_linux_transport">Native Linux Transport</h3>
+<div class="paragraph">
+<p>You need to add the following dependency in your classpath:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.netty<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>netty-transport-native-epoll<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>4.1.15.Final<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;classifier&gt;</span>linux-x86_64<span class="tag">&lt;/classifier&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Native on Linux gives you extra networking options:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SO_REUSEPORT</p>
+</li>
+<li>
+<p>TCP_QUICKACK</p>
+</li>
+<li>
+<p>TCP_CORK</p>
+</li>
+<li>
+<p>TCP_FASTOPEN</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">// Available on Linux
+vertx.createHttpServer(HttpServerOptions()
+  .setTcpFastOpen(fastOpen)
+  .setTcpCork(cork)
+  .setTcpQuickAck(quickAck)
+  .setReusePort(reusePort)
+)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_native_bsd_transport">Native BSD Transport</h3>
+<div class="paragraph">
+<p>You need to add the following dependency in your classpath:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.netty<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>netty-transport-native-epoll<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>4.1.15.Final<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;classifier&gt;</span>osx-x86_64<span class="tag">&lt;/classifier&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>MacOS Sierra and above are supported.</p>
+</div>
+<div class="paragraph">
+<p>Native on BSD gives you extra networking options:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SO_REUSEPORT</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">// Available on BSD
+vertx.createHttpServer(HttpServerOptions()
+  .setReusePort(reusePort)
+)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_domain_sockets">Domain sockets</h3>
+<div class="paragraph">
+<p>Natives provide support domain sockets for <code>NetServer</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">// Only available on BSD and Linux
+vertx.createNetServer().connectHandler((so: io.vertx.scala.core.net.NetSocket) =&gt; {
+  // Handle application
+}).listen(SocketAddress.domainSocketAddress(&quot;/var/tmp/myservice.sock&quot;))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As well as <code>NetClient</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">var netClient = vertx.createNetClient()
+
+// Only available on BSD and Linux
+netClient.connectFuture(SocketAddress.domainSocketAddress(&quot;/var/tmp/myservice.sock&quot;)).onComplete{
+  case Success(result) =&gt; {
+    // Connected
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+support for <code>HttpServer</code> and <code>HttpClient</code> can be expected in later versions of Vert.x
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_security_notes">Security notes</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -10571,7 +10889,7 @@ very careful when using this settings.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:38 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -353,6 +354,11 @@ on it:</p>
 <div class="paragraph">
 <p>You can set an <code><a href="../../yardoc/Vertx/NetSocket.html#exception_handler-instance_method">exceptionHandler</a></code> to receive any
 exceptions that happen on the socket.</p>
+</div>
+<div class="paragraph">
+<p>You can set an <code><a href="../../yardoc/Vertx/NetServer.html#exception_handler-instance_method">exceptionHandler</a></code> to receive any
+exceptions that happens before the connection is passed to the <code><a href="../../yardoc/Vertx/NetServer.html#connect_handler-instance_method">connectHandler</a></code>
+, e.g during the TLS handshake.</p>
 </div>
 </div>
 <div class="sect2">
@@ -784,7 +790,19 @@ server = vertx.create_net_server(options)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Keep in mind that pem configuration, the private key is not crypted.</p>
+<p>PKCS8, PKCS1 and X.509 certificates wrapped in a PEM block formats are supported.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+keep in mind that pem configuration, the private key is not crypted.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -1484,6 +1502,9 @@ HTTP/2: during the TLS handshake the client gives the list of application protoc
 with a protocol it supports.</p>
 </div>
 <div class="paragraph">
+<p>If you are using Java 9, you are fine and you can use HTTP/2 out of the box without extra steps.</p>
+</div>
+<div class="paragraph">
 <p>Java 8 does not supports ALPN out of the box, so ALPN should be enabled by other means:</p>
 </div>
 <div class="ulist">
@@ -1598,7 +1619,7 @@ to resolve the DNS address locally.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:36 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

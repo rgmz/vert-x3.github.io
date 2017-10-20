@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -102,6 +103,7 @@
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
 <li><a href="#_record_parser">Record Parser</a></li>
+<li><a href="#_json_parser">Json Parser</a></li>
 </ul>
         </div>
       </div>
@@ -110,6 +112,7 @@
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
 <li><a href="#_record_parser">Record Parser</a></li>
+<li><a href="#_json_parser">Json Parser</a></li>
 </ul>
         </div>
         <div class="sect1">
@@ -174,6 +177,108 @@ parser.handle(Buffer.buffer(&quot;\n&quot;))</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_json_parser">Json Parser</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can easily parse JSON structures but that requires to provide the JSON content at once, but it
+may not be convenient when you need to parse very large structures.</p>
+</div>
+<div class="paragraph">
+<p>The non-blocking JSON parser is an event driven parser able to deal with very large structures.
+It transforms a sequence of input buffer to a sequence of JSON parse events.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">Code not translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The parser is non-blocking and emitted events are driven by the input buffers.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">var parser = JsonParser.newParser()
+
+// start array event
+// start object event
+// &quot;firstName&quot;:&quot;Bob&quot; event
+parser.handle(Buffer.buffer(&quot;[{\&quot;firstName\&quot;:\&quot;Bob\&quot;,&quot;))
+
+// &quot;lastName&quot;:&quot;Morane&quot; event
+// end object event
+parser.handle(Buffer.buffer(&quot;\&quot;lastName\&quot;:\&quot;Morane\&quot;},&quot;))
+
+// start object event
+// &quot;firstName&quot;:&quot;Luke&quot; event
+// &quot;lastName&quot;:&quot;Lucky&quot; event
+// end object event
+parser.handle(Buffer.buffer(&quot;{\&quot;firstName\&quot;:\&quot;Luke\&quot;,\&quot;lastName\&quot;:\&quot;Lucky\&quot;}&quot;))
+
+// end array event
+parser.handle(Buffer.buffer(&quot;]&quot;))
+
+// Always call end
+parser.end()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Event driven parsing provides more control but comes at the price of dealing with fine grained events, which can be
+inconvenient sometimes. The JSON parser allows you to handle JSON structures as values when it is desired:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">Code not translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The value mode can be set and unset during the parsing allowing you to switch between fine grained
+events or JSON object value events.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">Code not translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can do the same with arrays as well</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">Code not translatable</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also decode POJOs</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">parser.handler({ event -&gt;
+  // Handle each object
+  // Get the field in which this object was parsed
+  var id = event.fieldName()
+  var user = event.mapTo(examples.ParseToolsExamples.User.`class`)
+  println(&quot;User with id ${id} : ${user.firstName} ${user.lastName}&quot;)
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Whenever the parser fails to process a buffer, an exception will be thrown unless you set an exception handler:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">var parser = JsonParser.newParser()
+
+parser.exceptionHandler({ err -&gt;
+  // Catch any parsing or decoding error
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more details, check out the <code><a href="../../apidocs/io/vertx/core/parsetools/JsonParser.html">JsonParser</a></code> class.</p>
+</div>
+</div>
+</div>
 
         
 
@@ -181,7 +286,7 @@ parser.handle(Buffer.buffer(&quot;\n&quot;))</code></pre>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:36 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

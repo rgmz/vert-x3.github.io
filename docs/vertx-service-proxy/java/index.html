@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -177,7 +178,7 @@ your build descriptor:</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-service-proxy<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -190,7 +191,7 @@ your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-proxy:3.4.2</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-service-proxy:3.5.0</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -208,7 +209,7 @@ your build descriptor:</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-codegen<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
   <span class="tag">&lt;scope&gt;</span>provided<span class="tag">&lt;/scope&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
@@ -222,7 +223,7 @@ your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compileOnly <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-codegen:3.4.2</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compileOnly <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-codegen:3.5.0</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -435,7 +436,7 @@ compiler so <em>no extra step</em> is required, it is just a matter of configuri
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-service-proxy<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
   <span class="tag">&lt;classifier&gt;</span>processor<span class="tag">&lt;/classifier&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
@@ -445,7 +446,7 @@ compiler so <em>no extra step</em> is required, it is just a matter of configuri
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>compile "io.vertx:vertx-service-proxy:3.4.2:processor"</code></pre>
+<pre class="CodeRay highlight"><code>compile "io.vertx:vertx-service-proxy:3.5.0:processor"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -484,8 +485,9 @@ code to "register" your service on the event bus:</p>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">SomeDatabaseService service = <span class="keyword">new</span> SomeDatabaseServiceImpl();
 <span class="comment">// Register the handler</span>
-ProxyHelper.registerService(SomeDatabaseService.class, vertx, service,
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">database-service-address</span><span class="delimiter">&quot;</span></span>);</code></pre>
+<span class="keyword">new</span> ServiceBinder(vertx)
+  .setAddress(<span class="string"><span class="delimiter">&quot;</span><span class="content">database-service-address</span><span class="delimiter">&quot;</span></span>)
+  .register(SomeDatabaseService.class, service);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -496,20 +498,24 @@ ProxyHelper.registerService(SomeDatabaseService.class, vertx, service,
 available from any host.</p>
 </div>
 <div class="paragraph">
-<p>To withdraw your service, use the <code><a href="../../apidocs/io/vertx/serviceproxy/ProxyHelper.html#unregisterService-io.vertx.core.eventbus.MessageConsumer-">ProxyHelper.unregisterService</a></code>
+<p>To withdraw your service, use the <code><a href="../../apidocs/io/vertx/serviceproxy/ServiceBinder.html#unregister-io.vertx.core.eventbus.MessageConsumer-">unregister</a></code>
 method:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">SomeDatabaseService service = <span class="keyword">new</span> SomeDatabaseServiceImpl();
+<pre class="CodeRay highlight"><code data-lang="java">ServiceBinder binder = <span class="keyword">new</span> ServiceBinder(vertx);
+
+<span class="comment">// Create an instance of your service implementation</span>
+SomeDatabaseService service = <span class="keyword">new</span> SomeDatabaseServiceImpl();
 <span class="comment">// Register the handler</span>
-MessageConsumer&lt;JsonObject&gt; consumer = ProxyHelper.registerService(SomeDatabaseService.class, vertx, service,
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">database-service-address</span><span class="delimiter">&quot;</span></span>);
+MessageConsumer&lt;JsonObject&gt; consumer = binder
+  .setAddress(<span class="string"><span class="delimiter">&quot;</span><span class="content">database-service-address</span><span class="delimiter">&quot;</span></span>)
+  .register(SomeDatabaseService.class, service);
 
 <span class="comment">// ....</span>
 
 <span class="comment">// Unregister your service.</span>
-ProxyHelper.unregisterService(consumer);</code></pre>
+binder.unregister(consumer);</code></pre>
 </div>
 </div>
 </div>
@@ -523,13 +529,11 @@ can be created using the <code>ProxyHelper</code> class:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">SomeDatabaseService service = ProxyHelper.createProxy(SomeDatabaseService.class,
-    vertx,
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">database-service-address</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">ServiceProxyBuilder builder = <span class="keyword">new</span> ServiceProxyBuilder(vertx).setAddress(<span class="string"><span class="delimiter">&quot;</span><span class="content">database-service-address</span><span class="delimiter">&quot;</span></span>);
+
+SomeDatabaseService service = builder.build(SomeDatabaseService.class);
 <span class="comment">// or with delivery options:</span>
-SomeDatabaseService service2 = ProxyHelper.createProxy(SomeDatabaseService.class,
-    vertx,
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">database-service-address</span><span class="delimiter">&quot;</span></span>, options);</code></pre>
+SomeDatabaseService service2 = builder.setOptions(options).build(SomeDatabaseService.class);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -907,7 +911,7 @@ any type supported by the event bus. To signal a failure the method <code>messag
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:36 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

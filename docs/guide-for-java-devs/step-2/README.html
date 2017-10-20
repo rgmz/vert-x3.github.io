@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -103,7 +104,13 @@
           <ul class="sectlevel1">
 <li><a href="#_architecture_and_technical_choices">Architecture and technical choices</a></li>
 <li><a href="#_the_http_server_verticle">The HTTP server verticle</a></li>
-<li><a href="#_the_database_verticle">The database verticle</a></li>
+<li><a href="#_the_database_verticle">The database verticle</a>
+<ul class="sectlevel2">
+<li><a href="#_configurable_sql_queries">Configurable SQL queries</a></li>
+<li><a href="#_dispatching_requests">Dispatching requests</a></li>
+<li><a href="#_reducing_the_jdbc_client_boilerplate">Reducing the JDBC client boilerplate</a></li>
+</ul>
+</li>
 <li><a href="#_deploying_the_verticles_from_a_main_verticle">Deploying the verticles from a main verticle</a></li>
 </ul>
         </div>
@@ -114,7 +121,13 @@
           <ul class="sectlevel1">
 <li><a href="#_architecture_and_technical_choices">Architecture and technical choices</a></li>
 <li><a href="#_the_http_server_verticle">The HTTP server verticle</a></li>
-<li><a href="#_the_database_verticle">The database verticle</a></li>
+<li><a href="#_the_database_verticle">The database verticle</a>
+<ul class="sectlevel2">
+<li><a href="#_configurable_sql_queries">Configurable SQL queries</a></li>
+<li><a href="#_dispatching_requests">Dispatching requests</a></li>
+<li><a href="#_reducing_the_jdbc_client_boilerplate">Reducing the JDBC client boilerplate</a></li>
+</ul>
+</li>
 <li><a href="#_deploying_the_verticles_from_a_main_verticle">Deploying the verticles from a main verticle</a></li>
 </ul>
         </div>
@@ -390,9 +403,15 @@ In the event that no response is expected there is a variant of the <code>send</
 <h2 id="_the_database_verticle">The database verticle</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Connecting to a database using JDBC requires of course a driver and configuration, which we had hard-coded in the first iteration.
-While this verticle will turn them to configuration parameters, we will also go a step further by loading the SQL queries from a properties file.
-The queries will be loaded from a file passed as a configuration parameter or from a default resource if none is being provided.
+<p>Connecting to a database using JDBC requires of course a driver and configuration, which we had hard-coded in the first iteration.</p>
+</div>
+<div class="sect2">
+<h3 id="_configurable_sql_queries">Configurable SQL queries</h3>
+<div class="paragraph">
+<p>While the verticle will turn the previously hard-coded values to configuration parameters, we will also go a step further by loading the SQL queries from a properties file.</p>
+</div>
+<div class="paragraph">
+<p>The queries will be loaded from a file passed as a configuration parameter or from a default resource if none is being provided.
 The advantage of this approach is that the verticle can adapt both to different JDBC drivers <em>and</em> SQL dialects.</p>
 </div>
 <div class="paragraph">
@@ -521,6 +540,9 @@ The code of the verticle <code>start</code> method is the following:</p>
 </li>
 </ol>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_dispatching_requests">Dispatching requests</h3>
 <div class="paragraph">
 <p>The event bus message handler is the <code>onMessage</code> method:</p>
 </div>
@@ -568,133 +590,160 @@ The code of the verticle <code>start</code> method is the following:</p>
 <p>We defined a <code>ErrorCodes</code> enumeration for errors, which we use to report back to the message sender.
 To do so, the <code>fail</code> method of the <code>Message</code> class provides a convenient shortcut to reply with an error, and the original message sender gets a failed <code>AsyncResult</code>.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_reducing_the_jdbc_client_boilerplate">Reducing the JDBC client boilerplate</h3>
+<div class="paragraph">
+<p>So far we have seen the <em>complete</em> interaction to perform a SQL query:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>retrieve a connection,</p>
+</li>
+<li>
+<p>perform requests,</p>
+</li>
+<li>
+<p>release the connection.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This leads to code where lots of error processing needs to happen for each asynchronous operation, as in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">dbClient.getConnection(car -&gt; {
+  <span class="keyword">if</span> (car.succeeded()) {
+    SQLConnection connection = car.result();
+    connection.query(sqlQueries.get(SqlQuery.ALL_PAGES), res -&gt; {
+      connection.close();
+      <span class="keyword">if</span> (res.succeeded()) {
+        <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; pages = res.result()
+          .getResults()
+          .stream()
+          .map(json -&gt; json.getString(<span class="integer">0</span>))
+          .sorted()
+          .collect(Collectors.toList());
+        message.reply(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">pages</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonArray(pages)));
+      } <span class="keyword">else</span> {
+        reportQueryError(message, res.cause());
+      }
+    });
+  } <span class="keyword">else</span> {
+    reportQueryError(message, car.cause());
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Starting from Vert.x 3.5.0, the JDBC client now supports <em>one-shot</em> operations where a connection is being acquired to do a SQL operation, then released internally.
+The same code as above now reduces to:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">dbClient.query(sqlQueries.get(SqlQuery.ALL_PAGES), res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; pages = res.result()
+      .getResults()
+      .stream()
+      .map(json -&gt; json.getString(<span class="integer">0</span>))
+      .sorted()
+      .collect(Collectors.toList());
+    message.reply(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">pages</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonArray(pages)));
+  } <span class="keyword">else</span> {
+    reportQueryError(message, res.cause());
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is very useful for cases where the connection is being acquired for a single operation.
+Performance-wise it is important to note that re-using a connection for chained SQL operations is better.</p>
+</div>
 <div class="paragraph">
 <p>The rest of the class consists of private methods called when <code>onMessage</code> dispatches incoming messages:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> <span class="type">void</span> fetchAllPages(Message&lt;JsonObject&gt; message) {
-
-  dbClient.getConnection(car -&gt; {
-    <span class="keyword">if</span> (car.succeeded()) {
-      SQLConnection connection = car.result();
-      connection.query(sqlQueries.get(SqlQuery.ALL_PAGES), res -&gt; {
-        connection.close();
-        <span class="keyword">if</span> (res.succeeded()) {
-          <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; pages = res.result()
-            .getResults()
-            .stream()
-            .map(json -&gt; json.getString(<span class="integer">0</span>))
-            .sorted()
-            .collect(Collectors.toList());
-          message.reply(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">pages</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonArray(pages)));
-        } <span class="keyword">else</span> {
-          reportQueryError(message, res.cause());
-        }
-      });
+  dbClient.query(sqlQueries.get(SqlQuery.ALL_PAGES), res -&gt; {
+    <span class="keyword">if</span> (res.succeeded()) {
+      <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; pages = res.result()
+        .getResults()
+        .stream()
+        .map(json -&gt; json.getString(<span class="integer">0</span>))
+        .sorted()
+        .collect(Collectors.toList());
+      message.reply(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">pages</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonArray(pages)));
     } <span class="keyword">else</span> {
-      reportQueryError(message, car.cause());
+      reportQueryError(message, res.cause());
     }
   });
 }
 
 <span class="directive">private</span> <span class="type">void</span> fetchPage(Message&lt;JsonObject&gt; message) {
-
   <span class="predefined-type">String</span> requestedPage = message.body().getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">page</span><span class="delimiter">&quot;</span></span>);
+  JsonArray params = <span class="keyword">new</span> JsonArray().add(requestedPage);
 
-  dbClient.getConnection(car -&gt; {
-    <span class="keyword">if</span> (car.succeeded()) {
-      SQLConnection connection = car.result();
-      connection.queryWithParams(sqlQueries.get(SqlQuery.GET_PAGE), <span class="keyword">new</span> JsonArray().add(requestedPage), fetch -&gt; {
-        connection.close();
-        <span class="keyword">if</span> (fetch.succeeded()) {
-          JsonObject response = <span class="keyword">new</span> JsonObject();
-          <span class="predefined-type">ResultSet</span> resultSet = fetch.result();
-          <span class="keyword">if</span> (resultSet.getNumRows() == <span class="integer">0</span>) {
-            response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">found</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">false</span>);
-          } <span class="keyword">else</span> {
-            response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">found</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>);
-            JsonArray row = resultSet.getResults().get(<span class="integer">0</span>);
-            response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>, row.getInteger(<span class="integer">0</span>));
-            response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">rawContent</span><span class="delimiter">&quot;</span></span>, row.getString(<span class="integer">1</span>));
-          }
-          message.reply(response);
-        } <span class="keyword">else</span> {
-          reportQueryError(message, fetch.cause());
-        }
-      });
+  dbClient.queryWithParams(sqlQueries.get(SqlQuery.GET_PAGE), params, fetch -&gt; {
+    <span class="keyword">if</span> (fetch.succeeded()) {
+      JsonObject response = <span class="keyword">new</span> JsonObject();
+      <span class="predefined-type">ResultSet</span> resultSet = fetch.result();
+      <span class="keyword">if</span> (resultSet.getNumRows() == <span class="integer">0</span>) {
+        response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">found</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">false</span>);
+      } <span class="keyword">else</span> {
+        response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">found</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>);
+        JsonArray row = resultSet.getResults().get(<span class="integer">0</span>);
+        response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>, row.getInteger(<span class="integer">0</span>));
+        response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">rawContent</span><span class="delimiter">&quot;</span></span>, row.getString(<span class="integer">1</span>));
+      }
+      message.reply(response);
     } <span class="keyword">else</span> {
-      reportQueryError(message, car.cause());
+      reportQueryError(message, fetch.cause());
     }
   });
-
 }
 
 <span class="directive">private</span> <span class="type">void</span> createPage(Message&lt;JsonObject&gt; message) {
   JsonObject request = message.body();
+  JsonArray data = <span class="keyword">new</span> JsonArray()
+    .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>))
+    .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">markdown</span><span class="delimiter">&quot;</span></span>));
 
-  dbClient.getConnection(car -&gt; {
-
-    <span class="keyword">if</span> (car.succeeded()) {
-      SQLConnection connection = car.result();
-      JsonArray data = <span class="keyword">new</span> JsonArray()
-        .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>))
-        .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">markdown</span><span class="delimiter">&quot;</span></span>));
-
-      connection.updateWithParams(sqlQueries.get(SqlQuery.CREATE_PAGE), data, res -&gt; {
-        connection.close();
-        <span class="keyword">if</span> (res.succeeded()) {
-          message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">ok</span><span class="delimiter">&quot;</span></span>);
-        } <span class="keyword">else</span> {
-          reportQueryError(message, res.cause());
-        }
-      });
+  dbClient.updateWithParams(sqlQueries.get(SqlQuery.CREATE_PAGE), data, res -&gt; {
+    <span class="keyword">if</span> (res.succeeded()) {
+      message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">ok</span><span class="delimiter">&quot;</span></span>);
     } <span class="keyword">else</span> {
-      reportQueryError(message, car.cause());
+      reportQueryError(message, res.cause());
     }
   });
 }
 
 <span class="directive">private</span> <span class="type">void</span> savePage(Message&lt;JsonObject&gt; message) {
   JsonObject request = message.body();
+  JsonArray data = <span class="keyword">new</span> JsonArray()
+    .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">markdown</span><span class="delimiter">&quot;</span></span>))
+    .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>));
 
-  dbClient.getConnection(car -&gt; {
-
-    <span class="keyword">if</span> (car.succeeded()) {
-      SQLConnection connection = car.result();
-      JsonArray data = <span class="keyword">new</span> JsonArray()
-        .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">markdown</span><span class="delimiter">&quot;</span></span>))
-        .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>));
-
-      connection.updateWithParams(sqlQueries.get(SqlQuery.SAVE_PAGE), data, res -&gt; {
-        connection.close();
-        <span class="keyword">if</span> (res.succeeded()) {
-          message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">ok</span><span class="delimiter">&quot;</span></span>);
-        } <span class="keyword">else</span> {
-          reportQueryError(message, res.cause());
-        }
-      });
+  dbClient.updateWithParams(sqlQueries.get(SqlQuery.SAVE_PAGE), data, res -&gt; {
+    <span class="keyword">if</span> (res.succeeded()) {
+      message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">ok</span><span class="delimiter">&quot;</span></span>);
     } <span class="keyword">else</span> {
-      reportQueryError(message, car.cause());
+      reportQueryError(message, res.cause());
     }
   });
 }
 
 <span class="directive">private</span> <span class="type">void</span> deletePage(Message&lt;JsonObject&gt; message) {
-  dbClient.getConnection(car -&gt; {
-    <span class="keyword">if</span> (car.succeeded()) {
-      SQLConnection connection = car.result();
-      JsonArray data = <span class="keyword">new</span> JsonArray().add(message.body().getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>));
-      connection.updateWithParams(sqlQueries.get(SqlQuery.DELETE_PAGE), data, res -&gt; {
-        connection.close();
-        <span class="keyword">if</span> (res.succeeded()) {
-          message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">ok</span><span class="delimiter">&quot;</span></span>);
-        } <span class="keyword">else</span> {
-          reportQueryError(message, res.cause());
-        }
-      });
+  JsonArray data = <span class="keyword">new</span> JsonArray().add(message.body().getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>));
+
+  dbClient.updateWithParams(sqlQueries.get(SqlQuery.DELETE_PAGE), data, res -&gt; {
+    <span class="keyword">if</span> (res.succeeded()) {
+      message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">ok</span><span class="delimiter">&quot;</span></span>);
     } <span class="keyword">else</span> {
-      reportQueryError(message, car.cause());
+      reportQueryError(message, res.cause());
     }
   });
 }
@@ -703,6 +752,7 @@ To do so, the <code>fail</code> method of the <code>Message</code> class provide
   LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, cause);
   message.fail(ErrorCodes.DB_ERROR.ordinal(), cause.getMessage());
 }</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -789,7 +839,7 @@ Incoming connections are simply distributed in a round-robin fashion from accept
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-07-27 11:46:46 CEST
+                Last updated 2017-10-19 14:01:10 CEST
               
               
             </div>

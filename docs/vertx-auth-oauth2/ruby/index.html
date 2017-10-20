@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -186,7 +187,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-auth-oauth2<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -199,7 +200,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-oauth2:3.4.2</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-oauth2:3.5.0</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -305,7 +306,7 @@ authorization_uri = oauth2.authorize_url({
 
 code = <span class="string"><span class="delimiter">&quot;</span><span class="content">xxxxxxxxxxxxxxxxxxxxxxxx</span><span class="delimiter">&quot;</span></span>
 
-oauth2.get_token({
+oauth2.authenticate({
   <span class="string"><span class="delimiter">'</span><span class="content">code</span><span class="delimiter">'</span></span> =&gt; code,
   <span class="string"><span class="delimiter">'</span><span class="content">redirect_uri</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/callback</span><span class="delimiter">&quot;</span></span>
 }) { |res_err,res|
@@ -357,7 +358,7 @@ tokenConfig = {
 
 <span class="comment"># Callbacks</span>
 <span class="comment"># Save the access token</span>
-oauth2.get_token(tokenConfig) { |res_err,res|
+oauth2.authenticate(tokenConfig) { |res_err,res|
   <span class="keyword">if</span> (res_err != <span class="predefined-constant">nil</span>)
     <span class="predefined-constant">STDERR</span>.puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Access Token Error: </span><span class="inline"><span class="inline-delimiter">#{</span>res_err.get_message()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
   <span class="keyword">else</span>
@@ -378,6 +379,7 @@ need a fast way to test your application.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-auth-oauth2/o_auth2_auth</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">vertx-auth-oauth2/access_token</span><span class="delimiter">'</span></span>
 
 <span class="comment"># Initialize the OAuth2 Library</span>
 oauth2 = <span class="constant">VertxAuthOauth2</span>::<span class="constant">OAuth2Auth</span>.create(vertx, <span class="symbol">:PASSWORD</span>)
@@ -389,16 +391,14 @@ tokenConfig = {
 
 <span class="comment"># Callbacks</span>
 <span class="comment"># Save the access token</span>
-oauth2.get_token(tokenConfig) { |res_err,res|
+oauth2.authenticate(tokenConfig) { |res_err,res|
   <span class="keyword">if</span> (res_err != <span class="predefined-constant">nil</span>)
     <span class="predefined-constant">STDERR</span>.puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Access Token Error: </span><span class="inline"><span class="inline-delimiter">#{</span>res_err.get_message()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
   <span class="keyword">else</span>
     <span class="comment"># Get the access token object (the authorization code is given from the previous step).</span>
     token = res
 
-    oauth2.api(<span class="symbol">:GET</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>, {
-      <span class="string"><span class="delimiter">'</span><span class="content">access_token</span><span class="delimiter">'</span></span> =&gt; token.principal()[<span class="string"><span class="delimiter">'</span><span class="content">access_token</span><span class="delimiter">'</span></span>]
-    }) { |res2_err,res2|
+    token.fetch(<span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>) { |res2_err,res2|
       <span class="comment"># the user object should be returned here...</span>
     }
   <span class="keyword">end</span>
@@ -431,7 +431,7 @@ tokenConfig = {
 
 <span class="comment"># Callbacks</span>
 <span class="comment"># Save the access token</span>
-oauth2.get_token(tokenConfig) { |res_err,res|
+oauth2.authenticate(tokenConfig) { |res_err,res|
   <span class="keyword">if</span> (res_err != <span class="predefined-constant">nil</span>)
     <span class="predefined-constant">STDERR</span>.puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Access Token Error: </span><span class="inline"><span class="inline-delimiter">#{</span>res_err.get_message()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
   <span class="keyword">else</span>
@@ -547,6 +547,7 @@ This information is quite valuable since it allows to do authorization at the AP
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-auth-oauth2/keycloak_auth</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">vertx-auth-oauth2/access_token</span><span class="delimiter">'</span></span>
 <span class="comment"># you would get this config from the keycloak admin console</span>
 keycloakJson = {
   <span class="string"><span class="delimiter">'</span><span class="content">realm</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">master</span><span class="delimiter">&quot;</span></span>,
@@ -563,7 +564,7 @@ keycloakJson = {
 oauth2 = <span class="constant">VertxAuthOauth2</span>::<span class="constant">KeycloakAuth</span>.create(vertx, <span class="symbol">:PASSWORD</span>, keycloakJson)
 
 <span class="comment"># first get a token (authenticate)</span>
-oauth2.get_token({
+oauth2.authenticate({
   <span class="string"><span class="delimiter">'</span><span class="content">username</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>,
   <span class="string"><span class="delimiter">'</span><span class="content">password</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>
 }) { |res_err,res|
@@ -893,7 +894,7 @@ user this is as simple as:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:36 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

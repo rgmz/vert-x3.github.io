@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -186,7 +187,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-auth-oauth2<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -199,7 +200,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-oauth2:3.4.2</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-oauth2:3.5.0</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -305,7 +306,7 @@ specification).</p>
 
 <span class="keyword">var</span> code = <span class="string"><span class="delimiter">&quot;</span><span class="content">xxxxxxxxxxxxxxxxxxxxxxxx</span><span class="delimiter">&quot;</span></span>;
 
-oauth2.getToken({
+oauth2.authenticate({
   <span class="key"><span class="delimiter">&quot;</span><span class="content">code</span><span class="delimiter">&quot;</span></span> : code,
   <span class="key"><span class="delimiter">&quot;</span><span class="content">redirect_uri</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/callback</span><span class="delimiter">&quot;</span></span>
 }, <span class="keyword">function</span> (res, res_err) {
@@ -357,7 +358,7 @@ response.putHeader(<span class="string"><span class="delimiter">&quot;</span><sp
 
 <span class="comment">// Callbacks</span>
 <span class="comment">// Save the access token</span>
-oauth2.getToken(tokenConfig, <span class="keyword">function</span> (res, res_err) {
+oauth2.authenticate(tokenConfig, <span class="keyword">function</span> (res, res_err) {
   <span class="keyword">if</span> (res_err != <span class="predefined-constant">null</span>) {
     console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Access Token Error: </span><span class="delimiter">&quot;</span></span> + res_err.getMessage());
   } <span class="keyword">else</span> {
@@ -378,6 +379,7 @@ need a fast way to test your application.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> OAuth2Auth = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-auth-oauth2-js/o_auth2_auth</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> AccessToken = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-auth-oauth2-js/access_token</span><span class="delimiter">&quot;</span></span>);
 
 <span class="comment">// Initialize the OAuth2 Library</span>
 <span class="keyword">var</span> oauth2 = OAuth2Auth.create(vertx, <span class="string"><span class="delimiter">'</span><span class="content">PASSWORD</span><span class="delimiter">'</span></span>);
@@ -389,16 +391,14 @@ need a fast way to test your application.</p>
 
 <span class="comment">// Callbacks</span>
 <span class="comment">// Save the access token</span>
-oauth2.getToken(tokenConfig, <span class="keyword">function</span> (res, res_err) {
+oauth2.authenticate(tokenConfig, <span class="keyword">function</span> (res, res_err) {
   <span class="keyword">if</span> (res_err != <span class="predefined-constant">null</span>) {
     console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Access Token Error: </span><span class="delimiter">&quot;</span></span> + res_err.getMessage());
   } <span class="keyword">else</span> {
     <span class="comment">// Get the access token object (the authorization code is given from the previous step).</span>
     <span class="keyword">var</span> token = res;
 
-    oauth2.api(<span class="string"><span class="delimiter">'</span><span class="content">GET</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>, {
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">access_token</span><span class="delimiter">&quot;</span></span> : token.principal().access_token
-    }, <span class="keyword">function</span> (res2, res2_err) {
+    token.fetch(<span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res2, res2_err) {
       <span class="comment">// the user object should be returned here...</span>
     });
   }
@@ -431,7 +431,7 @@ oauth2.getToken(tokenConfig, <span class="keyword">function</span> (res, res_err
 
 <span class="comment">// Callbacks</span>
 <span class="comment">// Save the access token</span>
-oauth2.getToken(tokenConfig, <span class="keyword">function</span> (res, res_err) {
+oauth2.authenticate(tokenConfig, <span class="keyword">function</span> (res, res_err) {
   <span class="keyword">if</span> (res_err != <span class="predefined-constant">null</span>) {
     console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Access Token Error: </span><span class="delimiter">&quot;</span></span> + res_err.getMessage());
   } <span class="keyword">else</span> {
@@ -547,6 +547,7 @@ This information is quite valuable since it allows to do authorization at the AP
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> KeycloakAuth = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-auth-oauth2-js/keycloak_auth</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> AccessToken = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-auth-oauth2-js/access_token</span><span class="delimiter">&quot;</span></span>);
 <span class="comment">// you would get this config from the keycloak admin console</span>
 <span class="keyword">var</span> keycloakJson = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">realm</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">master</span><span class="delimiter">&quot;</span></span>,
@@ -563,7 +564,7 @@ This information is quite valuable since it allows to do authorization at the AP
 <span class="keyword">var</span> oauth2 = KeycloakAuth.create(vertx, <span class="string"><span class="delimiter">'</span><span class="content">PASSWORD</span><span class="delimiter">'</span></span>, keycloakJson);
 
 <span class="comment">// first get a token (authenticate)</span>
-oauth2.getToken({
+oauth2.authenticate({
   <span class="key"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>,
   <span class="key"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>
 }, <span class="keyword">function</span> (res, res_err) {
@@ -893,7 +894,7 @@ user this is as simple as:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:36 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -186,7 +187,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-auth-oauth2-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -199,7 +200,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-oauth2-scala_2.12:3.4.2</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-oauth2-scala_2.12:3.5.0</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -299,7 +300,7 @@ var authorization_uri = oauth2.authorizeURL(new io.vertx.core.json.JsonObject().
 
 var code = &quot;xxxxxxxxxxxxxxxxxxxxxxxx&quot;
 
-oauth2.getTokenFuture(new io.vertx.core.json.JsonObject().put(&quot;code&quot;, code).put(&quot;redirect_uri&quot;, &quot;http://localhost:8080/callback&quot;)).onComplete{
+oauth2.authenticateFuture(new io.vertx.core.json.JsonObject().put(&quot;code&quot;, code).put(&quot;redirect_uri&quot;, &quot;http://localhost:8080/callback&quot;)).onComplete{
   case Success(result) =&gt; {
     // error, the code provided is not valid
   }
@@ -340,7 +341,7 @@ var tokenConfig = new io.vertx.core.json.JsonObject().put(&quot;code&quot;, &quo
 
 // Callbacks
 // Save the access token
-oauth2.getTokenFuture(tokenConfig).onComplete{
+oauth2.authenticateFuture(tokenConfig).onComplete{
   case Success(result) =&gt; {
     System.err.println(s&quot;Access Token Error: ${res.cause().getMessage()}&quot;)
   }
@@ -367,7 +368,7 @@ var tokenConfig = new io.vertx.core.json.JsonObject().put(&quot;username&quot;, 
 
 // Callbacks
 // Save the access token
-oauth2.getTokenFuture(tokenConfig).onComplete{
+oauth2.authenticateFuture(tokenConfig).onComplete{
   case Success(result) =&gt; {
     System.err.println(s&quot;Access Token Error: ${res.cause().getMessage()}&quot;)
   }
@@ -400,7 +401,7 @@ var tokenConfig = new io.vertx.core.json.JsonObject()
 
 // Callbacks
 // Save the access token
-oauth2.getTokenFuture(tokenConfig).onComplete{
+oauth2.authenticateFuture(tokenConfig).onComplete{
   case Success(result) =&gt; {
     System.err.println(s&quot;Access Token Error: ${res.cause().getMessage()}&quot;)
   }
@@ -519,7 +520,7 @@ var keycloakJson = new io.vertx.core.json.JsonObject().put(&quot;realm&quot;, &q
 var oauth2 = KeycloakAuth.create(vertx, OAuth2FlowType.PASSWORD, keycloakJson)
 
 // first get a token (authenticate)
-oauth2.getTokenFuture(new io.vertx.core.json.JsonObject().put(&quot;username&quot;, &quot;user&quot;).put(&quot;password&quot;, &quot;secret&quot;)).onComplete{
+oauth2.authenticateFuture(new io.vertx.core.json.JsonObject().put(&quot;username&quot;, &quot;user&quot;).put(&quot;password&quot;, &quot;secret&quot;)).onComplete{
   case Success(result) =&gt; {
     // error handling...
   }
@@ -828,7 +829,7 @@ user this is as simple as:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:38 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

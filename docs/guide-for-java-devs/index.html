@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -168,6 +169,7 @@
 <ul class="sectlevel2">
 <li><a href="#_enabling_the_rxjava_apis">Enabling the RxJava APIs</a></li>
 <li><a href="#_deploying_verticles_in_order">Deploying verticles in order</a></li>
+<li><a href="#_partially_em_rxifying_em_code_httpserververticle_code">Partially <em>"Rxifying"</em> <code>HttpServerVerticle</code></a></li>
 <li><a href="#_executing_authorization_queries_concurrently">Executing authorization queries concurrently</a></li>
 <li><a href="#_working_with_database_connections">Working with database connections</a></li>
 <li><a href="#_bridging_the_gap_between_callbacks_and_rxjava">Bridging the gap between callbacks and RxJava</a></li>
@@ -269,6 +271,7 @@
 <ul class="sectlevel2">
 <li><a href="#_enabling_the_rxjava_apis">Enabling the RxJava APIs</a></li>
 <li><a href="#_deploying_verticles_in_order">Deploying verticles in order</a></li>
+<li><a href="#_partially_em_rxifying_em_code_httpserververticle_code">Partially <em>"Rxifying"</em> <code>HttpServerVerticle</code></a></li>
 <li><a href="#_executing_authorization_queries_concurrently">Executing authorization queries concurrently</a></li>
 <li><a href="#_working_with_database_connections">Working with database connections</a></li>
 <li><a href="#_bridging_the_gap_between_callbacks_and_rxjava">Bridging the gap between callbacks and RxJava</a></li>
@@ -323,6 +326,10 @@ This document is also <a href="guide-for-java-devs.pdf">available as a PDF</a>.
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<div class="title">Acknowledgements</div>
+<p>This document has received contributions from Arnaud Esteve and Marc Paquette.</p>
 </div>
 </div>
 </div>
@@ -642,7 +649,7 @@ It has goals to initialize, build, package and run a Vert.x project.</p>
 <div class="content">
 <pre>mkdir vertx-wiki
 cd vertx-wiki
-mvn io.fabric8:vertx-maven-plugin:1.0.7:setup -DvertxVersion=3.4.2
+mvn io.fabric8:vertx-maven-plugin:1.0.7:setup -DvertxVersion=3.5.0
 git init</pre>
 </div>
 </div>
@@ -1603,7 +1610,7 @@ This happens both when updating an existing page (issuing a SQL <code>update</co
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>$ java -jar target/wiki-step-1-1.0.1-fat.jar</pre>
+<pre>$ java -jar target/wiki-step-1-1.1.0-fat.jar</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1878,9 +1885,15 @@ In the event that no response is expected there is a variant of the <code>send</
 <div class="sect2">
 <h3 id="_the_database_verticle">The database verticle</h3>
 <div class="paragraph">
-<p>Connecting to a database using JDBC requires of course a driver and configuration, which we had hard-coded in the first iteration.
-While this verticle will turn them to configuration parameters, we will also go a step further by loading the SQL queries from a properties file.
-The queries will be loaded from a file passed as a configuration parameter or from a default resource if none is being provided.
+<p>Connecting to a database using JDBC requires of course a driver and configuration, which we had hard-coded in the first iteration.</p>
+</div>
+<div class="sect3">
+<h4 id="_configurable_sql_queries">Configurable SQL queries</h4>
+<div class="paragraph">
+<p>While the verticle will turn the previously hard-coded values to configuration parameters, we will also go a step further by loading the SQL queries from a properties file.</p>
+</div>
+<div class="paragraph">
+<p>The queries will be loaded from a file passed as a configuration parameter or from a default resource if none is being provided.
 The advantage of this approach is that the verticle can adapt both to different JDBC drivers <em>and</em> SQL dialects.</p>
 </div>
 <div class="paragraph">
@@ -2009,6 +2022,9 @@ The code of the verticle <code>start</code> method is the following:</p>
 </li>
 </ol>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_dispatching_requests">Dispatching requests</h4>
 <div class="paragraph">
 <p>The event bus message handler is the <code>onMessage</code> method:</p>
 </div>
@@ -2056,133 +2072,160 @@ The code of the verticle <code>start</code> method is the following:</p>
 <p>We defined a <code>ErrorCodes</code> enumeration for errors, which we use to report back to the message sender.
 To do so, the <code>fail</code> method of the <code>Message</code> class provides a convenient shortcut to reply with an error, and the original message sender gets a failed <code>AsyncResult</code>.</p>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_reducing_the_jdbc_client_boilerplate">Reducing the JDBC client boilerplate</h4>
+<div class="paragraph">
+<p>So far we have seen the <em>complete</em> interaction to perform a SQL query:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>retrieve a connection,</p>
+</li>
+<li>
+<p>perform requests,</p>
+</li>
+<li>
+<p>release the connection.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This leads to code where lots of error processing needs to happen for each asynchronous operation, as in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">dbClient.getConnection(car -&gt; {
+  <span class="keyword">if</span> (car.succeeded()) {
+    SQLConnection connection = car.result();
+    connection.query(sqlQueries.get(SqlQuery.ALL_PAGES), res -&gt; {
+      connection.close();
+      <span class="keyword">if</span> (res.succeeded()) {
+        <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; pages = res.result()
+          .getResults()
+          .stream()
+          .map(json -&gt; json.getString(<span class="integer">0</span>))
+          .sorted()
+          .collect(Collectors.toList());
+        message.reply(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">pages</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonArray(pages)));
+      } <span class="keyword">else</span> {
+        reportQueryError(message, res.cause());
+      }
+    });
+  } <span class="keyword">else</span> {
+    reportQueryError(message, car.cause());
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Starting from Vert.x 3.5.0, the JDBC client now supports <em>one-shot</em> operations where a connection is being acquired to do a SQL operation, then released internally.
+The same code as above now reduces to:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">dbClient.query(sqlQueries.get(SqlQuery.ALL_PAGES), res -&gt; {
+  <span class="keyword">if</span> (res.succeeded()) {
+    <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; pages = res.result()
+      .getResults()
+      .stream()
+      .map(json -&gt; json.getString(<span class="integer">0</span>))
+      .sorted()
+      .collect(Collectors.toList());
+    message.reply(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">pages</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonArray(pages)));
+  } <span class="keyword">else</span> {
+    reportQueryError(message, res.cause());
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is very useful for cases where the connection is being acquired for a single operation.
+Performance-wise it is important to note that re-using a connection for chained SQL operations is better.</p>
+</div>
 <div class="paragraph">
 <p>The rest of the class consists of private methods called when <code>onMessage</code> dispatches incoming messages:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> <span class="type">void</span> fetchAllPages(Message&lt;JsonObject&gt; message) {
-
-  dbClient.getConnection(car -&gt; {
-    <span class="keyword">if</span> (car.succeeded()) {
-      SQLConnection connection = car.result();
-      connection.query(sqlQueries.get(SqlQuery.ALL_PAGES), res -&gt; {
-        connection.close();
-        <span class="keyword">if</span> (res.succeeded()) {
-          <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; pages = res.result()
-            .getResults()
-            .stream()
-            .map(json -&gt; json.getString(<span class="integer">0</span>))
-            .sorted()
-            .collect(Collectors.toList());
-          message.reply(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">pages</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonArray(pages)));
-        } <span class="keyword">else</span> {
-          reportQueryError(message, res.cause());
-        }
-      });
+  dbClient.query(sqlQueries.get(SqlQuery.ALL_PAGES), res -&gt; {
+    <span class="keyword">if</span> (res.succeeded()) {
+      <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; pages = res.result()
+        .getResults()
+        .stream()
+        .map(json -&gt; json.getString(<span class="integer">0</span>))
+        .sorted()
+        .collect(Collectors.toList());
+      message.reply(<span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">pages</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonArray(pages)));
     } <span class="keyword">else</span> {
-      reportQueryError(message, car.cause());
+      reportQueryError(message, res.cause());
     }
   });
 }
 
 <span class="directive">private</span> <span class="type">void</span> fetchPage(Message&lt;JsonObject&gt; message) {
-
   <span class="predefined-type">String</span> requestedPage = message.body().getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">page</span><span class="delimiter">&quot;</span></span>);
+  JsonArray params = <span class="keyword">new</span> JsonArray().add(requestedPage);
 
-  dbClient.getConnection(car -&gt; {
-    <span class="keyword">if</span> (car.succeeded()) {
-      SQLConnection connection = car.result();
-      connection.queryWithParams(sqlQueries.get(SqlQuery.GET_PAGE), <span class="keyword">new</span> JsonArray().add(requestedPage), fetch -&gt; {
-        connection.close();
-        <span class="keyword">if</span> (fetch.succeeded()) {
-          JsonObject response = <span class="keyword">new</span> JsonObject();
-          <span class="predefined-type">ResultSet</span> resultSet = fetch.result();
-          <span class="keyword">if</span> (resultSet.getNumRows() == <span class="integer">0</span>) {
-            response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">found</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">false</span>);
-          } <span class="keyword">else</span> {
-            response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">found</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>);
-            JsonArray row = resultSet.getResults().get(<span class="integer">0</span>);
-            response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>, row.getInteger(<span class="integer">0</span>));
-            response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">rawContent</span><span class="delimiter">&quot;</span></span>, row.getString(<span class="integer">1</span>));
-          }
-          message.reply(response);
-        } <span class="keyword">else</span> {
-          reportQueryError(message, fetch.cause());
-        }
-      });
+  dbClient.queryWithParams(sqlQueries.get(SqlQuery.GET_PAGE), params, fetch -&gt; {
+    <span class="keyword">if</span> (fetch.succeeded()) {
+      JsonObject response = <span class="keyword">new</span> JsonObject();
+      <span class="predefined-type">ResultSet</span> resultSet = fetch.result();
+      <span class="keyword">if</span> (resultSet.getNumRows() == <span class="integer">0</span>) {
+        response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">found</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">false</span>);
+      } <span class="keyword">else</span> {
+        response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">found</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>);
+        JsonArray row = resultSet.getResults().get(<span class="integer">0</span>);
+        response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>, row.getInteger(<span class="integer">0</span>));
+        response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">rawContent</span><span class="delimiter">&quot;</span></span>, row.getString(<span class="integer">1</span>));
+      }
+      message.reply(response);
     } <span class="keyword">else</span> {
-      reportQueryError(message, car.cause());
+      reportQueryError(message, fetch.cause());
     }
   });
-
 }
 
 <span class="directive">private</span> <span class="type">void</span> createPage(Message&lt;JsonObject&gt; message) {
   JsonObject request = message.body();
+  JsonArray data = <span class="keyword">new</span> JsonArray()
+    .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>))
+    .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">markdown</span><span class="delimiter">&quot;</span></span>));
 
-  dbClient.getConnection(car -&gt; {
-
-    <span class="keyword">if</span> (car.succeeded()) {
-      SQLConnection connection = car.result();
-      JsonArray data = <span class="keyword">new</span> JsonArray()
-        .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>))
-        .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">markdown</span><span class="delimiter">&quot;</span></span>));
-
-      connection.updateWithParams(sqlQueries.get(SqlQuery.CREATE_PAGE), data, res -&gt; {
-        connection.close();
-        <span class="keyword">if</span> (res.succeeded()) {
-          message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">ok</span><span class="delimiter">&quot;</span></span>);
-        } <span class="keyword">else</span> {
-          reportQueryError(message, res.cause());
-        }
-      });
+  dbClient.updateWithParams(sqlQueries.get(SqlQuery.CREATE_PAGE), data, res -&gt; {
+    <span class="keyword">if</span> (res.succeeded()) {
+      message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">ok</span><span class="delimiter">&quot;</span></span>);
     } <span class="keyword">else</span> {
-      reportQueryError(message, car.cause());
+      reportQueryError(message, res.cause());
     }
   });
 }
 
 <span class="directive">private</span> <span class="type">void</span> savePage(Message&lt;JsonObject&gt; message) {
   JsonObject request = message.body();
+  JsonArray data = <span class="keyword">new</span> JsonArray()
+    .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">markdown</span><span class="delimiter">&quot;</span></span>))
+    .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>));
 
-  dbClient.getConnection(car -&gt; {
-
-    <span class="keyword">if</span> (car.succeeded()) {
-      SQLConnection connection = car.result();
-      JsonArray data = <span class="keyword">new</span> JsonArray()
-        .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">markdown</span><span class="delimiter">&quot;</span></span>))
-        .add(request.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>));
-
-      connection.updateWithParams(sqlQueries.get(SqlQuery.SAVE_PAGE), data, res -&gt; {
-        connection.close();
-        <span class="keyword">if</span> (res.succeeded()) {
-          message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">ok</span><span class="delimiter">&quot;</span></span>);
-        } <span class="keyword">else</span> {
-          reportQueryError(message, res.cause());
-        }
-      });
+  dbClient.updateWithParams(sqlQueries.get(SqlQuery.SAVE_PAGE), data, res -&gt; {
+    <span class="keyword">if</span> (res.succeeded()) {
+      message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">ok</span><span class="delimiter">&quot;</span></span>);
     } <span class="keyword">else</span> {
-      reportQueryError(message, car.cause());
+      reportQueryError(message, res.cause());
     }
   });
 }
 
 <span class="directive">private</span> <span class="type">void</span> deletePage(Message&lt;JsonObject&gt; message) {
-  dbClient.getConnection(car -&gt; {
-    <span class="keyword">if</span> (car.succeeded()) {
-      SQLConnection connection = car.result();
-      JsonArray data = <span class="keyword">new</span> JsonArray().add(message.body().getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>));
-      connection.updateWithParams(sqlQueries.get(SqlQuery.DELETE_PAGE), data, res -&gt; {
-        connection.close();
-        <span class="keyword">if</span> (res.succeeded()) {
-          message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">ok</span><span class="delimiter">&quot;</span></span>);
-        } <span class="keyword">else</span> {
-          reportQueryError(message, res.cause());
-        }
-      });
+  JsonArray data = <span class="keyword">new</span> JsonArray().add(message.body().getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>));
+
+  dbClient.updateWithParams(sqlQueries.get(SqlQuery.DELETE_PAGE), data, res -&gt; {
+    <span class="keyword">if</span> (res.succeeded()) {
+      message.reply(<span class="string"><span class="delimiter">&quot;</span><span class="content">ok</span><span class="delimiter">&quot;</span></span>);
     } <span class="keyword">else</span> {
-      reportQueryError(message, car.cause());
+      reportQueryError(message, res.cause());
     }
   });
 }
@@ -2191,6 +2234,7 @@ To do so, the <code>fail</code> method of the <code>Message</code> class provide
   LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, cause);
   message.fail(ErrorCodes.DB_ERROR.ordinal(), cause.getMessage());
 }</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -2530,27 +2574,18 @@ The essential difference is the support of the asynchronous result handler in th
 
   <span class="annotation">@Override</span>
   <span class="directive">public</span> WikiDatabaseService fetchAllPages(<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;JsonArray&gt;&gt; resultHandler) {
-    dbClient.getConnection(car -&gt; {
-      <span class="keyword">if</span> (car.succeeded()) {
-        SQLConnection connection = car.result();
-        connection.query(sqlQueries.get(SqlQuery.ALL_PAGES), res -&gt; {
-          connection.close();
-          <span class="keyword">if</span> (res.succeeded()) {
-            JsonArray pages = <span class="keyword">new</span> JsonArray(res.result()
-              .getResults()
-              .stream()
-              .map(json -&gt; json.getString(<span class="integer">0</span>))
-              .sorted()
-              .collect(Collectors.toList()));
-            resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture(pages));
-          } <span class="keyword">else</span> {
-            LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, res.cause());
-            resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(res.cause()));
-          }
-        });
+    dbClient.query(sqlQueries.get(SqlQuery.ALL_PAGES), res -&gt; {
+      <span class="keyword">if</span> (res.succeeded()) {
+        JsonArray pages = <span class="keyword">new</span> JsonArray(res.result()
+          .getResults()
+          .stream()
+          .map(json -&gt; json.getString(<span class="integer">0</span>))
+          .sorted()
+          .collect(Collectors.toList()));
+        resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture(pages));
       } <span class="keyword">else</span> {
-        LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, car.cause());
-        resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(car.cause()));
+        LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, res.cause());
+        resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(res.cause()));
       }
     });
     <span class="keyword">return</span> <span class="local-variable">this</span>;
@@ -2558,31 +2593,22 @@ The essential difference is the support of the asynchronous result handler in th
 
   <span class="annotation">@Override</span>
   <span class="directive">public</span> WikiDatabaseService fetchPage(<span class="predefined-type">String</span> name, <span class="predefined-type">Handler</span>&lt;AsyncResult&lt;JsonObject&gt;&gt; resultHandler) {
-    dbClient.getConnection(car -&gt; {
-      <span class="keyword">if</span> (car.succeeded()) {
-        SQLConnection connection = car.result();
-        connection.queryWithParams(sqlQueries.get(SqlQuery.GET_PAGE), <span class="keyword">new</span> JsonArray().add(name), fetch -&gt; {
-          connection.close();
-          <span class="keyword">if</span> (fetch.succeeded()) {
-            JsonObject response = <span class="keyword">new</span> JsonObject();
-            <span class="predefined-type">ResultSet</span> resultSet = fetch.result();
-            <span class="keyword">if</span> (resultSet.getNumRows() == <span class="integer">0</span>) {
-              response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">found</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">false</span>);
-            } <span class="keyword">else</span> {
-              response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">found</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>);
-              JsonArray row = resultSet.getResults().get(<span class="integer">0</span>);
-              response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>, row.getInteger(<span class="integer">0</span>));
-              response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">rawContent</span><span class="delimiter">&quot;</span></span>, row.getString(<span class="integer">1</span>));
-            }
-            resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture(response));
-          } <span class="keyword">else</span> {
-            LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, fetch.cause());
-            resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(fetch.cause()));
-          }
-        });
+    dbClient.queryWithParams(sqlQueries.get(SqlQuery.GET_PAGE), <span class="keyword">new</span> JsonArray().add(name), fetch -&gt; {
+      <span class="keyword">if</span> (fetch.succeeded()) {
+        JsonObject response = <span class="keyword">new</span> JsonObject();
+        <span class="predefined-type">ResultSet</span> resultSet = fetch.result();
+        <span class="keyword">if</span> (resultSet.getNumRows() == <span class="integer">0</span>) {
+          response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">found</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">false</span>);
+        } <span class="keyword">else</span> {
+          response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">found</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>);
+          JsonArray row = resultSet.getResults().get(<span class="integer">0</span>);
+          response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>, row.getInteger(<span class="integer">0</span>));
+          response.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">rawContent</span><span class="delimiter">&quot;</span></span>, row.getString(<span class="integer">1</span>));
+        }
+        resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture(response));
       } <span class="keyword">else</span> {
-        LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, car.cause());
-        resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(car.cause()));
+        LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, fetch.cause());
+        resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(fetch.cause()));
       }
     });
     <span class="keyword">return</span> <span class="local-variable">this</span>;
@@ -2590,23 +2616,13 @@ The essential difference is the support of the asynchronous result handler in th
 
   <span class="annotation">@Override</span>
   <span class="directive">public</span> WikiDatabaseService createPage(<span class="predefined-type">String</span> title, <span class="predefined-type">String</span> markdown, <span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">Void</span>&gt;&gt; resultHandler) {
-    dbClient.getConnection(car -&gt; {
-
-      <span class="keyword">if</span> (car.succeeded()) {
-        SQLConnection connection = car.result();
-        JsonArray data = <span class="keyword">new</span> JsonArray().add(title).add(markdown);
-        connection.updateWithParams(sqlQueries.get(SqlQuery.CREATE_PAGE), data, res -&gt; {
-          connection.close();
-          <span class="keyword">if</span> (res.succeeded()) {
-            resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture());
-          } <span class="keyword">else</span> {
-            LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, res.cause());
-            resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(res.cause()));
-          }
-        });
+    JsonArray data = <span class="keyword">new</span> JsonArray().add(title).add(markdown);
+    dbClient.updateWithParams(sqlQueries.get(SqlQuery.CREATE_PAGE), data, res -&gt; {
+      <span class="keyword">if</span> (res.succeeded()) {
+        resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture());
       } <span class="keyword">else</span> {
-        LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, car.cause());
-        resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(car.cause()));
+        LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, res.cause());
+        resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(res.cause()));
       }
     });
     <span class="keyword">return</span> <span class="local-variable">this</span>;
@@ -2614,23 +2630,13 @@ The essential difference is the support of the asynchronous result handler in th
 
   <span class="annotation">@Override</span>
   <span class="directive">public</span> WikiDatabaseService savePage(<span class="type">int</span> id, <span class="predefined-type">String</span> markdown, <span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">Void</span>&gt;&gt; resultHandler) {
-    dbClient.getConnection(car -&gt; {
-
-      <span class="keyword">if</span> (car.succeeded()) {
-        SQLConnection connection = car.result();
-        JsonArray data = <span class="keyword">new</span> JsonArray().add(markdown).add(id);
-        connection.updateWithParams(sqlQueries.get(SqlQuery.SAVE_PAGE), data, res -&gt; {
-          connection.close();
-          <span class="keyword">if</span> (res.succeeded()) {
-            resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture());
-          } <span class="keyword">else</span> {
-            LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, res.cause());
-            resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(res.cause()));
-          }
-        });
+    JsonArray data = <span class="keyword">new</span> JsonArray().add(markdown).add(id);
+    dbClient.updateWithParams(sqlQueries.get(SqlQuery.SAVE_PAGE), data, res -&gt; {
+      <span class="keyword">if</span> (res.succeeded()) {
+        resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture());
       } <span class="keyword">else</span> {
-        LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, car.cause());
-        resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(car.cause()));
+        LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, res.cause());
+        resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(res.cause()));
       }
     });
     <span class="keyword">return</span> <span class="local-variable">this</span>;
@@ -2638,22 +2644,13 @@ The essential difference is the support of the asynchronous result handler in th
 
   <span class="annotation">@Override</span>
   <span class="directive">public</span> WikiDatabaseService deletePage(<span class="type">int</span> id, <span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">Void</span>&gt;&gt; resultHandler) {
-    dbClient.getConnection(car -&gt; {
-      <span class="keyword">if</span> (car.succeeded()) {
-        SQLConnection connection = car.result();
-        JsonArray data = <span class="keyword">new</span> JsonArray().add(id);
-        connection.updateWithParams(sqlQueries.get(SqlQuery.DELETE_PAGE), data, res -&gt; {
-          connection.close();
-          <span class="keyword">if</span> (res.succeeded()) {
-            resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture());
-          } <span class="keyword">else</span> {
-            LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, res.cause());
-            resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(res.cause()));
-          }
-        });
+    JsonArray data = <span class="keyword">new</span> JsonArray().add(id);
+    dbClient.updateWithParams(sqlQueries.get(SqlQuery.DELETE_PAGE), data, res -&gt; {
+      <span class="keyword">if</span> (res.succeeded()) {
+        resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture());
       } <span class="keyword">else</span> {
-        LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, car.cause());
-        resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(car.cause()));
+        LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, res.cause());
+        resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(res.cause()));
       }
     });
     <span class="keyword">return</span> <span class="local-variable">this</span>;
@@ -2755,10 +2752,11 @@ What it does is actually very close to what we did in the previous section: mess
 <div class="sect2">
 <h3 id="_obtaining_a_database_service_proxy">Obtaining a database service proxy</h3>
 <div class="paragraph">
-<p>The final step to refactoring to Vert.x services is to adapt the HTTP server verticle to obtain a proxy to the database service.</p>
+<p>The final steps to refactoring to Vert.x services is to adapt the HTTP server verticle to obtain a proxy to the database service
+and use it in the handlers instead of the event bus.</p>
 </div>
 <div class="paragraph">
-<p>All we need to do for that is creating the proxy when the verticle starts:</p>
+<p>First, we need to create the proxy when the verticle starts:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2767,15 +2765,118 @@ What it does is actually very close to what we did in the previous section: mess
 <span class="annotation">@Override</span>
 <span class="directive">public</span> <span class="type">void</span> start(<span class="predefined-type">Future</span>&lt;<span class="predefined-type">Void</span>&gt; startFuture) <span class="directive">throws</span> <span class="exception">Exception</span> {
 
-  <span class="predefined-type">String</span> wikiDbQueue = config().getString(CONFIG_WIKIDB_QUEUE, <span class="string"><span class="delimiter">&quot;</span><span class="content">wikidb.queue</span><span class="delimiter">&quot;</span></span>);
+  <span class="predefined-type">String</span> wikiDbQueue = config().getString(CONFIG_WIKIDB_QUEUE, <span class="string"><span class="delimiter">&quot;</span><span class="content">wikidb.queue</span><span class="delimiter">&quot;</span></span>); <b class="conum">(1)</b>
   dbService = WikiDatabaseService.createProxy(vertx, wikiDbQueue);
 
   HttpServer server = vertx.createHttpServer();
   <span class="comment">// (...)</span></code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="colist arabic">
+<ol>
+<li>
 <p>We just need to make sure to use the same event bus destination as the service that was published by  <code>WikiDatabaseVerticle</code>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Then, we need to replace calls to the event bus with calls to the database service:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> <span class="type">void</span> indexHandler(RoutingContext context) {
+  dbService.fetchAllPages(reply -&gt; {
+    <span class="keyword">if</span> (reply.succeeded()) {
+      context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Wiki home</span><span class="delimiter">&quot;</span></span>);
+      context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">pages</span><span class="delimiter">&quot;</span></span>, reply.result().getList());
+      templateEngine.render(context, <span class="string"><span class="delimiter">&quot;</span><span class="content">templates</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/index.ftl</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
+        <span class="keyword">if</span> (ar.succeeded()) {
+          context.response().putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Content-Type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/html</span><span class="delimiter">&quot;</span></span>);
+          context.response().end(ar.result());
+        } <span class="keyword">else</span> {
+          context.fail(ar.cause());
+        }
+      });
+    } <span class="keyword">else</span> {
+      context.fail(reply.cause());
+    }
+  });
+}
+
+<span class="directive">private</span> <span class="type">void</span> pageRenderingHandler(RoutingContext context) {
+  <span class="predefined-type">String</span> requestedPage = context.request().getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">page</span><span class="delimiter">&quot;</span></span>);
+  dbService.fetchPage(requestedPage, reply -&gt; {
+    <span class="keyword">if</span> (reply.succeeded()) {
+
+      JsonObject payLoad = reply.result();
+      <span class="type">boolean</span> found = payLoad.getBoolean(<span class="string"><span class="delimiter">&quot;</span><span class="content">found</span><span class="delimiter">&quot;</span></span>);
+      <span class="predefined-type">String</span> rawContent = payLoad.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">rawContent</span><span class="delimiter">&quot;</span></span>, EMPTY_PAGE_MARKDOWN);
+      context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, requestedPage);
+      context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>, payLoad.getInteger(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>, -<span class="integer">1</span>));
+      context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">newPage</span><span class="delimiter">&quot;</span></span>, found ? <span class="string"><span class="delimiter">&quot;</span><span class="content">no</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">yes</span><span class="delimiter">&quot;</span></span>);
+      context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">rawContent</span><span class="delimiter">&quot;</span></span>, rawContent);
+      context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">content</span><span class="delimiter">&quot;</span></span>, Processor.process(rawContent));
+      context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">timestamp</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> <span class="predefined-type">Date</span>().toString());
+
+      templateEngine.render(context, <span class="string"><span class="delimiter">&quot;</span><span class="content">templates</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/page.ftl</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
+        <span class="keyword">if</span> (ar.succeeded()) {
+          context.response().putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Content-Type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/html</span><span class="delimiter">&quot;</span></span>);
+          context.response().end(ar.result());
+        } <span class="keyword">else</span> {
+          context.fail(ar.cause());
+        }
+      });
+
+    } <span class="keyword">else</span> {
+      context.fail(reply.cause());
+    }
+  });
+}
+
+<span class="directive">private</span> <span class="type">void</span> pageUpdateHandler(RoutingContext context) {
+  <span class="predefined-type">String</span> title = context.request().getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>);
+
+  <span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">Void</span>&gt;&gt; handler = reply -&gt; {
+    <span class="keyword">if</span> (reply.succeeded()) {
+      context.response().setStatusCode(<span class="integer">303</span>);
+      context.response().putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Location</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/wiki/</span><span class="delimiter">&quot;</span></span> + title);
+      context.response().end();
+    } <span class="keyword">else</span> {
+      context.fail(reply.cause());
+    }
+  };
+
+  <span class="predefined-type">String</span> markdown = context.request().getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">markdown</span><span class="delimiter">&quot;</span></span>);
+  <span class="keyword">if</span> (<span class="string"><span class="delimiter">&quot;</span><span class="content">yes</span><span class="delimiter">&quot;</span></span>.equals(context.request().getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">newPage</span><span class="delimiter">&quot;</span></span>))) {
+    dbService.createPage(title, markdown, handler);
+  } <span class="keyword">else</span> {
+    dbService.savePage(<span class="predefined-type">Integer</span>.valueOf(context.request().getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>)), markdown, handler);
+  }
+}
+
+<span class="directive">private</span> <span class="type">void</span> pageCreateHandler(RoutingContext context) {
+  <span class="predefined-type">String</span> pageName = context.request().getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>);
+  <span class="predefined-type">String</span> location = <span class="string"><span class="delimiter">&quot;</span><span class="content">/wiki/</span><span class="delimiter">&quot;</span></span> + pageName;
+  <span class="keyword">if</span> (pageName == <span class="predefined-constant">null</span> || pageName.isEmpty()) {
+    location = <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>;
+  }
+  context.response().setStatusCode(<span class="integer">303</span>);
+  context.response().putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Location</span><span class="delimiter">&quot;</span></span>, location);
+  context.response().end();
+}
+
+<span class="directive">private</span> <span class="type">void</span> pageDeletionHandler(RoutingContext context) {
+  dbService.deletePage(<span class="predefined-type">Integer</span>.valueOf(context.request().getParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>)), reply -&gt; {
+    <span class="keyword">if</span> (reply.succeeded()) {
+      context.response().setStatusCode(<span class="integer">303</span>);
+      context.response().putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Location</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>);
+      context.response().end();
+    } <span class="keyword">else</span> {
+      context.fail(reply.cause());
+    }
+  });
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>The <code>WikiDatabaseServiceVertxProxyHandler</code> generated class deals with forwarding calls as event bus messages.</p>
@@ -3092,20 +3193,12 @@ WikiDatabaseService fetchAllPagesData(<span class="predefined-type">Handler</spa
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Override</span>
 <span class="directive">public</span> WikiDatabaseService fetchAllPagesData(<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">List</span>&lt;JsonObject&gt;&gt;&gt; resultHandler) {
-  dbClient.getConnection(car -&gt; {
-    <span class="keyword">if</span> (car.succeeded()) {
-      SQLConnection connection = car.result();
-      connection.query(sqlQueries.get(SqlQuery.ALL_PAGES_DATA), queryResult -&gt; {
-        <span class="keyword">if</span> (queryResult.succeeded()) {
-          resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture(queryResult.result().getRows()));
-        } <span class="keyword">else</span> {
-          LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, queryResult.cause());
-          resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(queryResult.cause()));
-        }
-      });
+  dbClient.query(sqlQueries.get(SqlQuery.ALL_PAGES_DATA), queryResult -&gt; {
+    <span class="keyword">if</span> (queryResult.succeeded()) {
+      resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture(queryResult.result().getRows()));
     } <span class="keyword">else</span> {
-      LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, car.cause());
-      resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(car.cause()));
+      LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, queryResult.cause());
+      resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(queryResult.cause()));
     }
   });
   <span class="keyword">return</span> <span class="local-variable">this</span>;
@@ -3696,7 +3789,8 @@ It creates a page, fetches it, updates it then deletes it:</p>
 <div class="title">Tip</div>
 </td>
 <td class="content">
-The test uses <code>Future</code> objects composition rather than nested callbacks.
+The test uses <code>Future</code> objects composition rather than nested callbacks; the last composition must complete the
+async future or the test will eventually time out.
 </td>
 </tr>
 </table>
@@ -3959,7 +4053,7 @@ router.get(<span class="string"><span class="delimiter">&quot;</span><span class
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> <span class="type">void</span> loginHandler(RoutingContext context) {
   context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Login</span><span class="delimiter">&quot;</span></span>);
-  templateEngine.render(context, <span class="string"><span class="delimiter">&quot;</span><span class="content">templates/login.ftl</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
+  templateEngine.render(context, <span class="string"><span class="delimiter">&quot;</span><span class="content">templates</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/login.ftl</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
     <span class="keyword">if</span> (ar.succeeded()) {
       context.response().putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Content-Type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/html</span><span class="delimiter">&quot;</span></span>);
       context.response().end(ar.result());
@@ -4063,7 +4157,7 @@ Here is how this is implemented for the <code>indexHandler</code> handler method
 <p>We use the result to&#8230;&#8203;</p>
 </li>
 <li>
-<p>&#8230;&#8203;leverage it is the HTML template.</p>
+<p>&#8230;&#8203;leverage it in the HTML template.</p>
 </li>
 <li>
 <p>We also have access to the user login.</p>
@@ -4588,6 +4682,66 @@ When the operation completes, it emits the deployment <code>id</code> or signals
 </div>
 </div>
 <div class="sect2">
+<h3 id="_partially_em_rxifying_em_code_httpserververticle_code">Partially <em>"Rxifying"</em> <code>HttpServerVerticle</code></h3>
+<div class="paragraph">
+<p>If you follow the guide in sequence, editing the code as you go, your <code>HttpServerVerticle</code> class is still using the
+callback-based API. Before you can use the RxJava API to execute asynchronous operations <em>naturally</em>, i.e.
+<strong><em>concurrently</em></strong>, you need to refactor <code>HttpServerVerticle</code>.</p>
+</div>
+<div class="sect3">
+<h4 id="_import_rxjava_versions_of_vert_x_classes">Import RxJava versions of Vert.x classes</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">io.vertx.rxjava.core.AbstractVerticle</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.core.http.HttpServer</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.auth.AuthProvider</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.auth.User</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.auth.jwt.JWTAuth</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.auth.shiro.ShiroAuth</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.Router</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.RoutingContext</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.client.WebClient</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.client.HttpResponse</span>; <b class="conum">(1)</b>
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.codec.BodyCodec</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.handler</span>.*;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.sstore.LocalSessionStore</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.templ.FreeMarkerTemplateEngine</span>;
+<span class="keyword">import</span> <span class="include">org.slf4j.Logger</span>;
+<span class="keyword">import</span> <span class="include">org.slf4j.LoggerFactory</span>;
+<span class="keyword">import</span> <span class="include">rx.Observable</span>;
+<span class="keyword">import</span> <span class="include">rx.Single</span>;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Our <code>backupHandler()</code> method still uses <code>HttpResponse</code> class, so it must be imported. It turns out that the RxJava
+version of <code>HttpResponse</code> provided by Vert.x can serve as a drop-in replacement in this specific case.
+The <em>"Rxified"</em> code in <code>step-8</code> folder of the guide repository does not import this class as the
+response type is inferred by the lambda expression.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_use_delegate_on_a_em_rxified_em_code_vertx_code_instance">Use delegate on a <em>"Rxified"</em> <code>vertx</code> instance</h4>
+<div class="paragraph">
+<p>To call a method expecting a <code>io.vertx.core.Vertx</code> instance when you have a <code>io.vertx.rxjava.core.Vertx</code> one, call
+the <code>getDelegate()</code> method. Verticle&#8217;s <code>start()</code> method needs to be adjusted when creating an instance of
+<code>WikiDatabaseService</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Override</span>
+<span class="directive">public</span> <span class="type">void</span> start(<span class="predefined-type">Future</span>&lt;<span class="predefined-type">Void</span>&gt; startFuture) <span class="directive">throws</span> <span class="exception">Exception</span> {
+
+  <span class="predefined-type">String</span> wikiDbQueue = config().getString(CONFIG_WIKIDB_QUEUE, <span class="string"><span class="delimiter">&quot;</span><span class="content">wikidb.queue</span><span class="delimiter">&quot;</span></span>);
+  dbService = io.vertx.guides.wiki.database.WikiDatabaseService.createProxy(vertx.getDelegate(), wikiDbQueue);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_executing_authorization_queries_concurrently">Executing authorization queries concurrently</h3>
 <div class="paragraph">
 <p>In the previous example, we saw how to use RxJava operators and the Rxified Vert.x API to execute asynchronous operations in order.
@@ -4599,21 +4753,25 @@ To create a token, we need all authorization query results to complete, but quer
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Single&lt;<span class="predefined-type">Boolean</span>&gt; create = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">create</span><span class="delimiter">&quot;</span></span>); <b class="conum">(1)</b>
-Single&lt;<span class="predefined-type">Boolean</span>&gt; delete = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">delete</span><span class="delimiter">&quot;</span></span>);
-Single&lt;<span class="predefined-type">Boolean</span>&gt; update = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">update</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">auth.rxAuthenticate(creds).flatMap(user -&gt; {
+  Single&lt;<span class="predefined-type">Boolean</span>&gt; create = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">create</span><span class="delimiter">&quot;</span></span>); <b class="conum">(1)</b>
+  Single&lt;<span class="predefined-type">Boolean</span>&gt; delete = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">delete</span><span class="delimiter">&quot;</span></span>);
+  Single&lt;<span class="predefined-type">Boolean</span>&gt; update = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">update</span><span class="delimiter">&quot;</span></span>);
 
-<span class="keyword">return</span> Single.zip(create, delete, update, (canCreate, canDelete, canUpdate) -&gt; { <b class="conum">(2)</b>
-  <span class="keyword">return</span> jwtAuth.generateToken(
-    <span class="keyword">new</span> JsonObject()
-      .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, context.request().getHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">login</span><span class="delimiter">&quot;</span></span>))
-      .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">canCreate</span><span class="delimiter">&quot;</span></span>, canCreate)
-      .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">canDelete</span><span class="delimiter">&quot;</span></span>, canDelete)
-      .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">canUpdate</span><span class="delimiter">&quot;</span></span>, canUpdate),
-    <span class="keyword">new</span> JWTOptions()
-      .setSubject(<span class="string"><span class="delimiter">&quot;</span><span class="content">Wiki API</span><span class="delimiter">&quot;</span></span>)
-      .setIssuer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Vert.x</span><span class="delimiter">&quot;</span></span>));
-});</code></pre>
+  <span class="keyword">return</span> Single.zip(create, delete, update, (canCreate, canDelete, canUpdate) -&gt; { <b class="conum">(2)</b>
+    <span class="keyword">return</span> jwtAuth.generateToken(
+      <span class="keyword">new</span> JsonObject()
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, context.request().getHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">login</span><span class="delimiter">&quot;</span></span>))
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">canCreate</span><span class="delimiter">&quot;</span></span>, canCreate)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">canDelete</span><span class="delimiter">&quot;</span></span>, canDelete)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">canUpdate</span><span class="delimiter">&quot;</span></span>, canUpdate),
+      <span class="keyword">new</span> JWTOptions()
+        .setSubject(<span class="string"><span class="delimiter">&quot;</span><span class="content">Wiki API</span><span class="delimiter">&quot;</span></span>)
+        .setIssuer(<span class="string"><span class="delimiter">&quot;</span><span class="content">Vert.x</span><span class="delimiter">&quot;</span></span>));
+  });
+}).subscribe(token -&gt; {
+  context.response().putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Content-Type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">text/plain</span><span class="delimiter">&quot;</span></span>).end(token);
+}, t -&gt; context.fail(<span class="integer">401</span>));</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -4642,8 +4800,8 @@ Single&lt;<span class="predefined-type">Boolean</span>&gt; update = user.rxIsAut
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Single&lt;<span class="predefined-type">ResultSet</span>&gt; resultSet = connection
-  .flatMap(conn -&gt; conn.rxQueryWithParams(sqlQueries.get(SqlQuery.GET_PAGE_BY_ID), <span class="keyword">new</span> JsonArray().add(id)));</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">Single&lt;<span class="predefined-type">ResultSet</span>&gt; resultSet = dbClient.rxQueryWithParams(
+  sqlQueries.get(SqlQuery.GET_PAGE_BY_ID), <span class="keyword">new</span> JsonArray().add(id));</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4685,9 +4843,9 @@ For example, service proxy interfaces can only be defined with callbacks, but th
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> WikiDatabaseService fetchAllPagesData(<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">List</span>&lt;JsonObject&gt;&gt;&gt; resultHandler) { <b class="conum">(1)</b>
-  getConnection()
-    .flatMap(connection -&gt; connection.rxQuery(sqlQueries.get(SqlQuery.ALL_PAGES_DATA)))
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Override</span>
+<span class="directive">public</span> WikiDatabaseService fetchAllPagesData(<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">List</span>&lt;JsonObject&gt;&gt;&gt; resultHandler) { <b class="conum">(1)</b>
+  dbClient.rxQuery(sqlQueries.get(SqlQuery.ALL_PAGES_DATA))
     .map(<span class="predefined-type">ResultSet</span>::getRows)
     .subscribe(RxHelper.toSubscriber(resultHandler));  <b class="conum">(2)</b>
   <span class="keyword">return</span> <span class="local-variable">this</span>;
@@ -4718,8 +4876,7 @@ And it comes with an extensive set of data manipulation operators.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> WikiDatabaseService fetchAllPages(<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;JsonArray&gt;&gt; resultHandler) {
-  getConnection()
-    .flatMap(conn -&gt; conn.rxQuery(sqlQueries.get(SqlQuery.ALL_PAGES)))
+  dbClient.rxQuery(sqlQueries.get(SqlQuery.ALL_PAGES))
     .flatMapObservable(res -&gt; {  <b class="conum">(1)</b>
       <span class="predefined-type">List</span>&lt;JsonArray&gt; results = res.getResults();
       <span class="keyword">return</span> <span class="predefined-type">Observable</span>.from(results); <b class="conum">(2)</b>
@@ -5752,9 +5909,9 @@ Of course we appreciate praise, but we appreciate as much any constructive feedb
           <div id="footer">
             <div id="footer-text">
               
-                Version 1.0.1<br>
+                Version 1.1.0<br>
               
-                Last updated 2017-07-27 11:46:46 CEST
+                Last updated 2017-10-19 14:01:10 CEST
               
               
             </div>

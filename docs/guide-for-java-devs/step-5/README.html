@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -210,20 +211,12 @@ WikiDatabaseService fetchAllPagesData(<span class="predefined-type">Handler</spa
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Override</span>
 <span class="directive">public</span> WikiDatabaseService fetchAllPagesData(<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">List</span>&lt;JsonObject&gt;&gt;&gt; resultHandler) {
-  dbClient.getConnection(car -&gt; {
-    <span class="keyword">if</span> (car.succeeded()) {
-      SQLConnection connection = car.result();
-      connection.query(sqlQueries.get(SqlQuery.ALL_PAGES_DATA), queryResult -&gt; {
-        <span class="keyword">if</span> (queryResult.succeeded()) {
-          resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture(queryResult.result().getRows()));
-        } <span class="keyword">else</span> {
-          LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, queryResult.cause());
-          resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(queryResult.cause()));
-        }
-      });
+  dbClient.query(sqlQueries.get(SqlQuery.ALL_PAGES_DATA), queryResult -&gt; {
+    <span class="keyword">if</span> (queryResult.succeeded()) {
+      resultHandler.handle(<span class="predefined-type">Future</span>.succeededFuture(queryResult.result().getRows()));
     } <span class="keyword">else</span> {
-      LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, car.cause());
-      resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(car.cause()));
+      LOGGER.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Database query error</span><span class="delimiter">&quot;</span></span>, queryResult.cause());
+      resultHandler.handle(<span class="predefined-type">Future</span>.failedFuture(queryResult.cause()));
     }
   });
   <span class="keyword">return</span> <span class="local-variable">this</span>;
@@ -425,7 +418,7 @@ We override the default user agent with <code>vert-x3</code> but you may opt to 
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-07-27 11:46:46 CEST
+                Last updated 2017-10-19 14:01:10 CEST
               
               
             </div>

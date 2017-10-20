@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -170,7 +171,7 @@ application.</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-jdbc-client-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -183,7 +184,7 @@ application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-jdbc-client-scala_2.12:3.4.2</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-jdbc-client-scala_2.12:3.5.0</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -208,7 +209,7 @@ to share the same datasource so you don&#8217;t end up with multiple pools</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>exampleCreateDefault<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">var client = JDBCClient.createShared(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -226,7 +227,7 @@ will actually create the data source, and the specified config will be used.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>exampleCreateDataSourceName<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">var client = JDBCClient.createShared(vertx, config, <span class="string"><span class="delimiter">&quot;</span><span class="content">MyDataSource</span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -256,7 +257,7 @@ However, it&#8217;s possible you want to create a client instance that doesn&#82
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>exampleCreateNonShared<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">var client = JDBCClient.createNonShared(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -271,7 +272,7 @@ with a unique data source name each time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>exampleCreateWithDataSource<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">var client = JDBCClient.create(vertx, dataSource)</code></pre>
 </div>
 </div>
 </div>
@@ -308,7 +309,26 @@ a connection.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>example4<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Now do stuff with it:</span>
+
+client.getConnectionFuture().onComplete{
+  <span class="keyword">case</span> Success(result) =&gt; {
+
+    var connection = result
+
+    connection.queryFuture(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM some_table</span><span class="delimiter">&quot;</span></span>).onComplete{
+      <span class="keyword">case</span> Success(result) =&gt; {
+
+        var rs = result
+        <span class="comment">// Do something with results</span>
+      }
+      <span class="keyword">case</span> Failure(cause) =&gt; println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Failure</span><span class="delimiter">&quot;</span></span>)
+    }
+  }
+  <span class="keyword">case</span> Failure(cause) =&gt; {
+    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">$cause</span><span class="delimiter">&quot;</span></span>)
+  }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -418,7 +438,9 @@ using the <code>-cp</code> command line flag.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>example5<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">var config = <span class="keyword">new</span> io.vertx.core.json.JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">url</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc:hsqldb:mem:test?shutdown=true</span><span class="delimiter">&quot;</span></span>).put(<span class="string"><span class="delimiter">&quot;</span><span class="content">driver_class</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">org.hsqldb.jdbcDriver</span><span class="delimiter">&quot;</span></span>).put(<span class="string"><span class="delimiter">&quot;</span><span class="content">max_pool_size</span><span class="delimiter">&quot;</span></span>, <span class="integer">30</span>)
+
+var client = JDBCClient.createShared(vertx, config)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -518,7 +540,7 @@ deployed as bundle.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:38 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>

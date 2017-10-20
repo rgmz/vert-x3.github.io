@@ -95,6 +95,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -125,7 +126,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-tcp-eventbus-bridge-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.4.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -134,7 +135,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-tcp-eventbus-bridge-scala_2.12:3.4.2</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-tcp-eventbus-bridge-scala_2.12:3.5.0</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -217,7 +218,23 @@ counter part so it should make it easier to switch between the TCP and SockJS im
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example1`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var bridge = TcpEventBusBridge.create(vertx, BridgeOptions()
+  .setInboundPermitteds(Set(PermittedOptions()
+    .setAddress(&quot;in&quot;)
+  ))
+  .setOutboundPermitteds(Set(PermittedOptions()
+    .setAddress(&quot;out&quot;)
+  ))
+)
+
+bridge.listenFuture(7000).onComplete{
+  case Success(result) =&gt; {
+    // succeed...
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
 </div>
 </div>
 </div>
@@ -229,7 +246,7 @@ counter part so it should make it easier to switch between the TCP and SockJS im
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-06-14 22:22:38 CEST
+                Last updated 2017-10-17 15:45:48 CEST
               
               
             </div>
