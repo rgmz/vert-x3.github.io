@@ -8,6 +8,140 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Eclipse Vert.x meets GraphQL</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;I recently added GraphQL support to &lt;a href=&quot;https://github.com/gentics/mesh&quot;&gt;Gentics Mesh&lt;/a&gt; and I thought it would be a good idea to boil down the essence of my implementation in example so that I could share it in a simpler form.
+The example I’m about to show will not cover all aspects that I have added to the &lt;a href=&quot;https://getmesh.io/docs/beta/graphql.html&quot;&gt;Gentics Mesh API&lt;/a&gt; (e.g. paging, search and error handling) but it will give you a basic overview of the parts that I put together.
+GraphQL does not require a GraphDB even if the name might suggest it.&lt;/p&gt;
+&lt;p&gt;Using a graphdb in combination with GraphQL does nevertheless provide you with some advantages which I will highlight later on.&lt;/p&gt;
+&lt;h2 id=&quot;what-is-graphql-what-is-it-good-for-&quot;&gt;What is GraphQL? What is it good for?&lt;/h2&gt;
+&lt;p&gt;GraphQL as the name suggests is a new query language which can be used to load exactly the amount of data which you ask for. &lt;/p&gt;
+&lt;p&gt;The query is defined in way that the query fields correlate to the JSON data that is being retrieved. 
+In our StarWars Demo domain model this query will load the name of human 1001 which is Darth Vader.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-rules&quot;&gt;{
+  &lt;span class=&quot;hljs-rule&quot;&gt;&lt;span class=&quot;hljs-attribute&quot;&gt;vader&lt;/span&gt;:&lt;span class=&quot;hljs-value&quot;&gt; &lt;span class=&quot;hljs-function&quot;&gt;human&lt;/span&gt;(id: &lt;span class=&quot;hljs-number&quot;&gt;1001&lt;/span&gt;) {
+      name
+  &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;}
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Would result in:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs json&quot;&gt;{
+  &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;data&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+    &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;vader&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;{
+      &quot;&lt;span class=&quot;hljs-attribute&quot;&gt;name&lt;/span&gt;&quot;: &lt;span class=&quot;hljs-value&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;Darth Vader&quot;&lt;/span&gt;
+    &lt;/span&gt;}
+  &lt;/span&gt;}
+&lt;/span&gt;}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;the-demo-app&quot;&gt;The Demo App&lt;/h2&gt;
+&lt;p&gt;The demo application I build makes use of the &lt;a href=&quot;https://github.com/graphql-java/graphql-java&quot;&gt;graphql-java&lt;/a&gt; library. The data is being stored in a graph database.
+I use &lt;a href=&quot;http://orientdb.com/orientdb/&quot;&gt;OrientDB&lt;/a&gt; in combination with the &lt;a href=&quot;https://github.com/Syncleus/Ferma&quot;&gt;OGM Ferma&lt;/a&gt; to provide a data access layer.
+GraphQL does not necessarily require a graph database but in this example I will make use of one and highlight the benefits of using a GraphDB for my usecase.&lt;/p&gt;
+&lt;p&gt;You can find the sources here: &lt;a href=&quot;https://github.com/Jotschi/vertx-graphql-example&quot;&gt;https://github.com/Jotschi/vertx-graphql-example&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;data&quot;&gt;Data&lt;/h3&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/Jotschi/vertx-graphql-example/blob/master/src/main/java/de/jotschi/vertx/data/StarWarsData.java&quot;&gt;StarWarsData&lt;/a&gt; class creates a Graph which contains the Star Wars Movies and Characters, Planets and their relations.
+The model is fairly simple. There is a single StarWarsRoot vertex which acts as a start element for various aggregation vertices: Movies are stored in MovieRoot, Planets in PlanetsRoot, Characters are stored in HumansRoot and DroidsRoot.&lt;/p&gt;
+&lt;p&gt;The model classes are used for wrappers of the specific graph vertices. The &lt;a href=&quot;http://syncleus.com/Ferma/&quot;&gt;Ferma OGM&lt;/a&gt; is used to provide these wrappers. Each class contains methods which can be used to traverse the graph to locate the needed vertices.
+The found vertices are in turn again wrapped and can be used to locate other graph elements.&lt;/p&gt;
+&lt;h3 id=&quot;schema&quot;&gt;Schema&lt;/h3&gt;
+&lt;p&gt;The next thing we need is the GraphQL schema. The schema describes each element which can be retrieved. It also describes the properties and relationships for these elements.&lt;/p&gt;
+&lt;p&gt;The graphql-java library provides an API to create the object types and schema information.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; GraphQLObjectType &lt;span class=&quot;hljs-title&quot;&gt;createMovieType&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;newObject&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt;.&lt;span class=&quot;hljs-title&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Movie&quot;&lt;/span&gt;)&lt;/span&gt;
+    .&lt;span class=&quot;hljs-title&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;One of the films in the Star Wars universe.&quot;&lt;/span&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;hljs-comment&quot;&gt;// .title&lt;/span&gt;
+    .&lt;span class=&quot;hljs-title&quot;&gt;field&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(newFieldDefinition()&lt;/span&gt;.&lt;span class=&quot;hljs-title&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;title&quot;&lt;/span&gt;)&lt;/span&gt;
+        .&lt;span class=&quot;hljs-title&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Title of the episode.&quot;&lt;/span&gt;)&lt;/span&gt;
+        .&lt;span class=&quot;hljs-title&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(GraphQLString)&lt;/span&gt;
+        .&lt;span class=&quot;hljs-title&quot;&gt;dataFetcher&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;((env)&lt;/span&gt; -&gt; &lt;/span&gt;{
+          Movie movie = env.getSource();
+          &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; movie.getName();
+        }))
+
+    &lt;span class=&quot;hljs-comment&quot;&gt;// .description&lt;/span&gt;
+    .field(newFieldDefinition().name(&lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt;)
+        .description(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Description of the episode.&quot;&lt;/span&gt;)
+        .type(GraphQLString))
+
+    .build();
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A type can be referenced via a &lt;code&gt;GraphQLTypeReference&lt;/code&gt; once it has been created and added to the schema. This is especially important if you need to add fields which reference other types.
+Data fetchers are used to access the context, traverse the graph and retrieve properties from graph elements.&lt;/p&gt;
+&lt;p&gt;Another great source to learn more about the schema options is the &lt;a href=&quot;https://github.com/graphql-java/graphql-java/blob/master/src/test/groovy/graphql/GarfieldSchema.java&quot;&gt;GarfieldSchema&lt;/a&gt; example.&lt;/p&gt;
+&lt;p&gt;Finally all the created types must be referenced by a central object type &lt;a href=&quot;https://github.com/Jotschi/vertx-graphql-example/blob/master/src/main/java/de/jotschi/vertx/data/StarWarsSchema.java#L204&quot;&gt;QueryType&lt;/a&gt;.
+The query type object is basically the root object for the query.
+It defines what query options are initially possible. In our case it is possible to load the hero of the sage, specific movies, humans or droids.&lt;/p&gt;
+&lt;h3 id=&quot;verticle&quot;&gt;Verticle&lt;/h3&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/Jotschi/vertx-graphql-example/blob/master/src/main/java/de/jotschi/vertx/GraphQLVerticle.java&quot;&gt;GraphQLVerticle&lt;/a&gt; is used to accept the GraphQL request and process it.&lt;/p&gt;
+&lt;p&gt;The verticle also contains a StaticHandler to provide the Graphiql Browser web interface. This interface will allow you to quickly discover and experiment with GraphQL.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/Jotschi/vertx-graphql-example/blob/master/src/main/java/de/jotschi/vertx/GraphQLVerticle.java#L77&quot;&gt;query handler&lt;/a&gt; accepts the query JSON data. &lt;/p&gt;
+&lt;p&gt;An OrientDB transaction is being opened and the query is executed:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;demoData.getGraph().asyncTx((tx) -&gt; {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Invoke the query and handle the resulting JSON&lt;/span&gt;
+    GraphQL graphQL = newGraphQL(schema).build();
+    ExecutionInput input = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; ExecutionInput(query, &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt;, queryJson, demoData.getRoot(), extractVariables(queryJson));
+    tx.complete(graphQL.execute(input));
+}, (AsyncResult&lt;ExecutionResult&gt; rh) -&gt; {
+    ...
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The execute method initially needs a context variable. This context passed along with the query.
+In our case the context is the root element of the graph &lt;code&gt;demoData.getRoot()&lt;/code&gt;.
+This context element also serves as the initial source for our data fetchers.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;.dataFetcher((env) -&gt; {
+    StarWarsRoot root = env.getSource();
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; root.getHero();
+}))&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The data fetchers for the hero type on the other hand will be able to access the hero element since the fetcher above returned the element.
+Using this mechanism it is possible to traverse the graph. It is important to note that each invocation on the domain model methods will directly access the graph database.
+This way it is possible to influence the graph database query down to the lowest level. When omitting a property from the graphql query it will not be loaded from the graph.
+Thus there is no need to write an additional data access layer. All operations are directly mapped to graph database.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;StarWarsRoot&lt;/code&gt; Ferma class &lt;code&gt;getHero()&lt;/code&gt; method in turn defines a &lt;a href=&quot;http://tinkerpop.apache.org/docs/3.3.0/tutorials/getting-started/#_graph_traversal_staying_simple&quot;&gt;TinkerPop Gremlin traversal&lt;/a&gt; which is used to load the Vertex which represents the hero of the Star Wars saga.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block info&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-info-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Apache TinkerPop &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; &lt;a href=&quot;http://tinkerpop.apache.org/&quot;&gt;Apache TinkerPop&lt;/a&gt; is an open source, vendor-agnostic, graph framework / API which is supported by many graph database vendors. 
+One part of TinkerPop is the Gremlin traversal language which is great to query graph databases.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;...
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; Droid &lt;span class=&quot;hljs-title&quot;&gt;getHero&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Follow the HAS_ROOT edge and return the first found Vertex which could be found. &lt;/span&gt;
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Wrap the Vertex explicitly in the Droid Ferma class.  &lt;/span&gt;
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;traverse&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;((g)&lt;/span&gt; -&gt; g.&lt;span class=&quot;hljs-title&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(HAS_HERO)&lt;/span&gt;).&lt;span class=&quot;hljs-title&quot;&gt;nextOrDefaultExplicit&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(Droid.class, &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;;
+}
+...&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Once the query has been executed the result handler is being invoked. It contains some code to process the result data and potential errors.
+It is important to note that a GraphQL query will always be answered with a 2xx HTTP status code.
+If an element which is being referenced in the query can’t be loaded an error will be added to the response JSON object.&lt;/p&gt;
+&lt;h3 id=&quot;testing&quot;&gt;Testing&lt;/h3&gt;
+&lt;p&gt;Testing is fairly straight forward. Although there are multiple approaches. One approach is to use unit testing directly on the GraphQL types. 
+Another option is to run queries against the endpoint.  &lt;/p&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/Jotschi/vertx-graphql-example/blob/master/src/test/java/de/jotschi/vertx/GraphQLTest.java&quot;&gt;GraphQLTest class&lt;/a&gt; I wrote will run multiple queries against the endpoint.
+A Parameterized JUnit test is used iterate over the queries.&lt;/p&gt;
+&lt;p&gt;A &lt;a href=&quot;https://github.com/Jotschi/vertx-graphql-example/blob/master/src/test/resources/graphql/full-query&quot;&gt;typical query&lt;/a&gt; does not only contain the query data.
+The assertions on the response JSON are directly included in query using plain comments.&lt;/p&gt;
+&lt;p&gt;I build an &lt;a href=&quot;http://joel-costigliola.github.io/assertj/&quot;&gt;AssertJ&lt;/a&gt; assertion to check the comments of a query and verify that the assertion matches the response.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;assertThat(response).compliesToAssertions(queryName);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;run-the-example&quot;&gt;Run the example&lt;/h2&gt;
+&lt;p&gt;You can run the example by executing the &lt;code&gt;GraphQLServer&lt;/code&gt; class and access the &lt;a href=&quot;http://localhost:3000/browser/?query=%7B%0A%20%20movies%20%7B%0A%20%20%20%20title%0A%20%20%7D%0A%20%20hero%20%7B%0A%20%20%20%20name%0A%20%20%7D%0A%7D%0A&quot;&gt;Graphiql browser on http://localhost:3000/browser/&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;where-to-go-from-here-&quot;&gt;Where to go from here?&lt;/h2&gt;
+&lt;p&gt;The example is read-only. GraphQL also supports data mutation which can be used to actually modify and store data.
+I have not yet explored that part of GraphQL but I assume it might not be that hard to add mutation support to the example.&lt;/p&gt;
+&lt;p&gt;Additionally it does not cover how to actually make use of such API. I recently &lt;a href=&quot;https://github.com/gentics/mesh-vertx-example/&quot;&gt;updated my Vert.x example&lt;/a&gt; which shows how to use Vert.x template handlers to build a small server which renders some pages using data which was loaded via GraphQL.&lt;/p&gt;
+&lt;p&gt;Thanks for reading. If you have any further questions or feedback don’t hesitate to send me a tweet to &lt;a href=&quot;https://twitter.com/Jotschi/&quot;&gt;@Jotschi&lt;/a&gt; or &lt;a href=&quot;https://twitter.com/genticsmesh/&quot;&gt;@genticsmesh&lt;/a&gt;.&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Tue, 14 Nov 2017 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/eclipse-vert-x-meets-graphql</link>
+          <guid isPermaLink="true">http://vertx.io/blog/eclipse-vert-x-meets-graphql</guid>
+          <author>
+            <name>jotschi</name>
+            <uri>http://github.com/jotschi</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Eclipse Vert.x 3.5.0 released !</title>
           <description>
       &lt;article&gt;&lt;p&gt;The Vert.x team is pleased to announce the release of Eclipse Vert.x 3.5.0.&lt;/p&gt;
