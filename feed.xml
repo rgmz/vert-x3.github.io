@@ -8,6 +8,102 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>TCP Client using Eclipse Vert.x, Kotlin and Gradle build</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;As part of my hobby project to control RaspberryPi using Google Home Mini and/or Alexa, I wanted to write a very simple TCP client that keeps a connection open to one of my custom written server in cloud (I will write another blog post to cover the server side on a later date). The requirement of the client is to send a shared secret upon connecting and then keep waiting for message from server. Vert.x, Kotlin and Gradle allow rapid development of such project. The generated jar can be executed on Raspberry Pi. These steps outline the project setup and related source code to showcase a Vert.x and Kotlin project with Gradle.&lt;/p&gt;
+&lt;h2 id=&quot;project-directory-structure&quot;&gt;Project Directory Structure&lt;/h2&gt;
+&lt;p&gt;From command line (or via Windows Explorer, whatever you prefer to use) create a directory for project,for instance &lt;code&gt;vertx-net-client&lt;/code&gt;. Since we are using Kotlin, we will place all Kotlin files in &lt;code&gt;src/main/kotlin&lt;/code&gt; folder. The &lt;code&gt;src/main/resources&lt;/code&gt; folder will contain our logging configuration related files.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;cd&lt;/span&gt; vertx-&lt;span class=&quot;hljs-winutils&quot;&gt;net&lt;/span&gt;-client
+&lt;span class=&quot;hljs-built_in&quot;&gt;mkdir&lt;/span&gt; -p src/main/kotlin
+&lt;span class=&quot;hljs-built_in&quot;&gt;mkdir&lt;/span&gt; -p src/main/resources&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;project-files&quot;&gt;Project Files&lt;/h3&gt;
+&lt;p&gt;We need to add following files in the project&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;.gitignore&lt;/code&gt;
+If you want to check your project into git, you may consider adding following &lt;code&gt;.gitignore&lt;/code&gt; file at root of your project&lt;/li&gt;
+&lt;/ul&gt;
+&lt;script src=&quot;https://gist.github.com/usmansaleem/b5838484a20cb8b08f236f2265ad7a8e.js&quot;&gt;&lt;/script&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;logback.xml&lt;/code&gt;
+This example is using slf4j and logback for logging. If you decide to use it in your project, you may also add following logback.xml file in &lt;code&gt;src/main/resources&lt;/code&gt;. Modify it as per your requirements. This example will
+log on console.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;script src=&quot;https://gist.github.com/usmansaleem/750c6d1cad0721b52be2ff00f758fb9f.js&quot;&gt;&lt;/script&gt;
+
+&lt;h2 id=&quot;gradle-setup&quot;&gt;Gradle Setup&lt;/h2&gt;
+&lt;p&gt;We will use Gradle build system for this project. If you don’t already have Gradle available on your system, download and unzip gradle in a directory of your choice (&lt;code&gt;$GRADLE_HOME&lt;/code&gt; is used here to represent this directory). This gradle distribution will be used as a starting point to create Gradle wrapper scripts for our project. These scripts will allow our project to download and use correct version of gradle distribution automatically without messing up system. Really useful when building your project on CI tool or on any other developer’s machine.&lt;/p&gt;
+&lt;p&gt;Run following command in project’s directory&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-variable&quot;&gt;$GRADLE_HOME&lt;/span&gt;/bin/gradle wrapper&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The above commands will generate following files and directories.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;gradle/  gradlew  gradlew.bat&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;gradle-build-file-build-gradle-&quot;&gt;Gradle build file &lt;code&gt;build.gradle&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Create (and/or copy and modify) following &lt;code&gt;build.gradle&lt;/code&gt; in your project’s root directory. Our example gradle build file is using &lt;a href=&quot;https://github.com/jponge/vertx-gradle-plugin/&quot;&gt;vertx-gradle-plugin&lt;/a&gt;.&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/usmansaleem/e723f25b827e0a925eaef2957a80132d.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;In the project directory, run following command to download local gradle distribution:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;./gradlew&lt;/code&gt;&lt;/pre&gt;
+(or `.\gradlew.bat` if in Windows)
+
+At this stage we should have following file structure. This is also a good time to commit changes if you are working with git.
+
+* `.gitignore`                              
+* `build.gradle`                            
+* `gradle/wrapper/gradle-wrapper.jar`       
+* `gradle/wrapper/gradle-wrapper.properties`
+* `gradlew`                                 
+* `gradlew.bat`
+* `src/main/resources/logback.xml`
+
+Now that our project structure is ready, time to add the meat of the project. You may use any IDE of your choice. My preference is IntelliJ IDEA.
+
+Create a new package under `src/main/kotlin`. The package name should be adapted from the following section of `build.gradle`
+
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-title&quot;&gt;vertx&lt;/span&gt; {
+    &lt;span class=&quot;hljs-title&quot;&gt;mainVerticle&lt;/span&gt; = &lt;span class=&quot;hljs-string&quot;&gt;&quot;info.usmans.blog.vertx.NetClientVerticle&quot;&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;From the above example, the package name is &lt;code&gt;info.usmans.blog.vertx&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Add a new Kotlin Class/file in &lt;code&gt;src/main/kotlin/info/usmans/blog/vertx&lt;/code&gt; as &lt;code&gt;NetClientVerticle.kt&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The contents of this class is as follows&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/usmansaleem/2a176a7b752fcb72f7f31964809696fe.js&quot;&gt;&lt;/script&gt;
+
+&lt;h2 id=&quot;explaining-the-code&quot;&gt;Explaining the Code&lt;/h2&gt;
+&lt;p&gt;The &lt;code&gt;fun main(args: Array&lt;String&gt;)&lt;/code&gt; is not strictly required, it quickly allows running the Vert.x verticle from within IDE. You will also notice a small hack in the method for setting system property &lt;code&gt;vertx.disableDnsResolver&lt;/code&gt; which is to avoid a Netty bug that I observed when running on Windows machine and remote server is down. Of course, since we are using vertx-gradle-plugin, we can also use &lt;code&gt;gradle vertxRun&lt;/code&gt; to run our verticle. In this case the &lt;code&gt;main&lt;/code&gt; method will not get called.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;override fun start()&lt;/code&gt; method calls &lt;code&gt;fireReconnectTimer&lt;/code&gt; which in turn calls &lt;code&gt;reconnect&lt;/code&gt; method. &lt;code&gt;reconnect&lt;/code&gt; method contains the connection logic to server as well as it calls &lt;code&gt;fireReconnectTimer&lt;/code&gt; if it is unable to connect to server or disconnects from server. In &lt;code&gt;reconnect&lt;/code&gt; method the &lt;code&gt;socket.handler&lt;/code&gt; gets called when server send message to client.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;socket.handler({ data -&gt;
+                        logger.info(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Data received: ${data}&quot;&lt;/span&gt;)
+                        //TODO: Do the work here &lt;span class=&quot;hljs-keyword&quot;&gt;...&lt;/span&gt;
+               })&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;distributing-the-project&quot;&gt;Distributing the project&lt;/h2&gt;
+&lt;p&gt;To create redistributable jar, use &lt;code&gt;./gradlew shadowJar&lt;/code&gt; command. Or if using IntelliJ: from Gradle projects, Tasks, shadow, shadowJar (right click run). This command will generate &lt;code&gt;./build/libs/vertx-net-client-fat.jar&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;executing-the-client&quot;&gt;Executing the client&lt;/h3&gt;
+&lt;p&gt;The client jar can be executed using following command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;java &lt;span class=&quot;hljs-variable&quot;&gt;-DserverHost=&lt;/span&gt;&lt;span class=&quot;hljs-number&quot;&gt;127.0&lt;/span&gt;.&lt;span class=&quot;hljs-number&quot;&gt;0.1&lt;/span&gt; &lt;span class=&quot;hljs-variable&quot;&gt;-DserverPort=&lt;/span&gt;&lt;span class=&quot;hljs-number&quot;&gt;8888&lt;/span&gt; &lt;span class=&quot;hljs-variable&quot;&gt;-DconnectMessage=&lt;/span&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;hello&quot;&lt;/span&gt; -jar vertx-net-client-full.jar&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you wish to use SLF4J for Vert.x internal logging, you need to pass system property &lt;code&gt;vertx.logger-delegate-factory-class-name&lt;/code&gt; with value of &lt;code&gt;io.vertx.core.logging.SLF4JLogDelegateFactory&lt;/code&gt;. The final command would look like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;java &lt;span class=&quot;hljs-variable&quot;&gt;-DserverHost=&lt;/span&gt;&lt;span class=&quot;hljs-number&quot;&gt;127.0&lt;/span&gt;.&lt;span class=&quot;hljs-number&quot;&gt;0.1&lt;/span&gt; &lt;span class=&quot;hljs-variable&quot;&gt;-DserverPort=&lt;/span&gt;&lt;span class=&quot;hljs-number&quot;&gt;8888&lt;/span&gt; &lt;span class=&quot;hljs-variable&quot;&gt;-DconnectMessage=&lt;/span&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;hello&quot;&lt;/span&gt; -Dvertx.&lt;span class=&quot;hljs-variable&quot;&gt;logger-delegate-factory-class-name=&lt;/span&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;io.vertx.core.logging.SLF4JLogDelegateFactory&quot;&lt;/span&gt; -jar vertx-net-client-full.jar&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can configure Vert.x logging levels in logback.xml file if required.&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;This post describes how easy it is to create a simple TCP client using Vert.x, Kotlin and Gradle build system. Hopefully the techniques shown here will serve as a starting point for your next DIY project.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block info&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-info-circle&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Info &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; This post is adapted and reproduced from &lt;a href=&quot;https://usmans.info/usmansaleem/blog/tcp_client_using_vertx_kotlin_gradle&quot;&gt;author’s blog post&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Wed, 20 Dec 2017 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/tcp-client-using-eclipse-vert-x-kotlin-and-gradle-build</link>
+          <guid isPermaLink="true">http://vertx.io/blog/tcp-client-using-eclipse-vert-x-kotlin-and-gradle-build</guid>
+          <author>
+            <name>usmansaleem</name>
+            <uri>http://github.com/usmansaleem</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Eclipse Vert.x meets GraphQL</title>
           <description>
       &lt;article&gt;&lt;p&gt;I recently added GraphQL support to &lt;a href=&quot;https://github.com/gentics/mesh&quot;&gt;Gentics Mesh&lt;/a&gt; and I thought it would be a good idea to boil down the essence of my implementation in example so that I could share it in a simpler form.
