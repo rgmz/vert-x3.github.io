@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -111,6 +112,7 @@
 </ul>
 </li>
 <li><a href="#_advanced_configuration">Advanced configuration</a></li>
+<li><a href="#_blockingserverinterceptor">BlockingServerInterceptor</a></li>
 </ul>
         </div>
       </div>
@@ -127,6 +129,7 @@
 </ul>
 </li>
 <li><a href="#_advanced_configuration">Advanced configuration</a></li>
+<li><a href="#_blockingserverinterceptor">BlockingServerInterceptor</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -246,7 +249,7 @@ or you can integrate it in your build.</p>
   <span class="tag">&lt;configuration&gt;</span>
     <span class="tag">&lt;protocArtifact&gt;</span>com.google.protobuf:protoc:3.2.0:exe:${os.detected.classifier}<span class="tag">&lt;/protocArtifact&gt;</span>
     <span class="tag">&lt;pluginId&gt;</span>grpc-java<span class="tag">&lt;/pluginId&gt;</span>
-    <span class="tag">&lt;pluginArtifact&gt;</span>io.vertx:protoc-gen-grpc-java:1.6.1:exe:${os.detected.classifier}<span class="tag">&lt;/pluginArtifact&gt;</span>
+    <span class="tag">&lt;pluginArtifact&gt;</span>io.vertx:protoc-gen-grpc-java:1.9.0:exe:${os.detected.classifier}<span class="tag">&lt;/pluginArtifact&gt;</span>
   <span class="tag">&lt;/configuration&gt;</span>
   <span class="tag">&lt;executions&gt;</span>
     <span class="tag">&lt;execution&gt;</span>
@@ -316,7 +319,7 @@ protobuf {
   }
   plugins {
   grpc {
-    artifact = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:protoc-gen-grpc-java:1.6.1</span><span class="delimiter">&quot;</span></span>
+    artifact = <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:protoc-gen-grpc-java:1.9.0</span><span class="delimiter">&quot;</span></span>
   }
 }
   generateProtoTasks {
@@ -489,6 +492,57 @@ recommended.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_blockingserverinterceptor">BlockingServerInterceptor</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>gRPC <a href="https://grpc.io/grpc-java/javadoc/io/grpc/ServerInterceptor.html">ServerInterceptor</a> is a mechanism
+for intercepting incoming calls before they are sent to the service.
+It has synchronous behavior and will be execute on the Vert.x event loop.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">VertxServer rpcServer = VertxServerBuilder
+  .forAddress(vertx, <span class="string"><span class="delimiter">&quot;</span><span class="content">my.host</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>)
+  .addService(ServerInterceptors.intercept(service, myInterceptor))
+  .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Suppose we have an interceptor that does something blocking the event loop:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">MyInterceptor</span> <span class="directive">implements</span> ServerInterceptor {
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> &lt;Q, A&gt; ServerCall.Listener&lt;Q&gt; interceptCall(
+    ServerCall&lt;Q, A&gt; call, Metadata headers, ServerCallHandler&lt;Q, A&gt; next) {
+    <span class="comment">// do something hard and update the metadata, for example</span>
+    <span class="keyword">return</span> next.startCall(call, headers);
+  }
+}
+MyInterceptor myInterceptor = <span class="keyword">new</span> MyInterceptor();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To avoid the blocking one should wrap the interceptor. Then it will be called on the Vert.x worker thread.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">ServerInterceptor wrapped = BlockingServerInterceptor.wrap(vertx, myInterceptor);
+
+<span class="comment">// Create the server</span>
+VertxServer rpcServer = VertxServerBuilder
+  .forAddress(vertx, <span class="string"><span class="delimiter">&quot;</span><span class="content">my.host</span><span class="delimiter">&quot;</span></span>, <span class="integer">8080</span>)
+  .addService(ServerInterceptors.intercept(service, wrapped))
+  .build();
+
+<span class="comment">// Start it</span>
+rpcServer.start();</code></pre>
+</div>
+</div>
+</div>
+</div>
 
         
 
@@ -496,7 +550,7 @@ recommended.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:08 CET
               
               
             </div>
@@ -542,7 +596,7 @@ recommended.</p>
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -192,7 +193,7 @@ of your build descriptor:</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
     <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>vertx-mqtt<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -205,7 +206,7 @@ of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-<span class="key">mqtt</span>:<span class="float">3.5</span><span class="float">.0</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-<span class="key">mqtt</span>:<span class="float">3.5</span><span class="float">.1</span></code></pre>
 </div>
 </div>
 </div>
@@ -245,13 +246,13 @@ this module has the tech preview status, this means the API can change between v
 <h3 id="_handling_client_connection_disconnection">Handling client connection/disconnection</h3>
 <div class="paragraph">
 <p>This example shows how it&#8217;s possible to handle the connection request from a remote MQTT client. First, an
-<code><a href="../../yardoc/VertxMqttServer/MqttServer.html">MqttServer</a></code> instance is created and the <code><a href="../../yardoc/VertxMqttServer/MqttServer.html#endpoint_handler-instance_method">endpointHandler</a></code> method is used to specify the handler called
-when a remote client sends a CONNECT message for connecting to the server itself. The <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html">MqttEndpoint</a></code>
+<code><a href="../../yardoc/VertxMqtt/MqttServer.html">MqttServer</a></code> instance is created and the <code><a href="../../yardoc/VertxMqtt/MqttServer.html#endpoint_handler-instance_method">endpointHandler</a></code> method is used to specify the handler called
+when a remote client sends a CONNECT message for connecting to the server itself. The <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html">MqttEndpoint</a></code>
 instance, provided as parameter to the handler, brings all main information related to the CONNECT message like client identifier,
 username/password, "will" information, clean session flag, protocol version and the "keep alive" timeout.
-Inside that handler, the <em>endpoint</em> instance provides the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#accept-instance_method">accept</a></code> method
+Inside that handler, the <em>endpoint</em> instance provides the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#accept-instance_method">accept</a></code> method
 for replying to the remote client with the corresponding CONNACK message : in this way, the connection is established.
-Finally, the server is started using the <code><a href="../../yardoc/VertxMqttServer/MqttServer.html#listen-instance_method">listen</a></code> method with
+Finally, the server is started using the <code><a href="../../yardoc/VertxMqtt/MqttServer.html#listen-instance_method">listen</a></code> method with
 the default behavior (on localhost and default MQTT port 1883). The same method allows to specify an handler in order
 to check if the server is started properly or not.</p>
 </div>
@@ -261,7 +262,7 @@ to check if the server is started properly or not.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The same <em>endpoint</em> instance provides the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#disconnect_handler-instance_method">disconnectHandler</a></code>
+<p>The same <em>endpoint</em> instance provides the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#disconnect_handler-instance_method">disconnectHandler</a></code>
 for specifying the handler called when the remote client sends a DISCONNECT message in order to disconnect from the server;
 this handler takes no parameters.</p>
 </div>
@@ -303,11 +304,11 @@ The MQTT server is started passing the Vert.x instance as usual and the above MQ
 <h3 id="_handling_client_subscription_unsubscription_request">Handling client subscription/unsubscription request</h3>
 <div class="paragraph">
 <p>After a connection is established between client and server, the client can send a subscription request for a topic
-using the SUBSCRIBE message. The <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html">MqttEndpoint</a></code> interface allows to specify an handler for the
-incoming subscription request using the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#subscribe_handler-instance_method">subscribeHandler</a></code> method.
-Such handler receives an instance of the <code><a href="../../yardoc/VertxMqttServer/MqttSubscribeMessage.html">MqttSubscribeMessage</a></code> interface which brings
+using the SUBSCRIBE message. The <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html">MqttEndpoint</a></code> interface allows to specify an handler for the
+incoming subscription request using the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#subscribe_handler-instance_method">subscribeHandler</a></code> method.
+Such handler receives an instance of the <code><a href="../../yardoc/VertxMqtt/MqttSubscribeMessage.html">MqttSubscribeMessage</a></code> interface which brings
 the list of topics with related QoS levels as desired by the client.
-Finally, the endpoint instance provides the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#subscribe_acknowledge-instance_method">subscribeAcknowledge</a></code> method
+Finally, the endpoint instance provides the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#subscribe_acknowledge-instance_method">subscribeAcknowledge</a></code> method
 for replying to the client with the related SUBACK message containing the granted QoS levels.</p>
 </div>
 <div class="listingblock">
@@ -327,10 +328,10 @@ endpoint.subscribe_handler() { |subscribe|
 </div>
 </div>
 <div class="paragraph">
-<p>In the same way, it&#8217;s possible to use the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#unsubscribe_handler-instance_method">unsubscribeHandler</a></code> method
+<p>In the same way, it&#8217;s possible to use the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#unsubscribe_handler-instance_method">unsubscribeHandler</a></code> method
 on the endpoint in order to specify the handler called when the client sends an UNSUBSCRIBE message. This handler receives
-an instance of the <code><a href="../../yardoc/VertxMqttServer/MqttUnsubscribeMessage.html">MqttUnsubscribeMessage</a></code> interface as parameter with the list of topics to unsubscribe.
-Finally, the endpoint instance provides the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#unsubscribe_acknowledge-instance_method">unsubscribeAcknowledge</a></code> method
+an instance of the <code><a href="../../yardoc/VertxMqtt/MqttUnsubscribeMessage.html">MqttUnsubscribeMessage</a></code> interface as parameter with the list of topics to unsubscribe.
+Finally, the endpoint instance provides the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#unsubscribe_acknowledge-instance_method">unsubscribeAcknowledge</a></code> method
 for replying to the client with the related UNSUBACK message.</p>
 </div>
 <div class="listingblock">
@@ -350,9 +351,9 @@ endpoint.unsubscribe_handler() { |unsubscribe|
 <div class="sect2">
 <h3 id="_handling_client_published_message">Handling client published message</h3>
 <div class="paragraph">
-<p>In order to handle incoming messages published by the remote client, the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html">MqttEndpoint</a></code> interface provides
-the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#publish_handler-instance_method">publishHandler</a></code> method for specifying the handler called
-when the client sends a PUBLISH message. This handler receives an instance of the <code><a href="../../yardoc/VertxMqttServer/MqttPublishMessage.html">MqttPublishMessage</a></code>
+<p>In order to handle incoming messages published by the remote client, the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html">MqttEndpoint</a></code> interface provides
+the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#publish_handler-instance_method">publishHandler</a></code> method for specifying the handler called
+when the client sends a PUBLISH message. This handler receives an instance of the <code><a href="../../yardoc/VertxMqtt/MqttPublishMessage.html">MqttPublishMessage</a></code>
 interface as parameter with the payload, the QoS level, the duplicate and retain flags.</p>
 </div>
 <div class="paragraph">
@@ -360,14 +361,14 @@ interface as parameter with the payload, the QoS level, the duplicate and retain
 </div>
 <div class="paragraph">
 <p>If the QoS level is 1 (AT_LEAST_ONCE), the endpoind needs to reply with a PUBACK message using the
-available <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#publish_acknowledge-instance_method">publishAcknowledge</a></code> method.</p>
+available <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#publish_acknowledge-instance_method">publishAcknowledge</a></code> method.</p>
 </div>
 <div class="paragraph">
 <p>If the QoS level is 2 (EXACTLY_ONCE), the endpoint needs to reply with a PUBREC message using the
-available <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#publish_received-instance_method">publishReceived</a></code> method; in this case the same endpoint should handle
+available <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#publish_received-instance_method">publishReceived</a></code> method; in this case the same endpoint should handle
 the PUBREL message received from the client as well (the remote client sends it after receiving the PUBREC from the endpoint)
-and it can do that specifying the handler through the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#publish_release_handler-instance_method">publishReleaseHandler</a></code> method.
-In order to close the QoS level 2 delivery, the endpoint can use the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#publish_complete-instance_method">publishComplete</a></code> method
+and it can do that specifying the handler through the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#publish_release_handler-instance_method">publishReleaseHandler</a></code> method.
+In order to close the QoS level 2 delivery, the endpoint can use the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#publish_complete-instance_method">publishComplete</a></code> method
 for sending the PUBCOMP message to the client.</p>
 </div>
 <div class="listingblock">
@@ -380,7 +381,7 @@ endpoint.publish_handler() { |message|
   <span class="keyword">if</span> (message.qos_level() == <span class="symbol">:AT_LEAST_ONCE</span>)
     endpoint.publish_acknowledge(message.message_id())
   <span class="keyword">elsif</span> (message.qos_level() == <span class="symbol">:EXACTLY_ONCE</span>)
-    endpoint.publish_release(message.message_id())
+    endpoint.publish_received(message.message_id())
   <span class="keyword">end</span>
 
 }.publish_release_handler() { |messageId|
@@ -394,7 +395,7 @@ endpoint.publish_handler() { |message|
 <h3 id="_publish_message_to_the_client">Publish message to the client</h3>
 <div class="paragraph">
 <p>The endpoint can publish a message to the remote client (sending a PUBLISH message) using the
-<code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#publish-instance_method">publish</a></code> method
+<code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#publish-instance_method">publish</a></code> method
 which takes the following input parameters : the topic to publish, the payload, the QoS level, the duplicate and retain flags.</p>
 </div>
 <div class="paragraph">
@@ -402,15 +403,15 @@ which takes the following input parameters : the topic to publish, the payload, 
 </div>
 <div class="paragraph">
 <p>If the QoS level is 1 (AT_LEAST_ONCE), the endpoint needs to handle the PUBACK message received from the client
-in order to receive final acknowledge of delivery. It&#8217;s possible using the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#publish_acknowledge_handler-instance_method">publishAcknowledgeHandler</a></code> method
+in order to receive final acknowledge of delivery. It&#8217;s possible using the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#publish_acknowledge_handler-instance_method">publishAcknowledgeHandler</a></code> method
 specifying such an handler.</p>
 </div>
 <div class="paragraph">
 <p>If the QoS level is 2 (EXACTLY_ONCE), the endpoint needs to handle the PUBREC message received from the client.
-The <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#publish_received_handler-instance_method">publishReceivedHandler</a></code> method allows to specify
-the handler for that. Inside that handler, the endpoint can use the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#publish_release-instance_method">publishRelease</a></code> method
+The <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#publish_received_handler-instance_method">publishReceivedHandler</a></code> method allows to specify
+the handler for that. Inside that handler, the endpoint can use the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#publish_release-instance_method">publishRelease</a></code> method
 for replying to the client with the PUBREL message. The last step is to handle the PUBCOMP message received from the client
-as final acknowledge for the published message; it&#8217;s possible using the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#publish_completion_handler-instance_method">publishCompletionHandler</a></code>
+as final acknowledge for the published message; it&#8217;s possible using the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#publish_completion_handler-instance_method">publishCompletionHandler</a></code>
 for specifying the handler called when the final PUBCOMP message is received.</p>
 </div>
 <div class="listingblock">
@@ -444,8 +445,8 @@ the server takes care of the keep alive timeout specified inside that message in
 send messages in such timeout. At same time, for every PINGREQ received, the server replies with the related PINGRESP.</p>
 </div>
 <div class="paragraph">
-<p>Even if there is no need for the high level application to handle that, the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html">MqttEndpoint</a></code> interface
-provides the <code><a href="../../yardoc/VertxMqttServer/MqttEndpoint.html#ping_handler-instance_method">pingHandler</a></code> method for specifying an handler
+<p>Even if there is no need for the high level application to handle that, the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html">MqttEndpoint</a></code> interface
+provides the <code><a href="../../yardoc/VertxMqtt/MqttEndpoint.html#ping_handler-instance_method">pingHandler</a></code> method for specifying an handler
 called when a PINGREQ message is received from the client. It&#8217;s just a notification to the application that the client
 isn&#8217;t sending meaningful messages but only pings for keeping alive; in any case the PINGRESP is automatically sent
 by the server internally as described above.</p>
@@ -463,7 +464,7 @@ endpoint.ping_handler() { |v|
 <div class="sect2">
 <h3 id="_closing_the_server">Closing the server</h3>
 <div class="paragraph">
-<p>The <code><a href="../../yardoc/VertxMqttServer/MqttServer.html">MqttServer</a></code> interface provides the <code><a href="../../yardoc/VertxMqttServer/MqttServer.html#close-instance_method">close</a></code> method
+<p>The <code><a href="../../yardoc/VertxMqtt/MqttServer.html">MqttServer</a></code> interface provides the <code><a href="../../yardoc/VertxMqtt/MqttServer.html#close-instance_method">close</a></code> method
 that can be used for closing the server; it stops to listen for incoming connections and closes all the active connections
 with remote clients. This method is asynchronous and one overload provides the possibility to specify a complention handler
 that will be called when the server is really closed.</p>
@@ -495,11 +496,11 @@ more instances of the MQTT server.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-mqtt-server/mqtt_server</span><span class="delimiter">'</span></span>
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-mqtt/mqtt_server</span><span class="delimiter">'</span></span>
 
 (<span class="integer">0</span>...<span class="integer">10</span>).each <span class="keyword">do</span> |i|
 
-  mqttServer = <span class="constant">VertxMqttServer</span>::<span class="constant">MqttServer</span>.create(vertx)
+  mqttServer = <span class="constant">VertxMqtt</span>::<span class="constant">MqttServer</span>.create(vertx)
   mqttServer.endpoint_handler() { |endpoint|
     <span class="comment"># handling endpoint</span>
   }.listen() { |ar_err,ar|
@@ -561,12 +562,12 @@ to connect to passing instance of <code><a href="../dataobjects.html#MqttClientO
 </div>
 <div class="paragraph">
 <p>This example shows how you could connect to a server and disconnect from it using Vert.x MQTT client
-and calling <code><a href="../../yardoc/VertxMqttServer/MqttClient.html#connect-instance_method">connect</a></code> and <code><a href="../../yardoc/VertxMqttServer/MqttClient.html#disconnect-instance_method">disconnect</a></code> methods.</p>
+and calling <code><a href="../../yardoc/VertxMqtt/MqttClient.html#connect-instance_method">connect</a></code> and <code><a href="../../yardoc/VertxMqtt/MqttClient.html#disconnect-instance_method">disconnect</a></code> methods.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-mqtt-server/mqtt_client</span><span class="delimiter">'</span></span>
-client = <span class="constant">VertxMqttServer</span>::<span class="constant">MqttClient</span>.create(vertx)
+<pre class="CodeRay highlight"><code data-lang="ruby">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-mqtt/mqtt_client</span><span class="delimiter">'</span></span>
+client = <span class="constant">VertxMqtt</span>::<span class="constant">MqttClient</span>.create(vertx)
 
 client.connect(<span class="integer">1883</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">iot.eclipse.org</span><span class="delimiter">&quot;</span></span>) { |s_err,s|
   client.disconnect()
@@ -601,15 +602,15 @@ default address of server provided by <code><a href="../dataobjects.html#MqttCli
 </div>
 </div>
 <div class="paragraph">
-<p>Here we have the example of usage of <code><a href="../../yardoc/VertxMqttServer/MqttClient.html#subscribe-instance_method">subscribe</a></code> method. In order to receive messages from rpi2/temp topic we call <code><a href="../../yardoc/VertxMqttServer/MqttClient.html#subscribe-instance_method">subscribe</a></code> method.
+<p>Here we have the example of usage of <code><a href="../../yardoc/VertxMqtt/MqttClient.html#subscribe-instance_method">subscribe</a></code> method. In order to receive messages from rpi2/temp topic we call <code><a href="../../yardoc/VertxMqtt/MqttClient.html#subscribe-instance_method">subscribe</a></code> method.
 Although, to handle received messages from server you need to provide a handler, which will be called each time you have a new messages in the topics you subscribe on.
-As this example shows, handler could be provided via <code><a href="../../yardoc/VertxMqttServer/MqttClient.html#publish_handler-instance_method">publishHandler</a></code> method.</p>
+As this example shows, handler could be provided via <code><a href="../../yardoc/VertxMqtt/MqttClient.html#publish_handler-instance_method">publishHandler</a></code> method.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_publishing_message_to_a_topic">Publishing message to a topic</h3>
 <div class="paragraph">
-<p>If you would like to publish some message into topic then <code><a href="../../yardoc/VertxMqttServer/MqttClient.html#publish-instance_method">publish</a></code> should be called.
+<p>If you would like to publish some message into topic then <code><a href="../../yardoc/VertxMqtt/MqttClient.html#publish-instance_method">publish</a></code> should be called.
 Let&#8217;s take a look at the example:</p>
 </div>
 <div class="listingblock">
@@ -626,7 +627,7 @@ client.publish(<span class="string"><span class="delimiter">&quot;</span><span c
 <h3 id="_keep_connection_with_server_alive">Keep connection with server alive</h3>
 <div class="paragraph">
 <p>In order to keep connection with server you should time to time send something to server otherwise server will close the connection.
-The right way to keep connection alive is a <code><a href="../../yardoc/VertxMqttServer/MqttClient.html#ping-instance_method">ping</a></code> method.</p>
+The right way to keep connection alive is a <code><a href="../../yardoc/VertxMqtt/MqttClient.html#ping-instance_method">ping</a></code> method.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -635,8 +636,8 @@ The right way to keep connection alive is a <code><a href="../../yardoc/VertxMqt
 <div class="title">Important</div>
 </td>
 <td class="content">
-by default you client keep connections with server automatically. That means that you don&#8217;t need to call <code><a href="../../yardoc/VertxMqttServer/MqttClient.html#ping-instance_method">ping</a></code> in order to keep connections with server.
-The <code><a href="../../yardoc/VertxMqttServer/MqttClient.html">MqttClient</a></code> will do it for you.
+by default you client keep connections with server automatically. That means that you don&#8217;t need to call <code><a href="../../yardoc/VertxMqtt/MqttClient.html#ping-instance_method">ping</a></code> in order to keep connections with server.
+The <code><a href="../../yardoc/VertxMqtt/MqttClient.html">MqttClient</a></code> will do it for you.
 </td>
 </tr>
 </table>
@@ -657,7 +658,7 @@ The <code><a href="../../yardoc/VertxMqttServer/MqttClient.html">MqttClient</a><
 <li>
 <p>publish is completed</p>
 <div class="paragraph">
-<p>You could provide handler by calling <code><a href="../../yardoc/VertxMqttServer/MqttClient.html#publish_completion_handler-instance_method">publishCompletionHandler</a></code>. The handler will be called each time publish is completed.
+<p>You could provide handler by calling <code><a href="../../yardoc/VertxMqtt/MqttClient.html#publish_completion_handler-instance_method">publishCompletionHandler</a></code>. The handler will be called each time publish is completed.
 This one is pretty useful because you could see the packetId of just received PUBACK or PUBCOMP packet.</p>
 </div>
 </li>
@@ -743,7 +744,7 @@ The handler WILL NOT BE CALLED if sent publish packet with QoS=0.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:08 CET
               
               
             </div>
@@ -789,7 +790,7 @@ The handler WILL NOT BE CALLED if sent publish packet with QoS=0.
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

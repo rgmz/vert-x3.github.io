@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -184,7 +185,7 @@ application.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>vertx-mysql-postgresql-client 3.5.0 (the client)</p>
+<p>vertx-mysql-postgresql-client 3.5.1 (the client)</p>
 </li>
 <li>
 <p>scala-library 2.11.4</p>
@@ -218,7 +219,7 @@ application.</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-mysql-postgresql-client<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -231,7 +232,7 @@ application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mysql-postgresql-client:3.5.0</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mysql-postgresql-client:3.5.1</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -462,7 +463,9 @@ one of the <code>query</code> methods to get access to the returned columns.</p>
   "password" : &lt;your-password&gt;,
   "database" : &lt;name-of-your-database&gt;,
   "charset" : &lt;name-of-the-character-set&gt;,
-  "queryTimeout" : &lt;timeout-in-milliseconds&gt;
+  "queryTimeout" : &lt;timeout-in-milliseconds&gt;,
+  "sslMode" : &lt;"disable"|"prefer"|"require"|"verify-ca"|"verify-full"&gt;,
+  "sslRootCert" : &lt;path to file with certificate&gt;
 }</pre>
 </div>
 </div>
@@ -500,6 +503,42 @@ one of the <code>query</code> methods to get access to the returned columns.</p>
 <dd>
 <p>The timeout to wait for a query in milliseconds. Defaults to <code>10000</code> (= 10 seconds).</p>
 </dd>
+<dt class="hdlist1"><code>sslMode</code> </dt>
+<dd>
+<p>If you want to enable SSL support you should enable this parameter.
+For example to connect Heroku you will need to use <strong>prefer</strong>.</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">"disable" </dt>
+<dd>
+<p>only try a non-SSL connection</p>
+</dd>
+<dt class="hdlist1">"prefer"  </dt>
+<dd>
+<p>first try an SSL connection; if that fails, try a non-SSL connection</p>
+</dd>
+<dt class="hdlist1">"require"  </dt>
+<dd>
+<p>only try an SSL connection, but don&#8217;t verify Certificate Authority</p>
+</dd>
+<dt class="hdlist1">"verify-ca"  </dt>
+<dd>
+<p>only try an SSL connection, and verify that the server certificate is issued by a trusted
+certificate authority (CA)</p>
+</dd>
+<dt class="hdlist1">"verify-full"  </dt>
+<dd>
+<p>only try an SSL connection, verify that the server certificate is issued by a trusted CA and
+that the server host name matches that in the certificate</p>
+</dd>
+</dl>
+</div>
+</dd>
+<dt class="hdlist1"><code>sslRootCert</code> </dt>
+<dd>
+<p>Path to SSL root certificate file. Is used if you want to verify privately issued certificate.
+Refer to <a href="https://github.com/mauricio/postgresql-async">postgresql-async</a> documentation for more details.</p>
+</dd>
 </dl>
 </div>
 </div>
@@ -511,7 +550,7 @@ one of the <code>query</code> methods to get access to the returned columns.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -557,7 +596,7 @@ one of the <code>query</code> methods to get access to the returned columns.</p>
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

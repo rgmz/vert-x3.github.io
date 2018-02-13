@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -140,7 +141,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-auth-mongo<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -153,7 +154,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-mongo:3.5.0</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-mongo:3.5.1</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -237,6 +238,31 @@ salt and password are stored inside the same place!
 </tr>
 </table>
 </div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+As of 2018 OWASP recommends the usage of stronger encryption algorithms to hash user passwords for
+this case you can change from the default (preserved for backwards-compatibility) to PBKDF2. For new projects
+this should be the standard.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MongoClient = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-mongo-js/mongo_client</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> MongoAuth = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-auth-mongo-js/mongo_auth</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> client = MongoClient.createShared(vertx, mongoClientConfig);
+<span class="keyword">var</span> authProperties = {
+};
+<span class="keyword">var</span> authProvider = MongoAuth.create(client, authProperties);
+authProvider.setHashAlgorithm(<span class="string"><span class="delimiter">'</span><span class="content">PBKDF2</span><span class="delimiter">'</span></span>);</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -282,7 +308,7 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="js">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">commit_code</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
+<pre class="CodeRay highlight"><code data-lang="js">user.isAuthorized(<span class="string"><span class="delimiter">&quot;</span><span class="content">commit_code</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
     <span class="keyword">var</span> hasPermission = res;
   } <span class="keyword">else</span> {
@@ -298,7 +324,7 @@ can have zero or more permissions.</p>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MongoAuth = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-auth-mongo-js/mongo_auth</span><span class="delimiter">&quot;</span></span>);
 
-user.isAuthorised(MongoAuth.ROLE_PREFIX + <span class="string"><span class="delimiter">&quot;</span><span class="content">manager</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
+user.isAuthorized(MongoAuth.ROLE_PREFIX + <span class="string"><span class="delimiter">&quot;</span><span class="content">manager</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
     <span class="keyword">var</span> hasRole = res;
   } <span class="keyword">else</span> {
@@ -316,7 +342,7 @@ user.isAuthorised(MongoAuth.ROLE_PREFIX + <span class="string"><span class="deli
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -362,7 +388,7 @@ user.isAuthorised(MongoAuth.ROLE_PREFIX + <span class="string"><span class="deli
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

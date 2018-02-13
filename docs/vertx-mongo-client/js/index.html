@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -118,6 +119,7 @@
 <li><a href="#_replacing_documents">Replacing documents</a></li>
 <li><a href="#_bulk_operations">Bulk operations</a></li>
 <li><a href="#_finding_documents">Finding documents</a></li>
+<li><a href="#_finding_documents_in_batches">Finding documents in batches</a></li>
 <li><a href="#_finding_a_single_document">Finding a single document</a></li>
 <li><a href="#_removing_documents">Removing documents</a></li>
 <li><a href="#_removing_a_single_document">Removing a single document</a></li>
@@ -125,6 +127,7 @@
 <li><a href="#_managing_mongodb_collections">Managing MongoDB collections</a></li>
 <li><a href="#_running_other_mongodb_commands">Running other MongoDB commands</a></li>
 <li><a href="#_mongodb_extended_json_support">MongoDB Extended JSON support</a></li>
+<li><a href="#_getting_distinct_values">Getting distinct values</a></li>
 </ul>
 </li>
 <li><a href="#_configuring_the_client">Configuring the client</a></li>
@@ -151,6 +154,7 @@
 <li><a href="#_replacing_documents">Replacing documents</a></li>
 <li><a href="#_bulk_operations">Bulk operations</a></li>
 <li><a href="#_finding_documents">Finding documents</a></li>
+<li><a href="#_finding_documents_in_batches">Finding documents in batches</a></li>
 <li><a href="#_finding_a_single_document">Finding a single document</a></li>
 <li><a href="#_removing_documents">Removing documents</a></li>
 <li><a href="#_removing_a_single_document">Removing a single document</a></li>
@@ -158,6 +162,7 @@
 <li><a href="#_managing_mongodb_collections">Managing MongoDB collections</a></li>
 <li><a href="#_running_other_mongodb_commands">Running other MongoDB commands</a></li>
 <li><a href="#_mongodb_extended_json_support">MongoDB Extended JSON support</a></li>
+<li><a href="#_getting_distinct_values">Getting distinct values</a></li>
 </ul>
 </li>
 <li><a href="#_configuring_the_client">Configuring the client</a></li>
@@ -213,7 +218,7 @@ as it natively handles JSON (BSON) documents.</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-mongo-client<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -226,7 +231,7 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mongo-client:3.5.0</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mongo-client:3.5.1</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -252,7 +257,6 @@ to share the same pool so you don&#8217;t end up with multiple pools</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MongoClient = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-mongo-js/mongo_client</span><span class="delimiter">&quot;</span></span>);
-
 <span class="keyword">var</span> client = MongoClient.createShared(vertx, config);</code></pre>
 </div>
 </div>
@@ -272,7 +276,6 @@ will actually create the pool, and the specified config will be used.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MongoClient = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-mongo-js/mongo_client</span><span class="delimiter">&quot;</span></span>);
-
 <span class="keyword">var</span> client = MongoClient.createShared(vertx, config, <span class="string"><span class="delimiter">&quot;</span><span class="content">MyPoolName</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
@@ -304,7 +307,6 @@ However, it&#8217;s possible you want to create a client instance that doesn&#82
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> MongoClient = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-mongo-js/mongo_client</span><span class="delimiter">&quot;</span></span>);
-
 <span class="keyword">var</span> client = MongoClient.createNonShared(vertx, config);</code></pre>
 </div>
 </div>
@@ -327,8 +329,8 @@ with a unique pool name each time.</p>
 <p>To save a document you use <code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#save">save</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>If the document has no <code>_id</code> field, it is inserted, otherwise, it is _upserted_. Upserted means it is inserted
-if it doesn&#8217;t already exist, otherwise it is updated.</p>
+<p>If the document has no <code>\_id</code> field, it is inserted, otherwise, it is <em>upserted</em>.
+Upserted means it is inserted if it doesn&#8217;t already exist, otherwise it is updated.</p>
 </div>
 <div class="paragraph">
 <p>If the document is inserted and has no id, then the id field generated will be returned to the result handler.</p>
@@ -339,22 +341,16 @@ if it doesn&#8217;t already exist, otherwise it is updated.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Document has no id</span>
-
 <span class="keyword">var</span> document = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
-
 mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     <span class="keyword">var</span> id = res;
     console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Saved book with id </span><span class="delimiter">&quot;</span></span> + id);
-
   } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
-
 });</code></pre>
 </div>
 </div>
@@ -364,22 +360,16 @@ mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Document has an id already</span>
-
 <span class="keyword">var</span> document = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>,
   <span class="key"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">123244</span><span class="delimiter">&quot;</span></span>
 };
-
 mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     <span class="comment">// ...</span>
-
   } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
-
 });</code></pre>
 </div>
 </div>
@@ -395,48 +385,35 @@ mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Document has an id already</span>
-
 <span class="keyword">var</span> document = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
-
 mongoClient.insert(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     <span class="keyword">var</span> id = res;
     console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Inserted book with id </span><span class="delimiter">&quot;</span></span> + id);
-
   } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
-
 });</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If a document is inserted with an id, and a document with that id already eists, the insert will fail:</p>
+<p>If a document is inserted with an id, and a document with that id already exists, the insert will fail:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// Document has an id already</span>
-
 <span class="keyword">var</span> document = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>,
   <span class="key"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">123244</span><span class="delimiter">&quot;</span></span>
 };
-
 mongoClient.insert(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     <span class="comment">//...</span>
-
   } <span class="keyword">else</span> {
-
     <span class="comment">// Will fail if the book with that id already exists.</span>
   }
-
 });</code></pre>
 </div>
 </div>
@@ -444,12 +421,13 @@ mongoClient.insert(<span class="string"><span class="delimiter">&quot;</span><sp
 <div class="sect2">
 <h3 id="_updating_documents">Updating documents</h3>
 <div class="paragraph">
-<p>To update a documents you use <code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#update">update</a></code>.</p>
+<p>To update a documents you use <code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#updateCollection">updateCollection</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>This updates one or multiple documents in a collection. The json object that is passed in the <code>update</code>
-parameter must contain <a href="http://docs.mongodb.org/manual/reference/operator/update-field/">Update Operators</a> and determines
-how the object is updated.</p>
+<p>This updates one or multiple documents in a collection.
+The json object that is passed in the <code>updateCollection</code> parameter must contain
+<a href="http://docs.mongodb.org/manual/reference/operator/update-field/">Update Operators</a>
+and determines how the object is updated.</p>
 </div>
 <div class="paragraph">
 <p>The json object specified in the query parameter determines which documents in the collection will be updated.</p>
@@ -463,30 +441,24 @@ how the object is updated.</p>
 <span class="keyword">var</span> query = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
-
 <span class="comment">// Set the author field</span>
 <span class="keyword">var</span> update = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">$set</span><span class="delimiter">&quot;</span></span> : {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
   }
 };
-
-mongoClient.update(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, update, <span class="keyword">function</span> (res, res_err) {
-
+mongoClient.updateCollection(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, update, <span class="keyword">function</span> (res, res_err) {
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Book updated !</span><span class="delimiter">&quot;</span></span>);
-
   } <span class="keyword">else</span> {
-
     res_err.printStackTrace();
   }
-
 });</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To specify if the update should upsert or update multiple documents, use <code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#updateWithOptions">updateWithOptions</a></code>
+<p>To specify if the update should upsert or update multiple documents, use
+<code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#updateCollectionWithOptions">updateCollectionWithOptions</a></code>
 and pass in an instance of <code><a href="../dataobjects.html#UpdateOptions">UpdateOptions</a></code>.</p>
 </div>
 <div class="paragraph">
@@ -514,29 +486,21 @@ and pass in an instance of <code><a href="../dataobjects.html#UpdateOptions">Upd
 <span class="keyword">var</span> query = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
-
 <span class="comment">// Set the author field</span>
 <span class="keyword">var</span> update = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">$set</span><span class="delimiter">&quot;</span></span> : {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
   }
 };
-
 <span class="keyword">var</span> options = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">multi</span><span class="delimiter">&quot;</span></span> : <span class="predefined-constant">true</span>
 };
-
-mongoClient.updateWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, update, options, <span class="keyword">function</span> (res, res_err) {
-
+mongoClient.updateCollectionWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, update, options, <span class="keyword">function</span> (res, res_err) {
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Book updated !</span><span class="delimiter">&quot;</span></span>);
-
   } <span class="keyword">else</span> {
-
     res_err.printStackTrace();
   }
-
 });</code></pre>
 </div>
 </div>
@@ -544,10 +508,10 @@ mongoClient.updateWithOptions(<span class="string"><span class="delimiter">&quot
 <div class="sect2">
 <h3 id="_replacing_documents">Replacing documents</h3>
 <div class="paragraph">
-<p>To replace documents you use <code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#replace">replace</a></code>.</p>
+<p>To replace documents you use <code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#replaceDocuments">replaceDocuments</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>This is similar to the update operation, however it does not take any update operators like <code>update</code>.
+<p>This is similar to the update operation, however it does not take any operator.
 Instead it replaces the entire document with the one provided.</p>
 </div>
 <div class="paragraph">
@@ -558,24 +522,16 @@ Instead it replaces the entire document with the one provided.</p>
 <pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> query = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
-
 <span class="keyword">var</span> replace = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Lord of the Rings</span><span class="delimiter">&quot;</span></span>,
   <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 };
-
-mongoClient.replace(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, replace, <span class="keyword">function</span> (res, res_err) {
-
+mongoClient.replaceDocuments(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, replace, <span class="keyword">function</span> (res, res_err) {
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Book replaced !</span><span class="delimiter">&quot;</span></span>);
-
   } <span class="keyword">else</span> {
-
     res_err.printStackTrace();
-
   }
-
 });</code></pre>
 </div>
 </div>
@@ -586,13 +542,14 @@ mongoClient.replace(<span class="string"><span class="delimiter">&quot;</span><s
 <p>To execute multiple insert, update, replace, or delete operations at once, use <code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#bulkWrite">bulkWrite</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>You can pass a list of <code><a href="../dataobjects.html#BulkOperation">BulkOperations</a></code>, with each working similiar to the matching single operations.
+<p>You can pass a list of <code><a href="../dataobjects.html#BulkOperation">BulkOperations</a></code>, with each working similar to the matching single operation.
 You can pass as many operations, even of the same type, as you wish.</p>
 </div>
 <div class="paragraph">
 <p>To specify if the bulk operation should be executed in order, and with what write option, use <code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#bulkWriteWithOptions">bulkWriteWithOptions</a></code>
 and pass an instance of <code><a href="../dataobjects.html#BulkWriteOptions">BulkWriteOptions</a></code>.
-For more explanation what ordered means, see <a href="https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/#execution-of-operations" class="bare">https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/#execution-of-operations</a></p>
+For more explanation what ordered means, see
+<a href="https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/#execution-of-operations">Execution of Operations</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -611,23 +568,14 @@ For more explanation what ordered means, see <a href="https://docs.mongodb.com/m
 <pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// empty query = match any</span>
 <span class="keyword">var</span> query = {
 };
-
 mongoClient.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     Array.prototype.forEach.call(res, <span class="keyword">function</span>(json) {
-
       console.log(JSON.stringify(json));
-
     });
-
   } <span class="keyword">else</span> {
-
     res_err.printStackTrace();
-
   }
-
 });</code></pre>
 </div>
 </div>
@@ -640,23 +588,14 @@ mongoClient.find(<span class="string"><span class="delimiter">&quot;</span><span
 <span class="keyword">var</span> query = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 };
-
 mongoClient.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     Array.prototype.forEach.call(res, <span class="keyword">function</span>(json) {
-
       console.log(JSON.stringify(json));
-
     });
-
   } <span class="keyword">else</span> {
-
     res_err.printStackTrace();
-
   }
-
 });</code></pre>
 </div>
 </div>
@@ -690,37 +629,56 @@ and pass in the an instance of <code><a href="../dataobjects.html#FindOptions">F
 </dd>
 </dl>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_finding_documents_in_batches">Finding documents in batches</h3>
+<div class="paragraph">
+<p>When dealing with large data sets, it is not advised to use the
+<code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#find">find</a></code> and
+<code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#findWithOptions">findWithOptions</a></code> methods.
+In order to avoid inflating the whole response into memory, use <code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#findBatch">findBatch</a></code>:</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre>// will match all Tolkien books
-var query = {
-  "author" : "J. R. R. Tolkien"
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// will match all Tolkien books</span>
+<span class="keyword">var</span> query = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 };
-
-mongoClient.findBatch("book", query, function (res, res_err) {
-
-  if (res_err == null) {
-
-    if ((res === null || res === undefined)) {
-
-      console.log("End of research");
-
-    } else {
-
-      console.log("Found doc: " + JSON.stringify(res));
-
-    }
-
-  } else {
-
-    res_err.printStackTrace();
-
-  }
-});</pre>
+mongoClient.findBatch(<span class="string"><span class="delimiter">&quot;</span><span class="content">book</span><span class="delimiter">&quot;</span></span>, query).exceptionHandler(<span class="keyword">function</span> (throwable) {
+  throwable.printStackTrace();
+}).endHandler(<span class="keyword">function</span> (v) {
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">End of research</span><span class="delimiter">&quot;</span></span>);
+}).handler(<span class="keyword">function</span> (doc) {
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Found doc: </span><span class="delimiter">&quot;</span></span> + JSON.stringify(doc));
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The matching documents are returned unitary in the result handler.</p>
+<p>The matching documents are emitted one by one by the <code><a href="../../jsdoc/module-vertx-js_read_stream-ReadStream.html">ReadStream</a></code> handler.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="../dataobjects.html#FindOptions">FindOptions</a></code> has an extra parameter <code>batchSize</code> which you can use to set the number of documents to load at once:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// will match all Tolkien books</span>
+<span class="keyword">var</span> query = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
+};
+<span class="keyword">var</span> options = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">batchSize</span><span class="delimiter">&quot;</span></span> : <span class="integer">100</span>
+};
+mongoClient.findBatchWithOptions(<span class="string"><span class="delimiter">&quot;</span><span class="content">book</span><span class="delimiter">&quot;</span></span>, query, options).exceptionHandler(<span class="keyword">function</span> (throwable) {
+  throwable.printStackTrace();
+}).endHandler(<span class="keyword">function</span> (v) {
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">End of research</span><span class="delimiter">&quot;</span></span>);
+}).handler(<span class="keyword">function</span> (doc) {
+  console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Found doc: </span><span class="delimiter">&quot;</span></span> + JSON.stringify(doc));
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default, <code>batchSize</code> is set to 20.</p>
 </div>
 </div>
 <div class="sect2">
@@ -748,17 +706,11 @@ mongoClient.findBatch("book", query, function (res, res_err) {
 <pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> query = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 };
-
-mongoClient.remove(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, <span class="keyword">function</span> (res, res_err) {
-
+mongoClient.removeDocuments(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, <span class="keyword">function</span> (res, res_err) {
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Never much liked Tolkien stuff!</span><span class="delimiter">&quot;</span></span>);
-
   } <span class="keyword">else</span> {
-
     res_err.printStackTrace();
-
   }
 });</code></pre>
 </div>
@@ -786,17 +738,11 @@ mongoClient.remove(<span class="string"><span class="delimiter">&quot;</span><sp
 <pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> query = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">J. R. R. Tolkien</span><span class="delimiter">&quot;</span></span>
 };
-
 mongoClient.count(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, query, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     <span class="keyword">var</span> num = res;
-
   } <span class="keyword">else</span> {
-
     res_err.printStackTrace();
-
   }
 });</code></pre>
 </div>
@@ -813,15 +759,10 @@ mongoClient.count(<span class="string"><span class="delimiter">&quot;</span><spa
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js">mongoClient.getCollections(<span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     <span class="keyword">var</span> collections = res;
-
   } <span class="keyword">else</span> {
-
     res_err.printStackTrace();
-
   }
 });</code></pre>
 </div>
@@ -832,15 +773,10 @@ mongoClient.count(<span class="string"><span class="delimiter">&quot;</span><spa
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js">mongoClient.createCollection(<span class="string"><span class="delimiter">&quot;</span><span class="content">mynewcollectionr</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     <span class="comment">// Created ok!</span>
-
   } <span class="keyword">else</span> {
-
     res_err.printStackTrace();
-
   }
 });</code></pre>
 </div>
@@ -863,15 +799,10 @@ Dropping a collection will delete all documents within it!
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js">mongoClient.dropCollection(<span class="string"><span class="delimiter">&quot;</span><span class="content">mynewcollectionr</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     <span class="comment">// Dropped ok!</span>
-
   } <span class="keyword">else</span> {
-
     res_err.printStackTrace();
-
   }
 });</code></pre>
 </div>
@@ -883,7 +814,7 @@ Dropping a collection will delete all documents within it!
 <p>You can run arbitrary MongoDB commands with <code><a href="../../jsdoc/module-vertx-mongo-js_mongo_client-MongoClient.html#runCommand">runCommand</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>Commands can be used to run more advanced mongoDB features, such as using MapReduce.
+<p>Commands can be used to run more advanced MongoDB features, such as using MapReduce.
 For more information see the mongo docs for supported <a href="http://docs.mongodb.org/manual/reference/command">Commands</a>.</p>
 </div>
 <div class="paragraph">
@@ -899,7 +830,6 @@ of the entries in the JSON is the command name it must be specified as a paramet
   <span class="key"><span class="delimiter">&quot;</span><span class="content">pipeline</span><span class="delimiter">&quot;</span></span> : [
   ]
 };
-
 mongoClient.runCommand(<span class="string"><span class="delimiter">&quot;</span><span class="content">aggregate</span><span class="delimiter">&quot;</span></span>, command, <span class="keyword">function</span> (res, res_err) {
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
     <span class="keyword">var</span> resArr = res.result;
@@ -914,10 +844,11 @@ mongoClient.runCommand(<span class="string"><span class="delimiter">&quot;</span
 <div class="sect2">
 <h3 id="_mongodb_extended_json_support">MongoDB Extended JSON support</h3>
 <div class="paragraph">
-<p>For now, only date, oid and binary types are supported (cf <a href="http://docs.mongodb.org/manual/reference/mongodb-extended-json" class="bare">http://docs.mongodb.org/manual/reference/mongodb-extended-json</a> )</p>
+<p>For now, only <code>date</code>, <code>oid</code> and <code>binary</code> types are supported
+(see <a href="http://docs.mongodb.org/manual/reference/mongodb-extended-json">MongoDB Extended JSON</a>).</p>
 </div>
 <div class="paragraph">
-<p>Here&#8217;s an example of inserting a document with a date field</p>
+<p>Here&#8217;s an example of inserting a document with a <code>date</code> field:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -927,29 +858,21 @@ mongoClient.runCommand(<span class="string"><span class="delimiter">&quot;</span
     <span class="key"><span class="delimiter">&quot;</span><span class="content">$date</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">1937-09-21T00:00:00+00:00</span><span class="delimiter">&quot;</span></span>
   }
 };
-
 mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">publishedBooks</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     <span class="keyword">var</span> id = res;
-
     mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">publishedBooks</span><span class="delimiter">&quot;</span></span>, {
       <span class="key"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span> : id
     }, <span class="predefined-constant">null</span>, <span class="keyword">function</span> (res2, res2_err) {
       <span class="keyword">if</span> (res2_err == <span class="predefined-constant">null</span>) {
-
         console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">To retrieve ISO-8601 date : </span><span class="delimiter">&quot;</span></span> + res2.publicationDate.<span class="predefined">$date</span>);
-
       } <span class="keyword">else</span> {
         res2_err.printStackTrace();
       }
     });
-
   } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
-
 });</code></pre>
 </div>
 </div>
@@ -959,31 +882,23 @@ mongoService.save(<span class="string"><span class="delimiter">&quot;</span><spa
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="reserved">byte</span>[] binaryObject = <span class="keyword">new</span> <span class="reserved">byte</span>[<span class="integer">40</span>];
-
 JsonObject document = <span class="keyword">new</span> JsonObject()
-        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Alan Turing</span><span class="delimiter">&quot;</span></span>)
-        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">$binary</span><span class="delimiter">&quot;</span></span>, binaryObject));
-
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Alan Turing</span><span class="delimiter">&quot;</span></span>)
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">$binary</span><span class="delimiter">&quot;</span></span>, binaryObject));
 mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document, res -&gt; {
-
   <span class="keyword">if</span> (res.succeeded()) {
-
     String id = res.result();
-
     mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject().put(<span class="string"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span>, id), <span class="predefined-constant">null</span>, res2 -&gt; {
-      <span class="keyword">if</span>(res2.succeeded()) {
-
+      <span class="keyword">if</span> (res2.succeeded()) {
         <span class="reserved">byte</span>[] reconstitutedBinaryObject = res2.result().getJsonObject(<span class="string"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span>).getBinary(<span class="string"><span class="delimiter">&quot;</span><span class="content">$binary</span><span class="delimiter">&quot;</span></span>);
         <span class="comment">//This could now be de-serialized into an object in real life</span>
       } <span class="keyword">else</span> {
         res2.cause().printStackTrace();
       }
     });
-
   } <span class="keyword">else</span> {
     res.cause().printStackTrace();
   }
-
 });</code></pre>
 </div>
 </div>
@@ -994,36 +909,28 @@ mongoService.save(<span class="string"><span class="delimiter">&quot;</span><spa
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="comment">//This could be a the byte contents of a pdf file, etc converted to base 64</span>
 <span class="keyword">var</span> base64EncodedString = <span class="string"><span class="delimiter">&quot;</span><span class="content">a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ=</span><span class="delimiter">&quot;</span></span>;
-
 <span class="keyword">var</span> document = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">Alan Turing</span><span class="delimiter">&quot;</span></span>,
   <span class="key"><span class="delimiter">&quot;</span><span class="content">binaryStuff</span><span class="delimiter">&quot;</span></span> : {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">$binary</span><span class="delimiter">&quot;</span></span> : base64EncodedString
   }
 };
-
 mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     <span class="keyword">var</span> id = res;
-
     mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, {
       <span class="key"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span> : id
     }, <span class="predefined-constant">null</span>, <span class="keyword">function</span> (res2, res2_err) {
       <span class="keyword">if</span> (res2_err == <span class="predefined-constant">null</span>) {
-
         <span class="keyword">var</span> reconstitutedBase64EncodedString = res2.binaryStuff.<span class="predefined">$binary</span>;
         <span class="comment">//This could now converted back to bytes from the base 64 string</span>
       } <span class="keyword">else</span> {
         res2_err.printStackTrace();
       }
     });
-
   } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
-
 });</code></pre>
 </div>
 </div>
@@ -1033,58 +940,50 @@ mongoService.save(<span class="string"><span class="delimiter">&quot;</span><spa
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> individualId = <span class="keyword">new</span> (Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">org.bson.types.ObjectId</span><span class="delimiter">&quot;</span></span>))().toHexString();
-
 <span class="keyword">var</span> document = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">Stephen Hawking</span><span class="delimiter">&quot;</span></span>,
   <span class="key"><span class="delimiter">&quot;</span><span class="content">individualId</span><span class="delimiter">&quot;</span></span> : {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">$oid</span><span class="delimiter">&quot;</span></span> : individualId
   }
 };
-
 mongoService.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     <span class="keyword">var</span> id = res;
-
-    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, {
+    <span class="keyword">var</span> query = {
       <span class="key"><span class="delimiter">&quot;</span><span class="content">_id</span><span class="delimiter">&quot;</span></span> : id
-    }, <span class="predefined-constant">null</span>, <span class="keyword">function</span> (res2, res2_err) {
+    };
+    mongoService.findOne(<span class="string"><span class="delimiter">&quot;</span><span class="content">smartPeople</span><span class="delimiter">&quot;</span></span>, query, <span class="predefined-constant">null</span>, <span class="keyword">function</span> (res2, res2_err) {
       <span class="keyword">if</span> (res2_err == <span class="predefined-constant">null</span>) {
         <span class="keyword">var</span> reconstitutedIndividualId = res2.individualId.<span class="predefined">$oid</span>;
       } <span class="keyword">else</span> {
         res2_err.printStackTrace();
       }
     });
-
   } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
-
 });</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_getting_distinct_values">Getting distinct values</h3>
 <div class="paragraph">
-<p>Here&#8217;s an example of getting disting value</p>
+<p>Here&#8217;s an example of getting distinct value</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> document = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
-
 mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
     mongoClient.distinct(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">java.lang.String</span><span class="delimiter">&quot;</span></span>).<span class="reserved">class</span>.getName(), <span class="keyword">function</span> (res2, res2_err) {
       console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Title is : </span><span class="delimiter">&quot;</span></span> + res2[<span class="integer">0</span>]);
     });
-
   } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
-
 });</code></pre>
 </div>
 </div>
@@ -1096,19 +995,72 @@ mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span
 <pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> document = {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>
 };
-
 mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
-
   <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
-    mongoClient.distinctBatch(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">java.lang.String</span><span class="delimiter">&quot;</span></span>).<span class="reserved">class</span>.getName(), <span class="keyword">function</span> (res2, res2_err) {
-      console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Title is : </span><span class="delimiter">&quot;</span></span> + res2.title);
+    mongoClient.distinctBatch(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">java.lang.String</span><span class="delimiter">&quot;</span></span>).<span class="reserved">class</span>.getName()).handler(<span class="keyword">function</span> (book) {
+      console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Title is : </span><span class="delimiter">&quot;</span></span> + book.title);
     });
-
   } <span class="keyword">else</span> {
     res_err.printStackTrace();
   }
-
+});</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Here&#8217;s an example of getting distinct value with query</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> document = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">publicationDate</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">$date</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">1937-09-21T00:00:00+00:00</span><span class="delimiter">&quot;</span></span>
+  }
+};
+<span class="keyword">var</span> query = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">publicationDate</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">$gte</span><span class="delimiter">&quot;</span></span> : {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">$date</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">1937-09-21T00:00:00+00:00</span><span class="delimiter">&quot;</span></span>
+    }
+  }
+};
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    mongoClient.distinctWithQuery(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">java.lang.String</span><span class="delimiter">&quot;</span></span>).<span class="reserved">class</span>.getName(), query, <span class="keyword">function</span> (res2, res2_err) {
+      console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Title is : </span><span class="delimiter">&quot;</span></span> + res2[<span class="integer">0</span>]);
+    });
+  }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example of getting distinct value in batch mode with query</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> document = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">The Hobbit</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">publicationDate</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">$date</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">1937-09-21T00:00:00+00:00</span><span class="delimiter">&quot;</span></span>
+  }
+};
+<span class="keyword">var</span> query = {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">publicationDate</span><span class="delimiter">&quot;</span></span> : {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">$gte</span><span class="delimiter">&quot;</span></span> : {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">$date</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">1937-09-21T00:00:00+00:00</span><span class="delimiter">&quot;</span></span>
+    }
+  }
+};
+mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, document, <span class="keyword">function</span> (res, res_err) {
+  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
+    mongoClient.distinctBatchWithQuery(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">java.lang.String</span><span class="delimiter">&quot;</span></span>).<span class="reserved">class</span>.getName(), query).handler(<span class="keyword">function</span> (book) {
+      console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Title is : </span><span class="delimiter">&quot;</span></span> + book.title);
+    });
+  }
 });</code></pre>
 </div>
 </div>
@@ -1128,7 +1080,7 @@ mongoClient.save(<span class="string"><span class="delimiter">&quot;</span><span
 <dl>
 <dt class="hdlist1"><code>db_name</code></dt>
 <dd>
-<p>Name of the database in the mongoDB instance to use. Defaults to <code>default_db</code></p>
+<p>Name of the database in the MongoDB instance to use. Defaults to <code>default_db</code></p>
 </dd>
 <dt class="hdlist1"><code>useObjectId</code></dt>
 <dd>
@@ -1170,64 +1122,64 @@ For more information on the format of the connection string please consult the d
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>{
-  // Single Cluster Settings
-  "host" : "127.0.0.1", // string
-  "port" : 27017,      // int
+<pre class="CodeRay highlight"><code data-lang="js">{
+  <span class="comment">// Single Cluster Settings</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.1</span><span class="delimiter">&quot;</span></span>, <span class="comment">// string</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span> : <span class="integer">27017</span>,      <span class="comment">// int</span>
 
-  // Multiple Cluster Settings
-  "hosts" : [
+  <span class="comment">// Multiple Cluster Settings</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">hosts</span><span class="delimiter">&quot;</span></span> : [
     {
-      "host" : "cluster1", // string
-      "port" : 27000       // int
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">cluster1</span><span class="delimiter">&quot;</span></span>, <span class="comment">// string</span>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span> : <span class="integer">27000</span>       <span class="comment">// int</span>
     },
     {
-      "host" : "cluster2", // string
-      "port" : 28000       // int
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">cluster2</span><span class="delimiter">&quot;</span></span>, <span class="comment">// string</span>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span> : <span class="integer">28000</span>       <span class="comment">// int</span>
     },
     ...
   ],
-  "replicaSet" :  "foo",    // string
-  "serverSelectionTimeoutMS" : 30000, // long
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">replicaSet</span><span class="delimiter">&quot;</span></span> :  <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>,    <span class="comment">// string</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">serverSelectionTimeoutMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">30000</span>, <span class="comment">// long</span>
 
-  // Connection Pool Settings
-  "maxPoolSize" : 50,                // int
-  "minPoolSize" : 25,                // int
-  "maxIdleTimeMS" : 300000,          // long
-  "maxLifeTimeMS" : 3600000,         // long
-  "waitQueueMultiple"  : 10,         // int
-  "waitQueueTimeoutMS" : 10000,      // long
-  "maintenanceFrequencyMS" : 2000,   // long
-  "maintenanceInitialDelayMS" : 500, // long
+  <span class="comment">// Connection Pool Settings</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maxPoolSize</span><span class="delimiter">&quot;</span></span> : <span class="integer">50</span>,                <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">minPoolSize</span><span class="delimiter">&quot;</span></span> : <span class="integer">25</span>,                <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maxIdleTimeMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">300000</span>,          <span class="comment">// long</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maxLifeTimeMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">3600000</span>,         <span class="comment">// long</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">waitQueueMultiple</span><span class="delimiter">&quot;</span></span>  : <span class="integer">10</span>,         <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">waitQueueTimeoutMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">10000</span>,      <span class="comment">// long</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maintenanceFrequencyMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">2000</span>,   <span class="comment">// long</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maintenanceInitialDelayMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">500</span>, <span class="comment">// long</span>
 
-  // Credentials / Auth
-  "username"   : "john",     // string
-  "password"   : "passw0rd", // string
-  "authSource" : "some.db"   // string
-  // Auth mechanism
-  "authMechanism"     : "GSSAPI",        // string
-  "gssapiServiceName" : "myservicename", // string
+  <span class="comment">// Credentials / Auth</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>   : <span class="string"><span class="delimiter">&quot;</span><span class="content">john</span><span class="delimiter">&quot;</span></span>,     <span class="comment">// string</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>   : <span class="string"><span class="delimiter">&quot;</span><span class="content">passw0rd</span><span class="delimiter">&quot;</span></span>, <span class="comment">// string</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">authSource</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some.db</span><span class="delimiter">&quot;</span></span>   <span class="comment">// string</span>
+  <span class="comment">// Auth mechanism</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">authMechanism</span><span class="delimiter">&quot;</span></span>     : <span class="string"><span class="delimiter">&quot;</span><span class="content">GSSAPI</span><span class="delimiter">&quot;</span></span>,        <span class="comment">// string</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">gssapiServiceName</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">myservicename</span><span class="delimiter">&quot;</span></span>, <span class="comment">// string</span>
 
-  // Socket Settings
-  "connectTimeoutMS" : 300000, // int
-  "socketTimeoutMS"  : 100000, // int
-  "sendBufferSize"    : 8192,  // int
-  "receiveBufferSize" : 8192,  // int
-  "keepAlive" : true           // boolean
+  <span class="comment">// Socket Settings</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">connectTimeoutMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">300000</span>, <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">socketTimeoutMS</span><span class="delimiter">&quot;</span></span>  : <span class="integer">100000</span>, <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">sendBufferSize</span><span class="delimiter">&quot;</span></span>    : <span class="integer">8192</span>,  <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">receiveBufferSize</span><span class="delimiter">&quot;</span></span> : <span class="integer">8192</span>,  <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">keepAlive</span><span class="delimiter">&quot;</span></span> : <span class="predefined-constant">true</span>           <span class="comment">// boolean</span>
 
-  // Heartbeat socket settings
-  "heartbeat.socket" : {
-  "connectTimeoutMS" : 300000, // int
-  "socketTimeoutMS"  : 100000, // int
-  "sendBufferSize"    : 8192,  // int
-  "receiveBufferSize" : 8192,  // int
-  "keepAlive" : true           // boolean
+  <span class="comment">// Heartbeat socket settings</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">heartbeat.socket</span><span class="delimiter">&quot;</span></span> : {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">connectTimeoutMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">300000</span>, <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">socketTimeoutMS</span><span class="delimiter">&quot;</span></span>  : <span class="integer">100000</span>, <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">sendBufferSize</span><span class="delimiter">&quot;</span></span>    : <span class="integer">8192</span>,  <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">receiveBufferSize</span><span class="delimiter">&quot;</span></span> : <span class="integer">8192</span>,  <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">keepAlive</span><span class="delimiter">&quot;</span></span> : <span class="predefined-constant">true</span>           <span class="comment">// boolean</span>
   }
 
-  // Server Settings
-  "heartbeatFrequencyMS" :    1000 // long
-  "minHeartbeatFrequencyMS" : 500 // long
-}</pre>
+  <span class="comment">// Server Settings</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">heartbeatFrequencyMS</span><span class="delimiter">&quot;</span></span> :    <span class="integer">1000</span> <span class="comment">// long</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">minHeartbeatFrequencyMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">500</span> <span class="comment">// long</span>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1237,15 +1189,15 @@ For more information on the format of the connection string please consult the d
 <dl>
 <dt class="hdlist1"><code>host</code></dt>
 <dd>
-<p>The host the mongoDB instance is running. Defaults to <code>127.0.0.1</code>. This is ignored if <code>hosts</code> is specified</p>
+<p>The host the MongoDB instance is running. Defaults to <code>127.0.0.1</code>. This is ignored if <code>hosts</code> is specified</p>
 </dd>
 <dt class="hdlist1"><code>port</code></dt>
 <dd>
-<p>The port the mongoDB instance is listening on. Defaults to <code>27017</code>. This is ignored if <code>hosts</code> is specified</p>
+<p>The port the MongoDB instance is listening on. Defaults to <code>27017</code>. This is ignored if <code>hosts</code> is specified</p>
 </dd>
 <dt class="hdlist1"><code>hosts</code></dt>
 <dd>
-<p>An array representing the hosts and ports to support a mongoDB cluster (sharding / replication)</p>
+<p>An array representing the hosts and ports to support a MongoDB cluster (sharding / replication)</p>
 </dd>
 <dt class="hdlist1"><code>host</code></dt>
 <dd>
@@ -1257,7 +1209,7 @@ For more information on the format of the connection string please consult the d
 </dd>
 <dt class="hdlist1"><code>replicaSet</code></dt>
 <dd>
-<p>The name of the replica set, if the mongoDB instance is a member of a replica set</p>
+<p>The name of the replica set, if the MongoDB instance is a member of a replica set</p>
 </dd>
 <dt class="hdlist1"><code>serverSelectionTimeoutMS</code></dt>
 <dd>
@@ -1371,7 +1323,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -1417,7 +1369,7 @@ Please consult the driver documentation for up to date information.
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

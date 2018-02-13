@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -108,6 +109,7 @@
 <li><a href="#_gradle">Gradle</a></li>
 <li><a href="#_create_a_client">Create a client</a></li>
 <li><a href="#_declare_exchange_with_additional_config">Declare exchange with additional config</a></li>
+<li><a href="#_declare_queue_with_additional_config">Declare queue with additional config</a></li>
 </ul>
 </li>
 <li><a href="#_operations">Operations</a>
@@ -133,6 +135,7 @@
 <li><a href="#_gradle">Gradle</a></li>
 <li><a href="#_create_a_client">Create a client</a></li>
 <li><a href="#_declare_exchange_with_additional_config">Declare exchange with additional config</a></li>
+<li><a href="#_declare_queue_with_additional_config">Declare queue with additional config</a></li>
 </ul>
 </li>
 <li><a href="#_operations">Operations</a>
@@ -170,7 +173,7 @@
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-rabbitmq-client<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -183,7 +186,7 @@
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-rabbitmq-client:3.5.0</span><span class="delimiter">'</span></span>
+  compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-rabbitmq-client:3.5.1</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -234,14 +237,35 @@ config.automaticRecoveryEnabled = <span class="predefined-constant">true</span>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> config = [:]
 
-config[<span class="string"><span class="delimiter">&quot;</span><span class="content">x-dead-letter-exchange</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">my.deadletter.exchange</span><span class="delimiter">&quot;</span></span>
-config[<span class="string"><span class="delimiter">&quot;</span><span class="content">alternate-exchange</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">my.alternate.exchange</span><span class="delimiter">&quot;</span></span>
+config.x-dead-letter-exchange = <span class="string"><span class="delimiter">&quot;</span><span class="content">my.deadletter.exchange</span><span class="delimiter">&quot;</span></span>
+config.alternate-exchange = <span class="string"><span class="delimiter">&quot;</span><span class="content">my.alternate.exchange</span><span class="delimiter">&quot;</span></span>
 <span class="comment">// ...</span>
 client.exchangeDeclare(<span class="string"><span class="delimiter">&quot;</span><span class="content">my.exchange</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">fanout</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>, <span class="predefined-constant">false</span>, config, { onResult -&gt;
   <span class="keyword">if</span> (onResult.succeeded()) {
     println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Exchange successfully declared with config</span><span class="delimiter">&quot;</span></span>)
   } <span class="keyword">else</span> {
     onResult.cause().printStackTrace()
+  }
+})</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_declare_queue_with_additional_config">Declare queue with additional config</h3>
+<div class="paragraph">
+<p>You can pass additional config parameters to RabbitMQs queueDeclare method</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> config = [:]
+config.x-message-ttl = <span class="integer">10000L</span>
+
+client.queueDeclare(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-queue</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>, <span class="predefined-constant">false</span>, <span class="predefined-constant">true</span>, config, { queueResult -&gt;
+  <span class="keyword">if</span> (queueResult.succeeded()) {
+    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Queue declared!</span><span class="delimiter">&quot;</span></span>)
+  } <span class="keyword">else</span> {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Queue failed to be declared!</span><span class="delimiter">&quot;</span></span>)
+    queueResult.cause().printStackTrace()
   }
 })</code></pre>
 </div>
@@ -396,7 +420,7 @@ client.basicConsume(<span class="string"><span class="delimiter">&quot;</span><s
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -442,7 +466,7 @@ client.basicConsume(<span class="string"><span class="delimiter">&quot;</span><s
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

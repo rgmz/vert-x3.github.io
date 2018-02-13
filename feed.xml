@@ -8,6 +8,119 @@
       <atom:link href="http://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Eclipse Vert.x 3.5.1 released!</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;We have just released Vert.x 3.5.1!&lt;/p&gt;
+&lt;h4 id=&quot;fixes-first-&quot;&gt;Fixes first!&lt;/h4&gt;
+&lt;p&gt;As usual this release fixes bugs reported in 3.5.0, see the release notes.&lt;/p&gt;
+&lt;h4 id=&quot;junit-5-support&quot;&gt;JUnit 5 support&lt;/h4&gt;
+&lt;p&gt;This release introduces the new &lt;a href=&quot;https://github.com/vert-x3/vertx-junit5&quot;&gt;vertx-junit5 module&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://junit.org/junit5/&quot;&gt;JUnit 5&lt;/a&gt; is a rewrite of the famous Java testing framework that brings new interesting features, including:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;nested tests,&lt;/li&gt;
+&lt;li&gt;the ability to give a human-readable description of tests and test cases (and yes, even use emojis),&lt;/li&gt;
+&lt;li&gt;a modular extension mechanism that is more powerful than the JUnit 4 runner mechanism (@RunWith annotation),&lt;/li&gt;
+&lt;li&gt;conditional test execution,&lt;/li&gt;
+&lt;li&gt;parameterized tests, including from sources such as CSV data,&lt;/li&gt;
+&lt;li&gt;the support of Java 8 lambda expressions in the reworked built-in assertions API,&lt;/li&gt;
+&lt;li&gt;support for running tests previously written for JUnit 4.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Suppose that we have a &lt;code&gt;SampleVerticle&lt;/code&gt; verticle that exposes a HTTP server on port 11981.
+Here is how we can test its deployment as well as the result of 10 concurrent HTTP requests:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-property&quot;&gt;@Test&lt;/span&gt;
+&lt;span class=&quot;hljs-property&quot;&gt;@DisplayName&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;🚀 Deploy a HTTP service verticle and make 10 requests&quot;&lt;/span&gt;)
+&lt;span class=&quot;hljs-literal&quot;&gt;void&lt;/span&gt; useSampleVerticle(Vertx vertx, VertxTestContext testContext) {
+  WebClient webClient = WebClient.create(vertx);
+  Checkpoint deploymentCheckpoint = testContext.checkpoint();
+
+  Checkpoint requestCheckpoint = testContext.checkpoint(&lt;span class=&quot;hljs-number&quot;&gt;10&lt;/span&gt;);
+  vertx.deployVerticle(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; SampleVerticle(), testContext.succeeding(id&lt;span class=&quot;hljs-function&quot;&gt; -&gt;&lt;/span&gt; {
+    deploymentCheckpoint.flag();
+
+    &lt;span class=&quot;hljs-keyword&quot;&gt;for&lt;/span&gt; (int i = &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;; i &lt; &lt;span class=&quot;hljs-number&quot;&gt;10&lt;/span&gt;; i++) {
+      webClient.get(&lt;span class=&quot;hljs-number&quot;&gt;11981&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;localhost&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/&quot;&lt;/span&gt;)
+        .as(BodyCodec.string())
+        .send(testContext.succeeding(resp&lt;span class=&quot;hljs-function&quot;&gt; -&gt;&lt;/span&gt; {
+          testContext.verify&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-params&quot;&gt;(() -&gt; {
+            assertThat(resp.statusCode()).isEqualTo(&lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt;);
+            assertThat(resp.body()).contains(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Yo!&quot;&lt;/span&gt;);
+            requestCheckpoint.flag();
+          })&lt;/span&gt;;
+        }));
+    }
+  }));
+}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The test method above benefits from the injection of a working &lt;code&gt;Vertx&lt;/code&gt; context, a &lt;code&gt;VertxTestContext&lt;/code&gt; for dealing with
+asynchronous operations, and the guarantee that the execution time is bound by a timeout which can optionally be configured
+using a &lt;code&gt;@Timeout&lt;/code&gt; annotation.&lt;/p&gt;
+&lt;p&gt;The test succeeds when all checkpoints have been flagged.
+Note that &lt;code&gt;vertx-junit5&lt;/code&gt; is agnostic of the assertions library being used: you may opt for the built-in JUnit 5 assertions
+or use a 3rd-party library such as &lt;a href=&quot;http://joel-costigliola.github.io/assertj/&quot;&gt;AssertJ&lt;/a&gt; as we did in the example above.&lt;/p&gt;
+&lt;p&gt;You can checkout the &lt;a href=&quot;https://github.com/vert-x3/vertx-junit5&quot;&gt;source on GitHub&lt;/a&gt;, read
+&lt;a href=&quot;http://vertx.io/docs/vertx-junit5/java/&quot;&gt;the manual&lt;/a&gt; and learn from
+&lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/master/junit5-examples&quot;&gt;the examples&lt;/a&gt;.&lt;/p&gt;
+&lt;h4 id=&quot;web-api-contract-enhancements&quot;&gt;Web API Contract enhancements&lt;/h4&gt;
+&lt;p&gt;The package &lt;code&gt;vertx-web-api-contract&lt;/code&gt; includes a variety of fixes, from schema &lt;code&gt;$ref&lt;/code&gt; to
+&lt;a href=&quot;http://vertx.io/docs/vertx-web-api-contract/java/&quot;&gt;revamped documentation&lt;/a&gt;. You can give a look at list of all
+&lt;a href=&quot;https://github.com/vert-x3/vertx-web/pull/802&quot;&gt;fixes/improvements here&lt;/a&gt; and all
+&lt;a href=&quot;https://github.com/vert-x3/wiki/wiki/3.5.1-Breaking-Changes#vertx-web-api-contracts&quot;&gt;breaking changes here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;From 3.5.1 to load the openapi spec and instantiate the Router you should use new method &lt;code&gt;OpenAPI3RouterFactory.create()&lt;/code&gt;
+that replaces old methods &lt;code&gt;createRouterFactoryFromFile()&lt;/code&gt; and &lt;code&gt;createRouterFactoryFromURL()&lt;/code&gt;. This new method accepts
+relative paths, absolute paths, local URL with &lt;code&gt;file://&lt;/code&gt; and remote URL with &lt;code&gt;http://&lt;/code&gt;. Note that if you want refeer to
+a file relative to your jar’s root, you can simply use a relative path and the parser will look out the jar and into the
+jar for the spec.&lt;/p&gt;
+&lt;p&gt;From 3.5.1 all settings about &lt;code&gt;OpenAPI3RouterFactory&lt;/code&gt; behaviours during router generation are inglobed in a new object called
+&lt;a href=&quot;http://vertx.io/docs/apidocs/io/vertx/ext/web/api/contract/RouterFactoryOptions.html&quot;&gt;&lt;code&gt;RouterFactoryOptions&lt;/code&gt;&lt;/a&gt;. From
+this object you can:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Configure if you want to mount a default validation failure handler and which one
+(methods &lt;code&gt;setMountValidationFailureHandler(boolean)&lt;/code&gt; and &lt;code&gt;setValidationFailureHandler(Handler)&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Configure if you want to mount a default 501 not implemented handler and which one
+(methods &lt;code&gt;setMountNotImplementedFailureHandler(boolean)&lt;/code&gt; and &lt;code&gt;setNotImplementedFailureHandler(Handler)&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Configure if you want to mount &lt;code&gt;ResponseContentTypeHandler&lt;/code&gt; automatically
+(method &lt;code&gt;setMountResponseContentTypeHandler(boolean)&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Configure if you want to fail during router generation when security handlers are not configured
+(method &lt;code&gt;setRequireSecurityHandlers(boolean)&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;After initialization of route, you can mount the &lt;code&gt;RouterFactoryOptions&lt;/code&gt; object with method &lt;code&gt;routerFactory.setOptions()&lt;/code&gt;
+when you want before calling &lt;code&gt;getRouter()&lt;/code&gt;.&lt;/p&gt;
+&lt;h4 id=&quot;rxjava-deprecation-removal&quot;&gt;RxJava deprecation removal&lt;/h4&gt;
+&lt;p&gt;It is important to know that 3.5.x will be the last release with the legacy &lt;code&gt;xyzObservable()&lt;/code&gt; methods:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-annotation&quot;&gt;@Deprecated&lt;/span&gt;()
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; Observable&lt;HttpServer&gt; &lt;span class=&quot;hljs-title&quot;&gt;listenObservable&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-keyword&quot;&gt;int&lt;/span&gt; port, String host)&lt;/span&gt;&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;has been replaced since Vert.x 3.4 by:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; Single&lt;HttpServer&gt; &lt;span class=&quot;hljs-title&quot;&gt;rxListen&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-keyword&quot;&gt;int&lt;/span&gt; port, String host)&lt;/span&gt;&lt;/span&gt;;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;xyzObservable()&lt;/code&gt; deprecated methods will be &lt;a href=&quot;https://github.com/vert-x3/vertx-rx/issues/113&quot;&gt;removed&lt;/a&gt; in Vert.x 3.6.&lt;/p&gt;
+&lt;h4 id=&quot;wrap-up&quot;&gt;Wrap up&lt;/h4&gt;
+&lt;p&gt;Vert.x 3.5.1 release notes and breaking changes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/vert-x3/wiki/wiki/3.5.1---Release-Notes&quot;&gt;https://github.com/vert-x3/wiki/wiki/3.5.1---Release-Notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/vert-x3/wiki/wiki/3.5.1-Breaking-Changes&quot;&gt;https://github.com/vert-x3/wiki/wiki/3.5.1-Breaking-Changes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The event bus client using the SockJS bridge are available from NPM, Bower and as a WebJar:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.npmjs.com/package/vertx3-eventbus-client&quot;&gt;https://www.npmjs.com/package/vertx3-eventbus-client&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/vert-x3/vertx-bus-bower&quot;&gt;https://github.com/vert-x3/vertx-bus-bower&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.webjars.org/&quot;&gt;http://www.webjars.org/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Docker images are also available on the &lt;a href=&quot;https://hub.docker.com/u/vertx/&quot;&gt;Docker Hub&lt;/a&gt;. The Vert.x distribution is also available from &lt;a href=&quot;http://sdkman.io/index.html&quot;&gt;SDKMan&lt;/a&gt; and &lt;a href=&quot;http://brew.sh/&quot;&gt;HomeBrew&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The artifacts have been deployed to &lt;a href=&quot;http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.vertx%22%20AND%20v%3A%223.5.1%22&quot;&gt;Maven Central&lt;/a&gt; and you can get the distribution on &lt;a href=&quot;https://bintray.com/vertx/downloads/distribution/3.3.3/view&quot;&gt;Bintray&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Happy coding !&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Tue, 13 Feb 2018 01:00:00 +0100</pubDate>
+          <link>http://vertx.io/blog/eclipse-vert-x-3-5-1-released</link>
+          <guid isPermaLink="true">http://vertx.io/blog/eclipse-vert-x-3-5-1-released</guid>
+          <author>
+            <name>vietj</name>
+            <uri>http://github.com/vietj</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Eclipse Vert.x based Framework URL Shortener Backend</title>
           <description>
       &lt;article&gt;&lt;h2 id=&quot;aws-lambda-vertx-framework-url-shortener-backend&quot;&gt;AWS Lambda &amp; Vertx Framework URL Shortener Backend&lt;/h2&gt;

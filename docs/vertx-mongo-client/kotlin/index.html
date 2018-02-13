@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -118,6 +119,7 @@
 <li><a href="#_replacing_documents">Replacing documents</a></li>
 <li><a href="#_bulk_operations">Bulk operations</a></li>
 <li><a href="#_finding_documents">Finding documents</a></li>
+<li><a href="#_finding_documents_in_batches">Finding documents in batches</a></li>
 <li><a href="#_finding_a_single_document">Finding a single document</a></li>
 <li><a href="#_removing_documents">Removing documents</a></li>
 <li><a href="#_removing_a_single_document">Removing a single document</a></li>
@@ -125,6 +127,7 @@
 <li><a href="#_managing_mongodb_collections">Managing MongoDB collections</a></li>
 <li><a href="#_running_other_mongodb_commands">Running other MongoDB commands</a></li>
 <li><a href="#_mongodb_extended_json_support">MongoDB Extended JSON support</a></li>
+<li><a href="#_getting_distinct_values">Getting distinct values</a></li>
 </ul>
 </li>
 <li><a href="#_configuring_the_client">Configuring the client</a></li>
@@ -151,6 +154,7 @@
 <li><a href="#_replacing_documents">Replacing documents</a></li>
 <li><a href="#_bulk_operations">Bulk operations</a></li>
 <li><a href="#_finding_documents">Finding documents</a></li>
+<li><a href="#_finding_documents_in_batches">Finding documents in batches</a></li>
 <li><a href="#_finding_a_single_document">Finding a single document</a></li>
 <li><a href="#_removing_documents">Removing documents</a></li>
 <li><a href="#_removing_a_single_document">Removing a single document</a></li>
@@ -158,6 +162,7 @@
 <li><a href="#_managing_mongodb_collections">Managing MongoDB collections</a></li>
 <li><a href="#_running_other_mongodb_commands">Running other MongoDB commands</a></li>
 <li><a href="#_mongodb_extended_json_support">MongoDB Extended JSON support</a></li>
+<li><a href="#_getting_distinct_values">Getting distinct values</a></li>
 </ul>
 </li>
 <li><a href="#_configuring_the_client">Configuring the client</a></li>
@@ -213,7 +218,7 @@ as it natively handles JSON (BSON) documents.</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-mongo-client<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -226,7 +231,7 @@ as it natively handles JSON (BSON) documents.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mongo-client:3.5.0</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-mongo-client:3.5.1</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -321,8 +326,8 @@ with a unique pool name each time.</p>
 <p>To save a document you use <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#save-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">save</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>If the document has no <code>_id</code> field, it is inserted, otherwise, it is _upserted_. Upserted means it is inserted
-if it doesn&#8217;t already exist, otherwise it is updated.</p>
+<p>If the document has no <code>\_id</code> field, it is inserted, otherwise, it is <em>upserted</em>.
+Upserted means it is inserted if it doesn&#8217;t already exist, otherwise it is updated.</p>
 </div>
 <div class="paragraph">
 <p>If the document is inserted and has no id, then the id field generated will be returned to the result handler.</p>
@@ -333,22 +338,16 @@ if it doesn&#8217;t already exist, otherwise it is updated.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="kotlin">// Document has no id
-
 var document = json {
   obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
-
 mongoClient.save(&quot;books&quot;, document, { res -&gt;
-
   if (res.succeeded()) {
-
     var id = res.result()
     println(&quot;Saved book with id ${id}&quot;)
-
   } else {
     res.cause().printStackTrace()
   }
-
 })</code></pre>
 </div>
 </div>
@@ -358,24 +357,18 @@ mongoClient.save(&quot;books&quot;, document, { res -&gt;
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="kotlin">// Document has an id already
-
 var document = json {
   obj(
     &quot;title&quot; to &quot;The Hobbit&quot;,
     &quot;_id&quot; to &quot;123244&quot;
   )
 }
-
 mongoClient.save(&quot;books&quot;, document, { res -&gt;
-
   if (res.succeeded()) {
-
     // ...
-
   } else {
     res.cause().printStackTrace()
   }
-
 })</code></pre>
 </div>
 </div>
@@ -391,50 +384,37 @@ mongoClient.save(&quot;books&quot;, document, { res -&gt;
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="kotlin">// Document has an id already
-
 var document = json {
   obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
-
 mongoClient.insert(&quot;books&quot;, document, { res -&gt;
-
   if (res.succeeded()) {
-
     var id = res.result()
     println(&quot;Inserted book with id ${id}&quot;)
-
   } else {
     res.cause().printStackTrace()
   }
-
 })</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If a document is inserted with an id, and a document with that id already eists, the insert will fail:</p>
+<p>If a document is inserted with an id, and a document with that id already exists, the insert will fail:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="kotlin">// Document has an id already
-
 var document = json {
   obj(
     &quot;title&quot; to &quot;The Hobbit&quot;,
     &quot;_id&quot; to &quot;123244&quot;
   )
 }
-
 mongoClient.insert(&quot;books&quot;, document, { res -&gt;
-
   if (res.succeeded()) {
-
     //...
-
   } else {
-
     // Will fail if the book with that id already exists.
   }
-
 })</code></pre>
 </div>
 </div>
@@ -442,12 +422,13 @@ mongoClient.insert(&quot;books&quot;, document, { res -&gt;
 <div class="sect2">
 <h3 id="_updating_documents">Updating documents</h3>
 <div class="paragraph">
-<p>To update a documents you use <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#update-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">update</a></code>.</p>
+<p>To update a documents you use <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#updateCollection-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">updateCollection</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>This updates one or multiple documents in a collection. The json object that is passed in the <code>update</code>
-parameter must contain <a href="http://docs.mongodb.org/manual/reference/operator/update-field/">Update Operators</a> and determines
-how the object is updated.</p>
+<p>This updates one or multiple documents in a collection.
+The json object that is passed in the <code>updateCollection</code> parameter must contain
+<a href="http://docs.mongodb.org/manual/reference/operator/update-field/">Update Operators</a>
+and determines how the object is updated.</p>
 </div>
 <div class="paragraph">
 <p>The json object specified in the query parameter determines which documents in the collection will be updated.</p>
@@ -461,28 +442,22 @@ how the object is updated.</p>
 var query = json {
   obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
-
 // Set the author field
 var update = json {
   obj(&quot;\$$set&quot; to obj(&quot;author&quot; to &quot;J. R. R. Tolkien&quot;))
 }
-
-mongoClient.update(&quot;books&quot;, query, update, { res -&gt;
-
+mongoClient.updateCollection(&quot;books&quot;, query, update, { res -&gt;
   if (res.succeeded()) {
-
     println(&quot;Book updated !&quot;)
-
   } else {
-
     res.cause().printStackTrace()
   }
-
 })</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To specify if the update should upsert or update multiple documents, use <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#updateWithOptions-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.json.JsonObject-io.vertx.ext.mongo.UpdateOptions-io.vertx.core.Handler-">updateWithOptions</a></code>
+<p>To specify if the update should upsert or update multiple documents, use
+<code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#updateCollectionWithOptions-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.json.JsonObject-io.vertx.ext.mongo.UpdateOptions-io.vertx.core.Handler-">updateCollectionWithOptions</a></code>
 and pass in an instance of <code><a href="../../apidocs/io/vertx/ext/mongo/UpdateOptions.html">UpdateOptions</a></code>.</p>
 </div>
 <div class="paragraph">
@@ -510,26 +485,18 @@ and pass in an instance of <code><a href="../../apidocs/io/vertx/ext/mongo/Updat
 var query = json {
   obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
-
 // Set the author field
 var update = json {
   obj(&quot;\$$set&quot; to obj(&quot;author&quot; to &quot;J. R. R. Tolkien&quot;))
 }
-
 var options = UpdateOptions(
   multi = true)
-
-mongoClient.updateWithOptions(&quot;books&quot;, query, update, options, { res -&gt;
-
+mongoClient.updateCollectionWithOptions(&quot;books&quot;, query, update, options, { res -&gt;
   if (res.succeeded()) {
-
     println(&quot;Book updated !&quot;)
-
   } else {
-
     res.cause().printStackTrace()
   }
-
 })</code></pre>
 </div>
 </div>
@@ -537,10 +504,10 @@ mongoClient.updateWithOptions(&quot;books&quot;, query, update, options, { res -
 <div class="sect2">
 <h3 id="_replacing_documents">Replacing documents</h3>
 <div class="paragraph">
-<p>To replace documents you use <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#replace-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">replace</a></code>.</p>
+<p>To replace documents you use <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#replaceDocuments-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">replaceDocuments</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>This is similar to the update operation, however it does not take any update operators like <code>update</code>.
+<p>This is similar to the update operation, however it does not take any operator.
 Instead it replaces the entire document with the one provided.</p>
 </div>
 <div class="paragraph">
@@ -551,26 +518,18 @@ Instead it replaces the entire document with the one provided.</p>
 <pre class="CodeRay highlight"><code data-lang="kotlin">var query = json {
   obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
-
 var replace = json {
   obj(
     &quot;title&quot; to &quot;The Lord of the Rings&quot;,
     &quot;author&quot; to &quot;J. R. R. Tolkien&quot;
   )
 }
-
-mongoClient.replace(&quot;books&quot;, query, replace, { res -&gt;
-
+mongoClient.replaceDocuments(&quot;books&quot;, query, replace, { res -&gt;
   if (res.succeeded()) {
-
     println(&quot;Book replaced !&quot;)
-
   } else {
-
     res.cause().printStackTrace()
-
   }
-
 })</code></pre>
 </div>
 </div>
@@ -581,13 +540,14 @@ mongoClient.replace(&quot;books&quot;, query, replace, { res -&gt;
 <p>To execute multiple insert, update, replace, or delete operations at once, use <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#bulkWrite-java.lang.String-java.util.List-io.vertx.core.Handler-">bulkWrite</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>You can pass a list of <code><a href="../../apidocs/io/vertx/ext/mongo/BulkOperation.html">BulkOperations</a></code>, with each working similiar to the matching single operations.
+<p>You can pass a list of <code><a href="../../apidocs/io/vertx/ext/mongo/BulkOperation.html">BulkOperations</a></code>, with each working similar to the matching single operation.
 You can pass as many operations, even of the same type, as you wish.</p>
 </div>
 <div class="paragraph">
 <p>To specify if the bulk operation should be executed in order, and with what write option, use <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#bulkWriteWithOptions-java.lang.String-java.util.List-io.vertx.ext.mongo.BulkWriteOptions-io.vertx.core.Handler-">bulkWriteWithOptions</a></code>
 and pass an instance of <code><a href="../../apidocs/io/vertx/ext/mongo/BulkWriteOptions.html">BulkWriteOptions</a></code>.
-For more explanation what ordered means, see <a href="https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/#execution-of-operations" class="bare">https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/#execution-of-operations</a></p>
+For more explanation what ordered means, see
+<a href="https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/#execution-of-operations">Execution of Operations</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -607,23 +567,14 @@ For more explanation what ordered means, see <a href="https://docs.mongodb.com/m
 var query = json {
   obj()
 }
-
 mongoClient.find(&quot;books&quot;, query, { res -&gt;
-
   if (res.succeeded()) {
-
     for (json in res.result()) {
-
       println(json.toString())
-
     }
-
   } else {
-
     res.cause().printStackTrace()
-
   }
-
 })</code></pre>
 </div>
 </div>
@@ -636,23 +587,14 @@ mongoClient.find(&quot;books&quot;, query, { res -&gt;
 var query = json {
   obj(&quot;author&quot; to &quot;J. R. R. Tolkien&quot;)
 }
-
 mongoClient.find(&quot;books&quot;, query, { res -&gt;
-
   if (res.succeeded()) {
-
     for (json in res.result()) {
-
       println(json.toString())
-
     }
-
   } else {
-
     res.cause().printStackTrace()
-
   }
-
 })</code></pre>
 </div>
 </div>
@@ -686,37 +628,55 @@ and pass in the an instance of <code><a href="../../apidocs/io/vertx/ext/mongo/F
 </dd>
 </dl>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_finding_documents_in_batches">Finding documents in batches</h3>
+<div class="paragraph">
+<p>When dealing with large data sets, it is not advised to use the
+<code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#find-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">find</a></code> and
+<code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#findWithOptions-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.ext.mongo.FindOptions-io.vertx.core.Handler-">findWithOptions</a></code> methods.
+In order to avoid inflating the whole response into memory, use <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#findBatch-java.lang.String-io.vertx.core.json.JsonObject-">findBatch</a></code>:</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre>// will match all Tolkien books
+<pre class="CodeRay highlight"><code data-lang="kotlin">// will match all Tolkien books
 var query = json {
-  obj("author" to "J. R. R. Tolkien")
+  obj(&quot;author&quot; to &quot;J. R. R. Tolkien&quot;)
 }
-
-mongoClient.findBatch("book", query, { res -&gt;
-
-  if (res.succeeded()) {
-
-    if (res.result() == null) {
-
-      println("End of research")
-
-    } else {
-
-      println("Found doc: ${res.result().toString()}")
-
-    }
-
-  } else {
-
-    res.cause().printStackTrace()
-
-  }
-})</pre>
+mongoClient.findBatch(&quot;book&quot;, query).exceptionHandler({ throwable -&gt;
+  throwable.printStackTrace()
+}).endHandler({ v -&gt;
+  println(&quot;End of research&quot;)
+}).handler({ doc -&gt;
+  println(&quot;Found doc: ${doc.toString()}&quot;)
+})</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The matching documents are returned unitary in the result handler.</p>
+<p>The matching documents are emitted one by one by the <code><a href="../../apidocs/io/vertx/core/streams/ReadStream.html">ReadStream</a></code> handler.</p>
+</div>
+<div class="paragraph">
+<p><code><a href="../../apidocs/io/vertx/ext/mongo/FindOptions.html">FindOptions</a></code> has an extra parameter <code>batchSize</code> which you can use to set the number of documents to load at once:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">// will match all Tolkien books
+var query = json {
+  obj(&quot;author&quot; to &quot;J. R. R. Tolkien&quot;)
+}
+var options = FindOptions(
+  batchSize = 100)
+mongoClient.findBatchWithOptions(&quot;book&quot;, query, options).exceptionHandler({ throwable -&gt;
+  throwable.printStackTrace()
+}).endHandler({ v -&gt;
+  println(&quot;End of research&quot;)
+}).handler({ doc -&gt;
+  println(&quot;Found doc: ${doc.toString()}&quot;)
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default, <code>batchSize</code> is set to 20.</p>
 </div>
 </div>
 <div class="sect2">
@@ -744,17 +704,11 @@ mongoClient.findBatch("book", query, { res -&gt;
 <pre class="CodeRay highlight"><code data-lang="kotlin">var query = json {
   obj(&quot;author&quot; to &quot;J. R. R. Tolkien&quot;)
 }
-
-mongoClient.remove(&quot;books&quot;, query, { res -&gt;
-
+mongoClient.removeDocuments(&quot;books&quot;, query, { res -&gt;
   if (res.succeeded()) {
-
     println(&quot;Never much liked Tolkien stuff!&quot;)
-
   } else {
-
     res.cause().printStackTrace()
-
   }
 })</code></pre>
 </div>
@@ -782,17 +736,11 @@ mongoClient.remove(&quot;books&quot;, query, { res -&gt;
 <pre class="CodeRay highlight"><code data-lang="kotlin">var query = json {
   obj(&quot;author&quot; to &quot;J. R. R. Tolkien&quot;)
 }
-
 mongoClient.count(&quot;books&quot;, query, { res -&gt;
-
   if (res.succeeded()) {
-
     var num = res.result()
-
   } else {
-
     res.cause().printStackTrace()
-
   }
 })</code></pre>
 </div>
@@ -809,15 +757,10 @@ mongoClient.count(&quot;books&quot;, query, { res -&gt;
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="kotlin">mongoClient.getCollections({ res -&gt;
-
   if (res.succeeded()) {
-
     var collections = res.result()
-
   } else {
-
     res.cause().printStackTrace()
-
   }
 })</code></pre>
 </div>
@@ -828,15 +771,10 @@ mongoClient.count(&quot;books&quot;, query, { res -&gt;
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="kotlin">mongoClient.createCollection(&quot;mynewcollectionr&quot;, { res -&gt;
-
   if (res.succeeded()) {
-
     // Created ok!
-
   } else {
-
     res.cause().printStackTrace()
-
   }
 })</code></pre>
 </div>
@@ -859,15 +797,10 @@ Dropping a collection will delete all documents within it!
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="kotlin">mongoClient.dropCollection(&quot;mynewcollectionr&quot;, { res -&gt;
-
   if (res.succeeded()) {
-
     // Dropped ok!
-
   } else {
-
     res.cause().printStackTrace()
-
   }
 })</code></pre>
 </div>
@@ -879,7 +812,7 @@ Dropping a collection will delete all documents within it!
 <p>You can run arbitrary MongoDB commands with <code><a href="../../apidocs/io/vertx/ext/mongo/MongoClient.html#runCommand-java.lang.String-io.vertx.core.json.JsonObject-io.vertx.core.Handler-">runCommand</a></code>.</p>
 </div>
 <div class="paragraph">
-<p>Commands can be used to run more advanced mongoDB features, such as using MapReduce.
+<p>Commands can be used to run more advanced MongoDB features, such as using MapReduce.
 For more information see the mongo docs for supported <a href="http://docs.mongodb.org/manual/reference/command">Commands</a>.</p>
 </div>
 <div class="paragraph">
@@ -896,7 +829,6 @@ of the entries in the JSON is the command name it must be specified as a paramet
     &quot;pipeline&quot; to array()
   )
 }
-
 mongoClient.runCommand(&quot;aggregate&quot;, command, { res -&gt;
   if (res.succeeded()) {
     var resArr = res.result().getJsonArray(&quot;result&quot;)
@@ -911,10 +843,11 @@ mongoClient.runCommand(&quot;aggregate&quot;, command, { res -&gt;
 <div class="sect2">
 <h3 id="_mongodb_extended_json_support">MongoDB Extended JSON support</h3>
 <div class="paragraph">
-<p>For now, only date, oid and binary types are supported (cf <a href="http://docs.mongodb.org/manual/reference/mongodb-extended-json" class="bare">http://docs.mongodb.org/manual/reference/mongodb-extended-json</a> )</p>
+<p>For now, only <code>date</code>, <code>oid</code> and <code>binary</code> types are supported
+(see <a href="http://docs.mongodb.org/manual/reference/mongodb-extended-json">MongoDB Extended JSON</a>).</p>
 </div>
 <div class="paragraph">
-<p>Here&#8217;s an example of inserting a document with a date field</p>
+<p>Here&#8217;s an example of inserting a document with a <code>date</code> field:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -924,29 +857,21 @@ mongoClient.runCommand(&quot;aggregate&quot;, command, { res -&gt;
     &quot;publicationDate&quot; to obj(&quot;\$$date&quot; to &quot;1937-09-21T00:00:00+00:00&quot;)
   )
 }
-
 mongoService.save(&quot;publishedBooks&quot;, document, { res -&gt;
-
   if (res.succeeded()) {
-
     var id = res.result()
-
     mongoService.findOne(&quot;publishedBooks&quot;, json {
       obj(&quot;_id&quot; to id)
     }, null, { res2 -&gt;
       if (res2.succeeded()) {
-
         println(&quot;To retrieve ISO-8601 date : ${res2.result().getJsonObject(&quot;publicationDate&quot;).getString(&quot;\$$date&quot;)}&quot;)
-
       } else {
         res2.cause().printStackTrace()
       }
     })
-
   } else {
     res.cause().printStackTrace()
   }
-
 })</code></pre>
 </div>
 </div>
@@ -956,31 +881,23 @@ mongoService.save(&quot;publishedBooks&quot;, document, { res -&gt;
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="kotlin">byte[] binaryObject = new byte[40];
-
 JsonObject document = new JsonObject()
-        .put(&quot;name&quot;, &quot;Alan Turing&quot;)
-        .put(&quot;binaryStuff&quot;, new JsonObject().put(&quot;$binary&quot;, binaryObject));
-
+  .put(&quot;name&quot;, &quot;Alan Turing&quot;)
+  .put(&quot;binaryStuff&quot;, new JsonObject().put(&quot;$binary&quot;, binaryObject));
 mongoService.save(&quot;smartPeople&quot;, document, res -&gt; {
-
   if (res.succeeded()) {
-
     String id = res.result();
-
     mongoService.findOne(&quot;smartPeople&quot;, new JsonObject().put(&quot;_id&quot;, id), null, res2 -&gt; {
-      if(res2.succeeded()) {
-
+      if (res2.succeeded()) {
         byte[] reconstitutedBinaryObject = res2.result().getJsonObject(&quot;binaryStuff&quot;).getBinary(&quot;$binary&quot;);
         //This could now be de-serialized into an object in real life
       } else {
         res2.cause().printStackTrace();
       }
     });
-
   } else {
     res.cause().printStackTrace();
   }
-
 });</code></pre>
 </div>
 </div>
@@ -991,36 +908,28 @@ mongoService.save(&quot;smartPeople&quot;, document, res -&gt; {
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="kotlin">//This could be a the byte contents of a pdf file, etc converted to base 64
 var base64EncodedString = &quot;a2FpbHVhIGlzIHRoZSAjMSBiZWFjaCBpbiB0aGUgd29ybGQ=&quot;
-
 var document = json {
   obj(
     &quot;name&quot; to &quot;Alan Turing&quot;,
     &quot;binaryStuff&quot; to obj(&quot;\$$binary&quot; to base64EncodedString)
   )
 }
-
 mongoService.save(&quot;smartPeople&quot;, document, { res -&gt;
-
   if (res.succeeded()) {
-
     var id = res.result()
-
     mongoService.findOne(&quot;smartPeople&quot;, json {
       obj(&quot;_id&quot; to id)
     }, null, { res2 -&gt;
       if (res2.succeeded()) {
-
         var reconstitutedBase64EncodedString = res2.result().getJsonObject(&quot;binaryStuff&quot;).getString(&quot;\$$binary&quot;)
         //This could now converted back to bytes from the base 64 string
       } else {
         res2.cause().printStackTrace()
       }
     })
-
   } else {
     res.cause().printStackTrace()
   }
-
 })</code></pre>
 </div>
 </div>
@@ -1030,58 +939,50 @@ mongoService.save(&quot;smartPeople&quot;, document, { res -&gt;
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="kotlin">var individualId = org.bson.types.ObjectId().toHexString()
-
 var document = json {
   obj(
     &quot;name&quot; to &quot;Stephen Hawking&quot;,
     &quot;individualId&quot; to obj(&quot;\$$oid&quot; to individualId)
   )
 }
-
 mongoService.save(&quot;smartPeople&quot;, document, { res -&gt;
-
   if (res.succeeded()) {
-
     var id = res.result()
-
-    mongoService.findOne(&quot;smartPeople&quot;, json {
+    var query = json {
       obj(&quot;_id&quot; to id)
-    }, null, { res2 -&gt;
+    }
+    mongoService.findOne(&quot;smartPeople&quot;, query, null, { res2 -&gt;
       if (res2.succeeded()) {
         var reconstitutedIndividualId = res2.result().getJsonObject(&quot;individualId&quot;).getString(&quot;\$$oid&quot;)
       } else {
         res2.cause().printStackTrace()
       }
     })
-
   } else {
     res.cause().printStackTrace()
   }
-
 })</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_getting_distinct_values">Getting distinct values</h3>
 <div class="paragraph">
-<p>Here&#8217;s an example of getting disting value</p>
+<p>Here&#8217;s an example of getting distinct value</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="kotlin">var document = json {
   obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
-
 mongoClient.save(&quot;books&quot;, document, { res -&gt;
-
   if (res.succeeded()) {
-
     mongoClient.distinct(&quot;books&quot;, &quot;title&quot;, String.`class`.getName(), { res2 -&gt;
       println(&quot;Title is : ${res2.result().getJsonArray(0)}&quot;)
     })
-
   } else {
     res.cause().printStackTrace()
   }
-
 })</code></pre>
 </div>
 </div>
@@ -1093,19 +994,64 @@ mongoClient.save(&quot;books&quot;, document, { res -&gt;
 <pre class="CodeRay highlight"><code data-lang="kotlin">var document = json {
   obj(&quot;title&quot; to &quot;The Hobbit&quot;)
 }
-
 mongoClient.save(&quot;books&quot;, document, { res -&gt;
-
   if (res.succeeded()) {
-
-    mongoClient.distinctBatch(&quot;books&quot;, &quot;title&quot;, String.`class`.getName(), { res2 -&gt;
-      println(&quot;Title is : ${res2.result().getString(&quot;title&quot;)}&quot;)
+    mongoClient.distinctBatch(&quot;books&quot;, &quot;title&quot;, String.`class`.getName()).handler({ book -&gt;
+      println(&quot;Title is : ${book.getString(&quot;title&quot;)}&quot;)
     })
-
   } else {
     res.cause().printStackTrace()
   }
-
+})</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Here&#8217;s an example of getting distinct value with query</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">var document = json {
+  obj(
+    &quot;title&quot; to &quot;The Hobbit&quot;,
+    &quot;publicationDate&quot; to obj(&quot;\$$date&quot; to &quot;1937-09-21T00:00:00+00:00&quot;)
+  )
+}
+var query = json {
+  obj(&quot;publicationDate&quot; to obj(&quot;\$$gte&quot; to obj(&quot;\$$date&quot; to &quot;1937-09-21T00:00:00+00:00&quot;)))
+}
+mongoClient.save(&quot;books&quot;, document, { res -&gt;
+  if (res.succeeded()) {
+    mongoClient.distinctWithQuery(&quot;books&quot;, &quot;title&quot;, String.`class`.getName(), query, { res2 -&gt;
+      println(&quot;Title is : ${res2.result().getJsonArray(0)}&quot;)
+    })
+  }
+})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example of getting distinct value in batch mode with query</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">var document = json {
+  obj(
+    &quot;title&quot; to &quot;The Hobbit&quot;,
+    &quot;publicationDate&quot; to obj(&quot;\$$date&quot; to &quot;1937-09-21T00:00:00+00:00&quot;)
+  )
+}
+var query = json {
+  obj(&quot;publicationDate&quot; to obj(&quot;\$$gte&quot; to obj(&quot;\$$date&quot; to &quot;1937-09-21T00:00:00+00:00&quot;)))
+}
+mongoClient.save(&quot;books&quot;, document, { res -&gt;
+  if (res.succeeded()) {
+    mongoClient.distinctBatchWithQuery(&quot;books&quot;, &quot;title&quot;, String.`class`.getName(), query).handler({ book -&gt;
+      println(&quot;Title is : ${book.getString(&quot;title&quot;)}&quot;)
+    })
+  }
 })</code></pre>
 </div>
 </div>
@@ -1125,7 +1071,7 @@ mongoClient.save(&quot;books&quot;, document, { res -&gt;
 <dl>
 <dt class="hdlist1"><code>db_name</code></dt>
 <dd>
-<p>Name of the database in the mongoDB instance to use. Defaults to <code>default_db</code></p>
+<p>Name of the database in the MongoDB instance to use. Defaults to <code>default_db</code></p>
 </dd>
 <dt class="hdlist1"><code>useObjectId</code></dt>
 <dd>
@@ -1167,64 +1113,64 @@ For more information on the format of the connection string please consult the d
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>{
-  // Single Cluster Settings
-  "host" : "127.0.0.1", // string
-  "port" : 27017,      // int
+<pre class="CodeRay highlight"><code data-lang="js">{
+  <span class="comment">// Single Cluster Settings</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.1</span><span class="delimiter">&quot;</span></span>, <span class="comment">// string</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span> : <span class="integer">27017</span>,      <span class="comment">// int</span>
 
-  // Multiple Cluster Settings
-  "hosts" : [
+  <span class="comment">// Multiple Cluster Settings</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">hosts</span><span class="delimiter">&quot;</span></span> : [
     {
-      "host" : "cluster1", // string
-      "port" : 27000       // int
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">cluster1</span><span class="delimiter">&quot;</span></span>, <span class="comment">// string</span>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span> : <span class="integer">27000</span>       <span class="comment">// int</span>
     },
     {
-      "host" : "cluster2", // string
-      "port" : 28000       // int
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">host</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">cluster2</span><span class="delimiter">&quot;</span></span>, <span class="comment">// string</span>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span> : <span class="integer">28000</span>       <span class="comment">// int</span>
     },
     ...
   ],
-  "replicaSet" :  "foo",    // string
-  "serverSelectionTimeoutMS" : 30000, // long
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">replicaSet</span><span class="delimiter">&quot;</span></span> :  <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>,    <span class="comment">// string</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">serverSelectionTimeoutMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">30000</span>, <span class="comment">// long</span>
 
-  // Connection Pool Settings
-  "maxPoolSize" : 50,                // int
-  "minPoolSize" : 25,                // int
-  "maxIdleTimeMS" : 300000,          // long
-  "maxLifeTimeMS" : 3600000,         // long
-  "waitQueueMultiple"  : 10,         // int
-  "waitQueueTimeoutMS" : 10000,      // long
-  "maintenanceFrequencyMS" : 2000,   // long
-  "maintenanceInitialDelayMS" : 500, // long
+  <span class="comment">// Connection Pool Settings</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maxPoolSize</span><span class="delimiter">&quot;</span></span> : <span class="integer">50</span>,                <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">minPoolSize</span><span class="delimiter">&quot;</span></span> : <span class="integer">25</span>,                <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maxIdleTimeMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">300000</span>,          <span class="comment">// long</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maxLifeTimeMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">3600000</span>,         <span class="comment">// long</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">waitQueueMultiple</span><span class="delimiter">&quot;</span></span>  : <span class="integer">10</span>,         <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">waitQueueTimeoutMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">10000</span>,      <span class="comment">// long</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maintenanceFrequencyMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">2000</span>,   <span class="comment">// long</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">maintenanceInitialDelayMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">500</span>, <span class="comment">// long</span>
 
-  // Credentials / Auth
-  "username"   : "john",     // string
-  "password"   : "passw0rd", // string
-  "authSource" : "some.db"   // string
-  // Auth mechanism
-  "authMechanism"     : "GSSAPI",        // string
-  "gssapiServiceName" : "myservicename", // string
+  <span class="comment">// Credentials / Auth</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>   : <span class="string"><span class="delimiter">&quot;</span><span class="content">john</span><span class="delimiter">&quot;</span></span>,     <span class="comment">// string</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>   : <span class="string"><span class="delimiter">&quot;</span><span class="content">passw0rd</span><span class="delimiter">&quot;</span></span>, <span class="comment">// string</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">authSource</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">some.db</span><span class="delimiter">&quot;</span></span>   <span class="comment">// string</span>
+  <span class="comment">// Auth mechanism</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">authMechanism</span><span class="delimiter">&quot;</span></span>     : <span class="string"><span class="delimiter">&quot;</span><span class="content">GSSAPI</span><span class="delimiter">&quot;</span></span>,        <span class="comment">// string</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">gssapiServiceName</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">myservicename</span><span class="delimiter">&quot;</span></span>, <span class="comment">// string</span>
 
-  // Socket Settings
-  "connectTimeoutMS" : 300000, // int
-  "socketTimeoutMS"  : 100000, // int
-  "sendBufferSize"    : 8192,  // int
-  "receiveBufferSize" : 8192,  // int
-  "keepAlive" : true           // boolean
+  <span class="comment">// Socket Settings</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">connectTimeoutMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">300000</span>, <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">socketTimeoutMS</span><span class="delimiter">&quot;</span></span>  : <span class="integer">100000</span>, <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">sendBufferSize</span><span class="delimiter">&quot;</span></span>    : <span class="integer">8192</span>,  <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">receiveBufferSize</span><span class="delimiter">&quot;</span></span> : <span class="integer">8192</span>,  <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">keepAlive</span><span class="delimiter">&quot;</span></span> : <span class="predefined-constant">true</span>           <span class="comment">// boolean</span>
 
-  // Heartbeat socket settings
-  "heartbeat.socket" : {
-  "connectTimeoutMS" : 300000, // int
-  "socketTimeoutMS"  : 100000, // int
-  "sendBufferSize"    : 8192,  // int
-  "receiveBufferSize" : 8192,  // int
-  "keepAlive" : true           // boolean
+  <span class="comment">// Heartbeat socket settings</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">heartbeat.socket</span><span class="delimiter">&quot;</span></span> : {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">connectTimeoutMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">300000</span>, <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">socketTimeoutMS</span><span class="delimiter">&quot;</span></span>  : <span class="integer">100000</span>, <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">sendBufferSize</span><span class="delimiter">&quot;</span></span>    : <span class="integer">8192</span>,  <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">receiveBufferSize</span><span class="delimiter">&quot;</span></span> : <span class="integer">8192</span>,  <span class="comment">// int</span>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">keepAlive</span><span class="delimiter">&quot;</span></span> : <span class="predefined-constant">true</span>           <span class="comment">// boolean</span>
   }
 
-  // Server Settings
-  "heartbeatFrequencyMS" :    1000 // long
-  "minHeartbeatFrequencyMS" : 500 // long
-}</pre>
+  <span class="comment">// Server Settings</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">heartbeatFrequencyMS</span><span class="delimiter">&quot;</span></span> :    <span class="integer">1000</span> <span class="comment">// long</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">minHeartbeatFrequencyMS</span><span class="delimiter">&quot;</span></span> : <span class="integer">500</span> <span class="comment">// long</span>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1234,15 +1180,15 @@ For more information on the format of the connection string please consult the d
 <dl>
 <dt class="hdlist1"><code>host</code></dt>
 <dd>
-<p>The host the mongoDB instance is running. Defaults to <code>127.0.0.1</code>. This is ignored if <code>hosts</code> is specified</p>
+<p>The host the MongoDB instance is running. Defaults to <code>127.0.0.1</code>. This is ignored if <code>hosts</code> is specified</p>
 </dd>
 <dt class="hdlist1"><code>port</code></dt>
 <dd>
-<p>The port the mongoDB instance is listening on. Defaults to <code>27017</code>. This is ignored if <code>hosts</code> is specified</p>
+<p>The port the MongoDB instance is listening on. Defaults to <code>27017</code>. This is ignored if <code>hosts</code> is specified</p>
 </dd>
 <dt class="hdlist1"><code>hosts</code></dt>
 <dd>
-<p>An array representing the hosts and ports to support a mongoDB cluster (sharding / replication)</p>
+<p>An array representing the hosts and ports to support a MongoDB cluster (sharding / replication)</p>
 </dd>
 <dt class="hdlist1"><code>host</code></dt>
 <dd>
@@ -1254,7 +1200,7 @@ For more information on the format of the connection string please consult the d
 </dd>
 <dt class="hdlist1"><code>replicaSet</code></dt>
 <dd>
-<p>The name of the replica set, if the mongoDB instance is a member of a replica set</p>
+<p>The name of the replica set, if the MongoDB instance is a member of a replica set</p>
 </dd>
 <dt class="hdlist1"><code>serverSelectionTimeoutMS</code></dt>
 <dd>
@@ -1368,7 +1314,7 @@ Please consult the driver documentation for up to date information.
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -1414,7 +1360,7 @@ Please consult the driver documentation for up to date information.
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

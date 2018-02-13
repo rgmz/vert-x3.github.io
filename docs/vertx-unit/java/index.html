@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -113,6 +114,7 @@
 <li><a href="#_assertinrange">assertInRange</a></li>
 <li><a href="#_asserttrue_and_assertfalse">assertTrue and assertFalse</a></li>
 <li><a href="#_failing">Failing</a></li>
+<li><a href="#_using_third_party_assertion_framework">Using third-party assertion framework</a></li>
 </ul>
 </li>
 <li><a href="#_asynchronous_testing">Asynchronous testing</a></li>
@@ -167,6 +169,7 @@
 <li><a href="#_assertinrange">assertInRange</a></li>
 <li><a href="#_asserttrue_and_assertfalse">assertTrue and assertFalse</a></li>
 <li><a href="#_failing">Failing</a></li>
+<li><a href="#_using_third_party_assertion_framework">Using third-party assertion framework</a></li>
 </ul>
 </li>
 <li><a href="#_asynchronous_testing">Asynchronous testing</a></li>
@@ -238,7 +241,7 @@ and follows the Vert.x practices.</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-unit<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
   <span class="tag">&lt;scope&gt;</span>test<span class="tag">&lt;/scope&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
@@ -252,7 +255,7 @@ and follows the Vert.x practices.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">testCompile io.vertx:vertx-<span class="key">unit</span>:<span class="float">3.5</span><span class="float">.0</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">testCompile io.vertx:vertx-<span class="key">unit</span>:<span class="float">3.5</span><span class="float">.1</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -517,6 +520,25 @@ object provides the usual methods when dealing with assertions.</p>
 <p>The failure can either be a <em>string</em> as seen previously or an <em>error</em>. The <em>error</em> object depends
 on the target language, for Java or Groovy it can be any class extending <em>Throwable- , for
 JavaScript it is an _error</em>, for Ruby it is an <em>Exception</em>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_third_party_assertion_framework">Using third-party assertion framework</h3>
+<div class="paragraph">
+<p>It is also possible to use any other assertion framework, like the popular <em>hamcrest</em> and <em>assertj</em>.
+The recommended way to go is to use <code><a href="../../apidocs/io/vertx/ext/unit/TestContext.html#verify-io.vertx.core.Handler-">verify</a></code>
+and perform the assertions within the supplied <em>Handler</em>. This way, asynchronous testing termination
+will be correctly handled.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">suite.test(<span class="string"><span class="delimiter">&quot;</span><span class="content">my_test_case</span><span class="delimiter">&quot;</span></span>, context -&gt; context.verify(v -&gt; {
+  <span class="comment">// Using here Assert from junit, could be assertj, hamcrest or any other</span>
+  <span class="comment">// Even manually throwing an AssertionError.</span>
+  Assert.assertNotNull(<span class="string"><span class="delimiter">&quot;</span><span class="content">not null!</span><span class="delimiter">&quot;</span></span>);
+  Assert.assertEquals(<span class="integer">10</span>, callbackCount);
+}));</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1597,7 +1619,7 @@ via the method name:</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -1643,7 +1665,7 @@ via the method name:</p>
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

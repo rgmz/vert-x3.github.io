@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -164,9 +165,28 @@ this Vert.x offers it&#8217;s own API for DNS resolution which is fully asynchro
 </div>
 </div>
 <div class="paragraph">
-<p>Be aware that you can pass in a varargs of InetSocketAddress arguments to specifiy more then one DNS Server to try
-to query for DNS resolution. The DNS Servers will be queried in the same order as specified here. Where the next
-will be used once the first produce an error while be used.</p>
+<p>You can also create the client with options and configure the query timeout.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="keyword">new</span> DnsClientOptions()
+  .setPort(<span class="integer">53</span>)
+  .setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+  .setQueryTimeout(<span class="integer">10000</span>)
+);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Creating the client with no arguments or omitting the server address will use the address of the server used internally
+for non blocking address resolution.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client1 = vertx.createDnsClient();
+
+<span class="comment">// Just the same but with a different query timeout</span>
+DnsClient client2 = vertx.createDnsClient(<span class="keyword">new</span> DnsClientOptions().setQueryTimeout(<span class="integer">10000</span>));</code></pre>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_lookup">lookup</h3>
@@ -179,7 +199,7 @@ so it behaves the same way as you may be used from when using "nslookup" on your
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>);
 client.lookup(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="predefined-type">System</span>.out.println(ar.result());
@@ -201,7 +221,7 @@ the same way as you may be used from when using "nslookup" on your operation sys
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>);
 client.lookup4(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="predefined-type">System</span>.out.println(ar.result());
@@ -223,7 +243,7 @@ same way as you may be used from when using "nslookup" on your operation system.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>);
 client.lookup6(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="predefined-type">System</span>.out.println(ar.result());
@@ -245,7 +265,7 @@ systems.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>);
 client.resolveA(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; records = ar.result();
@@ -270,7 +290,7 @@ operation systems.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>);
 client.resolveAAAA(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; records = ar.result();
@@ -295,7 +315,7 @@ systems.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>);
 client.resolveCNAME(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; records = ar.result();
@@ -320,7 +340,7 @@ emails for a given domain.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>);
 client.resolveMX(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="predefined-type">List</span>&lt;MxRecord&gt; records = ar.result();
@@ -357,7 +377,7 @@ record.name();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>);
 client.resolveTXT(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; records = ar.result();
@@ -382,7 +402,7 @@ for a given domain.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>);
 client.resolveNS(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; records = ar.result();
@@ -407,7 +427,7 @@ hostname of services. Some protocols need this extra informations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>);
 client.resolveSRV(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="predefined-type">List</span>&lt;SrvRecord&gt; records = ar.result();
@@ -452,7 +472,7 @@ record.target();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>);
 client.resolvePTR(<span class="string"><span class="delimiter">&quot;</span><span class="content">1.0.0.10.in-addr.arpa</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="predefined-type">String</span> record = ar.result();
@@ -475,7 +495,7 @@ just pass in the ipaddress and not a valid PTR query string.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">DnsClient client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>);
 client.reverseLookup(<span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="predefined-type">String</span> record = ar.result();
@@ -583,7 +603,7 @@ client.lookup(<span class="string"><span class="delimiter">&quot;</span><span cl
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -629,7 +649,7 @@ client.lookup(<span class="string"><span class="delimiter">&quot;</span><span cl
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

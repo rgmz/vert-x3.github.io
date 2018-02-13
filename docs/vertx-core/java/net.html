@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -1266,8 +1267,8 @@ configured by explicitly adding enabled protocols:</p>
 <pre class="CodeRay highlight"><code data-lang="java">NetServerOptions options = <span class="keyword">new</span> NetServerOptions().
   setSsl(<span class="predefined-constant">true</span>).
   setKeyStoreOptions(keyStoreOptions).
-  addEnabledSecureTransportProtocol(<span class="string"><span class="delimiter">&quot;</span><span class="content">TLSv1.1</span><span class="delimiter">&quot;</span></span>).
-  addEnabledSecureTransportProtocol(<span class="string"><span class="delimiter">&quot;</span><span class="content">TLSv1.2</span><span class="delimiter">&quot;</span></span>);
+  removeEnabledSecureTransportProtocol(<span class="string"><span class="delimiter">&quot;</span><span class="content">TLSv1</span><span class="delimiter">&quot;</span></span>).
+  addEnabledSecureTransportProtocol(<span class="string"><span class="delimiter">&quot;</span><span class="content">TLSv1.3</span><span class="delimiter">&quot;</span></span>);
 NetServer server = vertx.createNetServer(options);</code></pre>
 </div>
 </div>
@@ -1317,9 +1318,11 @@ options = <span class="keyword">new</span> NetServerOptions().
 <div class="sect3">
 <h4 id="_server_name_indication_sni">Server Name Indication (SNI)</h4>
 <div class="paragraph">
-<p>Server Name Indication (SNI) is a TLS extension by which a client specifies an hostname attempting to connect: during
-the TLS handshake the clients gives a server name and the server can use it to respond with a specific certificate
-for this server name instead of the default deployed certificate.</p>
+<p>Server Name Indication (SNI) is a TLS extension by which a client specifies a hostname attempting to connect: during
+the TLS handshake the client gives a server name and the server can use it to respond with a specific certificate
+for this server name instead of the default deployed certificate.
+If the server requires client authentication the server can use a specific trusted CA certificate depending on the
+indicated server name.</p>
 </div>
 <div class="paragraph">
 <p>When SNI is active the server uses</p>
@@ -1333,7 +1336,22 @@ for this server name instead of the default deployed certificate.</p>
 <p>the certificate CN or SAN DNS certificate to match a wildcard name, e.g <code>*.example.com</code></p>
 </li>
 <li>
-<p>otherwise the first certificate when the client does not present a server name or the presenter server name cannot be matched</p>
+<p>otherwise the first certificate when the client does not present a server name or the presented server name cannot be matched</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When the server additionally requires client authentication:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>if <code><a href="../../apidocs/io/vertx/core/net/JksOptions.html">JksOptions</a></code> were used to set the trust options
+(<code><a href="../../apidocs/io/vertx/core/net/NetServerOptions.html#setTrustOptions-io.vertx.core.net.TrustOptions-">options</a></code>) then an exact match with the trust store
+alias is done</p>
+</li>
+<li>
+<p>otherwise the available CA certificates are used in the same way as if no SNI is in place</p>
 </li>
 </ul>
 </div>
@@ -1533,7 +1551,7 @@ to resolve the DNS address locally.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -1579,7 +1597,7 @@ to resolve the DNS address locally.</p>
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

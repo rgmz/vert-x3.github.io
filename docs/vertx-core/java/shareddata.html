@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -105,9 +106,9 @@
 <li><a href="#_using_shared_data_with_vert_x">Using Shared Data with Vert.x</a>
 <ul class="sectlevel2">
 <li><a href="#_local_shared_maps">Local shared maps</a></li>
-<li><a href="#_cluster_wide_asynchronous_maps">Cluster-wide asynchronous maps</a></li>
-<li><a href="#_cluster_wide_locks">Cluster-wide locks</a></li>
-<li><a href="#_cluster_wide_counters">Cluster-wide counters</a></li>
+<li><a href="#_asynchronous_shared_maps">Asynchronous shared maps</a></li>
+<li><a href="#_asynchronous_locks">Asynchronous locks</a></li>
+<li><a href="#_asynchronous_counters">Asynchronous counters</a></li>
 </ul>
 </li>
 </ul>
@@ -120,9 +121,9 @@
 <li><a href="#_using_shared_data_with_vert_x">Using Shared Data with Vert.x</a>
 <ul class="sectlevel2">
 <li><a href="#_local_shared_maps">Local shared maps</a></li>
-<li><a href="#_cluster_wide_asynchronous_maps">Cluster-wide asynchronous maps</a></li>
-<li><a href="#_cluster_wide_locks">Cluster-wide locks</a></li>
-<li><a href="#_cluster_wide_counters">Cluster-wide counters</a></li>
+<li><a href="#_asynchronous_shared_maps">Asynchronous shared maps</a></li>
+<li><a href="#_asynchronous_locks">Asynchronous locks</a></li>
+<li><a href="#_asynchronous_counters">Asynchronous counters</a></li>
 </ul>
 </li>
 </ul>
@@ -135,8 +136,23 @@
 or different applications in the same Vert.x instance or across a cluster of Vert.x instances.</p>
 </div>
 <div class="paragraph">
-<p>Shared data includes local shared maps, distributed, cluster-wide maps, asynchronous cluster-wide locks and
-asynchronous cluster-wide counters.</p>
+<p>Shared data provides:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>synchronous shared maps (local)</p>
+</li>
+<li>
+<p>asynchronous maps (local or cluster-wide)</p>
+</li>
+<li>
+<p>asynchronous locks (local or cluster-wide)</p>
+</li>
+<li>
+<p>asynchronous counters (local or cluster-wide)</p>
+</li>
+</ul>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -195,10 +211,23 @@ map2 = sd.getLocalMap(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cluster_wide_asynchronous_maps">Cluster-wide asynchronous maps</h3>
+<h3 id="_asynchronous_shared_maps">Asynchronous shared maps</h3>
 <div class="paragraph">
-<p>Cluster-wide asynchronous maps allow data to be put in the map from any node of the cluster and retrieved from any
-other node.</p>
+<p>Asynchronous shared maps allow data to be put in the map and retrieved locally when Vert.x is not clustered.
+When clustered, data can be put from any node and retrieved from the same node or any other node.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+In clustered mode, asynchronous shared maps rely on distributed data structures provided by the cluster manager.
+Beware that the latency relative to asynchronous shared map operations can be much higher in clustered than in local mode.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>This makes them really useful for things like storing session state in a farm of servers hosting a Vert.x web
@@ -206,7 +235,7 @@ application.</p>
 </div>
 <div class="paragraph">
 <p>You get an instance of <code><a href="../../apidocs/io/vertx/core/shareddata/AsyncMap.html">AsyncMap</a></code> with
-<code><a href="../../apidocs/io/vertx/core/shareddata/SharedData.html#getClusterWideMap-java.lang.String-io.vertx.core.Handler-">getClusterWideMap</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/core/shareddata/SharedData.html#getAsyncMap-java.lang.String-io.vertx.core.Handler-">getAsyncMap</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Getting the map is asynchronous and the result is returned to you in the handler that you specify. Here&#8217;s an example:</p>
@@ -215,7 +244,7 @@ application.</p>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">SharedData sd = vertx.sharedData();
 
-sd.&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt;getClusterWideMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+sd.&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt;getAsyncMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap</span><span class="delimiter">&quot;</span></span>, res -&gt; {
   <span class="keyword">if</span> (res.succeeded()) {
     AsyncMap&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt; map = res.result();
   } <span class="keyword">else</span> {
@@ -276,13 +305,13 @@ sd.&lt;<span class="predefined-type">String</span>, <span class="predefined-type
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cluster_wide_locks">Cluster-wide locks</h3>
+<h3 id="_asynchronous_locks">Asynchronous locks</h3>
 <div class="paragraph">
-<p><code><a href="../../apidocs/io/vertx/core/shareddata/Lock.html">Cluster wide locks</a></code> allow you to obtain exclusive locks across the cluster -
+<p><code><a href="../../apidocs/io/vertx/core/shareddata/Lock.html">Asynchronous locks</a></code> allow you to obtain exclusive locks locally or across the cluster -
 this is useful when you want to do something or access a resource on only one node of a cluster at any one time.</p>
 </div>
 <div class="paragraph">
-<p>Cluster wide locks have an asynchronous API unlike most lock APIs which block the calling thread until the lock
+<p>Asynchronous locks have an asynchronous API unlike most lock APIs which block the calling thread until the lock
 is obtained.</p>
 </div>
 <div class="paragraph">
@@ -335,9 +364,9 @@ with a failure:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cluster_wide_counters">Cluster-wide counters</h3>
+<h3 id="_asynchronous_counters">Asynchronous counters</h3>
 <div class="paragraph">
-<p>It&#8217;s often useful to maintain an atomic counter across the different nodes of your application.</p>
+<p>It&#8217;s often useful to maintain an atomic counter locally or across the different nodes of your application.</p>
 </div>
 <div class="paragraph">
 <p>You can do this with <code><a href="../../apidocs/io/vertx/core/shareddata/Counter.html">Counter</a></code>.</p>
@@ -373,7 +402,7 @@ it using the various methods.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -419,7 +448,7 @@ it using the various methods.</p>
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

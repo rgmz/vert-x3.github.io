@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -103,6 +104,7 @@
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
 <li><a href="#_vert_x_common_sql_interface">Vert.x Common SQL interface</a></li>
+<li><a href="#_simple_sql_operations">Simple SQL Operations</a></li>
 <li><a href="#_the_sql_connection">The SQL Connection</a>
 <ul class="sectlevel2">
 <li><a href="#_auto_commit">Auto-commit</a></li>
@@ -127,6 +129,7 @@
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
 <li><a href="#_vert_x_common_sql_interface">Vert.x Common SQL interface</a></li>
+<li><a href="#_simple_sql_operations">Simple SQL Operations</a></li>
 <li><a href="#_the_sql_connection">The SQL Connection</a>
 <ul class="sectlevel2">
 <li><a href="#_auto_commit">Auto-commit</a></li>
@@ -170,7 +173,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-sql-common<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -183,8 +186,76 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-sql-common:3.5.0</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-sql-common:3.5.1</span><span class="delimiter">'</span></span></code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_simple_sql_operations">Simple SQL Operations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are times when you will want to run a single SQL operation, e.g.: a single select of a row, or a update to a
+set of rows which do not require to be part of a transaction or have dependencies on the previous or next operation.</p>
+</div>
+<div class="paragraph">
+<p>For these cases, clients provide a boilerplate-less API <code><a href="../../jsdoc/module-vertx-sql-js_sql_operations-SQLOperations.html">SQLOperations</a></code>. This interface will
+perform the following steps for you:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>acquire a connection from the connection pool</p>
+</li>
+<li>
+<p>perform your action</p>
+</li>
+<li>
+<p>close and return the connection to the connection pool</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>An example where users get loaded from the <code>USERS</code> table could be:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example16<span class="error">`</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can perform the following operations as a simple one "shot" method call:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="../../jsdoc/module-vertx-sql-js_sql_client-SQLClient.html#query">query</a></code></p>
+</li>
+<li>
+<p><code><a href="../../jsdoc/module-vertx-sql-js_sql_client-SQLClient.html#queryWithParams">queryWithParams</a></code></p>
+</li>
+<li>
+<p><code><a href="../../jsdoc/module-vertx-sql-js_sql_operations-SQLOperations.html#querySingle">querySingle</a></code></p>
+</li>
+<li>
+<p><code><a href="../../jsdoc/module-vertx-sql-js_sql_operations-SQLOperations.html#querySingleWithParams">querySingleWithParams</a></code></p>
+</li>
+<li>
+<p><code><a href="../../jsdoc/module-vertx-sql-js_sql_client-SQLClient.html#update">update</a></code></p>
+</li>
+<li>
+<p><code><a href="../../jsdoc/module-vertx-sql-js_sql_client-SQLClient.html#updateWithParams">updateWithParams</a></code></p>
+</li>
+<li>
+<p><code><a href="../../jsdoc/module-vertx-sql-js_sql_client-SQLClient.html#call">call</a></code></p>
+</li>
+<li>
+<p><code><a href="../../jsdoc/module-vertx-sql-js_sql_client-SQLClient.html#callWithParams">callWithParams</a></code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For further details on these API please refer to the <code><a href="../../jsdoc/module-vertx-sql-js_sql_operations-SQLOperations.html">SQLOperations</a></code> interface.</p>
 </div>
 </div>
 </div>
@@ -209,13 +280,7 @@ execute in its own transaction.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">connection.setAutoCommit(<span class="predefined-constant">false</span>, function (res, res_err) {
-  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-    <span class="comment">// OK!</span>
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example1<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -233,14 +298,7 @@ been run.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">connection.query(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE</span><span class="delimiter">&quot;</span></span>, function (res, res_err) {
-  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-    <span class="comment">// Get the result set</span>
-    var resultSet = res;
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example2<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -255,18 +313,7 @@ available with <code><a href="../dataobjects.html#ResultSet#getResults">getResul
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">var columnNames = resultSet.columnNames;
-
-var results = resultSet.results;
-
-<span class="predefined-type">Array</span>.prototype.forEach.call(results, function(row) {
-
-  var id = row[<span class="integer">0</span>];
-  var fName = row[<span class="integer">1</span>];
-  var lName = row[<span class="integer">2</span>];
-  var shoeSize = row[<span class="integer">3</span>];
-
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example3<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -279,16 +326,7 @@ column names - if that&#8217;s the case you should use <code><a href="../dataobj
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">var rows = resultSet.rows;
-
-<span class="predefined-type">Array</span>.prototype.forEach.call(rows, function(row) {
-
-  var id = row.ID;
-  var fName = row.FNAME;
-  var lName = row.LNAME;
-  var shoeSize = row.SHOE_SIZE;
-
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example3__1<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -304,21 +342,7 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">var query = <span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE WHERE LNAME=? AND SHOE_SIZE &gt; ?</span><span class="delimiter">&quot;</span></span>;
-var params = [
-  <span class="string"><span class="delimiter">&quot;</span><span class="content">Fox</span><span class="delimiter">&quot;</span></span>,
-  <span class="integer">9</span>
-];
-
-connection.queryWithParams(query, params, function (res, res_err) {
-
-  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-    <span class="comment">// Get the result set</span>
-    var resultSet = res;
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example3_1<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -340,17 +364,7 @@ if the update generated keys, they are available with <code><a href="../dataobje
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">connection.update(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO PEOPLE VALUES (null, 'john', 'smith', 9)</span><span class="delimiter">&quot;</span></span>, function (res, res_err) {
-  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
-    var result = res;
-    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Updated no. of rows: </span><span class="delimiter">&quot;</span></span> + result.updated);
-    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Generated keys: </span><span class="delimiter">&quot;</span></span> + result.keys);
-
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example4<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -366,25 +380,7 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">var update = <span class="string"><span class="delimiter">&quot;</span><span class="content">UPDATE PEOPLE SET SHOE_SIZE = 10 WHERE LNAME=?</span><span class="delimiter">&quot;</span></span>;
-var params = [
-  <span class="string"><span class="delimiter">&quot;</span><span class="content">Fox</span><span class="delimiter">&quot;</span></span>
-];
-
-connection.updateWithParams(update, params, function (res, res_err) {
-
-  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-
-    var updateResult = res;
-
-    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">No. of rows updated: </span><span class="delimiter">&quot;</span></span> + updateResult.updated);
-
-  } <span class="keyword">else</span> {
-
-    <span class="comment">// Failed!</span>
-
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example5<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -409,22 +405,7 @@ argument then the output array must contain a null value as the first element.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Assume that there is a SQL function like this:</span>
-<span class="comment">//</span>
-<span class="comment">// create function one_hour_ago() returns timestamp</span>
-<span class="comment">//    return now() - 1 hour;</span>
-
-<span class="comment">// note that you do not need to declare the output for functions</span>
-var func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call one_hour_ago() }</span><span class="delimiter">&quot;</span></span>;
-
-connection.call(func, function (res, res_err) {
-
-  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-    var result = res;
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example8<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -433,25 +414,7 @@ not return anything the usage is as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Assume that there is a SQL procedure like this:</span>
-<span class="comment">//</span>
-<span class="comment">// create procedure new_customer(firstname varchar(50), lastname varchar(50))</span>
-<span class="comment">//   modifies sql data</span>
-<span class="comment">//   insert into customers values (default, firstname, lastname, current_timestamp);</span>
-
-var func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call new_customer(?, ?) }</span><span class="delimiter">&quot;</span></span>;
-
-connection.callWithParams(func, [
-  <span class="string"><span class="delimiter">&quot;</span><span class="content">John</span><span class="delimiter">&quot;</span></span>,
-  <span class="string"><span class="delimiter">&quot;</span><span class="content">Doe</span><span class="delimiter">&quot;</span></span>
-], <span class="predefined-constant">null</span>, function (res, res_err) {
-
-  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-    <span class="comment">// Success!</span>
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example9<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -459,27 +422,7 @@ connection.callWithParams(func, [
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Assume that there is a SQL procedure like this:</span>
-<span class="comment">//</span>
-<span class="comment">// create procedure customer_lastname(IN firstname varchar(50), OUT lastname varchar(50))</span>
-<span class="comment">//   modifies sql data</span>
-<span class="comment">//   select lastname into lastname from customers where firstname = firstname;</span>
-
-var func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call customer_lastname(?, ?) }</span><span class="delimiter">&quot;</span></span>;
-
-connection.callWithParams(func, [
-  <span class="string"><span class="delimiter">&quot;</span><span class="content">John</span><span class="delimiter">&quot;</span></span>
-], [
-  <span class="predefined-constant">null</span>,
-  <span class="string"><span class="delimiter">&quot;</span><span class="content">VARCHAR</span><span class="delimiter">&quot;</span></span>
-], function (res, res_err) {
-
-  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-    var result = res;
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example10<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -532,18 +475,7 @@ String describing the type you want to receive.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Batch values</span>
-var batch = <span class="type">[]</span>;
-batch.push(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (NAME) VALUES ('JOE')</span><span class="delimiter">&quot;</span></span>);
-batch.push(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (NAME) VALUES ('JANE')</span><span class="delimiter">&quot;</span></span>);
-
-connection.batch(batch, function (res, res_err) {
-  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-    var result = res;
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example12<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -551,22 +483,7 @@ connection.batch(batch, function (res, res_err) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Batch values</span>
-var batch = <span class="type">[]</span>;
-batch.push([
-  <span class="string"><span class="delimiter">&quot;</span><span class="content">joe</span><span class="delimiter">&quot;</span></span>
-]);
-batch.push([
-  <span class="string"><span class="delimiter">&quot;</span><span class="content">jane</span><span class="delimiter">&quot;</span></span>
-]);
-
-connection.batchWithParams(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (name) VALUES (?)</span><span class="delimiter">&quot;</span></span>, batch, function (res, res_err) {
-  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-    var result = res;
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example11<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -582,15 +499,7 @@ is complete</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">var sql = <span class="string"><span class="delimiter">&quot;</span><span class="content">CREATE TABLE PEOPLE (ID int generated by default as identity (start with 1 increment by 1) not null,FNAME varchar(255), LNAME varchar(255), SHOE_SIZE int);</span><span class="delimiter">&quot;</span></span>;
-
-connection.execute(sql, function (execute, execute_err) {
-  <span class="keyword">if</span> (execute_err == <span class="predefined-constant">null</span>) {
-    console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Table created !</span><span class="delimiter">&quot;</span></span>);
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example6<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -603,11 +512,7 @@ under the property <code>next</code>. A simple walk of all result sets can be ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="js"><span class="comment">// do something with the result set...</span>
-
-<span class="comment">// next step</span>
-rs = rs.next;
-;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example13<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -619,13 +524,7 @@ inflating the whole response into memory and JSON and data is just processed on 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="js">connection.queryStream(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM large_table</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (stream, stream_err) {
-  <span class="keyword">if</span> (stream_err == <span class="predefined-constant">null</span>) {
-    stream.handler(<span class="keyword">function</span> (row) {
-      <span class="comment">// do something with the row...</span>
-    });
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example14<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -635,20 +534,7 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="js">connection.queryStream(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM large_table; SELECT * FROM other_table</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (stream, stream_err) {
-  <span class="keyword">if</span> (stream_err == <span class="predefined-constant">null</span>) {
-    <span class="keyword">var</span> sqlRowStream = stream;
-
-    sqlRowStream.resultSetClosedHandler(<span class="keyword">function</span> (v) {
-      <span class="comment">// will ask to restart the stream with the new result set if any</span>
-      sqlRowStream.moreResults();
-    }).handler(<span class="keyword">function</span> (row) {
-      <span class="comment">// do something with the row...</span>
-    }).endHandler(<span class="keyword">function</span> (v) {
-      <span class="comment">// no more data available...</span>
-    });
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example15<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -667,17 +553,7 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Do stuff with connection - updates etc</span>
-
-<span class="comment">// Now commit</span>
-
-connection.commit(function (res, res_err) {
-  <span class="keyword">if</span> (res_err == <span class="predefined-constant">null</span>) {
-    <span class="comment">// Committed OK!</span>
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">`</span>example7<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -696,7 +572,7 @@ connection.commit(function (res, res_err) {
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -742,7 +618,7 @@ connection.commit(function (res, res_err) {
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

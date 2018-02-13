@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -214,7 +215,7 @@
 <li><a href="#_creating_an_http_client">Creating an HTTP client</a></li>
 <li><a href="#_logging_network_client_activity">Logging network client activity</a></li>
 <li><a href="#_making_requests">Making requests</a></li>
-<li><a href="#_handling_http_responses">Handling http responses</a></li>
+<li><a href="#_handling_http_responses">Handling HTTP responses</a></li>
 <li><a href="#_enabling_compression_on_the_client">Enabling compression on the client</a></li>
 <li><a href="#_http_1_x_pooling_and_keep_alive">HTTP/1.x pooling and keep alive</a></li>
 <li><a href="#_http_1_1_pipe_lining">HTTP/1.1 pipe-lining</a></li>
@@ -231,9 +232,9 @@
 <li><a href="#_using_shared_data_with_vert_x">Using Shared Data with Vert.x</a>
 <ul class="sectlevel2">
 <li><a href="#_local_shared_maps">Local shared maps</a></li>
-<li><a href="#_cluster_wide_asynchronous_maps">Cluster-wide asynchronous maps</a></li>
-<li><a href="#_cluster_wide_locks">Cluster-wide locks</a></li>
-<li><a href="#_cluster_wide_counters">Cluster-wide counters</a></li>
+<li><a href="#_asynchronous_shared_maps">Asynchronous shared maps</a></li>
+<li><a href="#_asynchronous_locks">Asynchronous locks</a></li>
+<li><a href="#_asynchronous_counters">Asynchronous counters</a></li>
 </ul>
 </li>
 <li><a href="#_using_the_file_system_with_vert_x">Using the file system with Vert.x</a>
@@ -461,7 +462,7 @@
 <li><a href="#_creating_an_http_client">Creating an HTTP client</a></li>
 <li><a href="#_logging_network_client_activity">Logging network client activity</a></li>
 <li><a href="#_making_requests">Making requests</a></li>
-<li><a href="#_handling_http_responses">Handling http responses</a></li>
+<li><a href="#_handling_http_responses">Handling HTTP responses</a></li>
 <li><a href="#_enabling_compression_on_the_client">Enabling compression on the client</a></li>
 <li><a href="#_http_1_x_pooling_and_keep_alive">HTTP/1.x pooling and keep alive</a></li>
 <li><a href="#_http_1_1_pipe_lining">HTTP/1.1 pipe-lining</a></li>
@@ -478,9 +479,9 @@
 <li><a href="#_using_shared_data_with_vert_x">Using Shared Data with Vert.x</a>
 <ul class="sectlevel2">
 <li><a href="#_local_shared_maps">Local shared maps</a></li>
-<li><a href="#_cluster_wide_asynchronous_maps">Cluster-wide asynchronous maps</a></li>
-<li><a href="#_cluster_wide_locks">Cluster-wide locks</a></li>
-<li><a href="#_cluster_wide_counters">Cluster-wide counters</a></li>
+<li><a href="#_asynchronous_shared_maps">Asynchronous shared maps</a></li>
+<li><a href="#_asynchronous_locks">Asynchronous locks</a></li>
+<li><a href="#_asynchronous_counters">Asynchronous counters</a></li>
 </ul>
 </li>
 <li><a href="#_using_the_file_system_with_vert_x">Using the file system with Vert.x</a>
@@ -676,12 +677,12 @@ project descriptor to access the Vert.x Core API and enable the Groovy support:<
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
  <span class="tag">&lt;artifactId&gt;</span>vertx-core<span class="tag">&lt;/artifactId&gt;</span>
- <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+ <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span>
 <span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-lang-groovy<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -694,8 +695,8 @@ project descriptor to access the Vert.x Core API and enable the Groovy support:<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:vertx-core:3.5.0</span><span class="delimiter">&quot;</span></span>
-compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:vertx-lang-groovy:3.5.0</span><span class="delimiter">&quot;</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:vertx-core:3.5.1</span><span class="delimiter">&quot;</span></span>
+compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:vertx-lang-groovy:3.5.1</span><span class="delimiter">&quot;</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1585,7 +1586,7 @@ will guarantee that those handlers, when called, will be executed on the same ev
 long as you don&#8217;t create your own threads and call it!).</p>
 </div>
 <div class="paragraph">
-<p>This means you can write all the code in your application as single threaded and let Vert.x worrying about the threading
+<p>This means you can write all the code in your application as single threaded and let Vert.x worry about the threading
 and scaling. No more worrying about synchronized and volatile any more, and you also avoid many other cases of race conditions
 and deadlock so prevalent when doing hand-rolled 'traditional' multi-threaded application development.</p>
 </div>
@@ -1593,8 +1594,8 @@ and deadlock so prevalent when doing hand-rolled 'traditional' multi-threaded ap
 <div class="sect2">
 <h3 id="worker_verticles">Worker verticles</h3>
 <div class="paragraph">
-<p>A worker verticle is just like a standard verticle but it&#8217;s executed not using an event loop, but using a thread from
-the Vert.x worker thread pool.</p>
+<p>A worker verticle is just like a standard verticle but it&#8217;s executed using a thread from the Vert.x worker thread pool,
+rather than using an event loop.</p>
 </div>
 <div class="paragraph">
 <p>Worker verticles are designed for calling blocking code, as they won&#8217;t block any event loops.</p>
@@ -1796,7 +1797,7 @@ vertx.deployVerticle(<span class="string"><span class="delimiter">&quot;</span><
 </div>
 <div class="paragraph">
 <p>This is useful for scaling easily across multiple cores. For example you might have a web-server verticle to deploy
-and multiple cores on your machine, so you want to deploy multiple instances to take utilise all the cores.</p>
+and multiple cores on your machine, so you want to deploy multiple instances to utilise all the cores.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1852,7 +1853,7 @@ println <span class="predefined-type">System</span>.getenv(<span class="string">
 <h3 id="_verticle_isolation_groups">Verticle Isolation Groups</h3>
 <div class="paragraph">
 <p>By default, Vert.x has a <em>flat classpath</em>. I.e, when Vert.x deploys verticles it does so with the current classloader -
-it doesn&#8217;t create a new one. In the majority of cases this is the simplest, clearest and sanest thing to do.</p>
+it doesn&#8217;t create a new one. In the majority of cases this is the simplest, clearest, and sanest thing to do.</p>
 </div>
 <div class="paragraph">
 <p>However, in some cases you may want to deploy a verticle so the classes of that verticle are isolated from others in
@@ -2146,7 +2147,7 @@ when the verticle is undeployed.</p>
 <div class="sect2">
 <h3 id="_verticle_worker_pool">Verticle worker pool</h3>
 <div class="paragraph">
-<p>Verticle use the Vert.x worker pool for executing blocking actions, i.e <code><a href="../../apidocs/io/vertx/core/Context.html#executeBlocking-io.vertx.core.Handler-boolean-io.vertx.core.Handler-">executeBlocking</a></code> or
+<p>Verticles use the Vert.x worker pool for executing blocking actions, i.e <code><a href="../../apidocs/io/vertx/core/Context.html#executeBlocking-io.vertx.core.Handler-boolean-io.vertx.core.Handler-">executeBlocking</a></code> or
 worker verticle.</p>
 </div>
 <div class="paragraph">
@@ -4239,15 +4240,7 @@ configured by explicitly adding enabled protocols:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> options = [
-  <span class="key">ssl</span>:<span class="predefined-constant">true</span>,
-  <span class="key">keyStoreOptions</span>:keyStoreOptions,
-  <span class="key">enabledSecureTransportProtocols</span>:[
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">TLSv1.1</span><span class="delimiter">&quot;</span></span>,
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">TLSv1.2</span><span class="delimiter">&quot;</span></span>
-  ]
-]
-<span class="keyword">def</span> server = vertx.createNetServer(options)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">Code not translatable</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4300,9 +4293,11 @@ options = [
 <div class="sect3">
 <h4 id="_server_name_indication_sni">Server Name Indication (SNI)</h4>
 <div class="paragraph">
-<p>Server Name Indication (SNI) is a TLS extension by which a client specifies an hostname attempting to connect: during
-the TLS handshake the clients gives a server name and the server can use it to respond with a specific certificate
-for this server name instead of the default deployed certificate.</p>
+<p>Server Name Indication (SNI) is a TLS extension by which a client specifies a hostname attempting to connect: during
+the TLS handshake the client gives a server name and the server can use it to respond with a specific certificate
+for this server name instead of the default deployed certificate.
+If the server requires client authentication the server can use a specific trusted CA certificate depending on the
+indicated server name.</p>
 </div>
 <div class="paragraph">
 <p>When SNI is active the server uses</p>
@@ -4316,7 +4311,22 @@ for this server name instead of the default deployed certificate.</p>
 <p>the certificate CN or SAN DNS certificate to match a wildcard name, e.g <code>*.example.com</code></p>
 </li>
 <li>
-<p>otherwise the first certificate when the client does not present a server name or the presenter server name cannot be matched</p>
+<p>otherwise the first certificate when the client does not present a server name or the presented server name cannot be matched</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When the server additionally requires client authentication:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>if <code><a href="../../apidocs/io/vertx/core/net/JksOptions.html">JksOptions</a></code> were used to set the trust options
+(<code><a href="../../apidocs/io/vertx/core/net/NetServerOptions.html#setTrustOptions-io.vertx.core.net.TrustOptions-">options</a></code>) then an exact match with the trust store
+alias is done</p>
+</li>
+<li>
+<p>otherwise the available CA certificates are used in the same way as if no SNI is in place</p>
 </li>
 </ul>
 </div>
@@ -6204,7 +6214,7 @@ present on the server, the server needs to accept the entire response.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_handling_http_responses">Handling http responses</h3>
+<h3 id="_handling_http_responses">Handling HTTP responses</h3>
 <div class="paragraph">
 <p>You receive an instance of <code><a href="../../apidocs/io/vertx/core/http/HttpClientResponse.html">HttpClientResponse</a></code> into the handler that you specify in of
 the request methods or by setting a handler directly on the <code><a href="../../apidocs/io/vertx/core/http/HttpClientRequest.html">HttpClientRequest</a></code> object.</p>
@@ -7475,8 +7485,23 @@ when the verticle is undeployed.</p>
 or different applications in the same Vert.x instance or across a cluster of Vert.x instances.</p>
 </div>
 <div class="paragraph">
-<p>Shared data includes local shared maps, distributed, cluster-wide maps, asynchronous cluster-wide locks and
-asynchronous cluster-wide counters.</p>
+<p>Shared data provides:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>synchronous shared maps (local)</p>
+</li>
+<li>
+<p>asynchronous maps (local or cluster-wide)</p>
+</li>
+<li>
+<p>asynchronous locks (local or cluster-wide)</p>
+</li>
+<li>
+<p>asynchronous counters (local or cluster-wide)</p>
+</li>
+</ul>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -7535,10 +7560,23 @@ map2 = sd.getLocalMap(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cluster_wide_asynchronous_maps">Cluster-wide asynchronous maps</h3>
+<h3 id="_asynchronous_shared_maps">Asynchronous shared maps</h3>
 <div class="paragraph">
-<p>Cluster-wide asynchronous maps allow data to be put in the map from any node of the cluster and retrieved from any
-other node.</p>
+<p>Asynchronous shared maps allow data to be put in the map and retrieved locally when Vert.x is not clustered.
+When clustered, data can be put from any node and retrieved from the same node or any other node.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+In clustered mode, asynchronous shared maps rely on distributed data structures provided by the cluster manager.
+Beware that the latency relative to asynchronous shared map operations can be much higher in clustered than in local mode.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>This makes them really useful for things like storing session state in a farm of servers hosting a Vert.x web
@@ -7546,7 +7584,7 @@ application.</p>
 </div>
 <div class="paragraph">
 <p>You get an instance of <code><a href="../../apidocs/io/vertx/core/shareddata/AsyncMap.html">AsyncMap</a></code> with
-<code><a href="../../apidocs/io/vertx/core/shareddata/SharedData.html#getClusterWideMap-java.lang.String-io.vertx.core.Handler-">getClusterWideMap</a></code>.</p>
+<code><a href="../../apidocs/io/vertx/core/shareddata/SharedData.html#getAsyncMap-java.lang.String-io.vertx.core.Handler-">getAsyncMap</a></code>.</p>
 </div>
 <div class="paragraph">
 <p>Getting the map is asynchronous and the result is returned to you in the handler that you specify. Here&#8217;s an example:</p>
@@ -7555,7 +7593,7 @@ application.</p>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> sd = vertx.sharedData()
 
-sd.getClusterWideMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+sd.getAsyncMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">mymap</span><span class="delimiter">&quot;</span></span>, { res -&gt;
   <span class="keyword">if</span> (res.succeeded()) {
     <span class="keyword">def</span> map = res.result()
   } <span class="keyword">else</span> {
@@ -7616,13 +7654,13 @@ sd.getClusterWideMap(<span class="string"><span class="delimiter">&quot;</span><
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cluster_wide_locks">Cluster-wide locks</h3>
+<h3 id="_asynchronous_locks">Asynchronous locks</h3>
 <div class="paragraph">
-<p><code><a href="../../apidocs/io/vertx/core/shareddata/Lock.html">Cluster wide locks</a></code> allow you to obtain exclusive locks across the cluster -
+<p><code><a href="../../apidocs/io/vertx/core/shareddata/Lock.html">Asynchronous locks</a></code> allow you to obtain exclusive locks locally or across the cluster -
 this is useful when you want to do something or access a resource on only one node of a cluster at any one time.</p>
 </div>
 <div class="paragraph">
-<p>Cluster wide locks have an asynchronous API unlike most lock APIs which block the calling thread until the lock
+<p>Asynchronous locks have an asynchronous API unlike most lock APIs which block the calling thread until the lock
 is obtained.</p>
 </div>
 <div class="paragraph">
@@ -7677,9 +7715,9 @@ with a failure:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cluster_wide_counters">Cluster-wide counters</h3>
+<h3 id="_asynchronous_counters">Asynchronous counters</h3>
 <div class="paragraph">
-<p>It&#8217;s often useful to maintain an atomic counter across the different nodes of your application.</p>
+<p>It&#8217;s often useful to maintain an atomic counter locally or across the different nodes of your application.</p>
 </div>
 <div class="paragraph">
 <p>You can do this with <code><a href="../../apidocs/io/vertx/core/shareddata/Counter.html">Counter</a></code>.</p>
@@ -8185,17 +8223,15 @@ stack, but gives no guarantee that it ever reached or will reach the remote peer
 <div class="sect3">
 <h4 id="_sending_multicast_packets">Sending Multicast packets</h4>
 <div class="paragraph">
-<p>Multicast allows multiple sockets to receive the same packets. This works by have same join a multicast group
-to which you can send packets.</p>
+<p>Multicast allows multiple sockets to receive the same packets. This works by having the sockets join the same multicast group
+to which you can then send packets.</p>
 </div>
 <div class="paragraph">
-<p>We will look at how you can joint a Multicast Group and so receive packets in the next section.</p>
+<p>We will look at how you can join a Multicast Group and receive packets in the next section.</p>
 </div>
 <div class="paragraph">
-<p>For now let us focus on how to send those. Sending multicast packets is not different to send normal Datagram Packets.</p>
-</div>
-<div class="paragraph">
-<p>The only difference is that you would pass in a multicast group address to the send method.</p>
+<p>Sending multicast packets is not different than sending normal Datagram packets.  The difference is that you pass
+in a multicast group address to the send method.</p>
 </div>
 <div class="paragraph">
 <p>This is show here:</p>
@@ -8217,10 +8253,10 @@ socket.send(buffer, <span class="integer">1234</span>, <span class="string"><spa
 <h5 id="_receiving_multicast_packets">Receiving Multicast packets</h5>
 <div class="paragraph">
 <p>If you want to receive packets for specific Multicast group you need to bind the <code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html">DatagramSocket</a></code> by
-calling <code>listen(&#8230;&#8203;)</code> on it and join the Multicast group.</p>
+calling <code>listen(&#8230;&#8203;)</code> on it to join the Multicast group.</p>
 </div>
 <div class="paragraph">
-<p>This way you will be able to receive DatagramPackets that were sent to the address and port on which the
+<p>This way you will receive DatagramPackets that were sent to the address and port on which the
 <code><a href="../../apidocs/io/vertx/core/datagram/DatagramSocket.html">DatagramSocket</a></code> listens and also to those sent to the Multicast group.</p>
 </div>
 <div class="paragraph">
@@ -8411,9 +8447,30 @@ this Vert.x offers it&#8217;s own API for DNS resolution which is fully asynchro
 </div>
 </div>
 <div class="paragraph">
-<p>Be aware that you can pass in a varargs of InetSocketAddress arguments to specifiy more then one DNS Server to try
-to query for DNS resolution. The DNS Servers will be queried in the same order as specified here. Where the next
-will be used once the first produce an error while be used.</p>
+<p>You can also create the client with options and configure the query timeout.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient([
+  <span class="key">port</span>:<span class="integer">53</span>,
+  <span class="key">host</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>,
+  <span class="key">queryTimeout</span>:<span class="integer">10000</span>
+])</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Creating the client with no arguments or omitting the server address will use the address of the server used internally
+for non blocking address resolution.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client1 = vertx.createDnsClient()
+
+<span class="comment">// Just the same but with a different query timeout</span>
+<span class="keyword">def</span> client2 = vertx.createDnsClient([
+  <span class="key">queryTimeout</span>:<span class="integer">10000</span>
+])</code></pre>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_lookup">lookup</h3>
@@ -8426,7 +8483,7 @@ so it behaves the same way as you may be used from when using "nslookup" on your
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>)
 client.lookup(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
   <span class="keyword">if</span> (ar.succeeded()) {
     println(ar.result())
@@ -8448,7 +8505,7 @@ the same way as you may be used from when using "nslookup" on your operation sys
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>)
 client.lookup4(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
   <span class="keyword">if</span> (ar.succeeded()) {
     println(ar.result())
@@ -8470,7 +8527,7 @@ same way as you may be used from when using "nslookup" on your operation system.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>)
 client.lookup6(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
   <span class="keyword">if</span> (ar.succeeded()) {
     println(ar.result())
@@ -8492,7 +8549,7 @@ systems.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>)
 client.resolveA(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="keyword">def</span> records = ar.result()
@@ -8517,7 +8574,7 @@ operation systems.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>)
 client.resolveAAAA(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="keyword">def</span> records = ar.result()
@@ -8542,7 +8599,7 @@ systems.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>)
 client.resolveCNAME(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="keyword">def</span> records = ar.result()
@@ -8567,7 +8624,7 @@ emails for a given domain.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>)
 client.resolveMX(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="keyword">def</span> records = ar.result()
@@ -8604,7 +8661,7 @@ record.name()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>)
 client.resolveTXT(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="keyword">def</span> records = ar.result()
@@ -8629,7 +8686,7 @@ for a given domain.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>)
 client.resolveNS(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="keyword">def</span> records = ar.result()
@@ -8654,7 +8711,7 @@ hostname of services. Some protocols need this extra informations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>)
 client.resolveSRV(<span class="string"><span class="delimiter">&quot;</span><span class="content">vertx.io</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="keyword">def</span> records = ar.result()
@@ -8699,7 +8756,7 @@ record.target()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>)
 client.resolvePTR(<span class="string"><span class="delimiter">&quot;</span><span class="content">1.0.0.10.in-addr.arpa</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="keyword">def</span> record = ar.result()
@@ -8722,7 +8779,7 @@ just pass in the ipaddress and not a valid PTR query string.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> client = vertx.createDnsClient(<span class="integer">53</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">9.9.9.9</span><span class="delimiter">&quot;</span></span>)
 client.reverseLookup(<span class="string"><span class="delimiter">&quot;</span><span class="content">10.0.0.1</span><span class="delimiter">&quot;</span></span>, { ar -&gt;
   <span class="keyword">if</span> (ar.succeeded()) {
     <span class="keyword">def</span> record = ar.result()
@@ -9236,6 +9293,19 @@ parser.exceptionHandler({ err -&gt;
   <span class="comment">// Catch any parsing or decoding error</span>
 })</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The parser also parses json streams:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>concatenated json streams: <code>{"temperature":30}{"temperature":50}</code></p>
+</li>
+<li>
+<p>line delimited json streams: <code>{"an":"object"}\r\n3\r\n"a string"\r\nnull</code></p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>For more details, check out the <code><a href="../../apidocs/io/vertx/core/parsetools/JsonParser.html">JsonParser</a></code> class.</p>
@@ -11081,7 +11151,7 @@ very careful when using this settings.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -11127,7 +11197,7 @@ very careful when using this settings.</p>
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

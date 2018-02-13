@@ -227,7 +227,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Set the handler to be used when batches of messages are fetched   from the Kafka server.</div></span>
+    <span class="summary_desc"><div class='inline'>Set the handler to be used when batches of messages are fetched  from the Kafka server.</div></span>
   
 </li>
 
@@ -536,6 +536,28 @@
 
   
     <span class="summary_desc"><div class='inline'>Get the set of partitions that were previously paused by a call to pause(Set).</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#poll_timeout-instance_method" title="#poll_timeout (instance method)">- (::VertxKafkaClient::KafkaConsumer) <strong>poll_timeout</strong>(timeout = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>Sets the poll timeout (in ms) for the underlying native Kafka Consumer.</div></span>
   
 </li>
 
@@ -909,6 +931,14 @@
 </h3><div class="docstring">
   <div class="discussion">
     Manually assign a list of partition to this consumer.
+ <p>
+ Due to internal buffering of messages, when reassigning
+ the old set of partitions may remain in effect 
+ (as observed by the  record handler)} 
+ until some time <em>after</em> the given <code>completionHandler</code> 
+ is called. In contrast, the once the given <code>completionHandler</code> 
+ is called the <span class='object_link'><a href="#batch_handler-instance_method" title="VertxKafkaClient::KafkaConsumer#batch_handler (method)">#batch_handler</a></span> will only see messages 
+ consistent with the new set of partitions.
 
   </div>
 </div>
@@ -1116,25 +1146,25 @@
       <pre class="lines">
 
 
-176
-177
-178
-179
-180
-181
-182
-183
-184
-185
-186
-187
-188
-189
-190
-191</pre>
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 176</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 200</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_assign'>assign</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_param_1'>param_1</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1223,16 +1253,16 @@
       <pre class="lines">
 
 
-195
-196
-197
-198
-199
-200
-201</pre>
+219
+220
+221
+222
+223
+224
+225</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 195</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 219</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_assignment'>assignment</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1257,8 +1287,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Set the handler to be used when batches of messages are fetched 
- from the Kafka server. Batch handlers need to take care not to block 
+    Set the handler to be used when batches of messages are fetched
+ from the Kafka server. Batch handlers need to take care not to block
  the event loop when dealing with large batches. It is better to process
  records individually using the record handler.
 
@@ -1315,16 +1345,16 @@
       <pre class="lines">
 
 
-363
-364
-365
-366
-367
-368
-369</pre>
+411
+412
+413
+414
+415
+416
+417</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 363</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 411</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_batch_handler'>batch_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1411,15 +1441,15 @@
       <pre class="lines">
 
 
-407
-408
-409
-410
-411
-412</pre>
+455
+456
+457
+458
+459
+460</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 407</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 455</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_beginning_offsets'>beginning_offsets</span><span class='lparen'>(</span><span class='id identifier rubyid_topicPartition'>topicPartition</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_topicPartition'>topicPartition</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1485,17 +1515,17 @@
       <pre class="lines">
 
 
-373
-374
-375
-376
-377
-378
-379
-380</pre>
+421
+422
+423
+424
+425
+426
+427
+428</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 373</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 421</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_close'>close</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1563,17 +1593,17 @@
       <pre class="lines">
 
 
-328
-329
-330
-331
-332
-333
-334
-335</pre>
+376
+377
+378
+379
+380
+381
+382
+383</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 328</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 376</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_commit'>commit</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1661,15 +1691,15 @@
       <pre class="lines">
 
 
-340
-341
-342
-343
-344
-345</pre>
+388
+389
+390
+391
+392
+393</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 340</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 388</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_committed'>committed</span><span class='lparen'>(</span><span class='id identifier rubyid_topicPartition'>topicPartition</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_topicPartition'>topicPartition</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1745,16 +1775,16 @@
       <pre class="lines">
 
 
-129
-130
-131
-132
-133
-134
-135</pre>
+137
+138
+139
+140
+141
+142
+143</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 129</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 137</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_handler'>end_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1842,15 +1872,15 @@
       <pre class="lines">
 
 
-418
-419
-420
-421
-422
-423</pre>
+466
+467
+468
+469
+470
+471</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 418</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 466</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_offsets'>end_offsets</span><span class='lparen'>(</span><span class='id identifier rubyid_topicPartition'>topicPartition</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_topicPartition'>topicPartition</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2125,15 +2155,15 @@
       <pre class="lines">
 
 
-397
-398
-399
-400
-401
-402</pre>
+445
+446
+447
+448
+449
+450</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 397</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 445</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_offsets_for_times'>offsets_for_times</span><span class='lparen'>(</span><span class='id identifier rubyid_topicPartition'>topicPartition</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_timestamp'>timestamp</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_topicPartition'>topicPartition</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_timestamp'>timestamp</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2212,16 +2242,16 @@
       <pre class="lines">
 
 
-247
-248
-249
-250
-251
-252
-253</pre>
+271
+272
+273
+274
+275
+276
+277</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 247</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 271</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_partitions_assigned_handler'>partitions_assigned_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2321,16 +2351,16 @@
       <pre class="lines">
 
 
-350
-351
-352
-353
-354
-355
-356</pre>
+398
+399
+400
+401
+402
+403
+404</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 350</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 398</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_partitions_for'>partitions_for</span><span class='lparen'>(</span><span class='id identifier rubyid_topic'>topic</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_topic'>topic</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2410,16 +2440,16 @@
       <pre class="lines">
 
 
-237
-238
-239
-240
-241
-242
-243</pre>
+261
+262
+263
+264
+265
+266
+267</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 237</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 261</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_partitions_revoked_handler'>partitions_revoked_handler</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -2455,6 +2485,14 @@
 </h3><div class="docstring">
   <div class="discussion">
     Suspend fetching from the requested partitions.
+ <p>
+ Due to internal buffering of messages,
+ the  will 
+ continue to observe messages from the given <code>topicParations</code> 
+ until some time <em>after</em> the given <code>completionHandler</code> 
+ is called. In contrast, the once the given <code>completionHandler</code> 
+ is called the <span class='object_link'><a href="#batch_handler-instance_method" title="VertxKafkaClient::KafkaConsumer#batch_handler (method)">#batch_handler</a></span> will not see messages 
+ from the given <code>topicParations</code>.
 
   </div>
 </div>
@@ -2663,14 +2701,6 @@
       <pre class="lines">
 
 
-76
-77
-78
-79
-80
-81
-82
-83
 84
 85
 86
@@ -2681,10 +2711,18 @@
 91
 92
 93
-94</pre>
+94
+95
+96
+97
+98
+99
+100
+101
+102</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 76</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 84</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_pause'>pause</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_1'>param_1</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -2763,21 +2801,115 @@
       <pre class="lines">
 
 
-228
-229
-230
-231
-232
-233</pre>
+252
+253
+254
+255
+256
+257</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 228</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 252</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_paused'>paused</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
     <span class='kw'>return</span> <span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:paused</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='const'>IoVertxCore</span><span class='op'>::</span><span class='const'>Handler</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ar'>ar</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_failed'>failed</span> <span class='op'>?</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_cause'>cause</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_succeeded'>succeeded</span> <span class='op'>?</span> <span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_to_set'>to_set</span><span class='lparen'>(</span><span class='id identifier rubyid_ar'>ar</span><span class='period'>.</span><span class='id identifier rubyid_result'>result</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map!'>map!</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_elt'>elt</span><span class='op'>|</span> <span class='id identifier rubyid_elt'>elt</span> <span class='op'>!=</span> <span class='kw'>nil</span> <span class='op'>?</span> <span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='id identifier rubyid_elt'>elt</span><span class='period'>.</span><span class='id identifier rubyid_toJson'>toJson</span><span class='period'>.</span><span class='id identifier rubyid_encode'>encode</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='kw'>nil</span> <span class='rbrace'>}</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling paused()</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="poll_timeout-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="VertxKafkaClient::KafkaConsumer (class)">::VertxKafkaClient::KafkaConsumer</a></span></tt>) <strong>poll_timeout</strong>(timeout = nil) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    Sets the poll timeout (in ms) for the underlying native Kafka Consumer. Defaults to 1000.
+ Setting timeout to a lower value results in a more 'responsive' client, because it will block for a shorter period
+ if no data is available in the assigned partition and therefore allows subsequent actions to be executed with a shorter
+ delay. At the same time, the client will poll more frequently and thus will potentially create a higher load on the Kafka Broker.
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>timeout</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>The time, in milliseconds, spent waiting in poll if data is not available in the buffer. If 0, returns immediately with any records that are available currently in the native Kafka consumer's buffer, else returns empty. Must not be negative.</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="" title="VertxKafkaClient::KafkaConsumer (class)">::VertxKafkaClient::KafkaConsumer</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+478
+479
+480
+481
+482
+483</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 478</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_poll_timeout'>poll_timeout</span><span class='lparen'>(</span><span class='id identifier rubyid_timeout'>timeout</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_timeout'>timeout</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='kw'>return</span> <span class='op'>::</span><span class='const'>Vertx</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Utils</span><span class='period'>.</span><span class='id identifier rubyid_safe_create'>safe_create</span><span class='lparen'>(</span><span class='ivar'>@j_del</span><span class='period'>.</span><span class='id identifier rubyid_java_method'>java_method</span><span class='lparen'>(</span><span class='symbol'>:pollTimeout</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>Java</span><span class='op'>::</span><span class='id identifier rubyid_long'>long</span><span class='period'>.</span><span class='id identifier rubyid_java_class'>java_class</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_timeout'>timeout</span><span class='rparen'>)</span><span class='comma'>,</span><span class='op'>::</span><span class='const'>VertxKafkaClient</span><span class='op'>::</span><span class='const'>KafkaConsumer</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid arguments when calling poll_timeout(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_timeout'>timeout</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2857,15 +2989,15 @@
       <pre class="lines">
 
 
-385
-386
-387
-388
-389
-390</pre>
+433
+434
+435
+436
+437
+438</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 385</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 433</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_position'>position</span><span class='lparen'>(</span><span class='id identifier rubyid_partition'>partition</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_partition'>partition</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3108,14 +3240,6 @@
       <pre class="lines">
 
 
-108
-109
-110
-111
-112
-113
-114
-115
 116
 117
 118
@@ -3126,10 +3250,18 @@
 123
 124
 125
-126</pre>
+126
+127
+128
+129
+130
+131
+132
+133
+134</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 108</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 116</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_resume'>resume</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_param_1'>param_1</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -3167,6 +3299,14 @@
 </h3><div class="docstring">
   <div class="discussion">
     Overrides the fetch offsets that the consumer will use on the next poll.
+ <p>
+ Due to internal buffering of messages,
+ the  will 
+ continue to observe messages fetched with respect to the old offset  
+ until some time <em>after</em> the given <code>completionHandler</code> 
+ is called. In contrast, the once the given <code>completionHandler</code> 
+ is called the <span class='object_link'><a href="#batch_handler-instance_method" title="VertxKafkaClient::KafkaConsumer#batch_handler (method)">#batch_handler</a></span> will only see messages 
+ consistent with the new offset.
 
   </div>
 </div>
@@ -3257,19 +3397,19 @@
       <pre class="lines">
 
 
-259
-260
-261
-262
-263
-264
-265
-266
-267
-268</pre>
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 259</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 291</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_seek'>seek</span><span class='lparen'>(</span><span class='id identifier rubyid_topicPartition'>topicPartition</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_offset'>offset</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_topicPartition'>topicPartition</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_offset'>offset</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3306,6 +3446,14 @@
 </h3><div class="docstring">
   <div class="discussion">
     Seek to the first offset for each of the given partitions.
+ <p>
+ Due to internal buffering of messages,
+ the  will 
+ continue to observe messages fetched with respect to the old offset  
+ until some time <em>after</em> the given <code>completionHandler</code> 
+ is called. In contrast, the once the given <code>completionHandler</code> 
+ is called the <span class='object_link'><a href="#batch_handler-instance_method" title="VertxKafkaClient::KafkaConsumer#batch_handler (method)">#batch_handler</a></span> will only see messages 
+ consistent with the new offset.
 
   </div>
 </div>
@@ -3513,25 +3661,25 @@
       <pre class="lines">
 
 
-281
-282
-283
-284
-285
-286
-287
-288
-289
-290
-291
-292
-293
-294
-295
-296</pre>
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 281</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 321</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_seek_to_beginning'>seek_to_beginning</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_param_1'>param_1</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3574,6 +3722,14 @@
 </h3><div class="docstring">
   <div class="discussion">
     Seek to the last offset for each of the given partitions.
+ <p>
+ Due to internal buffering of messages,
+ the  will 
+ continue to observe messages fetched with respect to the old offset  
+ until some time <em>after</em> the given <code>completionHandler</code> 
+ is called. In contrast, the once the given <code>completionHandler</code> 
+ is called the <span class='object_link'><a href="#batch_handler-instance_method" title="VertxKafkaClient::KafkaConsumer#batch_handler (method)">#batch_handler</a></span> will only see messages 
+ consistent with the new offset.
 
   </div>
 </div>
@@ -3781,25 +3937,25 @@
       <pre class="lines">
 
 
-309
-310
-311
-312
-313
-314
-315
-316
-317
-318
-319
-320
-321
-322
-323
-324</pre>
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 309</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 357</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_seek_to_end'>seek_to_end</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_param_1'>param_1</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -3842,6 +3998,14 @@
 </h3><div class="docstring">
   <div class="discussion">
     Subscribe to the given list of topics to get dynamically assigned partitions.
+ <p>
+ Due to internal buffering of messages, when changing the subscribed topics  
+ the old set of topics may remain in effect 
+ (as observed by the  record handler}) 
+ until some time <em>after</em> the given <code>completionHandler</code> 
+ is called. In contrast, the once the given <code>completionHandler</code> 
+ is called the <span class='object_link'><a href="#batch_handler-instance_method" title="VertxKafkaClient::KafkaConsumer#batch_handler (method)">#batch_handler</a></span> will only see messages 
+ consistent with the new set of topics.
 
   </div>
 </div>
@@ -4049,25 +4213,25 @@
       <pre class="lines">
 
 
-148
-149
-150
-151
-152
-153
-154
-155
-156
-157
-158
-159
-160
-161
-162
-163</pre>
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 148</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 164</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_subscribe'>subscribe</span><span class='lparen'>(</span><span class='id identifier rubyid_param_1'>param_1</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_param_1'>param_1</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -4156,16 +4320,16 @@
       <pre class="lines">
 
 
-218
-219
-220
-221
-222
-223
-224</pre>
+242
+243
+244
+245
+246
+247
+248</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 218</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 242</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_subscription'>subscription</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -4245,19 +4409,19 @@
       <pre class="lines">
 
 
-205
-206
-207
-208
-209
-210
-211
-212
-213
-214</pre>
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 205</span>
+      <pre class="code"><span class="info file"># File '/Users/julien/java/vertx-stack/stack-docs/target/rb/vertx-kafka-client/kafka_consumer.rb', line 229</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_unsubscribe'>unsubscribe</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -4279,7 +4443,7 @@
 </div>
 
     <div id="footer">
-  Generated on Tue Oct 17 15:45:01 2017 by
+  Generated on Fri Feb  9 09:47:15 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.3.3).
 </div>

@@ -11,19 +11,31 @@
 <code><span class="keyword">interface </span><span class="identifier">SharedData</span></code>
 <p>Shared data allows you to share data safely between different parts of your application in a safe way. 
 <p> Shared data provides: </p>
-<ul> <li>Cluster wide maps which can be accessed from any node of the cluster</li>
- <li>Cluster wide locks which can be used to give exclusive access to resources across the cluster</li>
- <li>Cluster wide counters used to maintain counts consistently across the cluster</li>
- <li>Local maps for sharing data safely in the same Vert.x instance</li>
+<ul> <li>synchronous shared maps (local)</li>
+ <li>asynchronous maps (local or cluster-wide)</li>
+ <li>asynchronous locks (local or cluster-wide)</li>
+ <li>asynchronous counters (local or cluster-wide)</li>
  </ul>
  
-<p> Please see the documentation for more information.</p>
-</p>
+<p> </p>
+<p> <strong>WARNING</strong>: In clustered mode, asynchronous maps/locks/counters rely on distributed data structures provided by the cluster manager. Beware that the latency relative to asynchronous maps/locks/counters operations can be much higher in clustered than in local mode. </p>
+ Please see the documentation for more information.</p>
 <p><strong>Author</strong><br/>
 <a href="#">Tim Fox</a></p>
 <h3>Functions</h3>
 <table>
 <tbody>
+<tr>
+<td>
+<p><a href="get-async-map.html">getAsyncMap</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">K</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">, </span><span class="identifier">V</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">&gt;</span> <span class="identifier">getAsyncMap</span><span class="symbol">(</span><span class="identifier" id="io.vertx.core.shareddata.SharedData$getAsyncMap(kotlin.String, io.vertx.core.Handler((io.vertx.core.AsyncResult((io.vertx.core.shareddata.AsyncMap((io.vertx.core.shareddata.SharedData.getAsyncMap.K, io.vertx.core.shareddata.SharedData.getAsyncMap.V)))))))/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="io.vertx.core.shareddata.SharedData$getAsyncMap(kotlin.String, io.vertx.core.Handler((io.vertx.core.AsyncResult((io.vertx.core.shareddata.AsyncMap((io.vertx.core.shareddata.SharedData.getAsyncMap.K, io.vertx.core.shareddata.SharedData.getAsyncMap.V)))))))/resultHandler">resultHandler</span><span class="symbol">:</span>&nbsp;<span class="identifier">Handler</span><span class="symbol">&lt;</span><span class="identifier">AsyncResult</span><span class="symbol">&lt;</span><span class="identifier">AsyncMap</span><span class="symbol">&lt;</span><span class="identifier">K</span><span class="symbol">,</span>&nbsp;<span class="identifier">V</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Get the AsyncMap with the specified name. When clustered, the map is accessible to all nodes in the cluster and data put into the map from any node is visible to to any other node. 
+<p> <strong>WARNING</strong>: In clustered mode, asynchronous shared maps rely on distributed data structures provided by the cluster manager. Beware that the latency relative to asynchronous shared maps operations can be much higher in clustered than in local mode. </p>
+</p>
+</td>
+</tr>
 <tr>
 <td>
 <p><a href="get-cluster-wide-map.html">getClusterWideMap</a></p>
@@ -39,7 +51,7 @@
 </td>
 <td>
 <code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getCounter</span><span class="symbol">(</span><span class="identifier" id="io.vertx.core.shareddata.SharedData$getCounter(kotlin.String, io.vertx.core.Handler((io.vertx.core.AsyncResult((io.vertx.core.shareddata.Counter)))))/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="io.vertx.core.shareddata.SharedData$getCounter(kotlin.String, io.vertx.core.Handler((io.vertx.core.AsyncResult((io.vertx.core.shareddata.Counter)))))/resultHandler">resultHandler</span><span class="symbol">:</span>&nbsp;<span class="identifier">Handler</span><span class="symbol">&lt;</span><span class="identifier">AsyncResult</span><span class="symbol">&lt;</span><span class="identifier">Counter</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Get a cluster wide counter. The counter will be passed to the handler.</p>
+<p>Get an asynchronous counter. The counter will be passed to the handler.</p>
 </td>
 </tr>
 <tr>
@@ -57,7 +69,7 @@
 </td>
 <td>
 <code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">getLock</span><span class="symbol">(</span><span class="identifier" id="io.vertx.core.shareddata.SharedData$getLock(kotlin.String, io.vertx.core.Handler((io.vertx.core.AsyncResult((io.vertx.core.shareddata.Lock)))))/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="io.vertx.core.shareddata.SharedData$getLock(kotlin.String, io.vertx.core.Handler((io.vertx.core.AsyncResult((io.vertx.core.shareddata.Lock)))))/resultHandler">resultHandler</span><span class="symbol">:</span>&nbsp;<span class="identifier">Handler</span><span class="symbol">&lt;</span><span class="identifier">AsyncResult</span><span class="symbol">&lt;</span><span class="identifier">Lock</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Get a cluster wide lock with the specified name. The lock will be passed to the handler when it is available.</p>
+<p>Get an asynchronous lock with the specified name. The lock will be passed to the handler when it is available.</p>
 </td>
 </tr>
 <tr>

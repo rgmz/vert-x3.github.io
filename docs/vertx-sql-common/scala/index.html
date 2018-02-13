@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -103,6 +104,7 @@
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
 <li><a href="#_vert_x_common_sql_interface">Vert.x Common SQL interface</a></li>
+<li><a href="#_simple_sql_operations">Simple SQL Operations</a></li>
 <li><a href="#_the_sql_connection">The SQL Connection</a>
 <ul class="sectlevel2">
 <li><a href="#_auto_commit">Auto-commit</a></li>
@@ -127,6 +129,7 @@
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
 <li><a href="#_vert_x_common_sql_interface">Vert.x Common SQL interface</a></li>
+<li><a href="#_simple_sql_operations">Simple SQL Operations</a></li>
 <li><a href="#_the_sql_connection">The SQL Connection</a>
 <ul class="sectlevel2">
 <li><a href="#_auto_commit">Auto-commit</a></li>
@@ -170,7 +173,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-sql-common-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -183,8 +186,76 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-sql-common-scala_2.12:3.5.0</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-sql-common-scala_2.12:3.5.1</span><span class="delimiter">'</span></span></code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_simple_sql_operations">Simple SQL Operations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are times when you will want to run a single SQL operation, e.g.: a single select of a row, or a update to a
+set of rows which do not require to be part of a transaction or have dependencies on the previous or next operation.</p>
+</div>
+<div class="paragraph">
+<p>For these cases, clients provide a boilerplate-less API <code><a href="../../scaladocs/io/vertx/scala/ext/sql/SQLOperations.html">SQLOperations</a></code>. This interface will
+perform the following steps for you:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>acquire a connection from the connection pool</p>
+</li>
+<li>
+<p>perform your action</p>
+</li>
+<li>
+<p>close and return the connection to the connection pool</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>An example where users get loaded from the <code>USERS</code> table could be:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">`example16`</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can perform the following operations as a simple one "shot" method call:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="../../scaladocs/io/vertx/scala/ext/sql/SQLClient.html#query(java.lang.String,%20io.vertx.core.Handler)">query</a></code></p>
+</li>
+<li>
+<p><code><a href="../../scaladocs/io/vertx/scala/ext/sql/SQLClient.html#queryWithParams(java.lang.String,%20io.vertx.core.json.JsonArray,%20io.vertx.core.Handler)">queryWithParams</a></code></p>
+</li>
+<li>
+<p><code><a href="../../scaladocs/io/vertx/scala/ext/sql/SQLOperations.html#querySingle(java.lang.String,%20io.vertx.core.Handler)">querySingle</a></code></p>
+</li>
+<li>
+<p><code><a href="../../scaladocs/io/vertx/scala/ext/sql/SQLOperations.html#querySingleWithParams(java.lang.String,%20io.vertx.core.json.JsonArray,%20io.vertx.core.Handler)">querySingleWithParams</a></code></p>
+</li>
+<li>
+<p><code><a href="../../scaladocs/io/vertx/scala/ext/sql/SQLClient.html#update(java.lang.String,%20io.vertx.core.Handler)">update</a></code></p>
+</li>
+<li>
+<p><code><a href="../../scaladocs/io/vertx/scala/ext/sql/SQLClient.html#updateWithParams(java.lang.String,%20io.vertx.core.json.JsonArray,%20io.vertx.core.Handler)">updateWithParams</a></code></p>
+</li>
+<li>
+<p><code><a href="../../scaladocs/io/vertx/scala/ext/sql/SQLClient.html#call(java.lang.String,%20io.vertx.core.Handler)">call</a></code></p>
+</li>
+<li>
+<p><code><a href="../../scaladocs/io/vertx/scala/ext/sql/SQLClient.html#callWithParams(java.lang.String,%20io.vertx.core.json.JsonArray,%20io.vertx.core.json.JsonArray,%20io.vertx.core.Handler)">callWithParams</a></code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For further details on these API please refer to the <code><a href="../../scaladocs/io/vertx/scala/ext/sql/SQLOperations.html">SQLOperations</a></code> interface.</p>
 </div>
 </div>
 </div>
@@ -209,14 +280,7 @@ execute in its own transaction.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">connection.setAutoCommitFuture(<span class="predefined-constant">false</span>).onComplete{
-  <span class="keyword">case</span> Success(result) =&gt; {
-    <span class="comment">// OK!</span>
-  }
-  <span class="keyword">case</span> Failure(cause) =&gt; {
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">$cause</span><span class="delimiter">&quot;</span></span>)
-  }
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example1`</code></pre>
 </div>
 </div>
 </div>
@@ -234,15 +298,7 @@ been run.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">connection.queryFuture(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE</span><span class="delimiter">&quot;</span></span>).onComplete{
-  <span class="keyword">case</span> Success(result) =&gt; {
-    <span class="comment">// Get the result set</span>
-    var resultSet = result
-  }
-  <span class="keyword">case</span> Failure(cause) =&gt; {
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">$cause</span><span class="delimiter">&quot;</span></span>)
-  }
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example2`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -257,18 +313,7 @@ available with <code><a href="../dataobjects.html#ResultSet#getResults()">getRes
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">var columnNames = todo-renderDataObjectMemberSelect
-
-var results = todo-renderDataObjectMemberSelect
-
-results.foreach(row =&gt; {
-
-  var id = row.getValue(<span class="integer">0</span>)
-  var fName = row.getValue(<span class="integer">1</span>)
-  var lName = row.getValue(<span class="integer">2</span>)
-  var shoeSize = row.getValue(<span class="integer">3</span>)
-
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example3`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -281,16 +326,7 @@ column names - if that&#8217;s the case you should use <code><a href="../dataobj
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">var rows = todo-renderDataObjectMemberSelect
-
-rows.foreach(row =&gt; {
-
-  var id = row.getValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">ID</span><span class="delimiter">&quot;</span></span>)
-  var fName = row.getValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">FNAME</span><span class="delimiter">&quot;</span></span>)
-  var lName = row.getValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">LNAME</span><span class="delimiter">&quot;</span></span>)
-  var shoeSize = row.getValue(<span class="string"><span class="delimiter">&quot;</span><span class="content">SHOE_SIZE</span><span class="delimiter">&quot;</span></span>)
-
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example3__1`</code></pre>
 </div>
 </div>
 </div>
@@ -306,18 +342,7 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">var query = <span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE WHERE LNAME=? AND SHOE_SIZE &gt; ?</span><span class="delimiter">&quot;</span></span>
-var params = <span class="keyword">new</span> io.vertx.core.json.JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">Fox</span><span class="delimiter">&quot;</span></span>).add(<span class="integer">9</span>)
-
-connection.queryWithParamsFuture(query, params).onComplete{
-  <span class="keyword">case</span> Success(result) =&gt; {
-    <span class="comment">// Get the result set</span>
-    var resultSet = result
-  }
-  <span class="keyword">case</span> Failure(cause) =&gt; {
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">$cause</span><span class="delimiter">&quot;</span></span>)
-  }
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example3_1`</code></pre>
 </div>
 </div>
 </div>
@@ -339,18 +364,7 @@ if the update generated keys, they are available with <code><a href="../dataobje
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">connection.updateFuture(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO PEOPLE VALUES (null, 'john', 'smith', 9)</span><span class="delimiter">&quot;</span></span>).onComplete{
-  <span class="keyword">case</span> Success(result) =&gt; {
-
-    var result = result
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">Updated no. of rows: ${todo-renderDataObjectMemberSelect}</span><span class="delimiter">&quot;</span></span>)
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">Generated keys: ${todo-renderDataObjectMemberSelect}</span><span class="delimiter">&quot;</span></span>)
-
-  }
-  <span class="keyword">case</span> Failure(cause) =&gt; {
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">$cause</span><span class="delimiter">&quot;</span></span>)
-  }
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example4`</code></pre>
 </div>
 </div>
 </div>
@@ -366,21 +380,7 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">var update = <span class="string"><span class="delimiter">&quot;</span><span class="content">UPDATE PEOPLE SET SHOE_SIZE = 10 WHERE LNAME=?</span><span class="delimiter">&quot;</span></span>
-var params = <span class="keyword">new</span> io.vertx.core.json.JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">Fox</span><span class="delimiter">&quot;</span></span>)
-
-connection.updateWithParamsFuture(update, params).onComplete{
-  <span class="keyword">case</span> Success(result) =&gt; {
-
-    var updateResult = result
-
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">No. of rows updated: ${todo-renderDataObjectMemberSelect}</span><span class="delimiter">&quot;</span></span>)
-
-  }
-  <span class="keyword">case</span> Failure(cause) =&gt; {
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">$cause</span><span class="delimiter">&quot;</span></span>)
-  }
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example5`</code></pre>
 </div>
 </div>
 </div>
@@ -405,22 +405,7 @@ argument then the output array must contain a null value as the first element.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Assume that there is a SQL function like this:</span>
-<span class="comment">//</span>
-<span class="comment">// create function one_hour_ago() returns timestamp</span>
-<span class="comment">//    now() - 1 hour;</span>
-
-<span class="comment">// note that you do not need to declare the output for functions</span>
-var func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call one_hour_ago() }</span><span class="delimiter">&quot;</span></span>
-
-connection.callFuture(func).onComplete{
-  <span class="keyword">case</span> Success(result) =&gt; {
-    var result = result
-  }
-  <span class="keyword">case</span> Failure(cause) =&gt; {
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">$cause</span><span class="delimiter">&quot;</span></span>)
-  }
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example8`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -429,22 +414,7 @@ not return anything the usage is as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Assume that there is a SQL procedure like this:</span>
-<span class="comment">//</span>
-<span class="comment">// create procedure new_customer(firstname varchar(50), lastname varchar(50))</span>
-<span class="comment">//   modifies sql data</span>
-<span class="comment">//   insert into customers values (default, firstname, lastname, current_timestamp);</span>
-
-var func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call new_customer(?, ?) }</span><span class="delimiter">&quot;</span></span>
-
-connection.callWithParamsFuture(func, <span class="keyword">new</span> io.vertx.core.json.JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">John</span><span class="delimiter">&quot;</span></span>).add(<span class="string"><span class="delimiter">&quot;</span><span class="content">Doe</span><span class="delimiter">&quot;</span></span>), <span class="predefined-constant">null</span>).onComplete{
-  <span class="keyword">case</span> Success(result) =&gt; {
-    <span class="comment">// Success!</span>
-  }
-  <span class="keyword">case</span> Failure(cause) =&gt; {
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">$cause</span><span class="delimiter">&quot;</span></span>)
-  }
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example9`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -452,22 +422,7 @@ connection.callWithParamsFuture(func, <span class="keyword">new</span> io.vertx.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Assume that there is a SQL procedure like this:</span>
-<span class="comment">//</span>
-<span class="comment">// create procedure customer_lastname(IN firstname varchar(50), OUT lastname varchar(50))</span>
-<span class="comment">//   modifies sql data</span>
-<span class="comment">//   select lastname into lastname from customers where firstname = firstname;</span>
-
-var func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call customer_lastname(?, ?) }</span><span class="delimiter">&quot;</span></span>
-
-connection.callWithParamsFuture(func, <span class="keyword">new</span> io.vertx.core.json.JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">John</span><span class="delimiter">&quot;</span></span>), <span class="keyword">new</span> io.vertx.core.json.JsonArray().add(<span class="predefined-constant">null</span>).add(<span class="string"><span class="delimiter">&quot;</span><span class="content">VARCHAR</span><span class="delimiter">&quot;</span></span>)).onComplete{
-  <span class="keyword">case</span> Success(result) =&gt; {
-    var result = result
-  }
-  <span class="keyword">case</span> Failure(cause) =&gt; {
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">$cause</span><span class="delimiter">&quot;</span></span>)
-  }
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example10`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -520,19 +475,7 @@ String describing the type you want to receive.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Batch values</span>
-var batch = <span class="predefined-type">List</span>()
-batch :::= <span class="predefined-type">List</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (NAME) VALUES ('JOE')</span><span class="delimiter">&quot;</span></span>)
-batch :::= <span class="predefined-type">List</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (NAME) VALUES ('JANE')</span><span class="delimiter">&quot;</span></span>)
-
-connection.batchFuture(batch).onComplete{
-  <span class="keyword">case</span> Success(result) =&gt; {
-    var result = result
-  }
-  <span class="keyword">case</span> Failure(cause) =&gt; {
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">$cause</span><span class="delimiter">&quot;</span></span>)
-  }
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example12`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -540,19 +483,7 @@ connection.batchFuture(batch).onComplete{
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Batch values</span>
-var batch = <span class="predefined-type">List</span>()
-batch :::= <span class="predefined-type">List</span>(<span class="keyword">new</span> io.vertx.core.json.JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">joe</span><span class="delimiter">&quot;</span></span>))
-batch :::= <span class="predefined-type">List</span>(<span class="keyword">new</span> io.vertx.core.json.JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">jane</span><span class="delimiter">&quot;</span></span>))
-
-connection.batchWithParamsFuture(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (name) VALUES (?)</span><span class="delimiter">&quot;</span></span>, batch).onComplete{
-  <span class="keyword">case</span> Success(result) =&gt; {
-    var result = result
-  }
-  <span class="keyword">case</span> Failure(cause) =&gt; {
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">$cause</span><span class="delimiter">&quot;</span></span>)
-  }
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example11`</code></pre>
 </div>
 </div>
 </div>
@@ -568,16 +499,7 @@ is complete</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">var sql = <span class="string"><span class="delimiter">&quot;</span><span class="content">CREATE TABLE PEOPLE (ID int generated by default as identity (start with 1 increment by 1) not null,FNAME varchar(255), LNAME varchar(255), SHOE_SIZE int);</span><span class="delimiter">&quot;</span></span>
-
-connection.executeFuture(sql).onComplete{
-  <span class="keyword">case</span> Success(result) =&gt; {
-    println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Table created !</span><span class="delimiter">&quot;</span></span>)
-  }
-  <span class="keyword">case</span> Failure(cause) =&gt; {
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">$cause</span><span class="delimiter">&quot;</span></span>)
-  }
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example6`</code></pre>
 </div>
 </div>
 </div>
@@ -590,10 +512,7 @@ under the property <code>next</code>. A simple walk of all result sets can be ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">// do something with the result set...
-
-// next step
-rs = todo-renderDataObjectMemberSelect</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example13`</code></pre>
 </div>
 </div>
 </div>
@@ -605,14 +524,7 @@ inflating the whole response into memory and JSON and data is just processed on 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">connection.queryStreamFuture(&quot;SELECT * FROM large_table&quot;).onComplete{
-  case Success(result) =&gt; {
-    result.handler((row: io.vertx.scala.core.json.JsonArray) =&gt; {
-      // do something with the row...
-    })
-  }
-  case Failure(cause) =&gt; println(&quot;Failure&quot;)
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example14`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -622,21 +534,7 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">connection.queryStreamFuture(&quot;SELECT * FROM large_table; SELECT * FROM other_table&quot;).onComplete{
-  case Success(result) =&gt; {
-    var sqlRowStream = result
-
-    sqlRowStream.resultSetClosedHandler((v: java.lang.Void) =&gt; {
-      // will ask to restart the stream with the new result set if any
-      sqlRowStream.moreResults()
-    }).handler((row: io.vertx.scala.core.json.JsonArray) =&gt; {
-      // do something with the row...
-    }).endHandler((v: java.lang.Void) =&gt; {
-      // no more data available...
-    })
-  }
-  case Failure(cause) =&gt; println(&quot;Failure&quot;)
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example15`</code></pre>
 </div>
 </div>
 </div>
@@ -655,18 +553,7 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Do stuff with connection - updates etc</span>
-
-<span class="comment">// Now commit</span>
-
-connection.commitFuture().onComplete{
-  <span class="keyword">case</span> Success(result) =&gt; {
-    <span class="comment">// Committed OK!</span>
-  }
-  <span class="keyword">case</span> Failure(cause) =&gt; {
-    println(s<span class="string"><span class="delimiter">&quot;</span><span class="content">$cause</span><span class="delimiter">&quot;</span></span>)
-  }
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">`example7`</code></pre>
 </div>
 </div>
 </div>
@@ -685,7 +572,7 @@ connection.commitFuture().onComplete{
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:08 CET
               
               
             </div>
@@ -731,7 +618,7 @@ connection.commitFuture().onComplete{
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

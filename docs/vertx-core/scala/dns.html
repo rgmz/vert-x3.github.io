@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -162,9 +163,30 @@ this Vert.x offers it&#8217;s own API for DNS resolution which is fully asynchro
 </div>
 </div>
 <div class="paragraph">
-<p>Be aware that you can pass in a varargs of InetSocketAddress arguments to specifiy more then one DNS Server to try
-to query for DNS resolution. The DNS Servers will be queried in the same order as specified here. Where the next
-will be used once the first produce an error while be used.</p>
+<p>You can also create the client with options and configure the query timeout.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(DnsClientOptions()
+  .setPort(53)
+  .setHost(&quot;10.0.0.1&quot;)
+  .setQueryTimeout(10000)
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Creating the client with no arguments or omitting the server address will use the address of the server used internally
+for non blocking address resolution.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="scala">var client1 = vertx.createDnsClient()
+
+// Just the same but with a different query timeout
+var client2 = vertx.createDnsClient(DnsClientOptions()
+  .setQueryTimeout(10000)
+)</code></pre>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_lookup">lookup</h3>
@@ -177,7 +199,7 @@ so it behaves the same way as you may be used from when using "nslookup" on your
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;9.9.9.9&quot;)
 client.lookupFuture(&quot;vertx.io&quot;).onComplete{
   case Success(result) =&gt; {
     println(result)
@@ -200,7 +222,7 @@ the same way as you may be used from when using "nslookup" on your operation sys
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;9.9.9.9&quot;)
 client.lookup4Future(&quot;vertx.io&quot;).onComplete{
   case Success(result) =&gt; {
     println(result)
@@ -223,7 +245,7 @@ same way as you may be used from when using "nslookup" on your operation system.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;9.9.9.9&quot;)
 client.lookup6Future(&quot;vertx.io&quot;).onComplete{
   case Success(result) =&gt; {
     println(result)
@@ -246,7 +268,7 @@ systems.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;9.9.9.9&quot;)
 client.resolveAFuture(&quot;vertx.io&quot;).onComplete{
   case Success(result) =&gt; {
     var records = result
@@ -273,7 +295,7 @@ operation systems.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;9.9.9.9&quot;)
 client.resolveAAAAFuture(&quot;vertx.io&quot;).onComplete{
   case Success(result) =&gt; {
     var records = result
@@ -300,7 +322,7 @@ systems.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;9.9.9.9&quot;)
 client.resolveCNAMEFuture(&quot;vertx.io&quot;).onComplete{
   case Success(result) =&gt; {
     var records = result
@@ -327,7 +349,7 @@ emails for a given domain.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;9.9.9.9&quot;)
 client.resolveMXFuture(&quot;vertx.io&quot;).onComplete{
   case Success(result) =&gt; {
     var records = result
@@ -366,7 +388,7 @@ record.name()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;9.9.9.9&quot;)
 client.resolveTXTFuture(&quot;vertx.io&quot;).onComplete{
   case Success(result) =&gt; {
     var records = result
@@ -393,7 +415,7 @@ for a given domain.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;9.9.9.9&quot;)
 client.resolveNSFuture(&quot;vertx.io&quot;).onComplete{
   case Success(result) =&gt; {
     var records = result
@@ -420,7 +442,7 @@ hostname of services. Some protocols need this extra informations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;9.9.9.9&quot;)
 client.resolveSRVFuture(&quot;vertx.io&quot;).onComplete{
   case Success(result) =&gt; {
     var records = result
@@ -467,7 +489,7 @@ record.target()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;9.9.9.9&quot;)
 client.resolvePTRFuture(&quot;1.0.0.10.in-addr.arpa&quot;).onComplete{
   case Success(result) =&gt; {
     var record = result
@@ -491,7 +513,7 @@ just pass in the ipaddress and not a valid PTR query string.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;10.0.0.1&quot;)
+<pre class="CodeRay highlight"><code data-lang="scala">var client = vertx.createDnsClient(53, &quot;9.9.9.9&quot;)
 client.reverseLookupFuture(&quot;10.0.0.1&quot;).onComplete{
   case Success(result) =&gt; {
     var record = result
@@ -513,7 +535,7 @@ client.reverseLookupFuture(&quot;10.0.0.1&quot;).onComplete{
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:08 CET
               
               
             </div>
@@ -559,7 +581,7 @@ client.reverseLookupFuture(&quot;10.0.0.1&quot;).onComplete{
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

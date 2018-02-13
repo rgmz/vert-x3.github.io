@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -142,7 +143,7 @@ add the following dependency to the <em>dependencies</em> section of your build 
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-auth-jdbc<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -155,7 +156,7 @@ add the following dependency to the <em>dependencies</em> section of your build 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-jdbc:3.5.0</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-jdbc:3.5.1</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -217,6 +218,23 @@ CREATE TABLE `user` (</span>
 <span class="class">ALTER</span> <span class="type">TABLE</span> user_roles <span class="class">ADD</span> <span class="type">CONSTRAINT</span> fk_username <span class="directive">FOREIGN</span> <span class="type">KEY</span> (username) <span class="keyword">REFERENCES</span> user(username);
 <span class="class">ALTER</span> <span class="type">TABLE</span> user_roles <span class="class">ADD</span> <span class="type">CONSTRAINT</span> fk_roles <span class="directive">FOREIGN</span> <span class="type">KEY</span> (role) <span class="keyword">REFERENCES</span> roles_perms(role);</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The current password hashing strategy is based on the SHA-512 algorithm. OWASP as of 2018-01-08 recommends
+the usage of stronger algorithms, for this case you can use the PBKDF2 strategy (OWASP recommendation).</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+If you already have a running application switching the strategies will make break your existing
+passwords, so you will need to migrate the passwords from one algorithm to the second.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>If you want to override this behaviour you can do so by providing an alternative hash strategy and setting it with
@@ -419,7 +437,7 @@ can have zero or more permissions.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -465,7 +483,7 @@ can have zero or more permissions.</p>
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

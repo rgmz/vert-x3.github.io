@@ -93,7 +93,7 @@
 <code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">async</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../-async/index.html"><span class="identifier">Async</span></a></code>
 <p>Create and returns a new async object, the returned async controls the completion of the test. Calling the <code><a href="../-async/complete.html">Async#complete()</a></code> completes the async operation. The test case will complete when all the async objects have their <code><a href="../-async/complete.html">io.vertx.ext.unit.Async#complete()</a></code> method called at least once. This method shall be used for creating asynchronous exit points for the executed test.</p>
 <code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">async</span><span class="symbol">(</span><span class="identifier" id="io.vertx.ext.unit.TestContext$async(kotlin.Int)/count">count</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../-async/index.html"><span class="identifier">Async</span></a></code>
-<p>Create and returns a new async object, the returned async controls the completion of the test. This async operation completes when the <code><a href="../-async/complete.html">Async#complete()</a></code> is called <code>count</code> times. The test case will complete when all the async objects have their <code><a href="../-async/complete.html">io.vertx.ext.unit.Async#complete()</a></code> method called at least once. This method shall be used for creating asynchronous exit points for the executed test.</p>
+<p>Create and returns a new async object, the returned async controls the completion of the test. This async operation completes when the <code><a href="../-async/count-down.html">Async#countDown()</a></code> is called <code>count</code> times. The test case will complete when all the async objects have their <code><a href="../-async/complete.html">io.vertx.ext.unit.Async#complete()</a></code> method called at least once. This method shall be used for creating asynchronous exit points for the executed test.</p>
 </td>
 </tr>
 <tr>
@@ -164,6 +164,24 @@
 <td>
 <code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">&gt;</span> <span class="identifier">remove</span><span class="symbol">(</span><span class="identifier" id="io.vertx.ext.unit.TestContext$remove(kotlin.String)/key">key</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">T</span></code>
 <p>Remove some data from the context.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="strict-async.html">strictAsync</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">strictAsync</span><span class="symbol">(</span><span class="identifier" id="io.vertx.ext.unit.TestContext$strictAsync(kotlin.Int)/count">count</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../-async/index.html"><span class="identifier">Async</span></a></code>
+<p>Create and returns a new async object, the returned async controls the completion of the test. This async operation completes when the <code><a href="../-async/count-down.html">Async#countDown()</a></code> is called <code>count</code> times. If <code><a href="../-async/count-down.html">Async#countDown()</a></code> is called more than <code>count</code> times, an IllegalStateException is thrown. The test case will complete when all the async objects have their <code><a href="../-async/complete.html">io.vertx.ext.unit.Async#complete()</a></code> method called at least once. This method shall be used for creating asynchronous exit points for the executed test.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="verify.html">verify</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">verify</span><span class="symbol">(</span><span class="identifier" id="io.vertx.ext.unit.TestContext$verify(io.vertx.core.Handler((java.lang.Void)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="identifier">Handler</span><span class="symbol">&lt;</span><span class="identifier">Void</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">TestContext</span></code>
+<p>Execute the provided handler, which may contain assertions, possibly from any third-party assertion framework. Any AssertionError thrown will be caught (and propagated) in order to fulfill potential expected async completeness.</p>
 </td>
 </tr>
 </tbody>

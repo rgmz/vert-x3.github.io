@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -158,10 +159,11 @@ the method has completed the verticle will be considered stopped.</p>
 <h3 id="_asynchronous_verticle_start_and_stop">Asynchronous Verticle start and stop</h3>
 <div class="paragraph">
 <p>Sometimes you want to do something in your verticle start-up which takes some time and you don&#8217;t want the verticle to
-be considered deployed until that happens. For example you might want to deploy other verticles in the start method.</p>
+be considered deployed until that happens. For example you might want to start an HTTP server in the start method and
+propagate the asynchronous result of the server <code>listen</code> method.</p>
 </div>
 <div class="paragraph">
-<p>You can&#8217;t block waiting for the other verticles to deploy in your start method as that would break the <a href="#golden_rule">Golden Rule</a>.</p>
+<p>You can&#8217;t block waiting for the HTTP server to bind in your start method as that would break the <a href="#golden_rule">Golden Rule</a>.</p>
 </div>
 <div class="paragraph">
 <p>So how can you do this?</p>
@@ -171,7 +173,7 @@ be considered deployed until that happens. For example you might want to deploy 
 When the method returns the verticle will <strong>not</strong> be considered deployed.</p>
 </div>
 <div class="paragraph">
-<p>Some time later, after you&#8217;ve done everything you need to do (e.g. start other verticles), you can call complete
+<p>Some time later, after you&#8217;ve done everything you need to do (e.g. start the HTTP server), you can call complete
 on the Future (or fail) to signal that you&#8217;re done.</p>
 </div>
 <div class="paragraph">
@@ -181,10 +183,17 @@ on the Future (or fail) to signal that you&#8217;re done.</p>
 <div class="content">
 <pre>public class MyVerticle extends AbstractVerticle {
 
-  public void start(Future&lt;Void&gt; startFuture) {
-    // Now deploy some other verticle:
+  private HttpServeer server;
 
-    vertx.deployVerticle("com.foo.OtherVerticle", res -&gt; {
+  public void start(Future&lt;Void&gt; startFuture) {
+    server = vertx.createHttpServer().requestHandler(req -&gt; {
+      req.response()
+        .putHeader("content-type", "text/plain")
+        .end("Hello from Vert.x!");
+      });
+
+    // Now bind the server:
+    server.listen(8080, res -&gt; {
       if (res.succeeded()) {
         startFuture.complete();
       } else {
@@ -220,8 +229,8 @@ cleanup that takes some time.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>INFO: You don&#8217;t need to manually undeploy child verticles started by a verticle, in the verticle&#8217;s stop method. Vert.x
-will automatically undeploy any child verticles when the parent is undeployed.</p>
+<p>INFO: You don&#8217;t need to manually the HTTP server started by a verticle, in the verticle&#8217;s stop method. Vert.x
+will automatically stop any running server when the verticle is undeployed.</p>
 </div>
 </div>
 
@@ -231,7 +240,7 @@ will automatically undeploy any child verticles when the parent is undeployed.</
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -277,7 +286,7 @@ will automatically undeploy any child verticles when the parent is undeployed.</
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

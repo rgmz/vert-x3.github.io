@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -106,6 +107,7 @@
 <li><a href="#_creating_kafka_clients">Creating Kafka clients</a></li>
 <li><a href="#_receiving_messages_from_a_topic_joining_a_consumer_group">Receiving messages from a topic joining a consumer group</a></li>
 <li><a href="#_receiving_messages_from_a_topic_requesting_specific_partitions">Receiving messages from a topic requesting specific partitions</a></li>
+<li><a href="#_changing_the_subscription_or_assignment">Changing the subscription or assignment</a></li>
 <li><a href="#_getting_topic_partition_information">Getting topic partition information</a></li>
 <li><a href="#_manual_offset_commit">Manual offset commit</a></li>
 <li><a href="#_seeking_in_a_topic_partition">Seeking in a topic partition</a></li>
@@ -131,6 +133,7 @@
 <li><a href="#_creating_kafka_clients">Creating Kafka clients</a></li>
 <li><a href="#_receiving_messages_from_a_topic_joining_a_consumer_group">Receiving messages from a topic joining a consumer group</a></li>
 <li><a href="#_receiving_messages_from_a_topic_requesting_specific_partitions">Receiving messages from a topic requesting specific partitions</a></li>
+<li><a href="#_changing_the_subscription_or_assignment">Changing the subscription or assignment</a></li>
 <li><a href="#_getting_topic_partition_information">Getting topic partition information</a></li>
 <li><a href="#_manual_offset_commit">Manual offset commit</a></li>
 <li><a href="#_seeking_in_a_topic_partition">Seeking in a topic partition</a></li>
@@ -191,7 +194,7 @@ this module has the tech preview status, this means the API can change between v
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-kafka-client<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -204,7 +207,7 @@ this module has the tech preview status, this means the API can change between v
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-kafka-<span class="key">client</span>:<span class="float">3.5</span><span class="float">.0</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile io.vertx:vertx-kafka-<span class="key">client</span>:<span class="float">3.5</span><span class="float">.1</span></code></pre>
 </div>
 </div>
 </div>
@@ -506,6 +509,21 @@ the list of the current assigned partitions.</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_changing_the_subscription_or_assignment">Changing the subscription or assignment</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can change the subscribed topics, or assigned partitions after you have started to consume messages, simply
+by calling <code>subscribe()</code> or <code>assign()</code> again.</p>
+</div>
+<div class="paragraph">
+<p>Note that due to internal buffering of messages it is possible that the record handler will continue to
+observe messages from the old subscription or assignment <em>after</em> the <code>subscribe()</code> or <code>assign()</code>
+method&#8217;s completion handler has been called. This is not the case for messages observed by the batch handler:
+Once the completion handler has been called it will only observe messages read from the subscription or assignment.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_getting_topic_partition_information">Getting topic partition information</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -642,6 +660,12 @@ consumer.seekToEnd(java.util.Collections.singleton(topicPartition), { done -&gt;
 })</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Note that due to internal buffering of messages it is possible that the record handler will continue to
+observe messages read from the original offset for a time <em>after</em> the <code>seek*()</code> method&#8217;s completion
+handler has been called. This is not the case for messages observed by the batch handler: Once the
+<code>seek*()</code> completion handler has been called it will only observe messages read from the new offset.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -733,7 +757,14 @@ to continue message processing.</p>
 </div>
 <div class="paragraph">
 <p>To achieve that you can use <code><a href="../../apidocs/io/vertx/kafka/client/consumer/KafkaConsumer.html#pause--">pause</a></code> and
-<code><a href="../../apidocs/io/vertx/kafka/client/consumer/KafkaConsumer.html#resume--">resume</a></code></p>
+<code><a href="../../apidocs/io/vertx/kafka/client/consumer/KafkaConsumer.html#resume--">resume</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>In the case of the partition-specific pause and resume it is possible that the record handler will continue to
+observe messages from a paused partition for a time <em>after</em> the <code>pause()</code> method&#8217;s completion
+handler has been called. This is not the case for messages observed by the batch handler: Once the
+<code>pause()</code> completion handler has been called it will only observe messages from those partitions which
+rare not paused.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1109,7 +1140,7 @@ stream of <code><a href="../../apidocs/org/apache/kafka/clients/producer/Produce
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:08 CET
               
               
             </div>
@@ -1155,7 +1186,7 @@ stream of <code><a href="../../apidocs/org/apache/kafka/clients/producer/Produce
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">

@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -108,6 +109,7 @@
 <li><a href="#_gradle">Gradle</a></li>
 <li><a href="#_create_a_client">Create a client</a></li>
 <li><a href="#_declare_exchange_with_additional_config">Declare exchange with additional config</a></li>
+<li><a href="#_declare_queue_with_additional_config">Declare queue with additional config</a></li>
 </ul>
 </li>
 <li><a href="#_operations">Operations</a>
@@ -133,6 +135,7 @@
 <li><a href="#_gradle">Gradle</a></li>
 <li><a href="#_create_a_client">Create a client</a></li>
 <li><a href="#_declare_exchange_with_additional_config">Declare exchange with additional config</a></li>
+<li><a href="#_declare_queue_with_additional_config">Declare queue with additional config</a></li>
 </ul>
 </li>
 <li><a href="#_operations">Operations</a>
@@ -170,7 +173,7 @@
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-rabbitmq-client<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.0<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -183,7 +186,7 @@
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-rabbitmq-client:3.5.0</span><span class="delimiter">'</span></span>
+  compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-rabbitmq-client:3.5.1</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -232,16 +235,41 @@ var client = RabbitMQClient.create(vertx, config)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">var config = mutableMapOf&lt;String, Any?&gt;()
+<pre class="CodeRay highlight"><code data-lang="kotlin">var config = json {
+  obj()
+}
 
-config[&quot;x-dead-letter-exchange&quot;] = &quot;my.deadletter.exchange&quot;
-config[&quot;alternate-exchange&quot;] = &quot;my.alternate.exchange&quot;
+config.put(&quot;x-dead-letter-exchange&quot;, &quot;my.deadletter.exchange&quot;)
+config.put(&quot;alternate-exchange&quot;, &quot;my.alternate.exchange&quot;)
 // ...
 client.exchangeDeclare(&quot;my.exchange&quot;, &quot;fanout&quot;, true, false, config, { onResult -&gt;
   if (onResult.succeeded()) {
     println(&quot;Exchange successfully declared with config&quot;)
   } else {
     onResult.cause().printStackTrace()
+  }
+})</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_declare_queue_with_additional_config">Declare queue with additional config</h3>
+<div class="paragraph">
+<p>You can pass additional config parameters to RabbitMQs queueDeclare method</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">var config = json {
+  obj()
+}
+config.put(&quot;x-message-ttl&quot;, 10000L)
+
+client.queueDeclare(&quot;my-queue&quot;, true, false, true, config, { queueResult -&gt;
+  if (queueResult.succeeded()) {
+    println(&quot;Queue declared!&quot;)
+  } else {
+    System.err.println(&quot;Queue failed to be declared!&quot;)
+    queueResult.cause().printStackTrace()
   }
 })</code></pre>
 </div>
@@ -396,7 +424,7 @@ client.basicConsume(&quot;my.queue&quot;, &quot;my.address&quot;, false, { consu
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-17 15:45:48 CEST
+                Last updated 2018-02-09 09:48:06 CET
               
               
             </div>
@@ -442,7 +470,7 @@ client.basicConsume(&quot;my.queue&quot;, &quot;my.address&quot;, false, { consu
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 copyright">
-        <p>Eclipse Vert.x is open source and dual licensed under the <a href="https://www.eclipse.org/org/documents/epl-v10.php">Eclipse Public License 1.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
+        <p>Eclipse Vert.x is open source and dual-licensed under the <a href="http://www.eclipse.org/legal/epl-v20.html">Eclipse Public License 2.0</a> and <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.</p>
         <p>This website is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0 License</a>.<br>
         Design by <a href="https://www.michel-kraemer.com">Michel Kr&auml;mer</a>.</p>
         <div class="row">
