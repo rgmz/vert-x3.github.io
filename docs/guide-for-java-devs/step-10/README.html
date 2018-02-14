@@ -426,13 +426,13 @@ eb.<span class="function">onopen</span> = <span class="keyword">function</span> 
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">dbService.rxSavePage(id, page.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">markdown</span><span class="delimiter">&quot;</span></span>))
-  .doOnSuccess(v -&gt; { <b class="conum">(1)</b>
+  .doOnComplete(() -&gt; { <b class="conum">(1)</b>
     JsonObject event = <span class="keyword">new</span> JsonObject()
       .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>, id) <b class="conum">(2)</b>
       .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">client</span><span class="delimiter">&quot;</span></span>, page.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">client</span><span class="delimiter">&quot;</span></span>)); <b class="conum">(3)</b>
     vertx.eventBus().publish(<span class="string"><span class="delimiter">&quot;</span><span class="content">page.saved</span><span class="delimiter">&quot;</span></span>, event); <b class="conum">(4)</b>
   })
-  .subscribe(v -&gt; apiResponse(context, <span class="integer">200</span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">null</span>), t -&gt; apiFailure(context, t));</code></pre>
+  .subscribe(() -&gt; apiResponse(context, <span class="integer">200</span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">null</span>), t -&gt; apiFailure(context, t));</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -473,7 +473,7 @@ The key point is that both the server and the client sides share the same progra
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-19 14:01:10 CEST
+                Last updated 2018-02-14 09:34:26 CET
               
               
             </div>

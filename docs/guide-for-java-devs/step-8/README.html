@@ -111,7 +111,12 @@
 </ul>
 </li>
 <li><a href="#_executing_authorization_queries_concurrently">Executing authorization queries concurrently</a></li>
-<li><a href="#_working_with_database_connections">Working with database connections</a></li>
+<li><a href="#_querying_the_database">Querying the database</a>
+<ul class="sectlevel2">
+<li><a href="#_direct_queries">Direct queries</a></li>
+<li><a href="#_working_with_a_database_connection">Working with a database connection</a></li>
+</ul>
+</li>
 <li><a href="#_bridging_the_gap_between_callbacks_and_rxjava">Bridging the gap between callbacks and RxJava</a></li>
 <li><a href="#_data_flows">Data flows</a></li>
 </ul>
@@ -130,7 +135,12 @@
 </ul>
 </li>
 <li><a href="#_executing_authorization_queries_concurrently">Executing authorization queries concurrently</a></li>
-<li><a href="#_working_with_database_connections">Working with database connections</a></li>
+<li><a href="#_querying_the_database">Querying the database</a>
+<ul class="sectlevel2">
+<li><a href="#_direct_queries">Direct queries</a></li>
+<li><a href="#_working_with_a_database_connection">Working with a database connection</a></li>
+</ul>
+</li>
 <li><a href="#_bridging_the_gap_between_callbacks_and_rxjava">Bridging the gap between callbacks and RxJava</a></li>
 <li><a href="#_data_flows">Data flows</a></li>
 </ul>
@@ -157,6 +167,20 @@ However, it can become a bit tedious, especially when you combine several source
 <div class="paragraph">
 <p>This is exactly where RxJava shines, and Vert.x integrates with it seamlessly.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+In this guide, RxJava 2.x is used, but Vert.x also works with RxJava 1.x.
+RxJava 2.x has been completely rewritten from scratch on top of the Reactive-Streams specification.
+Learn more in the <a href="https://github.com/ReactiveX/RxJava/wiki/What%27s-different-in-2.0">What&#8217;s different in 2.0</a> wiki page.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -164,22 +188,22 @@ However, it can become a bit tedious, especially when you combine several source
 <div class="sectionbody">
 <div class="paragraph">
 <p>In addition to the callback-based API, the Vert.x modules offer an <em>"Rxified"</em> API.
-To enable it, start by adding the <code>vertx-rx-java</code> module to the Maven POM file:</p>
+To enable it, start by adding the <code>vertx-rx-java2</code> module to the Maven POM file:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
-  <span class="tag">&lt;artifactId&gt;</span>vertx-rx-java<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-rx-java2<span class="tag">&lt;/artifactId&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Verticles then have to be modified so that they extend <code>io.vertx.rxjava.core.AbstractVerticle</code> instead of <code>io.vertx.core.AbstractVerticle</code>.
-How is this different? The former class extends the latter and exposes a <code>io.vertx.rxjava.core.Vertx</code> field.</p>
+<p>Verticles then have to be modified so that they extend <code>io.vertx.reactivex.core.AbstractVerticle</code> instead of <code>io.vertx.core.AbstractVerticle</code>.
+How is this different? The former class extends the latter and exposes a <code>io.vertx.reactivex.core.Vertx</code> field.</p>
 </div>
 <div class="paragraph">
-<p><code>io.vertx.rxjava.core.Vertx</code> defines extra <code>rxSomething(&#8230;&#8203;)</code> methods that are equivalent to their callback-based counterparts.</p>
+<p><code>io.vertx.reactivex.core.Vertx</code> defines extra <code>rxSomething(&#8230;&#8203;)</code> methods that are equivalent to their callback-based counterparts.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s take a look at the <code>MainVerticle</code> to get a better idea of how it works in practice:</p>
@@ -245,24 +269,22 @@ callback-based API. Before you can use the RxJava API to execute asynchronous op
 <h3 id="_import_rxjava_versions_of_vert_x_classes">Import RxJava versions of Vert.x classes</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">io.vertx.rxjava.core.AbstractVerticle</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.rxjava.core.http.HttpServer</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.auth.AuthProvider</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.auth.User</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.auth.jwt.JWTAuth</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.auth.shiro.ShiroAuth</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.Router</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.RoutingContext</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.client.WebClient</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.client.HttpResponse</span>; <b class="conum">(1)</b>
-<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.codec.BodyCodec</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.handler</span>.*;
-<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.sstore.LocalSessionStore</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.rxjava.ext.web.templ.FreeMarkerTemplateEngine</span>;
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">io.vertx.reactivex.core.AbstractVerticle</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.core.http.HttpServer</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.auth.AuthProvider</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.auth.User</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.auth.jwt.JWTAuth</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.auth.shiro.ShiroAuth</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.Router</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.RoutingContext</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.client.WebClient</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.client.HttpResponse</span>; <b class="conum">(1)</b>
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.codec.BodyCodec</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.handler</span>.*;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.sstore.LocalSessionStore</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.templ.FreeMarkerTemplateEngine</span>;
 <span class="keyword">import</span> <span class="include">org.slf4j.Logger</span>;
-<span class="keyword">import</span> <span class="include">org.slf4j.LoggerFactory</span>;
-<span class="keyword">import</span> <span class="include">rx.Observable</span>;
-<span class="keyword">import</span> <span class="include">rx.Single</span>;</code></pre>
+<span class="keyword">import</span> <span class="include">org.slf4j.LoggerFactory</span>;</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -279,7 +301,7 @@ response type is inferred by the lambda expression.</p>
 <div class="sect2">
 <h3 id="_use_delegate_on_a_em_rxified_em_code_vertx_code_instance">Use delegate on a <em>"Rxified"</em> <code>vertx</code> instance</h3>
 <div class="paragraph">
-<p>To call a method expecting a <code>io.vertx.core.Vertx</code> instance when you have a <code>io.vertx.rxjava.core.Vertx</code> one, call
+<p>To call a method expecting a <code>io.vertx.core.Vertx</code> instance when you have a <code>io.vertx.reactivex.core.Vertx</code> one, call
 the <code>getDelegate()</code> method. Verticle&#8217;s <code>start()</code> method needs to be adjusted when creating an instance of
 <code>WikiDatabaseService</code>:</p>
 </div>
@@ -304,7 +326,7 @@ But sometimes this guarantee is not required, or you simply want them to run con
 </div>
 <div class="paragraph">
 <p>The JWT token generation process in the <code>HttpServerVerticle</code> is a good example of such a situation.
-To create a token, we need all authorization query results to complete, but queries are independent from each other:</p>
+To create a token, we need all authorization queries to complete, but queries are independent from each other:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -342,10 +364,27 @@ To create a token, we need all authorization query results to complete, but quer
 </div>
 </div>
 <div class="sect1">
-<h2 id="_working_with_database_connections">Working with database connections</h2>
+<h2 id="_querying_the_database">Querying the database</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_direct_queries">Direct queries</h3>
 <div class="paragraph">
-<p>To acquire a database connection from the pool, all you have to do is calling <code>rxGetConnection</code> on the <code>JDBCClient</code>:</p>
+<p>Very often, a single database query is needed to prepare a response to the user.
+For such simple cases, the <code>JDBCClient</code> provides <code>rxQueryXXX</code> and <code>rxUpdateXXX</code> methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> query = sqlQueries.get(SqlQuery.GET_PAGE_BY_ID);
+JsonArray params = <span class="keyword">new</span> JsonArray().add(id);
+Single&lt;<span class="predefined-type">ResultSet</span>&gt; resultSet = dbClient.rxQueryWithParams(query, params);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_working_with_a_database_connection">Working with a database connection</h3>
+<div class="paragraph">
+<p>When direct queries do not fit (e.g. when multiple queries must participate in the same transaction), you can acquire a database connection from the pool.
+All you have to do is calling <code>rxGetConnection</code> on the <code>JDBCClient</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -353,24 +392,24 @@ To create a token, we need all authorization query results to complete, but quer
 </div>
 </div>
 <div class="paragraph">
-<p>The method returns a <code>Single&lt;Connection&gt;</code> which you can easily transform with <code>flatMap</code> to execute SQL queries:</p>
+<p>The method returns a <code>Single&lt;Connection&gt;</code> which you can easily transform with <code>flatMapXXX</code> to execute SQL queries:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Single&lt;<span class="predefined-type">ResultSet</span>&gt; resultSet = dbClient.rxQueryWithParams(
-  sqlQueries.get(SqlQuery.GET_PAGE_BY_ID), <span class="keyword">new</span> JsonArray().add(id));</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">connection
+  .flatMapCompletable(conn -&gt; conn.rxExecute(sqlQueries.get(SqlQuery.CREATE_PAGES_TABLE)))</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>But how can we release the connection if the <code>SQLConnection</code> reference is no longer reachable?
-A simple and convenient way to do this is to invoke <code>close</code> when the <code>Single&lt;SQLConnection&gt;</code> is unsubscribed:</p>
+A simple and convenient way to do this is to invoke <code>close</code> in a <code>doFinally</code> callback:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> Single&lt;SQLConnection&gt; getConnection() {
   <span class="keyword">return</span> dbClient.rxGetConnection().flatMap(conn -&gt; {
     Single&lt;SQLConnection&gt; connectionSingle = Single.just(conn); <b class="conum">(1)</b>
-    <span class="keyword">return</span> connectionSingle.doOnUnsubscribe(conn::close); <b class="conum">(2)</b>
+    <span class="keyword">return</span> connectionSingle.doFinally(conn::close); <b class="conum">(2)</b>
   });
 }</code></pre>
 </div>
@@ -381,12 +420,13 @@ A simple and convenient way to do this is to invoke <code>close</code> when the 
 <p>After the connection is acquired we wrap it into a <code>Single</code></p>
 </li>
 <li>
-<p>The <code>Single</code> is modified to invoke <code>close</code> when unsubscribed</p>
+<p>The <code>Single</code> is modified to invoke <code>close</code> in a <code>doFinally</code> callback</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>Now we shall use <code>getConnection</code> anytime we need to execute SQL queries in our database verticle.</p>
+<p>Now we shall use <code>getConnection</code> anytime we need to work with a database connection.</p>
+</div>
 </div>
 </div>
 </div>
@@ -398,7 +438,7 @@ A simple and convenient way to do this is to invoke <code>close</code> when the 
 For example, service proxy interfaces can only be defined with callbacks, but the implementation uses the Vert.x Rxified API.</p>
 </div>
 <div class="paragraph">
-<p>In this case, the <code>io.vertx.rx.java.RxHelper</code> class can adapt a <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code> to an RxJava <code>Subscriber&lt;T&gt;</code>:</p>
+<p>In this case, the <code>io.vertx.reactivex.SingleHelper.toObserver</code> class can adapt a <code>Handler&lt;AsyncResult&lt;T&gt;&gt;</code> to an RxJava <code>SingleObserver&lt;T&gt;</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -406,7 +446,7 @@ For example, service proxy interfaces can only be defined with callbacks, but th
 <span class="directive">public</span> WikiDatabaseService fetchAllPagesData(<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">List</span>&lt;JsonObject&gt;&gt;&gt; resultHandler) { <b class="conum">(1)</b>
   dbClient.rxQuery(sqlQueries.get(SqlQuery.ALL_PAGES_DATA))
     .map(<span class="predefined-type">ResultSet</span>::getRows)
-    .subscribe(RxHelper.toSubscriber(resultHandler));  <b class="conum">(2)</b>
+    .subscribe(SingleHelper.toObserver(resultHandler));  <b class="conum">(2)</b>
   <span class="keyword">return</span> <span class="local-variable">this</span>;
 }</code></pre>
 </div>
@@ -417,9 +457,21 @@ For example, service proxy interfaces can only be defined with callbacks, but th
 <p><code>fetchAllPagesData</code> is an asynchronous service proxy operation, defined with a <code>Handler&lt;AsyncResult&lt;List&lt;JsonObject&gt;&gt;&gt;</code> callback.</p>
 </li>
 <li>
-<p>The <code>toSubscriber</code> method adapts the <code>resultHandler</code> to a <code>Subscriber&lt;List&lt;JsonObject&gt;&gt;</code>, so that the handler is invoked when the list of rows is emitted.</p>
+<p>The <code>toObserver</code> method adapts the <code>resultHandler</code> to a <code>SingleObserver&lt;List&lt;JsonObject&gt;&gt;</code>, so that the handler is invoked when the list of rows is emitted.</p>
 </li>
 </ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<code>io.vertx.reactivex.CompletableHelper</code> and <code>io.vertx.reactivex.MaybeHelper</code> also provide adapters for <code>Completable</code> and <code>Maybe</code>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -428,7 +480,7 @@ For example, service proxy interfaces can only be defined with callbacks, but th
 <div class="sectionbody">
 <div class="paragraph">
 <p>RxJava is not only great at combining different sources of events, it is also very helpful with data flows.
-Unlike a Vert.x or JDK future, an <code>Observable</code> emits a stream of events, not just a single one.
+Unlike a Vert.x or JDK future, a <code>Flowable</code> emits a stream of events, not just a single one.
 And it comes with an extensive set of data manipulation operators.</p>
 </div>
 <div class="paragraph">
@@ -438,14 +490,14 @@ And it comes with an extensive set of data manipulation operators.</p>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> WikiDatabaseService fetchAllPages(<span class="predefined-type">Handler</span>&lt;AsyncResult&lt;JsonArray&gt;&gt; resultHandler) {
   dbClient.rxQuery(sqlQueries.get(SqlQuery.ALL_PAGES))
-    .flatMapObservable(res -&gt; {  <b class="conum">(1)</b>
+    .flatMapPublisher(res -&gt; {  <b class="conum">(1)</b>
       <span class="predefined-type">List</span>&lt;JsonArray&gt; results = res.getResults();
-      <span class="keyword">return</span> <span class="predefined-type">Observable</span>.from(results); <b class="conum">(2)</b>
+      <span class="keyword">return</span> Flowable.fromIterable(results); <b class="conum">(2)</b>
     })
     .map(json -&gt; json.getString(<span class="integer">0</span>)) <b class="conum">(3)</b>
     .sorted() <b class="conum">(4)</b>
     .collect(JsonArray::<span class="keyword">new</span>, JsonArray::add) <b class="conum">(5)</b>
-    .subscribe(RxHelper.toSubscriber(resultHandler));
+    .subscribe(SingleHelper.toObserver(resultHandler));
   <span class="keyword">return</span> <span class="local-variable">this</span>;
 }</code></pre>
 </div>
@@ -453,10 +505,10 @@ And it comes with an extensive set of data manipulation operators.</p>
 <div class="colist arabic">
 <ol>
 <li>
-<p>With <code>flatMapObservable</code> we will create an <code>Observable</code> from the item emitted by the <code>Single&lt;Result&gt;</code>.</p>
+<p>With <code>flatMapPublisher</code> we will create a <code>Flowable</code> from the item emitted by the <code>Single&lt;Result&gt;</code>.</p>
 </li>
 <li>
-<p><code>from</code> converts the database <code>results</code> iterable into an <code>Observable</code> emitting the database row items.</p>
+<p><code>fromIterable</code> converts the database results <code>Iterable</code> into a <code>Flowable</code> emitting the database row items.</p>
 </li>
 <li>
 <p>Since we only need the page name we can <code>map</code> each <code>JsonObject</code> row to the first column.</p>
@@ -478,7 +530,7 @@ And it comes with an extensive set of data manipulation operators.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-19 14:01:10 CEST
+                Last updated 2018-02-14 09:34:26 CET
               
               
             </div>

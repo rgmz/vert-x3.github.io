@@ -516,7 +516,7 @@ steps.setHandler(ar -&gt; {  <b class="conum">(1)</b>
 <ol>
 <li>
 <p><code>ar</code> is of type <code>AsyncResult&lt;Void&gt;</code>.
-<code>AsyncResult&lt;T&gt;</code> is used to pass the result of an asynchronous processing and may either yield a value of type <code>T</code> on success or a failure exception is the processing failed.</p>
+<code>AsyncResult&lt;T&gt;</code> is used to pass the result of an asynchronous processing and may either yield a value of type <code>T</code> on success or a failure exception if the processing failed.</p>
 </li>
 </ol>
 </div>
@@ -663,7 +663,7 @@ It attempts to obtain a JDBC client connection, then performs a SQL query to cre
 <div class="title">Tip</div>
 </td>
 <td class="content">
-The SQL database modules supported by the Vert.x project do not currently offer anything beyond passing SQL queries (e.g., an object-relationnal mapper) as they focus on providing asynchronous access to databases.
+The SQL database modules supported by the Vert.x project do not currently offer anything beyond passing SQL queries (e.g., an object-relational mapper) as they focus on providing asynchronous access to databases.
 However, nothing forbids using <a href="https://github.com/vert-x3/vertx-awesome">more advanced modules from the community</a>, and we especially recommend checking out projects like <a href="https://github.com/jklingsporn/vertx-jooq">this jOOq generator for Vert.x</a> or <a href="https://github.com/BraintagsGmbH/vertx-pojo-mapper">this POJO mapper</a>.
 </td>
 </tr>
@@ -673,7 +673,7 @@ However, nothing forbids using <a href="https://github.com/vert-x3/vertx-awesome
 <div class="sect2">
 <h3 id="_notes_about_logging">Notes about logging</h3>
 <div class="paragraph">
-<p>The previous subsection introduced a logger, and we opted for the <a href="https://www.slf4j.org/">SFL4J library</a>.
+<p>The previous subsection introduced a logger, and we opted for the <a href="https://www.slf4j.org/">SLF4J library</a>.
 Vert.x is also unopinionated on logging: you can choose any popular Java logging library.
 We recommend SLF4J since it is a popular logging abstraction and unification library in the Java ecosystem.</p>
 </div>
@@ -770,10 +770,10 @@ This is the role of a <em>router</em> as it dispatches requests to different pro
 <p>The <code>Router</code> class comes from <code>vertx-web</code>: <code>io.vertx.ext.web.Router</code>.</p>
 </li>
 <li>
-<p>Routes have their own handlers, and they can be defined by URL and/or by HTTP method. For short handlers a Java lambda is an option, but for more elaborated handlers it is a good idea to reference private methods instead. Note that URLs can be parametric: <code>/wiki/:page</code> will match a request like <code>/wiki/Hello</code>, in which case a <code>page</code> parameter will be available with value <code>Hello</code>.</p>
+<p>Routes have their own handlers, and they can be defined by URL and/or by HTTP method. For short handlers a Java lambda is an option, but for more elaborate handlers it is a good idea to reference private methods instead. Note that URLs can be parametric: <code>/wiki/:page</code> will match a request like <code>/wiki/Hello</code>, in which case a <code>page</code> parameter will be available with value <code>Hello</code>.</p>
 </li>
 <li>
-<p>This makes all HTTP POST requests got through a first handler, here <code>io.vertx.ext.web.handler.BodyHandler</code>. This handler automatically decodes the body from the HTTP requests (e.g., form submissions), which can then be manipulated as Vert.x buffer objects.</p>
+<p>This makes all HTTP POST requests go through a first handler, here <code>io.vertx.ext.web.handler.BodyHandler</code>. This handler automatically decodes the body from the HTTP requests (e.g., form submissions), which can then be manipulated as Vert.x buffer objects.</p>
 </li>
 <li>
 <p>The router object can be used as a HTTP server handler, which then dispatches to other handlers as defined above.</p>
@@ -791,7 +791,7 @@ This is the role of a <em>router</em> as it dispatches requests to different pro
 <div class="sectionbody">
 <div class="paragraph">
 <p>The HTTP router instance of the <code>startHttpServer</code> method points to different handlers based on URL patterns and HTTP methods.
-Each handlers deals with a HTTP request, performs a database query, and renders HTML from a FreeMarker template.</p>
+Each handler deals with an HTTP request, performs a database query, and renders HTML from a FreeMarker template.</p>
 </div>
 <div class="sect2">
 <h3 id="_index_page_handler">Index page handler</h3>
@@ -1097,10 +1097,10 @@ Instead of having a separate handler and template, we simply rely on JavaScript 
 <div class="paragraph">
 <p>The index page offers a field to create a new page, and its surrounding HTML form points to a URL that is being managed by this handler.
 The strategy isn&#8217;t actually to create a new entry in the database, but simply to redirect to a wiki page URL with the name to create.
-Since the wiki page doesn&#8217;t exist, the <code>pageRenderingHandler</code> method will use a default text for new pages, and a user can eventually create that page by editing then saving it.</p>
+Since the wiki page doesn&#8217;t exist, the <code>pageRenderingHandler</code> method will use a default text for new pages, and a user can eventually create that page by editing and then saving it.</p>
 </div>
 <div class="paragraph">
-<p>The handler is the <code>pageCreateHandler</code> method, and its implementation is a redirection through a HTTP 303 status code:</p>
+<p>The handler is the <code>pageCreateHandler</code> method, and its implementation is a redirection through an HTTP 303 status code:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1164,7 +1164,7 @@ This happens both when updating an existing page (issuing a SQL <code>update</co
 <p>Form parameters sent through a HTTP POST request are available from the <code>RoutingContext</code> object. Note that without a <code>BodyHandler</code> within the <code>Router</code> configuration chain these values would not be available, and the form submission payload would need to be manually decoded from the HTTP POST request payload.</p>
 </li>
 <li>
-<p>We rely on a form hidden field rendered in the <code>page.ftl</code> FreeMarker template to know if we are updating an existing page or saving a new page.</p>
+<p>We rely on a hidden form field rendered in the <code>page.ftl</code> FreeMarker template to know if we are updating an existing page or saving a new page.</p>
 </li>
 <li>
 <p>Again, preparing the SQL query with parameters uses a <code>JsonArray</code> to pass values.</p>
@@ -1225,11 +1225,11 @@ This happens both when updating an existing page (issuing a SQL <code>update</co
 </div>
 </div>
 <div class="paragraph">
-<p>Since the build produces a Jar will all required dependencies embedded (including Vert.x and a JDBC database), running the wiki is as simple as:</p>
+<p>Since the build produces a Jar with all required dependencies embedded (including Vert.x and a JDBC database), running the wiki is as simple as:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>$ java -jar target/wiki-step-1-1.1.0-fat.jar</pre>
+<pre>$ java -jar target/wiki-step-1-1.2.0-fat.jar</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1244,7 +1244,7 @@ This happens both when updating an existing page (issuing a SQL <code>update</co
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2017-10-19 14:01:10 CEST
+                Last updated 2018-02-14 09:34:26 CET
               
               
             </div>
