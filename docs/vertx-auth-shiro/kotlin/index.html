@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -181,7 +182,11 @@ configuration in a JSON object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/AuthShiroExamples.html<span class="error">#</span>example3-io.vertx.core.Vertx-[example3]<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">var config = json {
+  obj(<span class="string"><span class="delimiter">&quot;</span><span class="content">properties_path</span><span class="delimiter">&quot;</span></span> to <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:test-auth.properties</span><span class="delimiter">&quot;</span></span>)
+}
+
+var provider = ShiroAuth.create(vertx, ShiroAuthRealmType.PROPERTIES, config)</code></pre>
 </div>
 </div>
 </div>
@@ -195,7 +200,20 @@ authentication info:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/AuthShiroExamples.html<span class="error">#</span>example4-io.vertx.ext.auth.AuthProvider-[example4]<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">var authInfo = json {
+  obj(
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span> to <span class="string"><span class="delimiter">&quot;</span><span class="content">tim</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span> to <span class="string"><span class="delimiter">&quot;</span><span class="content">sausages</span><span class="delimiter">&quot;</span></span>
+  )
+}
+
+authProvider.authenticate(authInfo, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    var user = res.result()
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed!</span>
+  }
+})</code></pre>
 </div>
 </div>
 </div>
@@ -214,7 +232,13 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/AuthShiroExamples.html<span class="error">#</span>example5-io.vertx.ext.auth.User-[example5]<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">newsletter:edit:13</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    var hasPermission = res.result()
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed to</span>
+  }
+})</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -222,7 +246,13 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/AuthShiroExamples.html<span class="error">#</span>example6-io.vertx.ext.auth.User-[example6]<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">role:manager</span><span class="delimiter">&quot;</span></span>, { res -&gt;
+  <span class="keyword">if</span> (res.succeeded()) {
+    var hasRole = res.result()
+  } <span class="keyword">else</span> {
+    <span class="comment">// Failed to</span>
+  }
+})</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -354,7 +384,7 @@ An example is <code>ldap://myldapserver.mycompany.com:10389</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/AuthShiroExamples.html<span class="error">#</span>example8-io.vertx.core.Vertx-org.apache.shiro.realm.Realm-[example8]<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">var provider = ShiroAuth.create(vertx, realm)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -371,7 +401,7 @@ An example is <code>ldap://myldapserver.mycompany.com:10389</code></p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2018-02-09 09:48:06 CET
+                Last updated 2018-03-19 14:51:20 CET
               
               
             </div>
