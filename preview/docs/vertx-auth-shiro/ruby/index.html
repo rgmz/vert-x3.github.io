@@ -182,7 +182,13 @@ configuration in a JSON object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:unavailable<span class="error">#</span>example3-instance_method[example3]<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-auth-shiro/shiro_auth</span><span class="delimiter">'</span></span>
+
+config = {
+  <span class="string"><span class="delimiter">'</span><span class="content">properties_path</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:test-auth.properties</span><span class="delimiter">&quot;</span></span>
+}
+
+provider = VertxAuthShiro::ShiroAuth.create(vertx, :PROPERTIES, config)</code></pre>
 </div>
 </div>
 </div>
@@ -196,7 +202,18 @@ authentication info:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:unavailable<span class="error">#</span>example4-instance_method[example4]<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">authInfo = {
+  <span class="string"><span class="delimiter">'</span><span class="content">username</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">tim</span><span class="delimiter">&quot;</span></span>,
+  <span class="string"><span class="delimiter">'</span><span class="content">password</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">sausages</span><span class="delimiter">&quot;</span></span>
+}
+
+authProvider.authenticate(authInfo) { |res_err,res|
+  <span class="keyword">if</span> (res_err == nil)
+    user = res
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed!
+  end
+}</code></pre>
 </div>
 </div>
 </div>
@@ -215,7 +232,13 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:unavailable<span class="error">#</span>example5-instance_method[example5]<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">user.is_authorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">newsletter:edit:13</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == nil)
+    hasPermission = res
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed to
+  end
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -223,7 +246,13 @@ can have zero or more permissions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:unavailable<span class="error">#</span>example6-instance_method[example6]<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">user.is_authorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">role:manager</span><span class="delimiter">&quot;</span></span>) { |res_err,res|
+  <span class="keyword">if</span> (res_err == nil)
+    hasRole = res
+  <span class="keyword">else</span>
+    <span class="error">#</span> Failed to
+  end
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -355,7 +384,9 @@ An example is <code>ldap://myldapserver.mycompany.com:10389</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:unavailable<span class="error">#</span>example8-instance_method[example8]<span class="error">`</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">require <span class="string"><span class="delimiter">'</span><span class="content">vertx-auth-shiro/shiro_auth</span><span class="delimiter">'</span></span>
+
+provider = VertxAuthShiro::ShiroAuth.create(vertx, realm)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -372,7 +403,7 @@ An example is <code>ldap://myldapserver.mycompany.com:10389</code></p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2018-02-09 09:48:06 CET
+                Last updated 2018-03-19 15:03:51 CET
               
               
             </div>
