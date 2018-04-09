@@ -8,6 +8,236 @@
       <atom:link href="https://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Eclipse Vert.x metrics now with Micrometer.io</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;Vert.x has already been providing metrics for some time, through the &lt;a href=&quot;https://vertx.io/docs/vertx-dropwizard-metrics/java/&quot;&gt;vertx-dropwizard-metrics&lt;/a&gt; and &lt;a href=&quot;https://vertx.io/docs/vertx-hawkular-metrics/java/&quot;&gt;vertx-hawkular-metrics&lt;/a&gt; modules. Both of them implement a service provider interface (SPI) to collect the Vert.x metrics and make them available to their respective backends.&lt;/p&gt;
+&lt;p&gt;A new module, &lt;a href=&quot;https://vertx.io/docs/vertx-micrometer-metrics/java/&quot;&gt;vertx-micrometer-metrics&lt;/a&gt;, is now added to the family. It implements the same SPI, which means that it is able to provide the same metrics.
+&lt;a href=&quot;http://micrometer.io/&quot;&gt;&lt;em&gt;Micrometer.io&lt;/em&gt;&lt;/a&gt; is a pretty new metrics library, quite comparable to &lt;em&gt;dropwizard metrics&lt;/em&gt; in that it collects metrics in a local, in-memory registry and is able to store them in various backends such as &lt;em&gt;Graphite&lt;/em&gt; or &lt;em&gt;InfluxDB&lt;/em&gt;. It has several advantages as we will see below.&lt;/p&gt;
+&lt;h2 id=&quot;tell-me-more-about-micrometer&quot;&gt;Tell me more about Micrometer&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;http://micrometer.io/&quot;&gt;&lt;em&gt;Micrometer.io&lt;/em&gt;&lt;/a&gt; describes itself as a a vendor-neutral application metrics facade.
+It provides a well designed API, in Java, to define &lt;em&gt;gauges&lt;/em&gt;, &lt;em&gt;counters&lt;/em&gt;, &lt;em&gt;timers&lt;/em&gt; and &lt;em&gt;distribution summaries&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Among the available backends, Micrometer natively supports &lt;em&gt;Graphite&lt;/em&gt;, &lt;em&gt;InfluxDB&lt;/em&gt;, &lt;em&gt;JMX&lt;/em&gt;, &lt;em&gt;Prometheus&lt;/em&gt; and &lt;a href=&quot;http://micrometer.io/docs&quot;&gt;several others&lt;/a&gt;. Prometheus is very popular in the Kubernetes and microservices ecosystems, so its support by Micrometer was a strong motivation for implementing it in Vert.x.&lt;/p&gt;
+&lt;p&gt;For the the moment, our implementation in Vert.x supports &lt;em&gt;Prometheus&lt;/em&gt;, &lt;em&gt;InfluxDB&lt;/em&gt; and &lt;em&gt;JMX&lt;/em&gt;. More should quickly come in the near future.&lt;/p&gt;
+&lt;h3 id=&quot;dimensionality&quot;&gt;Dimensionality&lt;/h3&gt;
+&lt;p&gt;Another interesting aspect in Micrometer is that it handles metrics &lt;em&gt;dimensionality&lt;/em&gt;: metrics can be associated with a set of key/value pairs (sometimes refered as &lt;em&gt;tags&lt;/em&gt;, sometimes as &lt;em&gt;labels&lt;/em&gt;). Every value brings a new dimension to the metric, so that in Prometheus or any other backend that supports dimensionality, we can query for datapoints of one or several dimensions, or query for datapoints aggregated over several dimensions.&lt;/p&gt;
+&lt;p&gt;  &lt;em&gt;Example: our metric &lt;code&gt;vertx_http_server_connections&lt;/code&gt; accepts labels &lt;code&gt;local&lt;/code&gt; and &lt;code&gt;remote&lt;/code&gt;, that are used to store addresses on HTTP connections&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;content&#39;&gt; Prometheus is used in the following examples, but equivalent queries can be performed with &lt;em&gt;InfluxDB&lt;/em&gt;.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;In Prometheus, the query &lt;code&gt;vertx_http_server_connections&lt;/code&gt; will return as many timeseries as there are combinations of &lt;code&gt;local&lt;/code&gt; and &lt;code&gt;remote&lt;/code&gt; values. Example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;vertx_http_server_connections{&lt;span class=&quot;hljs-variable&quot;&gt;local=&lt;/span&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;0.0.0.0:8080&quot;&lt;/span&gt;,&lt;span class=&quot;hljs-variable&quot;&gt;remote=&lt;/span&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;1.1.1.1&quot;&lt;/span&gt;}
+vertx_http_server_connections{&lt;span class=&quot;hljs-variable&quot;&gt;local=&lt;/span&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;0.0.0.0:8080&quot;&lt;/span&gt;,&lt;span class=&quot;hljs-variable&quot;&gt;remote=&lt;/span&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;2.2.2.2&quot;&lt;/span&gt;}
+vertx_http_server_connections{&lt;span class=&quot;hljs-variable&quot;&gt;local=&lt;/span&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;0.0.0.0:8080&quot;&lt;/span&gt;,&lt;span class=&quot;hljs-variable&quot;&gt;remote=&lt;/span&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;3.3.3.3&quot;&lt;/span&gt;}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To query on a single dimension, we must provide the labels:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;vertx_http_server_connections{local=&quot;0.0.0.0:8080&quot;,remote=&quot;1.1.1.1&quot;}&lt;/code&gt;. It will return a single timeseries.&lt;/p&gt;
+&lt;p&gt;To get an aggregate, Prometheus (PromQL) provides several &lt;a href=&quot;https://prometheus.io/docs/prometheus/latest/querying/operators/#aggregation-operators&quot;&gt;aggregation operators&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;sum(vertx_http_server_connections)&lt;/code&gt; will return the sum across all dimensions.&lt;/p&gt;
+&lt;h2 id=&quot;so-what-are-the-vert-x-metrics-&quot;&gt;So what are the Vert.x metrics?&lt;/h2&gt;
+&lt;p&gt;People already familiar with the existing metrics modules (&lt;em&gt;dropwizard&lt;/em&gt; or &lt;em&gt;hawkular&lt;/em&gt;) will not be too disoriented. They are roughly the same. The main difference is where previously, some metric names could have a variable part within - such as &lt;code&gt;vertx.eventbus.handlers.myaddress&lt;/code&gt; - here we take advantage of dimensionality and we will have &lt;code&gt;vertx_eventbus_handlers{address=&quot;myaddress&quot;}&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Some other metrics are no longer useful, for instance the dropwizard’s &lt;code&gt;vertx.eventbus.messages.pending&lt;/code&gt;, &lt;code&gt;vertx.eventbus.messages.pending-local&lt;/code&gt; and &lt;code&gt;vertx.eventbus.messages.pending-remote&lt;/code&gt; are now just &lt;code&gt;vertx_eventbus_pending{side=local}&lt;/code&gt; and &lt;code&gt;vertx_eventbus_pending{side=remote}&lt;/code&gt; in micrometer. The sum of them can easily be computed at query time.&lt;/p&gt;
+&lt;p&gt;The metrics provided by Vert.x are dispatched into eight big families:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Net client&lt;/strong&gt;: distribution summaries of bytes sent and received, number of connections, etc.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Net server&lt;/strong&gt;: distribution summaries of bytes sent and received, number of connections, etc.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;HTTP client&lt;/strong&gt;: counter of requests, response times, etc.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;HTTP server&lt;/strong&gt;: counter of requests, processing times, etc.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Event bus&lt;/strong&gt;: counter of handlers, messages sent and received, etc.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Pool&lt;/strong&gt;: for worker pools and some datasource pools, queue size and waiting time, processing time, etc.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Verticles&lt;/strong&gt;: number of verticles deployed.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The full list of collected metrics is &lt;a href=&quot;https://vertx.io/docs/vertx-micrometer-metrics/java/#_vert_x_core_tools_metrics&quot;&gt;available here&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;getting-started&quot;&gt;Getting started&lt;/h2&gt;
+&lt;p&gt;This section will guide you through a quick setup to run a Vert.x application with Micrometer. The code examples used here are taken from the &lt;code&gt;micrometer-metrics-example&lt;/code&gt; in &lt;code&gt;vertx-examples&lt;/code&gt; repository, in Java, using &lt;em&gt;maven&lt;/em&gt;. But the same could be done with other Vert.x supported languages, as well as &lt;em&gt;gradle&lt;/em&gt; instead of &lt;em&gt;maven&lt;/em&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;maven-configuration&quot;&gt;Maven configuration&lt;/h3&gt;
+&lt;p&gt;The configuration and the maven imports will vary according to the backend storage that will be used. For maven, the common part is always:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.vertx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;vertx-micrometer-metrics&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;3.5.1&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Then, to report to InfluxDB:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.micrometer&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;micrometer-registry-influx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;1.0.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Or Prometheus:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.micrometer&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;micrometer-registry-prometheus&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;1.0.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.vertx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;vertx-web&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;3.5.1&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Remark that, since Prometheus pulls metrics from their source, they must be exposed on an HTTP endpoint. That’s why &lt;code&gt;vertx-web&lt;/code&gt; is imported here. It is not &lt;em&gt;absolutely&lt;/em&gt; necessary (it’s possible to get the metrics registry content and expose it in any other way) but it’s probably the easiest way to do.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Or JMX:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;io.micrometer&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;micrometer-registry-jmx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&gt;&lt;/span&gt;
+  &lt;span class=&quot;hljs-tag&quot;&gt;&lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;1.0.0&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;/&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;div class=&#39;admonition-block note&#39;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#39;admonition-icon&#39;&gt;&lt;i class=&#39;admonition-icon fa fa-comment&#39;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&#39;content&#39;&gt;&lt;span class=&#39;title&#39;&gt;Note &lt;/span&gt;&lt;br/&gt;&lt;span class=&#39;content&#39;&gt; At the moment, it is not possible to report metrics to several backends at the same time. &lt;a href=&quot;https://github.com/vert-x3/vertx-micrometer-metrics/issues/16&quot;&gt;It might be soon implemented&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;setting-up-vert-x-options&quot;&gt;Setting up Vert.x options&lt;/h3&gt;
+&lt;p&gt;A &lt;code&gt;MicrometerMetricsOptions&lt;/code&gt; object must be created and passed to &lt;code&gt;VertxOptions&lt;/code&gt;, with one backend configured (though having no backend is possible: you would get metrics sent to a default Micrometer registry, but without any persistent storage).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;InfluxDB example:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Default InfluxDB options will push metrics to localhost:8086, db &quot;default&quot;&lt;/span&gt;
+MicrometerMetricsOptions options = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; MicrometerMetricsOptions()
+  .setInfluxDbOptions(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; VertxInfluxDbOptions().setEnabled(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;))
+  .setEnabled(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;);
+Vertx vertx = Vertx.vertx(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; VertxOptions().setMetricsOptions(options));
+&lt;span class=&quot;hljs-comment&quot;&gt;// Then deploy verticles with this vertx instance&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Prometheus example:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Deploy with embedded server: prometheus metrics will be automatically exposed,&lt;/span&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;// independently from any other HTTP server defined&lt;/span&gt;
+MicrometerMetricsOptions options = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; MicrometerMetricsOptions()
+  .setPrometheusOptions(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; VertxPrometheusOptions()
+    .setStartEmbeddedServer(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;)
+    .setEmbeddedServerOptions(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; HttpServerOptions().setPort(&lt;span class=&quot;hljs-number&quot;&gt;8081&lt;/span&gt;))
+    .setEnabled(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;))
+  .setEnabled(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;);
+Vertx vertx = Vertx.vertx(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; VertxOptions().setMetricsOptions(options));
+&lt;span class=&quot;hljs-comment&quot;&gt;// Then deploy verticles with this vertx instance&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Or Prometheus with the &lt;code&gt;/metrics&lt;/code&gt; endpoint bound to an existing HTTP server:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Deploy without embedded server: we need to &quot;manually&quot; expose the prometheus metrics&lt;/span&gt;
+MicrometerMetricsOptions options = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; MicrometerMetricsOptions()
+  .setPrometheusOptions(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; VertxPrometheusOptions().setEnabled(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;))
+  .setEnabled(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;);
+Vertx vertx = Vertx.vertx(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; VertxOptions().setMetricsOptions(options));
+
+Router router = Router.router(vertx);
+PrometheusMeterRegistry registry = (PrometheusMeterRegistry) BackendRegistries.getDefaultNow();
+&lt;span class=&quot;hljs-comment&quot;&gt;// Setup a route for metrics&lt;/span&gt;
+router.route(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/metrics&quot;&lt;/span&gt;).handler(ctx -&gt; {
+  String response = registry.scrape();
+  ctx.response().end(response);
+});
+vertx.createHttpServer().requestHandler(router::accept).listen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;JMX example:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Default JMX options will publish MBeans under domain &quot;metrics&quot;&lt;/span&gt;
+MicrometerMetricsOptions options = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; MicrometerMetricsOptions()
+  .setJmxMetricsOptions(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; VertxJmxMetricsOptions().setEnabled(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;))
+  .setEnabled(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;);
+Vertx vertx = Vertx.vertx(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; VertxOptions().setMetricsOptions(options));
+&lt;span class=&quot;hljs-comment&quot;&gt;// Then deploy verticles with this vertx instance&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;setup-the-backend-server&quot;&gt;Setup the backend server&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.influxdata.com/&quot;&gt;InfluxDB&lt;/a&gt;, by default, is expected to run on &lt;code&gt;localhost:8086&lt;/code&gt; without authentication, database “default”. It is configurable in &lt;code&gt;VertxInfluxDbOptions&lt;/code&gt;.
+If you don’t have a running instance of InfluxDB, the shortest way to start is certainly with docker, just run:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;docker run -p &lt;span class=&quot;hljs-number&quot;&gt;8086&lt;/span&gt;:&lt;span class=&quot;hljs-number&quot;&gt;8086&lt;/span&gt; influxdb&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://prometheus.io/docs/prometheus/latest/getting_started/&quot;&gt;Prometheus&lt;/a&gt; needs some configuration since it pulls metrics from the sources. Once it is installed, configure the scrape endpoints in &lt;code&gt;prometheus.yml&lt;/code&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;-&lt;span class=&quot;ruby&quot;&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;job_name:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&#39;vertx-8081&#39;&lt;/span&gt;
+&lt;/span&gt;  static_configs:
+    -&lt;span class=&quot;ruby&quot;&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;targets:&lt;/span&gt; [&lt;span class=&quot;hljs-string&quot;&gt;&#39;localhost:8081&#39;&lt;/span&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or, when using &lt;code&gt;/metrics&lt;/code&gt; endpoint bound to an existing HTTP server:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;-&lt;span class=&quot;ruby&quot;&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;job_name:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&#39;vertx-8080&#39;&lt;/span&gt;
+&lt;/span&gt;  static_configs:
+    -&lt;span class=&quot;ruby&quot;&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;targets:&lt;/span&gt; [&lt;span class=&quot;hljs-string&quot;&gt;&#39;localhost:8080&#39;&lt;/span&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;For JMX there is nothing special to configure.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;collecting-vert-x-metrics&quot;&gt;Collecting Vert.x metrics&lt;/h3&gt;
+&lt;p&gt;From now on, all Vert.x metrics will be collected and sent to the configured backend. In our Vert.x example, we setup an HTTP server metrics:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;Router router = Router.router(vertx);
+router.get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/&quot;&lt;/span&gt;).handler(ctx -&gt; {
+  ctx.response().end(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello Micrometer from HTTP!&quot;&lt;/span&gt;);
+});
+vertx.createHttpServer().requestHandler(router::accept).listen(&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt; And some event bus ping-pong:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Producer side&lt;/span&gt;
+vertx.setPeriodic(&lt;span class=&quot;hljs-number&quot;&gt;1000&lt;/span&gt;, x -&gt; {
+  vertx.eventBus().send(&lt;span class=&quot;hljs-string&quot;&gt;&quot;greeting&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello Micrometer from event bus!&quot;&lt;/span&gt;);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Consumer side&lt;/span&gt;
+vertx.eventBus().&lt;String&gt;consumer(&lt;span class=&quot;hljs-string&quot;&gt;&quot;greeting&quot;&lt;/span&gt;, message -&gt; {
+  String greeting = message.body();
+  System.out.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Received: &quot;&lt;/span&gt; + greeting);
+  message.reply(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello back!&quot;&lt;/span&gt;);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To trigger some activity on the HTTP server, we can write a small bash script:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;do&lt;/span&gt; curl http://localhost:&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;/
+    sleep .&lt;span class=&quot;hljs-number&quot;&gt;8&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;done&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;viewing-the-results&quot;&gt;Viewing the results&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://grafana.com/&quot;&gt;Grafana&lt;/a&gt; can be used to display the InfluxDB and Prometheus metrics. The &lt;code&gt;vertx-examples&lt;/code&gt; repository contains two dashboards for that: &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/blob/master/micrometer-metrics-examples/grafana/Vertx-InfluxDB.json&quot;&gt;for InfluxDB&lt;/a&gt; and &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/blob/master/micrometer-metrics-examples/grafana/Vertx-Prometheus.json&quot;&gt;for Prometheus&lt;/a&gt;.&lt;/p&gt;
+&lt;h5 id=&quot;http-server-metrics&quot;&gt;HTTP server metrics&lt;/h5&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/jotak/vertx-examples/micrometer-example/micrometer-metrics-examples/grafana/http-server-metrics.png&quot; alt=&quot;HTTP server metrics&quot;&gt;&lt;/p&gt;
+&lt;h5 id=&quot;event-bus-metrics&quot;&gt;Event bus metrics&lt;/h5&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/jotak/vertx-examples/micrometer-example/micrometer-metrics-examples/grafana/eventbus-metrics.png&quot; alt=&quot;Event bus metrics&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;going-further&quot;&gt;Going further&lt;/h2&gt;
+&lt;p&gt;We’ve seen the basic setup. There is a good bunch of options available, detailed &lt;a href=&quot;https://vertx.io/docs/vertx-micrometer-metrics/java/&quot;&gt;in the documentation&lt;/a&gt;: how to disable some metrics domains, how to filter or rearrange labels, how to export metrics snapshots to Json objects, how to add JVM or processor instrumentation, etc.&lt;/p&gt;
+&lt;p&gt;Before we finish, there is one important point that we can cover here: defining custom metrics.
+Because the module gives you access to its Micrometer registry, you can add your custom metrics there.&lt;/p&gt;
+&lt;p&gt;Getting the default registry is straightforward:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;MeterRegistry registry = BackendRegistries.getDefaultNow();&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then you have plain access to the &lt;a href=&quot;https://micrometer.io/docs/concepts&quot;&gt;Micrometer API&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For instance, here is how you can track the execution time of a piece of code that is regularly called:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;MeterRegistry registry = BackendRegistries.getDefaultNow();
+Timer timer = Timer
+  .builder(&lt;span class=&quot;hljs-string&quot;&gt;&quot;my.timer&quot;&lt;/span&gt;)
+  .description(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Time tracker for my extremely sophisticated algorithm&quot;&lt;/span&gt;)
+  .register(registry);
+
+vertx.setPeriodic(&lt;span class=&quot;hljs-number&quot;&gt;1000&lt;/span&gt;, l -&gt; {
+  timer.record(() -&gt; myExtremelySophisticatedAlgorithm());
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since it is using the same registry, there is no extra backend configuration to do.&lt;/p&gt;
+&lt;h2 id=&quot;what-s-next-&quot;&gt;What’s next?&lt;/h2&gt;
+&lt;p&gt;The &lt;code&gt;vertx-micrometer-metrics&lt;/code&gt; module will continue to be improved, with already two planned enhancements:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/vert-x3/vertx-micrometer-metrics/issues/15&quot;&gt;Adding more backends&lt;/a&gt;, like Graphite.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/vert-x3/vertx-micrometer-metrics/issues/16&quot;&gt;Allow to configure several backends&lt;/a&gt;, and not only one at the same time.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Would you miss any feature, please &lt;a href=&quot;https://github.com/vert-x3/vertx-micrometer-metrics/issues&quot;&gt;ask on GitHub&lt;/a&gt;. Contributions and bug fixes are also welcome!&lt;/p&gt;
+&lt;p&gt;Now is time to enter the Metrics.&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 09 Apr 2018 02:00:00 +0200</pubDate>
+          <link>https://vertx.io/blog/eclipse-vert-x-metrics-now-with-micrometer-io</link>
+          <guid isPermaLink="true">https://vertx.io/blog/eclipse-vert-x-metrics-now-with-micrometer-io</guid>
+          <author>
+            <name>jotak</name>
+            <uri>http://github.com/jotak</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Google Summer of Code 2018</title>
           <description>
       &lt;article&gt;&lt;p&gt;It’s this time of year again!
