@@ -8,6 +8,84 @@
       <atom:link href="https://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Eclipse Vert.x RabbitMQ client gets a new consumer API!</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;In Eclipse Vert.x 3.6.0 the RabbitMQ client will get a new consumer API. In this post we are going to show
+the improvements since the previous API and how easy it is to use now.&lt;/p&gt;
+&lt;p&gt;Before digging into the new API let’s find out what were the limitations of the actual one:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The API uses the event bus in such limiting the control of the consumer over the RabbitMQ queue.&lt;/li&gt;
+&lt;li&gt;The message API is based on &lt;code&gt;JsonObject&lt;/code&gt; which does not provide a typed API&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;the-new-api-at-a-glance&quot;&gt;The new API at a glance&lt;/h2&gt;
+&lt;p&gt;Here is how simple queue consumption looks like with the new API:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;RabbitMQClient client = RabbitMQClient.create(vertx, &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; RabbitMQOptions());
+
+client.basicConsumer(&lt;span class=&quot;hljs-string&quot;&gt;&quot;my.queue&quot;&lt;/span&gt;, res -&gt; {
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (res.succeeded()) {
+    System.out.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;RabbitMQ consumer created !&quot;&lt;/span&gt;);
+    RabbitMQConsumer mqConsumer = res.result();
+    mqConsumer.handler((RabbitMQMessage message) -&gt; {
+        System.out.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Got message: &quot;&lt;/span&gt; + message.body().toString());
+    });
+  } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Oups something went wrong&lt;/span&gt;
+    res.cause().printStackTrace();
+  }
+});&lt;/code&gt;&lt;/pre&gt;
+
+
+&lt;p&gt;Now to create a queue you simply call the &lt;code&gt;basicConsumer&lt;/code&gt; method and you obtain asynchronously
+a &lt;code&gt;RabbitMQConsumer&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Then you need to provide a handler called for each message consumed via &lt;em&gt;RabbitMQConsumer#handler&lt;/em&gt; which
+is the idiomatic way to consumer stream in Vert.x&lt;/p&gt;
+&lt;p&gt;You may also note that when we a message arrives, it has the type of &lt;code&gt;RabbitMQMessage&lt;/code&gt;, this is a typed
+message representation.&lt;/p&gt;
+&lt;p&gt;Since &lt;code&gt;RabbitMQConsumer&lt;/code&gt; is a stream, you also allowed to &lt;code&gt;pause&lt;/code&gt; and &lt;code&gt;resume&lt;/code&gt; the stream, subscribe to the
+end event, get notified when an exception occurs.&lt;/p&gt;
+&lt;p&gt;In addition, you can cancel the subscription by calling &lt;code&gt;RabbitMQConsumer#cancel&lt;/code&gt; method.&lt;/p&gt;
+&lt;h2 id=&quot;backpressure&quot;&gt;Backpressure&lt;/h2&gt;
+&lt;p&gt;Sometimes you can have more incoming messages than you can handle.&lt;/p&gt;
+&lt;p&gt;The new consumer API allows you to control this and lets you store arrived messages in the internal queue
+before they are delivered to the application. Indeed, you can configure the queue size.&lt;/p&gt;
+&lt;p&gt;Here is how you can limit the internal queue size:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Limit to max 300 messages&lt;/span&gt;
+QueueOptions options = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; QueueOptions()
+  .setMaxInternalQueueSize(&lt;span class=&quot;hljs-number&quot;&gt;300&lt;/span&gt;);
+
+RabbitMQClient client = RabbitMQClient.create(vertx, &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; RabbitMQOptions());
+
+client.basicConsumer(&lt;span class=&quot;hljs-string&quot;&gt;&quot;my.queue&quot;&lt;/span&gt;, options, res -&gt; {
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (res.succeeded()) {
+    System.out.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;RabbitMQ consumer created !&quot;&lt;/span&gt;);
+    RabbitMQConsumer mqConsumer = res.result();
+    mqConsumer.handler((RabbitMQMessage message) -&gt; {
+      System.out.println(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Got message: &quot;&lt;/span&gt; + message.body().toString());
+    });
+  } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+    res.cause().printStackTrace();
+  }
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When the intenral queue queue capacity is exceeded, the new message will be simply dropped.&lt;/p&gt;
+&lt;p&gt;An alternative option is to drop the oldest message in the queue.&lt;/p&gt;
+&lt;p&gt;In order to achieve this, you should specify the behavior by calling &lt;code&gt;QueueOptions#setKeepMostRecent&lt;/code&gt; method.&lt;/p&gt;
+&lt;h2 id=&quot;finally&quot;&gt;Finally&lt;/h2&gt;
+&lt;p&gt;The new Vert.x RabbitMQ client consumer API is way more idiomatic and modern way to consume messages from a queue.&lt;/p&gt;
+&lt;p&gt;This API is going to provided in the 3.6.0 release, while the old will be deprecated.&lt;/p&gt;
+&lt;p&gt;I hope you enjoyed reading this article. See you soon on our &lt;a href=&quot;https://gitter.im/eclipse-vertx/vertx-users&quot;&gt;Gitter channel&lt;/a&gt;!&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 23 Apr 2018 02:00:00 +0200</pubDate>
+          <link>https://vertx.io/blog/eclipse-vert-x-rabbitmq-client-gets-a-new-consumer-api</link>
+          <guid isPermaLink="true">https://vertx.io/blog/eclipse-vert-x-rabbitmq-client-gets-a-new-consumer-api</guid>
+          <author>
+            <name>Sammers21</name>
+            <uri>http://github.com/Sammers21</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>New community channels</title>
           <description>
       &lt;article&gt;&lt;p&gt;If you visited the Eclipse Vert.x website recently, you might have noticed a couple of novelties on the &lt;a href=&quot;https://vertx.io/community&quot;&gt;community&lt;/a&gt; page:&lt;/p&gt;
