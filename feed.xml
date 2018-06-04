@@ -138,15 +138,6 @@ Substrate VM supports JNI and could in theory integrate these native libraries. 
   libc.so.&lt;span class=&quot;hljs-number&quot;&gt;6&lt;/span&gt; =&gt; /lib/x86_64-linux-gnu/libc.so.&lt;span class=&quot;hljs-number&quot;&gt;6&lt;/span&gt; (&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;x00007f8e886da000)
   /lib64/ld-linux-x86-&lt;span class=&quot;hljs-number&quot;&gt;64&lt;/span&gt;.so.&lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt; (&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;x00007f8e8afb7000)&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;performance&quot;&gt;Performance&lt;/h3&gt;
-&lt;p&gt;I ran Apache benchmark on both versions.
-The logger in the request handler was disabled for both versions to remove logging side effects.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;ab -n &lt;span class=&quot;hljs-number&quot;&gt;160000&lt;/span&gt; -c &lt;span class=&quot;hljs-number&quot;&gt;200&lt;/span&gt; http://localhost:&lt;span class=&quot;hljs-number&quot;&gt;8080&lt;/span&gt;/hello&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Native Image: 32k requests per second (mean)&lt;/li&gt;
-&lt;li&gt;Java 10 using shaded jar: 60k requests per second (mean)&lt;/li&gt;
-&lt;/ul&gt;
 &lt;h3 id=&quot;memory&quot;&gt;Memory&lt;/h3&gt;
 &lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;/usr/bin/time &lt;span class=&quot;hljs-operator&quot;&gt;-f&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;\nmaxRSS\t%MkB&quot;&lt;/span&gt; java -jar target/vertx-graalvm-native-image-test-&lt;span class=&quot;hljs-number&quot;&gt;0.0&lt;/span&gt;.&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;-SNAPSHOT.jar 
 /usr/bin/time &lt;span class=&quot;hljs-operator&quot;&gt;-f&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;\nmaxRSS\t%MkB&quot;&lt;/span&gt; ./vertx-graalvm-native-image-test-&lt;span class=&quot;hljs-number&quot;&gt;0.0&lt;/span&gt;.&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;-SNAPSHOT&lt;/code&gt;&lt;/pre&gt;
