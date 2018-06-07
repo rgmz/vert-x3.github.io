@@ -240,7 +240,7 @@ Also:</p>
 <span class="type">class</span> <span class="class">BTest</span> {
 
   <span class="annotation">@Test</span>
-  <span class="type">void</span> start_http_server() <span class="directive">throws</span> <span class="exception">InterruptedException</span> {
+  <span class="type">void</span> start_http_server() <span class="directive">throws</span> <span class="predefined-type">Throwable</span> {
     VertxTestContext testContext = <span class="keyword">new</span> VertxTestContext();
 
     Vertx vertx = Vertx.vertx();
@@ -249,6 +249,9 @@ Also:</p>
       .listen(<span class="integer">16969</span>, testContext.succeeding(ar -&gt; testContext.completeNow())); <b class="conum">(1)</b>
 
     assertThat(testContext.awaitCompletion(<span class="integer">5</span>, <span class="predefined-type">TimeUnit</span>.SECONDS)).isTrue(); <b class="conum">(2)</b>
+    <span class="keyword">if</span> (testContext.failed()) {  <b class="conum">(3)</b>
+      <span class="keyword">throw</span> testContext.causeOfFailure();
+    }
   }
 }</code></pre>
 </div>
@@ -260,6 +263,9 @@ Also:</p>
 </li>
 <li>
 <p><code><a href="../../apidocs/io/vertx/junit5/VertxTestContext.html#awaitCompletion-long-java.util.concurrent.TimeUnit-">awaitCompletion</a></code> has the semantics of a <code>java.util.concurrent.CountDownLatch</code>, and returns <code>false</code> if the waiting delay expired before the test passed.</p>
+</li>
+<li>
+<p>If the context captures a (potentially asynchronous) error, then after completion we must throw the failure exception to make the test fail.</p>
 </li>
 </ol>
 </div>
@@ -595,7 +601,7 @@ Because of asynchronous operations it is possible that the effects of these meth
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2018-02-09 09:48:06 CET
+                Last updated 2018-06-04 18:02:22 CEST
               
               
             </div>

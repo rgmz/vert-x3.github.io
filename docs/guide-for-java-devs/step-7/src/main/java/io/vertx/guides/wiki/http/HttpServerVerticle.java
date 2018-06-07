@@ -24,39 +24,35 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import io.vertx.core.net.JksOptions;
-import io.vertx.ext.auth.AuthProvider;
+import io.vertx.ext.auth.KeyStoreOptions;
 import io.vertx.ext.auth.User;
+import io.vertx.ext.auth.jdbc.JDBCAuth;
 import io.vertx.ext.auth.jwt.JWTAuth;
-import io.vertx.ext.auth.jwt.JWTOptions;
-import io.vertx.ext.auth.shiro.ShiroAuth;
-import io.vertx.ext.auth.shiro.ShiroAuthOptions;
-import io.vertx.ext.auth.shiro.ShiroAuthRealmType;
+import io.vertx.ext.auth.jwt.JWTAuthOptions;
+import io.vertx.ext.jdbc.JDBCClient;
+import io.vertx.ext.jwt.JWTOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.ext.web.codec.BodyCodec;
-import io.vertx.ext.web.handler.AuthHandler;
-import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.CookieHandler;
-import io.vertx.ext.web.handler.FormLoginHandler;
-import io.vertx.ext.web.handler.JWTAuthHandler;
-import io.vertx.ext.web.handler.RedirectAuthHandler;
-import io.vertx.ext.web.handler.SessionHandler;
-import io.vertx.ext.web.handler.UserSessionHandler;
+import io.vertx.ext.web.handler.*;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import io.vertx.ext.web.templ.FreeMarkerTemplateEngine;
 import io.vertx.guides.wiki.database.WikiDatabaseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static io.vertx.guides.wiki.DatabaseConstants.*;
 
 /**
  * @author <a href="https://julien.ponge.org/">Julien Ponge</a>
@@ -97,14 +93,16 @@ public class HttpServerVerticle extends AbstractVerticle {
         .setPassword("secret")));
     // end::https-server[]
 
-    // tag::shiro-auth[]
-    AuthProvider auth = ShiroAuth.create(vertx, new ShiroAuthOptions()
-      .setType(ShiroAuthRealmType.PROPERTIES)
-      .setConfig(new JsonObject()
-        .put("properties_path", "classpath:wiki-users.properties")));
-    // end::shiro-auth[]
+    // tag::jdbc-auth[]
+    JDBCClient dbClient = JDBCClient.createShared(vertx, new JsonObject()
+      .put("url", config().getString(CONFIG_WIKIDB_JDBC_URL, DEFAULT_WIKIDB_JDBC_URL))
+      .put("driver_class", config().getString(CONFIG_WIKIDB_JDBC_DRIVER_CLASS, DEFAULT_WIKIDB_JDBC_DRIVER_CLASS))
+      .put("max_pool_size", config().getInteger(CONFIG_WIKIDB_JDBC_MAX_POOL_SIZE, DEFAULT_JDBC_MAX_POOL_SIZE)));
 
-    // tag::shiro-routes[]
+    JDBCAuth auth = JDBCAuth.create(vertx, dbClient);
+    // end::jdbc-auth[]
+
+    // tag::auth-routes[]
     Router router = Router.router(vertx);
 
     router.route().handler(CookieHandler.create());
@@ -123,9 +121,9 @@ public class HttpServerVerticle extends AbstractVerticle {
     router.post("/action/create").handler(this::pageCreateHandler);
     router.get("/action/backup").handler(this::backupHandler);
     router.post("/action/delete").handler(this::pageDeletionHandler);
-    // end::shiro-routes[]
+    // end::auth-routes[]
 
-    // tag::shiro-login[]
+    // tag::auth-login[]
     router.get("/login").handler(this::loginHandler);
     router.post("/login-auth").handler(FormLoginHandler.create(auth));  // <1>
 
@@ -136,16 +134,16 @@ public class HttpServerVerticle extends AbstractVerticle {
         .putHeader("Location", "/")
         .end();
     });
-    // end::shiro-login[]
+    // end::auth-login[]
 
     // tag::jwtAuth[]
     Router apiRouter = Router.router(vertx);
 
-    JWTAuth jwtAuth = JWTAuth.create(vertx, new JsonObject()
-      .put("keyStore", new JsonObject()
-        .put("path", "keystore.jceks")
-        .put("type", "jceks")
-        .put("password", "secret")));
+    JWTAuth jwtAuth = JWTAuth.create(vertx, new JWTAuthOptions()
+      .setKeyStore(new KeyStoreOptions()
+        .setPath("keystore.jceks")
+        .setType("jceks")
+        .setPassword("secret")));
 
     apiRouter.route().handler(JWTAuthHandler.create(jwtAuth, "/api/token"));
     // end::jwtAuth[]
@@ -160,9 +158,9 @@ public class HttpServerVerticle extends AbstractVerticle {
 
         if (authResult.succeeded()) {
           User user = authResult.result();
-          user.isAuthorised("create", canCreate -> {  // <2>
-            user.isAuthorised("delete", canDelete -> {
-              user.isAuthorised("update", canUpdate -> {
+          user.isAuthorized("create", canCreate -> {  // <2>
+            user.isAuthorized("delete", canDelete -> {
+              user.isAuthorized("update", canUpdate -> {
 
                 String token = jwtAuth.generateToken( // <3>
                   new JsonObject()
@@ -348,7 +346,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
   // tag::indexHandler[]
   private void indexHandler(RoutingContext context) {
-    context.user().isAuthorised("create", res -> {  // <1>
+    context.user().isAuthorized("create", res -> {  // <1>
       boolean canCreatePage = res.succeeded() && res.result();  // <2>
       dbService.fetchAllPages(reply -> {
         if (reply.succeeded()) {
@@ -373,9 +371,9 @@ public class HttpServerVerticle extends AbstractVerticle {
   // end::indexHandler[]
 
   private void pageRenderingHandler(RoutingContext context) {
-    context.user().isAuthorised("update", updateResponse -> {
+    context.user().isAuthorized("update", updateResponse -> {
       boolean canSavePage = updateResponse.succeeded() && updateResponse.result();
-      context.user().isAuthorised("delete", deleteResponse -> {
+      context.user().isAuthorized("delete", deleteResponse -> {
         boolean canDeletePage = deleteResponse.succeeded() && deleteResponse.result();
 
         String requestedPage = context.request().getParam("page");
@@ -429,7 +427,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
   private void pageUpdateHandler(RoutingContext context) {
     boolean pageCreation = "yes".equals(context.request().getParam("newPage"));
-    context.user().isAuthorised(pageCreation ? "create" : "update", res -> {
+    context.user().isAuthorized(pageCreation ? "create" : "update", res -> {
       if (res.succeeded() && res.result()) {
 
         String title = context.request().getParam("title");
@@ -470,7 +468,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
   // tag::pageDeletionHandler[]
   private void pageDeletionHandler(RoutingContext context) {
-    context.user().isAuthorised("delete", res -> {
+    context.user().isAuthorized("delete", res -> {
       if (res.succeeded() && res.result()) {
 
         // Original code:
@@ -492,60 +490,60 @@ public class HttpServerVerticle extends AbstractVerticle {
   // end::pageDeletionHandler[]
 
   private void backupHandler(RoutingContext context) {
-    context.user().isAuthorised("role:writer", res -> {
+    context.user().isAuthorized("role:writer", res -> {
       if (res.succeeded() && res.result()) {
-
         dbService.fetchAllPagesData(reply -> {
           if (reply.succeeded()) {
 
-            JsonObject filesObject = new JsonObject();
-            JsonObject gistPayload = new JsonObject()
+            JsonArray filesObject = new JsonArray();
+            JsonObject payload = new JsonObject() // <1>
               .put("files", filesObject)
-              .put("description", "A wiki backup")
+              .put("language", "plaintext")
+              .put("title", "vertx-wiki-backup")
               .put("public", true);
 
             reply
               .result()
               .forEach(page -> {
-                JsonObject fileObject = new JsonObject();
-                filesObject.put(page.getString("NAME"), fileObject);
+                JsonObject fileObject = new JsonObject(); // <2>
+                fileObject.put("name", page.getString("NAME"));
                 fileObject.put("content", page.getString("CONTENT"));
+                filesObject.add(fileObject);
               });
 
-            webClient.post(443, "api.github.com", "/gists")
-              .putHeader("User-Agent", "vert-x3")
-              .putHeader("Accept", "application/vnd.github.v3+json")
+            webClient.post(443, "snippets.glot.io", "/snippets") // <3>
               .putHeader("Content-Type", "application/json")
-              .as(BodyCodec.jsonObject())
-              .sendJsonObject(gistPayload, ar -> {
-              if (ar.succeeded()) {
-                HttpResponse<JsonObject> response = ar.result();
-                if (response.statusCode() == 201) {
-                  context.put("backup_gist_url", response.body().getString("html_url"));
-                  indexHandler(context);
-                } else {
-                  StringBuilder message = new StringBuilder()
-                    .append("Could not backup the wiki: ")
-                    .append(response.statusMessage());
-                  JsonObject body = response.body();
-                  if (body != null) {
-                    message.append(System.getProperty("line.separator"))
-                      .append(body.encodePrettily());
+              .as(BodyCodec.jsonObject()) // <4>
+              .sendJsonObject(payload, ar -> {  // <5>
+                if (ar.succeeded()) {
+                  HttpResponse<JsonObject> response = ar.result();
+                  if (response.statusCode() == 200) {
+                    String url = "https://glot.io/snippets/" + response.body().getString("id");
+                    context.put("backup_gist_url", url);  // <6>
+                    indexHandler(context);
+                  } else {
+                    StringBuilder message = new StringBuilder()
+                      .append("Could not backup the wiki: ")
+                      .append(response.statusMessage());
+                    JsonObject body = response.body();
+                    if (body != null) {
+                      message.append(System.getProperty("line.separator"))
+                        .append(body.encodePrettily());
+                    }
+                    LOGGER.error(message.toString());
+                    context.fail(502);
                   }
-                  LOGGER.error(message.toString());
-                  context.fail(502);
+                } else {
+                  Throwable err = ar.cause();
+                  LOGGER.error("HTTP Client error", err);
+                  context.fail(err);
                 }
-              } else {
-                Throwable err = ar.cause();
-                LOGGER.error("HTTP Client error", err);
-                context.fail(err);
-              }
-            });
+              });
+
           } else {
             context.fail(reply.cause());
           }
         });
-
       } else {
         context.response().setStatusCode(403).end();
       }

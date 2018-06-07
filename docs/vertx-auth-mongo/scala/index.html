@@ -104,6 +104,7 @@
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
 <li><a href="#_mongo_auth_provider_implementation">Mongo Auth Provider implementation</a></li>
+<li><a href="#_vertx_auth_and_gdpr">Vertx Auth and GDPR</a></li>
 <li><a href="#_authentication">Authentication</a></li>
 <li><a href="#_authorisation_permission_role_model">Authorisation - Permission-Role Model</a></li>
 </ul>
@@ -114,6 +115,7 @@
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
 <li><a href="#_mongo_auth_provider_implementation">Mongo Auth Provider implementation</a></li>
+<li><a href="#_vertx_auth_and_gdpr">Vertx Auth and GDPR</a></li>
 <li><a href="#_authentication">Authentication</a></li>
 <li><a href="#_authorisation_permission_role_model">Authorisation - Permission-Role Model</a></li>
 </ul>
@@ -141,7 +143,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-auth-mongo-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.2<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -154,7 +156,7 @@ dependency to the <em>dependencies</em> section of your build descriptor:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-mongo-scala_2.12:3.5.1</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-auth-mongo-scala_2.12:3.5.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -260,6 +262,91 @@ authProvider.setHashAlgorithm(HashAlgorithm.PBKDF2)</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_vertx_auth_and_gdpr">Vertx Auth and GDPR</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>GDPR is a regulation from the common European Union law. It overrides/supercedes national data protection laws and
+extents the previously existing directives. This section of the manual is by no means a thorough walkthrough of the
+regulation, it is just a small summary how this component adheres to the requirements. Companies not adhering to the
+equirements can be fined on 4% of the turnover or 20 million euro. Therefore we want to make sure that as a user of
+Vert.x Auth you&#8217;re are on the good track to comply.</p>
+</div>
+<div class="paragraph">
+<p>The law defines certain terminology:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Subject - Person whose personal data is processed (e.g.: User)</p>
+</li>
+<li>
+<p>Personal Data - Any data about an identifiable or identified person</p>
+</li>
+<li>
+<p>Data Processing - Any operation (manual or automated) on personal data</p>
+</li>
+<li>
+<p>Controller - The entity (company) that requests and uses the data</p>
+</li>
+<li>
+<p>Processors - Any entity that processes data on behalf of a controller (e.g.: cloud service provider)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>GDPR defines the following functionality:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>"Forget me" - Right to erasure</p>
+</li>
+<li>
+<p>Mark profile as restricted - Right to restriction of processing</p>
+</li>
+<li>
+<p>Export data - Right to portability</p>
+</li>
+<li>
+<p>Allow profile editing - Right to rectification</p>
+</li>
+<li>
+<p>See all my data - Right to access</p>
+</li>
+<li>
+<p>Consent checkboxes</p>
+</li>
+<li>
+<p>Age checks</p>
+</li>
+<li>
+<p>Data destruction - Data minimization principle</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This module complies to the GDPR law by not storing any identifiable information about a data subject. The only
+reference is the username which is not linked to any personal data.</p>
+</div>
+<div class="paragraph">
+<p>In order to add personal data to your application you should create your own data schema and use the username column
+as a reference to your data. As a tip you should have a boolean flag to mark the personal data as restricted to
+comply to the right to restriction of processing which means that if you need to handle the data, e.g.: send a bulk
+email from a mailing list you are not allowed to do so if the flag is true.</p>
+</div>
+<div class="paragraph">
+<p>The right to erasure does not mean that you must wipe all records from your application, e.g.: in a bank this right
+cannot be used to erase a running loan or debt. You are allowed to keep your application data but must erase the
+personal data. In case of Vert.x Auth you should delete your table but can still use a reference to the username as
+long as is not possible to link the username to the personal data.</p>
+</div>
+<div class="paragraph">
+<p>Important note is that this must survive backups! As a tip backup the data, and data erasure on different archives so
+they can be replayed individually.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_authentication">Authentication</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -334,7 +421,7 @@ can have zero or more permissions.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2018-02-09 09:48:08 CET
+                Last updated 2018-06-04 18:02:24 CEST
               
               
             </div>

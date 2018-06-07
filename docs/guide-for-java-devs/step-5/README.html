@@ -103,10 +103,10 @@
       <div class="col-sm-12 col-md-push-9 col-md-3 hidden-xs hidden-sm">
         <div id="sidebar" data-spy="affix">
           <ul class="sectlevel1">
-<li><a href="#_scenario_backing_up_to_github_gist">Scenario: backing up to GitHub Gist</a></li>
+<li><a href="#_scenario_backing_up_to_glot_io">Scenario: backing up to Glot.io</a></li>
 <li><a href="#_updating_the_database_service">Updating the database service</a></li>
 <li><a href="#_the_web_client_api">The web client API</a></li>
-<li><a href="#_creating_anonymous_gists">Creating anonymous Gists</a></li>
+<li><a href="#_creating_anonymous_snippets">Creating anonymous snippets</a></li>
 </ul>
         </div>
       </div>
@@ -114,10 +114,10 @@
         <div class="toc hidden-md hidden-lg">
           <h2>Table of Contents</h2>
           <ul class="sectlevel1">
-<li><a href="#_scenario_backing_up_to_github_gist">Scenario: backing up to GitHub Gist</a></li>
+<li><a href="#_scenario_backing_up_to_glot_io">Scenario: backing up to Glot.io</a></li>
 <li><a href="#_updating_the_database_service">Updating the database service</a></li>
 <li><a href="#_the_web_client_api">The web client API</a></li>
-<li><a href="#_creating_anonymous_gists">Creating anonymous Gists</a></li>
+<li><a href="#_creating_anonymous_snippets">Creating anonymous snippets</a></li>
 </ul>
         </div>
         <div id="preamble">
@@ -144,19 +144,14 @@ Integration is very often achieved using APIs exposed over the versatile HTTP pr
 </div>
 </div>
 <div class="sect1">
-<h2 id="_scenario_backing_up_to_github_gist">Scenario: backing up to GitHub Gist</h2>
+<h2 id="_scenario_backing_up_to_glot_io">Scenario: backing up to Glot.io</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <a href="https://gist.github.com/">GitHub Gist service</a> is popular for sharing code snippets to the world.
-Other services can use it, an example being the <a href="https://medium.com">Medium publishing platform</a> where links to Gists allow code snippets to be embedded inside publications.</p>
+<p>The <a href="https://glot.io/">Glot service</a> allows sharing code snippets and files to the world.
+It exposes an <a href="https://github.com/prasmussen/glot-snippets/blob/master/api_docs/create_snippet.md">API for posting anonymous snippets</a>.</p>
 </div>
 <div class="paragraph">
-<p>GitHub exposes a <a href="https://developer.github.com/v3/">detailed API</a> for fetching, creating, updating and deleting Gists.
-The API uses HTTPS endpoints starting at <a href="https://api.github.com/" class="bare">https://api.github.com/</a> and JSON payloads.</p>
-</div>
-<div class="paragraph">
-<p>While many operations require authorization from the client using OAuth authentication, <a href="https://developer.github.com/v3/gists/#create-a-gist">creating a Gist is possible while being anonymous</a>.
-We are going to leverage this feature to backup our wiki pages as Gists.</p>
+<p>We are going to leverage this service to backup our wiki pages as snippets where each file represents the Markdown content of a wiki page.</p>
 </div>
 <div class="paragraph">
 <p>A new button is going to be added on the wiki index page:</p>
@@ -167,19 +162,19 @@ We are going to leverage this feature to backup our wiki pages as Gists.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Clicking the <em>backup</em> button will trigger the creating of a Gist:</p>
+<p>Clicking the <em>backup</em> button will trigger the creation of a snippet:</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/images/gist-created.png" alt="gist created">
+<img src="images/images/backup-created.png" alt="backup created">
 </div>
 </div>
 <div class="paragraph">
-<p>A backup Gist consists of 1 file per wiki page, with the content being the raw Markdown text:</p>
+<p>Each backup snippet can then be seen at Glot.io:</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/images/gist.png" alt="gist">
+<img src="images/images/snippet.png" alt="snippet">
 </div>
 </div>
 </div>
@@ -281,7 +276,7 @@ The test starts a HTTP server and then it does a HTTP GET request with the web c
 </div>
 </div>
 <div class="sect1">
-<h2 id="_creating_anonymous_gists">Creating anonymous Gists</h2>
+<h2 id="_creating_anonymous_snippets">Creating anonymous snippets</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We first need a web client object to issue HTTP requests to the Gist API:</p>
@@ -312,7 +307,6 @@ Since requests are made using HTTPS, we need to configure the web client with SS
 <div class="title">Tip</div>
 </td>
 <td class="content">
-The GitHub API requires a valid <code>User-Agent</code> header and requests a GitHub account or organization identifier.
 We override the default user agent with <code>vert-x3</code> but you may opt to use your own value instead.
 </td>
 </tr>
@@ -335,29 +329,31 @@ We override the default user agent with <code>vert-x3</code> but you may opt to 
   dbService.fetchAllPagesData(reply -&gt; {
     <span class="keyword">if</span> (reply.succeeded()) {
 
-      JsonObject filesObject = <span class="keyword">new</span> JsonObject();
-      JsonObject gistPayload = <span class="keyword">new</span> JsonObject() <b class="conum">(1)</b>
+      JsonArray filesObject = <span class="keyword">new</span> JsonArray();
+      JsonObject payload = <span class="keyword">new</span> JsonObject() <b class="conum">(1)</b>
         .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">files</span><span class="delimiter">&quot;</span></span>, filesObject)
-        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">A wiki backup</span><span class="delimiter">&quot;</span></span>)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">language</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">plaintext</span><span class="delimiter">&quot;</span></span>)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-wiki-backup</span><span class="delimiter">&quot;</span></span>)
         .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">public</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>);
 
       reply
         .result()
         .forEach(page -&gt; {
           JsonObject fileObject = <span class="keyword">new</span> JsonObject(); <b class="conum">(2)</b>
-          filesObject.put(page.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">NAME</span><span class="delimiter">&quot;</span></span>), fileObject);
+          fileObject.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, page.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">NAME</span><span class="delimiter">&quot;</span></span>));
           fileObject.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">content</span><span class="delimiter">&quot;</span></span>, page.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">CONTENT</span><span class="delimiter">&quot;</span></span>));
+          filesObject.add(fileObject);
         });
 
-      webClient.post(<span class="integer">443</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">api.github.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/gists</span><span class="delimiter">&quot;</span></span>) <b class="conum">(3)</b>
-        .putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Accept</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">application/vnd.github.v3+json</span><span class="delimiter">&quot;</span></span>) <b class="conum">(4)</b>
+      webClient.post(<span class="integer">443</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">snippets.glot.io</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/snippets</span><span class="delimiter">&quot;</span></span>) <b class="conum">(3)</b>
         .putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Content-Type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
-        .as(BodyCodec.jsonObject()) <b class="conum">(5)</b>
-        .sendJsonObject(gistPayload, ar -&gt; {  <b class="conum">(6)</b>
+        .as(BodyCodec.jsonObject()) <b class="conum">(4)</b>
+        .sendJsonObject(payload, ar -&gt; {  <b class="conum">(5)</b>
           <span class="keyword">if</span> (ar.succeeded()) {
             HttpResponse&lt;JsonObject&gt; response = ar.result();
-            <span class="keyword">if</span> (response.statusCode() == <span class="integer">201</span>) {
-              context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">backup_gist_url</span><span class="delimiter">&quot;</span></span>, response.body().getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">html_url</span><span class="delimiter">&quot;</span></span>));  <b class="conum">(7)</b>
+            <span class="keyword">if</span> (response.statusCode() == <span class="integer">200</span>) {
+              <span class="predefined-type">String</span> url = <span class="string"><span class="delimiter">&quot;</span><span class="content">https://glot.io/snippets/</span><span class="delimiter">&quot;</span></span> + response.body().getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>);
+              context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">backup_gist_url</span><span class="delimiter">&quot;</span></span>, url);  <b class="conum">(6)</b>
               indexHandler(context);
             } <span class="keyword">else</span> {
               <span class="predefined-type">StringBuilder</span> message = <span class="keyword">new</span> <span class="predefined-type">StringBuilder</span>()
@@ -388,16 +384,13 @@ We override the default user agent with <code>vert-x3</code> but you may opt to 
 <div class="colist arabic">
 <ol>
 <li>
-<p>The Gist creation request payload is a JSON document as outlined in the <a href="https://developer.github.com/v3/gists/#create-a-gist">GitHub API documentation</a>.</p>
+<p>The snippet creation request payload is a JSON document as outlined in the <a href="https://github.com/prasmussen/glot-snippets/blob/master/api_docs/create_snippet.md">service API documentation</a>.</p>
 </li>
 <li>
-<p>Each file is an entry under the <code>files</code> object of the payload, where the title is the key and the value is the text.</p>
+<p>Each file is an entry under the <code>files</code> object of the payload, with a title and content.</p>
 </li>
 <li>
-<p>The web client needs to issue a <code>POST</code> request on port 443 (HTTPS), and the path must be <code>/gists</code>.</p>
-</li>
-<li>
-<p>It is mandatory to have a <code>Accept</code> header in the request with the <code>application/vnd.github.v3+json</code> MIME type, otherwise the request fails. It is also important to specify that the payload is a JSON object at the next line.</p>
+<p>The web client needs to issue a <code>POST</code> request on port 443 (HTTPS), and the path must be <code>/snippets</code>.</p>
 </li>
 <li>
 <p>The <code>BodyCodec</code> class provides a helper to specify that the response will be directly converted to a Vert.x <code>JsonObject</code> instance. It is also possible to use <code>BodyCodec#json(Class&lt;T&gt;)</code> and the JSON data will be mapped to a Java object of type <code>T</code> (this uses Jackson data mapping under the hood).</p>
@@ -406,7 +399,7 @@ We override the default user agent with <code>vert-x3</code> but you may opt to 
 <p><code>sendJsonObject</code> is a helper for triggering the HTTP request with a JSON payload.</p>
 </li>
 <li>
-<p>Upon success we can traverse the JSON data (<code>html_url</code> key) to get the user-friendly URL of the newly created Gist.</p>
+<p>Upon success we can get the snippet identifier, and construct a URL to the user-friendly web representation.</p>
 </li>
 </ol>
 </div>
@@ -419,7 +412,7 @@ We override the default user agent with <code>vert-x3</code> but you may opt to 
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2018-02-14 09:34:26 CET
+                Last updated 2018-06-05 07:44:38 CEST
               
               
             </div>

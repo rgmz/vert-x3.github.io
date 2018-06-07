@@ -514,7 +514,10 @@ The essential difference is the support of the asynchronous result handler in th
 
     WikiDatabaseService.create(dbClient, sqlQueries, ready -&gt; {
       <span class="keyword">if</span> (ready.succeeded()) {
-        ProxyHelper.registerService(WikiDatabaseService.class, vertx, ready.result(), CONFIG_WIKIDB_QUEUE); <b class="conum">(1)</b>
+        ServiceBinder binder = <span class="keyword">new</span> ServiceBinder(vertx);
+        binder
+          .setAddress(CONFIG_WIKIDB_QUEUE)
+          .register(WikiDatabaseService.class, ready.result()); <b class="conum">(1)</b>
         startFuture.complete();
       } <span class="keyword">else</span> {
         startFuture.fail(ready.cause());
@@ -721,7 +724,7 @@ It is still perfectly possible to consume a Vert.x service directly via event bu
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2018-02-14 09:34:26 CET
+                Last updated 2018-06-05 07:44:38 CEST
               
               
             </div>

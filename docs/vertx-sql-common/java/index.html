@@ -173,7 +173,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-sql-common<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.2<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -186,7 +186,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-sql-common:3.5.1</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-sql-common:3.5.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -220,17 +220,7 @@ perform the following steps for you:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">client.query(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM USERS</span><span class="delimiter">&quot;</span></span>, ar -&gt; {
-  <span class="keyword">if</span> (ar.succeeded()) {
-    <span class="keyword">if</span> (ar.succeeded()) {
-      <span class="predefined-type">ResultSet</span> result = ar.result();
-    } <span class="keyword">else</span> {
-      <span class="comment">// Failed!</span>
-    }
-    <span class="comment">// NOTE that you don't need to worry about</span>
-    <span class="comment">// the connection management (e.g.: close)</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example16-io.vertx.ext.sql.SQLClient-[example16]<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -290,13 +280,7 @@ execute in its own transaction.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">connection.setAutoCommit(<span class="predefined-constant">false</span>, res -&gt; {
-  <span class="keyword">if</span> (res.succeeded()) {
-    <span class="comment">// OK!</span>
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example1-io.vertx.ext.sql.SQLConnection-[example1]<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -314,14 +298,7 @@ been run.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">connection.query(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE</span><span class="delimiter">&quot;</span></span>, res -&gt; {
-  <span class="keyword">if</span> (res.succeeded()) {
-    <span class="comment">// Get the result set</span>
-    <span class="predefined-type">ResultSet</span> resultSet = res.result();
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example2-io.vertx.ext.sql.SQLConnection-[example2]<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -336,18 +313,7 @@ available with <code><a href="../../apidocs/io/vertx/ext/sql/ResultSet.html#getR
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; columnNames = resultSet.getColumnNames();
-
-<span class="predefined-type">List</span>&lt;JsonArray&gt; results = resultSet.getResults();
-
-<span class="keyword">for</span> (JsonArray row : results) {
-
-  <span class="predefined-type">String</span> id = row.getString(<span class="integer">0</span>);
-  <span class="predefined-type">String</span> fName = row.getString(<span class="integer">1</span>);
-  <span class="predefined-type">String</span> lName = row.getString(<span class="integer">2</span>);
-  <span class="type">int</span> shoeSize = row.getInteger(<span class="integer">3</span>);
-
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example3-io.vertx.ext.sql.ResultSet-[example3]<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -360,16 +326,7 @@ column names - if that&#8217;s the case you should use <code><a href="../../apid
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">List</span>&lt;JsonObject&gt; rows = resultSet.getRows();
-
-<span class="keyword">for</span> (JsonObject row : rows) {
-
-  <span class="predefined-type">String</span> id = row.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">ID</span><span class="delimiter">&quot;</span></span>);
-  <span class="predefined-type">String</span> fName = row.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">FNAME</span><span class="delimiter">&quot;</span></span>);
-  <span class="predefined-type">String</span> lName = row.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">LNAME</span><span class="delimiter">&quot;</span></span>);
-  <span class="type">int</span> shoeSize = row.getInteger(<span class="string"><span class="delimiter">&quot;</span><span class="content">SHOE_SIZE</span><span class="delimiter">&quot;</span></span>);
-
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example3__1-io.vertx.ext.sql.ResultSet-[example3__1]<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -385,18 +342,7 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> query = <span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE WHERE LNAME=? AND SHOE_SIZE &gt; ?</span><span class="delimiter">&quot;</span></span>;
-JsonArray params = <span class="keyword">new</span> JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">Fox</span><span class="delimiter">&quot;</span></span>).add(<span class="integer">9</span>);
-
-connection.queryWithParams(query, params, res -&gt; {
-
-  <span class="keyword">if</span> (res.succeeded()) {
-    <span class="comment">// Get the result set</span>
-    <span class="predefined-type">ResultSet</span> resultSet = res.result();
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example3_1-io.vertx.ext.sql.SQLConnection-[example3_1]<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -418,17 +364,7 @@ if the update generated keys, they are available with <code><a href="../../apido
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">connection.update(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO PEOPLE VALUES (null, 'john', 'smith', 9)</span><span class="delimiter">&quot;</span></span>, res -&gt; {
-  <span class="keyword">if</span> (res.succeeded()) {
-
-    UpdateResult result = res.result();
-    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Updated no. of rows: </span><span class="delimiter">&quot;</span></span> + result.getUpdated());
-    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Generated keys: </span><span class="delimiter">&quot;</span></span> + result.getKeys());
-
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example4-io.vertx.ext.sql.SQLConnection-[example4]<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -444,23 +380,7 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> update = <span class="string"><span class="delimiter">&quot;</span><span class="content">UPDATE PEOPLE SET SHOE_SIZE = 10 WHERE LNAME=?</span><span class="delimiter">&quot;</span></span>;
-JsonArray params = <span class="keyword">new</span> JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">Fox</span><span class="delimiter">&quot;</span></span>);
-
-connection.updateWithParams(update, params, res -&gt; {
-
-  <span class="keyword">if</span> (res.succeeded()) {
-
-    UpdateResult updateResult = res.result();
-
-    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">No. of rows updated: </span><span class="delimiter">&quot;</span></span> + updateResult.getUpdated());
-
-  } <span class="keyword">else</span> {
-
-    <span class="comment">// Failed!</span>
-
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example5-io.vertx.ext.sql.SQLConnection-[example5]<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -485,16 +405,7 @@ argument then the output array must contain a null value as the first element.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call one_hour_ago() }</span><span class="delimiter">&quot;</span></span>;
-
-connection.call(func, res -&gt; {
-
-  <span class="keyword">if</span> (res.succeeded()) {
-    <span class="predefined-type">ResultSet</span> result = res.result();
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example8-io.vertx.ext.sql.SQLConnection-[example8]<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -503,16 +414,7 @@ not return anything the usage is as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call new_customer(?, ?) }</span><span class="delimiter">&quot;</span></span>;
-
-connection.callWithParams(func, <span class="keyword">new</span> JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">John</span><span class="delimiter">&quot;</span></span>).add(<span class="string"><span class="delimiter">&quot;</span><span class="content">Doe</span><span class="delimiter">&quot;</span></span>), <span class="predefined-constant">null</span>, res -&gt; {
-
-  <span class="keyword">if</span> (res.succeeded()) {
-    <span class="comment">// Success!</span>
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example9-io.vertx.ext.sql.SQLConnection-[example9]<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -520,16 +422,7 @@ connection.callWithParams(func, <span class="keyword">new</span> JsonArray().add
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> func = <span class="string"><span class="delimiter">&quot;</span><span class="content">{ call customer_lastname(?, ?) }</span><span class="delimiter">&quot;</span></span>;
-
-connection.callWithParams(func, <span class="keyword">new</span> JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">John</span><span class="delimiter">&quot;</span></span>), <span class="keyword">new</span> JsonArray().addNull().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">VARCHAR</span><span class="delimiter">&quot;</span></span>), res -&gt; {
-
-  <span class="keyword">if</span> (res.succeeded()) {
-    <span class="predefined-type">ResultSet</span> result = res.result();
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example10-io.vertx.ext.sql.SQLConnection-[example10]<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -582,17 +475,7 @@ String describing the type you want to receive.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; batch = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;();
-batch.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (NAME) VALUES ('JOE')</span><span class="delimiter">&quot;</span></span>);
-batch.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (NAME) VALUES ('JANE')</span><span class="delimiter">&quot;</span></span>);
-
-connection.batch(batch, res -&gt; {
-  <span class="keyword">if</span> (res.succeeded()) {
-    <span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = res.result();
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example12-io.vertx.ext.sql.SQLConnection-[example12]<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -600,17 +483,7 @@ connection.batch(batch, res -&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">List</span>&lt;JsonArray&gt; batch = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;();
-batch.add(<span class="keyword">new</span> JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">joe</span><span class="delimiter">&quot;</span></span>));
-batch.add(<span class="keyword">new</span> JsonArray().add(<span class="string"><span class="delimiter">&quot;</span><span class="content">jane</span><span class="delimiter">&quot;</span></span>));
-
-connection.batchWithParams(<span class="string"><span class="delimiter">&quot;</span><span class="content">INSERT INTO emp (name) VALUES (?)</span><span class="delimiter">&quot;</span></span>, batch, res -&gt; {
-  <span class="keyword">if</span> (res.succeeded()) {
-    <span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = res.result();
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example11-io.vertx.ext.sql.SQLConnection-[example11]<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -626,16 +499,7 @@ is complete</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> sql = <span class="string"><span class="delimiter">&quot;</span><span class="content">CREATE TABLE PEOPLE (ID int generated by default as identity (start with 1 increment by 1) not null,</span><span class="delimiter">&quot;</span></span> +
-  <span class="string"><span class="delimiter">&quot;</span><span class="content">FNAME varchar(255), LNAME varchar(255), SHOE_SIZE int);</span><span class="delimiter">&quot;</span></span>;
-
-connection.execute(sql, execute -&gt; {
-  <span class="keyword">if</span> (execute.succeeded()) {
-    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Table created !</span><span class="delimiter">&quot;</span></span>);
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example6-io.vertx.ext.sql.SQLConnection-[example6]<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -648,12 +512,7 @@ under the property <code>next</code>. A simple walk of all result sets can be ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">while</span> (rs != <span class="predefined-constant">null</span>) {
-  <span class="comment">// do something with the result set...</span>
-
-  <span class="comment">// next step</span>
-  rs = rs.getNext();
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example13-io.vertx.ext.sql.ResultSet-[example13]<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -665,13 +524,7 @@ inflating the whole response into memory and JSON and data is just processed on 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">connection.queryStream(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM large_table</span><span class="delimiter">&quot;</span></span>, stream -&gt; {
-  <span class="keyword">if</span> (stream.succeeded()) {
-    stream.result().handler(row -&gt; {
-      <span class="comment">// do something with the row...</span>
-    });
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example14-io.vertx.ext.sql.SQLConnection-[example14]<span class="error">`</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -681,23 +534,7 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">connection.queryStream(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM large_table; SELECT * FROM other_table</span><span class="delimiter">&quot;</span></span>, stream -&gt; {
-  <span class="keyword">if</span> (stream.succeeded()) {
-    SQLRowStream sqlRowStream = stream.result();
-
-    sqlRowStream
-      .resultSetClosedHandler(v -&gt; {
-        <span class="comment">// will ask to restart the stream with the new result set if any</span>
-        sqlRowStream.moreResults();
-      })
-      .handler(row -&gt; {
-        <span class="comment">// do something with the row...</span>
-      })
-      .endHandler(v -&gt; {
-        <span class="comment">// no more data available...</span>
-      });
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example15-io.vertx.ext.sql.SQLConnection-[example15]<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -716,13 +553,7 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">connection.commit(res -&gt; {
-  <span class="keyword">if</span> (res.succeeded()) {
-    <span class="comment">// Committed OK!</span>
-  } <span class="keyword">else</span> {
-    <span class="comment">// Failed!</span>
-  }
-});</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">`</span>link:../../apidocs/examples/SQLExamples.html<span class="error">#</span>example7-io.vertx.ext.sql.SQLConnection-[example7]<span class="error">`</span></code></pre>
 </div>
 </div>
 </div>
@@ -741,7 +572,7 @@ data the stream handler will receive the new data, otherwise the end handler is 
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2018-06-04 16:50:27 CEST
+                Last updated 2018-06-04 18:02:22 CEST
               
               
             </div>

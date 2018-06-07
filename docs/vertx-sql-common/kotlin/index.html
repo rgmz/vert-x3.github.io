@@ -173,7 +173,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-sql-common<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.1<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.2<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -186,7 +186,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-sql-common:3.5.1</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-sql-common:3.5.2</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -220,17 +220,7 @@ perform the following steps for you:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">client.query(&quot;SELECT * FROM USERS&quot;, { ar -&gt;
-  if (ar.succeeded()) {
-    if (ar.succeeded()) {
-      var result = ar.result()
-    } else {
-      // Failed!
-    }
-    // NOTE that you don't need to worry about
-    // the connection management (e.g.: close)
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example16-io.vertx.ext.sql.SQLClient-[example16]`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -290,13 +280,7 @@ execute in its own transaction.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">connection.setAutoCommit(false, { res -&gt;
-  if (res.succeeded()) {
-    // OK!
-  } else {
-    // Failed!
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example1-io.vertx.ext.sql.SQLConnection-[example1]`</code></pre>
 </div>
 </div>
 </div>
@@ -314,14 +298,7 @@ been run.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">connection.query(&quot;SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE&quot;, { res -&gt;
-  if (res.succeeded()) {
-    // Get the result set
-    var resultSet = res.result()
-  } else {
-    // Failed!
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example2-io.vertx.ext.sql.SQLConnection-[example2]`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -336,18 +313,7 @@ available with <code><a href="../../apidocs/io/vertx/ext/sql/ResultSet.html#getR
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">var columnNames = resultSet.columnNames
-
-var results = resultSet.results
-
-for (row in results) {
-
-  var id = row.getString(0)
-  var fName = row.getString(1)
-  var lName = row.getString(2)
-  var shoeSize = row.getInteger(3)
-
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example3-io.vertx.ext.sql.ResultSet-[example3]`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -360,16 +326,7 @@ column names - if that&#8217;s the case you should use <code><a href="../../apid
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">var rows = resultSet.rows
-
-for (row in rows) {
-
-  var id = row.getString(&quot;ID&quot;)
-  var fName = row.getString(&quot;FNAME&quot;)
-  var lName = row.getString(&quot;LNAME&quot;)
-  var shoeSize = row.getInteger(&quot;SHOE_SIZE&quot;)
-
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example3__1-io.vertx.ext.sql.ResultSet-[example3__1]`</code></pre>
 </div>
 </div>
 </div>
@@ -385,20 +342,7 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">var query = &quot;SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE WHERE LNAME=? AND SHOE_SIZE &gt; ?&quot;
-var params = json {
-  array(&quot;Fox&quot;, 9)
-}
-
-connection.queryWithParams(query, params, { res -&gt;
-
-  if (res.succeeded()) {
-    // Get the result set
-    var resultSet = res.result()
-  } else {
-    // Failed!
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example3_1-io.vertx.ext.sql.SQLConnection-[example3_1]`</code></pre>
 </div>
 </div>
 </div>
@@ -420,17 +364,7 @@ if the update generated keys, they are available with <code><a href="../../apido
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">connection.update(&quot;INSERT INTO PEOPLE VALUES (null, 'john', 'smith', 9)&quot;, { res -&gt;
-  if (res.succeeded()) {
-
-    var result = res.result()
-    println(&quot;Updated no. of rows: ${result.updated}&quot;)
-    println(&quot;Generated keys: ${result.keys}&quot;)
-
-  } else {
-    // Failed!
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example4-io.vertx.ext.sql.SQLConnection-[example4]`</code></pre>
 </div>
 </div>
 </div>
@@ -446,25 +380,7 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">var update = &quot;UPDATE PEOPLE SET SHOE_SIZE = 10 WHERE LNAME=?&quot;
-var params = json {
-  array(&quot;Fox&quot;)
-}
-
-connection.updateWithParams(update, params, { res -&gt;
-
-  if (res.succeeded()) {
-
-    var updateResult = res.result()
-
-    println(&quot;No. of rows updated: ${updateResult.updated}&quot;)
-
-  } else {
-
-    // Failed!
-
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example5-io.vertx.ext.sql.SQLConnection-[example5]`</code></pre>
 </div>
 </div>
 </div>
@@ -489,22 +405,7 @@ argument then the output array must contain a null value as the first element.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">// Assume that there is a SQL function like this:
-//
-// create function one_hour_ago() returns timestamp
-//    return now() - 1 hour;
-
-// note that you do not need to declare the output for functions
-var func = &quot;{ call one_hour_ago() }&quot;
-
-connection.call(func, { res -&gt;
-
-  if (res.succeeded()) {
-    var result = res.result()
-  } else {
-    // Failed!
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example8-io.vertx.ext.sql.SQLConnection-[example8]`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -513,24 +414,7 @@ not return anything the usage is as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">// Assume that there is a SQL procedure like this:
-//
-// create procedure new_customer(firstname varchar(50), lastname varchar(50))
-//   modifies sql data
-//   insert into customers values (default, firstname, lastname, current_timestamp);
-
-var func = &quot;{ call new_customer(?, ?) }&quot;
-
-connection.callWithParams(func, json {
-  array(&quot;John&quot;, &quot;Doe&quot;)
-}, null, { res -&gt;
-
-  if (res.succeeded()) {
-    // Success!
-  } else {
-    // Failed!
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example9-io.vertx.ext.sql.SQLConnection-[example9]`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -538,26 +422,7 @@ connection.callWithParams(func, json {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">// Assume that there is a SQL procedure like this:
-//
-// create procedure customer_lastname(IN firstname varchar(50), OUT lastname varchar(50))
-//   modifies sql data
-//   select lastname into lastname from customers where firstname = firstname;
-
-var func = &quot;{ call customer_lastname(?, ?) }&quot;
-
-connection.callWithParams(func, json {
-  array(&quot;John&quot;)
-}, json {
-  array(null, &quot;VARCHAR&quot;)
-}, { res -&gt;
-
-  if (res.succeeded()) {
-    var result = res.result()
-  } else {
-    // Failed!
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example10-io.vertx.ext.sql.SQLConnection-[example10]`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -610,18 +475,7 @@ String describing the type you want to receive.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">// Batch values
-var batch = mutableListOf&lt;Any?&gt;()
-batch.add(&quot;INSERT INTO emp (NAME) VALUES ('JOE')&quot;)
-batch.add(&quot;INSERT INTO emp (NAME) VALUES ('JANE')&quot;)
-
-connection.batch(batch, { res -&gt;
-  if (res.succeeded()) {
-    var result = res.result()
-  } else {
-    // Failed!
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example12-io.vertx.ext.sql.SQLConnection-[example12]`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -629,22 +483,7 @@ connection.batch(batch, { res -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">// Batch values
-var batch = mutableListOf&lt;Any?&gt;()
-batch.add(json {
-  array(&quot;joe&quot;)
-})
-batch.add(json {
-  array(&quot;jane&quot;)
-})
-
-connection.batchWithParams(&quot;INSERT INTO emp (name) VALUES (?)&quot;, batch, { res -&gt;
-  if (res.succeeded()) {
-    var result = res.result()
-  } else {
-    // Failed!
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example11-io.vertx.ext.sql.SQLConnection-[example11]`</code></pre>
 </div>
 </div>
 </div>
@@ -660,15 +499,7 @@ is complete</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">var sql = &quot;CREATE TABLE PEOPLE (ID int generated by default as identity (start with 1 increment by 1) not null,FNAME varchar(255), LNAME varchar(255), SHOE_SIZE int);&quot;
-
-connection.execute(sql, { execute -&gt;
-  if (execute.succeeded()) {
-    println(&quot;Table created !&quot;)
-  } else {
-    // Failed!
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example6-io.vertx.ext.sql.SQLConnection-[example6]`</code></pre>
 </div>
 </div>
 </div>
@@ -681,10 +512,7 @@ under the property <code>next</code>. A simple walk of all result sets can be ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">// do something with the result set...
-
-// next step
-rs = rs.next</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example13-io.vertx.ext.sql.ResultSet-[example13]`</code></pre>
 </div>
 </div>
 </div>
@@ -696,13 +524,7 @@ inflating the whole response into memory and JSON and data is just processed on 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">connection.queryStream(&quot;SELECT * FROM large_table&quot;, { stream -&gt;
-  if (stream.succeeded()) {
-    stream.result().handler({ row -&gt;
-      // do something with the row...
-    })
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example14-io.vertx.ext.sql.SQLConnection-[example14]`</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -712,20 +534,7 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">connection.queryStream(&quot;SELECT * FROM large_table; SELECT * FROM other_table&quot;, { stream -&gt;
-  if (stream.succeeded()) {
-    var sqlRowStream = stream.result()
-
-    sqlRowStream.resultSetClosedHandler({ v -&gt;
-      // will ask to restart the stream with the new result set if any
-      sqlRowStream.moreResults()
-    }).handler({ row -&gt;
-      // do something with the row...
-    }).endHandler({ v -&gt;
-      // no more data available...
-    })
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example15-io.vertx.ext.sql.SQLConnection-[example15]`</code></pre>
 </div>
 </div>
 </div>
@@ -744,17 +553,7 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">// Do stuff with connection - updates etc
-
-// Now commit
-
-connection.commit({ res -&gt;
-  if (res.succeeded()) {
-    // Committed OK!
-  } else {
-    // Failed!
-  }
-})</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/SQLExamples.html#example7-io.vertx.ext.sql.SQLConnection-[example7]`</code></pre>
 </div>
 </div>
 </div>
@@ -773,7 +572,7 @@ connection.commit({ res -&gt;
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2018-06-04 16:50:27 CEST
+                Last updated 2018-06-04 18:02:22 CEST
               
               
             </div>

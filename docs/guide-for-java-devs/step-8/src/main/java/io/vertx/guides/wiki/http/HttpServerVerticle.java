@@ -28,33 +28,31 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.JksOptions;
 import io.vertx.ext.auth.KeyStoreOptions;
 import io.vertx.ext.auth.jwt.JWTAuthOptions;
-import io.vertx.ext.auth.jwt.JWTOptions;
-import io.vertx.ext.auth.shiro.ShiroAuthOptions;
-import io.vertx.ext.auth.shiro.ShiroAuthRealmType;
+import io.vertx.ext.jwt.JWTOptions;
 import io.vertx.ext.web.client.WebClientOptions;
-import io.vertx.guides.wiki.database.reactivex.WikiDatabaseService;
 // tag::rx-imports[]
+import io.vertx.guides.wiki.database.reactivex.WikiDatabaseService;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.core.http.HttpServer;
-import io.vertx.reactivex.ext.auth.AuthProvider;
 import io.vertx.reactivex.ext.auth.User;
+import io.vertx.reactivex.ext.auth.jdbc.JDBCAuth;
 import io.vertx.reactivex.ext.auth.jwt.JWTAuth;
-import io.vertx.reactivex.ext.auth.shiro.ShiroAuth;
+import io.vertx.reactivex.ext.jdbc.JDBCClient;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import io.vertx.reactivex.ext.web.client.WebClient;
-import io.vertx.reactivex.ext.web.client.HttpResponse; // <1>
 import io.vertx.reactivex.ext.web.codec.BodyCodec;
 import io.vertx.reactivex.ext.web.handler.*;
 import io.vertx.reactivex.ext.web.sstore.LocalSessionStore;
 import io.vertx.reactivex.ext.web.templ.FreeMarkerTemplateEngine;
+// end::rx-imports[]
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-// end::rx-imports[]
 
 import java.util.Arrays;
 import java.util.Date;
 
+import static io.vertx.guides.wiki.DatabaseConstants.*;
 /**
  * @author <a href="https://julien.ponge.org/">Julien Ponge</a>
  */
@@ -94,10 +92,12 @@ public class HttpServerVerticle extends AbstractVerticle {
         .setPath("server-keystore.jks")
         .setPassword("secret")));
 
-    AuthProvider auth = ShiroAuth.create(vertx, new ShiroAuthOptions()
-      .setType(ShiroAuthRealmType.PROPERTIES)
-      .setConfig(new JsonObject()
-        .put("properties_path", "classpath:wiki-users.properties")));
+    JDBCClient dbClient = JDBCClient.createShared(vertx, new JsonObject()
+      .put("url", config().getString(CONFIG_WIKIDB_JDBC_URL, DEFAULT_WIKIDB_JDBC_URL))
+      .put("driver_class", config().getString(CONFIG_WIKIDB_JDBC_DRIVER_CLASS, DEFAULT_WIKIDB_JDBC_DRIVER_CLASS))
+      .put("max_pool_size", config().getInteger(CONFIG_WIKIDB_JDBC_MAX_POOL_SIZE, DEFAULT_JDBC_MAX_POOL_SIZE)));
+
+    JDBCAuth auth = JDBCAuth.create(vertx, dbClient);
 
     Router router = Router.router(vertx);
 
@@ -148,9 +148,9 @@ public class HttpServerVerticle extends AbstractVerticle {
       // tag::rx-concurrent-composition[]
 
       auth.rxAuthenticate(creds).flatMap(user -> {
-        Single<Boolean> create = user.rxIsAuthorised("create"); // <1>
-        Single<Boolean> delete = user.rxIsAuthorised("delete");
-        Single<Boolean> update = user.rxIsAuthorised("update");
+        Single<Boolean> create = user.rxIsAuthorized("create"); // <1>
+        Single<Boolean> delete = user.rxIsAuthorized("delete");
+        Single<Boolean> update = user.rxIsAuthorized("update");
 
         return Single.zip(create, delete, update, (canCreate, canDelete, canUpdate) -> { // <2>
           return jwtAuth.generateToken(
@@ -194,7 +194,7 @@ public class HttpServerVerticle extends AbstractVerticle {
   }
 
   private Completable checkAuthorised(RoutingContext context, String authority) {
-    return context.user().rxIsAuthorised("role:writer")
+    return context.user().rxIsAuthorized(authority)
       .flatMapCompletable(authorized -> authorized ? Completable.complete() : Completable.error(new UnauthorizedThrowable(authority)));
   }
 
@@ -296,7 +296,7 @@ public class HttpServerVerticle extends AbstractVerticle {
   }
 
   private void indexHandler(RoutingContext context) {
-    context.user().rxIsAuthorised("create")
+    context.user().rxIsAuthorized("create")
       .flatMap(canCreatePage -> {
         context.put("canCreatePage", canCreatePage);
         return dbService.rxFetchAllPages();
@@ -315,10 +315,10 @@ public class HttpServerVerticle extends AbstractVerticle {
 
   private void pageRenderingHandler(RoutingContext context) {
     User user = context.user();
-    user.rxIsAuthorised("update")
+    user.rxIsAuthorized("update")
       .flatMap(canSavePage -> {
         context.put("canSavePage", canSavePage);
-        return user.rxIsAuthorised("delete");
+        return user.rxIsAuthorized("delete");
       })
       .flatMap(canDeletePage -> {
         context.put("canDeletePage", canDeletePage);
@@ -395,26 +395,30 @@ public class HttpServerVerticle extends AbstractVerticle {
     checkAuthorised(context, "role:writer")
       .andThen(dbService.rxFetchAllPagesData())
       .map(pages -> {
-        JsonObject filesObject = new JsonObject();
+        JsonArray filesObject = new JsonArray();
+        JsonObject payload = new JsonObject()
+          .put("files", filesObject)
+          .put("language", "plaintext")
+          .put("title", "vertx-wiki-backup")
+          .put("public", true);
         pages.forEach(page -> {
           JsonObject fileObject = new JsonObject();
-          filesObject.put(page.getString("NAME"), fileObject);
+          fileObject.put("name", page.getString("NAME"));
           fileObject.put("content", page.getString("CONTENT"));
+          filesObject.add(fileObject);
         });
-        return new JsonObject()
-          .put("files", filesObject)
-          .put("description", "A wiki backup")
-          .put("public", true);
+        return payload;
       })
       .flatMap(body -> webClient
-        .post(443, "api.github.com", "/gists")
+        .post(443, "snippets.glot.io", "/snippets")
         .putHeader("User-Agent", "vert-x3")
-        .putHeader("Accept", "application/vnd.github.v3+json")
         .putHeader("Content-Type", "application/json")
-        .as(BodyCodec.jsonObject()).rxSendJsonObject(body))
+        .as(BodyCodec.jsonObject())
+        .rxSendJsonObject(body))
       .subscribe(response -> {
-        if (response.statusCode() == 201) {
-          context.put("backup_gist_url", response.body().getString("html_url"));
+        if (response.statusCode() == 200) {
+          String url = "https://glot.io/snippets/" + response.body().getString("id");
+          context.put("backup_gist_url", url);
           indexHandler(context);
         } else {
           StringBuilder message = new StringBuilder()

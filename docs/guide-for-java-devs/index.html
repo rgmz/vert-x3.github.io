@@ -146,10 +146,10 @@
 </li>
 <li><a href="#_integrating_with_a_3rd_party_web_service">Integrating with a 3rd-party web service</a>
 <ul class="sectlevel2">
-<li><a href="#_scenario_backing_up_to_github_gist">Scenario: backing up to GitHub Gist</a></li>
+<li><a href="#_scenario_backing_up_to_glot_io">Scenario: backing up to Glot.io</a></li>
 <li><a href="#_updating_the_database_service">Updating the database service</a></li>
 <li><a href="#_the_web_client_api">The web client API</a></li>
-<li><a href="#_creating_anonymous_gists">Creating anonymous Gists</a></li>
+<li><a href="#_creating_anonymous_snippets">Creating anonymous snippets</a></li>
 </ul>
 </li>
 <li><a href="#_exposing_a_web_api">Exposing a web API</a>
@@ -248,10 +248,10 @@
 </li>
 <li><a href="#_integrating_with_a_3rd_party_web_service">Integrating with a 3rd-party web service</a>
 <ul class="sectlevel2">
-<li><a href="#_scenario_backing_up_to_github_gist">Scenario: backing up to GitHub Gist</a></li>
+<li><a href="#_scenario_backing_up_to_glot_io">Scenario: backing up to Glot.io</a></li>
 <li><a href="#_updating_the_database_service">Updating the database service</a></li>
 <li><a href="#_the_web_client_api">The web client API</a></li>
-<li><a href="#_creating_anonymous_gists">Creating anonymous Gists</a></li>
+<li><a href="#_creating_anonymous_snippets">Creating anonymous snippets</a></li>
 </ul>
 </li>
 <li><a href="#_exposing_a_web_api">Exposing a web API</a>
@@ -650,7 +650,7 @@ It has goals to initialize, build, package and run a Vert.x project.</p>
 <div class="content">
 <pre>mkdir vertx-wiki
 cd vertx-wiki
-mvn io.fabric8:vertx-maven-plugin:1.0.7:setup -DvertxVersion=3.5.0
+mvn io.fabric8:vertx-maven-plugin:1.0.13:setup -DvertxVersion=3.5.2
 git init</pre>
 </div>
 </div>
@@ -1414,7 +1414,7 @@ Instead of having a separate handler and template, we simply rely on JavaScript 
 <div class="colist arabic">
 <ol>
 <li>
-<p>URL parameters (<code>/wiki/:name</code> here) can be accessed through the context request object.</p>
+<p>URL parameters (<code>/wiki/:page</code> here) can be accessed through the context request object.</p>
 </li>
 <li>
 <p>Passing argument values to SQL queries is done using a <code>JsonArray</code>, with the elements in order of the <code>?</code> symbols in the SQL query.</p>
@@ -1611,7 +1611,7 @@ This happens both when updating an existing page (issuing a SQL <code>update</co
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>$ java -jar target/wiki-step-1-1.2.0-fat.jar</pre>
+<pre>$ java -jar target/wiki-step-1-1.3.0-SNAPSHOT-fat.jar</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2698,7 +2698,10 @@ The essential difference is the support of the asynchronous result handler in th
 
     WikiDatabaseService.create(dbClient, sqlQueries, ready -&gt; {
       <span class="keyword">if</span> (ready.succeeded()) {
-        ProxyHelper.registerService(WikiDatabaseService.class, vertx, ready.result(), CONFIG_WIKIDB_QUEUE); <b class="conum">(1)</b>
+        ServiceBinder binder = <span class="keyword">new</span> ServiceBinder(vertx);
+        binder
+          .setAddress(CONFIG_WIKIDB_QUEUE)
+          .register(WikiDatabaseService.class, ready.result()); <b class="conum">(1)</b>
         startFuture.complete();
       } <span class="keyword">else</span> {
         startFuture.fail(ready.cause());
@@ -3129,18 +3132,13 @@ Integration is very often achieved using APIs exposed over the versatile HTTP pr
 <p>This section shows how to integrate with a 3rd-party web service using the HTTP client APIs of Vert.x.</p>
 </div>
 <div class="sect2">
-<h3 id="_scenario_backing_up_to_github_gist">Scenario: backing up to GitHub Gist</h3>
+<h3 id="_scenario_backing_up_to_glot_io">Scenario: backing up to Glot.io</h3>
 <div class="paragraph">
-<p>The <a href="https://gist.github.com/">GitHub Gist service</a> is popular for sharing code snippets to the world.
-Other services can use it, an example being the <a href="https://medium.com">Medium publishing platform</a> where links to Gists allow code snippets to be embedded inside publications.</p>
+<p>The <a href="https://glot.io/">Glot service</a> allows sharing code snippets and files to the world.
+It exposes an <a href="https://github.com/prasmussen/glot-snippets/blob/master/api_docs/create_snippet.md">API for posting anonymous snippets</a>.</p>
 </div>
 <div class="paragraph">
-<p>GitHub exposes a <a href="https://developer.github.com/v3/">detailed API</a> for fetching, creating, updating and deleting Gists.
-The API uses HTTPS endpoints starting at <a href="https://api.github.com/" class="bare">https://api.github.com/</a> and JSON payloads.</p>
-</div>
-<div class="paragraph">
-<p>While many operations require authorization from the client using OAuth authentication, <a href="https://developer.github.com/v3/gists/#create-a-gist">creating a Gist is possible while being anonymous</a>.
-We are going to leverage this feature to backup our wiki pages as Gists.</p>
+<p>We are going to leverage this service to backup our wiki pages as snippets where each file represents the Markdown content of a wiki page.</p>
 </div>
 <div class="paragraph">
 <p>A new button is going to be added on the wiki index page:</p>
@@ -3151,19 +3149,19 @@ We are going to leverage this feature to backup our wiki pages as Gists.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Clicking the <em>backup</em> button will trigger the creating of a Gist:</p>
+<p>Clicking the <em>backup</em> button will trigger the creation of a snippet:</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="step-5/images/gist-created.png" alt="gist created">
+<img src="step-5/images/backup-created.png" alt="backup created">
 </div>
 </div>
 <div class="paragraph">
-<p>A backup Gist consists of 1 file per wiki page, with the content being the raw Markdown text:</p>
+<p>Each backup snippet can then be seen at Glot.io:</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="step-5/images/gist.png" alt="gist">
+<img src="step-5/images/snippet.png" alt="snippet">
 </div>
 </div>
 </div>
@@ -3260,7 +3258,7 @@ The test starts a HTTP server and then it does a HTTP GET request with the web c
 </div>
 </div>
 <div class="sect2">
-<h3 id="_creating_anonymous_gists">Creating anonymous Gists</h3>
+<h3 id="_creating_anonymous_snippets">Creating anonymous snippets</h3>
 <div class="paragraph">
 <p>We first need a web client object to issue HTTP requests to the Gist API:</p>
 </div>
@@ -3290,7 +3288,6 @@ Since requests are made using HTTPS, we need to configure the web client with SS
 <div class="title">Tip</div>
 </td>
 <td class="content">
-The GitHub API requires a valid <code>User-Agent</code> header and requests a GitHub account or organization identifier.
 We override the default user agent with <code>vert-x3</code> but you may opt to use your own value instead.
 </td>
 </tr>
@@ -3313,29 +3310,31 @@ We override the default user agent with <code>vert-x3</code> but you may opt to 
   dbService.fetchAllPagesData(reply -&gt; {
     <span class="keyword">if</span> (reply.succeeded()) {
 
-      JsonObject filesObject = <span class="keyword">new</span> JsonObject();
-      JsonObject gistPayload = <span class="keyword">new</span> JsonObject() <b class="conum">(1)</b>
+      JsonArray filesObject = <span class="keyword">new</span> JsonArray();
+      JsonObject payload = <span class="keyword">new</span> JsonObject() <b class="conum">(1)</b>
         .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">files</span><span class="delimiter">&quot;</span></span>, filesObject)
-        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">A wiki backup</span><span class="delimiter">&quot;</span></span>)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">language</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">plaintext</span><span class="delimiter">&quot;</span></span>)
+        .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">vertx-wiki-backup</span><span class="delimiter">&quot;</span></span>)
         .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">public</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>);
 
       reply
         .result()
         .forEach(page -&gt; {
           JsonObject fileObject = <span class="keyword">new</span> JsonObject(); <b class="conum">(2)</b>
-          filesObject.put(page.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">NAME</span><span class="delimiter">&quot;</span></span>), fileObject);
+          fileObject.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, page.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">NAME</span><span class="delimiter">&quot;</span></span>));
           fileObject.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">content</span><span class="delimiter">&quot;</span></span>, page.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">CONTENT</span><span class="delimiter">&quot;</span></span>));
+          filesObject.add(fileObject);
         });
 
-      webClient.post(<span class="integer">443</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">api.github.com</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/gists</span><span class="delimiter">&quot;</span></span>) <b class="conum">(3)</b>
-        .putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Accept</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">application/vnd.github.v3+json</span><span class="delimiter">&quot;</span></span>) <b class="conum">(4)</b>
+      webClient.post(<span class="integer">443</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">snippets.glot.io</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/snippets</span><span class="delimiter">&quot;</span></span>) <b class="conum">(3)</b>
         .putHeader(<span class="string"><span class="delimiter">&quot;</span><span class="content">Content-Type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
-        .as(BodyCodec.jsonObject()) <b class="conum">(5)</b>
-        .sendJsonObject(gistPayload, ar -&gt; {  <b class="conum">(6)</b>
+        .as(BodyCodec.jsonObject()) <b class="conum">(4)</b>
+        .sendJsonObject(payload, ar -&gt; {  <b class="conum">(5)</b>
           <span class="keyword">if</span> (ar.succeeded()) {
             HttpResponse&lt;JsonObject&gt; response = ar.result();
-            <span class="keyword">if</span> (response.statusCode() == <span class="integer">201</span>) {
-              context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">backup_gist_url</span><span class="delimiter">&quot;</span></span>, response.body().getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">html_url</span><span class="delimiter">&quot;</span></span>));  <b class="conum">(7)</b>
+            <span class="keyword">if</span> (response.statusCode() == <span class="integer">200</span>) {
+              <span class="predefined-type">String</span> url = <span class="string"><span class="delimiter">&quot;</span><span class="content">https://glot.io/snippets/</span><span class="delimiter">&quot;</span></span> + response.body().getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>);
+              context.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">backup_gist_url</span><span class="delimiter">&quot;</span></span>, url);  <b class="conum">(6)</b>
               indexHandler(context);
             } <span class="keyword">else</span> {
               <span class="predefined-type">StringBuilder</span> message = <span class="keyword">new</span> <span class="predefined-type">StringBuilder</span>()
@@ -3366,16 +3365,13 @@ We override the default user agent with <code>vert-x3</code> but you may opt to 
 <div class="colist arabic">
 <ol>
 <li>
-<p>The Gist creation request payload is a JSON document as outlined in the <a href="https://developer.github.com/v3/gists/#create-a-gist">GitHub API documentation</a>.</p>
+<p>The snippet creation request payload is a JSON document as outlined in the <a href="https://github.com/prasmussen/glot-snippets/blob/master/api_docs/create_snippet.md">service API documentation</a>.</p>
 </li>
 <li>
-<p>Each file is an entry under the <code>files</code> object of the payload, where the title is the key and the value is the text.</p>
+<p>Each file is an entry under the <code>files</code> object of the payload, with a title and content.</p>
 </li>
 <li>
-<p>The web client needs to issue a <code>POST</code> request on port 443 (HTTPS), and the path must be <code>/gists</code>.</p>
-</li>
-<li>
-<p>It is mandatory to have a <code>Accept</code> header in the request with the <code>application/vnd.github.v3+json</code> MIME type, otherwise the request fails. It is also important to specify that the payload is a JSON object at the next line.</p>
+<p>The web client needs to issue a <code>POST</code> request on port 443 (HTTPS), and the path must be <code>/snippets</code>.</p>
 </li>
 <li>
 <p>The <code>BodyCodec</code> class provides a helper to specify that the response will be directly converted to a Vert.x <code>JsonObject</code> instance. It is also possible to use <code>BodyCodec#json(Class&lt;T&gt;)</code> and the JSON data will be mapped to a Java object of type <code>T</code> (this uses Jackson data mapping under the hood).</p>
@@ -3384,7 +3380,7 @@ We override the default user agent with <code>vert-x3</code> but you may opt to 
 <p><code>sendJsonObject</code> is a helper for triggering the HTTP request with a JSON payload.</p>
 </li>
 <li>
-<p>Upon success we can traverse the JSON data (<code>html_url</code> key) to get the user-friendly URL of the newly created Gist.</p>
+<p>Upon success we can get the snippet identifier, and construct a URL to the user-friendly web representation.</p>
 </li>
 </ol>
 </div>
@@ -3902,11 +3898,10 @@ You will likely need a <em>self-signed certificate</em> for testing purposes, an
 <h3 id="_access_control_and_authentication">Access control and authentication</h3>
 <div class="paragraph">
 <p>Vert.x provides a wide range of options for doing authentication and authorization.
-The officially supported modules cover JDBC, MongoDB, <a href="https://shiro.apache.org/">Apache Shiro</a>, OAuth2 with well-known providers and JWT (JSON web tokens).</p>
+The officially supported modules cover JDBC, MongoDB, Apache Shiro, <code>htdigest</code> files, OAuth2 with well-known providers and JWT (JSON web tokens).</p>
 </div>
 <div class="paragraph">
-<p>While the next section will cover JWT, this one focuses on using Apache Shiro which is especially interesting when authentication must be backed by a LDAP or Active Directory server.
-In our case we will simply store the credentials in a properties file to keep things simple, but the API usage against a LDAP server remains the same.</p>
+<p>While the next section will cover JWT, this one focuses on using JDBC-based authentication, reusing the wiki database.</p>
 </div>
 <div class="paragraph">
 <p>The goal is to require users to authenticate for using the wiki, and have role-based permissions:</p>
@@ -3927,63 +3922,71 @@ In our case we will simply store the credentials in a properties file to keep th
 </li>
 </ul>
 </div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Warning</div>
-</td>
-<td class="content">
-The Vert.x Shiro integration has some issues due to the inner workings of Apache Shiro. Some parts are blocking which can hinder performance, and some data is stored using thread local state. You should not try abusing the exposed internal state APIs either.
-</td>
-</tr>
-</table>
+<div class="sect3">
+<h4 id="_refactoring_the_jdbc_configuration">Refactoring the JDBC configuration</h4>
+<div class="paragraph">
+<p>In the previous steps, only the database verticle and service where aware of the JDBC configuration.
+Now the HTTP service vertice also needs to share the same JDBC access.</p>
+</div>
+<div class="paragraph">
+<p>To do that we extract configuration parameters and default values to an interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">io.vertx.guides.wiki</span>;
+
+<span class="directive">public</span> <span class="type">interface</span> <span class="class">DatabaseConstants</span> {
+
+  <span class="predefined-type">String</span> CONFIG_WIKIDB_JDBC_URL = <span class="string"><span class="delimiter">&quot;</span><span class="content">wikidb.jdbc.url</span><span class="delimiter">&quot;</span></span>;
+  <span class="predefined-type">String</span> CONFIG_WIKIDB_JDBC_DRIVER_CLASS = <span class="string"><span class="delimiter">&quot;</span><span class="content">wikidb.jdbc.driver_class</span><span class="delimiter">&quot;</span></span>;
+  <span class="predefined-type">String</span> CONFIG_WIKIDB_JDBC_MAX_POOL_SIZE = <span class="string"><span class="delimiter">&quot;</span><span class="content">wikidb.jdbc.max_pool_size</span><span class="delimiter">&quot;</span></span>;
+
+  <span class="predefined-type">String</span> DEFAULT_WIKIDB_JDBC_URL = <span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc:hsqldb:file:db/wiki</span><span class="delimiter">&quot;</span></span>;
+  <span class="predefined-type">String</span> DEFAULT_WIKIDB_JDBC_DRIVER_CLASS = <span class="string"><span class="delimiter">&quot;</span><span class="content">org.hsqldb.jdbcDriver</span><span class="delimiter">&quot;</span></span>;
+  <span class="type">int</span> DEFAULT_JDBC_MAX_POOL_SIZE = <span class="integer">30</span>;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now in <code>WikiDatabaseVerticle</code> we use these constants as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">JDBCClient dbClient = JDBCClient.createShared(vertx, <span class="keyword">new</span> JsonObject()
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">url</span><span class="delimiter">&quot;</span></span>, config().getString(CONFIG_WIKIDB_JDBC_URL, DEFAULT_WIKIDB_JDBC_URL))
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">driver_class</span><span class="delimiter">&quot;</span></span>, config().getString(CONFIG_WIKIDB_JDBC_DRIVER_CLASS, DEFAULT_WIKIDB_JDBC_DRIVER_CLASS))
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">max_pool_size</span><span class="delimiter">&quot;</span></span>, config().getInteger(CONFIG_WIKIDB_JDBC_MAX_POOL_SIZE, DEFAULT_JDBC_MAX_POOL_SIZE)));</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_adding_apache_shiro_authentication_to_routes">Adding Apache Shiro authentication to routes</h4>
+<h4 id="_adding_jdbc_authentication_to_routes">Adding JDBC authentication to routes</h4>
 <div class="paragraph">
-<p>The first step is to add the <code>vertx-auth-shiro</code> module to the Maven dependencies list:</p>
+<p>The first step is to add the <code>vertx-auth-jdbc</code> module to the Maven dependencies list:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
-  <span class="tag">&lt;artifactId&gt;</span>vertx-auth-shiro<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-auth-jdbc<span class="tag">&lt;/artifactId&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The properties file definition that we use is the following, located in <code>src/main/resources/wiki-users.properties</code>:</p>
+<p>Back to the <code>HttpServerVerticle</code> class code, we create an authentication provider:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>user.root=w00t,admin
-user.foo=bar,editor,writer
-user.bar=baz,writer
-user.baz=baz
+<pre class="CodeRay highlight"><code data-lang="java">JDBCClient dbClient = JDBCClient.createShared(vertx, <span class="keyword">new</span> JsonObject()
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">url</span><span class="delimiter">&quot;</span></span>, config().getString(CONFIG_WIKIDB_JDBC_URL, DEFAULT_WIKIDB_JDBC_URL))
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">driver_class</span><span class="delimiter">&quot;</span></span>, config().getString(CONFIG_WIKIDB_JDBC_DRIVER_CLASS, DEFAULT_WIKIDB_JDBC_DRIVER_CLASS))
+  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">max_pool_size</span><span class="delimiter">&quot;</span></span>, config().getInteger(CONFIG_WIKIDB_JDBC_MAX_POOL_SIZE, DEFAULT_JDBC_MAX_POOL_SIZE)));
 
-role.admin=*
-role.editor=create,delete,update
-role.writer=update</code></pre>
+JDBCAuth auth = JDBCAuth.create(vertx, dbClient);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>A <code>user</code>-prefixed entry is a user account, where the first value entry is the password possibly followed by roles.
-In this example user <code>bar</code> has password <code>baz</code>, is a <code>writer</code>, and a <code>writer</code> has <code>update</code> permission.</p>
-</div>
-<div class="paragraph">
-<p>Back to the <code>HttpServerVerticle</code> class code, we create an authentication provider using Apache Shiro:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">AuthProvider</span> auth = ShiroAuth.create(vertx, <span class="keyword">new</span> ShiroAuthOptions()
-  .setType(ShiroAuthRealmType.PROPERTIES)
-  .setConfig(<span class="keyword">new</span> JsonObject()
-    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">properties_path</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:wiki-users.properties</span><span class="delimiter">&quot;</span></span>)));</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code>ShiroAuth</code> object instance is then used to deal with server-side user sessions:</p>
+<p>The <code>JDBCAuth</code> object instance is then used to deal with server-side user sessions:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4125,7 +4128,7 @@ Here is how this is implemented for the <code>indexHandler</code> handler method
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> <span class="type">void</span> indexHandler(RoutingContext context) {
-  context.user().isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">create</span><span class="delimiter">&quot;</span></span>, res -&gt; {  <b class="conum">(1)</b>
+  context.user().isAuthorized(<span class="string"><span class="delimiter">&quot;</span><span class="content">create</span><span class="delimiter">&quot;</span></span>, res -&gt; {  <b class="conum">(1)</b>
     <span class="type">boolean</span> canCreatePage = res.succeeded() &amp;&amp; res.result();  <b class="conum">(2)</b>
     dbService.fetchAllPages(reply -&gt; {
       <span class="keyword">if</span> (reply.succeeded()) {
@@ -4233,7 +4236,7 @@ Here is how to protect page deletions by wrapping the <code>pageDeletionHandler<
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> <span class="type">void</span> pageDeletionHandler(RoutingContext context) {
-  context.user().isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">delete</span><span class="delimiter">&quot;</span></span>, res -&gt; {
+  context.user().isAuthorized(<span class="string"><span class="delimiter">&quot;</span><span class="content">delete</span><span class="delimiter">&quot;</span></span>, res -&gt; {
     <span class="keyword">if</span> (res.succeeded() &amp;&amp; res.result()) {
 
       <span class="comment">// Original code:</span>
@@ -4252,6 +4255,227 @@ Here is how to protect page deletions by wrapping the <code>pageDeletionHandler<
     }
   });
 }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_populating_the_database_with_user_and_role_data">Populating the database with user and role data</h4>
+<div class="paragraph">
+<p>A last step is required for assembling all pieces of our authentication puzzle.
+We leave adding user registration and management as an exercice left to the reader, and instead we add some code to ensure that the database is being populated with some roles and accounts:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Login</th>
+<th class="tableblock halign-left valign-top">Password</th>
+<th class="tableblock halign-left valign-top">Roles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">root</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin (create, delete, update)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">foo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">editor (create, delete, update), writer (update)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">baz</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">writer (update)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">baz</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">baz</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The <code>vertx-auth-jdbc</code> prescribes a default database schema with 3 tables: 1 for users (with salted passwords), 1 for role permissions, and 1 to map users to roles.
+That schema can be changed and configured, but in many cases sticking to the default is a very good option.</p>
+</div>
+<div class="paragraph">
+<p>To do that, we are going to deploy a verticle whose sole role is performing the initialisation work:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">io.vertx.guides.wiki.http</span>;
+
+<span class="keyword">import</span> <span class="include">io.vertx.core.AbstractVerticle</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.core.AsyncResult</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.core.Handler</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.core.json.JsonObject</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.ext.jdbc.JDBCClient</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.ext.sql.ResultSet</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.ext.sql.SQLConnection</span>;
+<span class="keyword">import</span> <span class="include">org.slf4j.Logger</span>;
+<span class="keyword">import</span> <span class="include">org.slf4j.LoggerFactory</span>;
+
+<span class="keyword">import</span> <span class="include">java.util.Arrays</span>;
+<span class="keyword">import</span> <span class="include">java.util.List</span>;
+
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">io.vertx.guides.wiki.DatabaseConstants</span>.*;
+
+<span class="directive">public</span> <span class="type">class</span> <span class="class">AuthInitializerVerticle</span> <span class="directive">extends</span> AbstractVerticle {
+
+  <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">Logger</span> logger = LoggerFactory.getLogger(AuthInitializerVerticle.class);
+
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="type">void</span> start() <span class="directive">throws</span> <span class="exception">Exception</span> {
+
+    <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; schemaCreation = <span class="predefined-type">Arrays</span>.asList(
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">create table if not exists user (username varchar(255), password varchar(255), password_salt varchar(255));</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">create table if not exists user_roles (username varchar(255), role varchar(255));</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">create table if not exists roles_perms (role varchar(255), perm varchar(255));</span><span class="delimiter">&quot;</span></span>
+    );
+
+    <span class="comment">/*
+     * Passwords:
+     *    root / admin
+     *    foo / bar
+     *    bar / baz
+     *    baz / baz
+     */</span>
+    <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; dataInit = <span class="predefined-type">Arrays</span>.asList( <b class="conum">(1)</b>
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into user values ('root', 'C705F9EAD3406D0C17DDA3668A365D8991E6D1050C9A41329D9C67FC39E53437A39E83A9586E18C49AD10E41CBB71F0C06626741758E16F9B6C2BA4BEE74017E', '017DC3D7F89CD5E873B16E6CCE9A2307C8E3D9C5758741EEE49A899FFBC379D8');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into user values ('foo', 'C3F0D72C1C3C8A11525B4563BAFF0E0F169114DE36796A595B78A373C522C0FF81BC2A683E2CB882A077847E8FD4DA09F1993072A4E9D7671313E4E5DB898F4E', '017DC3D7F89CD5E873B16E6CCE9A2307C8E3D9C5758741EEE49A899FFBC379D8');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into user values ('bar', 'AEDD3E9FFCB847596A0596306A4303CC61C43D9904A0184951057D07D2FE2F36FA855C58EBCA9F3AEC9C65C46656F393E3D0F8711881F250D0D860F143A7A281', '017DC3D7F89CD5E873B16E6CCE9A2307C8E3D9C5758741EEE49A899FFBC379D8');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into user values ('baz', 'AEDD3E9FFCB847596A0596306A4303CC61C43D9904A0184951057D07D2FE2F36FA855C58EBCA9F3AEC9C65C46656F393E3D0F8711881F250D0D860F143A7A281', '017DC3D7F89CD5E873B16E6CCE9A2307C8E3D9C5758741EEE49A899FFBC379D8');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into roles_perms values ('editor', 'create');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into roles_perms values ('editor', 'delete');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into roles_perms values ('editor', 'update');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into roles_perms values ('writer', 'update');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into roles_perms values ('admin', 'create');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into roles_perms values ('admin', 'delete');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into roles_perms values ('admin', 'update');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into user_roles values ('root', 'admin');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into user_roles values ('foo', 'editor');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into user_roles values ('foo', 'writer');</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">insert into user_roles values ('bar', 'writer');</span><span class="delimiter">&quot;</span></span>
+    );
+
+    JDBCClient dbClient = JDBCClient.createShared(vertx, <span class="keyword">new</span> JsonObject()
+      .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">url</span><span class="delimiter">&quot;</span></span>, config().getString(CONFIG_WIKIDB_JDBC_URL, DEFAULT_WIKIDB_JDBC_URL))
+      .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">driver_class</span><span class="delimiter">&quot;</span></span>, config().getString(CONFIG_WIKIDB_JDBC_DRIVER_CLASS, DEFAULT_WIKIDB_JDBC_DRIVER_CLASS))
+      .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">max_pool_size</span><span class="delimiter">&quot;</span></span>, config().getInteger(CONFIG_WIKIDB_JDBC_MAX_POOL_SIZE, DEFAULT_JDBC_MAX_POOL_SIZE)));
+
+
+    dbClient.getConnection(car -&gt; {
+      <span class="keyword">if</span> (car.succeeded()) {
+        SQLConnection connection = car.result();
+        connection.batch(schemaCreation, ar -&gt; schemaCreationHandler(dataInit, connection, ar));
+      } <span class="keyword">else</span> {
+        logger.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Cannot obtain a database connection</span><span class="delimiter">&quot;</span></span>, car.cause());
+      }
+    });
+  }
+
+  <span class="directive">private</span> <span class="type">void</span> schemaCreationHandler(<span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; dataInit, SQLConnection connection, AsyncResult&lt;<span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt;&gt; ar) {
+    <span class="keyword">if</span> (ar.succeeded()) {
+      connection.query(<span class="string"><span class="delimiter">&quot;</span><span class="content">select count(*) from user;</span><span class="delimiter">&quot;</span></span>, testQueryHandler(dataInit, connection));
+    } <span class="keyword">else</span> {
+      connection.close();
+      logger.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Schema creation failed</span><span class="delimiter">&quot;</span></span>, ar.cause());
+    }
+  }
+
+  <span class="directive">private</span> <span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">ResultSet</span>&gt;&gt; testQueryHandler(<span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; dataInit, SQLConnection connection) {
+    <span class="keyword">return</span> ar -&gt; {
+      <span class="keyword">if</span> (ar.succeeded()) {
+        <span class="keyword">if</span> (ar.result().getResults().get(<span class="integer">0</span>).getInteger(<span class="integer">0</span>) == <span class="integer">0</span>) {
+          logger.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">Need to insert data</span><span class="delimiter">&quot;</span></span>);
+          connection.batch(dataInit, batchInsertHandler(connection));
+        } <span class="keyword">else</span> {
+          logger.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">No need to insert data</span><span class="delimiter">&quot;</span></span>);
+          connection.close();
+        }
+      } <span class="keyword">else</span> {
+        connection.close();
+        logger.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Could not check the number of users in the database</span><span class="delimiter">&quot;</span></span>, ar.cause());
+      }
+    };
+  }
+
+  <span class="directive">private</span> <span class="predefined-type">Handler</span>&lt;AsyncResult&lt;<span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt;&gt;&gt; batchInsertHandler(SQLConnection connection) {
+    <span class="keyword">return</span> ar -&gt; {
+      <span class="keyword">if</span> (ar.succeeded()) {
+        logger.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">Successfully inserted data</span><span class="delimiter">&quot;</span></span>);
+      } <span class="keyword">else</span> {
+        logger.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Could not insert data</span><span class="delimiter">&quot;</span></span>, ar.cause());
+      }
+      connection.close();
+    };
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>The hashed values can be generated using <code>auth.computeHash(password, salt)</code> where <code>auth</code> is a <code>JDBCAuth</code> instance.
+Salt values can also be generated using <code>auth.generateSalt()</code>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This impacts the <code>MainVerticle</code> class, as we now deploy it first:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">MainVerticle</span> <span class="directive">extends</span> AbstractVerticle {
+
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="type">void</span> start(<span class="predefined-type">Future</span>&lt;<span class="predefined-type">Void</span>&gt; startFuture) <span class="directive">throws</span> <span class="exception">Exception</span> {
+
+    <span class="predefined-type">Future</span>&lt;<span class="predefined-type">String</span>&gt; dbVerticleDeployment = <span class="predefined-type">Future</span>.future();
+    vertx.deployVerticle(<span class="keyword">new</span> WikiDatabaseVerticle(), dbVerticleDeployment);
+
+    dbVerticleDeployment.compose(id -&gt; {
+      <span class="predefined-type">Future</span>&lt;<span class="predefined-type">String</span>&gt; authInitDeployment = <span class="predefined-type">Future</span>.future();
+      vertx.deployVerticle(<span class="keyword">new</span> AuthInitializerVerticle(), authInitDeployment);
+      <span class="keyword">return</span> authInitDeployment;
+    }).compose(id -&gt; {
+      <span class="predefined-type">Future</span>&lt;<span class="predefined-type">String</span>&gt; httpVerticleDeployment = <span class="predefined-type">Future</span>.future();
+      vertx.deployVerticle(
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.guides.wiki.http.HttpServerVerticle</span><span class="delimiter">&quot;</span></span>,
+        <span class="keyword">new</span> DeploymentOptions().setInstances(<span class="integer">2</span>),
+        httpVerticleDeployment.completer());
+      <span class="keyword">return</span> httpVerticleDeployment;
+    }).setHandler(ar -&gt; {
+      <span class="keyword">if</span> (ar.succeeded()) {
+        startFuture.complete();
+      } <span class="keyword">else</span> {
+        startFuture.fail(ar.cause());
+      }
+    });
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, we also need to update the <code>ApiTest</code> class to setup the in-memory database for both the authentication and wiki storage:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">JsonObject dbConf = <span class="keyword">new</span> JsonObject()
+  .put(WikiDatabaseVerticle.CONFIG_WIKIDB_JDBC_URL, <span class="string"><span class="delimiter">&quot;</span><span class="content">jdbc:hsqldb:mem:testdb;shutdown=true</span><span class="delimiter">&quot;</span></span>)
+  .put(WikiDatabaseVerticle.CONFIG_WIKIDB_JDBC_MAX_POOL_SIZE, <span class="integer">4</span>);
+
+vertx.deployVerticle(<span class="keyword">new</span> AuthInitializerVerticle(),
+  <span class="keyword">new</span> DeploymentOptions().setConfig(dbConf), context.asyncAssertSuccess());
+
+vertx.deployVerticle(<span class="keyword">new</span> WikiDatabaseVerticle(),
+  <span class="keyword">new</span> DeploymentOptions().setConfig(dbConf), context.asyncAssertSuccess());</code></pre>
 </div>
 </div>
 </div>
@@ -4314,11 +4538,11 @@ keytool -genkeypair -keystore keystore.jceks -storetype jceks -storepass secret 
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">Router apiRouter = Router.router(vertx);
 
-JWTAuth jwtAuth = JWTAuth.create(vertx, <span class="keyword">new</span> JsonObject()
-  .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyStore</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> JsonObject()
-    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jceks</span><span class="delimiter">&quot;</span></span>)
-    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">jceks</span><span class="delimiter">&quot;</span></span>)
-    .put(<span class="string"><span class="delimiter">&quot;</span><span class="content">password</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>)));
+JWTAuth jwtAuth = JWTAuth.create(vertx, <span class="keyword">new</span> JWTAuthOptions()
+  .setKeyStore(<span class="keyword">new</span> KeyStoreOptions()
+    .setPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">keystore.jceks</span><span class="delimiter">&quot;</span></span>)
+    .setType(<span class="string"><span class="delimiter">&quot;</span><span class="content">jceks</span><span class="delimiter">&quot;</span></span>)
+    .setPassword(<span class="string"><span class="delimiter">&quot;</span><span class="content">secret</span><span class="delimiter">&quot;</span></span>)));
 
 apiRouter.route().handler(JWTAuthHandler.create(jwtAuth, <span class="string"><span class="delimiter">&quot;</span><span class="content">/api/token</span><span class="delimiter">&quot;</span></span>));</code></pre>
 </div>
@@ -4338,9 +4562,9 @@ Indeed, this URL is being used to generate new JWT tokens:</p>
 
     <span class="keyword">if</span> (authResult.succeeded()) {
       User user = authResult.result();
-      user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">create</span><span class="delimiter">&quot;</span></span>, canCreate -&gt; {  <b class="conum">(2)</b>
-        user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">delete</span><span class="delimiter">&quot;</span></span>, canDelete -&gt; {
-          user.isAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">update</span><span class="delimiter">&quot;</span></span>, canUpdate -&gt; {
+      user.isAuthorized(<span class="string"><span class="delimiter">&quot;</span><span class="content">create</span><span class="delimiter">&quot;</span></span>, canCreate -&gt; {  <b class="conum">(2)</b>
+        user.isAuthorized(<span class="string"><span class="delimiter">&quot;</span><span class="content">delete</span><span class="delimiter">&quot;</span></span>, canDelete -&gt; {
+          user.isAuthorized(<span class="string"><span class="delimiter">&quot;</span><span class="content">update</span><span class="delimiter">&quot;</span></span>, canUpdate -&gt; {
 
             <span class="predefined-type">String</span> token = jwtAuth.generateToken( <b class="conum">(3)</b>
               <span class="keyword">new</span> JsonObject()
@@ -4365,7 +4589,7 @@ Indeed, this URL is being used to generate new JWT tokens:</p>
 <div class="colist arabic">
 <ol>
 <li>
-<p>We expect login and password information to have been passed through HTTP request headers, and we authenticate using the Apache Shiro authentication provider of the previous section.</p>
+<p>We expect login and password information to have been passed through HTTP request headers, and we authenticate using the authentication provider of the previous section.</p>
 </li>
 <li>
 <p>Upon success we can query for roles.</p>
@@ -4451,7 +4675,7 @@ Here is how to fix the API request above by passing the JWT token that had been 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>$ http --verbose --verify no GET https://localhost:8080/api/pages 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJjYW5DcmVhdGUiOnRydWUsImNhbkRlbGV0ZSI6dHJ1ZSwiY2FuVXBkYXRlIjp0cnVlLCJpYXQiOjE0ODk0NDE1OTAsImlzcyI6IlZlcnQueCIsInN1YiI6Ildpa2kgQVBJIn0=.RmtJb81QKVUFreXL-ajZ8ktLGasoKEqG8GSQncRWrN8='
+<pre>$ http --verbose --verify no GET https://localhost:8080/api/pages Authorization:'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJjYW5DcmVhdGUiOnRydWUsImNhbkRlbGV0ZSI6dHJ1ZSwiY2FuVXBkYXRlIjp0cnVlLCJpYXQiOjE0ODk0NDE1OTAsImlzcyI6IlZlcnQueCIsInN1YiI6Ildpa2kgQVBJIn0=.RmtJb81QKVUFreXL-ajZ8ktLGasoKEqG8GSQncRWrN8='
 GET /api/pages HTTP/1.1
 Accept: */*
 Accept-Encoding: gzip, deflate
@@ -4521,7 +4745,7 @@ Set-Cookie: vertx-web.session=0598697483371c7f3cb434fbe35f15e4; Path=/
         context.fail(ar.cause());
       }
     });
-    <span class="comment">// (...)</span></code></pre>
+  <span class="comment">// (...)</span></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -4682,13 +4906,17 @@ When the operation completes, it emits the deployment <code>id</code> or signals
 
     <span class="keyword">return</span> httpVerticleDeployment;
   })
-  .subscribe(id -&gt; startFuture.complete(), startFuture::fail); <b class="conum">(2)</b></code></pre>
+  .flatMap(id -&gt; vertx.rxDeployVerticle(<span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx.guides.wiki.http.AuthInitializerVerticle</span><span class="delimiter">&quot;</span></span>)) <b class="conum">(2)</b>
+  .subscribe(id -&gt; startFuture.complete(), startFuture::fail); <b class="conum">(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <ol>
 <li>
 <p>The <code>flatMap</code> operator applies the function to the result of <code>dbVerticleDeployment</code>. Here it schedules the deployment of the <code>HttpServerVerticle</code>.</p>
+</li>
+<li>
+<p>We use the shorter lambda form here.</p>
 </li>
 <li>
 <p>Operations start when subscribing. On success or on error, the <code>MainVerticle</code> start future is either completed or failed.</p>
@@ -4707,33 +4935,21 @@ callback-based API. Before you can use the RxJava API to execute asynchronous op
 <h4 id="_import_rxjava_versions_of_vert_x_classes">Import RxJava versions of Vert.x classes</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">io.vertx.reactivex.core.AbstractVerticle</span>;
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">io.vertx.guides.wiki.database.reactivex.WikiDatabaseService</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.core.AbstractVerticle</span>;
 <span class="keyword">import</span> <span class="include">io.vertx.reactivex.core.http.HttpServer</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.auth.AuthProvider</span>;
 <span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.auth.User</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.auth.jdbc.JDBCAuth</span>;
 <span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.auth.jwt.JWTAuth</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.auth.shiro.ShiroAuth</span>;
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.jdbc.JDBCClient</span>;
 <span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.Router</span>;
 <span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.RoutingContext</span>;
 <span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.client.WebClient</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.client.HttpResponse</span>; <b class="conum">(1)</b>
 <span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.codec.BodyCodec</span>;
 <span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.handler</span>.*;
 <span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.sstore.LocalSessionStore</span>;
-<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.templ.FreeMarkerTemplateEngine</span>;
-<span class="keyword">import</span> <span class="include">org.slf4j.Logger</span>;
-<span class="keyword">import</span> <span class="include">org.slf4j.LoggerFactory</span>;</code></pre>
+<span class="keyword">import</span> <span class="include">io.vertx.reactivex.ext.web.templ.FreeMarkerTemplateEngine</span>;</code></pre>
 </div>
-</div>
-<div class="colist arabic">
-<ol>
-<li>
-<p>Our <code>backupHandler()</code> method still uses <code>HttpResponse</code> class, so it must be imported. It turns out that the RxJava
-version of <code>HttpResponse</code> provided by Vert.x can serve as a drop-in replacement in this specific case.
-The <em>"Rxified"</em> code in <code>step-8</code> folder of the guide repository does not import this class as the
-response type is inferred by the lambda expression.</p>
-</li>
-</ol>
 </div>
 </div>
 <div class="sect3">
@@ -4767,9 +4983,9 @@ To create a token, we need all authorization queries to complete, but queries ar
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">auth.rxAuthenticate(creds).flatMap(user -&gt; {
-  Single&lt;<span class="predefined-type">Boolean</span>&gt; create = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">create</span><span class="delimiter">&quot;</span></span>); <b class="conum">(1)</b>
-  Single&lt;<span class="predefined-type">Boolean</span>&gt; delete = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">delete</span><span class="delimiter">&quot;</span></span>);
-  Single&lt;<span class="predefined-type">Boolean</span>&gt; update = user.rxIsAuthorised(<span class="string"><span class="delimiter">&quot;</span><span class="content">update</span><span class="delimiter">&quot;</span></span>);
+  Single&lt;<span class="predefined-type">Boolean</span>&gt; create = user.rxIsAuthorized(<span class="string"><span class="delimiter">&quot;</span><span class="content">create</span><span class="delimiter">&quot;</span></span>); <b class="conum">(1)</b>
+  Single&lt;<span class="predefined-type">Boolean</span>&gt; delete = user.rxIsAuthorized(<span class="string"><span class="delimiter">&quot;</span><span class="content">delete</span><span class="delimiter">&quot;</span></span>);
+  Single&lt;<span class="predefined-type">Boolean</span>&gt; update = user.rxIsAuthorized(<span class="string"><span class="delimiter">&quot;</span><span class="content">update</span><span class="delimiter">&quot;</span></span>);
 
   <span class="keyword">return</span> Single.zip(create, delete, update, (canCreate, canDelete, canUpdate) -&gt; { <b class="conum">(2)</b>
     <span class="keyword">return</span> jwtAuth.generateToken(
@@ -5952,9 +6168,9 @@ Of course we appreciate praise, but we appreciate as much any constructive feedb
           <div id="footer">
             <div id="footer-text">
               
-                Version 1.2.0<br>
+                Version 1.3.0<br>
               
-                Last updated 2018-02-14 09:34:26 CET
+                Last updated 2018-06-05 07:44:38 CEST
               
               
             </div>
