@@ -96,7 +96,6 @@
 
 
 
-
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -219,7 +218,19 @@ counter part so it should make it easier to switch between the TCP and SockJS im
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">`link:../../apidocs/examples/TCPBridgeExamples.html#example1-io.vertx.core.Vertx-[example1]`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="kotlin">var bridge = TcpEventBusBridge.create(vertx, BridgeOptions(
+  inboundPermitteds = listOf(PermittedOptions(
+    address = &quot;in&quot;)),
+  outboundPermitteds = listOf(PermittedOptions(
+    address = &quot;out&quot;))))
+
+bridge.listen(7000, { res -&gt;
+  if (res.succeeded()) {
+    // succeed...
+  } else {
+    // fail...
+  }
+})</code></pre>
 </div>
 </div>
 </div>
@@ -231,7 +242,7 @@ counter part so it should make it easier to switch between the TCP and SockJS im
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2018-06-04 18:02:22 CEST
+                Last updated 2018-06-25 17:37:09 CEST
               
               
             </div>
