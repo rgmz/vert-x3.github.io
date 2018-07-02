@@ -8,6 +8,122 @@
       <atom:link href="https://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>Simplified database transaction management with the Vert.x RxJava API</title>
+          <description>
+      &lt;article&gt;&lt;p&gt;&lt;em&gt;TL;DR As of 3.5, managing database transactions with Vert.x requires a lot of boilerplate code.&lt;/em&gt;
+&lt;em&gt;Vert.x 3.6 will provide helpers and &lt;code&gt;Observable&lt;/code&gt; transformers to easily make a reactive flow transactional.&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&quot;simple-queries-with-the-rxified-api&quot;&gt;Simple queries with the &lt;em&gt;“Rxified”&lt;/em&gt; API&lt;/h2&gt;
+&lt;p&gt;The &lt;a href=&quot;https://vertx.io/docs/vertx-rx/java2/&quot;&gt;Vert.x API for RxJava&lt;/a&gt; is one of the most popular modules in the Vert.x stack.&lt;/p&gt;
+&lt;p&gt;So we make sure the &lt;em&gt;“Rxified”&lt;/em&gt; API is easy to use for common programming tasks, such as reading rows from a relational database and sending the result to the client:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;dbClient.rxQuery(&lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT name, duration FROM tracks WHERE album = &#39;The Israelites&#39;&quot;&lt;/span&gt;)
+  .map(ResultSet::getResults)
+  .map(rows -&gt; {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Transform DB rows into a client-friendly JSON object&lt;/span&gt;
+  })
+  .subscribe(json -&gt; {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Send JSON to the client&lt;/span&gt;
+  }, t -&gt; {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Send error to the client&lt;/span&gt;
+  });&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;managing-transactions-with-vert-x-3-5&quot;&gt;Managing transactions with Vert.x 3.5&lt;/h2&gt;
+&lt;p&gt;But very often, developers have to implement complex interactions with the database, running inside a single transaction.
+To do so, the implementation must follow this process:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;get a connection from the pool,&lt;/li&gt;
+&lt;li&gt;start a transaction,&lt;/li&gt;
+&lt;li&gt;execute queries,&lt;/li&gt;
+&lt;li&gt;if all queries succeed, commit the transaction,&lt;/li&gt;
+&lt;li&gt;otherwise, rollback the changes.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;How does that translate to code?&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;// Get a connection from the pool&lt;/span&gt;
+dbClient.rxGetConnection().flatMap(sqlConnection -&gt; {
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Setting auto-commit mode to false implicitely starts a transaction&lt;/span&gt;
+  &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; sqlConnection.rxSetAutoCommit(&lt;span class=&quot;hljs-keyword&quot;&gt;false&lt;/span&gt;)
+    .andThen(
+      &lt;span class=&quot;hljs-comment&quot;&gt;// Database queries&lt;/span&gt;
+      sqlConnection.rxExecute(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO albums (name) VALUES (&#39;The Israelites&#39;)&quot;&lt;/span&gt;)
+        .andThen(sqlConnection.rxExecute(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO tracks (album, name) VALUES (&#39;The Israelites&#39;, &#39;Israelites&#39;)&quot;&lt;/span&gt;))
+        .andThen(sqlConnection.rxExecute(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO tracks (album, name) VALUES (&#39;The Israelites&#39;, &#39;Too Much Too Soon&#39;)&quot;&lt;/span&gt;))
+        .andThen(sqlConnection.rxQuery(&lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT name FROM tracks WHERE album = &#39;The Israelites&#39;&quot;&lt;/span&gt;).map(ResultSet::getResults))
+    )
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Commit if all queries succeed&lt;/span&gt;
+    .flatMap(rows -&gt; sqlConnection.rxCommit().andThen(Single.just(rows)))
+    .onErrorResumeNext(throwable -&gt; {
+      &lt;span class=&quot;hljs-comment&quot;&gt;// On error, rollback the changes&lt;/span&gt;
+      &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; sqlConnection.rxRollback().onErrorComplete()
+        .andThen(sqlConnection.rxSetAutoCommit(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;).onErrorComplete())
+        .andThen(Single.error(throwable));
+    }).flatMap(rows -&gt; sqlConnection.rxSetAutoCommit(&lt;span class=&quot;hljs-keyword&quot;&gt;true&lt;/span&gt;).andThen(Single.just(rows)))
+    .doFinally(sqlConnection::close);
+}).map(rows -&gt; {
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Transform DB rows into a client-friendly JSON object&lt;/span&gt;
+}).subscribe(json -&gt; {
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Send JSON to the client&lt;/span&gt;
+}, t -&gt; {
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Send error to the client&lt;/span&gt;
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That is a lot of boilerplate around the specific database queries…
+It would be better to relieve the developer from maintaining it.&lt;/p&gt;
+&lt;h2 id=&quot;vert-x-3-6-tools-for-transaction-management&quot;&gt;Vert.x 3.6 tools for transaction management&lt;/h2&gt;
+&lt;p&gt;That is why Vert.x 3.6 will provide &lt;em&gt;&lt;code&gt;Observable&lt;/code&gt; transformers&lt;/em&gt; that can be applied to reactive flows with &lt;a href=&quot;http://reactivex.io/RxJava/javadoc/io/reactivex/Flowable.html#compose-io.reactivex.FlowableTransformer-&quot;&gt;&lt;code&gt;compose&lt;/code&gt;&lt;/a&gt; to make them transactional:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;SQLClientHelper#txFlowableTransformer&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;SQLClientHelper#txObservableTransformer&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;SQLClientHelper#txSingleTransformer&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;SQLClientHelper#txMaybeTransformer&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;SQLClientHelper#txCompletableTransformer&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;These &lt;em&gt;transformers&lt;/em&gt; wrap the corresponding source of events with SQL transaction management.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;dbClient.rxGetConnection().flatMap(sqlConnection -&gt; {
+  &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; sqlConnection.rxExecute(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO albums (name) VALUES (&#39;The Israelites&#39;)&quot;&lt;/span&gt;)
+    .andThen(sqlConnection.rxExecute(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO tracks (album, name) VALUES (&#39;The Israelites&#39;, &#39;Israelites&#39;)&quot;&lt;/span&gt;))
+    .andThen(sqlConnection.rxExecute(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO tracks (album, name) VALUES (&#39;The Israelites&#39;, &#39;Too Much Too Soon&#39;)&quot;&lt;/span&gt;))
+    .andThen(sqlConnection.rxQuery(&lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT name FROM tracks WHERE album = &#39;The Israelites&#39;&quot;&lt;/span&gt;).map(ResultSet::getResults))
+    .compose(SQLClientHelper.txSingleTransformer(sqlConnection))
+    .doFinally(sqlConnection::close);
+}).map(rows -&gt; {
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Transform DB rows into a client-friendly JSON object&lt;/span&gt;
+}).subscribe(json -&gt; {
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Send JSON to the client&lt;/span&gt;
+}, t -&gt; {
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Send error to the client&lt;/span&gt;
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Source &lt;em&gt;transformers&lt;/em&gt; provide maximum flexibility: you are still able to execute operations with the connection after the transaction completes.&lt;/p&gt;
+&lt;p&gt;However, you usually do not need the connection after the changes are &lt;em&gt;commited&lt;/em&gt; or &lt;em&gt;rollbacked&lt;/em&gt;.
+In this case, you may simply create you source observable with one of the transactional helper methods in &lt;code&gt;io.vertx.reactivex.ext.sql.SQLClientHelper&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Let’s rewrite the previous example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;SQLClientHelper.inTransactionSingle(client, sqlConnection -&gt; {
+  &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; sqlConnection.rxExecute(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO albums (name) VALUES (&#39;The Israelites&#39;)&quot;&lt;/span&gt;)
+    .andThen(sqlConnection.rxExecute(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO tracks (album, name) VALUES (&#39;The Israelites&#39;, &#39;Israelites&#39;)&quot;&lt;/span&gt;))
+    .andThen(sqlConnection.rxExecute(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO tracks (album, name) VALUES (&#39;The Israelites&#39;, &#39;Too Much Too Soon&#39;)&quot;&lt;/span&gt;))
+    .andThen(sqlConnection.rxQuery(&lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT name FROM tracks WHERE album = &#39;The Israelites&#39;&quot;&lt;/span&gt;).map(ResultSet::getResults))
+}).map(rows -&gt; {
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Transform DB rows into a client-friendly JSON object&lt;/span&gt;
+}).subscribe(json -&gt; {
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Send JSON to the client&lt;/span&gt;
+}, t -&gt; {
+  &lt;span class=&quot;hljs-comment&quot;&gt;// Send error to the client&lt;/span&gt;
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;give-it-a-try&quot;&gt;Give it a try&lt;/h2&gt;
+&lt;p&gt;Vert.x 3.6 is expected around fall, but the code is already in master and &lt;em&gt;snapshots&lt;/em&gt; are regularly published to Sonatype’s OSS repos.&lt;/p&gt;
+&lt;p&gt;So give it a try and feel free to provide your feeback on our user or dev &lt;a href=&quot;https://vertx.io/community&quot;&gt;channels&lt;/a&gt;.&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 02 Jul 2018 02:00:00 +0200</pubDate>
+          <link>https://vertx.io/blog/simplified-database-transaction-management-with-the-vert-x-rxjava-api</link>
+          <guid isPermaLink="true">https://vertx.io/blog/simplified-database-transaction-management-with-the-vert-x-rxjava-api</guid>
+          <author>
+            <name>tsegismont</name>
+            <uri>http://github.com/tsegismont</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Eclipse Vert.x 3.5.2</title>
           <description>
       &lt;article&gt;&lt;p&gt;We have just released Vert.x 3.5.2, a bug fix release of Vert.x 3.5.x.&lt;/p&gt;
