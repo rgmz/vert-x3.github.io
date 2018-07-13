@@ -59,6 +59,7 @@ var ServiceList = Java.type('io.vertx.ext.consul.ServiceList');
 var EventList = Java.type('io.vertx.ext.consul.EventList');
 
 /**
+ Watches are a way of specifying a view of data (e.g. list of nodes, KV pairs, health checks)
  @class
 */
 var Watch = function(j_val, j_arg_0) {
@@ -68,26 +69,28 @@ var Watch = function(j_val, j_arg_0) {
   var j_T = typeof j_arg_0 !== 'undefined' ? j_arg_0 : utils.unknown_jtype;
 
   /**
+   Set the result handler. As data is changed, the handler will be called with the result.
 
    @public
-   @param arg0 {function} 
-   @return {Watch}
+   @param handler {function} the result handler 
+   @return {Watch} reference to this, for fluency
    */
-  this.setHandler = function(arg0) {
+  this.setHandler = function(handler) {
     var __args = arguments;
     if (__args.length === 1 &amp;&amp; typeof __args[0] === 'function') {
       j_watch["setHandler(io.vertx.core.Handler)"](function(jVal) {
-      arg0(utils.convReturnVertxGen(WatchResult, jVal, undefined));
+      handler(utils.convReturnVertxGen(WatchResult, jVal, undefined));
     });
       return that;
     } else throw new TypeError('function invoked with invalid arguments');
   };
 
   /**
+   Start this &lt;code>Watch&lt;/code>
 
    @public
 
-   @return {Watch}
+   @return {Watch} reference to this, for fluency
    */
   this.start = function() {
     var __args = arguments;
@@ -98,6 +101,7 @@ var Watch = function(j_val, j_arg_0) {
   };
 
   /**
+   Stop the watch and release its resources
 
    @public
 
@@ -135,12 +139,14 @@ Watch._create = function(jdel) {
   return obj;
 }
 /**
+ Creates &lt;code>Watch&lt;/code> to monitoring a specific key in the KV store.
+ This maps to the &lt;a href="https://www.consul.io/api/kv.html">/v1/kv/&lt;/a> API internally.
 
  @memberof module:vertx-consul-js/watch
- @param key {string} 
- @param vertx {Vertx} 
- @param options {Object} 
- @return {Watch}
+ @param key {string} the key 
+ @param vertx {Vertx} the &lt;code>Vertx&lt;/code> instance 
+ @param options {Object} the options to create underlying Consul client 
+ @return {Watch} the &lt;code>Watch&lt;/code> instance
  */
 Watch.key = function() {
   var __args = arguments;
@@ -152,12 +158,14 @@ Watch.key = function() {
 };
 
 /**
+ Creates &lt;code>Watch&lt;/code> to monitoring a prefix of keys in the KV store.
+ This maps to the &lt;a href="https://www.consul.io/api/kv.html">/v1/kv/&lt;/a> API internally.
 
  @memberof module:vertx-consul-js/watch
- @param keyPrefix {string} 
- @param vertx {Vertx} 
- @param options {Object} 
- @return {Watch}
+ @param keyPrefix {string} the key 
+ @param vertx {Vertx} the &lt;code>Vertx&lt;/code> instance 
+ @param options {Object} the options to create underlying Consul client 
+ @return {Watch} the &lt;code>Watch&lt;/code> instance
  */
 Watch.keyPrefix = function() {
   var __args = arguments;
@@ -169,11 +177,13 @@ Watch.keyPrefix = function() {
 };
 
 /**
+ Creates &lt;code>Watch&lt;/code> to monitoring the list of available services.
+ This maps to the &lt;a href="https://www.consul.io/docs/agent/http/catalog.html#catalog_services">/v1/catalog/services&lt;/a> API internally.
 
  @memberof module:vertx-consul-js/watch
- @param vertx {Vertx} 
- @param options {Object} 
- @return {Watch}
+ @param vertx {Vertx} the &lt;code>Vertx&lt;/code> instance 
+ @param options {Object} the options to create underlying Consul client 
+ @return {Watch} the &lt;code>Watch&lt;/code> instance
  */
 Watch.services = function() {
   var __args = arguments;
@@ -185,12 +195,14 @@ Watch.services = function() {
 };
 
 /**
+ Creates &lt;code>Watch&lt;/code> to monitoring the nodes providing the service.
+ This maps to the &lt;a href="https://www.consul.io/docs/agent/http/health.html#health_service">/v1/health/service/&amp;lt;service&amp;gt;&lt;/a> API internally.
 
  @memberof module:vertx-consul-js/watch
- @param service {string} 
- @param vertx {Vertx} 
- @param options {Object} 
- @return {Watch}
+ @param service {string} the service name 
+ @param vertx {Vertx} the &lt;code>Vertx&lt;/code> instance 
+ @param options {Object} the options to create underlying Consul client 
+ @return {Watch} the &lt;code>Watch&lt;/code> instance
  */
 Watch.service = function() {
   var __args = arguments;
@@ -202,12 +214,14 @@ Watch.service = function() {
 };
 
 /**
+ Creates &lt;code>Watch&lt;/code> to monitoring the custom user events.
+ This maps to the &lt;a href="https://www.consul.io/docs/agent/http/event.html#event_list">/v1/event/list&lt;/a> API internally.
 
  @memberof module:vertx-consul-js/watch
- @param event {string} 
- @param vertx {Vertx} 
- @param options {Object} 
- @return {Watch}
+ @param event {string} the event name 
+ @param vertx {Vertx} the &lt;code>Vertx&lt;/code> instance 
+ @param options {Object} the options to create underlying Consul client 
+ @return {Watch} the &lt;code>Watch&lt;/code> instance
  */
 Watch.events = function() {
   var __args = arguments;
@@ -219,11 +233,13 @@ Watch.events = function() {
 };
 
 /**
+ Creates &lt;code>Watch&lt;/code> to monitoring the list of available nodes.
+ This maps to the &lt;a href="https://www.consul.io/api/catalog.html#list-nodes">/v1/catalog/nodes&lt;/a> API internally.
 
  @memberof module:vertx-consul-js/watch
- @param vertx {Vertx} 
- @param options {Object} 
- @return {Watch}
+ @param vertx {Vertx} the &lt;code>Vertx&lt;/code> instance 
+ @param options {Object} the options to create underlying Consul client 
+ @return {Watch} the &lt;code>Watch&lt;/code> instance
  */
 Watch.nodes = function() {
   var __args = arguments;
@@ -250,7 +266,7 @@ module.exports = Watch;</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Mon Jun 04 2018 17:58:20 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Wed Jul 11 2018 10:01:30 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

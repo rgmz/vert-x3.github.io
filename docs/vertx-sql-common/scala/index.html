@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -172,7 +173,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>vertx-sql-common-scala_2.12<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>3.5.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.3<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -185,7 +186,7 @@ you are using (e.g. JDBC/MySQL/PostgreSQL).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-sql-common-scala_2.12:3.5.2</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">io.vertx:vertx-sql-common-scala_2.12:3.5.3</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -219,7 +220,18 @@ perform the following steps for you:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example16`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">client.queryFuture(&quot;SELECT * FROM USERS&quot;).onComplete{
+  case Success(result) =&gt; {
+    if (true) {
+      var result = result
+    } else {
+      // Failed!
+    }
+    // NOTE that you don't need to worry about
+    // the connection management (e.g.: close)
+  }
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -279,7 +291,14 @@ execute in its own transaction.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example1`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">connection.setAutoCommitFuture(false).onComplete{
+  case Success(result) =&gt; {
+    // OK!
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
 </div>
 </div>
 </div>
@@ -297,7 +316,15 @@ been run.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example2`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">connection.queryFuture(&quot;SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE&quot;).onComplete{
+  case Success(result) =&gt; {
+    // Get the result set
+    var resultSet = result
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -312,7 +339,18 @@ available with <code><a href="../dataobjects.html#ResultSet#getResults()">getRes
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example3`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var columnNames = todo-renderDataObjectMemberSelect
+
+var results = todo-renderDataObjectMemberSelect
+
+results.foreach(row =&gt; {
+
+  var id = row.getValue(0)
+  var fName = row.getValue(1)
+  var lName = row.getValue(2)
+  var shoeSize = row.getValue(3)
+
+})</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -325,7 +363,16 @@ column names - if that&#8217;s the case you should use <code><a href="../dataobj
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example3__1`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var rows = todo-renderDataObjectMemberSelect
+
+rows.foreach(row =&gt; {
+
+  var id = row.getValue(&quot;ID&quot;)
+  var fName = row.getValue(&quot;FNAME&quot;)
+  var lName = row.getValue(&quot;LNAME&quot;)
+  var shoeSize = row.getValue(&quot;SHOE_SIZE&quot;)
+
+})</code></pre>
 </div>
 </div>
 </div>
@@ -341,7 +388,18 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example3_1`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var query = &quot;SELECT ID, FNAME, LNAME, SHOE_SIZE from PEOPLE WHERE LNAME=? AND SHOE_SIZE &gt; ?&quot;
+var params = new io.vertx.core.json.JsonArray().add(&quot;Fox&quot;).add(9)
+
+connection.queryWithParamsFuture(query, params).onComplete{
+  case Success(result) =&gt; {
+    // Get the result set
+    var resultSet = result
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
 </div>
 </div>
 </div>
@@ -363,7 +421,18 @@ if the update generated keys, they are available with <code><a href="../dataobje
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example4`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">connection.updateFuture(&quot;INSERT INTO PEOPLE VALUES (null, 'john', 'smith', 9)&quot;).onComplete{
+  case Success(result) =&gt; {
+
+    var result = result
+    println(s&quot;Updated no. of rows: ${todo-renderDataObjectMemberSelect}&quot;)
+    println(s&quot;Generated keys: ${todo-renderDataObjectMemberSelect}&quot;)
+
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
 </div>
 </div>
 </div>
@@ -379,7 +448,21 @@ values.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example5`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var update = &quot;UPDATE PEOPLE SET SHOE_SIZE = 10 WHERE LNAME=?&quot;
+var params = new io.vertx.core.json.JsonArray().add(&quot;Fox&quot;)
+
+connection.updateWithParamsFuture(update, params).onComplete{
+  case Success(result) =&gt; {
+
+    var updateResult = result
+
+    println(s&quot;No. of rows updated: ${todo-renderDataObjectMemberSelect}&quot;)
+
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
 </div>
 </div>
 </div>
@@ -404,7 +487,22 @@ argument then the output array must contain a null value as the first element.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example8`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">// Assume that there is a SQL function like this:
+//
+// create function one_hour_ago() returns timestamp
+//    now() - 1 hour;
+
+// note that you do not need to declare the output for functions
+var func = &quot;{ call one_hour_ago() }&quot;
+
+connection.callFuture(func).onComplete{
+  case Success(result) =&gt; {
+    var result = result
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -413,7 +511,22 @@ not return anything the usage is as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example9`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">// Assume that there is a SQL procedure like this:
+//
+// create procedure new_customer(firstname varchar(50), lastname varchar(50))
+//   modifies sql data
+//   insert into customers values (default, firstname, lastname, current_timestamp);
+
+var func = &quot;{ call new_customer(?, ?) }&quot;
+
+connection.callWithParamsFuture(func, new io.vertx.core.json.JsonArray().add(&quot;John&quot;).add(&quot;Doe&quot;), null).onComplete{
+  case Success(result) =&gt; {
+    // Success!
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -421,7 +534,22 @@ not return anything the usage is as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example10`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">// Assume that there is a SQL procedure like this:
+//
+// create procedure customer_lastname(IN firstname varchar(50), OUT lastname varchar(50))
+//   modifies sql data
+//   select lastname into lastname from customers where firstname = firstname;
+
+var func = &quot;{ call customer_lastname(?, ?) }&quot;
+
+connection.callWithParamsFuture(func, new io.vertx.core.json.JsonArray().add(&quot;John&quot;), new io.vertx.core.json.JsonArray().add(null).add(&quot;VARCHAR&quot;)).onComplete{
+  case Success(result) =&gt; {
+    var result = result
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -474,7 +602,19 @@ String describing the type you want to receive.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example12`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">// Batch values
+var batch = List()
+batch :::= List(&quot;INSERT INTO emp (NAME) VALUES ('JOE')&quot;)
+batch :::= List(&quot;INSERT INTO emp (NAME) VALUES ('JANE')&quot;)
+
+connection.batchFuture(batch).onComplete{
+  case Success(result) =&gt; {
+    var result = result
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -482,7 +622,19 @@ String describing the type you want to receive.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example11`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">// Batch values
+var batch = List()
+batch :::= List(new io.vertx.core.json.JsonArray().add(&quot;joe&quot;))
+batch :::= List(new io.vertx.core.json.JsonArray().add(&quot;jane&quot;))
+
+connection.batchWithParamsFuture(&quot;INSERT INTO emp (name) VALUES (?)&quot;, batch).onComplete{
+  case Success(result) =&gt; {
+    var result = result
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
 </div>
 </div>
 </div>
@@ -498,7 +650,16 @@ is complete</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example6`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">var sql = &quot;CREATE TABLE PEOPLE (ID int generated by default as identity (start with 1 increment by 1) not null,FNAME varchar(255), LNAME varchar(255), SHOE_SIZE int);&quot;
+
+connection.executeFuture(sql).onComplete{
+  case Success(result) =&gt; {
+    println(&quot;Table created !&quot;)
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
 </div>
 </div>
 </div>
@@ -511,7 +672,10 @@ under the property <code>next</code>. A simple walk of all result sets can be ac
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example13`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">// do something with the result set...
+
+// next step
+rs = todo-renderDataObjectMemberSelect</code></pre>
 </div>
 </div>
 </div>
@@ -523,7 +687,14 @@ inflating the whole response into memory and JSON and data is just processed on 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example14`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">connection.queryStreamFuture(&quot;SELECT * FROM large_table&quot;).onComplete{
+  case Success(result) =&gt; {
+    result.handler((row: io.vertx.scala.core.json.JsonArray) =&gt; {
+      // do something with the row...
+    })
+  }
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -533,7 +704,21 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example15`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">connection.queryStreamFuture(&quot;SELECT * FROM large_table; SELECT * FROM other_table&quot;).onComplete{
+  case Success(result) =&gt; {
+    var sqlRowStream = result
+
+    sqlRowStream.resultSetClosedHandler((v: java.lang.Void) =&gt; {
+      // will ask to restart the stream with the new result set if any
+      sqlRowStream.moreResults()
+    }).handler((row: io.vertx.scala.core.json.JsonArray) =&gt; {
+      // do something with the row...
+    }).endHandler((v: java.lang.Void) =&gt; {
+      // no more data available...
+    })
+  }
+  case Failure(cause) =&gt; println(&quot;Failure&quot;)
+}</code></pre>
 </div>
 </div>
 </div>
@@ -552,7 +737,18 @@ data the stream handler will receive the new data, otherwise the end handler is 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="scala">`example7`</code></pre>
+<pre class="CodeRay highlight"><code data-lang="scala">// Do stuff with connection - updates etc
+
+// Now commit
+
+connection.commitFuture().onComplete{
+  case Success(result) =&gt; {
+    // Committed OK!
+  }
+  case Failure(cause) =&gt; {
+    println(s&quot;$cause&quot;)
+  }
+}</code></pre>
 </div>
 </div>
 </div>
@@ -571,7 +767,7 @@ data the stream handler will receive the new data, otherwise the end handler is 
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2018-06-04 18:02:24 CEST
+                Last updated 2018-07-11 10:05:32 CEST
               
               
             </div>

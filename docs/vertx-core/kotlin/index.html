@@ -96,6 +96,7 @@
 
 
 
+
 <div id="content">
   <div class="container docs-content">
     <div class="row">
@@ -122,6 +123,7 @@
 </li>
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
+<li><a href="#_writing_verticles">Writing Verticles</a></li>
 <li><a href="#_verticle_types">Verticle Types</a></li>
 <li><a href="#_standard_verticles">Standard verticles</a></li>
 <li><a href="#worker_verticles">Worker verticles</a></li>
@@ -148,6 +150,12 @@
 </ul>
 </li>
 <li><a href="#_configuring_the_event_bus">Configuring the event bus</a></li>
+<li><a href="#_json">JSON</a>
+<ul class="sectlevel2">
+<li><a href="#_builders">Builders</a></li>
+<li><a href="#_postscript_operator_overloading">Postscript operator overloading</a></li>
+</ul>
+</li>
 <li><a href="#_buffers">Buffers</a>
 <ul class="sectlevel2">
 <li><a href="#_creating_buffers">Creating buffers</a></li>
@@ -356,6 +364,7 @@
 </li>
 <li><a href="#_verticles">Verticles</a>
 <ul class="sectlevel2">
+<li><a href="#_writing_verticles">Writing Verticles</a></li>
 <li><a href="#_verticle_types">Verticle Types</a></li>
 <li><a href="#_standard_verticles">Standard verticles</a></li>
 <li><a href="#worker_verticles">Worker verticles</a></li>
@@ -382,6 +391,12 @@
 </ul>
 </li>
 <li><a href="#_configuring_the_event_bus">Configuring the event bus</a></li>
+<li><a href="#_json">JSON</a>
+<ul class="sectlevel2">
+<li><a href="#_builders">Builders</a></li>
+<li><a href="#_postscript_operator_overloading">Postscript operator overloading</a></li>
+</ul>
+</li>
 <li><a href="#_buffers">Buffers</a>
 <ul class="sectlevel2">
 <li><a href="#_creating_buffers">Creating buffers</a></li>
@@ -635,7 +650,42 @@ Instead, we automatically generate an <strong>idiomatic</strong> equivalent of t
 <p>From now on we&#8217;ll just use the word <strong>core</strong> to refer to Vert.x core.</p>
 </div>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::override/dependencies.adoc[]</p>
+<p>If you are using Maven or Gradle, add the following dependency to the <em>dependencies</em> section of your
+project descriptor to access the Vert.x Core API and enable the JavaScript support:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven (in your <code>pom.xml</code>):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-core<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.3<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span>
+<span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.vertx<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>vertx-lang-kotlin<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>3.5.3<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gradle (in your <code>build.gradle</code> file):</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:vertx-core:3.5.3</span><span class="delimiter">&quot;</span></span>
+compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.vertx:vertx-lang-kotlin:3.5.3</span><span class="delimiter">&quot;</span></span></code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s discuss the different concepts and features in core.</p>
@@ -1292,8 +1342,34 @@ and a single application can include verticles written in multiple languages.</p
 <p>An application would typically be composed of many verticle instances running in the same Vert.x instance at the same
 time. The different verticle instances communicate with each other by sending messages on the <a href="#event_bus">event bus</a>.</p>
 </div>
+<div class="sect2">
+<h3 id="_writing_verticles">Writing Verticles</h3>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::override/verticles.adoc[]</p>
+<p>Writing a Verticle with Kotlin is achieved the same way you write a Java Verticle by
+extending the <code><a href="../../apidocs/io/vertx/core/AbstractVerticle.html">AbstractVerticle</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example verticle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">import io.vertx.core.AbstractVerticle
+
+class MyVerticle : AbstractVerticle() {
+
+  // Called when verticle is deployed
+  override fun start() {
+  }
+
+  // Optional - called when verticle is undeployed
+  override fun stop() {
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please refer to the Java documentation.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_verticle_types">Verticle Types</h3>
@@ -1542,9 +1618,6 @@ vertx.deployVerticle(&quot;com.mycompany.MyOrderProcessorVerticle&quot;, options
 <div class="paragraph">
 <p>This is useful for scaling easily across multiple cores. For example you might have a web-server verticle to deploy
 and multiple cores on your machine, so you want to deploy multiple instances to utilise all the cores.</p>
-</div>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::override/verticle-configuration.adoc[]</p>
 </div>
 </div>
 <div class="sect2">
@@ -2117,9 +2190,6 @@ This is the point to point messaging pattern. The handler is chosen in a non-str
 <pre class="CodeRay highlight"><code data-lang="kotlin">eventBus.send(&quot;news.uk.sport&quot;, &quot;Yay! Someone kicked a ball&quot;)</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Unresolved directive in eventbus.adoc - include::override/eventbus_headers.adoc[]</p>
-</div>
 </div>
 <div class="sect3">
 <h4 id="_message_ordering">Message ordering</h4>
@@ -2237,9 +2307,6 @@ so it can be deleted from the database</p>
 </div>
 <div class="paragraph">
 <p>In all cases the reply handler will be called with the specific failure.</p>
-</div>
-<div class="paragraph">
-<p>Unresolved directive in eventbus.adoc - include::override/eventbus.adoc[]</p>
 </div>
 </div>
 <div class="sect3">
@@ -2367,8 +2434,104 @@ Vertx.clusteredVertx(options, { res -&gt;
 })</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_json">JSON</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::override/json.adoc[]</p>
+<p>Unlike some other languages, Java does not have first class support for <a href="http://json.org/">JSON</a> so we provide
+two classes to make handling JSON in your Vert.x applications a bit easier.</p>
+</div>
+<div class="paragraph">
+<p>Use the <code><a href="../../apidocs/io/vertx/core/json/JsonObject.html">JsonObject</a></code> class to represent JSON objects and the <code><a href="../../apidocs/io/vertx/core/json/JsonArray.html">JsonArray</a></code>
+class to represent JSON arrays, you can refer to the Java documentation for more details.</p>
+</div>
+<div class="sect2">
+<h3 id="_builders">Builders</h3>
+<div class="paragraph">
+<p>Builders are provided to provide a more fluent JSON construction:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">// The json builder declares a JSON structure
+val result = json {
+
+  // in this structure the obj function can be used
+
+  // takes a vararg of Kotlin pairs
+  obj(
+    &quot;key_1&quot; to 1,
+    &quot;key_2&quot; to 2,
+    &quot;key_3&quot; to 3
+  )
+
+  // or an iterable of Kotlin pairs
+  obj((1..3).map { &quot;key_$it&quot; to it })
+
+  // or a Map&lt;String, Any?&gt;
+  obj(someMap)
+
+  // apply function on object receiver
+  obj {
+    for (i in 1..3) {
+      put(&quot;key_$i&quot;, i)
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also build JSON arrays:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">// The json builder declares a JSON structure
+val result = json {
+
+  // in this structure the array function can be used
+
+  // takes a vararg of values
+  array(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;)
+
+  // or an iterable of values
+  array((1..3).map { &quot;$it&quot; })
+
+  // apply function on array receiver
+  array {
+    for (i in 1..3) {
+      add(&quot;$i&quot;)
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course it is possible to mix objects and arrays</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">// The json builder declares a JSON structure
+val result = json {
+  &quot;firstName&quot; to &quot;Dale&quot;,
+  &quot;lastName&quot; to &quot;Cooper&quot;,
+  &quot;age&quot; to 64,
+  &quot;names&quot; to array(&quot;Dale&quot;, &quot;Bartholomew&quot;)
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_postscript_operator_overloading">Postscript operator overloading</h3>
+<div class="paragraph">
+<p>The Kotlin postscript operator is overloaded for JSON object and array:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">print(someObject[&quot;firstName&quot;]);
+print(someArray[4]);</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2416,9 +2579,6 @@ necessary to accommodate any bytes written to it. You can perhaps think of a buf
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="kotlin">var buff = Buffer.buffer(&quot;some string&quot;, &quot;UTF-16&quot;)</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>Unresolved directive in buffers.adoc - include::override/buffer_from_bytes.adoc[]</p>
 </div>
 <div class="paragraph">
 <p>Create a buffer with an initial size hint. If you know your buffer will have a certain amount of data written to it
@@ -8154,9 +8314,6 @@ client.reverseLookup(&quot;10.0.0.1&quot;, { ar -&gt;
 })</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Unresolved directive in dns.adoc - include::override/dns.adoc[]</p>
-</div>
 </div>
 </div>
 </div>
@@ -10389,7 +10546,7 @@ very careful when using this settings.</p>
           <div id="footer">
             <div id="footer-text">
               
-                Last updated 2018-06-04 18:02:22 CEST
+                Last updated 2018-07-11 10:05:30 CEST
               
               
             </div>
