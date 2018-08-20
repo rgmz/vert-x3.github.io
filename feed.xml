@@ -8,6 +8,217 @@
       <atom:link href="https://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>The RSS reader tutorial</title>
+          <description>
+      &lt;article&gt;&lt;h1 id=&quot;the-rss-reader-tutorial&quot;&gt;The RSS reader tutorial&lt;/h1&gt;
+&lt;p&gt;This tutorial is dedicated for users who’d like to know how to use the Eclipse Vert.x Cassandra client with in practice.&lt;/p&gt;
+&lt;h1 id=&quot;before-you-start-this-tutorial&quot;&gt;Before you start this tutorial&lt;/h1&gt;
+&lt;p&gt;Before starting, you should :&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;be familiar with &lt;a href=&quot;https://vertx.io/&quot;&gt;Eclipse Vert.x&lt;/a&gt;. If you are not, here is the &lt;a href=&quot;https://vertx.io/docs/guide-for-java-devs/&quot;&gt;guide for Java developers&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;have some basic understanding of databases. Extended knowledge of Cassandra is not required.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You also may find it useful to read &lt;a href=&quot;https://validator.w3.org/feed/docs/rss2.html&quot;&gt;the RSS 2.0&lt;/a&gt; specification, because the resulted app is, basically, a storage of RSS 2.0 feeds.&lt;/p&gt;
+&lt;p&gt;To give you an idea of what the App is about, here is how it looks like from the fronted side:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/QnLieKA.png&quot; alt=&quot;see how it looks&quot;&gt;&lt;/p&gt;
+&lt;p&gt;On the image we see that browser space is split into 2 parts:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Saved feed names&lt;/li&gt;
+&lt;li&gt;List of articles for the selected feed&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Here you also can enter a link to a new feed, so the App will fetch and parse the feed.
+After that, it will appear in the left column along with other saved feeds.&lt;/p&gt;
+&lt;h1 id=&quot;requirements&quot;&gt;Requirements&lt;/h1&gt;
+&lt;p&gt;For completing this tutorial you need:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Java 8 or higher&lt;/li&gt;
+&lt;li&gt;Git&lt;/li&gt;
+&lt;li&gt;1 hour of your time&lt;/li&gt;
+&lt;li&gt;You favorite code editor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For running the example you should ensure that Cassandra service is running locally on port 9042.
+As an option, you can run Cassandra with &lt;a href=&quot;https://github.com/riptano/ccm#installation&quot;&gt;ccm&lt;/a&gt;(Cassandra Cluster Manager).
+Follow &lt;a href=&quot;https://github.com/riptano/ccm#installation&quot;&gt;this&lt;/a&gt; instructions for installing ccm.
+After installing you will be able to run a single node cluster:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;ccm create rss_reader -v &lt;span class=&quot;hljs-number&quot;&gt;3.11&lt;/span&gt;.&lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt; -n &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;hljs-operator&quot;&gt;-s&lt;/span&gt;
+ccm start&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For now, &lt;a href=&quot;https://github.com/vert-x3/vertx-cassandra-client&quot;&gt;Eclipse Vert.x Cassandra client&lt;/a&gt; is not available in maven central, it means that you have to build and install it locally:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;git clone https://github.com/vert-x3/vertx-cassandra-client
+&lt;span class=&quot;hljs-built_in&quot;&gt;cd&lt;/span&gt; vertx-cassandra-client
+mvn clean install -Dmaven.test.skip=&lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;hljs-operator&quot;&gt;-s&lt;/span&gt; .travis.maven.settings.xml&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Before completing this step make sure that you have successfully cloned the RSS reader repository and checked out the &lt;code&gt;step_1&lt;/code&gt; branch:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;git clone https://github.com/Sammers21/rss-reader
+&lt;span class=&quot;hljs-built_in&quot;&gt;cd&lt;/span&gt; rss-reader
+git checkout step_1&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now you can try to tun this example and see if it works:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;./gradlew vertxRun&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;schema&quot;&gt;Schema&lt;/h2&gt;
+&lt;p&gt;If you are familiar with &lt;a href=&quot;http://cassandra.apache.org/&quot;&gt;Apache Cassandra&lt;/a&gt; you
+should know that the way your data is stored in Cassandra is dependent on queries
+you are running. It means that you need first to figure out what kind of queries
+you will be running, and then you can produce a storage scheme.&lt;/p&gt;
+&lt;p&gt;In our case we’d like our application to have 3 endpoints:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;POST /user/{user_id}/rss_link - for adding links to a user’s feed&lt;/li&gt;
+&lt;li&gt;GET /user/{user_id}/rss_channels - for retrieving information about RSS channels a user subscribed on&lt;/li&gt;
+&lt;li&gt;GET /articles/by_rss_link?link={rss_link} - for retrieving information about articles on a specific RSS channel&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;For implementing this endpoints the schema should look in this way:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;TABLE&lt;/span&gt; rss_by_user (login &lt;span class=&quot;hljs-built_in&quot;&gt;text&lt;/span&gt; , rss_link &lt;span class=&quot;hljs-built_in&quot;&gt;text&lt;/span&gt;, &lt;span class=&quot;hljs-keyword&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;KEY&lt;/span&gt; (login, rss_link));&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;TABLE&lt;/span&gt; articles_by_rss_link(rss_link &lt;span class=&quot;hljs-built_in&quot;&gt;text&lt;/span&gt;, pubDate &lt;span class=&quot;hljs-keyword&quot;&gt;timestamp&lt;/span&gt;, title &lt;span class=&quot;hljs-built_in&quot;&gt;text&lt;/span&gt;, article_link &lt;span class=&quot;hljs-built_in&quot;&gt;text&lt;/span&gt;, description &lt;span class=&quot;hljs-built_in&quot;&gt;text&lt;/span&gt;, &lt;span class=&quot;hljs-keyword&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;KEY&lt;/span&gt; ( rss_link , pubDate , article_link));&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;TABLE&lt;/span&gt; channel_info_by_rss_link(rss_link &lt;span class=&quot;hljs-built_in&quot;&gt;text&lt;/span&gt;, last_fetch_time &lt;span class=&quot;hljs-keyword&quot;&gt;timestamp&lt;/span&gt;,title &lt;span class=&quot;hljs-built_in&quot;&gt;text&lt;/span&gt;, site_link &lt;span class=&quot;hljs-built_in&quot;&gt;text&lt;/span&gt;, description &lt;span class=&quot;hljs-built_in&quot;&gt;text&lt;/span&gt;, &lt;span class=&quot;hljs-keyword&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;KEY&lt;/span&gt;(rss_link));&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;what-to-do-in-this-step&quot;&gt;What to do in this step&lt;/h2&gt;
+&lt;p&gt;In this step we will implement only the first endpoint&lt;/p&gt;
+&lt;h2 id=&quot;project-overview&quot;&gt;Project overview&lt;/h2&gt;
+&lt;p&gt;There are two notable classes in the project: &lt;code&gt;AppVerticle&lt;/code&gt; and &lt;code&gt;FetchVerticle&lt;/code&gt;. The first one is a &lt;a href=&quot;https://vertx.io/docs/vertx-core/java/#_verticles&quot;&gt;Verticle&lt;/a&gt; responsible for HTTP request handling and storage schema initialization. The second one is a &lt;a href=&quot;https://vertx.io/docs/vertx-core/java/#_verticles&quot;&gt;Verticle&lt;/a&gt; as well, but responsible for RSS feeds fetching.&lt;/p&gt;
+&lt;p&gt;The idea is simple. When the application is starting the &lt;code&gt;AppVerticle&lt;/code&gt; is deployed, then it tries to initialize storage schema, described in &lt;code&gt;src/main/resources/schema.cql&lt;/code&gt; file by reading it and executing listed queries line by line. After the schema initialization the &lt;code&gt;AppVerticle&lt;/code&gt; deploys &lt;code&gt;FetchVerticle&lt;/code&gt; and starts a HTTP server.&lt;/p&gt;
+&lt;h2 id=&quot;implementing-the-endpoint&quot;&gt;Implementing the endpoint&lt;/h2&gt;
+&lt;p&gt;Now, it is time to implement the first endpoint. Pay attention to &lt;code&gt;TODO&lt;/code&gt;s, they are for pointing you out about where changes should be made.&lt;/p&gt;
+&lt;p&gt;Now, let’s have a look at the &lt;code&gt;AppVerticle#postRssLink&lt;/code&gt; method. This method is called each time the first endpoint is called, so we can figure out what is the posted body and id of the user, who performed the request, directly there. There are 2 main things we want to do in this method:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Notifying via the &lt;a href=&quot;https://vertx.io/docs/vertx-core/java/#event_bus&quot;&gt;Event Bus&lt;/a&gt; the &lt;code&gt;FetchVerticle&lt;/code&gt; to fetch given by user link link to an RSS feed.&lt;/li&gt;
+&lt;li&gt;Inserting an entry to the &lt;code&gt;rss_by_user&lt;/code&gt; table.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This is how the &lt;code&gt;AppVerticle#postRssLink&lt;/code&gt; method should be implemented:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;postRssLink&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(RoutingContext ctx)&lt;/span&gt; &lt;/span&gt;{
+    ctx.request().bodyHandler(body -&gt; {
+        JsonObject bodyAsJson = body.toJsonObject();
+        String link = bodyAsJson.getString(&lt;span class=&quot;hljs-string&quot;&gt;&quot;link&quot;&lt;/span&gt;);
+        String userId = ctx.request().getParam(&lt;span class=&quot;hljs-string&quot;&gt;&quot;user_id&quot;&lt;/span&gt;);
+        &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (link == &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt; || userId == &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt;) {
+            responseWithInvalidRequest(ctx);
+        } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+            vertx.eventBus().send(&lt;span class=&quot;hljs-string&quot;&gt;&quot;fetch.rss.link&quot;&lt;/span&gt;, link);
+            Future&lt;ResultSet&gt; future = Future.future();
+            BoundStatement query = insertNewLinkForUser.bind(userId, link);
+            client.execute(query, future);
+            future.setHandler(result -&gt; {
+                &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (result.succeeded()) {
+                    ctx.response().end(&lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject().put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;message&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;The feed just added&quot;&lt;/span&gt;).toString());
+                } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+                    ctx.response().setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;400&lt;/span&gt;).end(result.cause().getMessage());
+                }
+            });
+        }
+    });
+}
+
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;responseWithInvalidRequest&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(RoutingContext ctx)&lt;/span&gt; &lt;/span&gt;{
+    ctx.response()
+            .setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;400&lt;/span&gt;)
+            .putHeader(&lt;span class=&quot;hljs-string&quot;&gt;&quot;content-type&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;application/json; charset=utf-8&quot;&lt;/span&gt;)
+            .end(invalidRequest().toString());
+}
+
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; JsonObject &lt;span class=&quot;hljs-title&quot;&gt;invalidRequest&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;JsonObject&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt;.&lt;span class=&quot;hljs-title&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;message&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;Invalid request&quot;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You may notice that &lt;code&gt;insertNewLinkForUser&lt;/code&gt; is a &lt;code&gt;PreparedStatement&lt;/code&gt;, and should be initialized before the &lt;code&gt;AppVerticle&lt;/code&gt; start. Let’s do it in the &lt;code&gt;AppVerticle#prepareNecessaryQueries&lt;/code&gt; method:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; Future&lt;Void&gt; &lt;span class=&quot;hljs-title&quot;&gt;prepareNecessaryQueries&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+    Future&lt;PreparedStatement&gt; insertNewLinkForUserPrepFuture = Future.future();
+    client.prepare(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO rss_by_user (login , rss_link ) VALUES ( ?, ?);&quot;&lt;/span&gt;, insertNewLinkForUserPrepFuture);
+
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; insertNewLinkForUserPrepFuture.compose(preparedStatement -&gt; {
+        insertNewLinkForUser = preparedStatement;
+        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; Future.succeededFuture();
+    });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Also, we should not forget to fetch a RSS by the link sent to &lt;code&gt;FetchVerticle&lt;/code&gt; via the Event Bus. We can do it in the &lt;code&gt;FetchVerticle#startFetchEventBusConsumer&lt;/code&gt; method:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;vertx.eventBus().localConsumer(&lt;span class=&quot;hljs-string&quot;&gt;&quot;fetch.rss.link&quot;&lt;/span&gt;, message -&gt; {
+    String rssLink = (String) message.body();
+    log.info(&lt;span class=&quot;hljs-string&quot;&gt;&quot;fetching &quot;&lt;/span&gt; + rssLink);
+    webClient.getAbs(rssLink).send(response -&gt; {
+        &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (response.succeeded()) {
+            String bodyAsString = response.result().bodyAsString(&lt;span class=&quot;hljs-string&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;);
+            &lt;span class=&quot;hljs-keyword&quot;&gt;try&lt;/span&gt; {
+                RssChannel rssChannel = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; RssChannel(bodyAsString);
+
+                BatchStatement batchStatement = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; BatchStatement();
+                BoundStatement channelInfoInsertQuery = insertChannelInfo.bind(
+                        rssLink, &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; Date(System.currentTimeMillis()), rssChannel.description, rssChannel.link, rssChannel.title
+                );
+                batchStatement.add(channelInfoInsertQuery);
+
+                &lt;span class=&quot;hljs-keyword&quot;&gt;for&lt;/span&gt; (Article article : rssChannel.articles) {
+                    batchStatement.add(insertArticleInfo.bind(rssLink, article.pubDate, article.link, article.description, article.title));
+                }
+                Future&lt;ResultSet&gt; insertArticlesFuture = Future.future();
+                cassandraClient.execute(batchStatement, insertArticlesFuture);
+
+                insertArticlesFuture.compose(insertDone -&gt; Future.succeededFuture());
+            } &lt;span class=&quot;hljs-keyword&quot;&gt;catch&lt;/span&gt; (Exception e) {
+                log.error(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Unable to fetch: &quot;&lt;/span&gt; + rssLink, e);
+            }
+        } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+            log.error(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Unable to fetch: &quot;&lt;/span&gt; + rssLink);
+        }
+    });
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And, finally, this code would not work if &lt;code&gt;insertChannelInfo&lt;/code&gt; and &lt;code&gt;insertArticleInfo&lt;/code&gt; statements will not be initialized at verticle start. Let’s to this in the &lt;code&gt;FetchVerticle#prepareNecessaryQueries&lt;/code&gt; method:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; Future&lt;Void&gt; &lt;span class=&quot;hljs-title&quot;&gt;prepareNecessaryQueries&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+        Future&lt;PreparedStatement&gt; insertChannelInfoPrepFuture = Future.future();
+        cassandraClient.prepare(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO channel_info_by_rss_link ( rss_link , last_fetch_time, description , site_link , title ) VALUES (?, ?, ?, ?, ?);&quot;&lt;/span&gt;, insertChannelInfoPrepFuture);
+
+        Future&lt;PreparedStatement&gt; insertArticleInfoPrepFuture = Future.future();
+        cassandraClient.prepare(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO articles_by_rss_link ( rss_link , pubdate , article_link , description , title ) VALUES ( ?, ?, ?, ?, ?);&quot;&lt;/span&gt;, insertArticleInfoPrepFuture);
+
+        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; CompositeFuture.all(
+                insertChannelInfoPrepFuture.compose(preparedStatement -&gt; {
+                    insertChannelInfo = preparedStatement;
+                    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; Future.succeededFuture();
+                }), insertArticleInfoPrepFuture.compose(preparedStatement -&gt; {
+                    insertArticleInfo = preparedStatement;
+                    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; Future.succeededFuture();
+                })
+        ).mapEmpty();
+    }&lt;/code&gt;&lt;/pre&gt;
+
+
+&lt;h1 id=&quot;observing&quot;&gt;Observing&lt;/h1&gt;
+&lt;p&gt;After all this changes you should ensure that the first endpoint is working correctly. So you need to run the application, go to localhost:8080 insert a link to a rss feed there(&lt;a href=&quot;http://feeds.bbci.co.uk/news/uk/rss.xml&quot;&gt;BBC UK feed news&lt;/a&gt; for example) and then click the &lt;em&gt;ENTER&lt;/em&gt; button. Now you can connect to your local Cassandra instance, for instance with &lt;a href=&quot;https://docs.datastax.com/en/cql/3.3/cql/cql_reference/cqlsh.html&quot;&gt;cqlsh&lt;/a&gt;, and find out how RSS feed data had been saved in the rss_reader keyspace:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs sh&quot;&gt;cqlsh&gt; SELECT * FROM rss_reader.rss_by_user limit &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;  ;
+
+ login | rss_link
+-------+-----------------------------------------
+ Pavel | http://feeds.bbci.co.uk/news/uk/rss.xml
+
+(&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; rows)
+cqlsh&gt; SELECT description FROM rss_reader.articles_by_rss_link  limit &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;;
+
+ description
+-------------------------------------
+ BBC coverage of latest developments
+
+(&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; rows)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;In this article we figured out how to implement the first endpoint of RSS-reader app. If you have any problems with completing this step you can checkout to &lt;code&gt;step_2&lt;/code&gt;, where you can find all changes made for completing this step:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;git checkout step_2&lt;/code&gt;&lt;/pre&gt;
+
+
+&lt;p&gt;Thanks for reading this. I hope you enjoyed reading this article. See you soon on our &lt;a href=&quot;https://gitter.im/eclipse-vertx/vertx-users&quot;&gt;Gitter channel&lt;/a&gt;!&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Mon, 20 Aug 2018 02:00:00 +0200</pubDate>
+          <link>https://vertx.io/blog/the-rss-reader-tutorial</link>
+          <guid isPermaLink="true">https://vertx.io/blog/the-rss-reader-tutorial</guid>
+          <author>
+            <name>Sammers21</name>
+            <uri>http://github.com/Sammers21</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>Eclipse Vert.x 3.5.3</title>
           <description>
       &lt;article&gt;&lt;p&gt;We have just released Vert.x 3.5.3, a bug fix release of Vert.x 3.5.x.&lt;/p&gt;
