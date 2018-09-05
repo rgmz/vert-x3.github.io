@@ -8,6 +8,119 @@
       <atom:link href="https://vertx.io/feed.xml" rel="self" type="application/rss+xml" />
       
         <item>
+          <title>The RSS reader tutorial. Step 2.</title>
+          <description>
+      &lt;article&gt;&lt;h1 id=&quot;quick-recap&quot;&gt;Quick recap&lt;/h1&gt;
+&lt;p&gt;In &lt;a href=&quot;https://vertx.io/blog/the-rss-reader-tutorial/&quot;&gt;the previous step&lt;/a&gt; we have successfully implemented the first endpoint 
+of the RSS reader app.&lt;/p&gt;
+&lt;p&gt;The RSS reader example assumes implementing 3 endpoints. This article is dedicated to implementing the &lt;code&gt;GET /user/{user_id}/rss_channels&lt;/code&gt; endpoint.&lt;/p&gt;
+&lt;p&gt;Before completing this step, make sure your are in the &lt;code&gt;step_2&lt;/code&gt; git branch:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;git checkout step_2&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;implementing-the-second-endpoint&quot;&gt;Implementing the second endpoint&lt;/h1&gt;
+&lt;p&gt;The second endpoint produces an array of RSS channels by given &lt;code&gt;user_id&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;We need to execute the two following queries to:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Fetch RSS links for a given user: &lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;SELECT&lt;/span&gt; rss_link &lt;span class=&quot;hljs-keyword&quot;&gt;FROM&lt;/span&gt; rss_by_user &lt;span class=&quot;hljs-keyword&quot;&gt;WHERE&lt;/span&gt; login = GIVEN_USER_ID ;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Fetch RSS channel details for a given link: &lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;SELECT&lt;/span&gt; description, title, site_link, rss_link &lt;span class=&quot;hljs-keyword&quot;&gt;FROM&lt;/span&gt; channel_info_by_rss_link &lt;span class=&quot;hljs-keyword&quot;&gt;WHERE&lt;/span&gt; rss_link = GIVEN_LINK ;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&quot;implementation&quot;&gt;Implementation&lt;/h1&gt;
+&lt;p&gt;The endpoint allows the the front-end app to display the list of RSS feeds a user subscribed on. When the endpoint is accessed, the &lt;code&gt;AppVerticle#getRssChannels&lt;/code&gt; method is called. We can implement this method in this way:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;getRssChannels&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(RoutingContext ctx)&lt;/span&gt; &lt;/span&gt;{
+    String userId = ctx.request().getParam(&lt;span class=&quot;hljs-string&quot;&gt;&quot;user_id&quot;&lt;/span&gt;);
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (userId == &lt;span class=&quot;hljs-keyword&quot;&gt;null&lt;/span&gt;) {
+        responseWithInvalidRequest(ctx);
+    } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+        Future&lt;List&lt;Row&gt;&gt; future = Future.future();
+        client.executeWithFullFetch(selectRssLinksByLogin.bind(userId), future);
+        future.compose(rows -&gt; {
+            List&lt;String&gt; links = rows.stream()
+                    .map(row -&gt; row.getString(&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;))
+                    .collect(Collectors.toList());
+
+            &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; CompositeFuture.all(
+                    links.stream().map(selectChannelInfo::bind).map(statement -&gt; {
+                        Future&lt;List&lt;Row&gt;&gt; channelInfoRow = Future.future();
+                        client.executeWithFullFetch(statement, channelInfoRow);
+                        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; channelInfoRow;
+                    }).collect(Collectors.toList())
+            );
+        }).setHandler(h -&gt; {
+            &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (h.succeeded()) {
+                CompositeFuture result = h.result();
+                List&lt;List&lt;Row&gt;&gt; results = result.list();
+                List&lt;Row&gt; list = results.stream()
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList());
+                JsonObject responseJson = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject();
+                JsonArray channels = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonArray();
+
+                list.forEach(eachRow -&gt; channels.add(
+                        &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; JsonObject()
+                                .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;description&quot;&lt;/span&gt;, eachRow.getString(&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;))
+                                .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;title&quot;&lt;/span&gt;, eachRow.getString(&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;))
+                                .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;link&quot;&lt;/span&gt;, eachRow.getString(&lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt;))
+                                .put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;rss_link&quot;&lt;/span&gt;, eachRow.getString(&lt;span class=&quot;hljs-number&quot;&gt;3&lt;/span&gt;))
+                ));
+
+                responseJson.put(&lt;span class=&quot;hljs-string&quot;&gt;&quot;channels&quot;&lt;/span&gt;, channels);
+                ctx.response().end(responseJson.toString());
+            } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+                log.error(&lt;span class=&quot;hljs-string&quot;&gt;&quot;failed to get rss channels&quot;&lt;/span&gt;, h.cause());
+                ctx.response().setStatusCode(&lt;span class=&quot;hljs-number&quot;&gt;500&lt;/span&gt;).end(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Unable to retrieve the info from C*&quot;&lt;/span&gt;);
+            }
+        });
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Also, this method uses &lt;code&gt;selectChannelInfo&lt;/code&gt; and &lt;code&gt;selectRssLinksByLogin&lt;/code&gt; fields, they should be initialized in the &lt;code&gt;AppVerticle#prepareNecessaryQueries&lt;/code&gt; method:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;private&lt;/span&gt; Future&lt;Void&gt; &lt;span class=&quot;hljs-title&quot;&gt;prepareNecessaryQueries&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+        Future&lt;PreparedStatement&gt; selectChannelInfoPrepFuture = Future.future();
+        client.prepare(&lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT description, title, site_link, rss_link FROM channel_info_by_rss_link WHERE rss_link = ? ;&quot;&lt;/span&gt;, selectChannelInfoPrepFuture);
+
+        Future&lt;PreparedStatement&gt; selectRssLinkByLoginPrepFuture = Future.future();
+        client.prepare(&lt;span class=&quot;hljs-string&quot;&gt;&quot;SELECT rss_link FROM rss_by_user WHERE login = ? ;&quot;&lt;/span&gt;, selectRssLinkByLoginPrepFuture);
+
+        Future&lt;PreparedStatement&gt; insertNewLinkForUserPrepFuture = Future.future();
+        client.prepare(&lt;span class=&quot;hljs-string&quot;&gt;&quot;INSERT INTO rss_by_user (login , rss_link ) VALUES ( ?, ?);&quot;&lt;/span&gt;, insertNewLinkForUserPrepFuture);
+
+        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; CompositeFuture.all(
+                selectChannelInfoPrepFuture.compose(preparedStatement -&gt; {
+                    selectChannelInfo = preparedStatement;
+                    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; Future.succeededFuture();
+                }),
+                selectRssLinkByLoginPrepFuture.compose(preparedStatement -&gt; {
+                    selectRssLinksByLogin = preparedStatement;
+                    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; Future.succeededFuture();
+                }),
+                insertNewLinkForUserPrepFuture.compose(preparedStatement -&gt; {
+                    insertNewLinkForUser = preparedStatement;
+                    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; Future.succeededFuture();
+                })
+        ).mapEmpty();
+    }&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;In this part, we have successfully implemented the second endpoint, which allows the browser app to obtain channels information for a specific user. To ensure that it is working fine, point your browser to &lt;code&gt;localhost:8080&lt;/code&gt; and click to the refresh button. Channel list should appear immediately.&lt;/p&gt;
+&lt;p&gt;If you have any problems with completing this step you can checkout to &lt;code&gt;step_3&lt;/code&gt;, where you can find all changes made for completing this step:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;git checkout step_3&lt;/code&gt;&lt;/pre&gt;
+
+
+&lt;p&gt;Thanks for reading this. I hope you enjoyed reading this article. See you soon on our &lt;a href=&quot;https://gitter.im/eclipse-vertx/vertx-users&quot;&gt;Gitter channel&lt;/a&gt;!&lt;/p&gt;
+&lt;/article&gt;
+      </description>
+          <pubDate>Wed, 05 Sep 2018 02:00:00 +0200</pubDate>
+          <link>https://vertx.io/blog/the-rss-reader-tutorial-step-2</link>
+          <guid isPermaLink="true">https://vertx.io/blog/the-rss-reader-tutorial-step-2</guid>
+          <author>
+            <name>Sammers21</name>
+            <uri>http://github.com/Sammers21</uri>
+          </author>
+        </item>
+      
+        <item>
           <title>The RSS reader tutorial</title>
           <description>
       &lt;article&gt;&lt;h1 id=&quot;the-rss-reader-tutorial&quot;&gt;The RSS reader tutorial&lt;/h1&gt;
@@ -22,7 +135,7 @@
 &lt;/ul&gt;
 &lt;p&gt;You also may find it useful to read &lt;a href=&quot;https://validator.w3.org/feed/docs/rss2.html&quot;&gt;the RSS 2.0&lt;/a&gt; specification, because the resulted app is, basically, a storage of RSS 2.0 feeds.&lt;/p&gt;
 &lt;p&gt;To give you an idea of what the App is about, here is how it looks like from the fronted side:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/blog/the-rss-reader-tutorial/application.png&quot; alt=&quot;see how it looks&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/QnLieKA.png&quot; alt=&quot;see how it looks&quot;&gt;&lt;/p&gt;
 &lt;p&gt;On the image we see that browser space is split into 2 parts:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Saved feed names&lt;/li&gt;
