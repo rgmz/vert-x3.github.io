@@ -51,8 +51,8 @@ var index = [
 {'name': 'User.isAuthorized', 'type': 'function', 'url': 'User.type.html#isAuthorized', 'doc': '<p>Is the user authorised to</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'User.setAuthProvider', 'type': 'function', 'url': 'User.type.html#setAuthProvider', 'doc': '<p>Set the auth provider for the User.</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'User.clearCache', 'type': 'function', 'url': 'User.type.html#clearCache', 'doc': '<p>The User object will cache any authorities that it knows it has to avoid hitting the\nunderlying auth provider each time.…</p>', 'tags': [],'icons': ['icon-shared-member']},
-{'name': 'User.principal', 'type': 'function', 'url': 'User.type.html#principal', 'doc': '<p>Get the underlying principal for the User.</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'User.isAuthorised', 'type': 'function', 'url': 'User.type.html#isAuthorised', 'doc': '', 'tags': [],'icons': ['icon-shared-member']},
+{'name': 'User.principal', 'type': 'function', 'url': 'User.type.html#principal', 'doc': '<p>Get the underlying principal for the User.</p>', 'tags': [],'icons': ['icon-shared-member']},
 {'name': 'User', 'type': 'class', 'url': 'User.type.html', 'doc': '<p>Represents an authenticates User and contains operations to authorise the user.\n<p>\nP', 'tags': [],'icons': ['icon-class']},
 {'name': 'io.vertx.ceylon.auth.common', 'type': 'module', 'url': 'index.html', 'doc': '', 'tags': [],'icons': ['icon-module']}];
 var tagIndex = [

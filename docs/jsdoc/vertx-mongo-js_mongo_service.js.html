@@ -52,7 +52,10 @@ var JsonObject = io.vertx.core.json.JsonObject;
 var JMongoService = Java.type('io.vertx.ext.mongo.MongoService');
 var MongoClientDeleteResult = Java.type('io.vertx.ext.mongo.MongoClientDeleteResult');
 var IndexOptions = Java.type('io.vertx.ext.mongo.IndexOptions');
+var BulkOperation = Java.type('io.vertx.ext.mongo.BulkOperation');
+var BulkWriteOptions = Java.type('io.vertx.ext.mongo.BulkWriteOptions');
 var FindOptions = Java.type('io.vertx.ext.mongo.FindOptions');
+var MongoClientBulkWriteResult = Java.type('io.vertx.ext.mongo.MongoClientBulkWriteResult');
 var MongoClientUpdateResult = Java.type('io.vertx.ext.mongo.MongoClientUpdateResult');
 var UpdateOptions = Java.type('io.vertx.ext.mongo.UpdateOptions');
 
@@ -99,8 +102,8 @@ var MongoService = function(j_val) {
    */
   this.saveWithOptions = function(collection, document, writeOption, resultHandler) {
     var __args = arguments;
-    if (__args.length === 4 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; (typeof __args[1] === 'object' &amp;&amp; __args[1] != null) &amp;&amp; typeof __args[2] === 'string' &amp;&amp; typeof __args[3] === 'function') {
-      j_mongoService["saveWithOptions(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.ext.mongo.WriteOption,io.vertx.core.Handler)"](collection, utils.convParamJsonObject(document), io.vertx.ext.mongo.WriteOption.valueOf(writeOption), function(ar) {
+    if (__args.length === 4 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; (typeof __args[1] === 'object' &amp;&amp; __args[1] != null) &amp;&amp; (typeof __args[2] === 'string' || __args[2] == null) &amp;&amp; typeof __args[3] === 'function') {
+      j_mongoService["saveWithOptions(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.ext.mongo.WriteOption,io.vertx.core.Handler)"](collection, utils.convParamJsonObject(document), writeOption == null ? null : io.vertx.ext.mongo.WriteOption.valueOf(writeOption), function(ar) {
       if (ar.succeeded()) {
         resultHandler(ar.result(), null);
       } else {
@@ -144,8 +147,8 @@ var MongoService = function(j_val) {
    */
   this.insertWithOptions = function(collection, document, writeOption, resultHandler) {
     var __args = arguments;
-    if (__args.length === 4 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; (typeof __args[1] === 'object' &amp;&amp; __args[1] != null) &amp;&amp; typeof __args[2] === 'string' &amp;&amp; typeof __args[3] === 'function') {
-      j_mongoService["insertWithOptions(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.ext.mongo.WriteOption,io.vertx.core.Handler)"](collection, utils.convParamJsonObject(document), io.vertx.ext.mongo.WriteOption.valueOf(writeOption), function(ar) {
+    if (__args.length === 4 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; (typeof __args[1] === 'object' &amp;&amp; __args[1] != null) &amp;&amp; (typeof __args[2] === 'string' || __args[2] == null) &amp;&amp; typeof __args[3] === 'function') {
+      j_mongoService["insertWithOptions(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.ext.mongo.WriteOption,io.vertx.core.Handler)"](collection, utils.convParamJsonObject(document), writeOption == null ? null : io.vertx.ext.mongo.WriteOption.valueOf(writeOption), function(ar) {
       if (ar.succeeded()) {
         resultHandler(ar.result(), null);
       } else {
@@ -348,16 +351,39 @@ var MongoService = function(j_val) {
 
    @public
    @param collection {string} 
-   @param query {Object} 
+   @param operations {Array.&lt;Object>} 
    @param resultHandler {function} 
    @return {MongoService}
    */
-  this.find = function(collection, query, resultHandler) {
+  this.bulkWrite = function(collection, operations, resultHandler) {
     var __args = arguments;
-    if (__args.length === 3 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; (typeof __args[1] === 'object' &amp;&amp; __args[1] != null) &amp;&amp; typeof __args[2] === 'function') {
-      j_mongoService["find(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](collection, utils.convParamJsonObject(query), function(ar) {
+    if (__args.length === 3 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; typeof __args[1] === 'object' &amp;&amp; __args[1] instanceof Array &amp;&amp; typeof __args[2] === 'function') {
+      j_mongoService["bulkWrite(java.lang.String,java.util.List,io.vertx.core.Handler)"](collection, utils.convParamListDataObject(operations, function(json) { return new BulkOperation(json); }), function(ar) {
       if (ar.succeeded()) {
-        resultHandler(utils.convReturnListSetJson(ar.result()), null);
+        resultHandler(utils.convReturnDataObject(ar.result()), null);
+      } else {
+        resultHandler(null, ar.cause());
+      }
+    });
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+
+   @public
+   @param collection {string} 
+   @param operations {Array.&lt;Object>} 
+   @param bulkWriteOptions {Object} 
+   @param resultHandler {function} 
+   @return {MongoService}
+   */
+  this.bulkWriteWithOptions = function(collection, operations, bulkWriteOptions, resultHandler) {
+    var __args = arguments;
+    if (__args.length === 4 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; typeof __args[1] === 'object' &amp;&amp; __args[1] instanceof Array &amp;&amp; (typeof __args[2] === 'object' &amp;&amp; __args[2] != null) &amp;&amp; typeof __args[3] === 'function') {
+      j_mongoService["bulkWriteWithOptions(java.lang.String,java.util.List,io.vertx.ext.mongo.BulkWriteOptions,io.vertx.core.Handler)"](collection, utils.convParamListDataObject(operations, function(json) { return new BulkOperation(json); }), bulkWriteOptions != null ? new BulkWriteOptions(new JsonObject(Java.asJSONCompatible(bulkWriteOptions))) : null, function(ar) {
+      if (ar.succeeded()) {
+        resultHandler(utils.convReturnDataObject(ar.result()), null);
       } else {
         resultHandler(null, ar.cause());
       }
@@ -374,12 +400,12 @@ var MongoService = function(j_val) {
    @param resultHandler {function} 
    @return {MongoService}
    */
-  this.findBatch = function(collection, query, resultHandler) {
+  this.find = function(collection, query, resultHandler) {
     var __args = arguments;
     if (__args.length === 3 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; (typeof __args[1] === 'object' &amp;&amp; __args[1] != null) &amp;&amp; typeof __args[2] === 'function') {
-      j_mongoService["findBatch(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](collection, utils.convParamJsonObject(query), function(ar) {
+      j_mongoService["find(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](collection, utils.convParamJsonObject(query), function(ar) {
       if (ar.succeeded()) {
-        resultHandler(utils.convReturnJson(ar.result()), null);
+        resultHandler(utils.convReturnListSetJson(ar.result()), null);
       } else {
         resultHandler(null, ar.cause());
       }
@@ -416,36 +442,13 @@ var MongoService = function(j_val) {
    @public
    @param collection {string} 
    @param query {Object} 
-   @param options {Object} 
-   @param resultHandler {function} 
-   @return {MongoService}
-   */
-  this.findBatchWithOptions = function(collection, query, options, resultHandler) {
-    var __args = arguments;
-    if (__args.length === 4 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; (typeof __args[1] === 'object' &amp;&amp; __args[1] != null) &amp;&amp; (typeof __args[2] === 'object' &amp;&amp; __args[2] != null) &amp;&amp; typeof __args[3] === 'function') {
-      j_mongoService["findBatchWithOptions(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.ext.mongo.FindOptions,io.vertx.core.Handler)"](collection, utils.convParamJsonObject(query), options != null ? new FindOptions(new JsonObject(Java.asJSONCompatible(options))) : null, function(ar) {
-      if (ar.succeeded()) {
-        resultHandler(utils.convReturnJson(ar.result()), null);
-      } else {
-        resultHandler(null, ar.cause());
-      }
-    });
-      return that;
-    } else throw new TypeError('function invoked with invalid arguments');
-  };
-
-  /**
-
-   @public
-   @param collection {string} 
-   @param query {Object} 
    @param fields {Object} 
    @param resultHandler {function} 
    @return {MongoService}
    */
   this.findOne = function(collection, query, fields, resultHandler) {
     var __args = arguments;
-    if (__args.length === 4 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; (typeof __args[1] === 'object' &amp;&amp; __args[1] != null) &amp;&amp; (typeof __args[2] === 'object' &amp;&amp; __args[2] != null) &amp;&amp; typeof __args[3] === 'function') {
+    if (__args.length === 4 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; (typeof __args[1] === 'object' &amp;&amp; __args[1] != null) &amp;&amp; typeof __args[2] === 'object' &amp;&amp; typeof __args[3] === 'function') {
       j_mongoService["findOne(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](collection, utils.convParamJsonObject(query), utils.convParamJsonObject(fields), function(ar) {
       if (ar.succeeded()) {
         resultHandler(utils.convReturnJson(ar.result()), null);
@@ -698,8 +701,8 @@ var MongoService = function(j_val) {
    */
   this.removeDocumentsWithOptions = function(collection, query, writeOption, resultHandler) {
     var __args = arguments;
-    if (__args.length === 4 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; (typeof __args[1] === 'object' &amp;&amp; __args[1] != null) &amp;&amp; typeof __args[2] === 'string' &amp;&amp; typeof __args[3] === 'function') {
-      j_mongoService["removeDocumentsWithOptions(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.ext.mongo.WriteOption,io.vertx.core.Handler)"](collection, utils.convParamJsonObject(query), io.vertx.ext.mongo.WriteOption.valueOf(writeOption), function(ar) {
+    if (__args.length === 4 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; (typeof __args[1] === 'object' &amp;&amp; __args[1] != null) &amp;&amp; (typeof __args[2] === 'string' || __args[2] == null) &amp;&amp; typeof __args[3] === 'function') {
+      j_mongoService["removeDocumentsWithOptions(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.ext.mongo.WriteOption,io.vertx.core.Handler)"](collection, utils.convParamJsonObject(query), writeOption == null ? null : io.vertx.ext.mongo.WriteOption.valueOf(writeOption), function(ar) {
       if (ar.succeeded()) {
         resultHandler(utils.convReturnDataObject(ar.result()), null);
       } else {
@@ -788,8 +791,8 @@ var MongoService = function(j_val) {
    */
   this.removeDocumentWithOptions = function(collection, query, writeOption, resultHandler) {
     var __args = arguments;
-    if (__args.length === 4 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; (typeof __args[1] === 'object' &amp;&amp; __args[1] != null) &amp;&amp; typeof __args[2] === 'string' &amp;&amp; typeof __args[3] === 'function') {
-      j_mongoService["removeDocumentWithOptions(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.ext.mongo.WriteOption,io.vertx.core.Handler)"](collection, utils.convParamJsonObject(query), io.vertx.ext.mongo.WriteOption.valueOf(writeOption), function(ar) {
+    if (__args.length === 4 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; (typeof __args[1] === 'object' &amp;&amp; __args[1] != null) &amp;&amp; (typeof __args[2] === 'string' || __args[2] == null) &amp;&amp; typeof __args[3] === 'function') {
+      j_mongoService["removeDocumentWithOptions(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.ext.mongo.WriteOption,io.vertx.core.Handler)"](collection, utils.convParamJsonObject(query), writeOption == null ? null : io.vertx.ext.mongo.WriteOption.valueOf(writeOption), function(ar) {
       if (ar.succeeded()) {
         resultHandler(utils.convReturnDataObject(ar.result()), null);
       } else {
@@ -1001,13 +1004,14 @@ var MongoService = function(j_val) {
    @param collection {string} 
    @param fieldName {string} 
    @param resultClassname {string} 
+   @param query {Object} 
    @param resultHandler {function} 
    @return {MongoService}
    */
-  this.distinctBatch = function(collection, fieldName, resultClassname, resultHandler) {
+  this.distinctWithQuery = function(collection, fieldName, resultClassname, query, resultHandler) {
     var __args = arguments;
-    if (__args.length === 4 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; typeof __args[1] === 'string' &amp;&amp; typeof __args[2] === 'string' &amp;&amp; typeof __args[3] === 'function') {
-      j_mongoService["distinctBatch(java.lang.String,java.lang.String,java.lang.String,io.vertx.core.Handler)"](collection, fieldName, resultClassname, function(ar) {
+    if (__args.length === 5 &amp;&amp; typeof __args[0] === 'string' &amp;&amp; typeof __args[1] === 'string' &amp;&amp; typeof __args[2] === 'string' &amp;&amp; (typeof __args[3] === 'object' &amp;&amp; __args[3] != null) &amp;&amp; typeof __args[4] === 'function') {
+      j_mongoService["distinctWithQuery(java.lang.String,java.lang.String,java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](collection, fieldName, resultClassname, utils.convParamJsonObject(query), function(ar) {
       if (ar.succeeded()) {
         resultHandler(utils.convReturnJson(ar.result()), null);
       } else {
@@ -1086,7 +1090,7 @@ module.exports = MongoService;</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Wed Jul 11 2018 10:01:30 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Mon Oct 01 2018 09:03:38 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
